@@ -5,9 +5,11 @@
 You should have installed [NodeJS](https://nodejs.org/), [npm](https://github.com/npm/npm), [bower](http://bower.io/) and [Webpack](https://webpack.github.io/) on your system as prerequisite, then:
 
 Clone the repository: `git clone https://github.com/slidewiki/slidewiki-platform.git`
+Run:
 
-run `bower install`
-run `npm install`
+`bower install`
+
+`npm install`
 
 ##Run in Production Mode
 
