@@ -1,0 +1,14 @@
+{
+  "name": "slidewiki-platform",
+  "description": "",
+  "main": "start.js",
+  "authors": [
+    "ali1k <hyperir@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/slidewiki/slidewiki-platform",
+  "dependencies": {
+    "semantic": "semantic-ui#~2.1.8",
+    "animate.css": "~3.5.1"
+  }
+}
