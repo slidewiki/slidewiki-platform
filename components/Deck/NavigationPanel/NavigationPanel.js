@@ -1,10 +1,10 @@
 import React from 'react';
 import Breadcrumb from './Breadcrumb';
 
-class DeckHeader extends React.Component {
+class NavigationPanel extends React.Component {
     render() {
         return (
-            <div className="ui menu sw-deck-header" ref="deckHeader">
+            <div className="ui menu sw-deck-navigation-panel" ref="navigationPanel">
                <div className="item">
                  <Breadcrumb />
                </div>
@@ -20,4 +20,4 @@ class DeckHeader extends React.Component {
     }
 }
 
-export default DeckHeader;
+export default NavigationPanel;

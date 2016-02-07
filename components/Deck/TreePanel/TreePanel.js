@@ -18,14 +18,14 @@ class TreePanel extends React.Component {
                         </div>
                     </div>
                   <div className="ui secondary segment">
-                    <p>Semantic Web</p>
+                    <b>Semantic Web</b>
                   </div>
                   <div className="ui segment">
                       <div className="ui celled ordered list">
                         <div className="item">Introduction</div>
-                        <div className="item">RDF
+                        <div className="item"><b>RDF</b>
                             <div className="list">
-                              <div className="item">Introduction</div>
+                              <div className="item"><b>Introduction</b></div>
                               <div className="item">Serializations</div>
                               <div className="item">Examples</div>
                             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import DeckHeader from './DeckHeader/DeckHeader';
+import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
@@ -11,7 +11,7 @@ class Deck extends React.Component {
 
               <div className="row">
                 <div className="column">
-                  <h2 className="ui header"><DeckHeader /></h2>
+                  <NavigationPanel />
                 </div>
               </div>
 
