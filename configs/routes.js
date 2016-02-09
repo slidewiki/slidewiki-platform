@@ -1,3 +1,7 @@
+//list of actions
+import loadContributors from '../actions/loadContributors';
+import loadDeck from '../actions/loadDeck';
+
 export default {
     //-----------------------------------HomePage routes------------------------------
     home: {
@@ -19,7 +23,18 @@ export default {
         path: '/deck/:id?',
         method: 'get',
         page: 'deck',
-        title: 'Deck',
-        handler: require('../components/Deck/Deck')
+        handler: require('../components/Deck/Deck'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
+    },
+    contributors: {
+        path: '/contributors/:ctype/:id',
+        method: 'get',
+        page: 'contributors',
+        handler: require('../components/Deck/ContributorsPanel/ContributorsPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContributors, payload, done);
+        }
     }
 };

@@ -1,6 +1,8 @@
 import React from 'react';
-import ContributorsList from './ContributorsList';
+import ContributorsStore from '../../../stores/ContributorsStore';
+import {connectToStores} from 'fluxible-addons-react';
 
+import ContributorsList from './ContributorsList';
 
 class ContributorsPanel extends React.Component {
     render() {
@@ -9,10 +11,10 @@ class ContributorsPanel extends React.Component {
 
                 <div className="ui segments">
                     <div className="ui secondary segment">
-                        Contributors
+                        <a href="/contributors/deck/57">Contributors</a>
                     </div>
                     <div className="ui segment">
-                        <ContributorsList />
+                        <ContributorsList items={this.props.ContributorsStore.contributors} />
                     </div>
                 </div>
 
@@ -20,5 +22,9 @@ class ContributorsPanel extends React.Component {
         );
     }
 }
-
+ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], function (context, props) {
+    return {
+        ContributorsStore: context.getStore(ContributorsStore).getState()
+    };
+});
 export default ContributorsPanel;

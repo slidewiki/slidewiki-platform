@@ -6,12 +6,10 @@ class ApplicationStore extends BaseStore {
         super(dispatcher);
         this.pageTitle = '';
     }
-    handlePageTitle(currentRoute) {
+    handlePageTitle(payload) {
         this.dispatcher.waitFor(RouteStore, () => {
-            if (currentRoute && currentRoute.get('title')) {
-                this.pageTitle = currentRoute.get('title');
-                this.emitChange();
-            }
+            this.pageTitle = payload.pageTitle;
+            this.emitChange();
         });
     }
     getPageTitle() {
@@ -29,7 +27,7 @@ class ApplicationStore extends BaseStore {
 
 ApplicationStore.storeName = 'ApplicationStore';
 ApplicationStore.handlers = {
-    'NAVIGATE_SUCCESS': 'handlePageTitle'
+    'UPDATE_PAGE_TITLE': 'handlePageTitle'
 };
 
 export default ApplicationStore;

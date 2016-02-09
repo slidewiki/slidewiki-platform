@@ -30,6 +30,11 @@ server.use('/assets', express.static(path.join(__dirname, '/assets')));
 server.use(compression());
 server.use(bodyParser.json());
 
+// Get access to the fetchr plugin instance
+let fetchrPlugin = app.getPlugin('FetchrPlugin');
+// Register our services
+fetchrPlugin.registerService(require('./services/contributors'));
+
 server.use((req, res, next) => {
 
     const context = app.createContext();
