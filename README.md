@@ -1,8 +1,9 @@
-[![Dependency Status](https://david-dm.org/slidewiki/slidewiki-platform.svg)](https://david-dm.org/slidewiki/slidewiki-platform)
-[![devDependency Status](https://david-dm.org/slidewiki/slidewiki-platform/dev-status.svg)](https://david-dm.org/slidewiki/slidewiki-platform#info=devDependencies)
-
-
 # SlideWiki Platform
+[![David](https://img.shields.io/david/slidewiki/slidewiki-platform.svg?style=flat-square)](https://david-dm.org/slidewiki/slidewiki-platform)
+[![David](https://img.shields.io/david/dev/slidewiki/slidewiki-platform.svg?style=flat-square)](https://david-dm.org/slidewiki/slidewiki-platform#info=devDependencies)
+[![Language](https://img.shields.io/badge/Language-Javascript%20ECMA2015-lightgrey.svg?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Framework](https://img.shields.io/badge/Framework-NodeJS%205.5.0-blue.svg?style=flat-square)](https://nodejs.org/)
+
 
 ##Installation
 
