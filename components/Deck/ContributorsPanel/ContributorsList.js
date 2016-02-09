@@ -7,7 +7,7 @@ class ContributorsList extends React.Component {
                 <div key={index} className="item">
                     <i className="large github middle aligned icon"></i>
                     <div className="content">
-                      <a className="header">{node.username}</a>
+                      <a className="header" href={"/user/" + node.id}>{node.username}</a>
                       <div className="description">{node.organization}</div>
                     </div>
                 </div>

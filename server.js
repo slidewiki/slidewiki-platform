@@ -29,9 +29,10 @@ server.use('/bower_components', express.static(path.join(__dirname, '/bower_comp
 server.use('/assets', express.static(path.join(__dirname, '/assets')));
 server.use(compression());
 server.use(bodyParser.json());
-
 // Get access to the fetchr plugin instance
 let fetchrPlugin = app.getPlugin('FetchrPlugin');
+// Set up the fetchr middleware
+server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 // Register our services
 fetchrPlugin.registerService(require('./services/contributors'));
 
