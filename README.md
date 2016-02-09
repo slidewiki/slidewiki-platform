@@ -1,3 +1,7 @@
+[![Dependency Status](https://david-dm.org/slidewiki/slidewiki-platform.svg)](https://david-dm.org/slidewiki/slidewiki-platform)
+[![devDependency Status](https://david-dm.org/slidewiki/slidewiki-platform/dev-status.svg)](https://david-dm.org/slidewiki/slidewiki-platform#info=devDependencies)
+
+
 # SlideWiki Platform
 
 ##Installation
