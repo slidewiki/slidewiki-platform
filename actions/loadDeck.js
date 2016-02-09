@@ -3,7 +3,7 @@ import {shortTitle} from '../configs/general';
 import loadContributors from './loadContributors';
 
 export default function loadDeck(context, payload, done) {
-    let pageTitle = shortTitle + ' | Deck | ' + payload.params.id ;
+    let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
 
     //load all required actions in parallel
     async.parallel([

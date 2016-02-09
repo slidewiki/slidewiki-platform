@@ -6,7 +6,7 @@ export default function loadContributors(context, payload, done) {
         } else {
             context.dispatch('LOAD_CONTRIBUTORS_SUCCESS', res);
         }
-        let pageTitle =  shortTitle + ' | Contributors | ' + payload.params.ctype + ' | ' + payload.params.id;
+        let pageTitle = shortTitle + ' | Contributors | ' + payload.params.ctype + ' | ' + payload.params.id;
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle
         });

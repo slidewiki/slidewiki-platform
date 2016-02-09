@@ -1,9 +1,16 @@
----
-  parser: "babel-eslint"
-  env:
-    node: true
-  rules:
-    strict: 0
-    indent: [2, 4]
-    quotes: [2, 'single']
-    no-unused-vars: 0 // see https://github.com/babel/babel-eslint/issues/21
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "strict": 0,
+    "indent": [2, 4],
+    "quotes": [2, 'single'],
+    "no-unused-vars": 0, // see https://github.com/babel/babel-eslint/issues/21
+    "react/prefer-es6-class": 1
+  }
+}
