@@ -10,8 +10,10 @@ export default function loadDeck(context, payload, done) {
             context.executeAction(loadContributors, payload, callback);
         },
         (callback)=> {
-            //another action
-            callback(null);
+            //another sample action with timeout
+            setTimeout(()=>{
+                callback(null);
+            }, 200);
         }
     ],
     // final callback
