@@ -1,10 +1,18 @@
 {
   "name": "slidewiki-platform",
-  "version": "0.1.0",
+  "description": "A Platform for Collaborative OpenCourseWare Authoring",
+  "keywords": [
+      "E-Learinng",
+      "OpenCourseWare",
+      "Presentations",
+      "Authoring"
+  ],
+  "version": "2.0.0",
   "private": false,
   "main": "start.js",
   "scripts": {
-    "build": "webpack --config webpack.config.production.js && NODE_ENV=production npm start",
+    "clean": "rm -rf build/",
+    "build": " npm run lint && webpack --config webpack.config.production.js && NODE_ENV=production npm start",
     "dev": "node webpack-dev-server.js",
     "lint": "eslint ./*.js ./**/*.js",
     "start": "node start.js"

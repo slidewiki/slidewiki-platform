@@ -9,7 +9,7 @@ import pages from '../configs/routes';
 
 class Application extends React.Component {
     render() {
-        var Handler = this.props.currentRoute.handler;
+        let Handler = this.props.currentRoute.handler;
 
         return (
             <div>
@@ -31,8 +31,8 @@ class Application extends React.Component {
 export default provideContext(handleHistory(connectToStores(
     Application,
     [ApplicationStore],
-    function (context, props) {
-        var appStore = context.getStore(ApplicationStore);
+    (context, props) => {
+        let appStore = context.getStore(ApplicationStore);
         return {
             pageTitle: appStore.getPageTitle()
         };

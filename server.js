@@ -24,9 +24,9 @@ const debug = debugLib('slidewiki-platform');
 
 const server = express();
 server.use(favicon(path.join(__dirname, '/favicon.ico')));
-server.use('/public', express.static(path.join(__dirname, '/build')));
-server.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
-server.use('/assets', express.static(path.join(__dirname, '/assets')));
+server.use('/public', express['static'](path.join(__dirname, '/build')));
+server.use('/bower_components', express['static'](path.join(__dirname, '/bower_components')));
+server.use('/assets', express['static'](path.join(__dirname, '/assets')));
 server.use(compression());
 server.use(bodyParser.json());
 // Get access to the fetchr plugin instance
