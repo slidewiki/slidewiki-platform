@@ -7,14 +7,20 @@ export default function loadDeck(context, payload, done) {
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
     //if no specific content selector is given, use the deck type, view mode and root deck id as default selector
-    if(!payload.params.sid) {
-        payloadCustom.params.sid = payload.params.id;
-    }
     if(!payload.params.stype) {
         payloadCustom.params.stype = 'deck';
+    }else{
+        pageTitle = pageTitle + ' | ' + payload.params.stype;
+    }
+    if(!payload.params.sid) {
+        payloadCustom.params.sid = payload.params.id;
+    }else{
+        pageTitle = pageTitle + ' | ' + payload.params.sid;
     }
     if(!payload.params.mode) {
         payloadCustom.params.mode = 'view';
+    }else{
+        pageTitle = pageTitle + ' | ' + payload.params.mode;
     }
     //load all required actions in parallel
     async.parallel([
