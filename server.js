@@ -35,6 +35,8 @@ let fetchrPlugin = app.getPlugin('FetchrPlugin');
 server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 // Register our services
 fetchrPlugin.registerService(require('./services/contributors'));
+fetchrPlugin.registerService(require('./services/deck'));
+fetchrPlugin.registerService(require('./services/slide'));
 
 server.use((req, res, next) => {
 

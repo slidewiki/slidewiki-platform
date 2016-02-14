@@ -1,6 +1,9 @@
 //list of actions
+import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadDeck from '../actions/loadDeck';
+import loadSlideContent from '../actions/loadSlideContent';
+import loadDeckContent from '../actions/loadDeckContent';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -30,12 +33,39 @@ export default {
         }
     },
     contributors: {
-        path: '/contributors/:ctype/:id',
+        path: '/contributors/:stype/:sid',
         method: 'get',
         page: 'contributors',
         handler: require('../components/Deck/ContributorsPanel/ContributorsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContributors, payload, done);
+        }
+    },
+    content: {
+        path: '/content/:stype/:sid/:mode?',
+        method: 'get',
+        page: 'content',
+        handler: require('../components/Deck/ContentPanel/ContentPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContent, payload, done);
+        }
+    },
+    slidecontent: {
+        path: '/slidecontent/:sid/:mode?',
+        method: 'get',
+        page: 'slidecontent',
+        handler: require('../components/Deck/ContentPanel/SlidePanel/SlidePanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadSlideContent, payload, done);
+        }
+    },
+    deckcontent: {
+        path: '/deckcontent/:sid/:mode?',
+        method: 'get',
+        page: 'deckcontent',
+        handler: require('../components/Deck/ContentPanel/DeckPanel/DeckPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckContent, payload, done);
         }
     }
 };

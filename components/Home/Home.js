@@ -24,7 +24,7 @@ class Home extends React.Component {
                         </div>
                         <div className="column">
                           <h2 className="ui header">Presentations</h2>
-                          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.<a className="ui button tiny" href="/deck/56">Try a Sample Deck &raquo;</a></p>
+                          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.<a className="ui button tiny" href="/deck/56/slide/24">Try a Sample Deck &raquo;</a></p>
                         </div>
                         <div className="column">
                           <h2 className="ui header">User Activities</h2>

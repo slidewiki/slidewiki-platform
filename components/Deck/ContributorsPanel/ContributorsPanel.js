@@ -1,7 +1,6 @@
 import React from 'react';
-import ContributorsStore from '../../../stores/ContributorsStore';
 import {connectToStores} from 'fluxible-addons-react';
-
+import ContributorsStore from '../../../stores/ContributorsStore';
 import ContributorsList from './ContributorsList';
 
 class ContributorsPanel extends React.Component {
@@ -22,7 +21,7 @@ class ContributorsPanel extends React.Component {
         );
     }
 }
-ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], function (context, props) {
+ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], (context, props)=> {
     return {
         ContributorsStore: context.getStore(ContributorsStore).getState()
     };

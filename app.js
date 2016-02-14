@@ -4,6 +4,9 @@ import Application from './components/Application';
 import ApplicationStore from './stores/ApplicationStore';
 import RouteStore from './stores/RouteStore';
 import ContributorsStore from './stores/ContributorsStore';
+import ContentStore from './stores/ContentStore';
+import DeckStore from './stores/DeckStore';
+import SlideStore from './stores/SlideStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -11,7 +14,10 @@ const app = new Fluxible({
     stores: [
         RouteStore,
         ApplicationStore,
-        ContributorsStore
+        ContributorsStore,
+        ContentStore,
+        DeckStore,
+        SlideStore
     ]
 });
 

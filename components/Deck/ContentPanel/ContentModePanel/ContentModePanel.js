@@ -33,7 +33,7 @@ class ContentModePanel extends React.Component {
                                 <i className="share alternate icon"></i>
                             </a>
                             <a title="play">
-                                <i className="right green play icon"></i>
+                                <i className="right large green circle play icon"></i>
                             </a>
                     </div>
                 </div>

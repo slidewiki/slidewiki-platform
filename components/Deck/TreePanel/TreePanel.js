@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from 'fluxible-router';
 
 class TreePanel extends React.Component {
     render() {
@@ -18,14 +19,14 @@ class TreePanel extends React.Component {
                         </div>
                     </div>
                   <div className="ui secondary segment">
-                    <b>Semantic Web</b>
+                    <b><NavLink href="/deck/56">Semantic Web</NavLink></b>
                   </div>
                   <div className="ui segment">
                       <div className="ui celled ordered list">
                         <div className="item">Introduction</div>
                         <div className="item"><b>RDF</b>
                             <div className="list">
-                              <div className="item"><b>Introduction</b></div>
+                              <div className="item"><b><b><NavLink href="/deck/56/slide/24">Introduction</NavLink></b></b></div>
                               <div className="item">Serializations</div>
                               <div className="item">Examples</div>
                             </div>
