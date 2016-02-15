@@ -1,3 +1,5 @@
+//general app config
+import {shortTitle, fullTitle} from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
@@ -12,14 +14,26 @@ export default {
         method: 'get',
         page: 'home',
         title: 'SlideWiki -- Home',
-        handler: require('../components/Home/Home')
+        handler: require('../components/Home/Home'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: fullTitle
+            });
+            done();
+        }
     },
     about: {
         path: '/about',
         method: 'get',
         page: 'about',
         title: 'SlideWiki -- About',
-        handler: require('../components/Home/About')
+        handler: require('../components/Home/About'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | About'
+            });
+            done();
+        }
     },
     //-----------------------------------DeckPage routes------------------------------
     // selector {stype: 'type of content e.g. slide, deck or question', sid: 'id of content type', sposition: 'if there are multiple item use the position', mode: 'interaction mode e.g. view or edit'}
