@@ -1,5 +1,6 @@
 import React from 'react';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
+import TranslationPanel from './TranslationPanel/TranslationPanel';
 import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
@@ -10,8 +11,11 @@ class Deck extends React.Component {
             <div className="ui vertically padded grid page" ref="deck">
 
               <div className="row">
-                <div className="column">
+                <div className="thirteen wide column">
                   <NavigationPanel />
+                </div>
+                <div className="three wide column">
+                  <TranslationPanel />
                 </div>
               </div>
 
