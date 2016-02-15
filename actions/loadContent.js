@@ -16,7 +16,7 @@ export default function loadContent(context, payload, done) {
                     context.executeAction(loadDeckContent, payloadCustom, done);
                     break;
                 case 'edit':
-                        done();
+                    done();
                     break;
                 default:
                     context.executeAction(loadDeckContent, payloadCustom, done);
