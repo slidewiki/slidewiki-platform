@@ -20,7 +20,7 @@ class ContentPanel extends React.Component {
         }
         return (
             <div className="sw-content-panel" ref="contentPanel">
-                <ContentModePanel />
+                <ContentModePanel ContentStore={this.props.ContentStore} />
                 {targetComponent}
              </div>
         );

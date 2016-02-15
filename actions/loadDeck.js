@@ -9,19 +9,25 @@ export default function loadDeck(context, payload, done) {
     //if no specific content selector is given, use the deck type, view mode and root deck id as default selector
     if(!payload.params.stype) {
         payloadCustom.params.stype = 'deck';
-    }else{
-        pageTitle = pageTitle + ' | ' + payload.params.stype;
     }
     if(!payload.params.sid) {
         payloadCustom.params.sid = payload.params.id;
-    }else{
-        pageTitle = pageTitle + ' | ' + payload.params.sid;
     }
-    if(!payload.params.mode) {
+    //position is an optional parameter which might get confused with the mode, therefore we need to disambiguate it:
+    if(payload.params.sposition) {
+        if(!payload.params.mode){
+            //if sposition is not a numeric value, it means it refers to the mode
+            if(isNaN(payload.params.sposition)){
+                payloadCustom.params.mode = payload.params.sposition;
+                payloadCustom.params.sposition = 0;
+            }else{
+                payloadCustom.params.mode = 'view';
+            }
+        }
+    }else{
         payloadCustom.params.mode = 'view';
-    }else{
-        pageTitle = pageTitle + ' | ' + payload.params.mode;
     }
+    pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
     //load all required actions in parallel
     async.parallel([
         (callback)=> {
