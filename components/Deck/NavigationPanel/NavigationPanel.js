@@ -8,13 +8,6 @@ class NavigationPanel extends React.Component {
                <div className="item">
                  <Breadcrumb />
                </div>
-               <div className="item right">
-                 <div className="ui transparent icon input">
-                   <input type="text" placeholder="Search..." />
-                   <i className="search link icon"></i>
-                 </div>
-               </div>
-
              </div>
         );
     }

@@ -1,7 +1,8 @@
 /*globals document*/
 
 import React from 'react';
-import Nav from './Nav';
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
 import ApplicationStore from '../stores/ApplicationStore';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import { handleHistory } from 'fluxible-router';
@@ -13,8 +14,9 @@ class Application extends React.Component {
 
         return (
             <div>
-                <Nav currentRoute={this.props.currentRoute} links={pages} />
+                <Header currentRoute={this.props.currentRoute} links={pages} />
                 <Handler />
+                <Footer />
             </div>
         );
     }
