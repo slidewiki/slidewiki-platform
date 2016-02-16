@@ -7,6 +7,7 @@ import loadDeck from '../actions/loadDeck';
 import loadSlideContent from '../actions/loadSlideContent';
 import loadDeckContent from '../actions/loadDeckContent';
 import loadDataSources from '../actions/loadDataSources';
+import loadActivities from '../actions/loadActivities';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -90,6 +91,16 @@ export default {
         handler: require('../components/Deck/DataSourcePanel/DataSourcePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDataSources, payload, done);
+        }
+    },
+    activities: {
+        path: '/activities/:stype/:sid',
+        method: 'get',
+        page: 'activities',
+        handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadActivities, payload, done);
+            done();
         }
     }
 };

@@ -1,5 +1,3 @@
-'use strict';
-
 export default {
     name: 'contributors',
     // At least one of the CRUD methods is Required

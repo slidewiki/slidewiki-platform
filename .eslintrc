@@ -27,7 +27,7 @@
     "no-use-before-define": 0,
     "no-unused-vars": 0, // see https://github.com/babel/babel-eslint/issues/21
     "semi": [2, "always"],
-    "strict": [1, "global"],
+    "strict": 0,
     "yoda": [2, "never"],"no-alert": 2,
     "no-const-assign": 2,
     "no-this-before-super": 2,

@@ -30,21 +30,21 @@ export default function loadDeck(context, payload, done) {
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
     //load all required actions in parallel
     async.parallel([
-        (callback)=> {
+        (callback) => {
             context.executeAction(loadContent, payloadCustom, callback);
         },
-        (callback)=> {
+        (callback) => {
             context.executeAction(loadContributors, payloadCustom, callback);
         },
-        (callback)=> {
+        (callback) => {
             //another sample action with timeout
-            setTimeout(()=>{
+            setTimeout(() => {
                 callback(null);
             }, 200);
         }
     ],
     // final callback
-    (err, results)=> {
+    (err, results) => {
         if (err){
             console.log(err);
         }

@@ -1,12 +1,12 @@
 export default {
-    name: 'datasource',
+    name: 'activities',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        if(resource === 'datasource.list'){
+        if(resource === 'activities.list'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            callback(null, {datasources: []});
+            callback(null, {activities: []});
         }
     }
     // other methods

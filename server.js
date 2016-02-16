@@ -38,6 +38,7 @@ fetchrPlugin.registerService(require('./services/contributors'));
 fetchrPlugin.registerService(require('./services/deck'));
 fetchrPlugin.registerService(require('./services/slide'));
 fetchrPlugin.registerService(require('./services/datasource'));
+fetchrPlugin.registerService(require('./services/activities'));
 
 server.use((req, res, next) => {
 
