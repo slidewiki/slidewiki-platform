@@ -20,6 +20,7 @@
   "main": "start.js",
   "scripts": {
     "clean": "rm -rf build/ coverage/",
+    "start": "node start.js",
     "build": " npm run lint && webpack --config webpack.config.production.js && NODE_ENV=production npm start",
     "dev": "node webpack-dev-server.js",
     "lint": "eslint ./**/*.js",
