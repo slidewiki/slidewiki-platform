@@ -37,6 +37,7 @@ server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 fetchrPlugin.registerService(require('./services/contributors'));
 fetchrPlugin.registerService(require('./services/deck'));
 fetchrPlugin.registerService(require('./services/slide'));
+fetchrPlugin.registerService(require('./services/datasource'));
 
 server.use((req, res, next) => {
 

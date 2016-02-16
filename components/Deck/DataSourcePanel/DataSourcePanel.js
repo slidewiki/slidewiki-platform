@@ -5,7 +5,7 @@ class DataSourcePanel extends React.Component {
         return (
             <div className="ui segments" ref="dataSourcePanel">
                 <div className="ui secondary segment">
-                    <a href="/datasources/deck/57">Data Sources</a>
+                    <a href="/datasource/deck/57">Data Sources</a>
                 </div>
                 <div className="ui orange segment">
                     <div className="ui divided list">

@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/slidewiki/slidewiki-platform"
   },
-  "bugs": "https://github.com/slidewiki/Microservice-Template/issues",
+  "bugs": "https://github.com/slidewiki/slidewiki-platform/issues",
   "engines": {
     "node": "5.6.x"
   },

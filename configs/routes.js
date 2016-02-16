@@ -6,6 +6,7 @@ import loadContributors from '../actions/loadContributors';
 import loadDeck from '../actions/loadDeck';
 import loadSlideContent from '../actions/loadSlideContent';
 import loadDeckContent from '../actions/loadDeckContent';
+import loadDataSources from '../actions/loadDataSources';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -80,6 +81,15 @@ export default {
         handler: require('../components/Deck/ContentPanel/DeckPanel/DeckPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckContent, payload, done);
+        }
+    },
+    datasource: {
+        path: '/datasource/:stype/:sid',
+        method: 'get',
+        page: 'datasources',
+        handler: require('../components/Deck/DataSourcePanel/DataSourcePanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDataSources, payload, done);
         }
     }
 };
