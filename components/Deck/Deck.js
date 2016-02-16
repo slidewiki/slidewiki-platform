@@ -10,7 +10,7 @@ import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 class Deck extends React.Component {
     render() {
         return (
-            <div className="ui vertically padded grid page" ref="deck">
+            <div className="ui vertically padded stackable grid page" ref="deck">
 
               <div className="row">
                   <div className="four wide column">
@@ -21,7 +21,7 @@ class Deck extends React.Component {
                 </div>
               </div>
 
-              <div className="ui hidden divider"></div>
+
 
               <div className="row">
 
@@ -29,9 +29,11 @@ class Deck extends React.Component {
                     <div className="row">
                         <TreePanel />
                     </div>
+                    <div className="ui hidden divider"></div>
                     <div className="row">
                         <ContributorsPanel />
                     </div>
+                    <div className="ui hidden divider"></div>
                     <div className="row">
                         <DataSourcePanel />
                     </div>
@@ -42,7 +44,7 @@ class Deck extends React.Component {
                   <div className="row">
                     <ContentPanel />
                   </div>
-                  <br/>
+                  <div className="ui hidden divider"></div>
                   <div className="row">
                       <ActivityFeedPanel />
                   </div>
