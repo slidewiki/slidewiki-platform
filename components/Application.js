@@ -13,7 +13,7 @@ class Application extends React.Component {
         let Handler = this.props.currentRoute.handler;
 
         return (
-            <div>
+            <div className="slidewiki-page">
                 <Header currentRoute={this.props.currentRoute} links={pages} />
                 <Handler />
                 <Footer />

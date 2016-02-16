@@ -4,6 +4,8 @@ import TranslationPanel from './TranslationPanel/TranslationPanel';
 import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
+import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
+import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 class Deck extends React.Component {
     render() {
@@ -31,16 +33,20 @@ class Deck extends React.Component {
                   <div className="row">
                     <ContentPanel />
                   </div>
+                  <br/>
                   <div className="row">
-
-                  </div>
-                  <div className="row">
-
+                      <ActivityFeedPanel />
                   </div>
                 </div>
 
                 <div className="three wide column">
-                  <ContributorsPanel />
+                    <div className="row">
+                        <ContributorsPanel />
+                    </div>
+                    <br/>
+                    <div className="row">
+                        <DataSourcePanel />
+                    </div>
                 </div>
 
               </div>

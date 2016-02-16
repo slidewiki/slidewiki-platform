@@ -1,25 +1,18 @@
 import React from 'react';
+import ContributorItem from './ContributorItem';
 
 class ContributorsList extends React.Component {
     render() {
-        let list = this.props.items.map(function(node, index) {
+        let list = this.props.items.map((node, index)=> {
             return (
-                <div key={index} className="item">
-                    <i className="large github middle aligned icon"></i>
-                    <div className="content">
-                      <a className="header" href={"/user/" + node.id}>{node.username}</a>
-                      <div className="description">{node.organization}</div>
-                    </div>
-                </div>
+                <ContributorItem key={index} data={node} />
             );
         });
         return (
-            <div className="sw-contributors-panel-list" ref="contributorsList">
-
+            <div ref="contributorsList">
                 <div className="ui relaxed divided list">
                     {list}
                 </div>
-
              </div>
         );
     }
