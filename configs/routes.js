@@ -8,6 +8,7 @@ import loadSlideContent from '../actions/loadSlideContent';
 import loadDeckContent from '../actions/loadDeckContent';
 import loadDataSources from '../actions/loadDataSources';
 import loadActivities from '../actions/loadActivities';
+import loadDeckTree from '../actions/loadDeckTree';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -100,6 +101,16 @@ export default {
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadActivities, payload, done);
+            done();
+        }
+    },
+    decktree: {
+        path: '/decktree/:sid',
+        method: 'get',
+        page: 'decktree',
+        handler: require('../components/Deck/TreePanel/TreePanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckTree, payload, done);
             done();
         }
     }
