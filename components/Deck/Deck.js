@@ -13,11 +13,11 @@ class Deck extends React.Component {
             <div className="ui vertically padded grid page" ref="deck">
 
               <div className="row">
-                <div className="thirteen wide column">
+                  <div className="four wide column">
+                    <TranslationPanel />
+                  </div>
+                <div className="twelve wide column">
                   <NavigationPanel />
-                </div>
-                <div className="three wide column">
-                  <TranslationPanel />
                 </div>
               </div>
 
@@ -26,10 +26,19 @@ class Deck extends React.Component {
               <div className="row">
 
                 <div className="four wide column">
-                  <TreePanel />
+                    <div className="row">
+                        <TreePanel />
+                    </div>
+                    <div className="row">
+                        <ContributorsPanel />
+                    </div>
+                    <div className="row">
+                        <DataSourcePanel />
+                    </div>
+
                 </div>
 
-                <div className="nine wide column">
+                <div className="twelve wide column">
                   <div className="row">
                     <ContentPanel />
                   </div>
@@ -37,16 +46,6 @@ class Deck extends React.Component {
                   <div className="row">
                       <ActivityFeedPanel />
                   </div>
-                </div>
-
-                <div className="three wide column">
-                    <div className="row">
-                        <ContributorsPanel />
-                    </div>
-                    <br/>
-                    <div className="row">
-                        <DataSourcePanel />
-                    </div>
                 </div>
 
               </div>
