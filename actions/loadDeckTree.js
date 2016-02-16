@@ -6,7 +6,7 @@ export default function loadDeckTree(context, payload, done) {
         } else {
             context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Deck Tree | ' + payload.params.stype + ' | ' + payload.params.sid;
+        let pageTitle = shortTitle + ' | Deck Tree | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle
         });

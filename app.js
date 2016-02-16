@@ -10,6 +10,7 @@ import SlideStore from './stores/SlideStore';
 import DataSourceStore from './stores/DataSourceStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
+import TranslationStore from './stores/TranslationStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -23,7 +24,8 @@ const app = new Fluxible({
         SlideStore,
         DataSourceStore,
         ActivityFeedStore,
-        DeckTreeStore
+        DeckTreeStore,
+        TranslationStore
     ]
 });
 

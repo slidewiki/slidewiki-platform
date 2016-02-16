@@ -9,6 +9,7 @@ import loadDeckContent from '../actions/loadDeckContent';
 import loadDataSources from '../actions/loadDataSources';
 import loadActivities from '../actions/loadActivities';
 import loadDeckTree from '../actions/loadDeckTree';
+import loadTranslations from '../actions/loadTranslations';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -101,6 +102,16 @@ export default {
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadActivities, payload, done);
+            done();
+        }
+    },
+    translations: {
+        path: '/translations/:stype/:sid',
+        method: 'get',
+        page: 'translations',
+        handler: require('../components/Deck/TranslationPanel/TranslationPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadTranslations, payload, done);
             done();
         }
     },
