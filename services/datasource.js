@@ -6,10 +6,11 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
+            let args = params.params? params.params : params;
             let datasources = [
-                {'title': 'Source 1', 'id': 231},
-                {'title': 'Source 2', 'id': 243},
-                {'title': 'Source 3', 'id': 31},
+                {'title': 'Source 1 #' + args.sid, 'id': 231},
+                {'title': 'Source 2 #' + args.sid, 'id': 243},
+                {'title': 'Source 3 #' + args.sid, 'id': 31},
             ];
             callback(null, {datasources: datasources});
         }

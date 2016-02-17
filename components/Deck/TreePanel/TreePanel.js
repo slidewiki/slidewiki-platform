@@ -26,15 +26,15 @@ class TreePanel extends React.Component {
                   <div className="ui segment">
                       <div className="ui celled ordered list">
                         <div className="item">Introduction</div>
-                        <div className="item"><b>RDF</b>
+                        <div className="item"><b><NavLink href="/deck/23">RDF</NavLink></b>
                             <div className="list">
-                              <div className="item"><b><b><NavLink href="/deck/56/slide/24">Introduction</NavLink></b></b></div>
-                              <div className="item">Serializations</div>
-                              <div className="item">Examples</div>
+                              <div className="item"><b><NavLink href="/deck/56/slide/24">Introduction</NavLink></b></div>
+                              <div className="item"><NavLink href="/deck/56/slide/28">Serializations</NavLink></div>
+                              <div className="item"><NavLink href="/deck/56/slide/45">Examples</NavLink></div>
                             </div>
                         </div>
-                        <div className="item">Cats</div>
-                        <div className="item">Horses</div>
+                        <div className="item"><NavLink href="/deck/59">Cats</NavLink></div>
+                        <div className="item"><NavLink href="/deck/98">Horses</NavLink></div>
                         <div className="item">Dogs
                           <div className="list">
                             <div className="item">Labradoodles</div>

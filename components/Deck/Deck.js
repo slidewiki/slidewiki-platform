@@ -21,10 +21,7 @@ class Deck extends React.Component {
                 </div>
               </div>
 
-
-
               <div className="row">
-
                 <div className="four wide column">
                     <div className="row">
                         <TreePanel />
@@ -37,9 +34,7 @@ class Deck extends React.Component {
                     <div className="row">
                         <DataSourcePanel />
                     </div>
-
                 </div>
-
                 <div className="twelve wide column">
                   <div className="row">
                     <ContentPanel />
@@ -49,8 +44,8 @@ class Deck extends React.Component {
                       <ActivityFeedPanel />
                   </div>
                 </div>
-
               </div>
+              
             </div>
         );
     }

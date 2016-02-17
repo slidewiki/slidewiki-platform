@@ -8,9 +8,9 @@ export default {
             /*********received data from microservices*************/
             let args = params.params? params.params : params;
             let sampleData = [
-                {'id': args.sid + '1', 'username': 'ali1k', 'organization': 'VUA'},
-                {'id': args.sid + '2', 'username': 'soeren', 'organization': 'Fraunhofer'},
-                {'id': args.sid + '3', 'username': 'darya', 'organization': 'Bonn'}
+                {'id': '1', 'username': 'ali1k' + args.sid, 'organization': 'VUA'},
+                {'id': '2', 'username': 'soeren' + args.sid, 'organization': 'Fraunhofer'},
+                {'id': '3', 'username': 'darya' + args.sid, 'organization': 'Bonn'}
             ];
             callback(null, {contributors: sampleData});
         }
