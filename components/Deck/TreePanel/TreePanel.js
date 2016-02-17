@@ -1,5 +1,7 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
 
 class TreePanel extends React.Component {
     render() {
@@ -49,4 +51,9 @@ class TreePanel extends React.Component {
     }
 }
 
+TreePanel = connectToStores(TreePanel, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 export default TreePanel;

@@ -6,7 +6,11 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            callback(null, {activities: []});
+            let activities = [
+                {'type': 'add', 'contentType': 'slide', 'contentID': 543, 'username': 'Ali K.', 'userID': 23, 'date': '1 Hour Ago', 'likesNo': 4},
+                {'type': 'edit', 'contentType': 'deck', 'contentID': 53, 'username': 'Dara T.', 'userID': 13, 'date': 'Today', 'likesNo': 1}
+            ];
+            callback(null, {activities: activities});
         }
     }
     // other methods

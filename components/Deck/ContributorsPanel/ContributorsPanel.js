@@ -21,7 +21,7 @@ class ContributorsPanel extends React.Component {
         );
     }
 }
-ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], (context, props)=> {
+ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], (context, props) => {
     return {
         ContributorsStore: context.getStore(ContributorsStore).getState()
     };

@@ -2,6 +2,9 @@ import async from 'async';
 import {shortTitle} from '../configs/general';
 import loadContent from './loadContent';
 import loadContributors from './loadContributors';
+import loadTranslations from './loadTranslations';
+import loadDataSources from './loadDataSources';
+import loadActivities from './loadActivities';
 
 export default function loadDeck(context, payload, done) {
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
@@ -34,7 +37,16 @@ export default function loadDeck(context, payload, done) {
             context.executeAction(loadContent, payloadCustom, callback);
         },
         (callback) => {
+            context.executeAction(loadTranslations, payloadCustom, callback);
+        },
+        (callback) => {
             context.executeAction(loadContributors, payloadCustom, callback);
+        },
+        (callback) => {
+            context.executeAction(loadActivities, payloadCustom, callback);
+        },
+        (callback) => {
+            context.executeAction(loadDataSources, payloadCustom, callback);
         },
         (callback) => {
             //another sample action with timeout

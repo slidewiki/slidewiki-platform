@@ -27,7 +27,7 @@ class ContentPanel extends React.Component {
     }
 }
 
-ContentPanel = connectToStores(ContentPanel, [ContentStore], (context, props)=> {
+ContentPanel = connectToStores(ContentPanel, [ContentStore], (context, props) => {
     return {
         ContentStore: context.getStore(ContentStore).getState()
     };

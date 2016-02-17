@@ -102,7 +102,6 @@ export default {
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadActivities, payload, done);
-            done();
         }
     },
     translations: {
@@ -112,7 +111,6 @@ export default {
         handler: require('../components/Deck/TranslationPanel/TranslationPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadTranslations, payload, done);
-            done();
         }
     },
     decktree: {
@@ -122,7 +120,6 @@ export default {
         handler: require('../components/Deck/TreePanel/TreePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
-            done();
         }
     }
 };

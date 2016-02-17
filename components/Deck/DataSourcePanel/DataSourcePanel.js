@@ -1,4 +1,7 @@
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
+import DataSourceStore from '../../../stores/DataSourceStore';
+import DataSourceList from './DataSourceList';
 
 class DataSourcePanel extends React.Component {
     render() {
@@ -8,24 +11,16 @@ class DataSourcePanel extends React.Component {
                     <a href="/datasource/deck/57">Data Sources</a>
                 </div>
                 <div className="ui orange segment">
-                    <div className="ui divided list">
-                        <div className="item">
-                            <i className="ui icon file"></i>
-                            <div className="content"> source 1</div>
-                        </div>
-                        <div className="item">
-                            <i className="ui icon file"></i>
-                            <div className="content"> source 2</div>
-                        </div>
-                        <div className="item">
-                            <i className="ui icon file"></i>
-                            <div className="content"> source 3</div>
-                        </div>
-                    </div>
+                    <DataSourceList items={this.props.DataSourceStore.datasources} />
                 </div>
             </div>
         );
     }
 }
 
+DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore], (context, props) => {
+    return {
+        DataSourceStore: context.getStore(DataSourceStore).getState()
+    };
+});
 export default DataSourcePanel;

@@ -5,7 +5,7 @@ class DataSourceStore extends BaseStore {
         super(dispatcher);
         this.datasources = [];
     }
-    updateContributors(payload) {
+    updateDataSources(payload) {
         this.datasources = payload.datasources;
         this.emitChange();
     }
@@ -24,7 +24,7 @@ class DataSourceStore extends BaseStore {
 
 DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
-    'LOAD_DATASOURCE_SUCCESS': 'updateDataSources'
+    'LOAD_DATASOURCES_SUCCESS': 'updateDataSources'
 };
 
 export default DataSourceStore;

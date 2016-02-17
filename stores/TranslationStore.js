@@ -3,15 +3,18 @@ import {BaseStore} from 'fluxible/addons';
 class TranslationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.datasources = [];
+        this.translations = [];
+        this.currentLang = {};
     }
     updateTranslations(payload) {
         this.translations = payload.translations;
+        this.currentLang = payload.currentLang;
         this.emitChange();
     }
     getState() {
         return {
-            translations: this.translations
+            translations: this.translations,
+            currentLang: this.currentLang
         };
     }
     dehydrate() {
@@ -19,6 +22,7 @@ class TranslationStore extends BaseStore {
     }
     rehydrate(state) {
         this.translations = state.translations;
+        this.currentLang = state.currentLang;
     }
 }
 

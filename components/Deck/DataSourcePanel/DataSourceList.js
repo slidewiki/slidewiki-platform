@@ -1,15 +1,17 @@
 import React from 'react';
-import ContributorItem from './ContributorItem';
 
-class ContributorsList extends React.Component {
+class DataSourceList extends React.Component {
     render() {
         let list = this.props.items.map((node, index) => {
             return (
-                <ContributorItem key={index} data={node} />
+                <div className="item" key={index}>
+                    <i className="ui icon file"></i>
+                    <div className="content"> {node.title}</div>
+                </div>
             );
         });
         return (
-            <div ref="contributorsList">
+            <div ref="datasourcesList">
                 <div className="ui relaxed divided list">
                     {list}
                 </div>
@@ -18,4 +20,4 @@ class ContributorsList extends React.Component {
     }
 }
 
-export default ContributorsList;
+export default DataSourceList;

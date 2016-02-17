@@ -17,7 +17,7 @@ class SlidePanel extends React.Component {
     }
 }
 
-SlidePanel = connectToStores(SlidePanel, [SlideStore], (context, props)=> {
+SlidePanel = connectToStores(SlidePanel, [SlideStore], (context, props) => {
     return {
         SlideStore: context.getStore(SlideStore).getState()
     };

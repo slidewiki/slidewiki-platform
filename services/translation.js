@@ -6,7 +6,12 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            callback(null, {translations: []});
+            let translations = [
+                {'lang': 'EN', 'id': 343},
+                {'lang': 'DE', 'id': 32}
+            ];
+            let currentLang = {'lang': 'EN', 'id': 343};
+            callback(null, {translations: translations, currentLang: currentLang});
         }
     }
     // other methods

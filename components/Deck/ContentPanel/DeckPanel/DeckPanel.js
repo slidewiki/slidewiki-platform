@@ -15,7 +15,7 @@ class DeckPanel extends React.Component {
     }
 }
 
-DeckPanel = connectToStores(DeckPanel, [DeckStore], (context, props)=> {
+DeckPanel = connectToStores(DeckPanel, [DeckStore], (context, props) => {
     return {
         DeckStore: context.getStore(DeckStore).getState()
     };

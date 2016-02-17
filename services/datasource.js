@@ -6,7 +6,12 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            callback(null, {datasources: []});
+            let datasources = [
+                {'title': 'Source 1', 'id': 231},
+                {'title': 'Source 2', 'id': 243},
+                {'title': 'Source 3', 'id': 31},
+            ];
+            callback(null, {datasources: datasources});
         }
     }
     // other methods
