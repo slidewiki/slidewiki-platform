@@ -6,9 +6,10 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
+            let args = params.params? params.params : params;
             let activities = [
-                {'type': 'add', 'contentType': 'slide', 'contentID': 543, 'username': 'Ali K.', 'userID': 23, 'date': '1 Hour Ago', 'likesNo': 4},
-                {'type': 'edit', 'contentType': 'deck', 'contentID': 53, 'username': 'Dara T.', 'userID': 13, 'date': 'Today', 'likesNo': 1}
+                {'type': 'add', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Ali K.', 'userID': 23, 'date': '1 Hour Ago', 'likesNo': 4},
+                {'type': 'edit', 'contentType': 'deck', 'contentID': 53 + parseInt(args.sid), 'username': 'Dara T.', 'userID': 13, 'date': 'Today', 'likesNo': 1}
             ];
             callback(null, {activities: activities});
         }
