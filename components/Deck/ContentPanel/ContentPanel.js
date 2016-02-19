@@ -1,26 +1,42 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../stores/ContentStore';
-import ContentModePanel from './ContentModePanel/ContentModePanel';
-import DeckPanel from './DeckPanel/DeckPanel';
-import SlidePanel from './SlidePanel/SlidePanel';
+import ContentModeMenu from './ContentModeMenu/ContentModeMenu';
+import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
+import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
+import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
+import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 
 class ContentPanel extends React.Component {
     render() {
         let targetComponent = '';
         switch (this.props.ContentStore.contentType) {
             case 'deck':
-                targetComponent = <DeckPanel />;
+                switch (this.props.ContentStore.mode) {
+                    case 'view':
+                        targetComponent = <DeckViewPanel ContentStore={this.props.ContentStore} />;
+                        break;
+                    case 'edit':
+                        targetComponent = <DeckEditPanel ContentStore={this.props.ContentStore} />;
+                        break;
+                }
                 break;
             case 'slide':
-                targetComponent = <SlidePanel />;
+                switch (this.props.ContentStore.mode) {
+                    case 'view':
+                        targetComponent = <SlideViewPanel ContentStore={this.props.ContentStore} />;
+                        break;
+                    case 'edit':
+                        targetComponent = <SlideEditPanel ContentStore={this.props.ContentStore} />;
+                        break;
+                }
                 break;
             default:
 
         }
         return (
             <div className="sw-content-panel" ref="contentPanel">
-                <ContentModePanel ContentStore={this.props.ContentStore} />
+                <ContentModeMenu ContentStore={this.props.ContentStore} />
                 {targetComponent}
              </div>
         );

@@ -12,7 +12,7 @@ class ActivityList extends React.Component {
                       <div className="summary">
                         <a className="user" href={'/user/' + node.userID}>
                           {node.username}
-                      </a> {node.type}ed {node.contentType} <a href={'/slidecontent/' + node.contentID}>#{node.contentID}</a>.
+                      </a> {node.type}ed {node.contentType} <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>.
                         <div className="date">
                           {node.date}
                         </div>

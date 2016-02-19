@@ -1,6 +1,8 @@
 import {shortTitle} from '../configs/general';
-import loadDeckContent from './loadDeckContent';
-import loadSlideContent from './loadSlideContent';
+import loadDeckView from './loadDeckView';
+import loadDeckEdit from './loadDeckEdit';
+import loadSlideView from './loadSlideView';
+import loadSlideEdit from './loadSlideEdit';
 
 export default function loadContent(context, payload, done) {
     let payloadCustom = payload;
@@ -13,25 +15,25 @@ export default function loadContent(context, payload, done) {
         case 'deck':
             switch (payload.params.mode) {
                 case 'view':
-                    context.executeAction(loadDeckContent, payloadCustom, done);
+                    context.executeAction(loadDeckView, payloadCustom, done);
                     break;
                 case 'edit':
-                    done();
+                    context.executeAction(loadDeckEdit, payloadCustom, done);
                     break;
                 default:
-                    context.executeAction(loadDeckContent, payloadCustom, done);
+                    context.executeAction(loadDeckView, payloadCustom, done);
             }
             break;
         case 'slide':
             switch (payload.params.mode) {
                 case 'view':
-                    context.executeAction(loadSlideContent, payloadCustom, done);
+                    context.executeAction(loadSlideView, payloadCustom, done);
                     break;
                 case 'edit':
-                    done();
+                    context.executeAction(loadSlideEdit, payloadCustom, done);
                     break;
                 default:
-                    context.executeAction(loadSlideContent, payloadCustom, done);
+                    context.executeAction(loadSlideView, payloadCustom, done);
             }
             break;
         default:

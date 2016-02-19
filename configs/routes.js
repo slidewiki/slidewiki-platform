@@ -4,8 +4,10 @@ import {shortTitle, fullTitle} from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadDeck from '../actions/loadDeck';
-import loadSlideContent from '../actions/loadSlideContent';
-import loadDeckContent from '../actions/loadDeckContent';
+import loadSlideView from '../actions/loadSlideView';
+import loadSlideEdit from '../actions/loadSlideEdit';
+import loadDeckView from '../actions/loadDeckView';
+import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/loadDataSources';
 import loadActivities from '../actions/loadActivities';
 import loadDeckTree from '../actions/loadDeckTree';
@@ -68,22 +70,40 @@ export default {
             context.executeAction(loadContent, payload, done);
         }
     },
-    slidecontent: {
-        path: '/slidecontent/:sid/:mode?',
+    slideview: {
+        path: '/slideview/:sid',
         method: 'get',
-        page: 'slidecontent',
-        handler: require('../components/Deck/ContentPanel/SlidePanel/SlidePanel'),
+        page: 'slideview',
+        handler: require('../components/Deck/ContentPanel/SlideModes/SlideViewPanel/SlideViewPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadSlideContent, payload, done);
+            context.executeAction(loadSlideView, payload, done);
         }
     },
-    deckcontent: {
-        path: '/deckcontent/:sid/:mode?',
+    slideedit: {
+        path: '/slideedit/:sid',
         method: 'get',
-        page: 'deckcontent',
-        handler: require('../components/Deck/ContentPanel/DeckPanel/DeckPanel'),
+        page: 'slideedit',
+        handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeckContent, payload, done);
+            context.executeAction(loadSlideEdit, payload, done);
+        }
+    },
+    deckview: {
+        path: '/deckview/:sid',
+        method: 'get',
+        page: 'deckview',
+        handler: require('../components/Deck/ContentPanel/DeckModes/DeckViewPanel/DeckViewPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckView, payload, done);
+        }
+    },
+    deckedit: {
+        path: '/deckedit/:sid',
+        method: 'get',
+        page: 'deckedit',
+        handler: require('../components/Deck/ContentPanel/DeckModes/DeckEditPanel/DeckEditPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckEdit, payload, done);
         }
     },
     datasource: {

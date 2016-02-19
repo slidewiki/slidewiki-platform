@@ -2,11 +2,11 @@ export default {
     name: 'deck',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        let args = params.params? params.params : params;
         if(resource === 'deck.content'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            let args = params.params? params.params : params;
             let sampleContent = `
             This is a sample deck content. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
             <br/>
@@ -39,6 +39,16 @@ export default {
             </div>
             `;
             callback(null, {content: sampleContent});
+        } else if(resource === 'deck.properties'){
+            /*********connect to microservices*************/
+            //todo
+            /*********received data from microservices*************/
+            let deckProps = {
+                'title': 'Sample Deck Title',
+                'language': 'EN',
+                'tags': ['RDF', 'Semantic Web', 'Linked Data']
+            };
+            callback(null, {deckProps: deckProps});
         }
     }
     // other methods

@@ -5,8 +5,10 @@ import ApplicationStore from './stores/ApplicationStore';
 import RouteStore from './stores/RouteStore';
 import ContributorsStore from './stores/ContributorsStore';
 import ContentStore from './stores/ContentStore';
-import DeckStore from './stores/DeckStore';
-import SlideStore from './stores/SlideStore';
+import DeckViewStore from './stores/DeckViewStore';
+import DeckEditStore from './stores/DeckEditStore';
+import SlideViewStore from './stores/SlideViewStore';
+import SlideEditStore from './stores/SlideEditStore';
 import DataSourceStore from './stores/DataSourceStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
@@ -20,8 +22,10 @@ const app = new Fluxible({
         ApplicationStore,
         ContributorsStore,
         ContentStore,
-        DeckStore,
-        SlideStore,
+        DeckViewStore,
+        DeckEditStore,
+        SlideViewStore,
+        SlideEditStore,
         DataSourceStore,
         ActivityFeedStore,
         DeckTreeStore,

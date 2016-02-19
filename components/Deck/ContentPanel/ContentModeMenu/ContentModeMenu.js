@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 
-class ContentModePanel extends React.Component {
+class ContentModeMenu extends React.Component {
     render() {
         let contextPath = '', positionPath = '';
         if(this.props.ContentStore.contextID){
@@ -16,7 +16,7 @@ class ContentModePanel extends React.Component {
             contextPath = '/content';
         }
         return (
-            <div className="sw-content-panel" ref="contentModePanel">
+            <div className="sw-content-panel" ref="contentModeMenu">
                 <div className="ui top attached tabular menu">
                     <NavLink className={'item' + (this.props.ContentStore.mode === 'view' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/view'}>
                         View
@@ -55,4 +55,4 @@ class ContentModePanel extends React.Component {
     }
 }
 
-export default ContentModePanel;
+export default ContentModeMenu;

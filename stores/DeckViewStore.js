@@ -1,10 +1,8 @@
 import {BaseStore} from 'fluxible/addons';
-import {ContentStore} from './ContentStore';
 
-class SlideStore extends BaseStore {
+class DeckViewStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        //this.dispatcher = dispatcher; // Provides access to waitFor and getStore methods
         this.content = '';
     }
     updateContent(payload) {
@@ -24,9 +22,9 @@ class SlideStore extends BaseStore {
     }
 }
 
-SlideStore.storeName = 'SlideStore';
-SlideStore.handlers = {
-    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent'
+DeckViewStore.storeName = 'DeckViewStore';
+DeckViewStore.handlers = {
+    'LOAD_DECK_CONTENT_SUCCESS': 'updateContent'
 };
 
-export default SlideStore;
+export default DeckViewStore;
