@@ -24,6 +24,12 @@ class ContentModeMenu extends React.Component {
                     <NavLink className={'item' + (this.props.ContentStore.mode === 'edit' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/edit'}>
                         Edit
                     </NavLink>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'history' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/history'}>
+                        History
+                    </NavLink>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'usage' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/usage'}>
+                        Usage
+                    </NavLink>
                     <NavLink className={'item' + (this.props.ContentStore.mode === 'questions' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/questions'}>
                         Questions<span className="ui tiny label">12</span>
                     </NavLink>
