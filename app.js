@@ -13,6 +13,8 @@ import DataSourceStore from './stores/DataSourceStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
 import TranslationStore from './stores/TranslationStore';
+import ContentHistoryStore from './stores/ContentHistoryStore';
+import ContentUsageStore from './stores/ContentUsageStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -29,7 +31,9 @@ const app = new Fluxible({
         DataSourceStore,
         ActivityFeedStore,
         DeckTreeStore,
-        TranslationStore
+        TranslationStore,
+        ContentHistoryStore,
+        ContentUsageStore
     ]
 });
 

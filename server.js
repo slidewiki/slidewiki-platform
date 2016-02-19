@@ -41,6 +41,8 @@ fetchrPlugin.registerService(require('./services/datasource'));
 fetchrPlugin.registerService(require('./services/activities'));
 fetchrPlugin.registerService(require('./services/decktree'));
 fetchrPlugin.registerService(require('./services/translation'));
+fetchrPlugin.registerService(require('./services/history'));
+fetchrPlugin.registerService(require('./services/usage'));
 
 server.use((req, res, next) => {
 

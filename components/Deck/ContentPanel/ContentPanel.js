@@ -6,6 +6,8 @@ import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
 import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
+import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
+import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
 
 class ContentPanel extends React.Component {
     render() {
@@ -14,20 +16,32 @@ class ContentPanel extends React.Component {
             case 'deck':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <DeckViewPanel ContentStore={this.props.ContentStore} />;
+                        targetComponent = <DeckViewPanel/>;
                         break;
                     case 'edit':
-                        targetComponent = <DeckEditPanel ContentStore={this.props.ContentStore} />;
+                        targetComponent = <DeckEditPanel />;
+                        break;
+                    case 'history':
+                        targetComponent = <ContentHistoryPanel />;
+                        break;
+                    case 'usage':
+                        targetComponent = <ContentUsagePanel />;
                         break;
                 }
                 break;
             case 'slide':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <SlideViewPanel ContentStore={this.props.ContentStore} />;
+                        targetComponent = <SlideViewPanel />;
                         break;
                     case 'edit':
-                        targetComponent = <SlideEditPanel ContentStore={this.props.ContentStore} />;
+                        targetComponent = <SlideEditPanel />;
+                        break;
+                    case 'history':
+                        targetComponent = <ContentHistoryPanel />;
+                        break;
+                    case 'usage':
+                        targetComponent = <ContentUsagePanel />;
                         break;
                 }
                 break;

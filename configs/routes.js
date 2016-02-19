@@ -12,6 +12,8 @@ import loadDataSources from '../actions/loadDataSources';
 import loadActivities from '../actions/loadActivities';
 import loadDeckTree from '../actions/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
+import loadContentHistory from '../actions/loadContentHistory';
+import loadContentUsage from '../actions/loadContentUsage';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -131,6 +133,24 @@ export default {
         handler: require('../components/Deck/TranslationPanel/TranslationPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadTranslations, payload, done);
+        }
+    },
+    history: {
+        path: '/history/:stype/:sid',
+        method: 'get',
+        page: 'history',
+        handler: require('../components/Deck/ContentPanel/ContentHistoryPanel/ContentHistoryPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContentHistory, payload, done);
+        }
+    },
+    usage: {
+        path: '/usage/:stype/:sid',
+        method: 'get',
+        page: 'usage',
+        handler: require('../components/Deck/ContentPanel/ContentUsagePanel/ContentUsagePanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContentUsage, payload, done);
         }
     },
     decktree: {
