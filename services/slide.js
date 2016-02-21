@@ -2,11 +2,11 @@ export default {
     name: 'slide',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        let args = params.params? params.params : params;
         if(resource === 'slide.content'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            let args = params.params? params.params : params;
             let sampleContent = `
             <h2>Introduction</h2>
             <div>

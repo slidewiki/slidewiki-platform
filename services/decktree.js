@@ -2,6 +2,7 @@ export default {
     name: 'decktree',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        let args = params.params? params.params : params;
         if(resource === 'decktree.nodes'){
             /*********connect to microservices*************/
             //todo

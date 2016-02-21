@@ -2,11 +2,11 @@ export default {
     name: 'datasource',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        let args = params.params? params.params : params;
         if(resource === 'datasource.list'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            let args = params.params? params.params : params;
             let datasources = [
                 {'title': 'Source 1 #' + args.sid, 'id': 231},
                 {'title': 'Source 2 #' + args.sid, 'id': 243},
