@@ -14,6 +14,8 @@ import loadDeckTree from '../actions/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
+import loadContentQuestions from '../actions/loadContentQuestions';
+import loadContentDiscussion from '../actions/loadContentDiscussion';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -151,6 +153,24 @@ export default {
         handler: require('../components/Deck/ContentPanel/ContentUsagePanel/ContentUsagePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentUsage, payload, done);
+        }
+    },
+    questions: {
+        path: '/questions/:stype/:sid',
+        method: 'get',
+        page: 'questions',
+        handler: require('../components/Deck/ContentPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContentQuestions, payload, done);
+        }
+    },
+    questions: {
+        path: '/discussion/:stype/:sid',
+        method: 'get',
+        page: 'discussion',
+        handler: require('../components/Deck/ContentPanel/ContentDiscussionPanel/ContentDiscussionPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadContentDiscussion, payload, done);
         }
     },
     decktree: {

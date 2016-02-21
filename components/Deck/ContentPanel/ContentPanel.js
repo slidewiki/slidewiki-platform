@@ -8,6 +8,8 @@ import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
 import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
+import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
+import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
 
 class ContentPanel extends React.Component {
     render() {
@@ -27,6 +29,14 @@ class ContentPanel extends React.Component {
                     case 'usage':
                         targetComponent = <ContentUsagePanel />;
                         break;
+                    case 'questions':
+                        targetComponent = <ContentQuestionsPanel />;
+                        break;
+                    case 'discussion':
+                        targetComponent = <ContentDiscussionPanel />;
+                        break;
+                    default:
+                        targetComponent = <DeckViewPanel/>;
                 }
                 break;
             case 'slide':
@@ -43,10 +53,16 @@ class ContentPanel extends React.Component {
                     case 'usage':
                         targetComponent = <ContentUsagePanel />;
                         break;
+                    case 'questions':
+                        targetComponent = <ContentQuestionsPanel />;
+                        break;
+                    case 'discussion':
+                        targetComponent = <ContentDiscussionPanel />;
+                        break;
+                    default:
+                        targetComponent = <SlideViewPanel />;
                 }
                 break;
-            default:
-
         }
         return (
             <div className="sw-content-panel" ref="contentPanel">
