@@ -164,7 +164,7 @@ export default {
             context.executeAction(loadContentQuestions, payload, done);
         }
     },
-    questions: {
+    discussion: {
         path: '/discussion/:stype/:sid',
         method: 'get',
         page: 'discussion',

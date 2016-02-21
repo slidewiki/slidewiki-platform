@@ -3,6 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
+        let selector= {'sid': args.sid, 'stype': args.stype};
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
             //todo
@@ -11,7 +12,7 @@ export default {
                 {'id': 12, 'title': 'title for question 1', 'Date': 'Yesterday'},
                 {'id': 35, 'title': 'title for question 2', 'Date': '2 hours ago'}
             ];
-            callback(null, {discussion: discussion});
+            callback(null, {discussion: discussion, selector: selector});
         }
     }
     // other methods

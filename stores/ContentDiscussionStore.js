@@ -4,14 +4,17 @@ class ContentDiscussionStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.discussion = [];
+        this.selector = {};
     }
     updateDiscussion(payload) {
         this.discussion = payload.discussion;
+        this.selector = payload.selector;
         this.emitChange();
     }
     getState() {
         return {
-            discussion: this.discussion
+            discussion: this.discussion,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -19,6 +22,7 @@ class ContentDiscussionStore extends BaseStore {
     }
     rehydrate(state) {
         this.discussion = state.discussion;
+        this.selector = state.selector;
     }
 }
 

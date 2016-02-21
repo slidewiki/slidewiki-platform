@@ -7,7 +7,9 @@ class ContentUsagePanel extends React.Component {
     render() {
         return (
             <div ref="contentUsagePanel" className="ui segment">
-                Usage of content comes here!
+                Usage related to {this.props.ContentUsageStore.selector.stype} #{this.props.ContentUsageStore.selector.sid}.
+                <br/>
+                <NavLink href={'/usage/' + this.props.ContentUsageStore.selector.stype + '/' + this.props.ContentUsageStore.selector.sid}>{'/usage/' + this.props.ContentUsageStore.selector.stype + '/' + this.props.ContentUsageStore.selector.sid}</NavLink>
             </div>
         );
     }

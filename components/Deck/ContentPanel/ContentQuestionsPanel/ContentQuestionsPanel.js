@@ -7,7 +7,9 @@ class ContentQuestionsPanel extends React.Component {
     render() {
         return (
             <div ref="contentQuestionsPanel" className="ui segment">
-                Questions related to this content come here!
+                Questions related to {this.props.ContentQuestionsStore.selector.stype} #{this.props.ContentQuestionsStore.selector.sid}.
+                <br/>
+                <NavLink href={'/questions/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid}>{'/questions/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid}</NavLink>
             </div>
         );
     }

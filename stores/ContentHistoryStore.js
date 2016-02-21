@@ -4,14 +4,17 @@ class ContentHistoryStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.history = [];
+        this.selector = {};
     }
     updateHistory(payload) {
         this.history = payload.history;
+        this.selector = payload.selector;
         this.emitChange();
     }
     getState() {
         return {
-            history: this.history
+            history: this.history,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -19,6 +22,7 @@ class ContentHistoryStore extends BaseStore {
     }
     rehydrate(state) {
         this.history = state.history;
+        this.selector = state.selector;
     }
 }
 

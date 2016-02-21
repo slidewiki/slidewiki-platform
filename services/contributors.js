@@ -3,6 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
+        let selector= {'sid': args.sid, 'stype': args.stype};
         if(resource === 'contributors.list'){
             /*********connect to microservices*************/
             //todo
@@ -12,7 +13,7 @@ export default {
                 {'id': '2', 'username': 'soeren' + args.sid, 'organization': 'Fraunhofer'},
                 {'id': '3', 'username': 'darya' + args.sid, 'organization': 'Bonn'}
             ];
-            callback(null, {contributors: sampleData});
+            callback(null, {contributors: sampleData, selector: selector});
         }
     }
     // other methods

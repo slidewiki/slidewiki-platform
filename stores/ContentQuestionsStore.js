@@ -4,14 +4,17 @@ class ContentQuestionsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.questions = [];
+        this.selector = {};
     }
     updateQuestions(payload) {
         this.questions = payload.questions;
+        this.selector = payload.selector;
         this.emitChange();
     }
     getState() {
         return {
-            questions: this.questions
+            questions: this.questions,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -19,6 +22,7 @@ class ContentQuestionsStore extends BaseStore {
     }
     rehydrate(state) {
         this.questions = state.questions;
+        this.selector = state.selector;
     }
 }
 

@@ -4,14 +4,17 @@ class ContentUsageStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.usage = [];
+        this.selector = {};
     }
     updateUsage(payload) {
         this.usage = payload.usage;
+        this.selector = payload.selector;
         this.emitChange();
     }
     getState() {
         return {
-            usage: this.usage
+            usage: this.usage,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -19,6 +22,7 @@ class ContentUsageStore extends BaseStore {
     }
     rehydrate(state) {
         this.usage = state.usage;
+        this.selector = state.selector;
     }
 }
 
