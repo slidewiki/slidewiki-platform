@@ -2,6 +2,7 @@ import async from 'async';
 import {shortTitle} from '../configs/general';
 import ContentStore from '../stores/ContentStore';
 import loadContent from './loadContent';
+import loadDeckTree from './loadDeckTree';
 import loadContributors from './loadContributors';
 import loadTranslations from './loadTranslations';
 import loadDataSources from './loadDataSources';
@@ -45,7 +46,14 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadTranslations, payloadCustom, callback);                
+                context.executeAction(loadTranslations, payloadCustom, callback);
+            }else{
+                callback();
+            }
+        },
+        (callback) => {
+            if(runNonContentActions){
+                context.executeAction(loadDeckTree, payloadCustom, callback);
             }else{
                 callback();
             }

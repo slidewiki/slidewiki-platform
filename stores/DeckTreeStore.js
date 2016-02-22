@@ -3,7 +3,7 @@ import {BaseStore} from 'fluxible/addons';
 class DeckTreeStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.deckTree = [];
+        this.deckTree = {};
     }
     updateDeckTree(payload) {
         this.deckTree = payload.deckTree;
@@ -11,7 +11,7 @@ class DeckTreeStore extends BaseStore {
     }
     getState() {
         return {
-            activities: this.deckTree
+            deckTree: this.deckTree
         };
     }
     dehydrate() {
