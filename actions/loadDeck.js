@@ -1,5 +1,6 @@
 import async from 'async';
 import {shortTitle} from '../configs/general';
+import ContentStore from '../stores/ContentStore';
 import loadContent from './loadContent';
 import loadContributors from './loadContributors';
 import loadTranslations from './loadTranslations';
@@ -7,6 +8,9 @@ import loadDataSources from './loadDataSources';
 import loadActivities from './loadActivities';
 
 export default function loadDeck(context, payload, done) {
+    //we should store the current content state in order to avoid duplicate load of actions
+    let currentContent = context.getStore(ContentStore).getState();
+    let runNonContentActions = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
     //if no specific content selector is given, use the deck type, view mode and root deck id as default selector
@@ -31,28 +35,41 @@ export default function loadDeck(context, payload, done) {
         payloadCustom.params.mode = 'view';
     }
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
+    if((currentContent.contextID === payloadCustom.params.id) && (currentContent.contentType === payloadCustom.params.stype) && (currentContent.contentID === payloadCustom.params.sid)){
+        runNonContentActions = 0;
+    }
     //load all required actions in parallel
     async.parallel([
         (callback) => {
             context.executeAction(loadContent, payloadCustom, callback);
         },
         (callback) => {
-            context.executeAction(loadTranslations, payloadCustom, callback);
+            if(runNonContentActions){
+                context.executeAction(loadTranslations, payloadCustom, callback);                
+            }else{
+                callback();
+            }
         },
         (callback) => {
-            context.executeAction(loadContributors, payloadCustom, callback);
+            if(runNonContentActions){
+                context.executeAction(loadContributors, payloadCustom, callback);
+            }else{
+                callback();
+            }
         },
         (callback) => {
-            context.executeAction(loadActivities, payloadCustom, callback);
+            if(runNonContentActions){
+                context.executeAction(loadActivities, payloadCustom, callback);
+            }else{
+                callback();
+            }
         },
         (callback) => {
-            context.executeAction(loadDataSources, payloadCustom, callback);
-        },
-        (callback) => {
-            //another sample action with timeout
-            setTimeout(() => {
-                callback(null);
-            }, 200);
+            if(runNonContentActions){
+                context.executeAction(loadDataSources, payloadCustom, callback);
+            }else{
+                callback();
+            }
         }
     ],
     // final callback
