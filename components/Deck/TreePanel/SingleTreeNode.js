@@ -13,8 +13,14 @@ class SingleTreeNode extends React.Component {
     render() {
         let slectorPath = this.makeSelectorPath(this.props.nodePath);
         let isSelected = '';
-        if(slectorPath === ('/' + this.props.selector.spath)){
-            isSelected = ' ->';
+        if(this.props.selector.spath){
+            if(slectorPath === ('/' + this.props.selector.spath)){
+                isSelected = ' ->';
+            }
+        }else{
+            if((this.props.selector.stype === this.props.item.type) && parseInt(this.props.selector.sid) === parseInt(this.props.item.id)){
+                isSelected = ' ->';
+            }
         }
         return (
             <div className="item">
