@@ -1,34 +1,18 @@
 import React from 'react';
+import ActivityItem from './ActivityItem';
 
 class ActivityList extends React.Component {
     render() {
         let list = this.props.items.map((node, index) => {
             return (
-                <div className="event" key={index}>
-                    <div className="label">
-                        <i className="ui user icon"></i>
-                    </div>
-                    <div className="content">
-                      <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                          {node.username}
-                      </a> {node.type}ed {node.contentType} <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>.
-                        <div className="date">
-                          {node.date}
-                        </div>
-                      </div>
-                      <div className="meta">
-                        <a className="like">
-                          <i className="like icon"></i> {node.likesNo} Likes
-                        </a>
-                      </div>
-                    </div>
+                <div className="column" key={index}>
+                    <ActivityItem activity={node} />
                 </div>
             );
         });
         return (
             <div ref="activityList">
-                <div className="ui feed">
+                <div className="ui three column doubling stackable internally celled grid">
                     {list}
                 </div>
              </div>
