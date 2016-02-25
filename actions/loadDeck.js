@@ -26,7 +26,7 @@ export default function loadDeck(context, payload, done) {
     if(payload.params.spath) {
         if(!payload.params.mode){
             //if spath does not have ';' and ':' as separator, it means it refers to the mode
-            if((payload.params.spath.split(':').length < 1) && (payload.params.spath.split(';').length < 2)){
+            if(payload.params.spath.indexOf(':') === -1 && payload.params.spath.indexOf(';') === -1){
                 payloadCustom.params.mode = payload.params.spath;
                 payloadCustom.params.spath = '';
             }else{
