@@ -11,14 +11,20 @@ class ActivityItem extends React.Component {
     }
     render() {
         let node = this.props.activity;
-        var TargetLang;
-        let isTranslation = node.type === 'translat' && node.translation;
+        var Addendum;
+        let isTranslation = node.type === 'translate' && node.translation;
+        let isSharing = node.type === 'share' && node.shareInfo;
         if (isTranslation) {
-            TargetLang = (
+            Addendum = (
                 <span> to <a href={'/slideview/' + node.translation.contentID}>{node.translation.language}</a></span>
             );
+        } else if (isSharing) {
+            Addendum = (
+                <span> on <a target="_blank" href={node.shareInfo.postURI}>{node.shareInfo.platform}</a></span>
+            );
         }
-        let verb = node.type === 'translate' ? 'translated' : node.type+'ed';
+        let hasAddendum = isTranslation || isSharing;
+        let verb = node.type.endsWith('e') ? node.type+'d' : node.type+'ed';
         return (
             <div className="ui feed">
                 <div className="event">
@@ -31,7 +37,7 @@ class ActivityItem extends React.Component {
                                 {node.username}
                             </a> {verb + ' ' + node.contentType + ' '}
                             <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
-                            { isTranslation? TargetLang : '' }.
+                            { hasAddendum? Addendum : '' }.
                             <div className="date">
                                 {node.date}
                             </div>

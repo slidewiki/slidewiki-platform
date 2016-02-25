@@ -3,17 +3,41 @@ import ActivityItem from './ActivityItem';
 
 class ActivityList extends React.Component {
     render() {
+        var rows = [];
+        var currentRow = [];
+        this.props.items.forEach(item => {
+            if (currentRow.length % 3 === 0 && currentRow.length > 0) {
+                rows.push((
+                    <div className="row">
+                        {currentRow}
+                    </div>
+                ));
+                currentRow = [];
+            }
+            currentRow.push((
+                <div className="ui column" >
+                    <ActivityItem activity={item} />
+                </div>
+            ));
+        });
+        if (currentRow.length > 0) {
+            rows.push((
+                <div className="row">
+                    {currentRow}
+                </div>
+            ));
+        }
         let list = this.props.items.map((node, index) => {
             return (
-                <div className="column" key={index}>
+                <div className="ui column" key={index}>
                     <ActivityItem activity={node} />
                 </div>
             );
         });
         return (
             <div ref="activityList">
-                <div className="ui three column doubling stackable internally celled grid">
-                    {list}
+                <div className="ui internally celled three column grid">
+                    {rows}
                 </div>
              </div>
         );
