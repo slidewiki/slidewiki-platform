@@ -3,26 +3,26 @@ import ActivityItem from './ActivityItem';
 
 class ActivityList extends React.Component {
     render() {
-        var rows = [];
-        var currentRow = [];
-        this.props.items.forEach(item => {
+        let rows = [];
+        let currentRow = [];
+        this.props.items.forEach((item) => {
             if (currentRow.length % 3 === 0 && currentRow.length > 0) {
                 rows.push((
-                    <div className="row">
+                    <div className="row" key={rows.length}>
                         {currentRow}
                     </div>
                 ));
                 currentRow = [];
             }
             currentRow.push((
-                <div className="ui column" >
+                <div className="ui column" key={currentRow.length}>
                     <ActivityItem activity={item} />
                 </div>
             ));
         });
         if (currentRow.length > 0) {
             rows.push((
-                <div className="row">
+                <div className="row" key={rows.length}>
                     {currentRow}
                 </div>
             ));
