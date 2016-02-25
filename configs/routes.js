@@ -46,7 +46,7 @@ export default {
         }
     },
     //-----------------------------------DeckPage routes------------------------------
-    // selector {stype: 'type of content e.g. slide, deck or question', sid: 'id of content type', spath: 'path of the node in the tree, always separated by dash', mode: 'interaction mode e.g. view or edit'}
+    // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by dash and colon for its position e.g. 67-45:1', mode: 'interaction mode e.g. view or edit'}
     deck: {
         path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
         method: 'get',
