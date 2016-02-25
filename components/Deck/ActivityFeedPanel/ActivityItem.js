@@ -3,8 +3,6 @@ import likeActivity from '../../../actions/likeActivity';
 
 class ActivityItem extends React.Component {
     handleLike() {
-        console.log('Liked the following activity:');
-        console.log(this.props.activity);
         this.context.executeAction(likeActivity, {
             id: this.props.activity.id
         });
