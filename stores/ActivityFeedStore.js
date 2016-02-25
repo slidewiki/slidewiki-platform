@@ -9,6 +9,12 @@ class ActivityFeedStore extends BaseStore {
         this.activities = payload.activities;
         this.emitChange();
     }
+    incrementLikes(payload) {
+        this.activities.forEach((activity) => {
+            if (activity.id === payload.id) activity.likesNo++;
+        });
+        this.emitChange();
+    }
     getState() {
         return {
             activities: this.activities
@@ -24,7 +30,8 @@ class ActivityFeedStore extends BaseStore {
 
 ActivityFeedStore.storeName = 'ActivityFeedStore';
 ActivityFeedStore.handlers = {
-    'LOAD_ACTIVITIES_SUCCESS': 'updateActivities'
+    'LOAD_ACTIVITIES_SUCCESS': 'updateActivities',
+    'LIKE_ACTIVITY_SUCCESS': 'incrementLikes'
 };
 
 export default ActivityFeedStore;
