@@ -3,6 +3,7 @@ import {shortTitle} from '../configs/general';
 import ContentStore from '../stores/ContentStore';
 import loadContent from './loadContent';
 import loadDeckTree from './loadDeckTree';
+import selectTreeNode from './selectTreeNode';
 import loadContributors from './loadContributors';
 import loadTranslations from './loadTranslations';
 import loadDataSources from './loadDataSources';
@@ -54,9 +55,11 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
+                //we need to load the whole tree for first time
                 context.executeAction(loadDeckTree, payloadCustom, callback);
             }else{
-                callback();
+                //when we only select a node in tree, there is no need to call the external service
+                context.executeAction(selectTreeNode, payloadCustom, callback);
             }
         },
         (callback) => {
