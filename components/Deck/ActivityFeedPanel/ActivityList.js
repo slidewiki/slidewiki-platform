@@ -1,35 +1,43 @@
 import React from 'react';
+import ActivityItem from './ActivityItem';
 
 class ActivityList extends React.Component {
     render() {
+        var rows = [];
+        var currentRow = [];
+        this.props.items.forEach(item => {
+            if (currentRow.length % 3 === 0 && currentRow.length > 0) {
+                rows.push((
+                    <div className="row">
+                        {currentRow}
+                    </div>
+                ));
+                currentRow = [];
+            }
+            currentRow.push((
+                <div className="ui column" >
+                    <ActivityItem activity={item} />
+                </div>
+            ));
+        });
+        if (currentRow.length > 0) {
+            rows.push((
+                <div className="row">
+                    {currentRow}
+                </div>
+            ));
+        }
         let list = this.props.items.map((node, index) => {
             return (
-                <div className="event" key={index}>
-                    <div className="label">
-                        <i className="ui user icon"></i>
-                    </div>
-                    <div className="content">
-                      <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                          {node.username}
-                      </a> {node.type}ed {node.contentType} <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>.
-                        <div className="date">
-                          {node.date}
-                        </div>
-                      </div>
-                      <div className="meta">
-                        <a className="like">
-                          <i className="like icon"></i> {node.likesNo} Likes
-                        </a>
-                      </div>
-                    </div>
+                <div className="ui column" key={index}>
+                    <ActivityItem activity={node} />
                 </div>
             );
         });
         return (
             <div ref="activityList">
-                <div className="ui feed">
-                    {list}
+                <div className="ui internally celled three column grid">
+                    {rows}
                 </div>
              </div>
         );
