@@ -3,38 +3,38 @@ import {NavLink} from 'fluxible-router';
 
 class ContentModeMenu extends React.Component {
     render() {
-        let contextPath = '', positionPath = '';
+        let contextDeckURI = '', contextPathURI = '';
         if(this.props.ContentStore.contextID){
             //when it is in the deck page
-            contextPath = '/deck/' + this.props.ContentStore.contextID;
-            //handle it when a position is given
-            if(this.props.ContentStore.contextPosition){
-                positionPath =  '/' + this.props.ContentStore.contextPosition;
+            contextDeckURI = '/deck/' + this.props.ContentStore.contextID;
+            //handle it when a path is given
+            if(this.props.ContentStore.contextPath.length){
+                contextPathURI =  '/' + this.props.ContentStore.contextPath.join('-');
             }
         }else{
             //when loaded independently
-            contextPath = '/content';
+            contextDeckURI = '/content';
         }
         return (
             <div className="sw-content-panel" ref="contentModeMenu">
                 <div className="ui top attached tabular menu">
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'view' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/view'}>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'view' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/view'}>
                         View
                     </NavLink>
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'edit' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/edit'}>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'edit' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/edit'}>
                         Edit
                     </NavLink>
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'history' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/history'}>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'history' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/history'}>
                         History
                     </NavLink>
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'usage' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/usage'}>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'usage' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/usage'}>
                         Usage
                     </NavLink>
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'questions' ? ' active' : '')} href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/questions'}>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'questions' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/questions'}>
                         Questions<span className="ui tiny label">12</span>
                     </NavLink>
                     <div className={'item' + (this.props.ContentStore.mode === 'discussion' ? ' active' : '')}>
-                        <NavLink title="Comments" href={contextPath + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + positionPath + '/discussion'}>
+                        <NavLink title="Comments" href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/discussion'}>
                             <i className="comments red large icon"></i><span>5</span>
                         </NavLink>
                     </div>

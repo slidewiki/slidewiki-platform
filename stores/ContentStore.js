@@ -4,14 +4,14 @@ class ContentStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.contextID = 0;
-        this.contextPosition = 0;
+        this.contextPath = [];
         this.contentType = '';
         this.contentID = 0;
         this.mode = 'view';
     }
     updateContent(payload) {
         this.contextID = payload.params.id;
-        this.contextPosition = payload.params.sposition;
+        this.contextPath = payload.params.spath;
         this.contentType = payload.params.stype;
         this.contentID = payload.params.sid;
         this.mode = payload.params.mode;
@@ -20,7 +20,7 @@ class ContentStore extends BaseStore {
     getState() {
         return {
             contextID: this.contextID,
-            contextPosition: this.contextPosition,
+            contextPath: this.contextPath,
             contentType: this.contentType,
             contentID: this.contentID,
             mode: this.mode
@@ -31,7 +31,7 @@ class ContentStore extends BaseStore {
     }
     rehydrate(state) {
         this.contextID = state.contextID;
-        this.contextPosition = state.contextPosition;
+        this.contextPath = state.contextPath;
         this.contentType = state.contentType;
         this.contentID = state.contentID;
         this.mode = state.mode;

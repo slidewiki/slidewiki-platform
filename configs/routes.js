@@ -46,9 +46,9 @@ export default {
         }
     },
     //-----------------------------------DeckPage routes------------------------------
-    // selector {stype: 'type of content e.g. slide, deck or question', sid: 'id of content type', sposition: 'if there are multiple item use the position', mode: 'interaction mode e.g. view or edit'}
+    // selector {stype: 'type of content e.g. slide, deck or question', sid: 'id of content type', spath: 'path of the node in the tree, always separated by dash', mode: 'interaction mode e.g. view or edit'}
     deck: {
-        path: '/deck/:id/:stype?/:sid?/:sposition?/:mode?',
+        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
