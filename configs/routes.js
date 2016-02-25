@@ -46,7 +46,7 @@ export default {
         }
     },
     //-----------------------------------DeckPage routes------------------------------
-    // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by dash and colon for its position e.g. 67-45:1', mode: 'interaction mode e.g. view or edit'}
+    // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
     deck: {
         path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
         method: 'get',
@@ -174,7 +174,7 @@ export default {
         }
     },
     decktree: {
-        path: '/decktree/:sid',
+        path: '/decktree/:sid/:spath?',
         method: 'get',
         page: 'decktree',
         handler: require('../components/Deck/TreePanel/TreePanel'),
