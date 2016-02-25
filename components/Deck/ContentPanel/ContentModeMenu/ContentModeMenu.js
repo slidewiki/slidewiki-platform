@@ -8,8 +8,8 @@ class ContentModeMenu extends React.Component {
             //when it is in the deck page
             contextDeckURI = '/deck/' + this.props.ContentStore.contextID;
             //handle it when a path is given
-            if(this.props.ContentStore.contextPath.length){
-                contextPathURI =  '/' + this.props.ContentStore.contextPath.join('-');
+            if(this.props.ContentStore.contextPath){
+                contextPathURI =  '/' + this.props.ContentStore.contextPath;
             }
         }else{
             //when loaded independently

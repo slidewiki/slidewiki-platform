@@ -24,19 +24,16 @@ export default function loadDeck(context, payload, done) {
     //path is an optional parameter which might get confused with the mode, therefore we need to disambiguate it:
     if(payload.params.spath) {
         if(!payload.params.mode){
-            //if spath is not a numeric value and does not have '-' as separator, it means it refers to the mode
-            if(isNaN(payload.params.spath) && (payload.params.spath.split('-').length < 2)){
+            //if spath does not have ';' and ':' as separator, it means it refers to the mode
+            if((payload.params.spath.split(':').length < 1) && (payload.params.spath.split(';').length < 2)){
                 payloadCustom.params.mode = payload.params.spath;
-                payloadCustom.params.spath = [];
+                payloadCustom.params.spath = '';
             }else{
-                payloadCustom.params.spath = payload.params.spath.split('-');
                 payloadCustom.params.mode = 'view';
             }
-        }else{
-            payloadCustom.params.spath = payload.params.spath.split('-');
         }
     }else{
-        payloadCustom.params.spath = [];
+        payloadCustom.params.spath = '';
         payloadCustom.params.mode = 'view';
     }
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;

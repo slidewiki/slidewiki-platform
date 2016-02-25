@@ -5,19 +5,20 @@ import MultiTreeNode from './MultiTreeNode';
 
 class Tree extends React.Component {
     render() {
+        let self = this;
         let output = this.props.items.map((node, index) => {
             if(node.type === 'deck'){
                 return (
-                    <MultiTreeNode item={node} rootNode={this.props.rootNode} key={index} />
+                    <MultiTreeNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
                 );
             }else{
                 return (
-                    <SingleTreeNode item={node} rootNode={this.props.rootNode} key={index} />
+                    <SingleTreeNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
                 );
             }
         });
         return (
-            <div className="ui celled ordered list" ref="tree">
+            <div className="ui celled list" ref="tree">
                 {output}
             </div>
         );

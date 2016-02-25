@@ -4,7 +4,7 @@ class ContentStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.contextID = 0;
-        this.contextPath = [];
+        this.contextPath = '';
         this.contentType = '';
         this.contentID = 0;
         this.mode = 'view';

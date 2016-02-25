@@ -3,6 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
+        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         if(resource === 'decktree.nodes'){
             /*********connect to microservices*************/
             //todo
@@ -19,14 +20,17 @@ export default {
                   ]},
                   {title: 'SPARQL', id: 68, type: 'deck',  children: [
                       {title: 'Introduction', id: 681, type: 'slide'},
-                      {title: 'Syntax', id: 685, type: 'slide'}
+                      {title: 'Syntax', id: 685, type: 'deck', children: [
+                          {title: 'Same Slide', id: 691, type: 'slide'},
+                          {title: 'Same Slide', id: 691, type: 'slide'}
+                      ]}
                   ]
                   },
                   {title: 'Conclusion', id: 78, type: 'slide'},
                   {title: 'References', id: 79, type: 'slide'}
                 ]
             };
-            callback(null, {deckTree: deckTree});
+            callback(null, {deckTree: deckTree, selector: selector});
         }
     }
     // other methods
