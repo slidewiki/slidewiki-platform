@@ -12,13 +12,13 @@ class Breadcrumb extends React.Component {
                 if(index === (nodes.length - 1)){
                     return (
                         <div key={index} className="section">
-                            {node}
+                            {this.props.pathNames[index]}
                         </div>
                     );
                 }else{
                     return (
                         <div key={index} className="section">
-                            <NavLink href={'/deck/' + self.props.selector.id + '/deck/' + self.props.selector.sid + '/' + (nodes[index - 1] ? (nodes[index - 1] + ';') : '') + node}>{node}</NavLink>
+                            <NavLink href={'/deck/' + self.props.selector.id + '/deck/' + self.props.selector.sid + '/' + (nodes[index - 1] ? (nodes[index - 1] + ';') : '') + node}>{this.props.pathNames[index]}</NavLink>
                             <i className="right chevron icon divider"></i>
                         </div>
                     );
@@ -30,7 +30,7 @@ class Breadcrumb extends React.Component {
             <div className="sw-breadcrumb" ref="breadcrumb">
                 <div className="ui large breadcrumb">
                     <div className="section">
-                        <NavLink href={'/deck/' + self.props.selector.id}> Semantic Web </NavLink>
+                        <NavLink href={'/deck/' + self.props.selector.id}> {this.props.rootDeckName} </NavLink>
                         <i className="right chevron icon divider"></i>
                     </div>
                     {list}
