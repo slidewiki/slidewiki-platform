@@ -8,9 +8,9 @@ export default {
             //todo
             /*********received data from microservices*************/
             let datasources = [
-                {'title': 'Source 1 #' + args.sid, 'id': 231},
-                {'title': 'Source 2 #' + args.sid, 'id': 243},
-                {'title': 'Source 3 #' + args.sid, 'id': 31},
+                {'title': 'https://www.w3.org/wiki/TaskForces/CommunityProjects/LinkingOpenData/DataSets/Statistics', 'id': 231},
+                {'title': 'Figures taken from Wikipedia #sid=' + args.sid, 'id': 243},
+                {'title': '[Guarino, 98] Formal Ontology in Information Systems (http://www.loa-cnr.it/Papers/FOIS98.pdf) #sid=' + args.sid, 'id': 31},
             ];
             callback(null, {datasources: datasources});
         }
