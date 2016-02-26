@@ -8,6 +8,7 @@ class DeckTreeStore extends BaseStore {
     }
     updateDeckTree(payload) {
         this.deckTree = payload.deckTree;
+        //todo: build a default selector (spath) if selector is not defined
         this.selector = payload.selector;
         this.emitChange();
     }
