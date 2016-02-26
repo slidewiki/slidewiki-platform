@@ -7,13 +7,17 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
+            let now = Date.now();
+            function timeFromNow(now, hours, mins) {
+                return now - 60000*mins - 3600000*hours;
+            }
             let activities = [
-                {'id': 0, 'type': 'add', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Ali K.', 'userID': 23, 'date': '1 Hour Ago', 'likesNo': 4},
-                {'id': 1, 'type': 'edit', 'contentType': 'deck', 'contentID': 53 + parseInt(args.sid), 'username': 'Dara T.', 'userID': 13, 'date': 'Today', 'likesNo': 1},
-                {'id': 2, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': '45 Minutes Ago', 'likesNo': 2, 'translation': {'contentID':42, 'language':'Serbian'}},
-                {'id': 3, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': '30 Minutes Ago', 'likesNo': 2, 'translation': {'contentID':42, 'language':'Bosnian'}},
-                {'id': 4, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': '15 Minutes Ago', 'likesNo': 2, 'translation': {'contentID':42, 'language':'Croatian'}},
-                {'id': 5, 'type': 'share', 'contentType': 'deck', 'contentID': 53 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': '7 Minutes Ago', 'likesNo': 10, 'shareInfo': {'postURI':'http://facebook.com', 'platform':'Facebook'}}
+                {'id': 0, 'type': 'add', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Ali K.', 'userID': 23, 'date': timeFromNow(now,2,0), 'likesNo': 4},
+                {'id': 1, 'type': 'edit', 'contentType': 'deck', 'contentID': 53 + parseInt(args.sid), 'username': 'Dara T.', 'userID': 13, 'date': timeFromNow(now,1,0), 'likesNo': 1},
+                {'id': 2, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,45), 'likesNo': 2, 'translation': {'contentID':42, 'language':'Serbian'}},
+                {'id': 3, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,30), 'likesNo': 2, 'translation': {'contentID':42, 'language':'Bosnian'}},
+                {'id': 4, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,15), 'likesNo': 2, 'translation': {'contentID':42, 'language':'Croatian'}},
+                {'id': 5, 'type': 'share', 'contentType': 'deck', 'contentID': 53 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,7), 'likesNo': 10, 'shareInfo': {'postURI':'http://facebook.com', 'platform':'Facebook'}}
             ];
             callback(null, {activities: activities});
         }
