@@ -4,7 +4,6 @@ import TranslationPanel from './TranslationPanel/TranslationPanel';
 import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
-import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 
 class Deck extends React.Component {
@@ -30,10 +29,6 @@ class Deck extends React.Component {
                     <div className="row">
                         <ContributorsPanel />
                     </div>
-                    <div className="ui hidden divider"></div>
-                    <div className="row">
-                        <DataSourcePanel />
-                    </div>
                 </div>
                 <div className="twelve wide column">
                   <div className="row">
@@ -45,7 +40,7 @@ class Deck extends React.Component {
                   </div>
                 </div>
               </div>
-              
+
             </div>
         );
     }
