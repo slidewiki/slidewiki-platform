@@ -24,20 +24,12 @@ class ContentModeMenu extends React.Component {
                     <NavLink className={'item' + (this.props.ContentStore.mode === 'edit' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/edit'}>
                         Edit
                     </NavLink>
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'history' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/history'}>
-                        History
-                    </NavLink>
-                    <NavLink className={'item' + (this.props.ContentStore.mode === 'usage' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/usage'}>
-                        Usage
-                    </NavLink>
                     <NavLink className={'item' + (this.props.ContentStore.mode === 'questions' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/questions'}>
                         Questions<span className="ui tiny label">12</span>
                     </NavLink>
-                    <div className={'item' + (this.props.ContentStore.mode === 'discussion' ? ' active' : '')}>
-                        <NavLink title="Comments" href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/discussion'}>
-                            <i className="comments red large icon"></i><span>5</span>
-                        </NavLink>
-                    </div>
+                    <NavLink className={'item' + (this.props.ContentStore.mode === 'datasources' ? ' active' : '')} href={contextDeckURI + '/' + this.props.ContentStore.contentType + '/' + this.props.ContentStore.contentID + contextPathURI + '/datasources'}>
+                        Data Sources<span className="ui tiny circular label">2</span>
+                    </NavLink>
                     <div className="item">
                         <a title="download">
                             <i className="download icon"></i>

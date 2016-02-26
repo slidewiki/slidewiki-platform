@@ -6,10 +6,8 @@ import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
 import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
-import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
-import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
 import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
-import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
+import DataSourcePanel from '../DataSourcePanel/DataSourcePanel';
 
 class ContentPanel extends React.Component {
     render() {
@@ -23,17 +21,11 @@ class ContentPanel extends React.Component {
                     case 'edit':
                         targetComponent = <DeckEditPanel />;
                         break;
-                    case 'history':
-                        targetComponent = <ContentHistoryPanel />;
-                        break;
-                    case 'usage':
-                        targetComponent = <ContentUsagePanel />;
-                        break;
                     case 'questions':
                         targetComponent = <ContentQuestionsPanel />;
                         break;
-                    case 'discussion':
-                        targetComponent = <ContentDiscussionPanel />;
+                    case 'datasources':
+                        targetComponent = <DataSourcePanel />;
                         break;
                     default:
                         targetComponent = <DeckViewPanel/>;
@@ -47,17 +39,11 @@ class ContentPanel extends React.Component {
                     case 'edit':
                         targetComponent = <SlideEditPanel />;
                         break;
-                    case 'history':
-                        targetComponent = <ContentHistoryPanel />;
-                        break;
-                    case 'usage':
-                        targetComponent = <ContentUsagePanel />;
-                        break;
                     case 'questions':
                         targetComponent = <ContentQuestionsPanel />;
                         break;
-                    case 'discussion':
-                        targetComponent = <ContentDiscussionPanel />;
+                    case 'datasources':
+                        targetComponent = <DataSourcePanel />;
                         break;
                     default:
                         targetComponent = <SlideViewPanel />;

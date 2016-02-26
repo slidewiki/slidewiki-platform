@@ -3,7 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'sid': args.sid, 'stype': args.stype};
+        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         if(resource === 'history.list'){
             /*********connect to microservices*************/
             //todo

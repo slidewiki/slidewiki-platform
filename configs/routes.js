@@ -141,7 +141,7 @@ export default {
         path: '/history/:stype/:sid',
         method: 'get',
         page: 'history',
-        handler: require('../components/Deck/ContentPanel/ContentHistoryPanel/ContentHistoryPanel'),
+        handler: require('../components/Deck/ActivityFeedPanel/ContentHistoryPanel/ContentHistoryPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentHistory, payload, done);
         }
@@ -150,7 +150,7 @@ export default {
         path: '/usage/:stype/:sid',
         method: 'get',
         page: 'usage',
-        handler: require('../components/Deck/ContentPanel/ContentUsagePanel/ContentUsagePanel'),
+        handler: require('../components/Deck/ActivityFeedPanel/ContentUsagePanel/ContentUsagePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentUsage, payload, done);
         }
@@ -168,7 +168,7 @@ export default {
         path: '/discussion/:stype/:sid',
         method: 'get',
         page: 'discussion',
-        handler: require('../components/Deck/ContentPanel/ContentDiscussionPanel/ContentDiscussionPanel'),
+        handler: require('../components/Deck/ActivityFeedPanel/ContentDiscussionPanel/ContentDiscussionPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentDiscussion, payload, done);
         }

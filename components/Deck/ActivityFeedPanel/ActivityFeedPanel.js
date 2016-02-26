@@ -1,5 +1,8 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
+import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
+import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
+import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
 
@@ -14,6 +17,12 @@ class ActivityFeedPanel extends React.Component {
                     <div className="ui olive segment">
                         <ActivityList  items={this.props.ActivityFeedStore.activities} />
                     </div>
+                    <div className="ui secondary segment green">
+                        The following components should fall under activity feed.
+                    </div>
+                    <ContentHistoryPanel />
+                    <ContentDiscussionPanel />
+                    <ContentUsagePanel />
                 </div>
             </div>
         );
