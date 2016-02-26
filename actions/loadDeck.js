@@ -75,13 +75,6 @@ export default function loadDeck(context, payload, done) {
             }else{
                 callback();
             }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadDataSources, payloadCustom, callback);
-            }else{
-                callback();
-            }
         }
     ],
     // final callback
