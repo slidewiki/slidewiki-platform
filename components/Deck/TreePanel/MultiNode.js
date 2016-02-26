@@ -41,7 +41,7 @@ class MultiNode extends React.Component {
         }
         //change the node icon based on the type of node and its expanded state
         let iconClass = classNames({
-            'ui folder icon': true,
+            'ui yellow folder icon': true,
             'folder': (this.props.item.type === 'deck'),
             'open': this.state.expanded
         });

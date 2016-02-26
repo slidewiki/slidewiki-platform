@@ -22,8 +22,8 @@ class SingleNode extends React.Component {
         }
         //change the node icon based on the type of node
         let iconClass = classNames({
-            'ui icon': true,
-            'file': (this.props.item.type === 'slide')
+            'ui grey icon': true,
+            'file text': (this.props.item.type === 'slide')
         });
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>
