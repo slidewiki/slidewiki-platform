@@ -17,6 +17,7 @@ import ContentHistoryStore from './stores/ContentHistoryStore';
 import ContentUsageStore from './stores/ContentUsageStore';
 import ContentQuestionsStore from './stores/ContentQuestionsStore';
 import ContentDiscussionStore from './stores/ContentDiscussionStore';
+import SimilarContentStore from './stores/SimilarContentStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -37,7 +38,8 @@ const app = new Fluxible({
         ContentHistoryStore,
         ContentUsageStore,
         ContentQuestionsStore,
-        ContentDiscussionStore
+        ContentDiscussionStore,
+        SimilarContentStore
     ]
 });
 

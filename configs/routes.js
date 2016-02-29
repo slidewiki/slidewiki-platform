@@ -16,6 +16,7 @@ import loadContentHistory from '../actions/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/loadContentDiscussion';
+import loadSimilarContents from '../actions/loadSimilarContents';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -63,6 +64,15 @@ export default {
         handler: require('../components/Deck/ContributorsPanel/ContributorsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContributors, payload, done);
+        }
+    },
+    similarcontent: {
+        path: '/similarcontent/:stype/:sid',
+        method: 'get',
+        page: 'similarcontent',
+        handler: require('../components/Deck/SimilarContentPanel/SimilarContentPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadSimilarContents, payload, done);
         }
     },
     content: {
