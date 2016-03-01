@@ -9,6 +9,7 @@
   "homepage": "https://github.com/slidewiki/slidewiki-platform",
   "dependencies": {
     "semantic": "semantic-ui#~2.1.8",
-    "animate.css": "~3.5.1"
+    "animate.css": "~3.5.1",
+    "keymaster": "~1.6.3"
   }
 }

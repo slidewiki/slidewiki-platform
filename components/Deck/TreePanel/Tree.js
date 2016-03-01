@@ -4,6 +4,27 @@ import SingleNode from './SingleNode';
 import MultiNode from './MultiNode';
 
 class Tree extends React.Component {
+    handleUpKey(){
+        console.log('up from tree');
+    }
+    handleDownKey(){
+        console.log('down key from tree');
+        //should select the next node of tree
+
+    }
+    handleRightKey(){
+        console.log('right key from tree');
+    }
+    componentDidMount() {
+        key('up', 'tree', this.handleUpKey);
+        key('down', 'tree', this.handleDownKey);
+        key('right', 'tree', this.handleRightKey);
+    }
+    componentWillUnmount() {
+        key.unbind('up', 'tree');
+        key.unbind('down', 'tree');
+        key.unbind('right', 'tree');
+    }
     render() {
         let self = this;
         //for simplicity and flexibility we divide tree nodes into single and multi
