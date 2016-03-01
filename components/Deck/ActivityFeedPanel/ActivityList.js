@@ -29,14 +29,14 @@ class ActivityList extends React.Component {
         }
         let list = this.props.items.map((node, index) => {
             return (
-                <div className="ui column" key={index}>
+                <div className="ui item" key={index}>
                     <ActivityItem activity={node} />
                 </div>
             );
         });
         return (
             <div ref="activityList">
-                <div className="ui internally celled three column grid">
+                <div className="ui list">
                     {rows}
                 </div>
              </div>

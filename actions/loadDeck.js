@@ -8,6 +8,7 @@ import loadContributors from './loadContributors';
 import loadTranslations from './loadTranslations';
 import loadDataSources from './loadDataSources';
 import loadActivities from './loadActivities';
+import loadSimilarContents from './loadSimilarContents';
 
 export default function loadDeck(context, payload, done) {
     //we should store the current content state in order to avoid duplicate load of actions
@@ -72,6 +73,13 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             if(runNonContentActions){
                 context.executeAction(loadActivities, payloadCustom, callback);
+            }else{
+                callback();
+            }
+        },
+        (callback) => {
+            if(runNonContentActions){
+                context.executeAction(loadSimilarContents, payloadCustom, callback);
             }else{
                 callback();
             }

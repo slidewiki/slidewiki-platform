@@ -5,6 +5,7 @@ import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
+import SimilarContentPanel from './SimilarContentPanel/SimilarContentPanel';
 
 class Deck extends React.Component {
     render() {
@@ -28,6 +29,10 @@ class Deck extends React.Component {
                     <div className="ui hidden divider"></div>
                     <div className="row">
                         <ContributorsPanel />
+                    </div>
+                    <div className="ui hidden divider"></div>
+                    <div className="row">
+                        <SimilarContentPanel />
                     </div>
                 </div>
                 <div className="twelve wide column">
