@@ -54,7 +54,7 @@ class Tree extends React.Component {
             }
         });
         return (
-            <div className="ui celled list" ref="tree" >
+            <div className="ui celled list" ref="tree">
                 {output}
             </div>
         );

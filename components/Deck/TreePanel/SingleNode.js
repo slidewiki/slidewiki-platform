@@ -6,7 +6,6 @@ import TreeUtil from './util/TreeUtil';
 class SingleNode extends React.Component {
     handleClick(e){
         e.stopPropagation();
-        key.setScope('tree'); // will allow specific tree keyborad actions
     }
     render() {
         let slectorPath = TreeUtil.makeSelectorPath(this.props.nodePath);

@@ -5,10 +5,16 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Tree from './Tree';
 
 class TreePanel extends React.Component {
+    handleFocus() {
+        key.setScope('tree'); // will allow specific tree keyborad actions
+    }
+    handleBlur() {
+        key.setScope('all'); // will disallow specific tree keyborad actions
+    }
     render() {
         let rootNode = {title: this.props.DeckTreeStore.deckTree.title, id: this.props.DeckTreeStore.deckTree.id};
         return (
-            <div className="ui panel sw-tree-panel" ref="treePanel">
+            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)}>
                 <div className="ui segments">
                     <div className="3 fluid ui attached bottom tertiary small icon buttons">
                         <div className="ui button">

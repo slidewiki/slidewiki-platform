@@ -11,7 +11,6 @@ class MultiNode extends React.Component {
     }
     handleClick(e){
         e.stopPropagation();
-        key.setScope('tree'); // will allow specific tree keyborad actions
         this.toggleNode();
     }
     toggleNode(){
