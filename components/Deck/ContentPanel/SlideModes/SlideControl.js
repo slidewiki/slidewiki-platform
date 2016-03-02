@@ -1,11 +1,16 @@
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
+import {NavLink, navigateAction} from 'fluxible-router';
+import SlideControlUtil from './util/SlideControlUtil';
+
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
 
 class SlideControl extends React.Component {
     componentDidMount() {
-        key('right', 'slideControl', this.handleNextClick);
-        key('shift+right', 'slideControl', this.handleForwardClick);
-        key('left', 'slideControl', this.handlePreviousClick);
-        key('shift+left', 'slideControl', this.handleBackwardClick);
+        key('right', 'slideControl', this.handleNextClick.bind(this));
+        key('shift+right', 'slideControl', this.handleForwardClick.bind(this));
+        key('left', 'slideControl', this.handlePreviousClick.bind(this));
+        key('shift+left', 'slideControl', this.handleBackwardClick.bind(this));
     }
     componentWillUnmount() {
         key.unbind('right', 'slideControl');
@@ -14,21 +19,45 @@ class SlideControl extends React.Component {
         key.unbind('shift+left', 'slideControl');
     }
     handleNextClick(){
-        console.log('right key from slideControl');
         key.setScope('slideControl'); // will enable specific slideControl keyborad actions
+        let nextPath = SlideControlUtil.nextSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        if(nextPath){
+            this.context.executeAction(navigateAction, {
+                url: nextPath
+            });
+        }
+        //returning false stops the event and prevents default browser events
+        return false;
     }
     handlePreviousClick(){
-        console.log('left key from slideControl');
         key.setScope('slideControl'); // will enable specific slideControl keyborad actions
+        let prevPath = SlideControlUtil.prevSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        if(prevPath){
+            this.context.executeAction(navigateAction, {
+                url: prevPath
+            });
+        }
+        return false;
     }
     handleForwardClick(){
-        console.log('shift+right key from slideControl');
+        let lastPath = SlideControlUtil.lastSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        if(lastPath){
+            this.context.executeAction(navigateAction, {
+                url: lastPath
+            });
+        }
         key.setScope('slideControl'); // will enable specific slideControl keyborad actions
+        return false;
     }
     handleBackwardClick(){
-        console.log('shift+left key from slideControl');
-
+        let firstPath = SlideControlUtil.firstSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        if(firstPath){
+            this.context.executeAction(navigateAction, {
+                url: firstPath
+            });
+        }
         key.setScope('slideControl'); // will enable specific slideControl keyborad actions
+        return false;
     }
     render() {
         return (
@@ -53,5 +82,14 @@ class SlideControl extends React.Component {
         );
     }
 }
+
+SlideControl.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+SlideControl = connectToStores(SlideControl, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 
 export default SlideControl;

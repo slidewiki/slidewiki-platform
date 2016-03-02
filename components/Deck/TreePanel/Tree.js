@@ -16,7 +16,6 @@ class Tree extends React.Component {
         return false;
     }
     handleDownKey(e){
-        console.log(e);
         let nextPath = TreeUtil.nextNodePath(this.props.selector, this.props.flatTree);
         if(nextPath){
             this.context.executeAction(navigateAction, {
