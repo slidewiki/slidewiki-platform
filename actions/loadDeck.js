@@ -1,6 +1,6 @@
 import async from 'async';
 import {shortTitle} from '../configs/general';
-import ContentStore from '../stores/ContentStore';
+import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './loadDeckTree';
 import selectTreeNode from './selectTreeNode';
@@ -12,7 +12,7 @@ import loadSimilarContents from './loadSimilarContents';
 
 export default function loadDeck(context, payload, done) {
     //we should store the current content state in order to avoid duplicate load of actions
-    let currentContent = context.getStore(ContentStore).getState();
+    let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
@@ -38,8 +38,9 @@ export default function loadDeck(context, payload, done) {
         payloadCustom.params.spath = '';
         payloadCustom.params.mode = 'view';
     }
+    context.dispatch('UPDATE_DECK_PAGE_CONTENT', payloadCustom);
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
-    if((currentContent.selector.sid === payloadCustom.params.id) && (currentContent.selector.stype === payloadCustom.params.stype) && (currentContent.selector.sid === payloadCustom.params.sid)){
+    if((currentState.selector.sid === payloadCustom.params.id) && (currentState.selector.stype === payloadCustom.params.stype) && (currentState.selector.sid === payloadCustom.params.sid)){
         runNonContentActions = 0;
     }
     //load all required actions in parallel

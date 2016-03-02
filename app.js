@@ -4,6 +4,7 @@ import Application from './components/Application';
 import ApplicationStore from './stores/ApplicationStore';
 import RouteStore from './stores/RouteStore';
 import ContributorsStore from './stores/ContributorsStore';
+import DeckPageStore from './stores/DeckPageStore';
 import ContentStore from './stores/ContentStore';
 import DeckViewStore from './stores/DeckViewStore';
 import DeckEditStore from './stores/DeckEditStore';
@@ -25,8 +26,9 @@ const app = new Fluxible({
     stores: [
         RouteStore,
         ApplicationStore,
-        ContributorsStore,
+        DeckPageStore,
         ContentStore,
+        ContributorsStore,
         DeckViewStore,
         DeckEditStore,
         SlideViewStore,
