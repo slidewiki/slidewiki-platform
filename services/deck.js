@@ -8,6 +8,7 @@ export default {
             //todo
             /*********received data from microservices*************/
             let sampleContent = `
+            <h1>Deck #` + args.sid + `</h1>
             This is a sample deck content. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
             <br/>
             <br/>
