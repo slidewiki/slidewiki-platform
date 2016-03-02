@@ -26,7 +26,7 @@ class Deck extends React.Component {
               <div className="row">
                 <div className="four wide column">
                     <div className="row">
-                        <TreePanel />
+                        <TreePanel mode={this.props.DeckPageStore.mode}/>
                     </div>
                     <div className="ui hidden divider"></div>
                     <div className="row">

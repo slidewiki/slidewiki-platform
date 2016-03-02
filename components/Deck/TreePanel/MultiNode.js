@@ -23,11 +23,11 @@ class MultiNode extends React.Component {
         let output = this.props.item.children.map((node, index) => {
             if(node.type === 'deck'){
                 return (
-                    <MultiNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={self.props.nodePath.concat([[node.id, index+1]])} nodePosition={index+1} />
+                    <MultiNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={self.props.nodePath.concat([[node.id, index+1]])} nodePosition={index+1} mode={self.props.mode}/>
                 );
             }else{
                 return (
-                    <SingleNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={self.props.nodePath.concat([[node.id, index+1]])} nodePosition={index+1} />
+                    <SingleNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={self.props.nodePath.concat([[node.id, index+1]])} nodePosition={index+1} mode={self.props.mode}/>
                 );
             }
         });
@@ -56,7 +56,7 @@ class MultiNode extends React.Component {
             subNodes = '';
         }
         //adapt URLs based on the current page
-        let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page});
+        let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page}, this.props.mode);
 
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>

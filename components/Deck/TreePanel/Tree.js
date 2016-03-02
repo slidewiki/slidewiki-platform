@@ -6,7 +6,7 @@ import MultiNode from './MultiNode';
 
 class Tree extends React.Component {
     handleUpKey(){
-        let prevPath = TreeUtil.prevNodePath(this.props.selector, this.props.flatTree);
+        let prevPath = TreeUtil.prevNodePath(this.props.selector, this.props.flatTree, this.props.mode);
         if(prevPath){
             this.context.executeAction(navigateAction, {
                 url: prevPath
@@ -16,7 +16,7 @@ class Tree extends React.Component {
         return false;
     }
     handleDownKey(e){
-        let nextPath = TreeUtil.nextNodePath(this.props.selector, this.props.flatTree);
+        let nextPath = TreeUtil.nextNodePath(this.props.selector, this.props.flatTree, this.props.mode);
         if(nextPath){
             this.context.executeAction(navigateAction, {
                 url: nextPath
@@ -45,11 +45,11 @@ class Tree extends React.Component {
         let output = this.props.items.map((node, index) => {
             if(node.type === 'deck'){
                 return (
-                    <MultiNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
+                    <MultiNode item={node} mode={self.props.mode} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
                 );
             }else{
                 return (
-                    <SingleNode item={node} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
+                    <SingleNode item={node} mode={self.props.mode} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
                 );
             }
         });

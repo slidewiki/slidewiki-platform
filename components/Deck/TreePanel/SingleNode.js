@@ -26,7 +26,7 @@ class SingleNode extends React.Component {
             'file text': (this.props.item.type === 'slide')
         });
         //adapt URLs based on the current page
-        let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page});
+        let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page}, this.props.mode);
 
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>
