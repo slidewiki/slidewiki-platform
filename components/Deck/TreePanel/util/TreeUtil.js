@@ -8,6 +8,22 @@ class TreeUtil{
         slectorPath = out.join(';');
         return slectorPath;
     }
+    //build node URL based on the context
+    static makeNodeURL(selector) {
+        let nodeURL;
+        //adapt URLs based on the current page
+        switch (selector.page) {
+            case 'deck':
+                nodeURL = '/' + selector.page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath;
+                break;
+            case 'decktree':
+                nodeURL = '/' + selector.page + '/' + selector.id + '/' + selector.spath;
+                break;
+            default:
+                nodeURL = '/decktree/' + selector.id + '/' + selector.spath;
+        }
+        return nodeURL;
+    }
     //create previous node path
     static prevNodePath(selector, flatTree) {
         let node, path;
@@ -15,7 +31,7 @@ class TreeUtil{
             return 0;
         }else{
             node = flatTree[selector.position - 1];
-            path = '/deck/' + selector.id + '/' + node.type + '/' + node.id + '/' + node.path;
+            path = this.makeNodeURL({id: selector.id, stype: node.type, sid: node.id, spath: node.path, page: selector.page});
             return path;
         }
     }
@@ -26,7 +42,7 @@ class TreeUtil{
             return 0;
         }else{
             node = flatTree[selector.position + 1];
-            path = '/deck/' + selector.id + '/' + node.type + '/' + node.id + '/' + node.path;
+            path = this.makeNodeURL({id: selector.id, stype: node.type, sid: node.id, spath: node.path, page: selector.page});
             return path;
         }
     }

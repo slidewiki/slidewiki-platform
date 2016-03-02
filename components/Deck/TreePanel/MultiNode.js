@@ -56,9 +56,12 @@ class MultiNode extends React.Component {
         }else{
             subNodes = '';
         }
+        //adapt URLs based on the current page
+        let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page});
+
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>
-                <NavLink href={'/deck/' + this.props.rootNode.id + '/' + this.props.item.type + '/' + this.props.item.id + '/' + slectorPath}>
+                <NavLink href={nodeURL}>
                     <i className={iconClass}></i>
                     {nodeTitle}
                 </NavLink>
