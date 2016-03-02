@@ -9,8 +9,12 @@ class MultiNode extends React.Component {
         super(props);
         this.state = {expanded: true};
     }
-    toggleNode(e){
+    handleClick(e){
         e.stopPropagation();
+        key.setScope('tree'); // will allow specific tree keyborad actions
+        this.toggleNode();
+    }
+    toggleNode(){
         this.setState({expanded: !this.state.expanded});
     }
     render() {
@@ -53,7 +57,7 @@ class MultiNode extends React.Component {
             subNodes = '';
         }
         return (
-            <div className="item" onClick={this.toggleNode.bind(this)}>
+            <div className="item" onClick={this.handleClick.bind(this)}>
                 <NavLink href={'/deck/' + this.props.rootNode.id + '/' + this.props.item.type + '/' + this.props.item.id + slectorPath}>
                     <i className={iconClass}></i>
                     {nodeTitle}

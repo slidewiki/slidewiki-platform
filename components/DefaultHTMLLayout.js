@@ -22,6 +22,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/bower_components/semantic/dist/components/checkbox.min.js"></script>
                 <script src="/bower_components/semantic/dist/components/dimmer.min.js"></script>
                 <script src="/bower_components/semantic/dist/components/modal.min.js"></script>
+                <script src="/bower_components/keymaster/keymaster.js"></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src={'/public/js/' + this.props.clientFile}></script>
             </body>
