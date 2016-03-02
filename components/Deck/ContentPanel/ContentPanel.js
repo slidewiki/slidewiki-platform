@@ -12,7 +12,7 @@ import DataSourcePanel from '../DataSourcePanel/DataSourcePanel';
 class ContentPanel extends React.Component {
     render() {
         let targetComponent = '';
-        switch (this.props.ContentStore.contentType) {
+        switch (this.props.ContentStore.selector.stype) {
             case 'deck':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
