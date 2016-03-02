@@ -39,7 +39,7 @@ export default function loadDeck(context, payload, done) {
         payloadCustom.params.mode = 'view';
     }
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
-    if((currentContent.contextID === payloadCustom.params.id) && (currentContent.contentType === payloadCustom.params.stype) && (currentContent.contentID === payloadCustom.params.sid)){
+    if((currentContent.selector.sid === payloadCustom.params.id) && (currentContent.selector.stype === payloadCustom.params.stype) && (currentContent.selector.sid === payloadCustom.params.sid)){
         runNonContentActions = 0;
     }
     //load all required actions in parallel

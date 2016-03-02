@@ -25,7 +25,7 @@ class TreePanel extends React.Component {
                         <b><NavLink href={'/deck/' + rootNode.id}>{rootNode.title}</NavLink></b>
                     </div>
                     <div className="ui segment">
-                        <Tree selector={this.props.DeckTreeStore.selector} rootNode={rootNode} items={this.props.DeckTreeStore.deckTree.children} />
+                        <Tree selector={this.props.DeckTreeStore.selector} rootNode={rootNode} items={this.props.DeckTreeStore.deckTree.children} flatTree={this.props.DeckTreeStore.flatTree}/>
                     </div>
                 </div>
              </div>

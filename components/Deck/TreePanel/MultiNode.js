@@ -35,7 +35,7 @@ class MultiNode extends React.Component {
         //change the node title style if it is selected
         let nodeTitle = this.props.item.title;
         if(this.props.selector.spath){
-            if(slectorPath === ('/' + this.props.selector.spath)){
+            if(slectorPath === this.props.selector.spath){
                 nodeTitle = <strong> {nodeTitle} </strong>;
             }
         }else{
@@ -58,7 +58,7 @@ class MultiNode extends React.Component {
         }
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>
-                <NavLink href={'/deck/' + this.props.rootNode.id + '/' + this.props.item.type + '/' + this.props.item.id + slectorPath}>
+                <NavLink href={'/deck/' + this.props.rootNode.id + '/' + this.props.item.type + '/' + this.props.item.id + '/' + slectorPath}>
                     <i className={iconClass}></i>
                     {nodeTitle}
                 </NavLink>
