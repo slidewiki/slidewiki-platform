@@ -15,7 +15,11 @@ class ContentUtil{
                 nodeURL = '/' + selector.page + '/' + selector.stype + '/' + selector.sid + '/' + mode;
                 break;
             default:
-                nodeURL = '/content/' + selector.id + '/' + mode;
+                if(selector.spath){
+                    nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
+                }else{
+                    nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode;
+                }
         }
         return nodeURL;
     }

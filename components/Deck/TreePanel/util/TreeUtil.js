@@ -20,7 +20,7 @@ class TreeUtil{
                 nodeURL = '/' + selector.page + '/' + selector.id + '/' + selector.spath;
                 break;
             default:
-                nodeURL = '/decktree/' + selector.id + '/' + selector.spath;
+                nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath;
         }
         return nodeURL;
     }
