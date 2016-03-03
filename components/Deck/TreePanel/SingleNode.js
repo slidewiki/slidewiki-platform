@@ -6,7 +6,6 @@ import TreeUtil from './util/TreeUtil';
 class SingleNode extends React.Component {
     handleClick(e){
         e.stopPropagation();
-        key.setScope('tree'); // will allow specific tree keyborad actions
     }
     render() {
         let slectorPath = TreeUtil.makeSelectorPath(this.props.nodePath);
@@ -26,9 +25,12 @@ class SingleNode extends React.Component {
             'ui grey icon': true,
             'file text': (this.props.item.type === 'slide')
         });
+        //adapt URLs based on the current page
+        let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page}, this.props.mode);
+
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>
-                <NavLink href={'/deck/' + this.props.rootNode.id + '/' + this.props.item.type + '/' + this.props.item.id + '/' + slectorPath}>
+                <NavLink href={nodeURL}>
                     <i className={iconClass}></i>
                     {nodeTitle}
                 </NavLink>

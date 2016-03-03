@@ -8,6 +8,7 @@ import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import DataSourcePanel from '../DataSourcePanel/DataSourcePanel';
+import SlideControl from './SlideModes/SlideControl';
 
 class ContentPanel extends React.Component {
     render() {
@@ -48,6 +49,7 @@ class ContentPanel extends React.Component {
                     default:
                         targetComponent = <SlideViewPanel />;
                 }
+                targetComponent = <div>{targetComponent} <SlideControl mode={this.props.ContentStore.mode}/> </div>;
                 break;
         }
         return (

@@ -1,9 +1,9 @@
 import {BaseStore} from 'fluxible/addons';
 
-class ContentStore extends BaseStore {
+class DeckPageStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': '', page: 'content'};
+        this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': '', page: 'deck'};
         this.mode = 'view';
     }
     updateContent(payload) {
@@ -26,9 +26,9 @@ class ContentStore extends BaseStore {
     }
 }
 
-ContentStore.storeName = 'ContentStore';
-ContentStore.handlers = {
-    'UPDATE_CONTENT': 'updateContent'
+DeckPageStore.storeName = 'DeckPageStore';
+DeckPageStore.handlers = {
+    'UPDATE_DECK_PAGE_CONTENT': 'updateContent'
 };
 
-export default ContentStore;
+export default DeckPageStore;

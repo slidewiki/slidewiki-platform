@@ -20,7 +20,7 @@ class SlideControl extends React.Component {
     }
     handleNextClick(){
         key.setScope('slideControl'); // will enable specific slideControl keyborad actions
-        let nextPath = SlideControlUtil.nextSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        let nextPath = SlideControlUtil.nextSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
         if(nextPath){
             this.context.executeAction(navigateAction, {
                 url: nextPath
@@ -31,7 +31,7 @@ class SlideControl extends React.Component {
     }
     handlePreviousClick(){
         key.setScope('slideControl'); // will enable specific slideControl keyborad actions
-        let prevPath = SlideControlUtil.prevSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        let prevPath = SlideControlUtil.prevSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
         if(prevPath){
             this.context.executeAction(navigateAction, {
                 url: prevPath
@@ -40,7 +40,7 @@ class SlideControl extends React.Component {
         return false;
     }
     handleForwardClick(){
-        let lastPath = SlideControlUtil.lastSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        let lastPath = SlideControlUtil.lastSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
         if(lastPath){
             this.context.executeAction(navigateAction, {
                 url: lastPath
@@ -50,7 +50,7 @@ class SlideControl extends React.Component {
         return false;
     }
     handleBackwardClick(){
-        let firstPath = SlideControlUtil.firstSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree);
+        let firstPath = SlideControlUtil.firstSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
         if(firstPath){
             this.context.executeAction(navigateAction, {
                 url: firstPath

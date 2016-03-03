@@ -1,4 +1,6 @@
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
+import DeckPageStore from '../../stores/DeckPageStore';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TranslationPanel from './TranslationPanel/TranslationPanel';
 import TreePanel from './TreePanel/TreePanel';
@@ -24,7 +26,7 @@ class Deck extends React.Component {
               <div className="row">
                 <div className="four wide column">
                     <div className="row">
-                        <TreePanel />
+                        <TreePanel mode={this.props.DeckPageStore.mode}/>
                     </div>
                     <div className="ui hidden divider"></div>
                     <div className="row">
@@ -41,7 +43,7 @@ class Deck extends React.Component {
                   </div>
                   <div className="ui hidden divider"></div>
                   <div className="row">
-                      <ActivityFeedPanel />
+                      {this.props.DeckPageStore.mode !== 'view'? '' : <ActivityFeedPanel />}
                   </div>
                 </div>
               </div>
@@ -51,4 +53,9 @@ class Deck extends React.Component {
     }
 }
 
+Deck = connectToStores(Deck, [DeckPageStore], (context, props) => {
+    return {
+        DeckPageStore: context.getStore(DeckPageStore).getState()
+    };
+});
 export default Deck;
