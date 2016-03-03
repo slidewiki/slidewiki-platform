@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 class DataSourceItem extends React.Component {
     static get urlRegEx() {
@@ -10,16 +11,14 @@ class DataSourceItem extends React.Component {
         return (DataSourceItem.urlRegEx.test(text));
     }
 
-    insertIcon(title) {
-        if (this.isTextURL(title)) {
-            return (
-                <i className="ui icon linkify"></i>
-            );
-        } else {
-            return (
-                <i className="ui icon file"></i>
-            );
-        }
+    shortenText(text) {
+        const maxLength = 80, startLength = 25, endLength = 50;
+        const textLength = text.length;
+        return (textLength <  maxLength) ? text : text.substring(0, startLength - 1) + '...' + text.substring(textLength - endLength - 1, textLength - 1);
+    }
+
+    addProtocolIfMissing(url) {
+        return url.includes('://') ? url : 'http://' + url;
     }
 
     insertTitle(title) {
@@ -30,7 +29,7 @@ class DataSourceItem extends React.Component {
         let y = [];
 
         titleSegments.forEach((titleSegment, index) => {
-            y.push(this.isTextURL(titleSegment) ? <a href={titleSegment} key={index}>{titleSegment}</a> : titleSegment);
+            y.push(this.isTextURL(titleSegment) ? <a href={this.addProtocolIfMissing(titleSegment)} key={index}>{this.shortenText(titleSegment)}</a> : titleSegment);
         });
 
         return (
@@ -39,16 +38,21 @@ class DataSourceItem extends React.Component {
     }
 
     render() {
-        let divStyle = {
-            fontSize: 12
-        };
-
         let nodeTitle = this.props.node.title;
+
+        //change the icon based on the text
+        let iconClass = classNames({
+            'ui icon': true,
+            'linkify': this.isTextURL(nodeTitle),
+            'file': !this.isTextURL(nodeTitle)
+        });
 
         return (
             <div className="item" >
-                {this.insertIcon(nodeTitle)}
-                <div style={divStyle} className="content">{this.insertTitle(nodeTitle)} </div>
+                <i className={iconClass}></i>
+                <div className="content">
+                    {this.insertTitle(nodeTitle)}
+                </div>
             </div>
         );
     }
