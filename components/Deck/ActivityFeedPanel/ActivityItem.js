@@ -109,6 +109,44 @@ class ActivityItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'comment':
+                IconNode = (<i className="ui comment outline icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'commented on ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'reply':
+                IconNode = (<i className="ui comments outline icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a>
+                        <span> replied to a comment </span>{'on ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'use':
+                IconNode = (<i className="ui copy icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'used ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        {' in deck '}<a href={'/slideview/' + node.targetDeckID}>#{node.targetDeckID}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
         }
 
         return (
