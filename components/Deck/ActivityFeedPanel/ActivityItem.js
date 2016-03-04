@@ -49,37 +49,76 @@ class ActivityItem extends React.Component {
     }
     render() {
         const node = this.props.activity;
-        let Addendum;
-        const isTranslation = node.type === 'translate' && node.translation;
-        const isSharing = node.type === 'share' && node.shareInfo;
-        if (isTranslation) {
-            Addendum = (
-                <span> to <a href={'/slideview/' + node.translation.contentID}>{node.translation.language}</a></span>
-            );
-        } else if (isSharing) {
-            Addendum = (
-                <span> on <a target="_blank" href={node.shareInfo.postURI}>{node.shareInfo.platform}</a></span>
-            );
+
+        let IconNode = '';
+        let SummaryNode = '';
+        const DateDiv = (
+            <div className="date">
+                {this.formatDate(node.date)}
+            </div>
+        );
+
+        switch (node.type) {
+            case 'translate':
+                IconNode = (<i className="ui translate icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'translated ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>{' to '}
+                        <a href={'/slideview/' + node.translation.contentID}>{node.translation.language}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'share':
+                IconNode = (<i className="ui slideshare icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'shared ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>{' on '}
+                        <a target="_blank" href={node.shareInfo.postURI}>{node.shareInfo.platform}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'add':
+                IconNode = (<i className="ui write icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'created ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'edit':
+                IconNode = (<i className="ui edit icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'edited ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        {DateDiv}
+                    </div>
+                );
+                break;
         }
-        const hasAddendum = isTranslation || isSharing;
-        const verb = node.type.endsWith('e') ? node.type+'d' : node.type+'ed';
+
         return (
             <div className="ui feed">
                 <div className="event">
                     <div className="label">
-                        <i className="ui user icon"></i>
+                        {IconNode}
                     </div>
                     <div className="content">
-                        <div className="summary">
-                            <a className="user" href={'/user/' + node.userID}>
-                                {node.username}
-                            </a> {verb + ' ' + node.contentType + ' '}
-                            <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
-                            { hasAddendum? Addendum : '' }.
-                            <div className="date">
-                                {this.formatDate(node.date)}
-                            </div>
-                        </div>
+                        {SummaryNode}
                         <div className="meta">
                             <a className="like" onClick={this.handleLike.bind(this)}>
                                 <i className="like icon"></i> {node.likesNo} Likes
