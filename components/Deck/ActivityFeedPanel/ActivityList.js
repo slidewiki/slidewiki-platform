@@ -34,10 +34,14 @@ class ActivityList extends React.Component {
                 </div>
             );
         });
+        const listStyles = {
+            maxHeight: '400px',
+            overflowY: 'auto'
+        };
         return (
             <div ref="activityList">
-                <div className="ui list">
-                    {rows}
+                <div className="ui list" style={listStyles}>
+                    {list}
                 </div>
              </div>
         );

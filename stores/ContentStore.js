@@ -11,6 +11,13 @@ class ContentStore extends BaseStore {
         this.mode = payload.params.mode;
         this.emitChange();
     }
+    updateSelector(selector) {
+        this.selector.id = selector.id;
+        this.selector.spath = selector.spath;
+        this.selector.sid = selector.sid;
+        this.selector.stype = selector.stype;
+        this.emitChange();
+    }
     getState() {
         return {
             selector: this.selector,
@@ -28,7 +35,8 @@ class ContentStore extends BaseStore {
 
 ContentStore.storeName = 'ContentStore';
 ContentStore.handlers = {
-    'UPDATE_CONTENT': 'updateContent'
+    'UPDATE_CONTENT': 'updateContent',
+    'UPDATE_CONTENT_SELECTOR': 'updateSelector'
 };
 
 export default ContentStore;
