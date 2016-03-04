@@ -57,6 +57,10 @@ class ActivityItem extends React.Component {
                 {this.formatDate(node.date)}
             </div>
         );
+        const commentStyles = {
+            fontStyle: 'italic',
+            fontWeight: 400
+        };
 
         switch (node.type) {
             case 'translate':
@@ -68,6 +72,7 @@ class ActivityItem extends React.Component {
                         </a> {'translated ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>{' to '}
                         <a href={'/slideview/' + node.translation.contentID}>{node.translation.language}</a>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
@@ -81,6 +86,7 @@ class ActivityItem extends React.Component {
                         </a> {'shared ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>{' on '}
                         <a target="_blank" href={node.shareInfo.postURI}>{node.shareInfo.platform}</a>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
@@ -93,6 +99,7 @@ class ActivityItem extends React.Component {
                             {node.username}
                         </a> {'created ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
@@ -105,6 +112,7 @@ class ActivityItem extends React.Component {
                             {node.username}
                         </a> {'edited ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
@@ -117,6 +125,9 @@ class ActivityItem extends React.Component {
                             {node.username}
                         </a> {'commented on ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <br/>
+                        <span style={commentStyles}>{'"' + node.commentText + '"'}</span>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
@@ -130,6 +141,9 @@ class ActivityItem extends React.Component {
                         </a>
                         <span> replied to a comment </span>{'on ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <br/>
+                        <span style={commentStyles}>{'"' + node.replyText + '"'}</span>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
@@ -143,11 +157,20 @@ class ActivityItem extends React.Component {
                         </a> {'used ' + node.contentType + ' '}
                         <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
                         {' in deck '}<a href={'/slideview/' + node.targetDeckID}>#{node.targetDeckID}</a>
+                        <br/>
                         {DateDiv}
                     </div>
                 );
                 break;
         }
+        // TODO: this should be removed probably, otherwise it should go below the SummaryNode
+        const MetaNode = (
+            <div className="meta">
+                <a className="like" onClick={this.handleLike.bind(this)}>
+                    <i className="like icon"></i> {node.likesNo} Likes
+                </a>
+            </div>
+        );
 
         return (
             <div className="ui feed">
@@ -157,11 +180,6 @@ class ActivityItem extends React.Component {
                     </div>
                     <div className="content" style={{marginLeft: '1em'}}>
                         {SummaryNode}
-                        <div className="meta">
-                            <a className="like" onClick={this.handleLike.bind(this)}>
-                                <i className="like icon"></i> {node.likesNo} Likes
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>

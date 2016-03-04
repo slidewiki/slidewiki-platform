@@ -19,8 +19,8 @@ export default {
                 {'id': 3, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,30), 'likesNo': 2, 'translation': {'contentID':42, 'language':'Bosnian'}},
                 {'id': 4, 'type': 'translate', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,15), 'likesNo': 2, 'translation': {'contentID':42, 'language':'Croatian'}},
                 {'id': 5, 'type': 'share', 'contentType': 'deck', 'contentID': 53 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,7), 'likesNo': 10, 'shareInfo': {'postURI':'http://facebook.com', 'platform':'Facebook'}},
-                {'id': 6, 'type': 'comment', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,6), 'likesNo': 3, commentID: 42},
-                {'id': 7, 'type': 'reply', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Ali K.', 'userID': 23, 'date': timeFromNow(now,0,5), 'likesNo': 3, replyID: 43, commentID: 42},
+                {'id': 6, 'type': 'comment', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Vuk M.', 'userID': 7, 'date': timeFromNow(now,0,6), 'likesNo': 3, commentID: 42, commentText: 'Awesome!'},
+                {'id': 7, 'type': 'reply', 'contentType': 'slide', 'contentID': 67 + parseInt(args.sid), 'username': 'Ali K.', 'userID': 23, 'date': timeFromNow(now,0,5), 'likesNo': 3, replyID: 43, replyText: 'Indeed', commentID: 42},
                 {id: 8, type: 'use', contentType: 'slide', contentID: 67 + parseInt(args.sid), username: 'Vuk M.', userID: 7, date: timeFromNow(now,0,4), likesNo: 2, targetDeckID: 53 + parseInt(args.sid)}
             ];
             callback(null, {activities: activities, selector: selector});
