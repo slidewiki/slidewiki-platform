@@ -10,10 +10,13 @@ class DeckTreeStore extends BaseStore {
     }
     updateDeckTree(payload) {
         this.deckTree = payload.deckTree;
-        //todo: build a default selector (spath) if selector is not defined
         this.selector = payload.selector;
         //flatten th deck tree
         this.flatTree = this.flattenTree(payload.deckTree, []);
+        //todo: build a default selector spath if selector is not defined
+        if(!this.selector.spath){
+            this.selector.spath = this.generateASelector();
+        }
         this.selector.position = this.calculateAbsPosition(this.selector.spath);
         this.emitChange();
     }
@@ -47,6 +50,17 @@ class DeckTreeStore extends BaseStore {
             });
         }
         return list;
+    }
+    //fill in the selector if needed
+    generateASelector() {
+        let spath = '';
+        for (let i=0; i < this.flatTree.length; i++) {
+            if ((this.flatTree[i].type === this.selector.stype) && (this.flatTree[i].id === parseInt(this.selector.sid))) {
+                spath = this.flatTree[i].path;
+                return spath;
+            }
+        }
+        return spath;
     }
     selectTreeNode(args) {
         this.selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode, 'position': this.calculateAbsPosition(args.spath)};
