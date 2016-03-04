@@ -155,7 +155,7 @@ class ActivityItem extends React.Component {
                     <div className="activity-icon">
                         {IconNode}
                     </div>
-                    <div className="content" style={{marginLeft: '0.5em'}}>
+                    <div className="content" style={{marginLeft: '1em'}}>
                         {SummaryNode}
                         <div className="meta">
                             <a className="like" onClick={this.handleLike.bind(this)}>

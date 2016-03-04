@@ -29,7 +29,7 @@ class ActivityList extends React.Component {
         }
         let list = this.props.items.map((node, index) => {
             return (
-                <div className="ui item" key={index}>
+                <div className="ui item" key={index} style={{ margin: '1em 0'}}>
                     <ActivityItem activity={node} />
                 </div>
             );
