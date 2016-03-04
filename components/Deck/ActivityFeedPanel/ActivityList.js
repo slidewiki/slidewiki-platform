@@ -35,8 +35,8 @@ class ActivityList extends React.Component {
             );
         });
         const listStyles = {
-            'max-height': '400px',
-            'overflow-y': 'auto'
+            maxHeight: '400px',
+            overflowY: 'auto'
         };
         return (
             <div ref="activityList">
