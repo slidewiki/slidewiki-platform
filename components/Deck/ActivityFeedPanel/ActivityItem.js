@@ -70,7 +70,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.userID}>
                             {node.username}
                         </a> {'translated ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>{' to '}
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>{' to '}
                         <a href={'/slideview/' + node.translation.contentID}>{node.translation.language}</a>
                         <br/>
                         {DateDiv}
@@ -84,7 +84,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.userID}>
                             {node.username}
                         </a> {'shared ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>{' on '}
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>{' on '}
                         <a target="_blank" href={node.shareInfo.postURI}>{node.shareInfo.platform}</a>
                         <br/>
                         {DateDiv}
@@ -98,7 +98,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.userID}>
                             {node.username}
                         </a> {'created ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -111,7 +111,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.userID}>
                             {node.username}
                         </a> {'edited ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -124,7 +124,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.userID}>
                             {node.username}
                         </a> {'commented on ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
                         <br/>
                         <span style={commentStyles}>{'"' + node.commentText + '"'}</span>
                         <br/>
@@ -140,7 +140,7 @@ class ActivityItem extends React.Component {
                             {node.username}
                         </a>
                         <span> replied to a comment </span>{'on ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
                         <br/>
                         <span style={commentStyles}>{'"' + node.replyText + '"'}</span>
                         <br/>
@@ -155,13 +155,46 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.userID}>
                             {node.username}
                         </a> {'used ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>#{node.contentID}</a>
-                        {' in deck '}<a href={'/slideview/' + node.targetDeckID}>#{node.targetDeckID}</a>
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        {' in deck '}<a href={'/slideview/' + node.targetDeckID}>{node.targetDeckName}</a>
                         <br/>
                         {DateDiv}
                     </div>
                 );
                 break;
+            case 'like':
+                IconNode = (<i className="ui big thumbs outline up icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'liked ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'download':
+                IconNode = (<i className="ui big download icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.userID}>
+                            {node.username}
+                        </a> {'downloaded ' + node.contentType + ' '}
+                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            default:
+                IconNode = (<i className="ui big warning icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        Unknown type of activity
+                    </div>
+                );
         }
         // TODO: this should be removed probably, otherwise it should go below the SummaryNode
         const MetaNode = (
