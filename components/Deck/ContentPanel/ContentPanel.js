@@ -17,37 +17,37 @@ class ContentPanel extends React.Component {
             case 'deck':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <DeckViewPanel/>;
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'edit':
-                        targetComponent = <DeckEditPanel />;
+                        targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'questions':
-                        targetComponent = <ContentQuestionsPanel />;
+                        targetComponent = <ContentQuestionsPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'datasources':
-                        targetComponent = <DataSourcePanel />;
+                        targetComponent = <DataSourcePanel  selector={this.props.ContentStore.selector} />;
                         break;
                     default:
-                        targetComponent = <DeckViewPanel/>;
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
                 }
                 break;
             case 'slide':
                 switch (this.props.ContentStore.mode) {
                     case 'view':
-                        targetComponent = <SlideViewPanel />;
+                        targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'edit':
-                        targetComponent = <SlideEditPanel />;
+                        targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
                         break;
                     case 'questions':
-                        targetComponent = <ContentQuestionsPanel />;
+                        targetComponent = <ContentQuestionsPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'datasources':
-                        targetComponent = <DataSourcePanel />;
+                        targetComponent = <DataSourcePanel  selector={this.props.ContentStore.selector} />;
                         break;
                     default:
-                        targetComponent = <SlideViewPanel />;
+                        targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
                 }
                 targetComponent = <div>{targetComponent} <SlideControl mode={this.props.ContentStore.mode}/> </div>;
                 break;
