@@ -18,8 +18,9 @@ ADD bower.json /nodeApp/
 RUN bower install --allow-root
 
 ADD package.json /nodeApp/
-# Installing ALL depencies is a bad idea because it increases the deployment image a lot! Can we fix that?
-RUN npm install
+
+# Install only production dependencies
+RUN npm install --production
 
 ADD . /nodeApp
 
