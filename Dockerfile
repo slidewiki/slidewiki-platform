@@ -1,27 +1,43 @@
 FROM node:5.7-slim
 MAINTAINER Ali Khalili "hyperir@gmail.com"
 
-# Update aptitude with new repo
-RUN apt-get update
-# Install software
-RUN apt-get install -y git
+RUN mkdir /nodeApp
+WORKDIR /nodeApp
 
-RUN mkdir /slidewiki-platform
-WORKDIR /slidewiki-platform
+# ---------------- #
+#   Installation   #
+# ---------------- #
+
+RUN apt-get update
+RUN apt-get install -y git
 
 RUN npm install bower -g
 RUN npm install webpack -g
 
-ADD bower.json /slidewiki-platform/
+ADD bower.json /nodeApp/
 RUN bower install --allow-root
 
-ADD package.json /slidewiki-platform/
+ADD package.json /nodeApp/
+# Installing ALL depencies is a bad idea because it increases the deployment image a lot! Can we fix that?
 RUN npm install
 
-ADD . /slidewiki-platform
+ADD . /nodeApp
 
+# ----------------- #
+#   Configuration   #
+# ----------------- #
 
-#specify the port used by slidewiki-platform
 EXPOSE 3000
+
+# ----------- #
+#   Cleanup   #
+# ----------- #
+
+RUN apt-get autoremove -y && apt-get -y clean && \
+		rm -rf /var/lib/apt/lists/*
+
+# -------- #
+#   Run!   #
+# -------- #
 
 ENTRYPOINT ["npm", "run", "build"]

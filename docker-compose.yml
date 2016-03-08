@@ -1,0 +1,8 @@
+service:
+  image: slidewiki/platform
+  restart: always
+  expose:
+    - "80"
+  environment:
+    - PORT=80
+    - VIRTUAL_HOST=platform.185.101.156.130.xip.io
