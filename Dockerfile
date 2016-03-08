@@ -19,8 +19,8 @@ RUN bower install --allow-root
 
 ADD package.json /nodeApp/
 
-# Install only production dependencies
-RUN npm install --production
+# Install only production dependencies? todo: handle webpack issue
+RUN npm install
 
 ADD . /nodeApp
 
