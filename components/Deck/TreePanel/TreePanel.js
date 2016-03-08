@@ -11,27 +11,45 @@ class TreePanel extends React.Component {
     handleBlur() {
         key.setScope('all'); // will disallow specific tree keyborad actions
     }
+    handleAddNode() {
+
+    }
+    handleDeleteNode() {
+
+    }
     render() {
+        const rootNodeStyles = {
+            fontSize: '1.2em'
+        };
+        const treeDIVStyles = {
+            maxHeight: '400',
+            overflowY: 'auto',
+            padding: '0'
+        };
         let rootNode = {title: this.props.DeckTreeStore.deckTree.title, id: this.props.DeckTreeStore.deckTree.id};
+        let rootNodeTitle = rootNode.title;
+        if(parseInt(this.props.DeckTreeStore.selector.sid) === parseInt(rootNode.id)){
+            rootNodeTitle = <strong> {rootNodeTitle} </strong>;
+        }
         return (
-            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)}>
+            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
                     <div className="3 fluid ui attached bottom tertiary small icon buttons">
                         <div className="ui button">
                             <i className="blue add icon"></i>
                         </div>
                         <div className="ui button">
-                            <i className="teal edit icon"></i>
+                            <i className="black ellipsis horizontal icon"></i>
                         </div>
                         <div className="ui button">
                             <i className="red remove icon"></i>
                         </div>
                     </div>
                     <div className="ui secondary segment">
-                        <b><NavLink href={'/deck/' + rootNode.id}>{rootNode.title}</NavLink></b>
+                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
-                    <div className="ui segment">
-                        <Tree selector={this.props.DeckTreeStore.selector} rootNode={rootNode} items={this.props.DeckTreeStore.deckTree.children} flatTree={this.props.DeckTreeStore.flatTree} mode={this.props.mode} />
+                    <div className="ui segment" style={treeDIVStyles}>
+                        <Tree selector={this.props.DeckTreeStore.selector} rootNode={rootNode} items={this.props.DeckTreeStore.deckTree.children} flatTree={this.props.DeckTreeStore.flatTree} mode={this.props.mode} onAddNode={this.handleAddNode} onDeleteNode={this.handleDeleteNode}/>
                     </div>
                 </div>
              </div>

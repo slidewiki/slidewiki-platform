@@ -18,6 +18,7 @@ class MultiNode extends React.Component {
     }
     render() {
         let self = this;
+        let rightBtns = '';
         let slectorPath = TreeUtil.makeSelectorPath(this.props.nodePath);
         //a multi node can have other multi nodes and single nodes
         let output = this.props.item.children.map((node, index) => {
@@ -33,14 +34,9 @@ class MultiNode extends React.Component {
         });
         //change the node title style if it is selected
         let nodeTitle = this.props.item.title;
-        if(this.props.selector.spath){
-            if(slectorPath === this.props.selector.spath){
-                nodeTitle = <strong> {nodeTitle} </strong>;
-            }
-        }else{
-            if((this.props.selector.stype === this.props.item.type) && parseInt(this.props.selector.sid) === parseInt(this.props.item.id)){
-                nodeTitle = <strong> {nodeTitle} </strong>;
-            }
+        if(slectorPath === this.props.selector.spath){
+            nodeTitle = <strong> {nodeTitle} </strong>;
+            rightBtns = <div className="right floated"><span><i className="blue add icon"></i></span><span><i className="black ellipsis horizontal icon"></i></span><span><i className="red remove icon"></i></span></div>;
         }
         //change the node icon based on the type of node and its expanded state
         let iconClass = classNames({
@@ -63,6 +59,7 @@ class MultiNode extends React.Component {
                 <NavLink href={nodeURL}>
                     <i className={iconClass}></i>
                     {nodeTitle}
+                    {rightBtns}
                 </NavLink>
                 {subNodes}
             </div>

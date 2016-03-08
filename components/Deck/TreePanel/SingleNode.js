@@ -9,16 +9,12 @@ class SingleNode extends React.Component {
     }
     render() {
         let slectorPath = TreeUtil.makeSelectorPath(this.props.nodePath);
+        let rightBtns = '';
         //change the node title style if it is selected
         let nodeTitle = this.props.item.title;
-        if(this.props.selector.spath){
-            if(slectorPath === this.props.selector.spath){
-                nodeTitle = <strong> {nodeTitle} </strong>;
-            }
-        }else{
-            if((this.props.selector.stype === this.props.item.type) && parseInt(this.props.selector.sid) === parseInt(this.props.item.id)){
-                nodeTitle = <strong> {nodeTitle} </strong>;
-            }
+        if(slectorPath === this.props.selector.spath){
+            nodeTitle = <strong> {nodeTitle} </strong>;
+            rightBtns = <div className="right floated"><span><i className="blue add icon"></i></span><span><i className="black ellipsis horizontal icon"></i></span><span><i className="red remove icon"></i></span></div>;
         }
         //change the node icon based on the type of node
         let iconClass = classNames({
@@ -27,12 +23,12 @@ class SingleNode extends React.Component {
         });
         //adapt URLs based on the current page
         let nodeURL = TreeUtil.makeNodeURL({id: this.props.rootNode.id, stype: this.props.item.type, sid: this.props.item.id, spath: slectorPath, page: this.props.selector.page}, this.props.mode);
-
         return (
             <div className="item" onClick={this.handleClick.bind(this)}>
                 <NavLink href={nodeURL}>
                     <i className={iconClass}></i>
                     {nodeTitle}
+                    {rightBtns}
                 </NavLink>
             </div>
         );

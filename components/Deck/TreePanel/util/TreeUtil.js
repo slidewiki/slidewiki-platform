@@ -27,7 +27,8 @@ class TreeUtil{
     //create previous node path
     static prevNodePath(selector, flatTree, mode) {
         let node, path;
-        if(!flatTree[selector.position - 1]){
+        //do not select the root deck node
+        if(selector.position === 1){
             return 0;
         }else{
             node = flatTree[selector.position - 1];

@@ -27,7 +27,11 @@ export default {
                   ]
                   },
                   {title: 'Conclusion', id: 78, type: 'slide'},
-                  {title: 'References', id: 79, type: 'slide'}
+                  {title: 'Future Work', id: 99, type: 'slide'},
+                  {title: 'References', id: 79, type: 'slide'},
+                  {title: 'Extra1', id: 739, type: 'slide'},
+                  {title: 'Extra2', id: 789, type: 'slide'},
+                  {title: 'Extra3', id: 799, type: 'slide'}
                 ]
             };
             callback(null, {deckTree: deckTree, selector: selector,  'mode': args.mode});
