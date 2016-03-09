@@ -52,6 +52,7 @@
     "immutable": "^3.7.6",
     "lodash": "^4.6.0",
     "react": "^0.14.7",
+    "react-custom-scrollbars": "^3.0.1",
     "react-dom": "^0.14.7",
     "serialize-javascript": "^1.2.0",
     "serve-favicon": "^2.3.0"
