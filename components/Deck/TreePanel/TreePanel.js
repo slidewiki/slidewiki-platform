@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
+import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Tree from './Tree';
@@ -11,15 +12,23 @@ class TreePanel extends React.Component {
     handleBlur() {
         key.setScope('all'); // will disallow specific tree keyborad actions
     }
-    handleAddNode() {
+    handleAddNode(path) {
+        if(!path){
+            // it means the root node is selected
+        }else{
 
+        }
     }
-    handleDeleteNode() {
+    handleDeleteNode(path) {
+        if(!path){
+            // it means the root node is selected
+        }else{
 
+        }
     }
     render() {
         const rootNodeStyles = {
-            fontSize: '1.2em'
+            fontSize: '1.06em'
         };
         const treeDIVStyles = {
             maxHeight: '400',
@@ -34,15 +43,12 @@ class TreePanel extends React.Component {
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
-                    <div className="3 fluid ui attached bottom tertiary small icon buttons">
+                    <div className="2 fluid ui attached bottom tertiary small icon buttons">
                         <div className="ui button">
-                            <i className="blue add icon"></i>
+                            <i className="blue search icon"></i>
                         </div>
                         <div className="ui button">
                             <i className="black ellipsis horizontal icon"></i>
-                        </div>
-                        <div className="ui button">
-                            <i className="red remove icon"></i>
                         </div>
                     </div>
                     <div className="ui secondary segment">

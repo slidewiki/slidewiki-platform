@@ -45,11 +45,11 @@ class Tree extends React.Component {
         let output = this.props.items.map((node, index) => {
             if(node.type === 'deck'){
                 return (
-                    <MultiNode item={node} mode={self.props.mode} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
+                    <MultiNode onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
                 );
             }else{
                 return (
-                    <SingleNode item={node} mode={self.props.mode} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
+                    <SingleNode onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} selector={self.props.selector} rootNode={self.props.rootNode} key={index} nodePath={[[node.id, index+1]]} nodePosition={index+1} />
                 );
             }
         });

@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import {shortTitle} from '../../configs/general';
 export default function loadDeckTree(context, payload, done) {
     context.service.read('decktree.nodes', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

@@ -10,7 +10,7 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/loadDataSources';
 import loadActivities from '../actions/loadActivities';
-import loadDeckTree from '../actions/loadDeckTree';
+import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
