@@ -90,7 +90,7 @@ class ActivityList extends React.Component {
                     length={this.state.items.length}
                     type={'variable'}>
                 </ReactList>
-             </div>
+            </div>
         );
     }
 }
