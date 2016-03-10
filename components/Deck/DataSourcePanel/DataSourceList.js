@@ -3,7 +3,9 @@ import DataSourceItem from './DataSourceItem';
 
 class DataSourceList extends React.Component {
     render() {
-        let list = this.props.items.map((node, index) => {
+        const selector = this.props.selector;
+
+        const list = this.props.items.map((node, index) => {
             return (
                 <DataSourceItem node={node} key={index}/>
             );

@@ -1,28 +1,29 @@
 import React from 'react';
+import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../stores/DataSourceStore';
 import DataSourceList from './DataSourceList';
+import ShadowScrollbars from './Scrollbars/ShadowScrollbars';
 
 class DataSourcePanel extends React.Component {
     render() {
-        let dataSources = this.props.DataSourceStore.datasources;
+        const dataSources = this.props.DataSourceStore.datasources;
+        const selector = this.props.DataSourceStore.selector;
 
-        const style= {
-            'maxHeight': '300px',
-            'overflowY': 'auto'
-        };
         return (
             <div className="ui segments" ref="dataSourcePanel">
                 <div className="ui secondary segment">
-                    <a href="/datasource/deck/57">Data Sources</a> ({dataSources.length})
+                    <NavLink href={'/datasource/'+ selector.stype + '/' + selector.sid}>Data Sources</NavLink> ({dataSources.length})
                 </div>
-                <div className="ui orange segment" style={style}>
-                    <DataSourceList items={dataSources} />
+                <div className="ui orange segment" >
+                    <ShadowScrollbars style={{height:300}} >
+                        <DataSourceList items={dataSources} />
+                    </ShadowScrollbars>
                 </div>
             </div>
         );
     }
-  }
+}
 
 DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore], (context, props) => {
     return {

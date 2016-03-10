@@ -4,14 +4,17 @@ class DataSourceStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.datasources = [];
+        this.selector = {};
     }
     updateDataSources(payload) {
         this.datasources = payload.datasources;
+        this.selector = payload.selector;
         this.emitChange();
     }
     getState() {
         return {
-            datasources: this.datasources
+            datasources: this.datasources,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -19,6 +22,7 @@ class DataSourceStore extends BaseStore {
     }
     rehydrate(state) {
         this.datasources = state.datasources;
+        this.selector = state.selector;
     }
 }
 
