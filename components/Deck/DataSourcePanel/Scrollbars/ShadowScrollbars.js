@@ -55,7 +55,8 @@ class ShadowScrollbars extends React.Component{
         return (
             <div style={containerStyle}>
                 <Scrollbars
-                    autoHide
+                    autoHide={true}
+                    autoHideTimeout={1000}
                     ref="scrollbars"
                     onScrollFrame={this.handleScrollFrame.bind(this)}
                     {...this.props}/>
