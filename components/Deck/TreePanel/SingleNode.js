@@ -17,7 +17,7 @@ class SingleNode extends React.Component {
     }
     activateDropDown() {
         let currentComp = this.refs[this.props.selector.spath];
-        $(currentComp).find('.ui.dropdown').dropdown();
+        $(currentComp).find('.dropdown').dropdown();
     }
     handleClick(e){
         e.stopPropagation();
@@ -39,33 +39,31 @@ class SingleNode extends React.Component {
         if(slectorPath === this.props.selector.spath){
             nodeTitle = <strong> {nodeTitle} </strong>;
             rightBtns = (
-                <div className="ui dropdown right floated" onClick={this.handleMenuClick.bind(this)}>
+                <div className="ui combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
                   <i className="ellipsis horizontal icon"></i>
                   <div className="small menu">
                         <div className="item" onClick={this.handleAddClick.bind(this, slectorPath)}>
-                            Append a new slide
+                            <i className="add circle icon"></i> New Slide
                         </div>
                         <div className="item">
-                            Append an existing slide
+                            <i className="add circle icon"></i> Existing Slide
                         </div>
-                        <div className="divider"></div>
                         <div className="item">
-                            Append an existing deck
+                            <i className="add circle icon"></i> New Deck
                         </div>
                         <div className="item" onClick={this.handleAddClick.bind(this, slectorPath)}>
-                            Append a new deck
+                            <i className="add circle icon"></i> Existing Deck
+                        </div>
+                        <div className="item">
+                            <i className="copy icon"></i> Duplicate
                         </div>
                         <div className="divider"></div>
                         <div className="item">
-                            Append a copy
-                        </div>
-                        <div className="divider"></div>
-                        <div className="item">
-                            Rename
+                            <i className="blue edit icon"></i> Rename
                         </div>
                         <div className="divider"></div>
                         <div className="item" onClick={this.handleDeleteClick.bind(this, slectorPath)}>
-                            Delete
+                            <i className="red remove circle icon"></i> Delete
                         </div>
                     </div>
                 </div>
