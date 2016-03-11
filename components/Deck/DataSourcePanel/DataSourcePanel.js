@@ -17,7 +17,7 @@ class DataSourcePanel extends React.Component {
                 </div>
                 <div className="ui orange segment" >
                     <ShadowScrollbars style={{height:300}} >
-                        <DataSourceList items={dataSources} />
+                        <DataSourceList items={dataSources} selector={selector}/>
                     </ShadowScrollbars>
                 </div>
             </div>
