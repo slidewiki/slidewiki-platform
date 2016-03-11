@@ -20,21 +20,15 @@ class ContentModeMenu extends React.Component {
                         Data Sources<span className="ui tiny circular label">2</span>
                     </NavLink>
                     <div className="item">
-                        <a title="download">
-                            <i className="download icon"></i>
-                        </a>
                         <a title="print">
-                            <i className="print icon"></i>
+                            <i className="large print icon"></i>
                         </a>
                         <a title="export">
-                            <i className="share external icon"></i>
+                            <i className="large share external icon"></i>
                         </a>
-                            <a title="share">
-                                <i className="share alternate icon"></i>
-                            </a>
-                            <a title="play">
-                                <i className="right large green circle play icon"></i>
-                            </a>
+                        <a title="play">
+                            <i className="large green circle play icon"></i>
+                        </a>
                     </div>
                 </div>
              </div>
