@@ -8,7 +8,7 @@ let fakeDiscussions = [
         author: {
             id: 7,
             username: 'Vuk M.',
-            avatar: ''
+            avatar: '/assets/images/mock-avatars/deadpool_256.png'
         },
         title: 'Congrats',
         text: 'Kudos, very good presentation, I\'ll spread the word!',
@@ -19,7 +19,7 @@ let fakeDiscussions = [
                 author: {
                     id: 8,
                     username: 'Dejan P.',
-                    avatar: ''
+                    avatar: '/assets/images/mock-avatars/man_512.png'
                 },
                 title: 'Agreed',
                 text: '^^',
@@ -30,7 +30,7 @@ let fakeDiscussions = [
                 author: {
                     id: 9,
                     username: 'Nikola T.',
-                    avatar: ''
+                    avatar: '/assets/images/mock-avatars/batman_512.jpg'
                 },
                 title: 'Yeah',
                 text: '+1',
@@ -43,7 +43,7 @@ let fakeDiscussions = [
         author: {
             id: 10,
             username: 'Marko B.',
-            avatar: ''
+            avatar: '/assets/images/mock-avatars/ninja-simple_512.png'
         },
         title: 'Simply the best',
         text: 'Best presentation I have seen so far on this subject',
@@ -54,7 +54,7 @@ let fakeDiscussions = [
         author: {
             id: 11,
             username: 'Voice in the crowd',
-            avatar: ''
+            avatar: '/assets/images/mock-avatars/anon_256.jpg'
         },
         title: 'Keep up the good work',
         text: 'Slide 54 could use some more details.\nGreat presentation though, keep on truckin!',
@@ -65,7 +65,7 @@ let fakeDiscussions = [
                 author: {
                     id: 12,
                     username: 'SlideWiki FTW',
-                    avatar: ''
+                    avatar: '/assets/images/mock-avatars/spooky_256.png'
                 },
                 title: 'Nitpicker!',
                 text: 'Damn nitpickers, everyone\'s a critic these days!',

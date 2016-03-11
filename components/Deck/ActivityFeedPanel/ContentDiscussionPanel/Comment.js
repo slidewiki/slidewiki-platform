@@ -36,7 +36,7 @@ class Comment extends React.Component {
         return (
             <div key={this.props.key} className="comment">
                 <a className="avatar">
-                    <i className="ui icon user" />
+                    {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <i className="ui icon user" />}
                 </a>
                 <div className="content">
                     <a className="author" href={'/user/' + comment.author.id}>{comment.author.username}</a>
