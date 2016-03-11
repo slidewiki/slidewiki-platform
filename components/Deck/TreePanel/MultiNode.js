@@ -42,7 +42,7 @@ class MultiNode extends React.Component {
     }
     render() {
         let self = this;
-        let rightBtns = '';
+        let actionBtns = '';
         let slectorPath = TreeUtil.makeSelectorPath(this.props.nodePath);
         //a multi node can have other multi nodes and single nodes
         let output = this.props.item.children.map((node, index) => {
@@ -60,9 +60,9 @@ class MultiNode extends React.Component {
         let nodeTitle = this.props.item.title;
         if(slectorPath === this.props.selector.spath){
             nodeTitle = <strong> {nodeTitle} </strong>;
-            rightBtns = (
-                <div className="ui combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
-                  <i className="ellipsis horizontal icon"></i>
+            actionBtns = (
+                <div className="ui floating combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
+                  <i className="ellipsis horizontal tiny icon"></i>
                   <div className="small menu">
                         <div className="item" onClick={this.handleAddClick.bind(this, slectorPath)}>
                             <i className="add circle icon"></i> New Slide
@@ -85,7 +85,7 @@ class MultiNode extends React.Component {
                         </div>
                         <div className="divider"></div>
                         <div className="item" onClick={this.handleDeleteClick.bind(this, slectorPath)}>
-                            <i className="red remove circle icon"></i> Delete
+                            <i className="red trash circle icon"></i> Delete
                         </div>
                     </div>
                 </div>
@@ -114,7 +114,7 @@ class MultiNode extends React.Component {
                     <NavLink href={nodeURL}>
                         {nodeTitle}
                     </NavLink>
-                    {rightBtns}
+                    {actionBtns}
                 </div>
                 {subNodes}
             </div>

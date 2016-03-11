@@ -33,14 +33,14 @@ class SingleNode extends React.Component {
     }
     render() {
         let slectorPath = TreeUtil.makeSelectorPath(this.props.nodePath);
-        let rightBtns = '';
+        let actionBtns = '';
         //change the node title style if it is selected
         let nodeTitle = this.props.item.title;
         if(slectorPath === this.props.selector.spath){
             nodeTitle = <strong> {nodeTitle} </strong>;
-            rightBtns = (
-                <div className="ui combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
-                  <i className="ellipsis horizontal icon"></i>
+            actionBtns = (
+                <div className="ui floating combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
+                  <i className="ellipsis horizontal tiny icon"></i>
                   <div className="small menu">
                         <div className="item" onClick={this.handleAddClick.bind(this, slectorPath)}>
                             <i className="add circle icon"></i> New Slide
@@ -63,7 +63,7 @@ class SingleNode extends React.Component {
                         </div>
                         <div className="divider"></div>
                         <div className="item" onClick={this.handleDeleteClick.bind(this, slectorPath)}>
-                            <i className="red remove circle icon"></i> Delete
+                            <i className="red trash circle icon"></i> Delete
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@ class SingleNode extends React.Component {
                     <NavLink href={nodeURL}>
                         {nodeTitle}
                     </NavLink>
-                    {rightBtns}
+                    {actionBtns}
                 </div>
             </div>
         );

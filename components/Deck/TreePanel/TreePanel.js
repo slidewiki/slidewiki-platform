@@ -32,6 +32,7 @@ class TreePanel extends React.Component {
         };
         const treeDIVStyles = {
             maxHeight: '400',
+            minHeight: '320',
             overflowY: 'auto',
             padding: '0'
         };
