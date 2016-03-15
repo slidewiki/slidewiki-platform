@@ -1,46 +1,21 @@
 import React from 'react';
 import ActivityItem from './ActivityItem';
 import ReactList from 'react-list';
-import _ from 'lodash';
-
-function timeFromNow(now, hours, mins) {
-    return now - 60000*mins - 3600000*hours;
-}
+import loadMoreActivities from '../../../actions/activityfeed/loadMoreActivities';
+import ActivityFeedStore from '../../../stores/ActivityFeedStore';
+import {connectToStores} from 'fluxible-addons-react';
 
 class ActivityList extends React.Component {
-    state = {
-        items: []
-    };
-    componentWillMount() {
-        this.setState({
-            items: this.props.items.concat(this.generateRandomActivities(20, this.props.items.length))
-        });
-    }
-    getRandomActivity() {
-        return _.merge({}, this.props.items[Math.floor(Math.random()*1000) % 11]);
-    }
-    generateRandomActivities(numActivities, startID) {
-        const now = Date.now();
-        let activities = [];
-        for (let i=0; i<numActivities; i++) {
-            let a = this.getRandomActivity();
-            a.id = i+startID;
-            a.date = timeFromNow(now, 0, 1);
-            a.contentName = a.contentName + ' (random)';
-            activities.push(a);
-        }
-        return activities;
-    }
     renderItem(index, key) {
-        let that = this;
-        if (index + 3 > this.state.items.length && index < 200) {
-            setTimeout(() => {
-                that.setState({
-                    items: that.state.items.concat(that.generateRandomActivities(30, that.state.length))
-                });
-            });
+        const activities = this.props.ActivityFeedStore.activities;
+        if (index + 3 > activities.length && index < 200) {
+            const payload = {
+                params: this.props.ActivityFeedStore.selector,
+                newActivities: { latestId: activities[activities.length-1].id, numNew: 30 }
+            };
+            this.context.executeAction(loadMoreActivities, payload);
         }
-        const node = this.state.items[index];
+        const node = activities[index];
         return (
             <div className="ui item" key={key} style={{ margin: '1em 0'}}>
                 <ActivityItem activity={node} />
@@ -50,7 +25,7 @@ class ActivityList extends React.Component {
     render() {
         let rows = [];
         let currentRow = [];
-        this.props.items.forEach((item) => {
+        this.props.ActivityFeedStore.activities.forEach((item) => {
             if (currentRow.length % 3 === 0 && currentRow.length > 0) {
                 rows.push((
                     <div className="row" key={rows.length}>
@@ -72,7 +47,7 @@ class ActivityList extends React.Component {
                 </div>
             ));
         }
-        let list = this.props.items.map((node, index) => {
+        let list = this.props.ActivityFeedStore.activities.map((node, index) => {
             return (
                 <div className="ui item" key={index} style={{ margin: '1em 0'}}>
                     <ActivityItem activity={node} />
@@ -87,12 +62,21 @@ class ActivityList extends React.Component {
             <div ref="activityList" style={listStyles}>
                 <ReactList className="ui list"
                     itemRenderer={this.renderItem.bind(this)}
-                    length={this.state.items.length}
+                    length={this.props.ActivityFeedStore.activities.length}
                     type={'variable'}>
                 </ReactList>
             </div>
         );
     }
 }
+
+ActivityList.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+ActivityList = connectToStores(ActivityList, [ActivityFeedStore], (context, props) => {
+    return {
+        ActivityFeedStore: context.getStore(ActivityFeedStore).getState()
+    };
+});
 
 export default ActivityList;

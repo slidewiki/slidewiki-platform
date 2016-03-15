@@ -33,7 +33,7 @@ class ActivityFeedPanel extends React.Component {
         let activityDIV ='';
         switch (this.props.ActivityFeedStore.activityType) {
             case 'all':
-                activityDIV = <ActivityList  items={this.props.ActivityFeedStore.activities} />;
+                activityDIV = <ActivityList  />;
                 break;
             case 'history':
                 activityDIV = <ContentHistoryPanel />;
@@ -45,7 +45,7 @@ class ActivityFeedPanel extends React.Component {
                 activityDIV = <ContentUsagePanel />;
                 break;
             default:
-                activityDIV = <ActivityList  items={this.props.ActivityFeedStore.activities} />;
+                activityDIV = <ActivityList  />;
 
         }
         let allTabClass = classNames({
