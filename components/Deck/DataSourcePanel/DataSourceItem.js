@@ -50,7 +50,6 @@ class DataSourceItem extends React.Component {
 
     insertTitle(node) {
         const title = node.title;
-        const selector = this.props.selector;
 
         //mark beginning and end of each url found and then split the text into segments
         const titleURLed = title.replace(DataSourceItem.urlRegEx, (url) => {
@@ -64,12 +63,8 @@ class DataSourceItem extends React.Component {
             y.push(this.isTextURL(titleSegment) ? <a href={this.addProtocolIfMissing(titleSegment)} key={index}>{this.shortenText(titleSegment)}</a> : titleSegment);
         });
 
-        //append origin of the datasource if it's not the current deck/slide
-        const showOrigin = ((node.originType === selector.stype) && (node.originId === selector.sid)) ? false : true;
-        const appendOrigin = (showOrigin) ? <span>(originally from <NavLink href={'/deck/' + selector.sid + '/' + node.originType + '/' + node.originId}> {node.originType + ' \'' + node.originTitle + ' \''}  </NavLink> ) </span> : '';
-
         return (
-            <span> {y} {appendOrigin}</span>
+            y
         );
     }
 
@@ -100,23 +95,10 @@ class DataSourceItem extends React.Component {
 
     render() {
         const node = this.props.node;
-        const nodeTitle = node.title;
-        const nodeType = node.type;
-        const nodeURL = node.url;
 
-        //change the icon based on the text
-        const iconClass = classNames({
-            'ui icon': true,
-            'linkify': nodeType === 'webpage' || (nodeType === 'plaintext' && this.isTextURL(nodeTitle)),
-            'file outline': nodeType === 'webdocument' || (nodeType === 'plaintext' && !this.isTextURL(nodeTitle)),
-            'user': nodeType === 'person',
-            'newspaper': nodeType === 'publication',
-            'pdf': nodeType === 'webdocument' && nodeURL.endsWith('pdf'),
-            'powerpoint': nodeType === 'webdocument' && ((nodeURL.endsWith('ppt') || nodeURL.endsWith('pptx'))),
-            'word': nodeType === 'webdocument' && ((nodeURL.endsWith('doc') || nodeURL.endsWith('docx'))),
-            'excel': nodeType === 'webdocument' && ((nodeURL.endsWith('xls') || nodeURL.endsWith('xlsx'))),
-            'image': nodeType === 'webdocument' && ((nodeURL.endsWith('jpg') || nodeURL.endsWith('jpeg') || nodeURL.endsWith('bmp') || nodeURL.endsWith('gif') || nodeURL.endsWith('png') || nodeURL.endsWith('svg')))
-        });
+        //append origin of the datasource
+        const selector = this.props.selector;
+        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
 
         let SummaryNode = '';
         switch (node.type) {
@@ -126,46 +108,46 @@ class DataSourceItem extends React.Component {
                 );
                 break;
             case 'webpage':
-                if (nodeURL !== '') {
+                if (node.url !== '') {
                     SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(nodeURL)}>{nodeTitle}</a> {this.addComment(node.comment)}</span>
+                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
                     );
                 } else {
                     SummaryNode = (
-                        <span>{nodeTitle} {this.addComment(node.comment)}</span>
+                        <span>{node.title} {this.addComment(node.comment)}</span>
                     );
                 }
                 break;
             case 'webdocument':
-                if (nodeURL !== '') {
+                if (node.url !== '') {
                     SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(nodeURL)}>{nodeTitle}</a> {this.addComment(node.comment)}</span>
+                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
                     );
                 } else {
                     SummaryNode = (
-                        <span>{nodeTitle} {this.addComment(node.comment)}</span>
+                        <span>{node.title} {this.addComment(node.comment)}</span>
                     );
                 }
                 break;
             case 'publication':
-                if (nodeURL !== '') {
+                if (node.url !== '') {
                     SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(nodeURL)}>{nodeTitle}</a> {this.addAuthors(node.authors)} {this.addYear(node.year)} {this.addComment(node.comment)}</span>
+                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addAuthors(node.authors)} {this.addYear(node.year)} {this.addComment(node.comment)}</span>
                     );
                 } else {
                     SummaryNode = (
-                        <span>{nodeTitle} {this.addAuthors(node.authors)} {this.addYear(node.year)} {this.addComment(node.comment)}</span>
+                        <span>{node.title} {this.addAuthors(node.authors)} {this.addYear(node.year)} {this.addComment(node.comment)}</span>
                     );
                 }
                 break;
             case 'person':
-                if (nodeURL !== '') {
+                if (node.url !== '') {
                     SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(nodeURL)}>{nodeTitle}</a> {this.addComment(node.comment)}</span>
+                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
                     );
                 } else {
                     SummaryNode = (
-                        <span>{nodeTitle} {this.addComment(node.comment)}</span>
+                        <span>{node.title} {this.addComment(node.comment)}</span>
                     );
                 }
                 break;
@@ -176,9 +158,9 @@ class DataSourceItem extends React.Component {
         }
         return (
             <div className="item" >
-                <i className={this.getIconType(nodeType, nodeTitle, nodeURL)}></i>
+                <i className={this.getIconType(node.type, node.title, node.url)}></i>
                 <div className="content">
-                    {SummaryNode}
+                    {SummaryNode} {appendOrigin}
                 </div>
             </div>
         );
