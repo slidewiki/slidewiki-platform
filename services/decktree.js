@@ -3,7 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
+        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype};
         if(resource === 'decktree.nodes'){
             /*********connect to microservices*************/
             //todo
@@ -33,7 +33,7 @@ export default {
                   {title: 'Extra3', id: 799, type: 'slide'}
                 ]
             };
-            callback(null, {deckTree: deckTree, selector: selector,  'mode': args.mode});
+            callback(null, {deckTree: deckTree, selector: selector, 'page': params.page, 'mode': args.mode});
         }
     },
     create: (req, resource, params, body, config, callback) => {
@@ -66,7 +66,7 @@ export default {
                   {title: 'Extra3', id: 799, type: 'slide'}
                 ]
             };
-            callback(null, {deckTree: deckTree, selector: selector,  'mode': args.mode});
+            callback(null, {deckTree: deckTree, selector: selector, 'page': params.page, 'mode': args.mode});
         }
     }
     // other methods

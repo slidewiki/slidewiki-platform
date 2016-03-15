@@ -1,49 +1,37 @@
 class TreeUtil{
-    //parses the nodePath and builds to selector path for navigation
-    static makeSelectorPath(nodePath) {
-        let out = [], slectorPath = '';
-        nodePath.forEach((element, index) => {
-            out.push(element.join(':'));
-        });
-        slectorPath = out.join(';');
-        return slectorPath;
-    }
     //build node URL based on the context
-    static makeNodeURL(selector, mode) {
+    static makeNodeURL(selector, page, mode) {
         let nodeURL;
         //adapt URLs based on the current page
-        switch (selector.page) {
+        switch (page) {
             case 'deck':
-                nodeURL = '/' + selector.page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
-                break;
-            case 'decktree':
-                nodeURL = '/' + selector.page + '/' + selector.id + '/' + selector.spath;
+                nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
                 break;
             default:
-                nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
+                nodeURL = '/decktree/' + selector.id + '/' + selector.spath;
         }
         return nodeURL;
     }
     //create previous node path
-    static prevNodePath(selector, flatTree, mode) {
+    static prevNodePath(selector, flatTree, page, mode) {
         let node, path;
         //do not select the root deck node
-        if(selector.position === 1){
+        if(selector.get('position') === 1){
             return 0;
         }else{
-            node = flatTree[selector.position - 1];
-            path = this.makeNodeURL({id: selector.id, stype: node.type, sid: node.id, spath: node.path, page: selector.page}, mode);
+            node = flatTree.get(selector.get('position')  - 1);
+            path = this.makeNodeURL({id: selector.get('id'), stype: node.get('type'), sid: node.get('id'), spath: node.get('path')}, page, mode);
             return path;
         }
     }
     //create next node path
-    static nextNodePath(selector, flatTree, mode) {
+    static nextNodePath(selector, flatTree, page, mode) {
         let node, path;
-        if(!flatTree[selector.position + 1]){
+        if(!flatTree.get(selector.get('position') + 1)){
             return 0;
         }else{
-            node = flatTree[selector.position + 1];
-            path = this.makeNodeURL({id: selector.id, stype: node.type, sid: node.id, spath: node.path, page: selector.page}, mode);
+            node = flatTree.get(selector.get('position') + 1);
+            path = this.makeNodeURL({id: selector.get('id'), stype: node.get('type'), sid: node.get('id'), spath: node.get('path')}, page, mode);
             return path;
         }
     }

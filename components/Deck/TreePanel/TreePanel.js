@@ -3,6 +3,7 @@ import {NavLink} from 'fluxible-router';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
+import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import Tree from './Tree';
 
 class TreePanel extends React.Component {
@@ -11,6 +12,9 @@ class TreePanel extends React.Component {
     }
     handleBlur() {
         key.setScope('all'); // will disallow specific tree keyborad actions
+    }
+    handleToggleNode(selector) {
+        this.context.executeAction(toggleTreeNode, selector);
     }
     handleAddNode(path) {
         if(!path){
@@ -36,11 +40,11 @@ class TreePanel extends React.Component {
             overflowY: 'auto',
             padding: '0'
         };
-        let rootNode = {title: this.props.DeckTreeStore.deckTree.title, id: this.props.DeckTreeStore.deckTree.id};
-        let rootNodeTitle = rootNode.title;
-        if(parseInt(this.props.DeckTreeStore.selector.sid) === parseInt(rootNode.id)){
-            rootNodeTitle = <strong> {rootNodeTitle} </strong>;
-        }
+        let deckTree = this.props.DeckTreeStore.deckTree;
+        let flatTree = this.props.DeckTreeStore.flatTree;
+        let selector = this.props.DeckTreeStore.selector;
+        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
+        let rootNodeTitle = <strong> {rootNode.title} </strong>;
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
@@ -56,7 +60,7 @@ class TreePanel extends React.Component {
                         <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
-                        <Tree selector={this.props.DeckTreeStore.selector} rootNode={rootNode} items={this.props.DeckTreeStore.deckTree.children} flatTree={this.props.DeckTreeStore.flatTree} mode={this.props.mode} onAddNode={this.handleAddNode} onDeleteNode={this.handleDeleteNode}/>
+                        <Tree rootNode={rootNode} selector={selector} items={deckTree.get('children')} flatTree={flatTree} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>
@@ -64,6 +68,9 @@ class TreePanel extends React.Component {
     }
 }
 
+TreePanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 TreePanel = connectToStores(TreePanel, [DeckTreeStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState()

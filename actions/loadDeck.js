@@ -41,7 +41,7 @@ export default function loadDeck(context, payload, done) {
     }
     context.dispatch('UPDATE_DECK_PAGE_CONTENT', payloadCustom);
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
-    if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.stype === payloadCustom.params.stype) && (currentState.selector.sid === payloadCustom.params.sid)){
+    if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
         runNonContentActions = 0;
     }
     if((currentState.selector.id === payloadCustom.params.id)){
