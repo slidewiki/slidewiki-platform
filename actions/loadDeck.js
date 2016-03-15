@@ -14,6 +14,7 @@ export default function loadDeck(context, payload, done) {
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;
+    let runFetchTree = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
     //if no specific content selector is given, use the deck type, view mode and root deck id as default selector
@@ -43,6 +44,9 @@ export default function loadDeck(context, payload, done) {
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.stype === payloadCustom.params.stype) && (currentState.selector.sid === payloadCustom.params.sid)){
         runNonContentActions = 0;
     }
+    if((currentState.selector.id === payloadCustom.params.id)){
+        runFetchTree = 0;
+    }
     //load all required actions in parallel
     async.parallel([
         (callback) => {
@@ -58,10 +62,14 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             if(runNonContentActions){
                 //we need to load the whole tree for first time
-                context.executeAction(loadDeckTree, payloadCustom, callback);
+                if(runFetchTree){
+                    context.executeAction(loadDeckTree, payloadCustom, callback);
+                }else{
+                    //when we only select a node in tree, there is no need to call the external service
+                    context.executeAction(selectTreeNode, payloadCustom, callback);
+                }
             }else{
-                //when we only select a node in tree, there is no need to call the external service
-                context.executeAction(selectTreeNode, payloadCustom, callback);
+                callback();
             }
         },
         (callback) => {
