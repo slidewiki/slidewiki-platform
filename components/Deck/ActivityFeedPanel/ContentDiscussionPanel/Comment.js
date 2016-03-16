@@ -1,25 +1,10 @@
 import React from 'react';
-import formatDate from '../DateFormatter';
-
-function breakLines(text) {
-    return text.split('\n').map((line, key) => {
-        return (
-            <span key={key}>
-                    {line}
-                <br />
-                </span>
-        );
-    });
-}
+import invertReplyBoxFlag from '../../../../actions/activityfeed/invertReplyBoxFlag';
+import ActivityFeedUtil from '../util/ActivityFeedUtil';
 
 class Comment extends React.Component {
-    state = {
-        replyBoxOpened: false
-    };
     handleReply() {
-        this.setState({
-            replyBoxOpened: !this.state.replyBoxOpened
-        });
+        this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
     }
     render() {
         const comment = this.props.comment;
@@ -41,21 +26,25 @@ class Comment extends React.Component {
                 <div className="content">
                     <a className="author" href={'/user/' + comment.author.id}>{comment.author.username}</a>
                     <div className="metadata">
-                        <span className="date">{formatDate(comment.date)}</span>
+                        <span className="date">{ActivityFeedUtil.formatDate(comment.date)}</span>
                     </div>
                     <div className="text">
                         <strong>{comment.title}</strong><br/>
-                        {breakLines(comment.text)}
+                        {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
                     <div className="actions">
                         <a className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
                     </div>
-                    { this.state.replyBoxOpened ? replyBox : '' }
+                    { comment.replyBoxOpened ? replyBox : '' }
                 </div>
                 {comment.replies?<div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} />); })}</div> : ''}
             </div>
         );
     }
 }
+
+Comment.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default Comment;
