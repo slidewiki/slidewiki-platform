@@ -1,4 +1,5 @@
 import React from 'react';
+//import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
@@ -25,14 +26,35 @@ class TreeNode extends React.Component {
         this.props.onToggleNode(selector);
         e.stopPropagation();
     }
-    handleAddClick(selector){
+    handleAddClick(selector, e){
         this.props.onAddNode(selector);
+        e.stopPropagation();
     }
-    handleDeleteClick(selector){
+    handleDeleteClick(selector, e){
         this.props.onDeleteNode(selector);
+        e.stopPropagation();
+    }
+    handleRenameClick(selector, e){
+        this.props.onRename(selector);
+        e.stopPropagation();
     }
     handleMenuClick(e){
         e.stopPropagation();
+    }
+    handleEditFocus(e){
+        //select all content
+        e.target.select();
+    }
+    handleNameChange(e){
+        console.log(e.target.value);
+    }
+    handleKeyDown(selector, e) {
+        switch (e.keyCode) {
+            //case 9: // Tab
+            case 13: // Enter
+                this.props.onSave(selector, this.props.item.get('title'), e.target.value);
+                break;
+        }
     }
     render() {
         let self = this;
@@ -45,7 +67,7 @@ class TreeNode extends React.Component {
         if(this.props.item.get('type') === 'deck'){
             childNodes = this.props.item.get('children').map((node, index) => {
                 return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
+                    <TreeNode onToggleNode={self.props.onToggleNode} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
                 );
             });
             //show/hide sub nodes based on the expanded state
@@ -57,9 +79,10 @@ class TreeNode extends React.Component {
         }
         //change the node title style if it is selected
         let nodeTitle = this.props.item.get('title');
+        let nodeTitleDIV = nodeTitle;
         let actionBtns = '';
         if(this.props.item.get('selected')){
-            nodeTitle = <strong> {nodeTitle} </strong>;
+            nodeTitleDIV = <strong> {nodeTitle} </strong>;
             actionBtns = (
                 <div className="ui floating combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
                   <i className="ellipsis horizontal tiny icon"></i>
@@ -79,17 +102,22 @@ class TreeNode extends React.Component {
                         <div className="item">
                             <i className="copy icon"></i> Duplicate
                         </div>
-                        <div className="divider"></div>
-                        <div className="item">
+                        <div className="item" onClick={this.handleRenameClick.bind(this, nodeSelector)}>
                             <i className="blue edit icon"></i> Rename
                         </div>
-                        <div className="divider"></div>
                         <div className="item" onClick={this.handleDeleteClick.bind(this, nodeSelector)}>
                             <i className="red trash circle icon"></i> Delete
                         </div>
                     </div>
                 </div>
             );
+        }
+        let nodeDIV = '';
+        if(this.props.item.get('editable')){
+            nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle} onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
+            actionBtns = '';
+        }else{
+            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
         let iconClass = classNames({
@@ -102,9 +130,7 @@ class TreeNode extends React.Component {
             <div className="item" ref={this.props.item.get('path')}>
                 <div>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
-                    <NavLink href={nodeURL} >
-                        {nodeTitle}
-                    </NavLink>
+                    {nodeDIV}
                     {actionBtns}
                 </div>
                 {childNodesDIV}

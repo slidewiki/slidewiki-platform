@@ -66,7 +66,7 @@ class DeckTreeStore extends BaseStore {
     }
     makePathForTree(deckTree, path) {
         let nodePath = this.makeSelectorPath(path);
-        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: nodePath === this.selector.get('spath')};
+        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: nodePath === this.selector.get('spath'), editable: false};
         if (deckTree.type === 'deck') {
             newTree.children = [];
             newTree.expanded = true;
@@ -94,6 +94,21 @@ class DeckTreeStore extends BaseStore {
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
         //select new one
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('expanded', (val) => ! val));
+        this.emitChange();
+    }
+    renameTreeNode(selector) {
+        let selectorIm = Immutable.fromJS(selector);
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //select new one
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => true));
+        this.emitChange();
+    }
+    saveTreeNode(payload) {
+        let selectorIm = Immutable.fromJS(payload.selector);
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //select new one
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.newValue));
         this.emitChange();
     }
     //e.x. path: 68:3;685:2;691:2
@@ -135,7 +150,9 @@ DeckTreeStore.storeName = 'DeckTreeStore';
 DeckTreeStore.handlers = {
     'LOAD_DECK_TREE_SUCCESS': 'updateDeckTree',
     'SELECT_TREE_NODE_SUCCESS': 'selectTreeNode',
-    'TOGGLE_TREE_NODE_SUCCESS': 'toggleTreeNode'
+    'TOGGLE_TREE_NODE_SUCCESS': 'toggleTreeNode',
+    'RENAME_TREE_NODE_SUCCESS': 'renameTreeNode',
+    'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode'
 };
 
 export default DeckTreeStore;

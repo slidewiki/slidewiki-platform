@@ -3,8 +3,10 @@ import {NavLink} from 'fluxible-router';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
-import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import Tree from './Tree';
+import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
+import renameTreeNode from '../../../actions/decktree/renameTreeNode';
+import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -15,6 +17,12 @@ class TreePanel extends React.Component {
     }
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);
+    }
+    handleRenameNode(selector) {
+        this.context.executeAction(renameTreeNode, selector);
+    }
+    handleSaveNode(selector, oldValue, newValue) {
+        this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
     handleAddNode(path) {
         if(!path){
@@ -60,7 +68,7 @@ class TreePanel extends React.Component {
                         <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
-                        <Tree rootNode={rootNode} selector={selector} items={deckTree.get('children')} flatTree={flatTree} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                        <Tree rootNode={rootNode} selector={selector} items={deckTree.get('children')} flatTree={flatTree} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>

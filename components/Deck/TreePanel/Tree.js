@@ -44,7 +44,7 @@ class Tree extends React.Component {
         //for simplicity and flexibility we divide tree nodes into single and multi
         let output = this.props.items.map((node, index) => {
             return (
-                <TreeNode onToggleNode={self.props.onToggleNode} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
+                <TreeNode onToggleNode={self.props.onToggleNode} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
             );
         });
         return (
