@@ -1,4 +1,4 @@
-service:
+slidewikiplatform:
   image: slidewiki/platform
   restart: always
   expose:
