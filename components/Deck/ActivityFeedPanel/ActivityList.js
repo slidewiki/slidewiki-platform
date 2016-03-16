@@ -13,7 +13,8 @@ class ActivityList extends React.Component {
                 params: this.props.ActivityFeedStore.selector,
                 newActivities: { latestId: activities[activities.length-1].id, numNew: 30 }
             };
-            this.context.executeAction(loadMoreActivities, payload);
+            //Todo: please fix the bug: only fecth service on scroll
+            //this.context.executeAction(loadMoreActivities, payload);
         }
         const node = activities[index];
         return (

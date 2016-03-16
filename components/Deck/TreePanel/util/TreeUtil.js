@@ -12,28 +12,42 @@ class TreeUtil{
         }
         return nodeURL;
     }
+    //return the absolute position of the selector
+    static calculateAbsPosition(flatTree, spath){
+        let position = 0;
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('path') === spath) {
+                position = i;
+                return i;
+            }
+        }
+        return position;
+    }
     //create previous node path
     static prevNodePath(selector, flatTree, page, mode) {
+        let position = this.calculateAbsPosition(flatTree, selector.get('spath'));
         let node, path;
         //do not select the root deck node
-        if(selector.get('position') === 1){
+        if(position === 1){
             return 0;
         }else{
-            node = flatTree.get(selector.get('position')  - 1);
+            node = flatTree.get(position  - 1);
             path = this.makeNodeURL({id: selector.get('id'), stype: node.get('type'), sid: node.get('id'), spath: node.get('path')}, page, mode);
             return path;
         }
     }
     //create next node path
     static nextNodePath(selector, flatTree, page, mode) {
+        let position = this.calculateAbsPosition(flatTree, selector.get('spath'));
         let node, path;
-        if(!flatTree.get(selector.get('position') + 1)){
+        if(!flatTree.get(position + 1)){
             return 0;
         }else{
-            node = flatTree.get(selector.get('position') + 1);
+            node = flatTree.get(position + 1);
             path = this.makeNodeURL({id: selector.get('id'), stype: node.get('type'), sid: node.get('id'), spath: node.get('path')}, page, mode);
             return path;
         }
     }
+
 }
 export default TreeUtil;

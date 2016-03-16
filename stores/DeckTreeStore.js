@@ -5,68 +5,26 @@ class DeckTreeStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.selector = Immutable.fromJS({});;
-        this.deckTree = Immutable.fromJS({});
         this.flatTree = Immutable.fromJS([]);
+        this.deckTree = Immutable.fromJS({});
     }
     updateDeckTree(payload) {
         this.selector = Immutable.fromJS(payload.selector);
-        //flatten the deck tree
-        this.flatTree = Immutable.fromJS((this.flattenTree(payload.deckTree, [])));
+        //add path to tree nodes
+        this.deckTree = Immutable.fromJS(this.makePathForTree(payload.deckTree, []));
+        this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
         //set a default path in case of no path
         if(!payload.selector.spath){
-            this.selector = this.selector.setIn(['spath'], this.generateASelector());
+            this.selector = this.selector.setIn(['spath'], this.generateASelectorPath(this.flatTree, this.selector));
         }
-        //find the absolute position of selector
-        this.selector = this.selector.setIn(['position'], this.calculateAbsPosition(this.selector.get('spath')));
-        //add path to tree nodes, waits for the selector path assignement
-        this.deckTree = Immutable.fromJS(this.makePathForTree(payload.deckTree, []));
+        //update the selected node in tree
+        let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
         this.emitChange();
     }
-    //return the absolute position of the selector
-    calculateAbsPosition(spath){
-        let position = 0;
-        for (let i=0; i < this.flatTree.size; i++) {
-            if (this.flatTree.get(i).get('path') === spath) {
-                position = i;
-                return i;
-            }
-        }
-        return position;
-    }
-    //this is helpful for next and prev within tree
-    flattenTree(deckTree, path) {
-        let list = [];
-        list.push({id: deckTree.id, title: deckTree.title, type: deckTree.type, path: this.makeSelectorPath(path)});
-        if (deckTree.type === 'deck') {
-            deckTree.children.forEach((item, index) => {
-                list = list.concat(this.flattenTree(item, path.concat([[item.id, index + 1]])));
-            });
-        }
-        return list;
-    }
-    //fill in the selector if needed
-    generateASelector() {
-        let spath = '';
-        for (let i=0; i < this.flatTree.size; i++) {
-            if ((this.flatTree.get(i).get('type') === this.selector.get('stype')) && (this.flatTree.get(i).get('id') === parseInt(this.selector.get('sid')))) {
-                spath = this.flatTree.get(i).get('path');
-                return spath;
-            }
-        }
-        return spath;
-    }
-    //parses the nodePath and builds to selector path for navigation
-    makeSelectorPath(nodePath) {
-        let out = [], slectorPath = '';
-        nodePath.forEach((element, index) => {
-            out.push(element.join(':'));
-        });
-        slectorPath = out.join(';');
-        return slectorPath;
-    }
     makePathForTree(deckTree, path) {
-        let nodePath = this.makeSelectorPath(path);
-        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: nodePath === this.selector.get('spath'), editable: false};
+        let nodePath = this.makeSelectorPathString(path);
+        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: false, editable: false};
         if (deckTree.type === 'deck') {
             newTree.children = [];
             newTree.expanded = true;
@@ -76,9 +34,60 @@ class DeckTreeStore extends BaseStore {
         }
         return newTree;
     }
+    //flat tree is used to avoid complex recursive functions on tree
+    //it is a trade off: updating the tree needs this to be synchronized
+    flattenTree(deckTree) {
+        let list = [];
+        list.push({id: deckTree.get('id'), title: deckTree.get('title'), type: deckTree.get('type'), path: deckTree.get('path')});
+        if (deckTree.get('type') === 'deck') {
+            deckTree.get('children').forEach((item, index) => {
+                list = list.concat(this.flattenTree(item));
+            });
+        }
+        return list;
+    }
+    //generates a selector path if needed (uses flatTree search)
+    //returns the first occurance
+    generateASelectorPath(flatTree, selector) {
+        let spath = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if ((flatTree.get(i).get('type') === selector.get('stype')) && (parseInt(flatTree.get(i).get('id')) === parseInt(selector.get('sid')))) {
+                spath = flatTree.get(i).get('path');
+                return spath;
+            }
+        }
+        return spath;
+    }
+    //parses the nodePath and builds to selector path for navigation
+    makeSelectorPathString(nodePath) {
+        let out = [], slectorPath = '';
+        nodePath.forEach((element, index) => {
+            out.push(element.join(':'));
+        });
+        slectorPath = out.join(';');
+        return slectorPath;
+    }
+    //e.x. path: 68:3;685:2;691:2
+    makeImmSelectorFromPath(path) {
+        if(!path){
+            //in case of root deck selected
+            return [];
+        }
+        let out=['children'];
+        let tmp, arr = path.split(';');
+        arr.forEach((item, index) => {
+            tmp = item.split(':');
+            out.push(parseInt(tmp[1]-1));
+            if(index !== (arr.length - 1)){
+                //last item is always a slide, remaining are decks
+                out.push('children');
+            }
+        });
+        return out;
+    }
     selectTreeNode(args) {
         let oldSelector = this.selector;
-        this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'position': this.calculateAbsPosition(args.spath)});
+        this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
         // get the index for target nodes
         let oldSelectedNodeIndex = this.makeImmSelectorFromPath(oldSelector.get('spath'));
         let newSelectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
@@ -111,23 +120,19 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.newValue));
         this.emitChange();
     }
-    //e.x. path: 68:3;685:2;691:2
-    makeImmSelectorFromPath(path) {
-        if(!path){
-            //in case of root deck selected
-            return [];
-        }
-        let out=['children'];
-        let tmp, arr = path.split(';');
-        arr.forEach((item, index) => {
-            tmp = item.split(':');
-            out.push(parseInt(tmp[1]-1));
-            if(index !== (arr.length - 1)){
-                //last item is always a slide, remaining are decks
-                out.push('children');
-            }
-        });
-        return out;
+    deleteTreeNode(selector) {
+        let selectorIm = Immutable.fromJS(selector);
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //select new one
+        this.deckTree = this.deckTree.deleteIn(selectedNodeIndex);
+        //need to update flat tree for node absolute positions
+        this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
+        //should also update the position of all nodes which are in the same level
+        //first, update the selector to find all nodes in the same level: remove the last item
+        //selectedNodeIndex.splice(-1,1);
+        // this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(list) => console.log(list));
+        // console.log('qwe', selectedNodeIndex);
+        this.emitChange();
     }
     getState() {
         return {
@@ -152,7 +157,8 @@ DeckTreeStore.handlers = {
     'SELECT_TREE_NODE_SUCCESS': 'selectTreeNode',
     'TOGGLE_TREE_NODE_SUCCESS': 'toggleTreeNode',
     'RENAME_TREE_NODE_SUCCESS': 'renameTreeNode',
-    'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode'
+    'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode',
+    'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode'
 };
 
 export default DeckTreeStore;

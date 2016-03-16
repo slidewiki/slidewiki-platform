@@ -7,6 +7,7 @@ import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
+import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -25,18 +26,10 @@ class TreePanel extends React.Component {
         this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
     handleAddNode(path) {
-        if(!path){
-            // it means the root node is selected
-        }else{
 
-        }
     }
-    handleDeleteNode(path) {
-        if(!path){
-            // it means the root node is selected
-        }else{
-
-        }
+    handleDeleteNode(selector) {
+        this.context.executeAction(deleteTreeNode, selector);
     }
     render() {
         const rootNodeStyles = {
@@ -49,8 +42,8 @@ class TreePanel extends React.Component {
             padding: '0'
         };
         let deckTree = this.props.DeckTreeStore.deckTree;
-        let flatTree = this.props.DeckTreeStore.flatTree;
         let selector = this.props.DeckTreeStore.selector;
+        let flatTree = this.props.DeckTreeStore.flatTree;
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let rootNodeTitle = <strong> {rootNode.title} </strong>;
         return (
@@ -68,7 +61,7 @@ class TreePanel extends React.Component {
                         <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
-                        <Tree rootNode={rootNode} selector={selector} items={deckTree.get('children')} flatTree={flatTree} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                        <Tree decktree={deckTree} rootNode={rootNode} selector={selector} flatTree={flatTree} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>
