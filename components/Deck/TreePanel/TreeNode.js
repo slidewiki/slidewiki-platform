@@ -94,11 +94,12 @@ class TreeNode extends React.Component {
         });
         let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this)}><i className="ui link ellipsis horizontal tiny icon right floated"></i></span>;
         actionBtnsClass = classNames({
-            'hide-element': !this.state.actionOn
+            'hide-element': !this.state.actionOn,
+            'ui right aligned': true
         });
         let actionBtns = (
             <div className={actionBtnsClass}>
-                <div className="ui mini basic icon buttons right floated">
+                <div className="ui mini basic icon compact fluid buttons">
                     <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)}>
                         <i className="plus square circle icon"></i>
                     </button>
