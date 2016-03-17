@@ -47,19 +47,20 @@ export default {
                 /*********connect to microservices*************/
                 //todo
                 /*********received data from microservices*************/
-                callback(null, {activities: initialActivities, selector: selector});
+                callback(null, {activities: initialActivities.concat(generateRandomActivities(30, 11)), selector: selector, hasMore: true});
                 break;
             case 'activities.more':
                 /*********connect to microservices*************/
                 //todo
                 /*********received data from microservices*************/
-                let newActivitiesParams = params.newActivities;
-                if (!newActivitiesParams) break;
-                let newActivities = [];
+                if (!params.newActivities) break;
                 setTimeout(() => {
-                    const startID = newActivitiesParams.latestId+1;
-                    if (startID < 200) newActivities = generateRandomActivities(newActivitiesParams.numNew, startID);
-                    callback(null, {activities: newActivities});
+                    let hasMoreActivities = true;
+                    let newActivities = [];
+                    const startID = params.newActivities.latestId+1;
+                    if (startID < 200) newActivities = generateRandomActivities(params.newActivities.numNew, startID);
+                    if (startID + params.newActivities.numNew > 200) hasMoreActivities = false;
+                    callback(null, {activities: newActivities, hasMore: hasMoreActivities});
                 }, 500);
                 break;
         }
