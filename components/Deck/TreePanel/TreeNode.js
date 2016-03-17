@@ -99,20 +99,20 @@ class TreeNode extends React.Component {
         });
         let actionBtns = (
             <div className={actionBtnsClass}>
-                <div className="ui mini basic icon compact fluid buttons">
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)}>
-                        <i className="plus square circle icon"></i>
+                <div className="ui small basic icon compact fluid buttons">
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)} title="add slide">
+                        <i className="plus square icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)}>
-                        <i className="add circle icon"></i>
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)} title="add deck">
+                        <i className="add yellow square icon"></i>
                     </button>
-                    <button className="ui button">
+                    <button className="ui button" title="Duplicate">
                         <i className="copy icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleRenameClick.bind(this, nodeSelector)}>
+                    <button className="ui button" onClick={this.handleRenameClick.bind(this, nodeSelector)} title="rename">
                         <i className="blue edit icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)}>
+                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
                         <i className="red trash circle icon"></i>
                     </button>
                 </div>

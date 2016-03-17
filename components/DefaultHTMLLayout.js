@@ -16,6 +16,7 @@ class DefaultHTMLLayout extends React.Component {
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
+                <script src="/bower_components/semantic/dist/components/progress.min.js"></script>
                 <script src={'/public/js/' + this.props.clientFile}></script>
             </body>
             </html>
