@@ -1,13 +1,27 @@
 import React from 'react';
-import Immutable from 'immutable';
+import {HotKeys} from 'react-hotkeys';
 import {NavLink, navigateAction} from 'fluxible-router';
 import TreeUtil from './util/TreeUtil';
 import TreeNode from './TreeNode';
 
 class Tree extends React.Component {
-    handleUpKey(){
-        let selector = {id: this.props.prevSelector.get('id'), stype: this.props.prevSelector.get('stype'), sid: this.props.prevSelector.get('sid'), spath: this.props.prevSelector.get('spath')};
-        let prevPath = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
+    getKeyMap() {
+        const keyMap = {
+            'moveUp': 'up',
+            'moveDown': 'down'
+        };
+        return keyMap;
+    }
+    getKeyMapHandlers() {
+        const handlers = {
+            'moveUp': (event) => this.handleUpKey(this.props.prevSelector, this.props.page, this.props.mode),
+            'moveDown': (event) => this.handleDownKey(this.props.nextSelector, this.props.page, this.props.mode)
+        };
+        return handlers;
+    }
+    handleUpKey(prevSelector, page, mode){
+        let selector = {id: prevSelector.get('id'), stype: prevSelector.get('stype'), sid: prevSelector.get('sid'), spath: prevSelector.get('spath')};
+        let prevPath = TreeUtil.makeNodeURL(selector, page, mode);
         if(prevPath){
             this.context.executeAction(navigateAction, {
                 url: prevPath
@@ -16,9 +30,9 @@ class Tree extends React.Component {
         //returning false stops the event and prevents default browser events
         return false;
     }
-    handleDownKey(e){
-        let selector = {id: this.props.nextSelector.get('id'), stype: this.props.nextSelector.get('stype'), sid: this.props.nextSelector.get('sid'), spath: this.props.nextSelector.get('spath')};
-        let nextPath = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
+    handleDownKey(nextSelector, page, mode){
+        let selector = {id: nextSelector.get('id'), stype: nextSelector.get('stype'), sid: nextSelector.get('sid'), spath: nextSelector.get('spath')};
+        let nextPath = TreeUtil.makeNodeURL(selector, page, mode);
         if(nextPath){
             this.context.executeAction(navigateAction, {
                 url: nextPath
@@ -26,20 +40,6 @@ class Tree extends React.Component {
         }
         //returning false stops the event and prevents default browser events
         return false;
-    }
-    handleRightKey(){
-        console.log('right key from tree');
-        return false;
-    }
-    componentDidMount() {
-        key('up', 'tree', this.handleUpKey.bind(this));
-        key('down', 'tree', this.handleDownKey.bind(this));
-        key('right', 'tree', this.handleRightKey);
-    }
-    componentWillUnmount() {
-        key.unbind('up', 'tree');
-        key.unbind('down', 'tree');
-        key.unbind('right', 'tree');
     }
     render() {
         let self = this;
@@ -50,9 +50,11 @@ class Tree extends React.Component {
             );
         });
         return (
-            <div className="ui celled list" ref="tree">
-                {output}
-            </div>
+            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
+                <div className="ui celled list" ref="tree">
+                    {output}
+                </div>
+            </HotKeys>
         );
     }
 }

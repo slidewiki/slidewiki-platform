@@ -7,19 +7,15 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 
 class SlideControl extends React.Component {
     componentDidMount() {
-        key('right', 'slideControl', this.handleNextClick.bind(this));
-        key('shift+right', 'slideControl', this.handleForwardClick.bind(this));
-        key('left', 'slideControl', this.handlePreviousClick.bind(this));
-        key('shift+left', 'slideControl', this.handleBackwardClick.bind(this));
+        // key('right', 'slideControl', this.handleNextClick.bind(this));
+        // key('shift+right', 'slideControl', this.handleForwardClick.bind(this));
+        // key('left', 'slideControl', this.handlePreviousClick.bind(this));
+        // key('shift+left', 'slideControl', this.handleBackwardClick.bind(this));
     }
     componentWillUnmount() {
-        key.unbind('right', 'slideControl');
-        key.unbind('shift+right', 'slideControl');
-        key.unbind('left', 'slideControl');
-        key.unbind('shift+left', 'slideControl');
+
     }
     handleNextClick(){
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
         let nextPath = SlideControlUtil.nextSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
         if(nextPath){
             this.context.executeAction(navigateAction, {
@@ -30,7 +26,6 @@ class SlideControl extends React.Component {
         return false;
     }
     handlePreviousClick(){
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
         let prevPath = SlideControlUtil.prevSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
         if(prevPath){
             this.context.executeAction(navigateAction, {
@@ -46,7 +41,6 @@ class SlideControl extends React.Component {
                 url: lastPath
             });
         }
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
         return false;
     }
     handleBackwardClick(){
@@ -56,7 +50,6 @@ class SlideControl extends React.Component {
                 url: firstPath
             });
         }
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
         return false;
     }
     render() {

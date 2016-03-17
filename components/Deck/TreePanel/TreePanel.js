@@ -11,10 +11,10 @@ import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
 
 class TreePanel extends React.Component {
     handleFocus() {
-        key.setScope('tree'); // will allow specific tree keyborad actions
+
     }
     handleBlur() {
-        key.setScope('all'); // will disallow specific tree keyborad actions
+
     }
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);

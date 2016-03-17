@@ -6,7 +6,7 @@ class TreeUtil{
         switch (page) {
             case 'deck':
                 if(selector.spath){
-                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;                
+                    nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath + '/' + mode;
                 }else{
                     //for root node
                     nodeURL = '/' + page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode;
