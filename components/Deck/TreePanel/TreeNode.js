@@ -88,16 +88,10 @@ class TreeNode extends React.Component {
                   <i className="ellipsis horizontal tiny icon"></i>
                   <div className="small menu">
                         <div className="item" onClick={this.handleAddClick.bind(this, nodeSelector)}>
-                            <i className="add circle icon"></i> New Slide
-                        </div>
-                        <div className="item">
-                            <i className="add circle icon"></i> Existing Slide
-                        </div>
-                        <div className="item">
-                            <i className="add circle icon"></i> New Deck
+                            <i className="add circle icon"></i> Add Slide
                         </div>
                         <div className="item" onClick={this.handleAddClick.bind(this, nodeSelector)}>
-                            <i className="add circle icon"></i> Existing Deck
+                            <i className="add circle icon"></i> Add Deck
                         </div>
                         <div className="item">
                             <i className="copy icon"></i> Duplicate

@@ -43,7 +43,8 @@ class TreePanel extends React.Component {
         };
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
-        let flatTree = this.props.DeckTreeStore.flatTree;
+        let prevSelector = this.props.DeckTreeStore.prevSelector;
+        let nextSelector = this.props.DeckTreeStore.nextSelector;
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let rootNodeTitle = <strong> {rootNode.title} </strong>;
         return (
@@ -61,7 +62,7 @@ class TreePanel extends React.Component {
                         <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
-                        <Tree decktree={deckTree} rootNode={rootNode} selector={selector} flatTree={flatTree} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                        <Tree decktree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>

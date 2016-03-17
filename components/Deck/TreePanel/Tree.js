@@ -6,7 +6,8 @@ import TreeNode from './TreeNode';
 
 class Tree extends React.Component {
     handleUpKey(){
-        let prevPath = TreeUtil.prevNodePath(this.props.selector, this.props.flatTree, this.props.page, this.props.mode);
+        let selector = {id: this.props.prevSelector.get('id'), stype: this.props.prevSelector.get('stype'), sid: this.props.prevSelector.get('sid'), spath: this.props.prevSelector.get('spath')};
+        let prevPath = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
         if(prevPath){
             this.context.executeAction(navigateAction, {
                 url: prevPath
@@ -16,7 +17,8 @@ class Tree extends React.Component {
         return false;
     }
     handleDownKey(e){
-        let nextPath = TreeUtil.nextNodePath(this.props.selector, this.props.flatTree, this.props.page, this.props.mode);
+        let selector = {id: this.props.nextSelector.get('id'), stype: this.props.nextSelector.get('stype'), sid: this.props.nextSelector.get('sid'), spath: this.props.nextSelector.get('spath')};
+        let nextPath = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
         if(nextPath){
             this.context.executeAction(navigateAction, {
                 url: nextPath
