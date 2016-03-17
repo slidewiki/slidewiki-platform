@@ -6,21 +6,19 @@ import {NavLink} from 'fluxible-router';
 import TreeUtil from './util/TreeUtil';
 
 class TreeNode extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {mouseover: 0, actionOn:0};
+    }
     //do not re-render in case of same props wihtout selector and if mode has not changed
     shouldComponentUpdate(nextProps, nextState) {
         return ! (Immutable.is(nextProps.item, this.props.item) &&  nextProps === this.props.mode);
     }
     componentDidMount(){
-        this.activateDropDown();
+
     }
     componentDidUpdate(){
-        //activate drop down
-        //todo: apply it only when it is selected
-        this.activateDropDown();
-    }
-    activateDropDown() {
-        let currentComp = this.refs[this.props.item.get('path')];
-        $(currentComp).find('.ui.dropdown').dropdown();
+
     }
     handleExpandIconClick(selector, e){
         this.props.onToggleNode(selector);
@@ -28,17 +26,29 @@ class TreeNode extends React.Component {
     }
     handleAddClick(selector, e){
         this.props.onAddNode(selector);
+        this.setState({actionOn: 0});
+        e.stopPropagation();
+    }
+    handleMouseOver(e){
+        this.setState({mouseover: 1});
+        e.stopPropagation();
+    }
+    handleMouseOut(e){
+        this.setState({mouseover: 0});
         e.stopPropagation();
     }
     handleDeleteClick(selector, e){
         this.props.onDeleteNode(selector);
+        this.setState({actionOn: 0});
         e.stopPropagation();
     }
     handleRenameClick(selector, e){
         this.props.onRename(selector);
+        this.setState({actionOn: 0});
         e.stopPropagation();
     }
     handleMenuClick(e){
+        this.setState({actionOn: !this.state.actionOn});
         e.stopPropagation();
     }
     handleEditFocus(e){
@@ -64,6 +74,8 @@ class TreeNode extends React.Component {
         let childNodes = '';
         let  childNodesDIV = '';
         let childNodesClass = '';
+        let actionSigClass = '';
+        let actionBtnsClass = '';
         if(this.props.item.get('type') === 'deck'){
             childNodes = this.props.item.get('children').map((node, index) => {
                 return (
@@ -77,39 +89,44 @@ class TreeNode extends React.Component {
             });
             childNodesDIV = <div className={childNodesClass}> {childNodes} </div>;
         }
+        actionSigClass = classNames({
+            'hide-element': !this.props.item.get('selected') && !this.state.mouseover
+        });
+        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this)}><i className="ui link ellipsis horizontal tiny icon right floated"></i></span>;
+        actionBtnsClass = classNames({
+            'hide-element': !this.state.actionOn
+        });
+        let actionBtns = (
+            <div className={actionBtnsClass}>
+                <div className="ui mini basic icon buttons right floated">
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)}>
+                        <i className="plus square circle icon"></i>
+                    </button>
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)}>
+                        <i className="add circle icon"></i>
+                    </button>
+                    <button className="ui button">
+                        <i className="copy icon"></i>
+                    </button>
+                    <button className="ui button" onClick={this.handleRenameClick.bind(this, nodeSelector)}>
+                        <i className="blue edit icon"></i>
+                    </button>
+                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)}>
+                        <i className="red trash circle icon"></i>
+                    </button>
+                </div>
+            </div>
+        );
         //change the node title style if it is selected
         let nodeTitle = this.props.item.get('title');
         let nodeTitleDIV = nodeTitle;
-        let actionBtns = '';
         if(this.props.item.get('selected')){
             nodeTitleDIV = <strong> {nodeTitle} </strong>;
-            actionBtns = (
-                <div className="ui floating combo top right pointing dropdown icon right floated" onClick={this.handleMenuClick.bind(this)}>
-                  <i className="ellipsis horizontal tiny icon"></i>
-                  <div className="small menu">
-                        <div className="item" onClick={this.handleAddClick.bind(this, nodeSelector)}>
-                            <i className="add circle icon"></i> Add Slide
-                        </div>
-                        <div className="item" onClick={this.handleAddClick.bind(this, nodeSelector)}>
-                            <i className="add circle icon"></i> Add Deck
-                        </div>
-                        <div className="item">
-                            <i className="copy icon"></i> Duplicate
-                        </div>
-                        <div className="item" onClick={this.handleRenameClick.bind(this, nodeSelector)}>
-                            <i className="blue edit icon"></i> Rename
-                        </div>
-                        <div className="item" onClick={this.handleDeleteClick.bind(this, nodeSelector)}>
-                            <i className="red trash circle icon"></i> Delete
-                        </div>
-                    </div>
-                </div>
-            );
         }
         let nodeDIV = '';
         if(this.props.item.get('editable')){
             nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle} onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
-            actionBtns = '';
+            actionSignifier = '';
         }else{
             nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink>;
         }
@@ -122,11 +139,12 @@ class TreeNode extends React.Component {
         });
         return (
             <div className="item" ref={this.props.item.get('path')}>
-                <div>
+                <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                     {nodeDIV}
-                    {actionBtns}
+                    {actionSignifier}
                 </div>
+                {actionBtns}
                 {childNodesDIV}
             </div>
         );
