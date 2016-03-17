@@ -4,10 +4,13 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
+import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 class SlideControl extends React.Component {
     constructor(props) {
         super(props);
+        this.state={expanded: 0};
     }
     componentDidMount() {
         this.updateProgressbar();
@@ -32,6 +35,16 @@ class SlideControl extends React.Component {
             'fastBackward': (event) => this.handleBackwardClick(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)
         };
         return handlers;
+    }
+    handleExpandClick(){
+        this.context.executeAction(expandContentPanel, {});
+        this.state.expanded = 1;
+        return false;
+    }
+    handleCollapseClick(){
+        this.context.executeAction(restoreDeckPageLayout, {});
+        this.state.expanded = 0;
+        return false;
     }
     handleNextClick(selector, flatTree, mode){
         let nextPath = SlideControlUtil.nextSlidePath(selector, flatTree, mode);
@@ -91,7 +104,8 @@ class SlideControl extends React.Component {
                             <div className="ui blue button">{SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}</div>
                             <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon caret blue right"></i></div>
                             <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon step forward"></i></div>
-                            <div className="ui teal button"><i className="icon expand"></i></div>
+                            {this.state.expanded ? <div className="ui yellow button" onClick={this.handleCollapseClick.bind(this)}><i className="icon compress"></i></div> : <div className="ui teal button" onClick={this.handleExpandClick.bind(this)}><i className="icon expand"></i></div>}
+
                         </div>
                     </div>
 
