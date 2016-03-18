@@ -8,16 +8,44 @@ class Tree extends React.Component {
     getKeyMap() {
         const keyMap = {
             'moveUp': 'up',
-            'moveDown': 'down'
+            'moveDown': 'down',
+            'fastForward': 'shift+up',
+            'fastBackward': 'shift+down'
         };
         return keyMap;
     }
     getKeyMapHandlers() {
         const handlers = {
             'moveUp': (event) => this.handleUpKey(this.props.prevSelector, this.props.page, this.props.mode),
-            'moveDown': (event) => this.handleDownKey(this.props.nextSelector, this.props.page, this.props.mode)
+            'moveDown': (event) => this.handleDownKey(this.props.nextSelector, this.props.page, this.props.mode),
+            'fastForward': (event) => this.handleForwardClick(),
+            'fastBackward': (event) => this.handleBackwardClick()
         };
         return handlers;
+    }
+    handleForwardClick(){
+        let firstNode =  this.props.deckTree.get('children').get(0);
+        let selector = {id: firstNode.get('id'), stype: firstNode.get('type'), sid: firstNode.get('id'), spath: firstNode.get('path')};
+        let path = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
+        if(path){
+            this.context.executeAction(navigateAction, {
+                url: path
+            });
+        }
+        //returning false stops the event and prevents default browser events
+        return false;
+    }
+    handleBackwardClick(){
+        let lastNode =  this.props.deckTree.get('children').get(this.props.deckTree.get('children').size - 1);
+        let selector = {id: lastNode.get('id'), stype: lastNode.get('type'), sid: lastNode.get('id'), spath: lastNode.get('path')};
+        let path = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
+        if(path){
+            this.context.executeAction(navigateAction, {
+                url: path
+            });
+        }
+        //returning false stops the event and prevents default browser events
+        return false;
     }
     handleUpKey(prevSelector, page, mode){
         let selector = {id: prevSelector.get('id'), stype: prevSelector.get('stype'), sid: prevSelector.get('sid'), spath: prevSelector.get('spath')};

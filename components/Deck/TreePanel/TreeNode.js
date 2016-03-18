@@ -1,4 +1,5 @@
 import React from 'react';
+import {HotKeys, FocusTrap} from 'react-hotkeys';
 //import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
@@ -19,6 +20,43 @@ class TreeNode extends React.Component {
     }
     componentDidUpdate(){
 
+    }
+    getKeyMap() {
+        const keyMap = {
+            'expandOrMenu': 'right',
+            'collapseOrMenu': 'left'
+        };
+        return keyMap;
+    }
+    getKeyMapHandlers() {
+        const handlers = {
+            'expandOrMenu': (event) => this.handleRightKey(),
+            'collapseOrMenu': (event) => this.handleLeftKey()
+        };
+        return handlers;
+    }
+    handleRightKey(){
+        if(this.props.item.get('type') === 'deck'){
+            if(!this.props.item.get('expanded')){
+                this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.item.get('type'), sid: this.props.item.get('id'), spath: this.props.item.get('path')});
+            }else{
+                this.setState({actionOn: !this.state.actionOn});
+            }
+        }else{
+            this.setState({actionOn: !this.state.actionOn});
+        }
+        return false;
+    }
+    handleLeftKey(){
+        if(this.props.item.get('type') === 'deck'){
+            if(this.props.item.get('expanded')){
+                this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.item.get('type'), sid: this.props.item.get('id'), spath: this.props.item.get('path')});
+            }
+        }
+        if(this.state.actionOn){
+            this.setState({actionOn: !this.state.actionOn});
+        }
+        return false;
     }
     handleExpandIconClick(selector, e){
         this.props.onToggleNode(selector);
@@ -140,13 +178,16 @@ class TreeNode extends React.Component {
         });
         return (
             <div className="item" ref={this.props.item.get('path')}>
-                <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
-                    {nodeDIV}
-                    {actionSignifier}
-                </div>
-                {actionBtns}
-                {childNodesDIV}
+                <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
+                    {this.props.item.get('selected') ? <FocusTrap></FocusTrap> : ''}
+                    <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
+                        <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
+                        {nodeDIV}
+                        {actionSignifier}
+                    </div>
+                    {actionBtns}
+                    {childNodesDIV}
+                </HotKeys>
             </div>
         );
     }
