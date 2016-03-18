@@ -1,6 +1,6 @@
 import React from 'react';
 import {HotKeys} from 'react-hotkeys';
-//import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
@@ -19,7 +19,9 @@ class TreeNode extends React.Component {
 
     }
     componentDidUpdate(){
-
+        if(this.props.item.get('selected') && !this.props.item.get('editable')){
+            ReactDOM.findDOMNode(this.refs[this.props.item.get('path')]).focus();
+        }
     }
     getKeyMap() {
         const keyMap = {
@@ -177,17 +179,15 @@ class TreeNode extends React.Component {
             'open': this.props.item.get('expanded')
         });
         return (
-            <div className="item" ref={this.props.item.get('path')}>
-                <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
-                    <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                        <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
-                        {nodeDIV}
-                        {actionSignifier}
-                    </div>
-                    {actionBtns}
-                    {childNodesDIV}
-                </HotKeys>
-            </div>
+            <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
+                <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
+                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
+                    {nodeDIV}
+                    {actionSignifier}
+                </div>
+                {actionBtns}
+                {childNodesDIV}
+            </HotKeys>
         );
     }
 }
