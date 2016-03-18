@@ -20,7 +20,13 @@ class DeckTreeStore extends BaseStore {
         }
         //update the selected node in tree
         let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
+        //in case the path does not exist anymore, try to make  a new one
+        try {
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
+        }
+        catch (e) {
+            this.selector = this.selector.setIn(['spath'], this.generateASelectorPath(this.flatTree, this.selector));
+        }
         //prepare next and prev node selector
         this.prevSelector = this.makeSelectorFromNode(this.findPrevNode(this.flatTree, this.selector));
         this.nextSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.selector));
