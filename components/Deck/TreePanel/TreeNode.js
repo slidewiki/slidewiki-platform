@@ -24,8 +24,8 @@ class TreeNode extends React.Component {
         this.props.onToggleNode(selector);
         e.stopPropagation();
     }
-    handleAddClick(selector, e){
-        this.props.onAddNode(selector);
+    handleAddClick(selector, nodeSpec, e){
+        this.props.onAddNode(selector, nodeSpec);
         this.setState({actionOn: 0});
         e.stopPropagation();
     }
@@ -100,10 +100,10 @@ class TreeNode extends React.Component {
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)} title="add slide">
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})} title="add slide">
                         <i className="plus square icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector)} title="add deck">
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})} title="add deck">
                         <i className="add yellow square icon"></i>
                     </button>
                     <button className="ui button" title="Duplicate">

@@ -42,8 +42,31 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            let deckTree = {};
-            callback(null, {deckTree: deckTree, selector: selector});
+            let node = {};
+            let rnd = Math.round(Math.random()*800) + 1;
+            if(args.nodeSpec.type === 'slide'){
+                if(args.nodeSpec.id){
+                    //it means it is an existing node
+                    node = {title: 'Existing Slide', id: 11, type: 'slide'};
+                }else{
+                    //need to make a new slide
+                    node = {title: 'New Slide', id: rnd, type: 'slide'};
+                }
+            }else{
+                if(args.nodeSpec.id){
+                    //it means it is an existing node
+                    node = {title: 'Existing Deck', id: 53, type: 'deck',  children: [
+                            {title: 'Syntax', id: 685, type: 'slide'},
+                            {title: 'Slide34', id: 691, type: 'slide'}
+                    ]};
+                }else{
+                    //need to make a new slide
+                    node = {title: 'New Deck', id: rnd, type: 'deck',  children: [
+                            {title: 'New Slide', id: rnd, type: 'slide'}
+                    ]};
+                }
+            }
+            callback(null, {node: node, selector: args.selector});
         }
     },
     update: (req, resource, params, body, config, callback) => {

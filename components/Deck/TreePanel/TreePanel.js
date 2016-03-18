@@ -8,6 +8,7 @@ import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
+import addTreeNode from '../../../actions/decktree/addTreeNode';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -25,8 +26,8 @@ class TreePanel extends React.Component {
     handleSaveNode(selector, oldValue, newValue) {
         this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
-    handleAddNode(path) {
-
+    handleAddNode(selector, nodeSpec) {
+        this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
     }
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNode, selector);
