@@ -1,26 +1,53 @@
 import React from 'react';
+import {HotKeys} from 'react-hotkeys';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
-
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
+import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 class SlideControl extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state={expanded: 0};
+    }
     componentDidMount() {
-        key('right', 'slideControl', this.handleNextClick.bind(this));
-        key('shift+right', 'slideControl', this.handleForwardClick.bind(this));
-        key('left', 'slideControl', this.handlePreviousClick.bind(this));
-        key('shift+left', 'slideControl', this.handleBackwardClick.bind(this));
+        this.updateProgressbar();
     }
-    componentWillUnmount() {
-        key.unbind('right', 'slideControl');
-        key.unbind('shift+right', 'slideControl');
-        key.unbind('left', 'slideControl');
-        key.unbind('shift+left', 'slideControl');
+    componentDidUpdate(){
+        this.updateProgressbar();
     }
-    handleNextClick(){
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
-        let nextPath = SlideControlUtil.nextSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
+    getKeyMap() {
+        const keyMap = {
+            'moveForward': 'right',
+            'moveBackward': 'left',
+            'fastForward': 'shift+right',
+            'fastBackward': 'shift+left'
+        };
+        return keyMap;
+    }
+    getKeyMapHandlers() {
+        const handlers = {
+            'moveForward': (event) => this.handleNextClick(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode),
+            'moveBackward': (event) => this.handlePreviousClick(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode),
+            'fastForward': (event) => this.handleForwardClick(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode),
+            'fastBackward': (event) => this.handleBackwardClick(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)
+        };
+        return handlers;
+    }
+    handleExpandClick(){
+        this.context.executeAction(expandContentPanel, {});
+        this.state.expanded = 1;
+        return false;
+    }
+    handleCollapseClick(){
+        this.context.executeAction(restoreDeckPageLayout, {});
+        this.state.expanded = 0;
+        return false;
+    }
+    handleNextClick(selector, flatTree, mode){
+        let nextPath = SlideControlUtil.nextSlidePath(selector, flatTree, mode);
         if(nextPath){
             this.context.executeAction(navigateAction, {
                 url: nextPath
@@ -29,9 +56,8 @@ class SlideControl extends React.Component {
         //returning false stops the event and prevents default browser events
         return false;
     }
-    handlePreviousClick(){
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
-        let prevPath = SlideControlUtil.prevSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
+    handlePreviousClick(selector, flatTree, mode){
+        let prevPath = SlideControlUtil.prevSlidePath(selector, flatTree, mode);
         if(prevPath){
             this.context.executeAction(navigateAction, {
                 url: prevPath
@@ -39,46 +65,52 @@ class SlideControl extends React.Component {
         }
         return false;
     }
-    handleForwardClick(){
-        let lastPath = SlideControlUtil.lastSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
+    handleForwardClick(selector, flatTree, mode){
+        let lastPath = SlideControlUtil.lastSlidePath(selector, flatTree, mode);
         if(lastPath){
             this.context.executeAction(navigateAction, {
                 url: lastPath
             });
         }
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
         return false;
     }
-    handleBackwardClick(){
-        let firstPath = SlideControlUtil.firstSlidePath(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode);
+    handleBackwardClick(selector, flatTree, mode){
+        let firstPath = SlideControlUtil.firstSlidePath(selector, flatTree, mode);
         if(firstPath){
             this.context.executeAction(navigateAction, {
                 url: firstPath
             });
         }
-        key.setScope('slideControl'); // will enable specific slideControl keyborad actions
         return false;
+    }
+    updateProgressbar() {
+        let percentage=(SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)/SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree))*100;
+        let progressbar = this.refs.progressbar;
+        //the following part only executes when javascript is enabled!
+        $(progressbar).progress({percent: percentage});
+        //$(progressbar).show();
     }
     render() {
         return (
-            <div className="sw-slidercontrol" ref="slideControl">
-                <div className="panel">
-                    <div className="ui top blue small attached progress">
+            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
+                <div className="ui panel bottom attached">
+                    <div className="ui olive bottom attached progress" ref="progressbar">
                       <div className="bar"></div>
                     </div>
                     <div className="ui bottom attached segment center aligned">
                         <div className="compact ui icon buttons">
-                            <div className="ui button" onClick={this.handleBackwardClick.bind(this)}><i className="icon step backward"></i></div>
-                            <div className="ui button" onClick={this.handlePreviousClick.bind(this)}><i className="caret left icon disabled"></i></div>
-                            <div className="ui blue button">2/12</div>
-                            <div className="ui button" onClick={this.handleNextClick.bind(this)}><i className="icon caret right disabled"></i></div>
-                            <div className="ui button" onClick={this.handleForwardClick.bind(this)}><i className="icon step forward"></i></div>
-                            <div className="ui teal button"><i className="icon expand"></i></div>
+                            <div className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon step backward"></i></div>
+                            <div className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="caret left blue icon"></i></div>
+                            <div className="ui blue button">{SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}</div>
+                            <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon caret blue right"></i></div>
+                            <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon step forward"></i></div>
+                            {this.state.expanded ? <div className="ui yellow button" onClick={this.handleCollapseClick.bind(this)}><i className="icon compress"></i></div> : <div className="ui teal button" onClick={this.handleExpandClick.bind(this)}><i className="icon expand"></i></div>}
+
                         </div>
                     </div>
 
                 </div>
-            </div>
+            </HotKeys>
         );
     }
 }

@@ -10,6 +10,29 @@ class SlideControlUtil{
         }
         return position;
     }
+    //get size based on slide number
+    static getSlidesNumber(flatTree) {
+        let c = 0;
+        flatTree.forEach((item) => {
+            if(item.get('type') === 'slide'){
+                c++;
+            }
+        });
+        return c;
+    }
+    //get size based on slide number
+    static getSlidePosition(selector, flatTree) {
+        let c = 0, out = 0;
+        let item = flatTree.get(0);
+        while (item.get('path') !== selector.get('spath')) {
+            c++;
+            item = flatTree.get(c);
+            if(item.get('type') === 'slide'){
+                out++;
+            }
+        }
+        return out;
+    }
     //create previous slide path
     static prevSlidePath(selector, flatTree, mode) {
         let position = this.calculateAbsPosition(flatTree, selector.get('spath'));

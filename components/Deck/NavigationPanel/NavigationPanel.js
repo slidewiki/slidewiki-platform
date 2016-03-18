@@ -23,8 +23,8 @@ class NavigationPanel extends React.Component {
         return names;
     }
     render() {
-        let deckTree = Immutable.fromJS(this.props.DeckTreeStore.deckTree);
-        let selector = Immutable.fromJS(this.props.DeckTreeStore.selector);
+        let deckTree = this.props.DeckTreeStore.deckTree;
+        let selector = this.props.DeckTreeStore.selector;
         return (
             <div className="ui menu sw-deck-navigation-panel" ref="navigationPanel">
                <div className="item">
