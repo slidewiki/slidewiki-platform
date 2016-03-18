@@ -24,12 +24,12 @@ class SlideControlUtil{
     static getSlidePosition(selector, flatTree) {
         let c = 0, out = 0;
         let item = flatTree.get(0);
-        while (item.get('path') !== selector.get('spath')) {
+        while (item && (item.get('path') !== selector.get('spath'))) {
             c++;
-            item = flatTree.get(c);
             if(item.get('type') === 'slide'){
                 out++;
             }
+            item = flatTree.get(c);
         }
         return out;
     }
