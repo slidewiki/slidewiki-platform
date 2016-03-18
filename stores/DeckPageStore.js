@@ -33,7 +33,7 @@ class DeckPageStore extends BaseStore {
     expandActivityFeedPanel() {
         //hide all others than Navigation and Content
         for(let c in this.componentsStatus){
-            if(c=== 'ActivityFeedPanel') {
+            if(c=== 'ActivityFeedPanel' || c=== 'ContentPanel' || c=== 'NavigationPanel') {
                 this.componentsStatus[c].visible=1;
                 this.componentsStatus[c].columnSize=16;
             }else{
