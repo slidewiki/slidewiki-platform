@@ -1,6 +1,8 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
+import expandActivityFeedPanel from '../../../actions/deckpagelayout/expandActivityFeedPanel';
+import restoreDeckPageLayout from '../../../actions/deckpagelayout/restoreDeckPageLayout';
 import loadActivities from '../../../actions/loadActivities';
 import loadContentDiscussion from '../../../actions/loadContentDiscussion';
 import loadContentHistory from '../../../actions/loadContentHistory';
@@ -12,6 +14,20 @@ import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
 
 class ActivityFeedPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state={expanded: 0};
+    }
+    handleExpandClick(){
+        this.context.executeAction(expandActivityFeedPanel, {});
+        this.state.expanded = 1;
+        return false;
+    }
+    handleCollapseClick(){
+        this.context.executeAction(restoreDeckPageLayout, {});
+        this.state.expanded = 0;
+        return false;
+    }
     handleTabClick(type, e) {
         switch (type) {
             case 'all':
@@ -96,6 +112,7 @@ class ActivityFeedPanel extends React.Component {
                     <a className={usageTabClass} onClick={this.handleTabClick.bind(this, 'usage')}>
                         Usage
                     </a>
+                    {this.state.expanded ? <a className="item right floated link" onClick={this.handleCollapseClick.bind(this)}><i className="icon compress"></i></a> : <a className="item right floated link" onClick={this.handleExpandClick.bind(this)}><i className="icon expand"></i></a>}
                 </div>
             </div>
         );

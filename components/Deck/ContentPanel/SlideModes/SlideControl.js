@@ -93,7 +93,7 @@ class SlideControl extends React.Component {
     render() {
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
-                <div className="panel">
+                <div className="ui panel bottom attached">
                     <div className="ui olive bottom attached progress" ref="progressbar">
                       <div className="bar"></div>
                     </div>

@@ -12,43 +12,50 @@ import SimilarContentPanel from './SimilarContentPanel/SimilarContentPanel';
 
 class Deck extends React.Component {
     render() {
+        let status = this.props.DeckPageStore.componentsStatus;
         let translationPanelClass = classNames({
-            'four': this.props.DeckPageStore.componentsStatus.TranslationPanel.size===4,
-            'wide column': this.props.DeckPageStore.componentsStatus.TranslationPanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.TranslationPanel.visible
+            'four': status.TranslationPanel.columnSize===4,
+            'wide column': status.TranslationPanel.visible,
+            'hide-element': !status.TranslationPanel.visible
         });
         let navigationPanelClass = classNames({
-            'twelve': this.props.DeckPageStore.componentsStatus.NavigationPanel.size===12,
-            'sixteen': this.props.DeckPageStore.componentsStatus.NavigationPanel.size===16,
-            'wide column': this.props.DeckPageStore.componentsStatus.NavigationPanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.NavigationPanel.visible
+            'twelve': status.NavigationPanel.columnSize===12,
+            'sixteen': status.NavigationPanel.columnSize===16,
+            'wide column': status.NavigationPanel.visible,
+            'hide-element': !status.NavigationPanel.visible
+        });
+        let leftColClass = classNames({
+            'four':  status.TreePanel.columnSize===4 || status.ContributorsPanel.columnSize===4 || status.SimilarContentPanel.columnSize===4,
+            'twelve':  status.TreePanel.columnSize===12 || status.ContributorsPanel.columnSize===12 || status.SimilarContentPanel.columnSize===12,
+            'sixteen':  status.TreePanel.columnSize===16 || status.ContributorsPanel.columnSize===16 || status.SimilarContentPanel.columnSize===16,
+            'wide column': status.TreePanel.visible || status.ContributorsPanel.visible || status.SimilarContentPanel.visible
         });
         let treePanelClass = classNames({
-            'four': this.props.DeckPageStore.componentsStatus.TreePanel.size===4,
-            'wide column': this.props.DeckPageStore.componentsStatus.TreePanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.TreePanel.visible
+            'hide-element': !status.TreePanel.visible
         });
         let contributorsPanelClass = classNames({
-            'four':  this.props.DeckPageStore.componentsStatus.ContributorsPanel.size===4,
-            'wide column': this.props.DeckPageStore.componentsStatus.ContributorsPanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.ContributorsPanel.visible
+            'hide-element': !status.ContributorsPanel.visible
         });
         let similarContentPanelClass = classNames({
-            'four':  this.props.DeckPageStore.componentsStatus.SimilarContentPanel.size===4,
-            'wide column': this.props.DeckPageStore.componentsStatus.SimilarContentPanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.SimilarContentPanel.visible
+            'hide-element': !status.SimilarContentPanel.visible
+        });
+        let rightColClass = classNames({
+            'four':  status.ContentPanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
+            'twelve':  status.ContentPanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
+            'sixteen':  status.ContentPanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
+            'wide column': status.ContentPanel.visible || status.ActivityFeedPanel.visible
         });
         let contentPanelClass = classNames({
-            'twelve':  this.props.DeckPageStore.componentsStatus.ContentPanel.size===12,
-            'sixteen':  this.props.DeckPageStore.componentsStatus.ContentPanel.size===16,
-            'wide column': this.props.DeckPageStore.componentsStatus.ContentPanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.ContentPanel.visible
+            'twelve':  status.ContentPanel.columnSize===12,
+            'sixteen':  status.ContentPanel.columnSize===16,
+            'wide column': status.ContentPanel.visible,
+            'hide-element': !status.ContentPanel.visible
         });
         let activityFeedPanelClass = classNames({
-            'twelve':  this.props.DeckPageStore.componentsStatus.ActivityFeedPanel.size===12,
-            'sixteen':  this.props.DeckPageStore.componentsStatus.ActivityFeedPanel.size===16,
-            'wide column': this.props.DeckPageStore.componentsStatus.ActivityFeedPanel.visible,
-            'hide-element': !this.props.DeckPageStore.componentsStatus.ActivityFeedPanel.visible
+            'twelve':  status.ActivityFeedPanel.columnSize===12,
+            'sixteen':  status.ActivityFeedPanel.columnSize===16,
+            'wide column': status.ActivityFeedPanel.visible,
+            'hide-element': !status.ActivityFeedPanel.visible
         });
         return (
             <div className="ui vertically padded stackable grid page" ref="deck">
@@ -63,9 +70,11 @@ class Deck extends React.Component {
               </div>
 
               <div className="row">
-                <div className={treePanelClass}>
+                <div className={leftColClass}>
                     <div className="row">
-                        <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                        <div className={treePanelClass}>
+                            <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                        </div>
                         <div className="ui hidden divider"></div>
                         <div className={contributorsPanelClass}>
                             <div className="row">
@@ -80,9 +89,11 @@ class Deck extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={contentPanelClass}>
+                <div className={rightColClass}>
                     <div className="row">
-                        <ContentPanel />
+                        <div className={contentPanelClass}>
+                            <ContentPanel />
+                        </div>
                         <div className={activityFeedPanelClass}>
                             <div className="ui hidden divider"></div>
                             <div className="row">
