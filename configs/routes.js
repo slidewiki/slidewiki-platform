@@ -8,7 +8,7 @@ import loadSlideView from '../actions/loadSlideView';
 import loadSlideEdit from '../actions/loadSlideEdit';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
-import loadDataSources from '../actions/loadDataSources';
+import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/loadActivities';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';

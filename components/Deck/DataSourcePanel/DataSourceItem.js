@@ -1,8 +1,15 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import classNames from 'classnames';
+import loadDataSource from '../../../actions/datasource/loadDataSource';
 
 class DataSourceItem extends React.Component {
+    handleEdit() {
+        this.context.executeAction(loadDataSource, {
+            dsid: this.props.node.id
+        });
+    }
+
     static get urlRegEx() {
         //urlRegEx taken from http://blog.mattheworiordan.com/post/13174566389/url-regular-expression-for-links-with-or-without
         return /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-]*)?\??(?:[\-\+=&;%@\.\w]*)#?(?:[\.\!\/\\\w]*))?)/g;
@@ -100,6 +107,12 @@ class DataSourceItem extends React.Component {
         const selector = this.props.selector;
         const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
 
+        const appendEdit = (
+            <a className="like" onClick={this.handleEdit.bind(this)}>
+                <i className="edit icon" />
+            </a>
+        );
+
         let SummaryNode = '';
         switch (node.type) {
             case 'plaintext':
@@ -156,15 +169,20 @@ class DataSourceItem extends React.Component {
                     this.insertTitle(node)
                 );
         }
+
         return (
             <div className="item" >
                 <i className={this.getIconType(node.type, node.title, node.url)}></i>
                 <div className="content">
-                    {SummaryNode} {appendOrigin}
+                    {SummaryNode} {appendOrigin} {appendEdit}
                 </div>
             </div>
         );
     }
 }
+
+DataSourceItem.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default DataSourceItem;
