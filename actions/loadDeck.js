@@ -6,7 +6,7 @@ import loadDeckTree from './decktree/loadDeckTree';
 import selectTreeNode from './decktree/selectTreeNode';
 import loadContributors from './loadContributors';
 import loadTranslations from './loadTranslations';
-import loadDataSources from './loadDataSources';
+import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './loadActivities';
 import loadSimilarContents from './loadSimilarContents';
 

@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import {shortTitle} from '../../configs/general';
 export default function loadDataSource(context, payload, done) {
     context.service.read('datasource.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

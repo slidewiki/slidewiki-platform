@@ -4,7 +4,7 @@ import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './loadSlideView';
 import loadSlideEdit from './loadSlideEdit';
 import loadContentQuestions from './loadContentQuestions';
-import loadDataSources from './loadDataSources';
+import loadDataSources from './datasource/loadDataSources';
 
 export default function loadContent(context, payload, done) {
     let payloadCustom = payload;
