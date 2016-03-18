@@ -22,7 +22,7 @@ class SlideControlUtil{
     }
     //get size based on slide number
     static getSlidePosition(selector, flatTree) {
-        let c = 0, out = 0;
+        let c = 0, out = 1;
         let item = flatTree.get(0);
         while (item && (item.get('path') !== selector.get('spath'))) {
             c++;

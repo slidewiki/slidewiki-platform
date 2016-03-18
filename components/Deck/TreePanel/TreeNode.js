@@ -1,5 +1,5 @@
 import React from 'react';
-import {HotKeys, FocusTrap} from 'react-hotkeys';
+import {HotKeys} from 'react-hotkeys';
 //import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
@@ -179,7 +179,6 @@ class TreeNode extends React.Component {
         return (
             <div className="item" ref={this.props.item.get('path')}>
                 <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
-                    {this.props.item.get('selected') ? <FocusTrap></FocusTrap> : ''}
                     <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                         <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                         {nodeDIV}

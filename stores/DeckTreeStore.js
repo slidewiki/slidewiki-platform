@@ -257,7 +257,13 @@ class DeckTreeStore extends BaseStore {
             //chain will be a list of all nodes in the same level
             chain = chain.get(item);
         });
-        let newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+        let newNodePathString = '';
+        if(chain.get('path')){
+            newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+        }else{
+            //for the first level node we don't need the ;
+            newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
+        }
         //we need to update path for new node
         if(newNode.get('type') === 'slide'){
             newNode = newNode.set('path', newNodePathString);
