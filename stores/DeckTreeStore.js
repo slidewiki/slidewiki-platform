@@ -235,6 +235,9 @@ class DeckTreeStore extends BaseStore {
                 }
             }
         });
+        //should deselect the current selected node first
+        selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => false));
         //should update the selector: set to parent node
         this.selector = this.findParentNodeSelector(this.selector.get('spath'));
         //update the selected node in tree
@@ -268,9 +271,11 @@ class DeckTreeStore extends BaseStore {
         if(newNode.get('type') === 'slide'){
             newNode = newNode.set('path', newNodePathString);
             newNode = newNode.set('selected', true);
+            newNode = newNode.set('editable', true);
         }else{
             newNode = newNode.set('selected', true);
             newNode = newNode.set('expanded', true);
+            newNode = newNode.set('editable', true);
             newNode = this.updatePathForImmTree(newNode, this.makePathArrFromString(newNodePathString));
         }
         chain = chain.get('children');
