@@ -96,13 +96,15 @@ class TreeNode extends React.Component {
         e.target.select();
     }
     handleNameChange(e){
-        console.log(e.target.value);
+        //console.log(e.target.value);
     }
     handleKeyDown(selector, e) {
         switch (e.keyCode) {
             //case 9: // Tab
             case 13: // Enter
-                this.props.onSave(selector, this.props.item.get('title'), e.target.value);
+                if(e.target.value.trim()){
+                    this.props.onSave(selector, this.props.item.get('title'), e.target.value.trim());
+                }
                 break;
         }
     }
