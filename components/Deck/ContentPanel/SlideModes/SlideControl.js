@@ -1,5 +1,6 @@
 import React from 'react';
 import {HotKeys} from 'react-hotkeys';
+//import ReactDOM from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
@@ -17,6 +18,7 @@ class SlideControl extends React.Component {
     }
     componentDidUpdate(){
         this.updateProgressbar();
+        //ReactDOM.findDOMNode(this.refs.slideControl).focus();
     }
     getKeyMap() {
         const keyMap = {
@@ -92,7 +94,7 @@ class SlideControl extends React.Component {
     }
     render() {
         return (
-            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
+            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl">
                 <div className="ui panel bottom attached">
                     <div className="ui olive bottom attached progress" ref="progressbar">
                       <div className="bar"></div>

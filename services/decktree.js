@@ -3,13 +3,14 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype};
+        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
             //todo: on-demand loading of content to not show the whole tree at once
-            let deckTree = {
+            let deckTree;
+            let deckTree1 = {
                 title: 'Semantic Web', id: 56, type: 'deck', children: [
                   {title: 'Introduction', id: 66, type: 'slide'},
                   {title: 'RDF Data Model', id: 67, type: 'deck',  children: [
@@ -33,6 +34,17 @@ export default {
                   {title: 'Extra3', id: 799, type: 'slide'}
                 ]
             };
+            let deckTree2 = {
+                title: 'Example Deck', id: 91, type: 'deck', children: [
+                  {title: 'Slide 1', id: 911, type: 'slide'},
+                  {title: 'Slide 2', id: 912, type: 'slide'}
+                ]
+            };
+            if(selector.id === 91){
+                deckTree = deckTree2;
+            }else{
+                deckTree = deckTree1;
+            }
             callback(null, {deckTree: deckTree, selector: selector, 'page': params.page, 'mode': args.mode});
         }
     },
