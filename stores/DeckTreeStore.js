@@ -226,109 +226,102 @@ class DeckTreeStore extends BaseStore {
     //deselects the old node and selects the new node
     switchSelector(oldSelector, newSelector){
         let selectedNodeIndex = this.makeImmSelectorFromPath(oldSelector.get('spath'));
-        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => false));
-
+        try {
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => false));
+        } catch (e) {
+            //there might be the case when the node for old selector does not exist anymore
+        }
         selectedNodeIndex = this.makeImmSelectorFromPath(newSelector.get('spath'));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
         this.selector = newSelector;
         this.updatePrevNextSelectors();
     }
     deleteTreeNode(selector) {
-        try {
-            let selectorIm = Immutable.fromJS(selector);
-            //should first update the selected node to the change target
-            if(!Immutable.is(this.selector, selectorIm)){
-                this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
-                this.selector = selectorIm;
-            }
-            //get relative position of node (starting in 0 index)
-            let selectedRelPosition = this.getRelPositionFromPath(this.selector.get('spath')) - 1;
-            //making the selector for the node in immutable tree
-            let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-            //delete node from the tree
-            //do not allow delete if it is the only children
-            let lastItem = selectedNodeIndex.splice(-1,1);
-            let chain = this.deckTree;
-            selectedNodeIndex.forEach((item, index) => {
-                //chain will be a list of all nodes in the same level
-                chain = chain.get(item);
-            });
-            if(chain.size > 1){
-                //push back last item
-                selectedNodeIndex.push(lastItem[0]);
-                this.deckTree = this.deckTree.deleteIn(selectedNodeIndex);
-                selectedNodeIndex.splice(-1,1);
-                //should also update the path of all nodes which are in the same level
-                //update the sibling nodes after deleting the node
-                this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition);
-                //need to update flat tree for node absolute positions
-                this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
-            }
-            //should deselect the currently selected node first
-            //should update the selector: set to parent node
-            this.switchSelector(this.selector, this.findParentNodeSelector(this.selector.get('spath')));
-            this.emitChange();
+        let selectorIm = Immutable.fromJS(selector);
+        //should first update the selected node to the change target
+        if(!Immutable.is(this.selector, selectorIm)){
+            this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
+            this.selector = selectorIm;
         }
-        catch (e) {
-            console.log('exception', e);
-        }
-    }
-    addTreeNode(payload) {
-        try {
-            let newNode = Immutable.fromJS(payload.node);
-            let selectorIm = Immutable.fromJS(payload.selector);
-            //should first update the selected node to the change target
-            if(!Immutable.is(this.selector, selectorIm)){
-                this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
-                this.selector = selectorIm;
-            }
-            let selectedRelPosition = this.getRelPositionFromPath(this.selector.get('spath')) - 1;
-            let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-            //insert new node to tree
+        //get relative position of node (starting in 0 index)
+        let selectedRelPosition = this.getRelPositionFromPath(this.selector.get('spath')) - 1;
+        //making the selector for the node in immutable tree
+        let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
+        //delete node from the tree
+        //do not allow delete if it is the only children
+        let lastItem = selectedNodeIndex.splice(-1,1);
+        let chain = this.deckTree;
+        selectedNodeIndex.forEach((item, index) => {
+            //chain will be a list of all nodes in the same level
+            chain = chain.get(item);
+        });
+        if(chain.size > 1){
+            //push back last item
+            selectedNodeIndex.push(lastItem[0]);
+            this.deckTree = this.deckTree.deleteIn(selectedNodeIndex);
             selectedNodeIndex.splice(-1,1);
-            selectedNodeIndex.splice(-1,1);
-            let chain = this.deckTree;
-            selectedNodeIndex.forEach((item, index) => {
-                //chain will be a list of all nodes in the same level
-                chain = chain.get(item);
-            });
-            let newNodePathString = '';
-            if(chain.get('path')){
-                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
-            }else{
-                //for the first level node we don't need the ;
-                newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
-            }
-            //we need to update path for new node
-            if(newNode.get('type') === 'slide'){
-                newNode = newNode.set('path', newNodePathString);
-                newNode = newNode.set('selected', true);
-                newNode = newNode.set('editable', true);
-            }else{
-                newNode = newNode.set('selected', true);
-                newNode = newNode.set('expanded', true);
-                newNode = newNode.set('editable', true);
-                newNode = this.updatePathForImmTree(newNode, this.makePathArrFromString(newNodePathString));
-            }
-            chain = chain.get('children');
-            //add node to the child list
-            chain = chain.insert(selectedRelPosition + 1, newNode);
-            //update tree
-            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('children', (list) => chain) );
-            //set back to child list
-            selectedNodeIndex.push('children');
-            //update the sibling nodes after adding the node
-            this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
-            //deselect the selected node in tree
-            //should update the selector: set to the new node
-            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
+            //should also update the path of all nodes which are in the same level
+            //update the sibling nodes after deleting the node
+            this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition);
             //need to update flat tree for node absolute positions
             this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
-            this.emitChange();
         }
-        catch (e) {
-            console.log('exception', e);
+        //should deselect the currently selected node first
+        //should update the selector: set to parent node
+        this.switchSelector(this.selector, this.findParentNodeSelector(this.selector.get('spath')));
+        this.emitChange();
+    }
+    addTreeNode(payload) {
+        let newNode = Immutable.fromJS(payload.node);
+        let selectorIm = Immutable.fromJS(payload.selector);
+        //should first update the selected node to the change target
+        if(!Immutable.is(this.selector, selectorIm)){
+            this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
+            this.selector = selectorIm;
         }
+        let selectedRelPosition = this.getRelPositionFromPath(this.selector.get('spath')) - 1;
+        let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
+        //insert new node to tree
+        selectedNodeIndex.splice(-1,1);
+        selectedNodeIndex.splice(-1,1);
+        let chain = this.deckTree;
+        selectedNodeIndex.forEach((item, index) => {
+            //chain will be a list of all nodes in the same level
+            chain = chain.get(item);
+        });
+        let newNodePathString = '';
+        if(chain.get('path')){
+            newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+        }else{
+            //for the first level node we don't need the ;
+            newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
+        }
+        //we need to update path for new node
+        if(newNode.get('type') === 'slide'){
+            newNode = newNode.set('path', newNodePathString);
+            newNode = newNode.set('selected', true);
+            newNode = newNode.set('editable', true);
+        }else{
+            newNode = newNode.set('selected', true);
+            newNode = newNode.set('expanded', true);
+            newNode = newNode.set('editable', true);
+            newNode = this.updatePathForImmTree(newNode, this.makePathArrFromString(newNodePathString));
+        }
+        chain = chain.get('children');
+        //add node to the child list
+        chain = chain.insert(selectedRelPosition + 1, newNode);
+        //update tree
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('children', (list) => chain) );
+        //set back to child list
+        selectedNodeIndex.push('children');
+        //update the sibling nodes after adding the node
+        this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
+        //need to update flat tree for node absolute positions
+        this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
+        //deselect the selected node in tree
+        //should update the selector: set to the new node
+        this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
+        this.emitChange();
     }
     updateNodeRelPosition(path, newPosition) {
         let arr = path.split(';');
