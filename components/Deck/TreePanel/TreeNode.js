@@ -180,8 +180,12 @@ class TreeNode extends React.Component {
             'yellow folder link': (this.props.item.get('type') === 'deck'),
             'open': this.props.item.get('expanded')
         });
+        //hide focused outline
+        let compStyle = {
+            outline: 'none'
+        };
         return (
-            <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
+            <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} style={compStyle}>
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                     {nodeDIV}

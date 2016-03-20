@@ -93,8 +93,12 @@ class SlideControl extends React.Component {
         //$(progressbar).show();
     }
     render() {
+        //hide focused outline
+        let compStyle = {
+            outline: 'none'
+        };
         return (
-            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl">
+            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl" style={compStyle}>
                 <div className="ui panel bottom attached">
                     <div className="ui olive bottom attached progress" ref="progressbar">
                       <div className="bar"></div>
