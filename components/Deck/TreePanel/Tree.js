@@ -78,8 +78,8 @@ class Tree extends React.Component {
             );
         });
         return (
-            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()}>
-                <div className="ui celled list" ref="tree">
+            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} className="sw-tree">
+                <div className="ui divided list" ref="tree">
                     {output}
                 </div>
             </HotKeys>

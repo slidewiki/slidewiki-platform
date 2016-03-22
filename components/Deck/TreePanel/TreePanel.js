@@ -40,7 +40,7 @@ class TreePanel extends React.Component {
             maxHeight: '400',
             minHeight: '320',
             overflowY: 'auto',
-            padding: '0'
+            padding: '5'
         };
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
