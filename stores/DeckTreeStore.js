@@ -236,6 +236,8 @@ class DeckTreeStore extends BaseStore {
         let selectedNodeIndex = this.makeImmSelectorFromPath(oldSelector.get('spath'));
         try {
             this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => false));
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => false));
+            //this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
         } catch (e) {
             //there might be the case when the node for old selector does not exist anymore
         }
