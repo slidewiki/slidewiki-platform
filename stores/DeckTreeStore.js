@@ -41,7 +41,7 @@ class DeckTreeStore extends BaseStore {
     //path: array of binary id:position
     makePathForTree(deckTree, path) {
         let nodePath = this.makeSelectorPathString(path);
-        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: false, editable: false};
+        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: false, editable: false, onAction: 0};
         if (deckTree.type === 'deck') {
             newTree.children = [];
             newTree.expanded = true;
@@ -55,7 +55,7 @@ class DeckTreeStore extends BaseStore {
     //path: array of binary id:position
     updatePathForImmTree(deckTree, path) {
         let nodePath = this.makeSelectorPathString(path);
-        let newTree = {id: deckTree.get('id'), title: deckTree.get('title'), type: deckTree.get('type'), path: nodePath, selected: deckTree.get('selected'), editable: deckTree.get('editable')};
+        let newTree = {id: deckTree.get('id'), title: deckTree.get('title'), type: deckTree.get('type'), path: nodePath, selected: deckTree.get('selected'), editable: deckTree.get('editable'), onAction: deckTree.get('onAction')};
         if (deckTree.get('type') === 'deck') {
             newTree.children = [];
             newTree.expanded = deckTree.get('expanded');
@@ -191,6 +191,13 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('expanded', (val) => ! val));
         this.emitChange();
     }
+    switchOnActionTreeNode(selector) {
+        let selectorIm = Immutable.fromJS(selector);
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //select new one
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => ! val));
+        this.emitChange();
+    }
     renameTreeNode(selector) {
         let selectorIm = Immutable.fromJS(selector);
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
@@ -203,6 +210,7 @@ class DeckTreeStore extends BaseStore {
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
         //select new one
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => false));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.newValue));
         this.emitChange();
     }
@@ -359,7 +367,8 @@ DeckTreeStore.handlers = {
     'RENAME_TREE_NODE_SUCCESS': 'renameTreeNode',
     'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode',
     'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode',
-    'ADD_TREE_NODE_SUCCESS': 'addTreeNode'
+    'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
+    'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode'
 };
 
 export default DeckTreeStore;

@@ -1,6 +1,5 @@
 import React from 'react';
-import {HotKeys} from 'react-hotkeys';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
@@ -9,7 +8,7 @@ import TreeUtil from './util/TreeUtil';
 class TreeNode extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {mouseover: 0, actionOn:0};
+        this.state = {mouseover: 0};
     }
     //do not re-render in case of same props wihtout selector and if mode has not changed
     shouldComponentUpdate(nextProps, nextState) {
@@ -19,46 +18,7 @@ class TreeNode extends React.Component {
 
     }
     componentDidUpdate(){
-        if(this.props.item.get('selected') && !this.props.item.get('editable')){
-            ReactDOM.findDOMNode(this.refs[this.props.item.get('path')]).focus();
-        }
-    }
-    getKeyMap() {
-        const keyMap = {
-            'expandOrMenu': 'right',
-            'collapseOrMenu': 'left'
-        };
-        return keyMap;
-    }
-    getKeyMapHandlers() {
-        const handlers = {
-            'expandOrMenu': (event) => this.handleRightKey(),
-            'collapseOrMenu': (event) => this.handleLeftKey()
-        };
-        return handlers;
-    }
-    handleRightKey(){
-        if(this.props.item.get('type') === 'deck'){
-            if(!this.props.item.get('expanded')){
-                this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.item.get('type'), sid: this.props.item.get('id'), spath: this.props.item.get('path')});
-            }else{
-                this.setState({actionOn: !this.state.actionOn});
-            }
-        }else{
-            this.setState({actionOn: !this.state.actionOn});
-        }
-        return false;
-    }
-    handleLeftKey(){
-        if(this.props.item.get('type') === 'deck'){
-            if(this.props.item.get('expanded')){
-                this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.item.get('type'), sid: this.props.item.get('id'), spath: this.props.item.get('path')});
-            }
-        }
-        if(this.state.actionOn){
-            this.setState({actionOn: !this.state.actionOn});
-        }
-        return false;
+
     }
     handleExpandIconClick(selector, e){
         this.props.onToggleNode(selector);
@@ -66,7 +26,6 @@ class TreeNode extends React.Component {
     }
     handleAddClick(selector, nodeSpec, e){
         this.props.onAddNode(selector, nodeSpec);
-        this.setState({actionOn: 0});
         e.stopPropagation();
     }
     handleMouseOver(e){
@@ -79,16 +38,14 @@ class TreeNode extends React.Component {
     }
     handleDeleteClick(selector, e){
         this.props.onDeleteNode(selector);
-        this.setState({actionOn: 0});
         e.stopPropagation();
     }
     handleRenameClick(selector, e){
         this.props.onRename(selector);
-        this.setState({actionOn: 0});
         e.stopPropagation();
     }
-    handleMenuClick(e){
-        this.setState({actionOn: !this.state.actionOn});
+    handleMenuClick(selector, e){
+        this.props.onSwitchOnAction(selector);
         e.stopPropagation();
     }
     handleEditFocus(e){
@@ -121,7 +78,7 @@ class TreeNode extends React.Component {
         if(this.props.item.get('type') === 'deck'){
             childNodes = this.props.item.get('children').map((node, index) => {
                 return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
+                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
                 );
             });
             //show/hide sub nodes based on the expanded state
@@ -134,9 +91,9 @@ class TreeNode extends React.Component {
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
         });
-        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this)}><i className="ui link ellipsis horizontal tiny icon right floated"></i></span>;
+        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this, nodeSelector)}><i className="ui link ellipsis horizontal tiny icon right floated"></i></span>;
         actionBtnsClass = classNames({
-            'hide-element': !this.state.actionOn,
+            'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
         });
         let actionBtns = (
@@ -191,7 +148,7 @@ class TreeNode extends React.Component {
             outline: 'none'
         };
         return (
-            <HotKeys className="item" ref={this.props.item.get('path')} keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} style={compStyle}>
+            <div className="item" ref={this.props.item.get('path')} style={compStyle}>
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                     {nodeDIV}
@@ -199,7 +156,7 @@ class TreeNode extends React.Component {
                 </div>
                 {actionBtns}
                 {childNodesDIV}
-            </HotKeys>
+            </div>
         );
     }
 }

@@ -10,7 +10,9 @@ class Tree extends React.Component {
             'moveUp': 'up',
             'moveDown': 'down',
             'fastForward': 'shift+up',
-            'fastBackward': 'shift+down'
+            'fastBackward': 'shift+down',
+            'expandOrMenu': 'right',
+            'collapseOrMenu': 'left'
         };
         return keyMap;
     }
@@ -19,9 +21,51 @@ class Tree extends React.Component {
             'moveUp': (event) => this.handleUpKey(this.props.prevSelector, this.props.page, this.props.mode),
             'moveDown': (event) => this.handleDownKey(this.props.nextSelector, this.props.page, this.props.mode),
             'fastForward': (event) => this.handleForwardClick(),
-            'fastBackward': (event) => this.handleBackwardClick()
+            'fastBackward': (event) => this.handleBackwardClick(),
+            'expandOrMenu': (event) => this.handleRightKey(),
+            'collapseOrMenu': (event) => this.handleLeftKey()
         };
         return handlers;
+    }
+    handleRightKey() {
+        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.selector.get('spath'));
+        if(node.get('editable')){
+            //disable handler when editing node
+            return true;
+        }else{
+            if(node.get('type') === 'deck'){
+                if(!node.get('expanded')){
+                    this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
+                }else{
+                    this.props.onSwitchOnAction({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
+                }
+            }else{
+                this.props.onSwitchOnAction({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
+            }
+            return false;
+        }
+    }
+    handleLeftKey(){
+        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.selector.get('spath'));
+        if(node.get('editable')){
+            //disable handler when editing node
+            return true;
+        }else{
+            if(node.get('type') === 'deck'){
+                if(node.get('onAction')){
+                    this.props.onSwitchOnAction({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
+                }else{
+                    if(node.get('expanded')){
+                        this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
+                    }    
+                }
+            }else{
+                if(node.get('onAction')){
+                    this.props.onSwitchOnAction({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
+                }
+            }
+            return false;
+        }
     }
     handleForwardClick(){
         let firstNode =  this.props.deckTree.get('children').get(0);
@@ -70,15 +114,19 @@ class Tree extends React.Component {
         return false;
     }
     render() {
+        //hide focused outline
+        let compStyle = {
+            outline: 'none'
+        };
         let self = this;
         //for simplicity and flexibility we divide tree nodes into single and multi
         let output = this.props.items.map((node, index) => {
             return (
-                <TreeNode onToggleNode={self.props.onToggleNode} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
+                <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
             );
         });
         return (
-            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} className="sw-tree">
+            <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} className="sw-tree" style={compStyle}>
                 <div className="ui divided list" ref="tree">
                     {output}
                 </div>

@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
+import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
@@ -19,6 +20,9 @@ class TreePanel extends React.Component {
     }
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);
+    }
+    handleSwitchOnAction(selector) {
+        this.context.executeAction(switchOnActionTreeNode, selector);
     }
     handleRenameNode(selector) {
         this.context.executeAction(renameTreeNode, selector);
@@ -63,7 +67,7 @@ class TreePanel extends React.Component {
                         <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>
