@@ -81,7 +81,7 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui vertically padded stackable grid page" ref="deck">
-              <div className="row">
+
                 <div className={leftColClass}>
                     <div className="row">
                         <div className={translationPanelClass}>
@@ -129,7 +129,6 @@ class Deck extends React.Component {
                         </div>
                     </div>
                 </div>
-              </div>
 
             </div>
         );
