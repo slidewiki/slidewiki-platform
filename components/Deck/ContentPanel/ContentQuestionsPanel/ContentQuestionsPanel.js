@@ -6,7 +6,7 @@ import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 class ContentQuestionsPanel extends React.Component {
     render() {
         return (
-            <div ref="contentQuestionsPanel" className="ui segment">
+            <div ref="contentQuestionsPanel" className="ui bottom attached segment">
                 Questions related to {this.props.ContentQuestionsStore.selector.stype} #{this.props.ContentQuestionsStore.selector.sid}.
                 <br/>
                 <NavLink href={'/questions/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid}>{'/questions/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid}</NavLink>

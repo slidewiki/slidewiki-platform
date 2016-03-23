@@ -57,7 +57,7 @@ class Tree extends React.Component {
                 }else{
                     if(node.get('expanded')){
                         this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
-                    }    
+                    }
                 }
             }else{
                 if(node.get('onAction')){

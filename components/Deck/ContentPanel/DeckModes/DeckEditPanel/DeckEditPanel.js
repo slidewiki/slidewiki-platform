@@ -6,7 +6,7 @@ import DeckEditStore from '../../../../../stores/DeckEditStore';
 class DeckEditPanel extends React.Component {
     render() {
         return (
-            <div ref="deckEditPanel" className="ui red segment">
+            <div ref="deckEditPanel" className="ui bottom attached segment">
                 Shows all properties of a deck to be edited...
             </div>
         );

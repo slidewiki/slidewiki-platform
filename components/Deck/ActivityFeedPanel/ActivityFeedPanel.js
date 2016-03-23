@@ -82,8 +82,8 @@ class ActivityFeedPanel extends React.Component {
         });
         return (
             <div ref="activityFeedPanel">
-                <div className="ui secondary pointing menu">
-                    <a className="active item" href="/activities/deck/57">Activity Feed</a>
+                <div className="ui top attached secondary pointing menu">
+                    <a className="item active" href="/activities/deck/57">Activity Feed</a>
                     <a className="item"><i className="ui large thumbs outline up icon"></i> 12</a>
                     <a className="item"><i className="ui large share alternate icon"></i> 5</a>
                     <a className="item"><i className="ui large download icon"></i> 2</a>
@@ -96,7 +96,7 @@ class ActivityFeedPanel extends React.Component {
                       </div>
                     </div>
                 </div>
-                <div className="ui olive segment top attached">
+                <div className="ui segment attached">
                     {activityDIV}
                 </div>
                 <div className="ui bottom attached tabular menu">

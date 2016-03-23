@@ -49,13 +49,13 @@ class ContentPanel extends React.Component {
                     default:
                         targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
                 }
-                targetComponent = <div>{targetComponent} <SlideControl mode={this.props.ContentStore.mode}/> </div>;
                 break;
         }
         return (
             <div ref="contentPanel">
                 <ContentModeMenu ContentStore={this.props.ContentStore} />
                 {targetComponent}
+                {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
              </div>
         );
     }
