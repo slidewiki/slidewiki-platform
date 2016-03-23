@@ -24,10 +24,9 @@ export default {
                 <p style="text-align:center">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink">
-
                         <text x="20"  y="40"
                               style="font-family: Arial;
-                                     font-size  : 34;
+                                     font-size  : 25;
                                      stroke     : #000000;
                                      fill       : #` +((1<<24)*Math.random()|0).toString(16) + `;
                                     "
