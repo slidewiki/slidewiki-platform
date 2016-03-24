@@ -340,6 +340,14 @@ class DeckTreeStore extends BaseStore {
         arr.push(lastNode.split(':')[0] + ':' + newPosition);
         return arr.join(';');
     }
+    getSelector(){
+        return {
+            id: this.selector.get('id'),
+            sid: this.selector.get('sid'),
+            stype: this.selector.get('stype'),
+            spath: this.selector.get('spath')
+        };
+    }
     getState() {
         return {
             deckTree: this.deckTree,

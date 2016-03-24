@@ -184,7 +184,7 @@ export default {
         }
     },
     decktree: {
-        path: '/decktree/:sid/:spath?',
+        path: '/decktree/:id/:spath?',
         method: 'get',
         page: 'decktree',
         handler: require('../components/Deck/TreePanel/TreePanel'),
