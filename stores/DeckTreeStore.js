@@ -98,7 +98,7 @@ class DeckTreeStore extends BaseStore {
         });
         return out;
     }
-    //parses the nodePath and builds to selector path for navigation
+    //parses the nodePath and builds a selector path for navigation
     makeSelectorPathString(nodePath) {
         let out = [], slectorPath = '';
         nodePath.forEach((element, index) => {
@@ -136,26 +136,70 @@ class DeckTreeStore extends BaseStore {
         return position;
     }
     findPrevNode(flatTree, selector) {
-        let position = this.calculateNodeAbsPosition(flatTree, selector.get('spath'));
         let node;
-        //do not select the root deck node
-        if(position === 0){
-            node = flatTree.get(0);
-        }else{
-            node = flatTree.get(position  - 1);
+        //we consider expansion of nodes to select the next selector
+        let selectedNodeIndex= this.makeImmSelectorFromPath(selector.get('spath'));
+        let selectedNode= this.getImmNodeFromImmSelector(selectedNodeIndex);
+        let lastItem = selectedNodeIndex.splice(-1,1);
+        let siblingsList = this.getImmNodeFromImmSelector(selectedNodeIndex);
+        if((lastItem[0] - 1) >=0){
+            selectedNodeIndex.push(lastItem[0] - 1);
+            let testNode = this.getImmNodeFromImmSelector(selectedNodeIndex);
+            if(testNode.get('type') === 'deck' && !testNode.get('expanded')){
+                node = testNode;
+            }
+        }
+        if(!node){
+            //we use the flat tree for normal case without considering expansion of nodes
+            let position = this.calculateNodeAbsPosition(flatTree, selector.get('spath'));
+            //do not select the root deck node
+            if(position === 0){
+                node = flatTree.get(0);
+            }else{
+                node = flatTree.get(position  - 1);
+            }
         }
         return node;
     }
     findNextNode(flatTree, selector) {
-        let position = this.calculateNodeAbsPosition(flatTree, selector.get('spath'));
-        let node = flatTree.get(position + 1);
-        if(!node){
-            node = flatTree.get(0);
+        let node;
+        let selectedNodeIndex= this.makeImmSelectorFromPath(selector.get('spath'));
+        let selectedNode= this.getImmNodeFromImmSelector(selectedNodeIndex);
+        if(selectedNode.get('type') === 'deck' && !selectedNode.get('expanded')){
+            let lastItem = selectedNodeIndex.splice(-1,1);
+            let siblingsList = this.getImmNodeFromImmSelector(selectedNodeIndex);
+            if((lastItem[0] + 1) <= (siblingsList.size -1)){
+                //it means there exists a last nodeIndex
+                selectedNodeIndex.push(lastItem[0] + 1);
+                node = this.getImmNodeFromImmSelector(selectedNodeIndex);
+            }else{
+                //stop in the node
+                node = selectedNode;
+            }
+        }else{
+            let position = this.calculateNodeAbsPosition(flatTree, selector.get('spath'));
+            node = flatTree.get(position + 1);
+            if(!node){
+                node = selectedNode;
+            }
         }
         return node;
     }
     makeSelectorFromNode(node) {
         return Immutable.fromJS({'id': this.deckTree.get('id'), 'spath': node.get('path'), 'sid': node.get('id'), 'stype': node.get('type')});
+    }
+    //get the node in immutable tree given its immutable selector
+    getImmNodeFromImmSelector(nodeIndex) {
+        let chain = this.deckTree;
+        nodeIndex.forEach((item, index) => {
+            chain = chain.get(item);
+        });
+        return chain;
+    }
+    //get the node in immutable tree given the spath string
+    getImmNodeFromPathString(path) {
+        let nodeIndex = this.makeImmSelectorFromPath(path);
+        return this.getImmNodeFromImmSelector(nodeIndex);
     }
     findParentNodeSelector(spath) {
         let arr = spath.split(';');
@@ -189,6 +233,8 @@ class DeckTreeStore extends BaseStore {
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
         //select new one
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('expanded', (val) => ! val));
+        //update next and prev nodes states
+        this.updatePrevNextSelectors();
         this.emitChange();
     }
     switchOnActionTreeNode(selector) {
