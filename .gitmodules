@@ -1,0 +1,3 @@
+[submodule "custom_modules/custom-semantic-ui"]
+	path = custom_modules/custom-semantic-ui
+	url = https://github.com/slidewiki/custom-semantic-ui.git
