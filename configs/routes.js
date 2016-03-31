@@ -17,6 +17,7 @@ import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
+import loadTabLinks from '../actions/loadTabLinks';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -184,12 +185,21 @@ export default {
         }
     },
     decktree: {
-        path: '/decktree/:sid/:spath?',
+        path: '/decktree/:id/:spath?',
         method: 'get',
         page: 'decktree',
         handler: require('../components/Deck/TreePanel/TreePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }
-    }
+    },
+    contentmode: {
+        path: '/contentmode/:stype/:sid/:mode?',// '/contentmode/:stype/:sid/:spath?/:mode?',
+        method: 'get',
+        page: 'contentmode',
+        handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
+        action: (context, payload, done) => {
+            context.executeAction(loadTabLinks, payload, done);
+        }
+    },
 };

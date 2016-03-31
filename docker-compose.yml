@@ -5,4 +5,4 @@ slidewikiplatform:
     - "80"
   environment:
     - PORT=80
-    - VIRTUAL_HOST=platform.185.101.156.130.xip.io
+    - VIRTUAL_HOST=platform.manfredfris.ch

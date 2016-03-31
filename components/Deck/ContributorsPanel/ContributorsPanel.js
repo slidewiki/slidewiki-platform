@@ -12,7 +12,7 @@ class ContributorsPanel extends React.Component {
                     <div className="ui secondary segment">
                         <a href="/contributors/deck/57">Contributors</a>
                     </div>
-                    <div className="ui black segment">
+                    <div className="ui segment">
                         <ContributorsList items={this.props.ContributorsStore.contributors} />
                     </div>
                 </div>

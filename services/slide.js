@@ -8,16 +8,31 @@ export default {
             //todo
             /*********received data from microservices*************/
             let sampleContent = `
-            <h2> Slide #` + args.sid + `</h2>
+            <h1> Slide #` + args.sid + `</h1>
             <div>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui ewf.
+                <p style="font-size: 1.16em;">
+                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus.
+                </p>
                 <ul>
                     <li>item 1 from slide ` + args.sid + `</li>
                     <li>item 2 from slide ` + args.sid + `</li>
                     <li>item 3 from slide ` + args.sid + `</li>
                 </ul>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-
+                <p style="font-size: 1.2em;">
+                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+                </p>
+                <p style="text-align:center">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <text x="20"  y="40"
+                              style="font-family: Arial;
+                                     font-size  : 25;
+                                     stroke     : #000000;
+                                     fill       : #` +((1<<24)*Math.random()|0).toString(16) + `;
+                                    "
+                              > SVG Image ` + args.sid + `</text>
+                    </svg>
+                </p>
             </div>
             `;
             callback(null, {content: sampleContent});

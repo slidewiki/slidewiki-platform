@@ -57,7 +57,7 @@ class Tree extends React.Component {
                 }else{
                     if(node.get('expanded')){
                         this.props.onToggleNode({id: this.props.rootNode.id, stype: this.props.selector.get('stype'), sid: this.props.selector.get('sid'), spath: this.props.selector.get('spath')});
-                    }    
+                    }
                 }
             }else{
                 if(node.get('onAction')){
@@ -69,7 +69,7 @@ class Tree extends React.Component {
     }
     handleForwardClick(){
         let firstNode =  this.props.deckTree.get('children').get(0);
-        let selector = {id: firstNode.get('id'), stype: firstNode.get('type'), sid: firstNode.get('id'), spath: firstNode.get('path')};
+        let selector = {id: this.props.rootNode.id, stype: firstNode.get('type'), sid: firstNode.get('id'), spath: firstNode.get('path')};
         let path = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
         if(path){
             this.context.executeAction(navigateAction, {
@@ -81,7 +81,7 @@ class Tree extends React.Component {
     }
     handleBackwardClick(){
         let lastNode =  this.props.deckTree.get('children').get(this.props.deckTree.get('children').size - 1);
-        let selector = {id: lastNode.get('id'), stype: lastNode.get('type'), sid: lastNode.get('id'), spath: lastNode.get('path')};
+        let selector = {id: this.props.rootNode.id, stype: lastNode.get('type'), sid: lastNode.get('id'), spath: lastNode.get('path')};
         let path = TreeUtil.makeNodeURL(selector, this.props.page, this.props.mode);
         if(path){
             this.context.executeAction(navigateAction, {

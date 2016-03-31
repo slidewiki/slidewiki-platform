@@ -5,8 +5,13 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 
 class SlideViewPanel extends React.Component {
     render() {
+        const compStyle = {
+            maxHeight: '500',
+            minHeight: '500',
+            overflowY: 'auto'
+        };
         return (
-            <div ref="slideViewPanel" className="ui grey segment">
+            <div ref="slideViewPanel" className="ui bottom attached segment" style={compStyle}>
                 <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
             </div>
         );

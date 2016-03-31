@@ -7,7 +7,7 @@ import SlideContentEditor from './SlideContentEditor';
 class SlideEditPanel extends React.Component {
     render() {
         return (
-            <div ref="slideEditPanel" className="ui red segment">
+            <div ref="slideEditPanel" className="ui bottom attached segment">
                 <SlideContentEditor content={this.props.SlideEditStore.content} selector={this.props.selector} />
             </div>
         );

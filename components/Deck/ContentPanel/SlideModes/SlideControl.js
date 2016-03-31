@@ -100,7 +100,7 @@ class SlideControl extends React.Component {
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl" style={compStyle}>
                 <div className="ui panel bottom attached">
-                    <div className="ui olive bottom attached progress" ref="progressbar">
+                    <div className="ui teal bottom attached progress" ref="progressbar">
                       <div className="bar"></div>
                     </div>
                     <div className="ui bottom attached segment center aligned">
