@@ -7,16 +7,20 @@ class TabLinksStore extends BaseStore {
         this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': '', page: 'contentmode'};
         this.mode = 'view';
         //this.dispatcher = dispatcher; // Provides access to waitFor and getStore methods
-        this.items = {dataSources : {'count' : 0}};
+        this.items = {dataSources : {'count' : 0}, questions : {'count' : 0}};
     }
     updateDataSourceCount(payload) {
-      console.log(payload);
         this.items.dataSources.count = payload.count;
         this.mode = payload.mode;
         this.selector = payload.selector;
         this.emitChange();
     }
-
+    updateQuestionsCount(payload){
+        this.items.questions.count = payload.count;
+        this.mode = payload.mode;
+        this.selector = payload.selector;
+        this.emitChange();
+    }
     updateContentMode(payload) {
       this.mode = payload.mode;
       this.emitChange();
@@ -43,6 +47,7 @@ class TabLinksStore extends BaseStore {
 TabLinksStore.storeName = 'TabLinksStore';
 TabLinksStore.handlers = {
     'LOAD_AMOUNT_OF_DATA_SOURCES_SUCCESS': 'updateDataSourceCount',
+    'LOAD_AMOUNT_OF_QUESTIONS_SUCCESS': 'updateQuestionsCount',
     'UPDATE_CONTENT_MODE': 'updateContentMode'
 
 };

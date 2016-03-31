@@ -11,8 +11,6 @@ class ContentModeMenu extends React.Component {
       if(this.props.TabLinksStore.selector.page == 'contentmode'){
         contentDetails = this.props.TabLinksStore;
       }
-      console.log("contentDetails", contentDetails);
-      console.log(this.props.TabLinksStore);
         return (
             <div className="sw-content-panel" ref="contentModeMenu">
                 <div className="ui top attached tabular menu">
@@ -23,7 +21,7 @@ class ContentModeMenu extends React.Component {
                         Edit
                     </NavLink>
                     <NavLink className={'item' + (contentDetails.mode === 'questions' ? ' active' : '')} href={ContentUtil.makeNodeURL(contentDetails.selector, 'questions')}>
-                        Questions<span className="ui tiny label">12</span>
+                        Questions<span className="ui tiny label">{this.props.TabLinksStore.items.questions.count}</span>
                     </NavLink>
                     <NavLink className={'item' + (contentDetails.mode === 'datasources' ? ' active' : '')} href={ContentUtil.makeNodeURL(contentDetails.selector, 'datasources')}>
                         Data Sources<span className="ui tiny circular label">{this.props.TabLinksStore.items.dataSources.count}</span>

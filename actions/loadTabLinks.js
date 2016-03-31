@@ -1,7 +1,10 @@
 import async from 'async';
 import {shortTitle} from '../configs/general';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
+import loadQuestionsCount from './loadQuestionsCount';
 import TabLinksStore from '../stores/TabLinksStore';
+
+
 export default function loadTabLinks(context, payload, done) {
   let currentState = context.getStore(TabLinksStore).getState();
   let pageTitle = shortTitle + ' | TabLinks | ';
@@ -19,9 +22,16 @@ export default function loadTabLinks(context, payload, done) {
   async.parallel([
       (callback) => {
         if(runNonContentActions){
-          console.log("currentState ", currentState);
-          console.log("payloadCustom ", payloadCustom);
           context.executeAction(loadDataSourceCount, payloadCustom, callback);
+        }
+        else{
+          context.dispatch('UPDATE_CONTENT_MODE', {mode: payloadCustom.params.mode});
+          callback();
+        }
+      },
+      (callback) => {
+        if(runNonContentActions){
+          context.executeAction(loadQuestionsCount, payloadCustom, callback);
         }
         else{
           context.dispatch('UPDATE_CONTENT_MODE', {mode: payloadCustom.params.mode});

@@ -4,6 +4,15 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
         let selector= {'sid': args.sid, 'stype': args.stype};
+
+        if (resource === 'questions.count'){
+
+            let randomNumber = Math.round(Math.random() * 20)
+
+            callback(null, {'count' : randomNumber, 'selector': selector, 'mode': args.mode});
+
+        }
+
         if(resource === 'questions.list'){
             /*********connect to microservices*************/
             //todo
