@@ -37,6 +37,7 @@ class ContentModeMenu extends React.Component {
                             <i className="large green circle play icon"></i>
                         </a>
                     </div>
+
                 </div>
             </div>
         );
