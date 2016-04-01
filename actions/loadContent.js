@@ -10,7 +10,7 @@ import loadDataSources from './datasource/loadDataSources';
 import ContentStore from '../stores/ContentStore';
 
 export default function loadContent(context, payload, done) {
-  let currentState = context.getStore(ContentStore).getState();
+    let currentState = context.getStore(ContentStore).getState();
     let payloadCustom = payload;
     let runNonContentActions = 1;
     if(currentState.selector.stype === payloadCustom.params.stype && currentState.selector.sid === payloadCustom.params.sid){
@@ -75,7 +75,7 @@ export default function loadContent(context, payload, done) {
             if(runNonContentActions){
                 context.executeAction(loadTabLinks, payloadCustom, callback);
             }else{
-               callback();
+                callback();
             }
         }
     ],

@@ -22,8 +22,8 @@ class TabLinksStore extends BaseStore {
         this.emitChange();
     }
     updateContentMode(payload) {
-      this.mode = payload.mode;
-      this.emitChange();
+        this.mode = payload.mode;
+        this.emitChange();
     }
 
     getState() {

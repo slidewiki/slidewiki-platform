@@ -7,8 +7,7 @@ export default {
 
         if (resource === 'questions.count'){
 
-            let randomNumber = Math.round(Math.random() * 20)
-
+            let randomNumber = Math.round(Math.random() * 20);
             callback(null, {'count' : randomNumber, 'selector': selector, 'mode': args.mode});
 
         }
