@@ -3,7 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector = {'sid': args.sid, 'stype': args.stype};
+        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
 
         let mockupdatasources = [
             {'type': 'webpage', 'title': 'Movies | STI Innsbruck', 'url': 'http://www.sti-innsbruck.at/results/movies/serviceweb30-the-future-internet/', 'comment': '', 'id': 231, 'sid': 66, 'stitle': 'Introduction'},
@@ -38,6 +38,15 @@ export default {
 
             callback(null, {datasource: datasource});
         }
+        if (resource === 'datasource.count'){
+
+            let randomNumber = Math.round(Math.random() * 20)
+
+            callback(null, {'count' : randomNumber, 'selector': selector, 'mode': args.mode});
+
+        }
+
+
 
         if (resource === 'datasource.list'){
             /*********connect to microservices*************/

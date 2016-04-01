@@ -23,16 +23,11 @@ class DataSourcePanel extends React.Component {
         const selector = this.props.DataSourceStore.selector;
 
         let content = (
-            <div>
-                <div className="ui secondary segment">
-                    <NavLink href={'/datasource/'+ selector.stype + '/' + selector.sid}>Data Sources</NavLink> ({dataSources.length})
-                </div>
-                <div className="ui orange segment" >
-                    <ShadowScrollbars style={{height:300}} >
-                        <DataSourceList items={dataSources} selector={selector}/>
-                    </ShadowScrollbars>
-                </div>
-            </div>
+              <div className="ui orange segment" >
+                  <ShadowScrollbars style={{height:300}} >
+                      <DataSourceList items={dataSources} selector={selector}/>
+                  </ShadowScrollbars>
+              </div>
         );
 
         if (dataSource !== undefined && dataSource !== null) {//dataSource is selected -> show its data
