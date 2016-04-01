@@ -23,7 +23,7 @@ class DataSourcePanel extends React.Component {
         const selector = this.props.DataSourceStore.selector;
 
         let content = (
-              <div className="ui orange segment" >
+              <div>
                   <ShadowScrollbars style={{height:300}} >
                       <DataSourceList items={dataSources} selector={selector}/>
                   </ShadowScrollbars>
@@ -68,7 +68,7 @@ class DataSourcePanel extends React.Component {
             );
         }
         return (
-            <div className="ui segments" ref="dataSourcePanel">
+            <div className="ui bottom attached segment" ref="dataSourcePanel">
                 {content}
             </div>
         );
