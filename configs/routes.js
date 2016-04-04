@@ -17,6 +17,7 @@ import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
+import loadTabLinks from '../actions/loadTabLinks';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -191,5 +192,14 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
         }
-    }
+    },
+    contentmode: {
+        path: '/contentmode/:stype/:sid/:mode?',// '/contentmode/:stype/:sid/:spath?/:mode?',
+        method: 'get',
+        page: 'contentmode',
+        handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
+        action: (context, payload, done) => {
+            context.executeAction(loadTabLinks, payload, done);
+        }
+    },
 };

@@ -11,6 +11,8 @@ class ContentUtil{
                     nodeURL = '/' + selector.page + '/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + mode;
                 }
                 break;
+            case 'contentmode':
+            //Deliberately falls through to content              
             case 'content':
                 nodeURL = '/' + selector.page + '/' + selector.stype + '/' + selector.sid + '/' + mode;
                 break;
