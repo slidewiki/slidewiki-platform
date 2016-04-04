@@ -52,7 +52,7 @@
     "fluxible-router": "^0.4.11",
     "immutable": "^3.7.6",
     "lodash": "^4.6.0",
-    "react": "^0.14.7",
+    "react": "^0.14.8",
     "react-custom-scrollbars": "^3.1.0",
     "react-dom": "^0.14.7",
     "react-hotkeys": "^0.7.1",
