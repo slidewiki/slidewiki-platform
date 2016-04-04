@@ -5,7 +5,7 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
 
-        let mockupdatasources = [
+        let mockupDataSources = [
             {'type': 'webpage', 'title': 'Movies | STI Innsbruck', 'url': 'http://www.sti-innsbruck.at/results/movies/serviceweb30-the-future-internet/', 'comment': '', 'id': 231, 'sid': 66, 'stitle': 'Introduction'},
             {'type': 'webpage', 'title': 'Research | STI Innsbruck', 'url': 'http://www.sti-innsbruck.at/research', 'comment': '', 'id': 241, 'sid': 66, 'stitle': 'Introduction'},
             {'type': 'webpage', 'title': 'XSL Transformations (XSLT)', 'url': 'http://www.w3.org/TR/xslt', 'comment': '', 'id': 31, 'sid': 671, 'stitle': 'Introduction'},
@@ -18,16 +18,16 @@ export default {
             {'type': 'webpage', 'title': 'YouTube: Web 2.0 ... The Machine is Using Us', 'url': 'http://www.youtube.com/watch?v=6gmP4nk0EOE', 'comment': '', 'id': 234, 'sid': 678, 'stitle': 'Examples'},
             {'type': 'publication', 'title': 'A Framework for Web Science - Foundations and Trends® in Web Science 1', 'url': '', 'comment': '', 'authors': 'T. Berners-Lee and W. Hall and J. A. Hendler and K. O\'Hara and N. Shadbolt and D. J. Weitzner', 'year': '2006.', 'id': 244, 'sid': 678, 'stitle': 'Examples'},
             {'type': 'webdocument', 'title': 'Semantic web stack', 'url': 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Semantic_web_stack.svg', 'comment': '', 'id': 34, 'sid': 678, 'stitle': 'Examples'},
-            {'type': 'webdocument', 'title': 'The emergence of web science', 'url': 'http://webcast.bibalex.org/Presentations/Bebo91108.ppt', 'comment': '', 'id': 235, 'sid': 686, 'stitle': 'Introduction'},
-            {'type': 'plaintext', 'title': 'RadarNetworks&NovaSpivack,2007-www.radarnetworks.com ', 'url': '', 'comment': '', 'id': 245, 'sid': 686, 'stitle': 'Introduction'},
-            {'type': 'webpage', 'title': 'Widgets for Web 2.0', 'url': 'http://widgets-gadgets.com/2006_10_01_archive.html', 'comment': '', 'id': 35, 'sid': 686, 'stitle': 'Introduction'}
+            {'type': 'webdocument', 'title': 'The emergence of web science', 'url': 'http://webcast.bibalex.org/Presentations/Bebo91108.ppt', 'comment': '', 'id': 235, 'sid': 686, 'stitle': 'Examples'},
+            {'type': 'plaintext', 'title': 'RadarNetworks&NovaSpivack,2007-www.radarnetworks.com ', 'url': '', 'comment': '', 'id': 245, 'sid': 686, 'stitle': 'Examples'},
+            {'type': 'webpage', 'title': 'Widgets for Web 2.0', 'url': 'http://widgets-gadgets.com/2006_10_01_archive.html', 'comment': '', 'id': 35, 'sid': 686, 'stitle': 'Examples'}
         ];
 
         //not used - data is already in the store
         if (resource === 'datasource.item'){
-            let datasource = {};
+            let dataSource = {};
 
-            datasource = mockupdatasources.find((ds) => {ds.dsid === args.dsid;});
+            dataSource = mockupDataSources.find((ds) => {ds.dsid === args.dsid;});
 
             //mockupdatasources.forEach((item) => {
             //    if (item.id === parseInt(args.dsid)) {
@@ -36,7 +36,7 @@ export default {
             //    }
             //});
 
-            callback(null, {datasource: datasource});
+            callback(null, {datasource: dataSource});
         }
         if (resource === 'datasource.count'){
 
@@ -52,37 +52,37 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            let datasources = [];
+            let dataSources = [];
 
             switch (args.sid) {
                 case '56':
-                    datasources = mockupdatasources;
+                    dataSources = mockupDataSources;
                     break;
                 case '66':
-                    datasources = mockupdatasources.slice(0,2);
+                    dataSources = mockupDataSources.slice(0,2);
                     break;
                 case '67':
-                    datasources = mockupdatasources.slice(2,12);
+                    dataSources = mockupDataSources.slice(2,12);
                     break;
                 case '671':
-                    datasources = datasources = mockupdatasources.slice(2,6);
+                    dataSources = mockupDataSources.slice(2,6);
                     break;
                 case '673':
-                    datasources = mockupdatasources.slice(6,9);
+                    dataSources = mockupDataSources.slice(6,9);
                     break;
                 case '678':
-                    datasources = mockupdatasources.slice(9,12);
+                    dataSources = mockupDataSources.slice(9,12);
                     break;
                 case '68':
-                    datasources = mockupdatasources.slice(12,15);
+                    dataSources = mockupDataSources.slice(12,15);
                     break;
                 case '686':
-                    datasources = mockupdatasources.slice(12,15);
+                    dataSources = mockupDataSources.slice(12,15);
                     break;
                 default:
-                    datasources = [];
+                    dataSources = [];
             }
-            callback(null, {datasources: datasources, selector: selector});
+            callback(null, {datasources: dataSources, selector: selector});
         }
     },
 
