@@ -1,3 +1,5 @@
+import {microservices} from '../configs/microservices';
+
 export default {
     name: 'decktree',
     // At least one of the CRUD methods is Required

@@ -4,7 +4,6 @@
  * based on the URL. Once completed, the store state is dehydrated
  * and the application is rendered via React.
  */
-
 import express from 'express';
 import compression from 'compression';
 import bodyParser from 'body-parser';
@@ -89,6 +88,6 @@ server.use((req, res, next) => {
 
 const port = process.env.PORT || 3000;
 server.listen(port);
-console.log('Application listening on port ' + port);
+console.log('SlideWiki Platform is now Listening on port ' + port);
 
 export default server;

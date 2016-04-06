@@ -5,3 +5,4 @@ build
 logs/*.log
 tmp.js
 coverage
+configs/microservices.js
