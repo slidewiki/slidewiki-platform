@@ -1,4 +1,5 @@
-import {microservices} from '../configs/microservices';
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
 
 export default {
     name: 'decktree',
@@ -6,48 +7,15 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
+
         if(resource === 'decktree.nodes'){
             /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            //todo: on-demand loading of content to not show the whole tree at once
-            let deckTree;
-            let deckTree1 = {
-                title: 'Semantic Web', id: 56, type: 'deck', children: [
-                  {title: 'Introduction', id: 66, type: 'slide'},
-                  {title: 'RDF Data Model', id: 67, type: 'deck',  children: [
-                      {title: 'Introduction', id: 671, type: 'slide'},
-                      {title: 'Serialization', id: 673, type: 'slide'},
-                      {title: 'Examples', id: 678, type: 'slide'}
-                  ]},
-                  {title: 'SPARQL', id: 68, type: 'deck',  children: [
-                      {title: 'Syntax', id: 685, type: 'deck', children: [
-                          {title: 'Same Slide', id: 691, type: 'slide'},
-                          {title: 'Same Slide', id: 691, type: 'slide'}
-                      ]},
-                      {title: 'Examples', id: 686, type: 'slide'}
-                  ]
-                  },
-                  {title: 'Conclusion', id: 78, type: 'slide'},
-                  {title: 'Future Work', id: 99, type: 'slide'},
-                  {title: 'References', id: 79, type: 'slide'},
-                  {title: 'Extra1', id: 739, type: 'slide'},
-                  {title: 'Extra2', id: 789, type: 'slide'},
-                  {title: 'Extra3', id: 799, type: 'slide'}
-                ]
-            };
-            let deckTree2 = {
-                title: 'Example Deck', id: 91, type: 'deck', children: [
-                  {title: 'Slide 1', id: 911, type: 'slide'},
-                  {title: 'Slide 2', id: 912, type: 'slide'}
-                ]
-            };
-            if(selector.id === 91){
-                deckTree = deckTree2;
-            }else{
-                deckTree = deckTree1;
-            }
-            callback(null, {deckTree: deckTree, selector: selector, 'page': params.page, 'mode': args.mode});
+            rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).then((res) => {
+                callback(null, {deckTree: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {deckTree: {}, selector: selector, 'page': params.page, 'mode': args.mode});
+            });
         }
     },
     create: (req, resource, params, body, config, callback) => {

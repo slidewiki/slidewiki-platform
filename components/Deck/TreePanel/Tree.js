@@ -119,12 +119,14 @@ class Tree extends React.Component {
             outline: 'none'
         };
         let self = this;
-        //for simplicity and flexibility we divide tree nodes into single and multi
-        let output = this.props.items.map((node, index) => {
-            return (
-                <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
-            );
-        });
+        let output = '';
+        if(this.props.items && this.props.items.size){
+            output = this.props.items.map((node, index) => {
+                return (
+                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
+                );
+            });
+        }
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} className="sw-tree" style={compStyle}>
                 <div className="ui divided list" ref="tree">

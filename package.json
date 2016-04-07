@@ -57,6 +57,7 @@
     "react-dom": "^0.14.7",
     "react-hotkeys": "^0.7.1",
     "react-list": "^0.7.16",
+    "request-promise": "^2.0.1",
     "serialize-javascript": "^1.2.0",
     "serve-favicon": "^2.3.0"
   },

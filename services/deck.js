@@ -1,4 +1,3 @@
-import {microservices} from '../configs/microservices';
 
 export default {
     name: 'deck',
