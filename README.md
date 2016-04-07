@@ -19,9 +19,10 @@ Run:
 
 `npm install`
 
-'cp ./configs/microservices.sample.js ./configs/microservices.js'
+add the config for your microservices:
 
-and add the config for your microservices.
+`cp ./configs/microservices.sample.js ./configs/microservices.js`
+
 
 ## Run in Production Mode ##
 
