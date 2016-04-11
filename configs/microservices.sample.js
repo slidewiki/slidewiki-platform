@@ -1,9 +1,9 @@
 export default {
-    microservices: {
-        'deck-service': {
+    Microservices: {
+        'deck': {
             uri: 'http://deckservice.manfredfris.ch'
         },
-        'discussion-service': {
+        'discussion': {
             uri: 'http://discussionservice.manfredfris.ch'
         }
     }

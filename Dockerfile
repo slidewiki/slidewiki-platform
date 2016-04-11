@@ -28,7 +28,7 @@ ADD . /nodeApp
 #   Configuration   #
 # ----------------- #
 
-RUN if [ ! -e "/nodeApp/configs/microservices.js" ]; then cp /nodeApp/configs/microservices.sample.js /nodeApp/configs/microservices.js ; fi
+RUN cp /nodeApp/configs/microservices.sample.js /nodeApp/configs/microservices.js
 
 EXPOSE 3000
 
