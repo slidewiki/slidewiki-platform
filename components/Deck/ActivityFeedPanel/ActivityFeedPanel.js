@@ -1,7 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
-import expandActivityFeedPanel from '../../../actions/deckpagelayout/expandActivityFeedPanel';
 import restoreDeckPageLayout from '../../../actions/deckpagelayout/restoreDeckPageLayout';
 import loadActivities from '../../../actions/loadActivities';
 import loadContentDiscussion from '../../../actions/loadContentDiscussion';

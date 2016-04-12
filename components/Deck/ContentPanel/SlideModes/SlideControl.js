@@ -105,12 +105,12 @@ class SlideControl extends React.Component {
                     </div>
                     <div className="ui bottom attached segment center aligned">
                         <div className="compact ui icon buttons">
-                            <div className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon step backward"></i></div>
-                            <div className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="caret left blue icon"></i></div>
+                            <div className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the first slide (shift + left arrow)"><i className="icon step backward"></i></div>
+                            <div className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the previous slide (left arrow)"><i className="caret left blue icon"></i></div>
                             <div className="ui blue button">{SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}</div>
-                            <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon caret blue right"></i></div>
-                            <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)}><i className="icon step forward"></i></div>
-                            {this.state.expanded ? <div className="ui yellow button" onClick={this.handleCollapseClick.bind(this)}><i className="icon compress"></i></div> : <div className="ui teal button" onClick={this.handleExpandClick.bind(this)}><i className="icon expand"></i></div>}
+                            <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the next slide (right arrow)"><i className="icon caret blue right"></i></div>
+                            <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the firlastst slide (shift + right arrow)"><i className="icon step forward"></i></div>
+                            {this.state.expanded ? <div className="ui yellow button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="icon compress"></i></div> : <div className="ui teal button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="icon expand"></i></div>}
 
                         </div>
                     </div>
