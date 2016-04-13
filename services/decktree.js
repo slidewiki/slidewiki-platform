@@ -25,13 +25,14 @@ export default {
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/decktree/node/create',
-                body:{
-                    //todo: send the right user id
-                    user: 1,
+                body:JSON.stringify({
                     selector: selector,
-                    nodeSpec: args.nodeSpec
-                }
+                    nodeSpec: args.nodeSpec,
+                    //todo: send the right user id
+                    user: 1
+                })
             }).then((res) => {
+                console.log(res);
                 callback(null, {node: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
@@ -40,6 +41,8 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
+        let args = params.params? params.params : params;
+        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodeTitle'){
             // only update if the value has changed
             if(params.oldValue === params.newValue){
@@ -48,12 +51,12 @@ export default {
             /*********connect to microservices*************/
             rp.put({
                 uri: Microservices.deck.uri + '/decktree/node/rename',
-                body:{
+                body:JSON.stringify({
                     //todo: send the right user id
                     user: 1,
                     selector: selector,
                     name: params.newValue
-                }
+                })
             }).then((res) => {
                 callback(null, params);
             }).catch((err) => {
@@ -63,15 +66,17 @@ export default {
         }
     },
     delete: (req, resource, params, config, callback) => {
+        let args = params.params? params.params : params;
+        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             rp.delete({
                 uri: Microservices.deck.uri + '/decktree/node/delete',
-                body:{
+                body:JSON.stringify({
                     //todo: send the right user id
                     user: 1,
                     selector: selector
-                }
+                })
             }).then((res) => {
                 callback(null, params);
             }).catch((err) => {
