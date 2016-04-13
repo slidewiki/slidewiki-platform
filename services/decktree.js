@@ -6,8 +6,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
-
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
             /*********connect to microservices*************/
             rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).then((res) => {
@@ -20,19 +19,19 @@ export default {
     },
     create: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+        let nodeSpec = {'id': String(args.nodeSpec.id), 'type': args.nodeSpec.type};
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/decktree/node/create',
                 body:JSON.stringify({
                     selector: selector,
-                    nodeSpec: args.nodeSpec,
+                    nodeSpec: nodeSpec,
                     //todo: send the right user id
-                    user: 1
+                    user: '1'
                 })
             }).then((res) => {
-                console.log(res);
                 callback(null, {node: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
@@ -42,7 +41,7 @@ export default {
     },
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodeTitle'){
             // only update if the value has changed
             if(params.oldValue === params.newValue){
@@ -53,7 +52,7 @@ export default {
                 uri: Microservices.deck.uri + '/decktree/node/rename',
                 body:JSON.stringify({
                     //todo: send the right user id
-                    user: 1,
+                    user: '1',
                     selector: selector,
                     name: params.newValue
                 })
@@ -67,7 +66,7 @@ export default {
     },
     delete: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             let options = {
@@ -75,7 +74,7 @@ export default {
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 body:JSON.stringify({
                     //todo: send the right user id
-                    user: 1,
+                    user: '1',
                     selector: selector
                 })
             };
