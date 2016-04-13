@@ -70,14 +70,16 @@ export default {
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype};
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
-            rp.delete({
+            let options = {
+                method: 'DELETE',
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 body:JSON.stringify({
                     //todo: send the right user id
                     user: 1,
                     selector: selector
                 })
-            }).then((res) => {
+            };
+            rp(options).then((res) => {
                 callback(null, params);
             }).catch((err) => {
                 console.log(err);
