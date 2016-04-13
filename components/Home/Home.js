@@ -8,9 +8,8 @@ class Home extends React.Component {
                     <div className="row">
                         <div className="column padding-reset">
                             <div className="ui huge message page grid">
-                                <h1 className="ui huge header">SlideWiki</h1>
+                                <img className="logo" src="/assets/images/logo_full.png" />
                                 <p>SlideWiki aims to revolutionize the way how educational material is authored, shared and used.</p>
-                                <a className="ui blue button" href="">Learn more &raquo;</a>
                             </div>
                         </div>
                     </div>

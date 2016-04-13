@@ -30,7 +30,7 @@ class DeckPageStore extends BaseStore {
         }
         this.emitChange();
     }
-    expandActivityFeedPanel() {
+    hideLeftColumn() {
         //hide all others than Navigation and Content
         for(let c in this.componentsStatus){
             if(c=== 'ActivityFeedPanel' || c=== 'ContentPanel' || c=== 'NavigationPanel') {
@@ -65,7 +65,7 @@ DeckPageStore.storeName = 'DeckPageStore';
 DeckPageStore.handlers = {
     'UPDATE_DECK_PAGE_CONTENT': 'updateContent',
     'EXPAND_CONTENET_PANEL': 'expandContentPanel',
-    'EXPAND_ACTIVITY_FEED_PANEL': 'expandActivityFeedPanel',
+    'HIDE_LEFT_COLUMN': 'hideLeftColumn',
     'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll'
 };
 

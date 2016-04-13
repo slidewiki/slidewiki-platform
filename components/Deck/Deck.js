@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
-import expandActivityFeedPanel from '../../actions/deckpagelayout/expandActivityFeedPanel';
+import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TranslationPanel from './TranslationPanel/TranslationPanel';
@@ -14,7 +14,7 @@ import SimilarContentPanel from './SimilarContentPanel/SimilarContentPanel';
 
 class Deck extends React.Component {
     handleExpandClick(){
-        this.context.executeAction(expandActivityFeedPanel, {});
+        this.context.executeAction(hideLeftColumn, {});
         return false;
     }
     handleCollapseClick(){
@@ -35,10 +35,11 @@ class Deck extends React.Component {
             'hide-element': !status.NavigationPanel.visible
         });
         let leftColClass = classNames({
-            'four':  status.TreePanel.columnSize===4 || status.ContributorsPanel.columnSize===4 || status.SimilarContentPanel.columnSize===4 || status.TranslationPanel.columnSize===4,
+            'four':  (status.TreePanel.columnSize===4 || status.ContributorsPanel.columnSize===4 || status.SimilarContentPanel.columnSize===4 || status.TranslationPanel.columnSize===4),
             'twelve':  status.TreePanel.columnSize===12 || status.ContributorsPanel.columnSize===12 || status.SimilarContentPanel.columnSize===12 || status.TranslationPanel.columnSize===12,
             'sixteen':  status.TreePanel.columnSize===16 || status.ContributorsPanel.columnSize===16 || status.SimilarContentPanel.columnSize===16 || status.TranslationPanel.columnSize===16 ,
-            'wide column': status.TranslationPanel.visible || status.TreePanel.visible || status.ContributorsPanel.visible || status.SimilarContentPanel.visible
+            'wide column': status.TranslationPanel.visible || status.TreePanel.visible || status.ContributorsPanel.visible || status.SimilarContentPanel.visible,
+            'hide-element': !status.TranslationPanel.visible && !status.TreePanel.visible && !status.ContributorsPanel.visible && !status.SimilarContentPanel.visible
         });
         let treePanelClass = classNames({
             'hide-element': !status.TreePanel.visible
@@ -74,10 +75,10 @@ class Deck extends React.Component {
         let dividerDIV = '';
         if(oneColumnMode){
             if(status.ActivityFeedPanel.visible){
-                dividerDIV = <div className="ui" onClick={this.handleCollapseClick.bind(this)}><i className="icon link sidebar"></i> </div>;
+                dividerDIV = <div className="ui" onClick={this.handleCollapseClick.bind(this)} title="show deck tree"><i className="icon link angle double right"></i> </div>;
             }
         }else{
-            dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)}><i className="icon link angle double left"></i> </div>;
+            dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
         return (
             <div className="ui vertically padded stackable grid page" ref="deck">

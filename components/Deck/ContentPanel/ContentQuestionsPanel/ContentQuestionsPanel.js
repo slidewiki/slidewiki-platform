@@ -5,12 +5,37 @@ import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import ContentQuestionsList from './ContentQuestionsList';
 
 class ContentQuestionsPanel extends React.Component {
-    render() {
+      render() {
+
+        let buttonBar = "";
+        switch(this.props.ContentQuestionsStore.selector.stype){
+          case 'slide':
+            buttonBar = (
+              <button className="ui button blue">
+                <i className="plus icon"></i>
+                Add question
+              </button>
+            );
+            break;
+          case 'deck':
+            buttonBar = (
+              <div className="ui buttons">
+                <button className="ui button tial">Exam mode</button>
+                <button className="ui button tial">Test mode</button>
+                <button className="ui button blue">
+                  <i className="file pdf outline icon"></i>
+                  Export to PDF
+                </button>
+              </div>
+            );
+            break;
+        }
+
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached segment">
-                Questions related to {this.props.ContentQuestionsStore.selector.stype} #{this.props.ContentQuestionsStore.selector.sid}.
-                <br/>
-                <NavLink href={'/questions/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid}>{'/questions/' + this.props.ContentQuestionsStore.selector.stype + '/' + this.props.ContentQuestionsStore.selector.sid}</NavLink>
+                <div>
+                  {buttonBar}
+                </div>
                 <div>
                   <ContentQuestionsList items={this.props.ContentQuestionsStore.questions} />
                 </div>
