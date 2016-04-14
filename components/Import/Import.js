@@ -33,7 +33,7 @@ class Import extends React.Component {
                                     <br />
                                     <form className="ui form" onChange={this.handleFileSelect.bind(this)}>
                                           <div className="ui input file focus animated">
-                                                <input type="file" ></input>
+                                                <input type="file" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation"></input>
                                                 <div id="submitbutton" className="ui focus animated button green" onClick={this.handleFileSubmit.bind(this)}>
                                                       <div className="visible content" onClick={this.handleFileSubmit.bind(this)}><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
                                                       <div className="hidden content"><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
