@@ -12,6 +12,7 @@ class Header extends React.Component {
                     </a>
                     <NavLink className="item" routeName="home" activeClass="active">Home</NavLink>
                     <NavLink className="item" routeName="about" activeClass="active">About</NavLink>
+                    <NavLink className="item right" routeName="import" activeClass="active">Upload your presentation</NavLink>
                     <div className="item right">
                         <SearchBox />
                     </div>
