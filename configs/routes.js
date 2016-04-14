@@ -53,7 +53,7 @@ export default {
         method: 'get',
         page: 'import',
         title: 'SlideWiki -- Import presentation',
-        handler: require('../components/Import/import'),
+        handler: require('../components/Import/Import'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Import presentation'
