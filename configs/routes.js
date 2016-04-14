@@ -18,6 +18,7 @@ import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
+import loadImportFile from '../actions/loadImportFile';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -47,6 +48,20 @@ export default {
             done();
         }
     },
+    import: {
+        path: '/import',
+        method: 'get',
+        page: 'import',
+        title: 'SlideWiki -- Import presentation',
+        handler: require('../components/Import/import'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Import presentation'
+            });
+            done();
+        }
+    },
+
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
     deck: {
