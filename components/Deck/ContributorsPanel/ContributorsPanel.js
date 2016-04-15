@@ -13,7 +13,16 @@ class ContributorsPanel extends React.Component {
                         <a href="/contributors/deck/57">Contributors</a>
                     </div>
                     <div className="ui segment">
+                    	<div className="colored-blue">Creator:</div>
+	                	<ContributorsList items={this.props.ContributorsStore.creator} />
+                    </div>
+                    <div className="ui segment">
+                    	<div className="colored-blue">Contributors:</div>
                         <ContributorsList items={this.props.ContributorsStore.contributors} />
+                    </div>
+                    <div className="ui segment">
+                    	<div className="colored-blue">Translators:</div>
+	                    <ContributorsList items={this.props.ContributorsStore.translators} />
                     </div>
                 </div>
 

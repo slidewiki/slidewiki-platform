@@ -7,10 +7,23 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-            let translations = [
-                {'lang': 'EN', 'id': 343},
-                {'lang': 'DE', 'id': 32}
-            ];
+            let translations = [];
+            
+            if(args.sid%2==0){
+            	translations = [
+            	                {'lang': 'EN', 'id': 343},
+            	                {'lang': 'DE', 'id': 32}
+            	            ];
+            }
+            else{
+            	translations = [
+            	                {'lang': 'ES', 'id': 56},
+            	                {'lang': 'GR', 'id': 71}
+            	            ];
+            }
+            
+            
+            
             let currentLang = {'lang': 'EN', 'id': 343};
             callback(null, {translations: translations, currentLang: currentLang});
         }
