@@ -15,7 +15,7 @@ class ContributorsStore extends BaseStore {
     }
     getState() {
         return {
-            contributors: this.contributors, 
+            contributors: this.contributors,
             creator: this.creator,
             translators: this.translators
         };
@@ -29,34 +29,34 @@ class ContributorsStore extends BaseStore {
         this.translators = state.translators;
     }
     getCreator(contributorsAll){
-    	let creator = [];
-    	for (var i in contributorsAll) {
-    		if(contributorsAll[i]["type"]==='creator'){
-    			creator.push(contributorsAll[i]);
-    		}
-    	}
-    	return creator;
+        let creator = [];
+
+        for (i in contributorsAll) {
+            if(contributorsAll[i].type==='creator'){
+                creator.push(contributorsAll[i]);
+            }
+        }
+
+        return creator;
     }
     getContributors(contributorsAll){
-    	let contributors = [];
-    	for (var i in contributorsAll) {
-    		if(contributorsAll[i]["type"]==='contributor'){
-    			contributors.push(contributorsAll[i]);
-    		}
-    	}
-    	return contributors;
+        let contributors = [];
+        for (i in contributorsAll) {
+            if(contributorsAll[i].type==='contributor'){
+                contributors.push(contributorsAll[i]);
+            }
+        }
+        return contributors;
     }
     getTranslators(contributorsAll){
-    	let translators = [];
-    	for (var i in contributorsAll) {
-    		if(contributorsAll[i]["type"]==='translator'){
-    			translators.push(contributorsAll[i]);
-    		}
-    	}
-    	return translators;
+        let translators = [];
+        for (i in contributorsAll){
+            if(contributorsAll[i].type==='translator'){
+                translators.push(contributorsAll[i]);
+            }
+        }
+        return translators;
     }
-    
-
 }
 
 ContributorsStore.storeName = 'ContributorsStore';

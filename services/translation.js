@@ -8,22 +8,22 @@ export default {
             //todo
             /*********received data from microservices*************/
             let translations = [];
-            
-            if(args.sid%2==0){
-            	translations = [
+
+            if(args.sid%2===0){
+                translations=[
             	                {'lang': 'EN', 'id': 343},
             	                {'lang': 'DE', 'id': 32}
-            	            ];
+                ];
             }
             else{
-            	translations = [
+                translations = [
             	                {'lang': 'ES', 'id': 56},
             	                {'lang': 'GR', 'id': 71}
-            	            ];
+                ];
             }
-            
-            
-            
+
+
+
             let currentLang = {'lang': 'EN', 'id': 343};
             callback(null, {translations: translations, currentLang: currentLang});
         }
