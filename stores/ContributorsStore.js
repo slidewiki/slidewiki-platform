@@ -28,34 +28,25 @@ class ContributorsStore extends BaseStore {
         this.creator = state.creator;
         this.translators = state.translators;
     }
-    getCreator(contributorsAll){
-        let creator = [];
 
-        for (i in contributorsAll) {
-            if(contributorsAll[i].type==='creator'){
-                creator.push(contributorsAll[i]);
+    getBasedonRole(role, list) {
+        let output = [];
+        list.forEach((contributor) => {
+            if(contributor.type === role){
+                output.push(contributor);
             }
-        }
-
-        return creator;
+        });
+        return output;
+    }
+    getCreator(contributorsAll){
+        return this.getBasedonRole('creator', contributorsAll);
     }
     getContributors(contributorsAll){
-        let contributors = [];
-        for (i in contributorsAll) {
-            if(contributorsAll[i].type==='contributor'){
-                contributors.push(contributorsAll[i]);
-            }
-        }
-        return contributors;
+        return this.getBasedonRole('contributor', contributorsAll);
+
     }
     getTranslators(contributorsAll){
-        let translators = [];
-        for (i in contributorsAll){
-            if(contributorsAll[i].type==='translator'){
-                translators.push(contributorsAll[i]);
-            }
-        }
-        return translators;
+        return this.getBasedonRole('translator', contributorsAll);
     }
 }
 
