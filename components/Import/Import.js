@@ -1,7 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import ImportStore from '../../stores/ImportStore';
-import loadImportFile from '../../actions/loadImportFile';
+import ImportStore from '../../stores/ImportStore'; //import store from file
+import loadImportFile from '../../actions/loadImportFile'; //import action from file
 
 class Import extends React.Component {
     handleFileSelect(){
@@ -33,9 +33,9 @@ class Import extends React.Component {
                                     <br />
                                     <form className="ui form" onChange={this.handleFileSelect.bind(this)}>
                                           <div className="ui input file focus animated">
-                                                <input type="file" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation"></input>
-                                                <div id="submitbutton" className="ui focus animated button green" onClick={this.handleFileSubmit.bind(this)}>
-                                                      <div className="visible content" onClick={this.handleFileSubmit.bind(this)}><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
+                                                <input type="file" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" tabIndex="0"></input>
+                                                <div tabIndex="0" id="submitbutton" className="ui focus animated button green" onClick={this.handleFileSubmit.bind(this)} onKeyDown={this.handleFileSubmit.bind(this)} >
+                                                      <div tabIndex="0" className="visible content" onClick={this.handleFileSubmit.bind(this)} onKeydown={this.handleFileSubmit.bind(this)}><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
                                                       <div className="hidden content"><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
                                                 </div>
                                                 <div className="ui error message"></div>

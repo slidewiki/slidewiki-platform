@@ -8,6 +8,13 @@
              //todo
              /*********received data from microservices*************/
              let sampleImportFile = `
+             <div className="ui content">
+                 <br />
+                 <br />
+                 <h1 className="ui header">Preview of imported presentation</h1>
+                 <br />
+                 <br />
+             </div>             
              <h1> Slide #IMPORT_EXAMPLE</h1>
              <div>
                  <p style="font-size: 1.16em;">
