@@ -69,7 +69,6 @@
     "coveralls": "^2.11.8",
     "eslint": "~2.2.0",
     "eslint-plugin-react": "^4.2.0",
-    "fluxible-plugin-devtools": "^0.1.2",
     "istanbul": "^0.4.2",
     "jsdom": "^8.1.0",
     "json-loader": "^0.5.4",
