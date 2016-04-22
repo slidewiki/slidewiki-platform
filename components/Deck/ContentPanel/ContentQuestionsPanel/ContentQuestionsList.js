@@ -5,7 +5,7 @@ class ContentQuestionsList extends React.Component {
     render() {
         let list = this.props.items.map((node, index) => {
             return (
-                <ContentQuestionsItem data={node} key={index}/>
+                <ContentQuestionsItem question={node} key={index}/>
             );
         });
 

@@ -3,12 +3,17 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import ContentQuestionsList from './ContentQuestionsList';
+import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
-      render() {
-
+      render() {        
+        const questions = this.props.ContentQuestionsStore.questions;
+        const question = this.props.ContentQuestionsStore.question;
+        const selector = this.props.ContentQuestionsStore.selector;
+        
+        //Button bar differs for Slide and Folder  
         let buttonBar = "";
-        switch(this.props.ContentQuestionsStore.selector.stype){
+        switch(selector.stype){
           case 'slide':
             buttonBar = (
               <button className="ui button blue">
@@ -20,8 +25,8 @@ class ContentQuestionsPanel extends React.Component {
           case 'deck':
             buttonBar = (
               <div className="ui buttons">
-                <button className="ui button tial">Exam mode</button>
-                <button className="ui button tial">Test mode</button>
+                <button className="ui button">Exam mode</button>
+                <button className="ui button">Test mode</button>
                 <button className="ui button blue">
                   <i className="file pdf outline icon"></i>
                   Export to PDF
@@ -30,16 +35,27 @@ class ContentQuestionsPanel extends React.Component {
             );
             break;
         }
+        
+        let content = (
+          <div>
+            {buttonBar}
+            <ContentQuestionsList items={questions} />
+          </div>
+        );
+        
+        if (question !== undefined && question !== null) {
+          //Question is selected -> show its data
+          content = (
+            <div>
+              <ContentQuestionForm question={question} />
+            </div>
+          );
+        } 
 
         return (
-            <div ref="contentQuestionsPanel" className="ui bottom attached segment">
-                <div>
-                  {buttonBar}
-                </div>
-                <div>
-                  <ContentQuestionsList items={this.props.ContentQuestionsStore.questions} />
-                </div>
-            </div>
+          <div ref="contentQuestionsPanel" className="ui bottom attached segment">
+            {content}
+          </div>
         );
     }
 }
