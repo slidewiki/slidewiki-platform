@@ -1,5 +1,5 @@
 import React from 'react';
-import likeActivity from '../../../actions/likeActivity';
+import likeActivity from '../../../actions/activityfeed/likeActivity';
 import {formatDate} from './util/ActivityFeedUtil';
 
 class ActivityItem extends React.Component {

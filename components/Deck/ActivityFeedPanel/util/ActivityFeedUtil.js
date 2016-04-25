@@ -23,10 +23,17 @@ class ActivityFeedUtil {
             return 30;
         }
     }
+
+    static formatDateFromMillisAgo(millis) {
+        const now = new Date();
+        const nowTime = now.getTime();
+        return ActivityFeedUtil.formatDate(nowTime - millis);
+    }
     // turn time millis into a string such as '1 hour ago'
     static formatDate(date) {
         const now = new Date();
         const nowTime = now.getTime();
+
         if (nowTime < date) return 'in the future [dramatic music playing]';
         const then = new Date(date);
 

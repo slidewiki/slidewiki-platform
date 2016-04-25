@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import {shortTitle} from '../../configs/general';
 
 export default function loadActivities(context, payload, done) {
     context.service.read('activities.list', payload, {timeout: 20 * 1000}, (err, res) => {

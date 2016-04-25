@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import {shortTitle} from '../../../configs/general';
 export default function loadContentDiscussion(context, payload, done) {
     context.service.read('discussion.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

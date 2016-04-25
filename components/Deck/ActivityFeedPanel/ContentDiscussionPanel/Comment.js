@@ -1,5 +1,5 @@
 import React from 'react';
-import invertReplyBoxFlag from '../../../../actions/activityfeed/invertReplyBoxFlag';
+import invertReplyBoxFlag from '../../../../actions/activityfeed/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 
 class Comment extends React.Component {
@@ -26,7 +26,7 @@ class Comment extends React.Component {
                 <div className="content">
                     <a className="author" href={'/user/' + comment.author.id}>{comment.author.username}</a>
                     <div className="metadata">
-                        <span className="date">{ActivityFeedUtil.formatDate(comment.date)}</span>
+                        <span className="date">{ActivityFeedUtil.formatDateFromMillisAgo(comment.date)}</span>
                     </div>
                     <div className="text">
                         <strong>{comment.title}</strong><br/>

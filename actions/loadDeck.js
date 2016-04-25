@@ -6,7 +6,7 @@ import loadDeckTree from './decktree/loadDeckTree';
 import loadContributors from './loadContributors';
 import loadTranslations from './loadTranslations';
 import loadDataSources from './datasource/loadDataSources';
-import loadActivities from './loadActivities';
+import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
 
 export default function loadDeck(context, payload, done) {
