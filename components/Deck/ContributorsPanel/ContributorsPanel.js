@@ -6,8 +6,6 @@ import ContributorsList from './ContributorsList';
 import ContributorSection from './ContributorSection';
 
 
-import Accordion from './Accordion';
-
 class ContributorsPanel extends React.Component {
 //var ContributorsPanel = React.createClass({
 
@@ -19,13 +17,13 @@ class ContributorsPanel extends React.Component {
                         <a href="/contributors/deck/57">Contributors</a>
                     </div>
 
-
                     <ContributorSection listName="Creator"><ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList></ContributorSection>
 
 
                     <ContributorSection listName="Contributors"><ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList></ContributorSection>
                     <ContributorSection listName="Translators"><ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList></ContributorSection>
                 </div>
+
 
              </div>
         );
