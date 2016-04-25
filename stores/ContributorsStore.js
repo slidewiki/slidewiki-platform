@@ -16,18 +16,6 @@ class ContributorsStore extends BaseStore {
         this.listName = payload.listName;
 
         console.log('listName: '+this.listName);
-        console.log('test: '+payload.test);
-        console.log('expand: '+this.creator[0].username);
-
-
-        if(this.creator!==null){
-            this.creator = [];
-            console.log('expand 0');
-        }
-        else{
-            this.creator = this.getCreator(payload.contributors);
-            console.log('expand: '+this.creator[0].username);
-        }
 
         this.emitChange();
     }
