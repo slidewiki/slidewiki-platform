@@ -15,23 +15,23 @@ class ContributorsStore extends BaseStore {
         this.translators = this.getTranslators(payload.contributors);
         this.listName = payload.listName;
 
-        console.log('listName: '+this.listName);
+        //console.log('listName: '+this.listName);
 
         this.emitChange();
     }
 
     expand(payload) {
 
-        console.log('expand ??');
-        console.log('listName: '+this.listName);
+        //console.log('expand ??');
+        //console.log('listName: '+this.listName);
 
         if(this.creator!==null){
             this.creator = [];
-            console.log('expand 0');
+            //console.log('expand 0');
         }
         else{
             this.creator = this.getCreator(payload.contributors);
-            console.log('expand: '+this.creator[0].username);
+            //console.log('expand: '+this.creator[0].username);
         }
         this.emitChange();
     }

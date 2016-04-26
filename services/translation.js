@@ -12,13 +12,15 @@ export default {
             if(args.sid%2===0){
                 translations=[
             	                {'lang': 'EN', 'id': 343},
-            	                {'lang': 'DE', 'id': 32}
+            	                {'lang': 'DE', 'id': 32},
+            	                {'lang': 'FR', 'id': 64}
                 ];
             }
             else{
                 translations = [
             	                {'lang': 'ES', 'id': 56},
-            	                {'lang': 'GR', 'id': 71}
+            	                {'lang': 'GR', 'id': 71},
+            	                {'lang': 'FA', 'id': 81}
                 ];
             }
 

@@ -9,11 +9,8 @@ class TranslationList extends React.Component {
             );
         });
         return (
-        		
-            <div ref="translationList">
-                <div className="ui relaxed divided list">
-                    {list}
-                </div>
+            <div ref="translationList" className="menu">
+                {list}
              </div>
         );
     }
