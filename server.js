@@ -5,18 +5,21 @@
  * and the application is rendered via React.
  */
 import express from 'express';
-import compression from 'compression';
-import bodyParser from 'body-parser';
-import path from 'path';
+import favicon from 'serve-favicon';
 import serialize from 'serialize-javascript';
-import {navigateAction} from 'fluxible-router';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import csrf from 'csurf';
+import compression from 'compression';
 import debugLib from 'debug';
+import path from 'path';
+import {navigateAction} from 'fluxible-router';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
-import favicon from 'serve-favicon';
+
 const env = process.env.NODE_ENV;
 
 const debug = debugLib('slidewiki-platform');
@@ -28,11 +31,15 @@ server.use('/bower_components', express['static'](path.join(__dirname, '/bower_c
 server.use('/custom_modules', express['static'](path.join(__dirname, '/custom_modules')));
 server.use('/assets', express['static'](path.join(__dirname, '/assets')));
 server.use(compression());
+server.use(cookieParser());
 server.use(bodyParser.json());
+server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
 let fetchrPlugin = app.getPlugin('FetchrPlugin');
+
 // Set up the fetchr middleware
 server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
+
 // Register our services
 fetchrPlugin.registerService(require('./services/contributors'));
 fetchrPlugin.registerService(require('./services/deck'));
@@ -50,7 +57,12 @@ fetchrPlugin.registerService(require('./services/import'));
 
 server.use((req, res, next) => {
 
-    const context = app.createContext();
+    const context =  app.createContext({
+        req: req, // The fetchr plugin depends on this
+        xhrContext: {
+            _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
+        }
+    });
 
     debug('Executing navigate action');
     context.getActionContext().executeAction(navigateAction, {
