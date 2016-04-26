@@ -26,7 +26,7 @@
     "build": "webpack --config webpack.config.production.js && NODE_ENV=production npm start",
     "dev": "node webpack-dev-server.js",
     "lint": "eslint ./**/*.js",
-    "test": "mocha tests/unit/ --recursive --compilers js:babel/register --reporter spec",
+    "test": "mocha tests/unit/ --recursive --compilers js:babel-register --reporter spec",
     "coverage": "istanbul cover _mocha --include-all-sources tests/unit/*.js",
     "coverall": "npm run coverage && #cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "countLOC": "sloc -f cli-table -k total,source,comment,empty -e node_modules\\|coverage\\|.git ./",
