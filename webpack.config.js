@@ -34,9 +34,6 @@ var webpackConfig = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        // Protects against multiple React installs when npm linking
-        new webpack.NormalModuleReplacementPlugin(/^react?$/, require.resolve('react')),
-        new webpack.NormalModuleReplacementPlugin(/^react(\/addons)?$/, require.resolve('react/addons')),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV)
