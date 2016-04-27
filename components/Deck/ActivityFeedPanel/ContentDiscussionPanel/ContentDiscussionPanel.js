@@ -3,8 +3,17 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import Comment from './Comment';
+import addComment from '../../../../actions/activityfeed/contentdiscussion/addComment';
 
 class ContentDiscussionPanel extends React.Component {
+    handleAddComment() {
+        this.context.executeAction(addComment, {
+            selector: this.props.ContentDiscussionStore.selector,
+            title: this.refs.title.value,
+            text: this.refs.text.value
+        });
+    }
+
     render() {
         let oldWay = (
             <div ref="contentDiscussionPanel" className="ui segment">
@@ -16,12 +25,17 @@ class ContentDiscussionPanel extends React.Component {
         return (
             <div className="ui comments" style={{maxWidth: 'none'}}>
                 <form className="ui reply form">
+                    <div className="ui input">
+                        <input type="text" ref="title" placeholder="Title"/>
+                    </div>
                     <div className="field">
-                        <textarea style={{minHeight: '6em', height: '6em'}}></textarea>
+                        <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
                     </div>
-                    <div className="ui blue labeled submit icon button">
-                        <i className="icon edit"></i> Add Comment
-                    </div>
+                    <a className="add" onClick={this.handleAddComment.bind(this)}>
+                        <div className="ui blue labeled submit icon button">
+                            <i className="icon edit"></i> Add Comment
+                        </div>
+                    </a>
                 </form>
                 <h3 className="ui dividing header">Comments</h3>
                 <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
@@ -31,6 +45,10 @@ class ContentDiscussionPanel extends React.Component {
         );
     }
 }
+
+ContentDiscussionPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 ContentDiscussionPanel = connectToStores(ContentDiscussionPanel, [ContentDiscussionStore], (context, props) => {
     return {

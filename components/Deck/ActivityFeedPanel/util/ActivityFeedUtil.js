@@ -36,7 +36,6 @@ class ActivityFeedUtil {
 
         if (nowTime < date) return 'in the future [dramatic music playing]';
         const then = new Date(date);
-
         const yearDiff = now.getFullYear() - then.getFullYear();
         const monthDiff = now.getMonth() - then.getMonth();
         if (yearDiff > 0 && monthDiff >= 0) return yearDiff + ' years ago';
@@ -49,7 +48,7 @@ class ActivityFeedUtil {
         if (trueDayDiff > 1) return trueDayDiff + ' days ago';
         if (trueDayDiff === 1) return 'Yesterday';
 
-        const diffInMillis = nowTime - date;
+        const diffInMillis = nowTime - then.getTime();
         const hours = Math.floor(diffInMillis / 3600000);
         if (hours > 0) return hours + ' hours ago';
 

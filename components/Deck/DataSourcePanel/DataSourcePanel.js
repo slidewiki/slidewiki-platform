@@ -9,11 +9,11 @@ import saveDataSource from '../../../actions/datasource/saveDataSource';
 class DataSourcePanel extends React.Component {
     handleSave() {
         let dataSource = this.props.DataSourceStore.datasource;
+        //read form data
         dataSource.title = this.refs.title.value;
         dataSource.url = this.refs.url.value;
         dataSource.comment = this.refs.comment.value;
         this.context.executeAction(saveDataSource, {
-          //read form data
             datasource: dataSource
         });
     }

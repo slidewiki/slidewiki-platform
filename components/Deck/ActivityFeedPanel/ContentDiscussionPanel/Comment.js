@@ -1,21 +1,38 @@
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
 import invertReplyBoxFlag from '../../../../actions/activityfeed/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
+import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
+import addReply from '../../../../actions/activityfeed/contentdiscussion/addReply';
 
 class Comment extends React.Component {
     handleReply() {
         this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
     }
+
+    handleAddReply() {
+        this.context.executeAction(addReply, {
+            comment: this.props.comment,
+            title: this.refs.title.value,
+            text: this.refs.text.value
+        });
+    }
+
     render() {
         const comment = this.props.comment;
         const replyBox = (
             <form className="ui reply form">
+                <div className="ui input">
+                    <input type="text" ref="title" placeholder="Title"/>
+                </div>
                 <div className="field">
-                    <textarea style={{minHeight: '6em', height: '6em'}}></textarea>
+                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
                 </div>
-                <div className="ui primary submit labeled icon button">
-                    <i className="icon edit"></i> Add Reply
-                </div>
+                <a className="add" onClick={this.handleAddReply.bind(this)}>
+                    <div className="ui primary submit labeled icon button">
+                        <i className="icon edit"></i> Add Reply
+                    </div>
+                </a>
             </form>
         );
         return (
@@ -26,7 +43,7 @@ class Comment extends React.Component {
                 <div className="content">
                     <a className="author" href={'/user/' + comment.author.id}>{comment.author.username}</a>
                     <div className="metadata">
-                        <span className="date">{ActivityFeedUtil.formatDateFromMillisAgo(comment.date)}</span>
+                        <span className="date">{ActivityFeedUtil.formatDate(comment.timestamp)}</span>
                     </div>
                     <div className="text">
                         <strong>{comment.title}</strong><br/>
@@ -47,4 +64,9 @@ Comment.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
+Comment = connectToStores(Comment, [ContentDiscussionStore], (context, props) => {
+    return {
+        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState()
+    };
+});
 export default Comment;

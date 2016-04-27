@@ -39,7 +39,7 @@ export default {
 
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        if(resource === 'datasource.save'){
+        if(resource === 'datasource.item'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/

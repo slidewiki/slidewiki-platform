@@ -22,6 +22,26 @@ class ContentDiscussionStore extends BaseStore {
         this.selector = payload.selector;
         this.emitChange();
     }
+    addComment(payload) {
+      //TODO
+        // payload.discussion.map((comment) => {
+        //     ContentDiscussionStore.clearReplyFlags(comment);
+        // });
+        // this.commentWithReplyBox = null;
+        // this.discussion = payload.discussion;
+        // this.selector = payload.selector;
+        this.emitChange();
+    }
+    addReply(payload) {
+      //TODO
+        // payload.discussion.map((comment) => {
+        //     ContentDiscussionStore.clearReplyFlags(comment);
+        // });
+        // this.commentWithReplyBox = null;
+        // this.discussion = payload.discussion;
+        // this.selector = payload.selector;
+        this.emitChange();
+    }
     invertReplyBoxFlag(payload) {
         let comment = payload.comment;
         if (comment.replyBoxOpened) {
@@ -55,7 +75,9 @@ class ContentDiscussionStore extends BaseStore {
 ContentDiscussionStore.storeName = 'ContentDiscussionStore';
 ContentDiscussionStore.handlers = {
     'LOAD_CONTENT_DISCUSSION_SUCCESS': 'updateDiscussion',
-    'INVERT_REPLY_BOX_FLAG': 'invertReplyBoxFlag'
+    'INVERT_REPLY_BOX_FLAG': 'invertReplyBoxFlag',
+    'ADD_COMMENT_SUCCESS': 'addComment',
+    'ADD_REPLY_SUCCESS': 'addReply'
 };
 
 export default ContentDiscussionStore;
