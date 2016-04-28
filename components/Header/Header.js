@@ -9,7 +9,7 @@ class Header extends React.Component {
                 <div className="ui container">
                     <a href="/" className="header item">
                         <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" />
-                        SlideWiki
+                        &nbsp; SlideWiki
                     </a>
                     <NavLink className="item" routeName="about" activeClass="active">About</NavLink>
                     <NavLink className="item right" routeName="import" activeClass="active">Upload your presentation</NavLink>

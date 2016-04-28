@@ -6,8 +6,8 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 class SlideViewPanel extends React.Component {
     render() {
         const compStyle = {
-            maxHeight: '500',
-            minHeight: '500',
+            maxHeight: 500,
+            minHeight: 500,
             overflowY: 'auto'
         };
         return (

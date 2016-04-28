@@ -17,8 +17,8 @@ class SlideContentEditor extends React.Component {
     render() {
         const compStyle = {
             minWidth: '100%',
-            maxHeight: '500',
-            minHeight: '500',
+            maxHeight: 500,
+            minHeight: 500,
             overflowY: 'auto'
         };
         return (
