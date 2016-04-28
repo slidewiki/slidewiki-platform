@@ -12,6 +12,9 @@ class ContentDiscussionPanel extends React.Component {
             title: this.refs.title.value,
             text: this.refs.text.value
         });
+
+        this.refs.title.value = '';
+        this.refs.text.value = '';
     }
 
     render() {

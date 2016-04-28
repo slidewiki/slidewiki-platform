@@ -23,23 +23,32 @@ class ContentDiscussionStore extends BaseStore {
         this.emitChange();
     }
     addComment(payload) {
-      //TODO
-        // payload.discussion.map((comment) => {
-        //     ContentDiscussionStore.clearReplyFlags(comment);
-        // });
-        // this.commentWithReplyBox = null;
-        // this.discussion = payload.discussion;
-        // this.selector = payload.selector;
+        this.discussion.push(payload);
         this.emitChange();
     }
+    findComment(array, identifier) {
+        for(let i = 0; i < array.length; i++) {
+            let comment = array[i];
+            if (comment.id === identifier) {
+                return comment;
+            } else if (comment.replies !== undefined) {
+                return (this.findComment(comment.replies, identifier));
+            }
+        };
+
+        return null;
+    }
     addReply(payload) {
-      //TODO
-        // payload.discussion.map((comment) => {
-        //     ContentDiscussionStore.clearReplyFlags(comment);
-        // });
-        // this.commentWithReplyBox = null;
-        // this.discussion = payload.discussion;
-        // this.selector = payload.selector;
+        let parentComment = this.findComment(this.discussion, payload.parent_comment);
+        if (parentComment.replies === undefined) {
+            parentComment.replies = [];
+        }
+        parentComment.replies.push(payload);
+
+        //close reply box
+        if (this.commentWithReplyBox) this.commentWithReplyBox.replyBoxOpened = false;
+        this.commentWithReplyBox = null;
+
         this.emitChange();
     }
     invertReplyBoxFlag(payload) {
@@ -77,7 +86,9 @@ ContentDiscussionStore.handlers = {
     'LOAD_CONTENT_DISCUSSION_SUCCESS': 'updateDiscussion',
     'INVERT_REPLY_BOX_FLAG': 'invertReplyBoxFlag',
     'ADD_COMMENT_SUCCESS': 'addComment',
-    'ADD_REPLY_SUCCESS': 'addReply'
+    'ADD_REPLY_SUCCESS': 'addReply',
+    'ADD_DUMMY_COMMENT': 'addComment',
+    'ADD_DUMMY_REPLY': 'addReply'
 };
 
 export default ContentDiscussionStore;
