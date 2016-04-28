@@ -1,10 +1,10 @@
-var createMockComponentContext = require('fluxible/utils/createMockComponentContext');
-var provideContext = require('fluxible-addons-react/provideContext');
-var connectToStores = require('fluxible-addons-react/connectToStores');
-var React = require('react/addons');
-var expect = require('chai').expect;
-var TestUtils = React.addons.TestUtils;
-var TabLinksStore = require('../../stores/TabLinksStore');
+import React from 'react';
+import createMockComponentContext from 'fluxible/utils/createMockComponentContext';
+import provideContext from 'fluxible-addons-react/provideContext';
+import connectToStores from 'fluxible-addons-react/connectToStores';
+import TestUtils from 'react-addons-test-utils';
+import { expect } from 'chai';
+import TabLinksStore from '../../stores/TabLinksStore';
 
 
 
