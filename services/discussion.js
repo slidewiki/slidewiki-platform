@@ -26,7 +26,7 @@ export default {
 
     create: (req, resource, params, body, config, callback) => {
         //TODO get real user id
-        const randomUserId = '11223344556677889900000' + String(Math.round(Math.random() * 6));
+        const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
 
         let args = params.params? params.params : params;
         let selector= args.selector;
