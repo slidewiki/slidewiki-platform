@@ -23,7 +23,7 @@ class ContentDiscussionStore extends BaseStore {
         this.emitChange();
     }
     addComment(payload) {
-        this.discussion.push(payload);
+        this.discussion.push(payload.comment);
         this.emitChange();
     }
     findComment(array, identifier) {
