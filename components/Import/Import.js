@@ -4,6 +4,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import ImportStore from '../../stores/ImportStore';
 import importFileSelect from '../../actions/importFileSelect';
 import loadImportFile from '../../actions/loadImportFile';
+import importFinished from '../../actions/importFinished';
 let ReactDOM = require('react-dom');
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
 
@@ -33,9 +34,11 @@ class Import extends React.Component {
     }
     //redirect to presentation deck with id (input param)
     handleRedirect(id){
+        this.context.executeAction(importFinished, {});  // destroy current state
         this.context.executeAction(navigateAction, {
             url: '/deck/' + id
         });
+        return false;
     }
     render() {
         //variable for intermediate storage of output
