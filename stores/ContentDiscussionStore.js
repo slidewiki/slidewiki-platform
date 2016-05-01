@@ -43,12 +43,13 @@ class ContentDiscussionStore extends BaseStore {
         return null;
     }
     addReply(payload) {
-        let parentComment = this.findComment(this.discussion, payload.parent_comment);
+        let replyComment = payload.comment;
+        let parentComment = this.findComment(this.discussion, replyComment.parent_comment);
         if (parentComment !== null) {//found parent comment
             if (parentComment.replies === undefined) {//first reply
                 parentComment.replies = [];
             }
-            parentComment.replies.push(payload);
+            parentComment.replies.push(replyComment);
         }
 
         //close reply box
