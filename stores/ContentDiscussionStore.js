@@ -34,9 +34,9 @@ class ContentDiscussionStore extends BaseStore {
             if (comment.id === identifier) {
                 return comment;
             } else if (comment.replies !== undefined) {
-              let commentFound = this.findComment(comment.replies, identifier);
-              if (commentFound !== null)
-                return commentFound;
+                let commentFound = this.findComment(comment.replies, identifier);
+                if (commentFound !== null)
+                    return commentFound;
             }
         }
 
