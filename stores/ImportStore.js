@@ -7,6 +7,12 @@ class ImportStore extends BaseStore {
         this.isUploaded = false;
         this.isAllowed = false;
     }
+    destructor()
+    {
+        this.content = '';
+        this.isUploaded = false;
+        this.isAllowed = false;
+    }
     showImportFile(payload) {
         this.content = payload.content;
         this.isUploaded = true;
@@ -38,7 +44,8 @@ class ImportStore extends BaseStore {
 ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
     'LOAD_IMPORT_FILE_SUCCESS': 'showImportFile',
-    'IMPORT_FILE_SELECT': 'checkFile'
+    'IMPORT_FILE_SELECT': 'checkFile',
+    'IMPORT_FINISHED': 'destructor'
 };
 
 export default ImportStore;

@@ -14,8 +14,15 @@ class DefaultHTMLLayout extends React.Component {
             </head>
             <body>
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
-                <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+                {/* Following are added only to support IE browser */}
+                <script src="/bower_components/es5-shim/es5-shim.min.js"></script>
+                <script src="/bower_components/es5-shim/es5-sham.min.js"></script>
+                <script src="/bower_components/json3/lib/json3.min.js"></script>
+                <script src="/bower_components/es6-shim/es6-shim.min.js"></script>
+                <script src="/bower_components/es6-shim/es6-sham.min.js"></script>
+                {/* Above are added only to support IE browser */}
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
+                <script src="/bower_components/jquery/dist/jquery.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/progress.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js"></script>
