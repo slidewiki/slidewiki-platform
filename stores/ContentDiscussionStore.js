@@ -26,24 +26,30 @@ class ContentDiscussionStore extends BaseStore {
         this.discussion.push(payload.comment);
         this.emitChange();
     }
+
+    //Find comment in a tree with id = identifier
     findComment(array, identifier) {
         for(let i = 0; i < array.length; i++) {
             let comment = array[i];
             if (comment.id === identifier) {
                 return comment;
             } else if (comment.replies !== undefined) {
-                return (this.findComment(comment.replies, identifier));
+              let commentFound = this.findComment(comment.replies, identifier);
+              if (commentFound !== null)
+                return commentFound;
             }
-        };
+        }
 
         return null;
     }
     addReply(payload) {
         let parentComment = this.findComment(this.discussion, payload.parent_comment);
-        if (parentComment.replies === undefined) {
-            parentComment.replies = [];
+        if (parentComment !== null) {//found parent comment
+            if (parentComment.replies === undefined) {//first reply
+                parentComment.replies = [];
+            }
+            parentComment.replies.push(payload);
         }
-        parentComment.replies.push(payload);
 
         //close reply box
         if (this.commentWithReplyBox) this.commentWithReplyBox.replyBoxOpened = false;
