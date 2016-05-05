@@ -54,6 +54,7 @@
     "react-dom": "^15.0.1",
     "react-hotkeys": "^0.8.0",
     "react-list": "^0.7.18",
+    "react-edit-inline": "^1.0.7",
     "request-promise": "^3.0.0",
     "serialize-javascript": "^1.2.0",
     "serve-favicon": "^2.3.0"
