@@ -93,9 +93,7 @@ ContentDiscussionStore.handlers = {
     'LOAD_CONTENT_DISCUSSION_SUCCESS': 'updateDiscussion',
     'INVERT_REPLY_BOX_FLAG': 'invertReplyBoxFlag',
     'ADD_COMMENT_SUCCESS': 'addComment',
-    'ADD_REPLY_SUCCESS': 'addReply',
-    'ADD_DUMMY_COMMENT': 'addComment',
-    'ADD_DUMMY_REPLY': 'addReply'
+    'ADD_REPLY_SUCCESS': 'addReply'
 };
 
 export default ContentDiscussionStore;

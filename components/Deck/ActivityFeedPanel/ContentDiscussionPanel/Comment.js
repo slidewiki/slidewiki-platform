@@ -31,11 +31,9 @@ class Comment extends React.Component {
                 <div className="field">
                     <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
                 </div>
-                <a className="add" onClick={this.handleAddReply.bind(this)}>
-                    <div className="ui primary submit labeled icon button">
-                        <i className="icon edit"></i> Add Reply
-                    </div>
-                </a>
+                <div className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
+                    <i className="icon edit"></i> Add Reply
+                </div>
             </form>
         );
         return (

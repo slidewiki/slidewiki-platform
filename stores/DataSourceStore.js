@@ -23,6 +23,10 @@ class DataSourceStore extends BaseStore {
         this.datasource = null;
         this.emitChange();
     }
+    cancelEditDataSource(payload) {
+        this.datasource = null;
+        this.emitChange();
+    }
     getState() {
         return {
             datasources: this.datasources,
@@ -44,7 +48,8 @@ DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
-    'SAVE_DATASOURCE_SUCCESS': 'saveDataSource'
+    'SAVE_DATASOURCE_SUCCESS': 'saveDataSource',
+    'CANCEL_EDIT_DATASOURCE': 'cancelEditDataSource'
 };
 
 export default DataSourceStore;
