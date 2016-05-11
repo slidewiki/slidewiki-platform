@@ -20,7 +20,8 @@ class ActivityList extends React.Component {
             this.loading = true;
             const payload = {
                 params: this.props.ActivityFeedStore.selector,
-                newActivities: { latestId: activities[activities.length-1].id, numNew: 30 }
+                newActivities: { start: activities.length, numNew: 30 }
+                // newActivities: { latestId: activities[activities.length-1].id, numNew: 30 }
             };
             this.context.executeAction(loadMoreActivities, payload);
         }

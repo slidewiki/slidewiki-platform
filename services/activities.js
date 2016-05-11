@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
 
 let now = Date.now();
 const args = {
@@ -42,26 +44,50 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
+
+        const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;//TODO solve these ID issues
+
         switch (resource) {
             case 'activities.list':
                 /*********connect to microservices*************/
                 //todo
                 /*********received data from microservices*************/
-                callback(null, {activities: initialActivities.concat(generateRandomActivities(30, 11)), selector: selector, hasMore: true});
+                // callback(null, {activities: initialActivities.concat(generateRandomActivities(30, 11)), selector: selector, hasMore: true});
+
+
+                rp.get({uri: Microservices.activities.uri + '/activities/' + content_id + '/more/0/30' }).then((res) => {
+                    let activities = JSON.parse(res);
+
+                    callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {activities: {}, selector: selector, hasMore: false});
+                });
+
                 break;
             case 'activities.more':
                 /*********connect to microservices*************/
                 //todo
                 /*********received data from microservices*************/
                 if (!params.newActivities) break;
-                setTimeout(() => {
-                    let hasMoreActivities = true;
-                    let newActivities = [];
-                    const startID = params.newActivities.latestId+1;
-                    if (startID < 200) newActivities = generateRandomActivities(params.newActivities.numNew, startID);
-                    if (startID + params.newActivities.numNew > 200) hasMoreActivities = false;
-                    callback(null, {activities: newActivities, hasMore: hasMoreActivities});
-                }, 500);
+                // setTimeout(() => {
+                //     let hasMoreActivities = true;
+                //     let newActivities = [];
+                //     const startID = params.newActivities.latestId+1;
+                //     if (startID < 200) newActivities = generateRandomActivities(params.newActivities.numNew, startID);
+                //     if (startID + params.newActivities.numNew > 200) hasMoreActivities = false;
+                //     callback(null, {activities: newActivities, hasMore: hasMoreActivities});
+                // }, 500);
+
+                rp.get({uri: Microservices.activities.uri + '/activities/' + content_id + '/more/' + params.newActivities.start + '/' + params.newActivities.numNew }).then((res) => {
+                    let activities = JSON.parse(res);
+
+                    callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {activities: {}, selector: selector, hasMore: false});
+                });
+
                 break;
         }
     },
