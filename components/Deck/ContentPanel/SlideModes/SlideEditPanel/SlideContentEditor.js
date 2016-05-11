@@ -45,9 +45,6 @@ class SlideContentEditor extends React.Component {
         return (
             <div>
                 <AlloyEditorComponent container="myContentEditable" id="myContentEditable" content={this.props.content}></AlloyEditorComponent>
-                <div ref="deckEditPanel" className="ui bottom attached segment">
-                    Shows all properties of a deck to be edited...
-                </div>
             </div>
         );
     }
