@@ -5,13 +5,13 @@ var webpackConfig = {
     resolve: {
         extensions: ['', '.js']
     },
-    entry: [
-        './client.js'
-    ],
+    entry: {
+        'main': './client.js'
+    },
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
-        filename: 'main.min.js'
+        filename: '[name].min.js'
     },
     module: {
         loaders: [
