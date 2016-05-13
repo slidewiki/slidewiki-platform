@@ -10,7 +10,7 @@ class SimilarContentPanel extends React.Component {
 
                 <div className="ui segments">
                     <div className="ui secondary segment">
-                        <a href={'/similarcontent/' + this.props.SimilarContentStore.selector.stype + '/' + this.props.SimilarContentStore.selector.sid}>Similar Content</a>
+                        <a href={'/similarcontent/' + this.props.SimilarContentStore.selector.stype + '/' + this.props.SimilarContentStore.selector.sid}>Recommended</a>
                     </div>
                     <div className="ui segment">
                         <SimilarContentList selector={this.props.SimilarContentStore.selector} items={this.props.SimilarContentStore.contents} />
