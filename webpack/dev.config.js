@@ -1,7 +1,7 @@
-var webpack = require('webpack');
-var path = require('path');
+let webpack = require('webpack');
+let path = require('path');
 
-var webpackConfig = {
+let webpackConfig = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
