@@ -15,7 +15,7 @@ class ActivityItem extends React.Component {
         let SummaryNode = '';
         const DateDiv = (
             <div className="date">
-                {formatDate(node.date)}
+                {formatDate(node.timestamp)}
             </div>
         );
         const commentStyles = {
@@ -23,16 +23,16 @@ class ActivityItem extends React.Component {
             fontWeight: 400
         };
 
-        switch (node.type) {
+        switch (node.activity_type) {
             case 'translate':
                 IconNode = (<i className="ui big translate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'translated ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>{' to '}
-                        <a href={'/slideview/' + node.translation.contentID}>{node.translation.language}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'translated ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>{' to '}
+                        <a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -42,11 +42,11 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big slideshare icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'shared ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>{' on '}
-                        <a target="_blank" href={node.shareInfo.postURI}>{node.shareInfo.platform}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'shared ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>{' on '}
+                        <a target="_blank" href={node.share_info.postURI}>{node.share_info.platform}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -56,10 +56,10 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big write icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'created ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'created ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -69,10 +69,10 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big edit icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'edited ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'edited ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -82,12 +82,12 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'commented on ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'commented on ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
                         <br/>
-                        <span style={commentStyles}>{'"' + node.commentText + '"'}</span>
+                        <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
                         <br/>
                         {DateDiv}
                     </div>
@@ -97,13 +97,13 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big comments outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
                         </a>
-                        <span> replied to a comment </span>{'on ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <span> replied to a comment </span>{'on ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
                         <br/>
-                        <span style={commentStyles}>{'"' + node.replyText + '"'}</span>
+                        <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
                         <br/>
                         {DateDiv}
                     </div>
@@ -113,24 +113,37 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big copy icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'used ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
-                        {' in deck '}<a href={'/slideview/' + node.targetDeckID}>{node.targetDeckName}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'used ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
+                        {' in deck '}<a href={'/slideview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
                         <br/>
                         {DateDiv}
                     </div>
                 );
                 break;
-            case 'like':
+            case 'rate'://TODO modify rate display
                 IconNode = (<i className="ui big thumbs outline up icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'liked ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'rated ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'react':
+                IconNode = (<i className="ui big thumbs outline up icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'liked ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -140,10 +153,10 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big download icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + node.userID}>
-                            {node.username}
-                        </a> {'downloaded ' + node.contentType + ' '}
-                        <a href={'/slideview/' + node.contentID}>{node.contentName}</a>
+                        <a className="user" href={'/user/' + node.user_id}>
+                            {node.author.username}
+                        </a> {'downloaded ' + node.content_kind + ' '}
+                        <a href={'/slideview/' + node.content_id}>{node.content_name}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -153,7 +166,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big warning icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        Unknown type of activity
+                        Unknown type of activity - {node.activity_type}
                     </div>
                 );
         }
