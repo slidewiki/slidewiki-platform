@@ -4,8 +4,8 @@ class DeckPropertyItemList extends React.Component {
     render() {
         let list = this.props.fieldcontent.map( (val, index) => {
             return (
-                <span className="ui tiny label">{val}</span>
-            )
+                <span className="ui tiny label" key={index}>{val}</span>
+            );
         });
         return (
             <div className="item">
