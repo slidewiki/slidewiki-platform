@@ -6,7 +6,7 @@ class DeckPropertyItemText extends React.Component {
         let update = {
             fieldname: this.props.fieldname,
             fieldcontent: event.value
-        }
+        };
         this.props.onChange(update);
     }
     render() {

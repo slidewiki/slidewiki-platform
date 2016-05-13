@@ -23,8 +23,8 @@
   "scripts": {
     "clean": "rm -rf build/ coverage/",
     "start": "node start.js",
-    "build": "webpack --config webpack.config.production.js && NODE_ENV=production npm start",
-    "dev": "node webpack-dev-server.js",
+    "build": "webpack --config ./webpack/prod.config.js && NODE_ENV=production npm start",
+    "dev": "node ./webpack/dev-server.js",
     "lint": "eslint ./**/*.js",
     "test": "mocha test/unit/ --recursive --compilers js:babel-register --reporter spec",
     "coverage": "istanbul cover _mocha --include-all-sources tests/unit/*.js",
