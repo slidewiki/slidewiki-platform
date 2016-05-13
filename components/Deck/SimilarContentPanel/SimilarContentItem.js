@@ -1,11 +1,12 @@
 import React from 'react';
+import ThumbnailUrl from './ThumbnailUrl';
 
 class SimilarContentItem extends React.Component {
     render() {
         return (
             <div className="item">
               <a className="avatar inline-div padding5" href={'/deck/' + this.props.data.id}>
-                  <img src={'/assets/images/thumbnails/' + this.props.data.id + '.jpg'} alt={'/deck/' + this.props.data.id} height="40" width="60"/>
+                    <ThumbnailUrl id={this.props.data.id} height='40' width='60'/>
               </a>
               <div className="content inline-div">
                 <div className="description">
@@ -19,7 +20,6 @@ class SimilarContentItem extends React.Component {
                   <i className="ui large download icon"></i>  {this.props.data.downloaded}
                   </div>
               </div>
-
             </div>
         );
     }
