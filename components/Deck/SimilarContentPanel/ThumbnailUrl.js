@@ -1,12 +1,10 @@
 import React from 'react';
-
-//import Thumbnail from 'react-thumbnail';
+import Thumbnail from './Thumbnail/Thumbnail';
 
 class ThumbnailUrl extends React.Component{
     render(){
         return(
-      //    <Thumbnail width={40} height={60} page="http://www.gti-ia.upv.es/" />
-        <img src={'/assets/images/thumbnails/' + this.props.id + '.jpg'} alt={'/deck/' + this.props.id} height={this.props.height}  width={this.props.width}/>
+          <Thumbnail width={250} height={250} page="http//gti-ia.dsic.upv.es" scale={4}/>
       );
     }
 
