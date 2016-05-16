@@ -124,7 +124,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'rate'://TODO modify rate display
-                IconNode = (<i className="ui big thumbs outline up icon"></i>);
+                IconNode = (<i className="ui big empty star icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
