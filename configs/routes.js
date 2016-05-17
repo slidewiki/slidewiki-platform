@@ -10,6 +10,7 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
+import loadUserNotifications from '../actions/user/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/loadContentHistory';
@@ -152,6 +153,15 @@ export default {
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadActivities, payload, done);
+        }
+    },
+    notifications: {
+        path: '/notifications/:uid',
+        method: 'get',
+        page: 'notifications',
+        handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadUserNotifications, payload, done);
         }
     },
     translations: {

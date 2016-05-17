@@ -136,7 +136,7 @@ class ActivityItem extends React.Component {
                     </div>
                 );
                 break;
-            case 'react':
+            case 'react'://TODO modify react display
                 IconNode = (<i className="ui big thumbs outline up icon"></i>);
                 SummaryNode = (
                     <div className="summary">
