@@ -12,7 +12,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react', 'react-dom', 'async', 'immutable', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
         ]
     },
     output: {
