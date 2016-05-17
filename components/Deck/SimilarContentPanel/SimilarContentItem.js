@@ -13,12 +13,15 @@ class SimilarContentItem extends React.Component {
                  <a href={'/deck/' + this.props.data.id}>{this.props.data.title} </a>
                  </div>
                 <div className="header">
-                  <a  href={'/user/' + this.props.data.authorId}>{this.props.data.author}</a>
+                  <a  href={'/user/' + this.props.data.authorId}>Creator: {this.props.data.author}</a>
                 </div>
-                  <div className="description">
+                <div className="content">
+                Modified: {this.props.data.date}
+                </div>
+                <div className="content">
                   <i className="ui large thumbs outline up icon"></i> {this.props.data.liked}
                   <i className="ui large download icon"></i>  {this.props.data.downloaded}
-                  </div>
+                </div>
               </div>
             </div>
         );
