@@ -6,7 +6,12 @@ let webpackConfig = {
         extensions: ['', '.js']
     },
     entry: {
-        'main': './client.js'
+        main: [
+            './client.js'
+        ],
+        vendor: [
+            'react', 'react-dom', 'async', 'immutable', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
+        ]
     },
     output: {
         path: path.resolve('./build/js'),
@@ -39,7 +44,8 @@ let webpackConfig = {
             compress: {
                 warnings: false
             }
-        })
+        }),
+        new webpack.optimize.CommonsChunkPlugin(/* chunkName= */'vendor', /* filename= */'vendor.bundle.js'),
     ],
     devtool: 'source-map'
 };

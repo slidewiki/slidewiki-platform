@@ -76,7 +76,7 @@
     "chai": "^3.5.0",
     "coveralls": "^2.11.9",
     "es6-promise": "^3.1.2",
-    "eslint": "~2.9.0",
+    "eslint": "~2.10.2",
     "eslint-plugin-babel": "^3.2.0",
     "eslint-plugin-react": "^5.1.1",
     "istanbul": "^0.4.3",
@@ -89,6 +89,7 @@
     "shelljs": "^0.7.0",
     "sloc": "^0.1.10",
     "webpack": "^1.13.0",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-vendor-chunk-plugin": "^1.0.0"
   }
 }
