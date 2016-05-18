@@ -45,7 +45,11 @@ let webpackConfig = {
                 warnings: false
             }
         }),
-        new webpack.optimize.CommonsChunkPlugin(/* chunkName= */'vendor', /* filename= */'vendor.bundle.js'),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: Infinity,
+            filename: 'vendor.bundle.js'
+        })
     ],
     devtool: 'source-map'
 };
