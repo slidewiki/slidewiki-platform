@@ -5,22 +5,31 @@ class SimilarContentItem extends React.Component {
     render() {
         return (
             <div className="item">
-              <a className="avatar inline-div padding5" href={'/deck/' + this.props.data.id}>
-                    <ThumbnailUrl id={this.props.data.id} height='40' width='60'/>
-              </a>
-              <div className="content inline-div">
-                <div className="description">
-                 <a href={'/deck/' + this.props.data.id}>{this.props.data.title} </a>
-                 </div>
-                <div className="header">
-                  <a  href={'/user/' + this.props.data.authorId}>Creator: {this.props.data.author}</a>
-                </div>
+              <div className="ui card">
+                <a className="image" href={'/deck/' + this.props.data.id}>
+                    <ThumbnailUrl id={this.props.data.id} width="60px" height="40px"/>
+                </a>
+
                 <div className="content">
-                Modified: {this.props.data.date}
+                  <div className="header">
+                    <a href={'/deck/' + this.props.data.id}>{this.props.data.title} </a>
+                  </div>
+                  <div className="description">
+                    Creator:<a  href={'/user/' + this.props.data.authorId}> {this.props.data.author}</a>
+                  </div>
+                  <div className="meta">
+                    <span className="date">
+                    {this.props.data.date}
+                    </span>
+                  </div>
                 </div>
-                <div className="content">
-                  <i className="ui large thumbs outline up icon"></i> {this.props.data.liked}
-                  <i className="ui large download icon"></i>  {this.props.data.downloaded}
+                <div className="extra content">
+                   <div className="left floated">
+                      <i className="ui large thumbs outline up icon"></i> {this.props.data.liked}
+                    </div>
+                    <div className="right floated">
+                      <i className="ui large download icon"></i>  {this.props.data.downloaded}
+                    </div>
                 </div>
               </div>
             </div>
