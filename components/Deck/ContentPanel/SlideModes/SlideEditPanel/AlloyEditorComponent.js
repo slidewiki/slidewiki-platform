@@ -3,75 +3,76 @@ import ReactDOM from 'react-dom';
 //import AlloyEditor from 'alloyeditor';
 
 class AlloyEditorComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.alloyEditorConfig;
+        this.Selections;
+        this.toolbars;
+    }
     componentDidMount() {
-        //ALLOYEDITOR_BASEPATH = '../node_modules/alloyeditor/dist/alloy-editor/';
-        //CKEDITOR_BASEPATH = '../node_modules/alloyeditor/dist/alloy-editor/';
-        //window.ALLOYEDITOR_BASEPATH = "../node_modules/alloyeditor/dist/alloy-editor/";
-        //window.CKEDITOR_BASEPATH = "../node_modules/alloyeditor/dist/alloy-editor/";
-        //window.ALLOYEDITOR_BASEPATH = '../custom_modules//alloy-editor/';
-        //window.CKEDITOR_BASEPATH = '../custom_modules//alloy-editor/';
-        //window.ALLOYEDITOR_BASEPATH = "../../../../";
-        //window.CKEDITOR_BASEPATH = "../../../../";
-        //AlloyEditor.editable($(this.props.container).attr('id'), this.props.alloyEditorConfig);
-        //AlloyEditor.editable(this.props.container, this.props.alloyEditorConfig);
-        //{this.props.selector.sid}
-        //AlloyEditor.editable(this.props.container);
-        //alert(this.props.container);
-        //AlloyEditor.editable(this.props.container);
-        //AlloyEditor.editable(this.props.container);
-        //if (!CKEDITOR.instances[this.props.container])
-        //{
-        //AlloyEditor.editable(this.props.container, {
-        //    extraPlugins: AlloyEditor.Core.ATTRS.extraPlugins.value + ',ae_autolink'
-        //});
-        /*
-        this.props.alloyEditorConfig = {
-            extraPlugins: AlloyEditor.Core.ATTRS.extraPlugins.value + ',ae_autolink',
-            toolbars: {
-                styles: {
-                    selections: [
-                        {
-                            name: 'image',
-                            buttons: ['imageCenter'],
-                            test: AlloyEditor.SelectionTest.image
-                        }
-                    ]
-                }
-            }
-        };
-        */
-        let Selections = [{
-            name: 'link',
-            buttons: ['linkEdit'],
-            test: AlloyEditor.SelectionTest.link
+        this.Selections = [{
+            name: 'text',
+            buttons: ['bold', 'italic', 'underline', 'h1', 'h2', 'h3', 'subscript', 'superscript', 'strike',
+                {
+                    name: 'styles',
+                    cfg: {
+                        styles: [
+                            {
+                                name: 'Head 1',
+                                style: { element: 'h1' }
+                            },
+                            {
+                                name: 'Head 2',
+                                style: { element: 'h2' }
+                            },
+                            {
+                                name: 'Head 3',
+                                style: { element: 'h3' }
+                            },
+                            {
+                                name: 'Big',
+                                style: { element: 'big' }
+                            },
+                            {
+                                name: 'Small',
+                                style: { element: 'small' }
+                            },
+                            {
+                                name: 'Strikethrough',
+                                style: { element: 'strike' }
+                            },
+                            {
+                                name: 'Code',
+                                style: { element: 'code' }
+                            },
+                            {
+                                name: 'Remove Format',
+                                style: { element: 'removeFormat' }
+                            }
+                        ]
+                    }
+                }, 'removeFormat',
+                'paragraphLeft', 'paragraphCenter', 'paragraphRight', 'paragraphJustify' ,'outdentBlock', 'indentBlock',
+                'ol', 'ul', 'link', 'quote', 'code', 'twitter'],
+            test: AlloyEditor.SelectionTest.text
         }, {
             name: 'image',
             buttons: ['imageLeft', 'imageCenter','imageRight'],
             test: AlloyEditor.SelectionTest.image
         }, {
-            name: 'text',
-            buttons: [
-                {
-                    name: 'styles',
-                    cfg: {
-                        styles: ['h1']
-                    }
-                }, 'bold', 'italic', 'underline', 'link', 'twitter'],
-            test: AlloyEditor.SelectionTest.text
+            name: 'link',
+            buttons: ['linkEdit'],
+            test: AlloyEditor.SelectionTest.link
         }, {
             name: 'table',
-            buttons: ['tableRow', 'tableColumn', 'tableCell', 'tableRemove'],
+            buttons: ['tableHeading', 'tableRow', 'tableColumn', 'tableCell', 'tableRemove'],
             getArrowBoxClasses: AlloyEditor.SelectionGetArrowBoxClasses.table,
             setPosition: AlloyEditor.SelectionSetPosition.table,
             test: AlloyEditor.SelectionTest.table
-        }, {
-            name: 'image',
-            buttons: ['imageLeft', 'imageCenter', 'imageright'],
-            test: AlloyEditor.SelectionTest.image
         }];
-        let toolbars = {
+        this.toolbars = {
             add: {
-                buttons: ['image', 'camera', 'hline', 'table'],
+                buttons: ['image', 'camera', 'hline', 'table', 'ol', 'ul'],
                 tabIndex: 2
             },
             styles: {
@@ -79,66 +80,28 @@ class AlloyEditorComponent extends React.Component {
                 tabIndex: 1
             }
         };
-        let alloyEditorConfig = {
+        this.alloyEditorConfig = {
             extraPlugins: AlloyEditor.Core.ATTRS.extraPlugins.value + ',ae_autolink',
             toolbars: this.toolbars
         };
-        //AlloyEditor.editable(this.props.container, this.props.alloyEditorConfig);
-        //this.props.alloyEditorConfig = {
-        //    extraPlugins: AlloyEditor.Core.ATTRS.extraPlugins.value + ',ae_autolink',
-        //    toolbars: this.toolbars
-        //};
-        //AlloyEditor.editable(this.props.container, alloyEditorConfig);
         if (this.props.content !== '')
         {
-            AlloyEditor.editable(this.props.container);
+            AlloyEditor.editable(this.props.container, this.alloyEditorConfig);
         }
-        //alert('test' + CKEDITOR.instances[this.props.container]);
-        //}
-        //alert('test_inti');
-        //alert('test0');
-        //setTimeout( () => {
-            //this.forceUpdate();
-        //    alert('test');
-        //}, 2000);
     }
-    //foreceUpdate()
-    //{
-    //}
-    //shouldComponentUpdate() {
-        //return false;
-    //}
     componentDidUpdate() {
-        //alert('test' + ReactDOM.findDOMNode(this.refs.alloycomponent).getAttribute('content'));
-        //alert('test' + $(this.refs.alloycomponent).attr('class'));
-        //alert(this.refs.alloycomponent);
-        //alert(this.props.container);
-        //alert((ReactDOM.findDOMNode(this.refs.alloycomponent).getAttribute('class') !== 'cke_editable cke_editable_inline cke_contents_ltr ae-editable'));
-        //assign Alloy-editor
-        //if (ReactDOM.findDOMNode(this.refs.alloycomponent).getAttribute('class') !== 'cke_editable cke_editable_inline cke_contents_ltr ae-editable')
-
-        //let editor = CKEDITOR.instances[this.props.container];
-        //if (editor) {
-            //alert('instance exists');
-        //    editor.destroy(true);
-            //alert('destroyed');
-        //}
-        //alert('test' + CKEDITOR.instances[this.props.container]);
-        //if (typeof(CKEDITOR.instances[this.props.container]) === 'undefined')
-        //{
-        //    AlloyEditor.editable(this.props.container);
-        ///    alert('undefined');
-        //}        //CKEDITOR.replace(this.props.container);
-        //}
-        //alert('test');
-        //alert('test' + ReactDOM.findDOMNode(this.refs.alloycomponent).attr('dangerouslySetInnerHTML'));
-        //alert('test1');
+        /**
+        ** Only load Alloy-Editor when the content has been loaded via loadSlideEdit.js
+        **AND when there is not yet an instance of CKeditor
+        ** ?TODO? = maybe we should, e.g., check for instance of AlloyEditor instead for increased reliability...
+        **/
         if (this.props.content !== '' && typeof(CKEDITOR.instances[this.props.container]) === 'undefined')
         {
-            AlloyEditor.editable(this.props.container);
+            AlloyEditor.editable(this.props.container, this.alloyEditorConfig);
         }
     }
     componentWillUnmount() {
+        //TODO
         //AlloyEditor.destroy();
         //AlloyEditor.destroy(true);
         //CKEDITOR.instances[this.props.container].destroy(true);
