@@ -12,32 +12,39 @@ const ensureThisOnly = (typeCheck, notAllowed) => {
     };
 };
 
-export default class Thumbnail extends Component {
+class Thumbnail extends React.Component{
+//export default class Thumbnail extends Component {
+    constructor(props) {
+        super(props);
+        let test;
 
-    static propTypes = {
-        style: PropTypes.object,
+        //static propTypes = {
+        this.propTypes = {
+            style: PropTypes.object,
 
-        page: PropTypes.string,
-        sandbox: PropTypes.string,
+            page: PropTypes.string,
+            sandbox: PropTypes.string,
 
-        width: PropTypes.number,
-        height: PropTypes.number,
+            width: PropTypes.number,
+            height: PropTypes.number,
 
-        pageWidth: ensureThisOnly(PropTypes.number, ['scale']),
-        pageHeight: ensureThisOnly(PropTypes.number, ['scale']),
+            pageWidth: ensureThisOnly(PropTypes.number, ['scale']),
+            pageHeight: ensureThisOnly(PropTypes.number, ['scale']),
 
-        scale: ensureThisOnly(PropTypes.number, ['pageWidth', 'pageHeight']),
+            scale: ensureThisOnly(PropTypes.number, ['pageWidth', 'pageHeight']),
 
-        interactive: PropTypes.bool,
+            interactive: PropTypes.bool,
 
-        keepAspectRatio: PropTypes.string,
+            keepAspectRatio: PropTypes.string,
 
-        showWhileLoading: PropTypes.bool,
-    }
+            showWhileLoading: PropTypes.bool,
+        };
 
-    static defaultProps = {
-        interactive: false,
-        showWhileLoading: true,
+    //static defaultProps = {
+        this.defaultProps = {
+            interactive: false,
+            showWhileLoading: true,
+        };
     }
 
     doLayout() {
@@ -102,14 +109,23 @@ export default class Thumbnail extends Component {
             height: this.props.height,
         };
 
-        const containerStyle = { ...styles.container, ...showWhileLoadingStyle, ...propWidthHeightStyle, ...this.props.style };
-        const iFrameStyle    = { ...styles.frame,     ...baseStyle,             ...interactiveStyle };
-        const iFrameProps    = { ...sourceProps,      ...interactiveProps};
+        //const containerStyle = { ...styles.container, ...showWhileLoadingStyle, ...propWidthHeightStyle, ...this.props.style };
+        //const iFrameStyle    = { ...styles.frame,     ...baseStyle,             ...interactiveStyle };
+        //const iFrameProps    = { ...sourceProps,      ...interactiveProps};
 
-        return (
+        const containerStyle = [ styles.container, showWhileLoadingStyle, propWidthHeightStyle, this.props.style ];
+        const iFrameStyle    = [ styles.frame,     baseStyle,             interactiveStyle];
+        const iFrameProps    = [ sourceProps,      interactiveProps];
+
+        /*return (
           <div style={ containerStyle }>
-            <iframe ref={this.showWhenReady.bind(this)} style={ iFrameStyle } { ...iFrameProps } />
+            <iframe ref={this.showWhenReady.bind(this)} style={iFrameStyle} {iFrameProps} />
           </div>
+      );*/
+        return (
+            <div style={ containerStyle }>
+              <iframe ref={this.showWhenReady.bind(this)} style={iFrameStyle} />
+            </div>
         );
     }
 
@@ -123,12 +139,23 @@ export default class Thumbnail extends Component {
         }
     }
 
+    //render() {
+    //    return  this.state === null ?
+    //        this.renderDummy() :  // On first render pass
+    //        this.renderThumbnail({ // on second render pass
+    //            ...this.props,
+    //            state: this.state,
+    //        });
+    //}
     render() {
+        let test = this.props;
         return  this.state === null ?
             this.renderDummy() :  // On first render pass
             this.renderThumbnail({ // on second render pass
-                ...this.props,
+                test,
                 state: this.state,
             });
     }
 }
+
+export default Thumbnail;
