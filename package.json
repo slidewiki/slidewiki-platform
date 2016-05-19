@@ -96,6 +96,8 @@
     "sloc": "^0.1.10",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1",
-    "webpack-vendor-chunk-plugin": "^1.0.0"
+    "webpack-stats-plugin": "^0.1.1",
+    "webpack-vendor-chunk-plugin": "^1.0.0",
+    "webpack-visualizer-plugin": "^0.1.5"
   }
 }
