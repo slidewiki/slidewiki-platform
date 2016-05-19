@@ -5,11 +5,16 @@ let webpackConfig = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-    entry: [
-        'webpack-dev-server/client?http://localhost:3000',
-        'webpack/hot/only-dev-server',
-        './client.js'
-    ],
+    entry: {
+        main: [
+            'webpack-dev-server/client?http://localhost:3000',
+            'webpack/hot/only-dev-server',
+            './client.js'
+        ],
+        vendor: [
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
+        ]
+    },
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
@@ -33,6 +38,11 @@ let webpackConfig = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: Infinity,
+            filename: 'vendor.bundle.js'
+        }),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
