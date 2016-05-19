@@ -12,6 +12,8 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/bower_components/alloyeditor/dist/alloy-editor/assets/alloy-editor-ocean-min.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/reveal.css" rel="stylesheet" type="text/css" />
+
             </head>
             <body>
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
