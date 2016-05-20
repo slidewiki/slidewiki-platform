@@ -1,12 +1,19 @@
 let webpack = require('webpack');
 let path = require('path');
+let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
+let Visualizer = require('webpack-visualizer-plugin');
 
 let webpackConfig = {
     resolve: {
         extensions: ['', '.js']
     },
     entry: {
-        'main': './client.js'
+        main: [
+            './client.js'
+        ],
+        vendor: [
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
+        ]
     },
     output: {
         path: path.resolve('./build/js'),
@@ -39,7 +46,21 @@ let webpackConfig = {
             compress: {
                 warnings: false
             }
-        })
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            minChunks: Infinity,
+            filename: '[name].bundle.js'
+        }),
+        // Write out stats file to build directory.
+        new StatsWriterPlugin({
+            filename: 'webpack.stats.json', // Default
+            fields: null,
+            transform: function (data) {
+                return JSON.stringify(data, null, 2);
+            }
+        }),
+        new Visualizer()
     ],
     devtool: 'source-map'
 };

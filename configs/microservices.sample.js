@@ -5,6 +5,9 @@ export default {
         },
         'discussion': {
             uri: 'http://discussionservice.manfredfris.ch'
+        },
+        'activities': {
+            uri: 'http://activitiesservice.manfredfris.ch'
         }
     }
 };
