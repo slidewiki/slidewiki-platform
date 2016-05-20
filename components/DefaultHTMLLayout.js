@@ -11,6 +11,7 @@ class DefaultHTMLLayout extends React.Component {
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+
                 <link href="/bower_components/alloyeditor/dist/alloy-editor/assets/alloy-editor-ocean-min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/reveal.css" rel="stylesheet" type="text/css" />
 
@@ -23,6 +24,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/bower_components/json3/lib/json3.min.js"></script>
                 <script src="/bower_components/es6-shim/es6-shim.min.js"></script>
                 <script src="/bower_components/es6-shim/es6-sham.min.js"></script>
+                <script src="/bower_components/ckeditor/ckeditor.js"></script>
                 {/* Above are added only to support IE browser */}
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
@@ -34,7 +36,6 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/checkbox.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/dimmer.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js"></script>
-                <script src="/bower_components/alloyeditor/dist/alloy-editor/alloy-editor-all-min.js"></script>
                 {/* All external vendors bundle*/}
                 <script src={'/public/js/vendor.bundle.js'}></script>
                 {/* Main app bundle */}

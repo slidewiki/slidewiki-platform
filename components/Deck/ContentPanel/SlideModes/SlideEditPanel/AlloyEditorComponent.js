@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 //import AlloyEditor from 'alloyeditor';
 
+//(Klaas note) TODO: fix bug - alloyeditor is not loaded when quickly focusing on (=clicking in) HTMLcontent of slideEditPanel onload
+//editor is loaded as soon as you click outside the HTMLcontent in slideEditPanel
+
 class AlloyEditorComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -84,21 +87,22 @@ class AlloyEditorComponent extends React.Component {
             extraPlugins: AlloyEditor.Core.ATTRS.extraPlugins.value + ',ae_autolink',
             toolbars: this.toolbars
         };
-        if (this.props.content !== '')
-        {
-            AlloyEditor.editable(this.props.container, this.alloyEditorConfig);
-        }
+        //if (this.props.content !== '')
+        //{
+        AlloyEditor.editable(this.props.container, this.alloyEditorConfig);
+        //}
     }
     componentDidUpdate() {
         /**
         ** Only load Alloy-Editor when the content has been loaded via loadSlideEdit.js
         **AND when there is not yet an instance of CKeditor
         ** ?TODO? = maybe we should, e.g., check for instance of AlloyEditor instead for increased reliability...
+        ** UPDATE - FIX = only load WYSIWYG editor (=slideContentEditor and transitive AlloyEditorComponent) when this.props.content (HTML TO BE EDITED) is known in slideEditPanel.js 
         **/
-        if (this.props.content !== '' && typeof(CKEDITOR.instances[this.props.container]) === 'undefined')
-        {
-            AlloyEditor.editable(this.props.container, this.alloyEditorConfig);
-        }
+        //if (this.props.content !== '' && typeof(CKEDITOR.instances[this.props.container]) === 'undefined')
+        //{
+        //AlloyEditor.editable(this.props.container, this.alloyEditorConfig);
+        //}
     }
     componentWillUnmount() {
         //TODO
