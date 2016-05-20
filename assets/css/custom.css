@@ -2,17 +2,12 @@
     display: none;
 }
 
-
 .inline-div{
 	display: inline-block;
 }
 
 .padding15{
 	padding: 15px;
-}
-
-.padding5{
-	padding: 5px;
 }
 
 .bold{
