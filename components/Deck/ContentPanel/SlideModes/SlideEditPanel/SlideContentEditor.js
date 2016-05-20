@@ -1,8 +1,9 @@
 import React from 'react';
 //import AlloyEditor from 'alloyeditor';
 //import AlloyEditorComponent from '../../SlideModes/SlideEditPanel/AlloyEditor';
-import AlloyEditorComponent from './AlloyEditorComponent';
+//import CKeditorComponent from './CKeditorComponent';
 //import CKEDITOR from 'ckeditor';
+//import ckeditor from 'ckeditor';
 
 class SlideContentEditor extends React.Component {
     componentDidMount() {
@@ -16,6 +17,9 @@ class SlideContentEditor extends React.Component {
         //AlloyEditor.editable('1');
         //AlloyEditor.editable(this.props.selector.sid);
         //CKEDITOR.replace('CKeditor1');
+        //let myInstanceName = this.props.selector.sid;
+        //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
+        CKEDITOR.replace(this.props.selector.sid);
         //CKEDITOR.replace(this.props.container);
         //CKEDITOR.replace(this.props.selector.sid);
         //CKEDITOR.replace(this.refs.CKeditor1), {language: 'fr', uiColor: '#9AB8F3'};
@@ -27,25 +31,49 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.replace('editor1');
     }
     componentDidUpdate() {
+        //if (typeof(CKEDITOR.instances[this.props.selector.sid]) === 'undefined')
+        //{
+            //CKEDITOR.replace(this.props.selector.sid);
+        //}
+        //if (typeof(CKEDITOR.instances[this.props.selector.sid]) !== 'undefined')
+        //{
+            //CKEDITOR.instances[this.props.selector.sid].destroy(true);
+        //}
+        //CKEDITOR.replace(this.props.selector.sid);
+
+        //let myInstanceName = this.props.selector.sid;
+        //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
+        //CKEDITOR.replace(this.props.selector.sid);
+        //alert('test' + this.props.selector.sid);
+    }
+    componentWillUnmount() {
+        //TODO
+        //AlloyEditor.destroy();
+        //AlloyEditor.destroy(true);
+        //let myInstanceName = this.props.selector.sid;
+        //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
+        //CKEDITOR.instances[this.props.selector.sid].destroy(true);
+        //AlloyEditor.instances[this.props.container].destroy(true);
     }
     handleEditorChange(e) {
         console.log(e.target.getContent());
     }
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
-        /*const compStyle = {
+        const compStyle = {
             minWidth: '100%',
             maxHeight: 500,
             minHeight: 500,
             overflowY: 'auto'
-        };*/
+        };
         //<textarea style={compStyle} ref={this.props.selector.sid} value={this.props.content} onChange={this.handleEditorChange} />
         //<AlloyEditorComponent container="1" ref={this.props.selector.sid} id={this.props.selector.sid} alloyEditorConfig={{}} content="test"></AlloyEditorComponent>
         //<AlloyEditorComponent  style={compStyle} container="1" ref={this.props.selector.sid} id={this.props.selector.sid} alloyEditorConfig={{}} content={this.props.content}></AlloyEditorComponent>
         //<textarea name="CKeditor1" ref="CKeditor1" rows="10" cols="80" content={this.props.content}></textarea>
+        //<CKeditorComponent container="myContentEditable" id="myContentEditable" content={this.props.content}></AlloyEditorComponent>
         return (
             <div>
-                <AlloyEditorComponent container="myContentEditable" id="myContentEditable" content={this.props.content}></AlloyEditorComponent>
+                <textarea style={compStyle} name={this.props.selector.sid} ref={this.props.selector.sid} id={this.props.selector.sid} rows="10" cols="80" value={this.props.content}  onChange={this.handleEditorChange}></textarea>
             </div>
         );
     }
