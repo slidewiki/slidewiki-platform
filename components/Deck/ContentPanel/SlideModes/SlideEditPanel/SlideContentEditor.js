@@ -32,6 +32,7 @@ class SlideContentEditor extends React.Component {
         console.log(e.target.getContent());
     }
     render() {
+        //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         /*const compStyle = {
             minWidth: '100%',
             maxHeight: 500,
