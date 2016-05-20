@@ -2,6 +2,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsList from './UserNotificationsList';
+import updateUserNotificationsVisibility from '../../../actions/user/updateUserNotificationsVisibility';
 
 class UserNotificationsPanel extends React.Component {
     componentDidMount() {
@@ -14,19 +15,27 @@ class UserNotificationsPanel extends React.Component {
         let dropdownDIV = this.refs.userNotificationsPanel;
         $(dropdownDIV).find('.ui.dropdown').dropdown({
             onChange: (value) => {
-                // this.context.executeAction(navigateAction, {
-                //     url: '/deck/' + value
-                // });
+
+
+
+
+
+              console.log(value);
+
+
+
+
+
+              
+                this.context.executeAction(updateUserNotificationsVisibility, {
+                    subscriptions: value
+                });
             }
         });
     }
 
     handleSettingsClick() {
 
-    }
-
-    getDefaultSelectValue() {
-        return ['slide:671','deck:66','user:1','user:2'];
     }
 
     render() {
@@ -40,27 +49,20 @@ class UserNotificationsPanel extends React.Component {
                     <a className="item active" href="/notifications/57">User notifications</a>
                     {/*<a className="item active" href={hrefPath}>Activity Feed</a>*/}
 
-                    <div className="right menu">
+                    <div className="menu">
                         <a className="item" onClick={this.handleSettingsClick.bind(this)}>
                             <i className="ui large settings icon" />
                         </a>
-                        <div className="item">
-                            <div className="ui icon input">
-                                <input type="text" placeholder="Search in notifications..." />
-                                <i className="search link icon"></i>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 <h4 className="ui header">Show notifications for:</h4>
 
-                <select name="subscriptions" className="ui dropdown" multiple defaultValue={this.getDefaultSelectValue()}>
-                    <option value="">Subscriptions</option>
-                    <option value={this.getDefaultSelectValue()[0]} >Slide: Introduction</option>
-                    <option value={this.getDefaultSelectValue()[1]} >Deck: RDF Data Model</option>
-                    <option value={this.getDefaultSelectValue()[2]} >User: Vuk M.</option>
-                    <option value={this.getDefaultSelectValue()[3]} >User: Dejan P.</option>
+                <select name="subscriptions" className="ui dropdown red" multiple defaultValue={this.props.UserNotificationsStore.subscriptions}>
+                    <option value={this.props.UserNotificationsStore.subscriptions[0]} >Slide: Introduction</option>
+                    <option value={this.props.UserNotificationsStore.subscriptions[1]} >Deck: RDF Data Model</option>
+                    <option value={this.props.UserNotificationsStore.subscriptions[2]} >User: Vuk M.</option>
+                    <option value={this.props.UserNotificationsStore.subscriptions[3]} >User: Dejan P.</option>
                 </select>
 
                 <div className="ui segment">
