@@ -50,7 +50,7 @@ let webpackConfig = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: Infinity,
-            filename: 'vendor.bundle.js'
+            filename: '[name].bundle.js'
         }),
         // Write out stats file to build directory.
         new StatsWriterPlugin({
