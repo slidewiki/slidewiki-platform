@@ -18,7 +18,7 @@ let webpackConfig = {
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
-        filename: 'main.js'
+        filename: '[name].js'
     },
     module: {
         loaders: [
@@ -41,7 +41,7 @@ let webpackConfig = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: Infinity,
-            filename: 'vendor.bundle.js'
+            filename: '[name].bundle.js'
         }),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({

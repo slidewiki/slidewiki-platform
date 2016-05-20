@@ -18,6 +18,7 @@ export default {
             }
             else{
                 translations = [
+                              {'lang': 'EN', 'id': 343},
             	                {'lang': 'ES', 'id': 56},
             	                {'lang': 'GR', 'id': 71},
             	                {'lang': 'FA', 'id': 81}
