@@ -24,6 +24,7 @@
     "clean": "rm -rf build/ coverage/",
     "start": "node start.js",
     "build": "webpack --config ./webpack/prod.config.js && NODE_ENV=production npm start",
+    "build:nostart": "webpack --config ./webpack/prod.config.js",
     "dev": "node ./webpack/dev-server.js",
     "lint": "eslint ./**/*.js",
     "test": "mocha test/unit/ --recursive --compilers js:babel-register --reporter spec",
@@ -32,7 +33,8 @@
     "countLOC": "sloc -f cli-table -k total,source,comment,empty -e node_modules\\|coverage\\|.git ./",
     "countLOC:details": "sloc -f cli-table -d -e node_modules\\|coverage\\|.git ./",
     "start:watch": "nodemon",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "pull": "git pull --recurse-submodules"
   },
   "pre-commit": [
     "lint",
