@@ -224,7 +224,7 @@ export default {
     // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4',
     // mode: 'interaction mode e.g. view or edit'}
     presentation: {
-      path: '/presentation/:id/:stype?/:sid?/:spath?/:mode?',
+      path: '/presentation/:id/:stype?/:sid?/:spath?',
       method: 'get',
       page: 'presentation',
       handler: require('../components/Deck/Presentation/Presentation'),
