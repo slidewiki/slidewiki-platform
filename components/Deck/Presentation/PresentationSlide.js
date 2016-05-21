@@ -1,16 +1,26 @@
 import React from 'react';
-import {connectToStores} from 'fluxible-addons-react';
-import DeckTreeStore from '../../../stores/DeckTreeStore';
-class PresentationSlide extends React.Component {
+import ReactDOM from 'react-dom'
+import {NavLink} from 'fluxible-router';
+import { connectToStores, provideContext } from 'fluxible-addons-react';
+import SlideViewStore from '../../../stores/SlideViewStore';
 
+class PresentationSlide extends React.Component {
+	render(){
+		console.log("PresentationSlide");
+		
+		return (
+			<section dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+		);
+	}
 
 }
 
-PresentationSlide = connectToStores(PresentationSlide, [DeckTreeStore], (context, props) => {
+PresentationSlide = connectToStores(PresentationSlide, [SlideViewStore], (context, props) => {
+	console.log("[SWIK-134] In PresentationSlide connectToStores function");
+	console.log("[SWIK-134] context: ", context);
     return {
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    	SlideViewStore: context.getStore(SlideViewStore).getState()
     };
 });
-
 
 export default PresentationSlide;
