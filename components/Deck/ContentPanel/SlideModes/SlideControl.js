@@ -126,7 +126,7 @@ SlideControl.contextTypes = {
 };
 SlideControl = connectToStores(SlideControl, [DeckTreeStore], (context, props) => {
     return {
-        //DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 
