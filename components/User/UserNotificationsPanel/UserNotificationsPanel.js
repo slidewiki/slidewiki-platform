@@ -3,44 +3,78 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/updateUserNotificationsVisibility';
+import classNames from 'classnames/bind';
 
 class UserNotificationsPanel extends React.Component {
-    componentDidMount() {
-        this.enableDropdown();
-    }
-    componentDidUpdate(){
-        this.enableDropdown();
-    }
-    enableDropdown(status) {
-        let dropdownDIV = this.refs.userNotificationsPanel;
-        $(dropdownDIV).find('.ui.dropdown').dropdown({
-            onChange: (value) => {
-
-
-
-
-
-              console.log(value);
-
-
-
-
-
-              
-                this.context.executeAction(updateUserNotificationsVisibility, {
-                    subscriptions: value
-                });
-            }
-        });
-    }
-
     handleSettingsClick() {
 
     }
 
+    handleChangeToggle(type, id) {
+        this.context.executeAction(updateUserNotificationsVisibility, {
+            changedType: type,
+            changedId: id
+        });
+    }
+
+    handleMarkAsRead() {
+      //TODO
+        // this.context.executeAction(markAsReadUserNotifications, {
+        //
+        // });
+    }
+
+    newNotificationExists() {
+        const notifications = this.props.UserNotificationsStore.notifications;
+        const newNotification = notifications.find((notification) => {return (notification.new !== undefined && notification.new === true);});
+        return (newNotification !== undefined) ;
+    }
+
     render() {
+        //Create subscription lists
+        const subscriptions = this.props.UserNotificationsStore.subscriptions;
+        const userSubscriptionList = subscriptions.map((s, index) => {
+            if (s.type === 'user')
+                return (
+                    <div className="ui item toggle checkbox" key={index} >
+                        <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
+                        <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
+                    </div>
+                );
+        });
+        const slideSubscriptionList = subscriptions.map((s, index) => {
+            if (s.type === 'slide')
+                return (
+                    <div className="ui item toggle checkbox" key={index} >
+                        <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
+                        <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
+                    </div>
+                );
+        });
+        const deckSubscriptionList = subscriptions.map((s, index) => {
+            if (s.type === 'deck')
+                return (
+                    <div className="ui item toggle checkbox" key={index} >
+                        <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
+                        <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
+                    </div>
+                );
+        });
+
         const notifications = this.props.UserNotificationsStore.notifications;
         const selector = this.props.UserNotificationsStore.selector;
+        let iconMarkAsRead = (//disabled icon
+            <a className="item">
+                <i className="ui large grey checkmark box icon"></i>
+            </a>
+        );
+        if(this.newNotificationExists()) {//if there are new notifications -> enable it
+            iconMarkAsRead = (
+              <a className="item" onClick={this.handleMarkAsRead.bind(this)} >
+                  <i className="ui large checkmark box icon"></i>
+              </a>
+            )
+        };
 
         // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
         return (
@@ -53,22 +87,48 @@ class UserNotificationsPanel extends React.Component {
                         <a className="item" onClick={this.handleSettingsClick.bind(this)}>
                             <i className="ui large settings icon" />
                         </a>
+                        <div className="mark-read-icon">
+                            {iconMarkAsRead}
+                        </div>
                     </div>
                 </div>
 
-                <h4 className="ui header">Show notifications for:</h4>
-
-                <select name="subscriptions" className="ui dropdown red" multiple defaultValue={this.props.UserNotificationsStore.subscriptions}>
-                    <option value={this.props.UserNotificationsStore.subscriptions[0]} >Slide: Introduction</option>
-                    <option value={this.props.UserNotificationsStore.subscriptions[1]} >Deck: RDF Data Model</option>
-                    <option value={this.props.UserNotificationsStore.subscriptions[2]} >User: Vuk M.</option>
-                    <option value={this.props.UserNotificationsStore.subscriptions[3]} >User: Dejan P.</option>
-                </select>
-
-                <div className="ui segment">
-                    <UserNotificationsList items={notifications} selector={selector} />
+                <div className="ui grid">
+                    <div className="five wide column">
+                        <div className="ui basic segment">
+                            <h4 className="ui header">Show notifications for:</h4>
+                            <label>Users:</label>
+                            <div className="subscriptions">
+                                <div ref="subscriptionslist">
+                                    <div className="ui relaxed list">
+                                        {userSubscriptionList}
+                                    </div>
+                                 </div>
+                            </div>
+                            <label>Slides:</label>
+                            <div className="subscriptions">
+                                <div ref="subscriptionslist">
+                                    <div className="ui relaxed list">
+                                        {slideSubscriptionList}
+                                    </div>
+                                 </div>
+                            </div>
+                            <label>Decks:</label>
+                            <div className="subscriptions">
+                                <div ref="subscriptionslist">
+                                    <div className="ui relaxed list">
+                                        {deckSubscriptionList}
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="ten wide column">
+                        <div className="ui basic segment">
+                            <UserNotificationsList items={notifications} selector={selector} />
+                        </div>
+                    </div>
                 </div>
-
             </div>
         );
     }
