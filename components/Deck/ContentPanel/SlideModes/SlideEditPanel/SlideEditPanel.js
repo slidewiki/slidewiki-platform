@@ -6,9 +6,14 @@ import SlideContentEditor from './SlideContentEditor';
 
 class SlideEditPanel extends React.Component {
     render() {
+        let content = '';
+        // Only load WYSIWYG-Editor when the content has been loaded via loadSlideEdit.js
+        if (this.props.SlideEditStore.content !== ''){
+            content = <SlideContentEditor content={this.props.SlideEditStore.content} selector={this.props.selector} />;
+        }
         return (
             <div ref="slideEditPanel" className="ui bottom attached segment">
-                <SlideContentEditor content={this.props.SlideEditStore.content} selector={this.props.selector} />
+                {content}
             </div>
         );
     }
