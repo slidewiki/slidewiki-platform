@@ -6,6 +6,11 @@ import React from 'react';
 //import ckeditor from 'ckeditor';
 
 class SlideContentEditor extends React.Component {
+    constructor(props) {
+        super(props);
+        this.currentcontent;
+        //this.currentCKeditorid;
+    }
     componentDidMount() {
         //AlloyEditorComponent.editable(this.refs.deckEditPanel.id);
         //AlloyEditorComponent.editable(this.refs.deckEditPanel);
@@ -19,7 +24,10 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.replace('CKeditor1');
         //let myInstanceName = this.props.selector.sid;
         //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
-        CKEDITOR.replace(this.props.selector.sid);
+        CKEDITOR.replace('nonInline');
+        CKEDITOR.inline('inlineHeader');
+        CKEDITOR.inline('inline');
+        this.currentcontent = this.props.content;
         //CKEDITOR.replace(this.props.container);
         //CKEDITOR.replace(this.props.selector.sid);
         //CKEDITOR.replace(this.refs.CKeditor1), {language: 'fr', uiColor: '#9AB8F3'};
@@ -28,19 +36,33 @@ class SlideContentEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         // check editor exists before use
         //todo: update editor content
-        //CKEDITOR.replace('editor1');
+        //CKEDITOR.replace(this.props.selector.sid);
+        //if (CKEDITOR.instances[this.props.selector.sid])
+        //CKEDITOR.instances[this.props.selector.sid].destroy();
+        //CKEDITOR.replace(this.props.selector.sid);
+        //alert('test' + this.props.selector.sid);
+        //alert(this.props.selector.sid + typeof(CKEDITOR.instances[this.props.selector.sid]));
+        //alert(typeof(CKEDITOR.instances[this.props.selector.sid]));
     }
     componentDidUpdate() {
-        //if (typeof(CKEDITOR.instances[this.props.selector.sid]) === 'undefined')
+        //if (typeof(CKEDITOR.instances[this.props.selector.sid]) !== 'undefined' && this.currentCKeditorid !== this.props.selector.sid)
         //{
-            //CKEDITOR.replace(this.props.selector.sid);
+        //    CKEDITOR.instances[this.props.selector.sid].destroy();
+        //    CKEDITOR.replace(this.props.selector.sid);
+        //    this.currentCKeditorid = this.props.selector.sid;
+        //    alert('CKEDITOR destroyed, and ID of editor instance (currentCKeditorid) updated');
         //}
-        //if (typeof(CKEDITOR.instances[this.props.selector.sid]) !== 'undefined')
-        //{
-            //CKEDITOR.instances[this.props.selector.sid].destroy(true);
-        //}
-        //CKEDITOR.replace(this.props.selector.sid);
-
+        if (typeof(CKEDITOR.instances.nonInline) !== 'undefined' && this.currentcontent !== this.props.content)
+        {   /*If an instance of CKeditor exists,
+            **and
+            **the content of the slide has changed because of navigating to different slide (not because of WYSIWYG edit = is handleEditorChange() instead )
+            ** TODO - probably a more fluent solution would be to use a CKeditor function for updating.
+            */
+            CKEDITOR.instances.nonInline.destroy();
+            CKEDITOR.replace('nonInline');
+            this.currentcontent = this.props.content;
+            //alert('CKEDITOR destroyed, and content updated');
+        }
         //let myInstanceName = this.props.selector.sid;
         //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
         //CKEDITOR.replace(this.props.selector.sid);
@@ -51,7 +73,12 @@ class SlideContentEditor extends React.Component {
         //AlloyEditor.destroy();
         //AlloyEditor.destroy(true);
         //let myInstanceName = this.props.selector.sid;
-        //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
+        //if (CKEDITOR.instances[this.props.selector.sid])
+        //if (typeof(CKEDITOR.instances[this.props.selector.sid]) !== 'undefined')
+        //{
+        //    alert('test'); CKEDITOR.instances[this.props.selector.sid].destroy();
+        //}
+        //alert('test' + this.props.selector.sid + typeof(CKEDITOR.instances[this.props.selector.sid]));
         //CKEDITOR.instances[this.props.selector.sid].destroy(true);
         //AlloyEditor.instances[this.props.container].destroy(true);
     }
@@ -71,9 +98,25 @@ class SlideContentEditor extends React.Component {
         //<AlloyEditorComponent  style={compStyle} container="1" ref={this.props.selector.sid} id={this.props.selector.sid} alloyEditorConfig={{}} content={this.props.content}></AlloyEditorComponent>
         //<textarea name="CKeditor1" ref="CKeditor1" rows="10" cols="80" content={this.props.content}></textarea>
         //<CKeditorComponent container="myContentEditable" id="myContentEditable" content={this.props.content}></AlloyEditorComponent>
+        /*
+        <textarea contenteditable='true' name='Inline' ref='Inline' id='Inline' onChange={this.handleEditorChange} value="
+                            <h1>Inline example test</h1>
+                            <p> some text to be edited</p>
+                            <br />
+        ">
+        </textarea>
+        */
         return (
             <div>
-                <textarea style={compStyle} name={this.props.selector.sid} ref={this.props.selector.sid} id={this.props.selector.sid} rows="10" cols="80" value={this.props.content}  onChange={this.handleEditorChange}></textarea>
+                <textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
+                <br />
+                <br />
+                <br />
+                    <div contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>Inline example test - SLIDE TITLE</h1>' + this.props.selector.sid}}></div>
+                    <div contentEditable='true' name='inline' ref='inline' id='inline' dangerouslySetInnerHTML={{__html:'<b>some CONTENT to be edited</b>' + this.props.content}}></div>
+                <br />
+                ...
+                <br />
             </div>
         );
     }
