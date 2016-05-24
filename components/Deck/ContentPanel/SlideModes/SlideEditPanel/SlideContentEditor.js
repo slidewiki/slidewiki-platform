@@ -24,9 +24,15 @@ class SlideContentEditor extends React.Component {
         //CKEDITOR.replace('CKeditor1');
         //let myInstanceName = this.props.selector.sid;
         //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
-        CKEDITOR.replace('nonInline');
-        CKEDITOR.inline('inlineHeader');
-        CKEDITOR.inline('inline');
+        //CKEDITOR.replace('nonInline');
+        if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline');}
+        if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader');}
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent');}
+        if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes');}
+        //CKEDITOR.replace('nonInline');
+        //CKEDITOR.inline('inlineHeader');
+        //CKEDITOR.inline('inlineContent');
+        //CKEDITOR.inline('inlineSpeakerNotes');
         this.currentcontent = this.props.content;
         //CKEDITOR.replace(this.props.container);
         //CKEDITOR.replace(this.props.selector.sid);
@@ -60,6 +66,9 @@ class SlideContentEditor extends React.Component {
             */
             CKEDITOR.instances.nonInline.destroy();
             CKEDITOR.replace('nonInline');
+            //if (typeof(CKEDITOR.instances.inlineHeader) !== 'undefined'){CKEDITOR.instances.inlineHeader.destroy();CKEDITOR.inline('inlineHeader');}
+            //if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined'){CKEDITOR.instances.inlineContent.destroy();CKEDITOR.inline('inlineContent');}
+            //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) !== 'undefined'){CKEDITOR.instances.inlineSpeakerNotes.destroy();CKEDITOR.inline('inlineSpeakerNotes');}
             this.currentcontent = this.props.content;
             //alert('CKEDITOR destroyed, and content updated');
         }
@@ -105,6 +114,7 @@ class SlideContentEditor extends React.Component {
                             <br />
         ">
         </textarea>
+        //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         */
         return (
             <div>
@@ -113,9 +123,9 @@ class SlideContentEditor extends React.Component {
                 <br />
                 <br />
                     <div contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>Inline example test - SLIDE TITLE</h1>' + this.props.selector.sid}}></div>
-                    <div contentEditable='true' name='inline' ref='inline' id='inline' dangerouslySetInnerHTML={{__html:'<b>some CONTENT to be edited</b>' + this.props.content}}></div>
+                    <div contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:'<b>some CONTENT to be edited</b>' + this.props.content}}></div>
+                    <div contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:'<b>Speaker Notes</b>'}}></div>
                 <br />
-                ...
                 <br />
             </div>
         );
