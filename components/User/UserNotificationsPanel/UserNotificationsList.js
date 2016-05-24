@@ -8,17 +8,17 @@ class UserNotificationsList extends React.Component {
         const list = this.props.items.map((notification, index) => {
             if (notification.visible) {
                 return (
-                    <UserNotificationsItem notification={notification} key={index} selector={selector} />
+                    <UserNotificationsItem notification={notification} key={index} selector={selector} iconSize='big' />
                 );
             }
         });
 
         return (
-            <div ref="usernotificationsList">
+            <div ref="userNotificationsList">
                 <div className="ui relaxed divided list">
                     {list}
                 </div>
-             </div>
+            </div>
         );
     }
 }

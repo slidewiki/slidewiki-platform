@@ -9,7 +9,7 @@ export default {
         if (resource === 'datasource.item'){
             let dataSource = {};
 
-            dataSource = mockupDataSources.find((ds) => {ds.dsid === args.dsid;});
+            dataSource = mockupDataSources.find((ds) => {return ds.dsid === args.dsid;});
 
             //mockupdatasources.forEach((item) => {
             //    if (item.id === parseInt(args.dsid)) {

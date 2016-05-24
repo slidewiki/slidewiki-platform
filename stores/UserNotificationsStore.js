@@ -4,13 +4,13 @@ class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.notifications = [];
-        // this.visibleNotifications = [];
+        this.newNotificationsCount = 0;
         this.subscriptions = [];
         this.selector = {};
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        // this.visibleNotifications = getVisibleNotifications(this.notifications);
+        this.newNotificationsCount = this.getNewNotificationsCount();
         this.subscriptions = payload.subscriptions;
         this.addVisibleParameterToNotifications();
         this.selector = payload.selector;
@@ -19,59 +19,74 @@ class UserNotificationsStore extends BaseStore {
     clearNotificationNewParameter(payload) {
         let notification = this.notifications.find((notification) => {return (notification.id === payload.id);});
         if (notification !== undefined) {
-            notification.new = false;
+            if (notification.new) {
+                notification.new = false;
+                this.newNotificationsCount--;
+            }
             this.emitChange();
         }
     }
-    updateNotificationsVisibility(payload) {
-        this.subscriptions.map((subscription) => {
-            if (subscription.type === payload.changedType && subscription.id === payload.changedId) {
-                subscription.selected = !subscription.selected;
-                for (let i = 0; i < this.notifications.length; i++) {
-                    this.notifications[i].visible = this.isVisible(this.notifications[i], subscription);
-                }
+    clearAllNotificationsNewParameter(payload) {
+        this.notifications.forEach((notification) => {notification.new =false;});
+        this.newNotificationsCount = 0;
+        this.emitChange();
+    }
+    getNewNotificationsCount() {
+        let count = 0;
+        this.notifications.forEach((notification) => {
+            if (notification.new !== undefined && notification.new === true) {
+                count++;
             }
         });
+        return count;
+    }
+    updateNotificationsVisibility(payload) {
+        let clickedSubscription = this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
+        if (clickedSubscription !== undefined) {
+            clickedSubscription.selected = !clickedSubscription.selected;
+            this.notifications.forEach((notification) => {
+                // notification.visible = this.isVisibleWhenChangedSubscription(notification, clickedSubscription);
+                notification.visible = this.isVisible(notification);
+            });
+        }
 
         this.emitChange();
     }
-    isVisible(notification, changedSubscription) {
-        switch (changedSubscription.type) {
-            case 'user':
-                if (changedSubscription.id === notification.user_id) {
-                    return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed(notification.content_kind, notification.content_id);
-                }
-                break;
-            case 'slide':
-                if (changedSubscription.id === notification.content_id) {
-                    return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed('user', notification.user_id);
-                }
-                break;
-            case 'deck':
-                if (changedSubscription.id === notification.content_id) {
-                    return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed('user', notification.user_id);
-                }
-                break;
-            default:
-                return true;
-                break;
-        }
-    }
+    // isVisibleWhenChangedSubscription(notification, changedSubscription) {
+    //     switch (changedSubscription.type) {
+    //         case 'user':
+    //             if (changedSubscription.id === notification.user_id) {
+    //                 return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed(notification.content_kind, notification.content_id);
+    //             }
+    //             break;
+    //         case 'slide':
+    //             if (changedSubscription.id === notification.content_id) {
+    //                 return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed('user', notification.user_id);
+    //             }
+    //             break;
+    //         case 'deck':
+    //             if (changedSubscription.id === notification.content_id) {
+    //                 return (changedSubscription.selected) ? changedSubscription.selected : this.isSubscribed('user', notification.user_id);
+    //             }
+    //             break;
+    //         default:
+    //             return true;
+    //     }
+    // }
     isVisible(notification) {
         return this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id);
     }
     isSubscribed(type, id) {
         let subscription = this.subscriptions.find((s) => {return ((s.type === type) && (s.id === id));});
         if (subscription === undefined) {//not found - not subscribed
-
             return false;
         }
         return subscription.selected;
     }
     addVisibleParameterToNotifications() {
-        for (let i = 0; i < this.notifications.length; i++) {
-            this.notifications[i].visible = this.isVisible(this.notifications[i]);
-        }
+        this.notifications.forEach((notification) => {
+            notification.visible = this.isVisible(notification);
+        });
     }
 
     //Remove duplicate notifications // TODO use in service
@@ -104,7 +119,7 @@ class UserNotificationsStore extends BaseStore {
     getState() {
         return {
             notifications: this.notifications,
-            visibleNotifications: this.visibleNotifications,
+            newNotificationsCount: this.newNotificationsCount,
             subscriptions: this.subscriptions,
             selector: this.selector
         };
@@ -114,7 +129,7 @@ class UserNotificationsStore extends BaseStore {
     }
     rehydrate(state) {
         this.notifications = state.notifications;
-        this.visibleNotifications = state.visibleNotifications;
+        this.newNotificationsCount = state.newNotificationsCount;
         this.subscriptions = state.subscriptions;
         this.selector = state.selector;
     }
@@ -124,7 +139,8 @@ UserNotificationsStore.storeName = 'UserNotificationsStore';
 UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
-    'CLEAR_NOTIFICATION_NEW_PARAMETER': 'clearNotificationNewParameter'
+    'CLEAR_NOTIFICATION_NEW_PARAMETER': 'clearNotificationNewParameter',
+    'CLEAR_ALL_NOTIFICATIONS_NEW_PARAMETER': 'clearAllNotificationsNewParameter'
 };
 
 export default UserNotificationsStore;

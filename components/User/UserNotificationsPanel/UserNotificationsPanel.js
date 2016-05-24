@@ -3,7 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/updateUserNotificationsVisibility';
-import classNames from 'classnames/bind';
+import markAsReadUserNotifications from '../../../actions/user/markAsReadUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
     handleSettingsClick() {
@@ -18,16 +18,9 @@ class UserNotificationsPanel extends React.Component {
     }
 
     handleMarkAsRead() {
-      //TODO
-        // this.context.executeAction(markAsReadUserNotifications, {
-        //
-        // });
-    }
+        this.context.executeAction(markAsReadUserNotifications, {
 
-    newNotificationExists() {
-        const notifications = this.props.UserNotificationsStore.notifications;
-        const newNotification = notifications.find((notification) => {return (notification.new !== undefined && notification.new === true);});
-        return (newNotification !== undefined) ;
+        });
     }
 
     render() {
@@ -63,24 +56,24 @@ class UserNotificationsPanel extends React.Component {
 
         const notifications = this.props.UserNotificationsStore.notifications;
         const selector = this.props.UserNotificationsStore.selector;
+
         let iconMarkAsRead = (//disabled icon
             <a className="item">
-                <i className="ui large grey checkmark box icon"></i>
+                <i className="ui large disabled checkmark box icon"></i>
             </a>
         );
-        if(this.newNotificationExists()) {//if there are new notifications -> enable it
+        if(this.props.UserNotificationsStore.newNotificationsCount > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
               <a className="item" onClick={this.handleMarkAsRead.bind(this)} >
                   <i className="ui large checkmark box icon"></i>
               </a>
-            )
+            );
         };
-
         // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/notifications/57">User notifications</a>
+                    <a className="item active" href="/notifications/57">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotificationsCount}</span></a>
                     {/*<a className="item active" href={hrefPath}>Activity Feed</a>*/}
 
                     <div className="menu">

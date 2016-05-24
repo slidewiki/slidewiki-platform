@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from './SearchBox';
+import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 
 class Header extends React.Component {
     render() {
@@ -16,6 +17,7 @@ class Header extends React.Component {
                     <div className="item right">
                         <SearchBox />
                     </div>
+                    <UserNotificationsBadge />
                 </div>
             </div>
         );

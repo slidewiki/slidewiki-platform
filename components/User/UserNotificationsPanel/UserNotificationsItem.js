@@ -5,10 +5,11 @@ import readUserNotification from '../../../actions/user/readUserNotification';
 
 class UserNotificationsItem extends React.Component {
     handleClick(notification) {
-      if (notification.new !== undefined && notification.new === true)
-          this.context.executeAction(readUserNotification, {
-              id: notification.id
-          });
+        if (notification.new !== undefined && notification.new === true) {
+            this.context.executeAction(readUserNotification, {
+                id: notification.id
+            });
+        }
     }
     render() {
         const notification = this.props.notification;
@@ -24,12 +25,16 @@ class UserNotificationsItem extends React.Component {
             fontStyle: 'italic',
             fontWeight: 400
         };
-
+        let allIconClass = classNames({
+            'ui icon': true,
+            'big': this.props.iconSize === 'big'
+        });
         switch (notification.activity_type) {
             case 'translate':
-                iconNotification = (<i className="ui big translate icon"></i>);
+                const translateIconClass = allIconClass.concat(' translate');
+                iconNotification = (<i className={translateIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'translated ' + notification.content_kind + ' '}
@@ -41,9 +46,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'share':
-                iconNotification = (<i className="ui big slideshare icon"></i>);
+                const shareIconClass = allIconClass.concat(' slideshare');
+                iconNotification = (<i className={shareIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'shared ' + notification.content_kind + ' '}
@@ -55,9 +61,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'add':
-                iconNotification = (<i className="ui big write icon"></i>);
+                const addIconClass = allIconClass.concat(' write');
+                iconNotification = (<i className={addIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary" >
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'created ' + notification.content_kind + ' '}
@@ -68,9 +75,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'edit':
-                iconNotification = (<i className="ui big edit icon"></i>);
+                const editIconClass = allIconClass.concat(' edit');
+                iconNotification = (<i className={editIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'edited ' + notification.content_kind + ' '}
@@ -81,9 +89,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'comment':
-                iconNotification = (<i className="ui big comment outline icon"></i>);
+                const commentIconClass = allIconClass.concat(' comment outline');
+                iconNotification = (<i className={commentIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'commented on ' + notification.content_kind + ' '}
@@ -96,9 +105,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'reply':
-                iconNotification = (<i className="ui big comments outline icon"></i>);
+                const replyIconClass = allIconClass.concat(' comments outline');
+                iconNotification = (<i className={replyIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a>
@@ -112,9 +122,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'use':
-                iconNotification = (<i className="ui big copy icon"></i>);
+                const useIconClass = allIconClass.concat(' copy');
+                iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'used ' + notification.content_kind + ' '}
@@ -126,9 +137,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'rate'://TODO modify rate display
-                iconNotification = (<i className="ui big empty star icon"></i>);
+                const rateIconClass = allIconClass.concat(' empty star');
+                iconNotification = (<i className={rateIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'rated ' + notification.content_kind + ' '}
@@ -139,9 +151,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'react'://TODO modify react display
-                iconNotification = (<i className="ui big thumbs outline up icon"></i>);
+                const reactIconClass = allIconClass.concat(' thumbs outline up');
+                iconNotification = (<i className={reactIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'liked ' + notification.content_kind + ' '}
@@ -152,9 +165,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'download':
-                iconNotification = (<i className="ui big download icon"></i>);
+                const downloadIconClass = allIconClass.concat(' download');
+                iconNotification = (<i className={downloadIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'downloaded ' + notification.content_kind + ' '}
@@ -165,9 +179,10 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             default:
-                iconNotification = (<i className="ui big warning icon"></i>);
+                const warningIconClass = allIconClass.concat(' warning');
+                iconNotification = (<i className={warningIconClass}></i>);
                 summaryNotification = (
-                    <div className="summary" onClick={this.handleClick.bind(this, notification)}>
+                    <div className="summary">
                         Unknown type of activity - {notification.activity_type}
                     </div>
                 );
@@ -175,11 +190,11 @@ class UserNotificationsItem extends React.Component {
 
         let itemClass = classNames({
             'event': true,
-            'ui  segment': (notification.new !== undefined && notification.new === true)
+            'ui raised segment': (notification.new !== undefined && notification.new === true)
         });
         return (
             <div className="ui feed">
-                <div className={itemClass}>
+                <div className={itemClass} onClick={this.handleClick.bind(this, notification)}>
                     <div className="activity-icon">
                         {iconNotification}
                     </div>
