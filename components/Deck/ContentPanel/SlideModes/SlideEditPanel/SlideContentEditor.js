@@ -25,10 +25,49 @@ class SlideContentEditor extends React.Component {
         //let myInstanceName = this.props.selector.sid;
         //if (CKEDITOR.instances[this.props.selector.sid]) CKEDITOR.instances[this.props.selector.sid].destroy();
         //CKEDITOR.replace('nonInline');
-        if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline');}
-        if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader');}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent');}
-        if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes');}
+
+        //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
+
+        //if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline');}
+        if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
+            toolbarGroups: [
+		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+		{ name: 'forms', groups: [ 'forms' ] },
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+		{ name: 'links', groups: [ 'links' ] },
+		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+		{ name: 'insert', groups: [ 'insert' ] },
+		{ name: 'colors', groups: [ 'colors' ] },
+		{ name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
+		{ name: 'styles', groups: [ 'styles' ] },
+		{ name: 'tools', groups: [ 'tools' ] },
+		{ name: 'others', groups: [ 'others' ] },
+		{ name: 'about', groups: [ 'about' ] }
+            ],
+            removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
+        });}
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
+        //TODO - remove more buttons speakernotes
+        if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
+            toolbarGroups: [
+		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+		{ name: 'forms', groups: [ 'forms' ] },
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+		{ name: 'links', groups: [ 'links' ] },
+		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+		{ name: 'insert', groups: [ 'insert' ] },
+		{ name: 'colors', groups: [ 'colors' ] },
+		{ name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
+		{ name: 'styles', groups: [ 'styles' ] },
+		{ name: 'tools', groups: [ 'tools' ] },
+		{ name: 'others', groups: [ 'others' ] },
+		{ name: 'about', groups: [ 'about' ] }
+            ],
+            removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
+        });}
+        if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
         //CKEDITOR.replace('nonInline');
         //CKEDITOR.inline('inlineHeader');
         //CKEDITOR.inline('inlineContent');
@@ -65,7 +104,7 @@ class SlideContentEditor extends React.Component {
             ** TODO - probably a more fluent solution would be to use a CKeditor function for updating.
             */
             CKEDITOR.instances.nonInline.destroy();
-            CKEDITOR.replace('nonInline');
+            CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});
             //if (typeof(CKEDITOR.instances.inlineHeader) !== 'undefined'){CKEDITOR.instances.inlineHeader.destroy();CKEDITOR.inline('inlineHeader');}
             //if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined'){CKEDITOR.instances.inlineContent.destroy();CKEDITOR.inline('inlineContent');}
             //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) !== 'undefined'){CKEDITOR.instances.inlineSpeakerNotes.destroy();CKEDITOR.inline('inlineSpeakerNotes');}
@@ -79,6 +118,10 @@ class SlideContentEditor extends React.Component {
     }
     componentWillUnmount() {
         //TODO
+        CKEDITOR.instances.nonInline.destroy();
+        CKEDITOR.instances.inlineHeader.destroy();
+        CKEDITOR.instances.inlineContent.destroy();
+        CKEDITOR.instances.inlineSpeakerNotes.destroy();
         //AlloyEditor.destroy();
         //AlloyEditor.destroy(true);
         //let myInstanceName = this.props.selector.sid;
@@ -118,15 +161,15 @@ class SlideContentEditor extends React.Component {
         */
         return (
             <div>
-                <textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
                 <br />
-                <br />
-                <br />
-                    <div contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>Inline example test - SLIDE TITLE</h1>' + this.props.selector.sid}}></div>
-                    <div contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:'<b>some CONTENT to be edited</b>' + this.props.content}}></div>
+                    <div contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<br /><br /><br /><h1>Inline example test - SLIDE ' + this.props.selector.sid + ' TITLE</h1><br /><br />'}}></div>
+                    <br />
+                    <div contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:'<b>CONTENT to be edited</b>' + this.props.content}}></div>
+                    <br />
+                    <br />
                     <div contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:'<b>Speaker Notes</b>'}}></div>
                 <br />
-                <br />
+                <textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
             </div>
         );
     }
