@@ -5,22 +5,22 @@ git:
   depth: 5
 branches:
   only:
-  - SWIK-*
+  - /\ASWIK-/
   - master
 cache:
   directories:
   - ./node_modules
   - ./bower_components
 before_install:
-- if ["$TRAVIS_BRANCH" == "master"] ; then sudo ./travis_scripts/install_compose.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] ; then sudo ./travis_scripts/install_compose.sh ; fi
 after_install:
 - bower install
 script:
 - npm run lint
 - npm run test
 after_success: # custom deployment
-- if ["$TRAVIS_BRANCH" == "master"] ; then ./travis_scripts/dockerhub.sh ; fi
-- if ["$TRAVIS_BRANCH" == "master"] ; then ./travis_scripts/deploy.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] ; then ./travis_scripts/dockerhub.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] ; then ./travis_scripts/deploy.sh ; fi
 after_script:
 - rm -f ~/.docker/{cert.pem,key.pem,ca.pem,config.json}
 services:
