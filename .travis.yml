@@ -5,14 +5,14 @@ git:
   depth: 5
 branches:
   only:
-  - /\ASWIK-/
+  - /^(?i:SWIK)-.*$/
   - master
 cache:
   directories:
   - ./node_modules
   - ./bower_components
 before_install:
-- if [ "$TRAVIS_BRANCH" == "master" ] ; then sudo ./travis_scripts/install_compose.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] ; then ./travis_scripts/install_compose.sh ; fi
 after_install:
 - bower install
 script:
