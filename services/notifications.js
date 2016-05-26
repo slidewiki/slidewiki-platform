@@ -3,12 +3,13 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
+        const uid = args.uid;//TODO use uid when calling the service
+        // let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
 
-        if (resource === 'notifications.count'){
-            let notifications = mockupNotifications;
-            callback(null, {'count' : notifications.length, 'selector': selector, 'mode': args.mode});
-        }
+        // if (resource === 'notifications.count'){
+        //     let notifications = mockupNotifications;
+        //     callback(null, {'count' : notifications.length});
+        // }
 
         if (resource === 'notifications.list'){
             /*********connect to microservices*************/
@@ -17,7 +18,7 @@ export default {
 
             let notifications = mockupNotifications;
             let subscriptions = mockupSubscriptions;
-            callback(null, {notifications: notifications, subscriptions: subscriptions, selector: selector});
+            callback(null, {notifications: notifications, subscriptions: subscriptions});
         }
     },
 

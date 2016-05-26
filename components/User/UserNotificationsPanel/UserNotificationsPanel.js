@@ -73,12 +73,12 @@ class UserNotificationsPanel extends React.Component {
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/notifications/57">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotificationsCount}</span></a>
+                    <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotificationsCount}</span></a>
                     {/*<a className="item active" href={hrefPath}>Activity Feed</a>*/}
 
                     <div className="menu">
                         <a className="item" onClick={this.handleSettingsClick.bind(this)}>
-                            <i className="ui large settings icon" />
+                            <i className="ui large settings icon"></i>
                         </a>
                         <div className="mark-read-icon">
                             {iconMarkAsRead}

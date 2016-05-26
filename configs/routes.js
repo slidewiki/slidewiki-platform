@@ -62,6 +62,20 @@ export default {
             done();
         }
     },
+    notifications: {
+        path: '/notifications',
+        method: 'get',
+        page: 'notifications',
+        title: 'SlideWiki -- User notifications',
+        handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | User notifications'
+            });
+            done();
+        }
+    },
+
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
@@ -155,15 +169,6 @@ export default {
             context.executeAction(loadActivities, payload, done);
         }
     },
-    notifications: {
-        path: '/notifications/:uid',
-        method: 'get',
-        page: 'notifications',
-        handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
-        action: (context, payload, done) => {
-            context.executeAction(loadUserNotifications, payload, done);
-        }
-    },
     translations: {
         path: '/translations/:stype/:sid',
         method: 'get',
@@ -226,5 +231,5 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadTabLinks, payload, done);
         }
-    },
+    }
 };

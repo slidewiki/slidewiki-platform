@@ -6,14 +6,12 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = [];
         this.newNotificationsCount = 0;
         this.subscriptions = [];
-        this.selector = {};
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
         this.newNotificationsCount = this.getNewNotificationsCount();
         this.subscriptions = payload.subscriptions;
         this.addVisibleParameterToNotifications();
-        this.selector = payload.selector;
         this.emitChange();
     }
     clearNotificationNewParameter(payload) {
@@ -27,7 +25,7 @@ class UserNotificationsStore extends BaseStore {
         }
     }
     clearAllNotificationsNewParameter(payload) {
-        this.notifications.forEach((notification) => {notification.new =false;});
+        this.notifications.forEach((notification) => {notification.new = false;});
         this.newNotificationsCount = 0;
         this.emitChange();
     }
@@ -120,8 +118,7 @@ class UserNotificationsStore extends BaseStore {
         return {
             notifications: this.notifications,
             newNotificationsCount: this.newNotificationsCount,
-            subscriptions: this.subscriptions,
-            selector: this.selector
+            subscriptions: this.subscriptions
         };
     }
     dehydrate() {
@@ -131,7 +128,6 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = state.notifications;
         this.newNotificationsCount = state.newNotificationsCount;
         this.subscriptions = state.subscriptions;
-        this.selector = state.selector;
     }
 }
 
