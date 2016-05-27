@@ -66,8 +66,10 @@ class UserNotificationsBadge extends React.Component {
           <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
               <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
                   <NavLink className="item right" routeName="notifications" navParams={{uid:57}} activeClass="active">
-                      <i className="ui large flag icon" />
-                        <span className="ui mini label">{this.props.UserNotificationsStore.newNotificationsCount}</span>
+                      <i className="large icons">
+                        <i className="newspaper icon"></i>
+                        {this.props.UserNotificationsStore.newNotificationsCount ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotificationsCount}</span> : ''}
+                      </i>
                   </NavLink>
               </div>
               <div id="popup" className="ui special flowing popup">
