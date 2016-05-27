@@ -65,10 +65,11 @@ class ActivityFeedPanel extends React.Component {
             'item': true,
             'active': (this.props.ActivityFeedStore.activityType === 'discussion')
         });
+        const hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
         return (
             <div ref="activityFeedPanel">
                 <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/activities/deck/57">Activity Feed</a>
+                    <a className="item active" href={hrefPath}>Activity Feed</a>
                     <a className="item"><i className="ui large thumbs outline up icon"></i> 12</a>
                     <a className="item"><i className="ui large share alternate icon"></i> 5</a>
                     <a className="item"><i className="ui large download icon"></i> 2</a>
