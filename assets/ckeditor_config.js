@@ -12,25 +12,48 @@
 
 CKEDITOR.editorConfig = function( config ) {
     config.toolbar = [
-			{ name: 'document', items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+            { name: 'styles', items: [ 'FontSize' ] },
+        '/',
+            { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates' ] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
-			{ name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+            { name: 'styles', items: [ 'Styles' ] },
         '/',
-			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+            { name: 'styles', items: [ 'Format'] },
+        '/',
+        '/',
 			{ name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
-        '/',
-			{ name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-			{ name: 'about', items: [ 'About' ] }
+            { name: 'styles', items: [ 'Font'] },
     ];
-    //config.floatSpaceDockedOffsetX = 1000;
-    //config.floatSpaceDockedOffsetX = 100;
+    //paragraph --> , 'Language'
+    //document --> 'NewPage',
+
+    //{ name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+    //{ name: 'about', items: [ 'About' ] }
+    config.floatSpacePreferRight = true;
+    //config.floatSpaceDockedOffsetX = 300;
     //config.floatSpaceDockedOffsetY = 100;
     //config.floatSpacePinnedOffsetX = 1000;
+    ///config.toolbarLocation = 'bottom';
+
+    config.uiColor = '#4183C4';
+    config.extraPlugins = 'sourcedialog',
+    // Show toolbar on startup (optional).
+    //config.startupFocus = true
+
+    //configuration to prevent lay-out change onload
+    config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
+    config.basicEntities = true;
+    config.entities = true;
+    config.entities_latin = false;
+    config.entities_greek = false;
+    config.entities_processNumerical = false;
+    config.allowedContent = true; // don't filter my data
 
 
     config.plugins =
