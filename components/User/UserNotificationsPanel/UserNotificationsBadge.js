@@ -71,6 +71,7 @@ class UserNotificationsBadge extends React.Component {
                   </NavLink>
               </div>
               <div id="popup" className="ui special flowing popup">
+                  <h5>Notifications</h5>
                   <div ref="userNotificationsList">
                       <div className="ui relaxed divided list">
                           {list}
