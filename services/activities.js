@@ -107,6 +107,7 @@ export default {
                 break;
         }
     },
+    //Not used
     create: (req, resource, params, body, config, callback) => {
         //TODO get real user id and content name
         const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
