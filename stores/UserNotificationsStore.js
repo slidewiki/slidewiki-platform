@@ -4,14 +4,28 @@ class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.notifications = [];
+        this.newNotifications = [];
         this.newNotificationsCount = 0;
         this.subscriptions = [];
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        this.newNotificationsCount = this.getNewNotificationsCount();
+
+
+
+        this.newNotifications = payload.newNotifications;
+        this.newNotificationsCount = this.newNotifications;
+
+
+
         this.subscriptions = payload.subscriptions;
         this.addVisibleParameterToNotifications();
+        this.emitChange();
+    }
+    loadNewNotifications(payload) {
+        this.newNotifications = payload.newNotifications;
+        this.newNotificationsCount = this.newNotifications;
+
         this.emitChange();
     }
     clearNotificationNewParameter(payload) {
@@ -29,15 +43,15 @@ class UserNotificationsStore extends BaseStore {
         this.newNotificationsCount = 0;
         this.emitChange();
     }
-    getNewNotificationsCount() {
-        let count = 0;
-        this.notifications.forEach((notification) => {
-            if (notification.new !== undefined && notification.new === true) {
-                count++;
-            }
-        });
-        return count;
-    }
+    // getNewNotificationsCount() {
+    //     let count = 0;
+    //     this.notifications.forEach((notification) => {
+    //         if (notification.new !== undefined && notification.new === true) {
+    //             count++;
+    //         }
+    //     });
+    //     return count;
+    // }
     updateNotificationsVisibility(payload) {
         let clickedSubscription = this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
         if (clickedSubscription !== undefined) {
@@ -126,6 +140,7 @@ class UserNotificationsStore extends BaseStore {
     }
     rehydrate(state) {
         this.notifications = state.notifications;
+        this.newNotifications = state.newNotifications;
         this.newNotificationsCount = state.newNotificationsCount;
         this.subscriptions = state.subscriptions;
     }
@@ -134,6 +149,7 @@ class UserNotificationsStore extends BaseStore {
 UserNotificationsStore.storeName = 'UserNotificationsStore';
 UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
+    'LOAD_NEW_USER_NOTIFICATIONS_SUCCESS': 'loadNewNotifications',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
     'CLEAR_NOTIFICATION_NEW_PARAMETER': 'clearNotificationNewParameter',
     'CLEAR_ALL_NOTIFICATIONS_NEW_PARAMETER': 'clearAllNotificationsNewParameter'

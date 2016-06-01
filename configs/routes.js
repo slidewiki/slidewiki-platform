@@ -69,6 +69,9 @@ export default {
         title: 'SlideWiki -- User notifications',
         handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
         action: (context, payload, done) => {
+            context.executeAction(loadUserNotifications, {
+                uid: 57//TODO get real user_id
+            });
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | User notifications'
             });

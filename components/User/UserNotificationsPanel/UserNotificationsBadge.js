@@ -3,11 +3,11 @@ import { NavLink } from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsItem from './UserNotificationsItem';
-import loadUserNotifications from '../../../actions/user/loadUserNotifications';
+import loadUserNotifications from '../../../actions/user/loadNewUserNotifications';
 
 class UserNotificationsBadge extends React.Component {
     componentDidMount() {
-        this.context.executeAction(loadUserNotifications, {
+        this.context.executeAction(loadNewUserNotifications, {
             uid: 57//TODO get real user_id
         });
         this.enablePopup();

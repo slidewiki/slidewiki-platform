@@ -59,8 +59,17 @@ export default {
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
                 let notifications = JSON.parse(res);
 
+
+
+
+                                //TODO use data provided by notifications service (already in store or do another call?)
                 notifications[0].new = true;
                 notifications[1].new = true;
+
+
+
+
+
 
                 notifications.forEach((notification) => adjustIDs(notification));//TODO solve these ID issues
 
@@ -68,6 +77,21 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 callback(null, {notifications: {}, subscriptions: subscriptions});
+            });
+        }
+        if (resource === 'notifications.listnew'){
+            rp.get({uri: Microservices.activities.uri + '/notifications/' + uid}).then((res) => {
+                let newNotifications = JSON.parse(res);
+                newNotifications.forEach((notification) => {
+                    notification.new = true;
+                    adjustIDs(notification);//TODO solve these ID issues
+
+                });
+
+                callback(null, {newNotifications: newNotifications});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {newNotifications: {}});
             });
         }
     },
