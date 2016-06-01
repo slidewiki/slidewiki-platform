@@ -4,12 +4,26 @@ import React from 'react';
 //import CKeditorComponent from './CKeditorComponent';
 //import CKEDITOR from 'ckeditor';
 //import ckeditor from 'ckeditor';
+import {NavLink} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
+//import SlideEditStore from '../../../../../stores/SlideEditStore';
+import saveSlide from '../../../../../actions/slide/saveSlide';
 let ReactDOM = require('react-dom');
 
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
         this.currentcontent;
+    }
+    handleSaveButton(){
+        //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
+        //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
+        //let slide.content = 'test';
+        //this.context.executeAction(saveSlide, {slide});
+        //let slide = 'test';
+        //this.context.executeAction(saveSlide, {slide});
+        console.log('saving slide');
+        return false;
     }
     componentDidMount() {
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
@@ -58,7 +72,7 @@ class SlideContentEditor extends React.Component {
         if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
         //if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
         this.currentcontent = this.props.content;
-        ReactDOM.findDOMNode(this.refs.inlineContent).focus();
+        ReactDOM.findDOMNode(this.refs.inlineHeader).focus();
         //this.forceUpdate();
     }
     componentDidUpdate() {
@@ -97,36 +111,40 @@ class SlideContentEditor extends React.Component {
 
         const headerStyle = {
             minWidth: '100%',
-            maxHeight: 60,
-            minHeight: 60,
-            overflowY: 'auto'
-        };        const contentStyle = {
+            overflowY: 'auto',
+            borderStyle: 'dotted'
+        };
+        const contentStyle = {
             minWidth: '100%',
-            maxHeight: 500,
-            minHeight: 500,
-            overflowY: 'auto'
+            maxHeight: 450,
+            minHeight: 450,
+            overflowY: 'auto',
+            borderStyle: 'dotted'
         };
         const speakernotesStyle = {
             minWidth: '100%',
             maxHeight: 120,
             minHeight: 120,
-            overflowY: 'auto'
+            overflowY: 'auto',
+            borderStyle: 'dotted'
         };
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
+        //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         return (
             <div>
-            <br />
-                Edit slide title:<br />
-                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
-                <br />
-                Edit slide content:<br />
+                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                 <br />
-                Edit speaker notes:<br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:'<b>Speaker Notes</b>'}}></div>
+                <b>Speaker notes:</b><br />
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <button tabIndex="0" ref="submitbutton" className="ui animated button green" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                  <div className="visible content"><i className="thumbs up icon"></i>Save <i className="thumbs up icon"></i></div>
+                  <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>Save <i className="thumbs up icon"></i></div>
+                </button>
             </div>
         );
     }
 }
+
 
 export default SlideContentEditor;
