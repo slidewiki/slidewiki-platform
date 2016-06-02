@@ -8,16 +8,18 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
-
         	//
+            let result = 'Searched for string: ' + args.searchstring + ' , result: RDF is a standard model for data';
+            //let result = 'Searched for string: "RDF" , result: RDF is a standard model for data';
             let searchresults = [
-                {'id': '1', 'type':'slide', 'sid': '12', 'description':'RDF is a standard model for data', 'stitle':'Introuction'},
-                {'id': '2', 'type':'deck', 'did': '23', 'description':'RDF was designed to provide'},
+                {'id': '1', 'type':'slide', 'sid': '12', 'description': 'Searched for string: ' + args.searchstring + ' , result: RDF is a standard model for data', 'stitle':'Introuction'},
+                {'id': '2', 'type':'deck', 'did': '23', 'description':result},
                 {'id': '3', 'type':'deck_revision', 'did': '26', 'title':'What Is RDF by rewriting it from'},
                 {'id': '4', 'type':'deck_revision', 'did': '31', 'comment':'Introduction RDF is one of'},
                 {'id': '5', 'type':'answer', 'aid': '87', 'explanation':'Introduction to RDF including'}
             ];
 
+            console.log(searchresults);
             callback(null, {searchresults: searchresults});
         }
     }

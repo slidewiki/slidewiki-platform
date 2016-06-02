@@ -77,17 +77,14 @@ export default {
         }
     },
 
-    results: {
-        path: '/results',
+    searchresults: {
+        path: '/searchresults/:searchstring?',
         method: 'get',
-        page: 'resutls',
+        page: 'searchresults',
         title: 'SlideWiki -- Search results',
-        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel.js'),
+        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Search results'
-            });
-            done();
+            context.executeAction(loadSearchResults, payload, done);
         }
     },
 
