@@ -6,8 +6,11 @@ import React from 'react';
 //import ckeditor from 'ckeditor';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-//import SlideEditStore from '../../../../../stores/SlideEditStore';
+import SlideEditStore from '../../../../../stores/SlideEditStore';
+import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
+import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 let ReactDOM = require('react-dom');
 
 class SlideContentEditor extends React.Component {
@@ -21,8 +24,27 @@ class SlideContentEditor extends React.Component {
         //let slide.content = 'test';
         //this.context.executeAction(saveSlide, {slide});
         //let slide = 'test';
-        //this.context.executeAction(saveSlide, {slide});
+        let title = CKEDITOR.instances.inlineHeader.getData();
+        let content = CKEDITOR.instances.inlineContent.getData();
+        let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
+        //update store
+        this.props.SlideEditStore.title = title;
+        this.props.SlideEditStore.content = content;
+        this.props.SlideEditStore.speakernotes = speakernotes;
+        let currentSelector = context.getStore(DeckTreeStore).getSelector();
+        console.log('currentSelector: ' + currentSelector.id);
+        let deckID = currentSelector.id;
+        //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
+        //TEST - create slide (before can be saved (=updated))
+        //console.log(speakernotes);
+        this.context.executeAction(saveSlide,
+          {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes});
         console.log('saving slide');
+        return false;
+    }
+    handleLoadTestButton(){
+        this.context.executeAction(loadSlideAll, 'test');
+        //console.log('load all slides test');
         return false;
     }
     componentDidMount() {
@@ -130,6 +152,13 @@ class SlideContentEditor extends React.Component {
         };
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
+        /*
+        <button tabIndex="0" ref="loadalltestbutton" className="ui animated button green" onClick={this.handleLoadTestButton.bind(this)} onChange={this.handleLoadTestButton.bind(this)}>
+          <div className="visible content"><i className="thumbs up icon"></i>Load all test <i className="thumbs up icon"></i></div>
+          <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>Load all test <i className="thumbs up icon"></i></div>
+        </button>
+        */
+
         return (
             <div>
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
@@ -146,5 +175,13 @@ class SlideContentEditor extends React.Component {
     }
 }
 
+SlideContentEditor.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore], (context, props) => {
+    return {
+        SlideEditStore: context.getStore(SlideEditStore).getState()
+    };
+});
 export default SlideContentEditor;

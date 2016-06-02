@@ -11,6 +11,20 @@ export default {
             /*********connect to microservices*************/
             //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
+            //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
+                console.log(res);
+                callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {slide: {}, selector: selector, 'page': params.page, 'mode': args.mode});
+            });
+        }
+        if(resource === 'slide.all'){
+            /*********connect to microservices*************/
+            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
+            rp.get({uri: Microservices.deck.uri + '/allslide'}).then((res) => {
+                //console.log(JSON.parse(res));
+                console.log(res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
@@ -31,17 +45,21 @@ export default {
             //TODO get real content_id
             //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
+            const root_deck_id = '68';
             /*********connect to microservices*************/
             rp.post({
-                uri: Microservices.deck.uri + '/slide/create',
+                uri: Microservices.deck.uri + '/slide/new',
                 body:JSON.stringify({
-                    title: 'test_insert_title',
+                    //id: args.id,
+                    title: args.title,
                     //args.title
-                    content: 'test_insert_content',
+                    content: args.content,
+                    //TODO speakernotes: args.speakernotes,
                     //args.content
                     //todo: send the right user id
+                    //TODO: speaker notes + in object model database in deck microservice
                     user: randomUserId,
-                    root_deck: 'test_insert_title',
+                    root_deck: args.deckID,
                     parent_slide: {
                         id: content_id,
                         revision: content_id
@@ -52,6 +70,7 @@ export default {
                     license: 'CC BY-SA'
                 })
             }).then((res) => {
+                console.log(JSON.parse(res));
                 callback(null, {slide: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
@@ -89,12 +108,44 @@ export default {
     },
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        if(resource === 'activities.like'){
+        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+        console.log('sending update');
+        if(resource === 'slide.content'){
+          //TODO get real content_id
+          //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
+            const content_id = '112233445566778899000000';
+            const root_deck_id = '68';
+            const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
             /*********connect to microservices*************/
-            //todo
-            //rp.put({
-            /*********received data from microservices*************/
-            callback(null, {id: args.id});
+            rp.put({
+                uri: Microservices.deck.uri + '/slide/' + args.id,
+                body:JSON.stringify({
+                    //id: args.id,
+                    title: args.title,
+                    //args.title
+                    content: args.content,
+                    //TODO speakernotes: args.speakernotes,
+                    //args.content
+                    //todo: send the right user id
+                    //TODO: speaker notes + in object model database in deck microservice
+                    user: randomUserId,
+                    root_deck: args.deckID,
+                    parent_slide: {
+                        id: content_id,
+                        revision: content_id
+                    },
+                    position: content_id,
+                    language: 'EN',
+                    position: content_id,
+                    license: 'CC BY-SA'
+                })
+            }).then((res) => {
+                console.log(JSON.parse(res));
+                callback(null, {slide: JSON.parse(res), selector: args.selector});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {slide: {}, selector: args.selector});
+            });
         }
     },
     delete: (req, resource, params, config, callback) => {
@@ -138,43 +189,4 @@ newSlide: function(request, reply) {
     reply(boom.badImplementation());
   });
 },
-*/
-/*
-        if(resource === 'slide.content'){
-            /*********connect to microservices*************/
-            //TODO (also in store) - objects in slides - see discussion on JIRA -
-            //for example; slide title, content, speaker notes, internal embeded objects (images, videos, sound, flash, etc..)
-            /*********received data from microservices*************/
-/*
-            let sampleContent = `
-            <h1> Slide #` + args.sid + `</h1>
-            <div>
-                <p style="font-size: 1.16em;">
-                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus.
-                </p>
-                <ul>
-                    <li>item 1 from slide ` + args.sid + `</li>
-                    <li>item 2 from slide ` + args.sid + `</li>
-                    <li>item 3 from slide ` + args.sid + `</li>
-                </ul>
-                <p style="font-size: 1.2em;">
-                    Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-                </p>
-                <p style="text-align:center">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <text x="20"  y="40"
-                              style="font-family: Arial;
-                                     font-size  : 25;
-                                     stroke     : #000000;
-                                     fill       : #` +((1<<24)*Math.random()|0).toString(16) + `;
-                                    "
-                              > SVG Image ` + args.sid + `</text>
-                    </svg>
-                </p>
-            </div>
-            `;
-            callback(null, {content: sampleContent});
-        }
-    }
 */
