@@ -85,7 +85,7 @@ export default {
         handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel.js'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | User notifications'
+                pageTitle: shortTitle + ' | Search results'
             });
             done();
         }

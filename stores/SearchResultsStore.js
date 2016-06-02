@@ -24,6 +24,11 @@ class SearchResultsStore extends BaseStore {
         this.emitChange();
     }
 
+    updateResultsVisibility(payload) {
+
+        this.emitChange();
+    }
+
     getState() {
         return {
             results: this.results,
@@ -46,7 +51,8 @@ class SearchResultsStore extends BaseStore {
 
 SearchResultsStore.storeName = 'SearchResultsStore';
 SearchResultsStore.handlers = {
-    'LOAD_RESULTS_SUCCESS': 'updateResults'
+    'LOAD_RESULTS_SUCCESS': 'updateResults',
+    'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility'
 };
 
 export default SearchResultsStore;

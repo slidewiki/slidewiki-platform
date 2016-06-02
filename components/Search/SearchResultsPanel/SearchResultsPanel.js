@@ -8,6 +8,13 @@ import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 class SearchPanel extends React.Component {
 
+    handleChangeToggle(field, value) {
+        this.context.executeAction(updateUserResultsVisibility, {
+            field: field,
+            value: value
+        });
+    }
+
     render() {
         const results = this.props.SearchResultsStore.results;
         const entities = this.props.SearchResultsStore.entities;
@@ -16,7 +23,7 @@ class SearchPanel extends React.Component {
         const entityList = entities.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, s.type, s.id)}*/ />
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} onChange={this.handleChangeToggle.bind(this, 'type', s.description)} />
                     <label>{s.description}</label>
                 </div>
             );
@@ -25,7 +32,7 @@ class SearchPanel extends React.Component {
         const languageList = languages.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, s.type, s.id)}*/ />
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} onChange={this.handleChangeToggle.bind(this, 'lang', s.description)} />
                     <label>{s.description}</label>
                 </div>
             );
