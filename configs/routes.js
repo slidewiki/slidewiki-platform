@@ -3,6 +3,7 @@ import {shortTitle, fullTitle} from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
+import loadSearchResults from '../actions/search/loadSearchResults';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/loadSlideView';
 import loadSlideEdit from '../actions/loadSlideEdit';
@@ -68,6 +69,20 @@ export default {
         page: 'notifications',
         title: 'SlideWiki -- User notifications',
         handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | User notifications'
+            });
+            done();
+        }
+    },
+
+    results: {
+        path: '/results',
+        method: 'get',
+        page: 'resutls',
+        title: 'SlideWiki -- Search results',
+        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel.js'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | User notifications'
