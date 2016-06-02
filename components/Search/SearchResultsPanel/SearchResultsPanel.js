@@ -9,14 +9,7 @@ class SearchPanel extends React.Component {
 
     render() {
         const results = this.props.SearchResultsStore.results;
-        const entityList = results.map((s, index) => {
-            return (
-                <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-                    <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-                </div>
-            );
-        });
+
 
         const infoStyles = {
             fontWeight: 600
