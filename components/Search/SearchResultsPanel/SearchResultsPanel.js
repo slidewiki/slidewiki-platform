@@ -3,12 +3,33 @@ import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
+import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 
 class SearchPanel extends React.Component {
 
     render() {
         const results = this.props.SearchResultsStore.results;
+        const entities = this.props.SearchResultsStore.entities;
+        const languages = this.props.SearchResultsStore.languages;
+
+        const entityList = entities.map((s, index) => {
+            return (
+                <div className="ui item toggle checkbox" key={index} >
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, s.type, s.id)}*/ />
+                    <label>{s.description}</label>
+                </div>
+            );
+        });
+
+        const languageList = languages.map((s, index) => {
+            return (
+                <div className="ui item toggle checkbox" key={index} >
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, s.type, s.id)}*/ />
+                    <label>{s.description}</label>
+                </div>
+            );
+        });
 
 
         const infoStyles = {
@@ -28,27 +49,19 @@ class SearchPanel extends React.Component {
                     <div className="five wide column">
                         <div className="ui basic segment">
                             <h4 className="ui header">Filters:</h4>
-                            <label>Users:</label>
+                            <label>Entities:</label>
                             <div className="subscriptions">
                                 <div ref="subscriptionslist">
                                     <div className="ui relaxed list">
-                                        hello1
+                                        {entityList}
                                     </div>
                                  </div>
                             </div>
-                            <label>Slides:</label>
+                            <label>Languages:</label>
                             <div className="subscriptions">
                                 <div ref="subscriptionslist">
                                     <div className="ui relaxed list">
-                                        hello2
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Decks:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        hello
+                                        {languageList}
                                     </div>
                                  </div>
                             </div>

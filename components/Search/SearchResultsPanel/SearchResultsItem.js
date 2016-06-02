@@ -1,8 +1,5 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-// import {creatorAttribute} from './util/ContributorsUtil';
-// import {avatarPath} from './util/ContributorsUtil';
-// import {contains} from './util/ContributorsUtil';
 
 class SearchResultsItem extends React.Component {
 
