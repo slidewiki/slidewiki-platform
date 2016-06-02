@@ -59,18 +59,6 @@ export default {
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
                 let notifications = JSON.parse(res);
 
-
-
-
-                                //TODO use data provided by notifications service (already in store or do another call?)
-                notifications[0].new = true;
-                notifications[1].new = true;
-
-
-
-
-
-
                 notifications.forEach((notification) => adjustIDs(notification));//TODO solve these ID issues
 
                 callback(null, {notifications: notifications, subscriptions: mockupSubscriptions});
@@ -78,14 +66,12 @@ export default {
                 console.log(err);
                 callback(null, {notifications: {}, subscriptions: subscriptions});
             });
-        }
-        if (resource === 'notifications.listnew'){
-            rp.get({uri: Microservices.activities.uri + '/notifications/' + uid}).then((res) => {
+        } else if (resource === 'notifications.listnew'){
+            rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).then((res) => {
                 let newNotifications = JSON.parse(res);
                 newNotifications.forEach((notification) => {
-                    notification.new = true;
+                    notification.newNotificationId = notification.id;
                     adjustIDs(notification);//TODO solve these ID issues
-
                 });
 
                 callback(null, {newNotifications: newNotifications});
@@ -95,11 +81,47 @@ export default {
             });
         }
     },
+    delete: (req, resource, params, config, callback) => {
+        let args = params.params? params.params : params;
+        const uid = args.uid;
+        const nid = args.nid;
+        if (resource === 'notifications.item'){
+            /*********connect to microservices*************/
+            let options = {
+                method: 'DELETE',
+                uri: Microservices.notification.uri + '/notification/delete',
+                body:JSON.stringify({
+                    id: nid
+                })
+            };
+            rp(options).then((res) => {
+                callback(null, params);
+            }).catch((err) => {
+                console.log(err);
+                callback(null, params);
+            });
+        } else if (resource === 'notifications.all'){
+            /*********connect to microservices*************/
+            let options = {
+                method: 'DELETE',
+                uri: Microservices.notification.uri + '/notifications/delete',
+                body:JSON.stringify({
+                    subscribed_user_id: uid
+                })
+            };
+            rp(options).then((res) => {
+                callback(null, params);
+            }).catch((err) => {
+                console.log(err);
+                callback(null, params);
+            });
+        }
+    }
 
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
     // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
+
 };
 
 let mockupSubscriptions = [

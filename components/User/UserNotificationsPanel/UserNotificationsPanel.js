@@ -62,7 +62,7 @@ class UserNotificationsPanel extends React.Component {
                 <i className="ui large disabled checkmark box icon"></i>
             </a>
         );
-        if(this.props.UserNotificationsStore.newNotificationsCount > 0) {//if there are new notifications -> enable it
+        if(this.props.UserNotificationsStore.newNotifications.length > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
               <a className="item" onClick={this.handleMarkAsRead.bind(this)} >
                   <i className="ui large checkmark box icon"></i>
@@ -73,7 +73,7 @@ class UserNotificationsPanel extends React.Component {
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotificationsCount}</span></a>
+                    <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotifications.length}</span></a>
                     {/*<a className="item active" href={hrefPath}>Activity Feed</a>*/}
 
                     <div className="menu">

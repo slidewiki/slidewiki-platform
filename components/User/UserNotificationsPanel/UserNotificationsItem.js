@@ -5,9 +5,9 @@ import readUserNotification from '../../../actions/user/readUserNotification';
 
 class UserNotificationsItem extends React.Component {
     handleClick(notification) {
-        if (notification.new !== undefined && notification.new === true) {
+        if (notification.newNotificationId !== undefined && notification.newNotificationId !== '') {
             this.context.executeAction(readUserNotification, {
-                id: notification.id
+                newNotificationId: notification.newNotificationId
             });
         }
     }
@@ -190,7 +190,7 @@ class UserNotificationsItem extends React.Component {
 
         let itemClass = classNames({
             'event': true,
-            'ui raised segment': (notification.new !== undefined && notification.new === true)
+            'ui raised segment': (notification.newNotificationId !== undefined && notification.newNotificationId !== '')
         });
         return (
             <div className="ui feed">
