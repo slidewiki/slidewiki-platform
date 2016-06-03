@@ -55,6 +55,7 @@ fetchrPlugin.registerService(require('./services/discussion'));
 fetchrPlugin.registerService(require('./services/similarcontent'));
 fetchrPlugin.registerService(require('./services/import'));
 fetchrPlugin.registerService(require('./services/notifications'));
+fetchrPlugin.registerService(require('./services/thumbnail'));
 
 server.use((req, res, next) => {
 
