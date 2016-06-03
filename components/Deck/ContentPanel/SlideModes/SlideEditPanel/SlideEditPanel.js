@@ -3,21 +3,32 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import SlideContentEditor from './SlideContentEditor';
+let ReactDOM = require('react-dom');
 
 class SlideEditPanel extends React.Component {
     render() {
-        let content = '';
+        let editorcontent = '';
         // Only load WYSIWYG-Editor when the content has been loaded via loadSlideEdit.js
         if (this.props.SlideEditStore.content !== ''){
-            content = <SlideContentEditor content={this.props.SlideEditStore.content} selector={this.props.selector} />;
+            editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}
+                                                content={this.props.SlideEditStore.content}
+                                                id={this.props.SlideEditStore.id}
+                                                speakernotes={this.props.SlideEditStore.speakernotes}
+                                                selector={this.props.selector} />;
         }
         return (
+            <div>
             <div ref="slideEditPanel" className="ui bottom attached segment">
-                {content}
+                {editorcontent}
+            </div>
             </div>
         );
     }
 }
+
+SlideEditPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 SlideEditPanel = connectToStores(SlideEditPanel, [SlideEditStore], (context, props) => {
     return {

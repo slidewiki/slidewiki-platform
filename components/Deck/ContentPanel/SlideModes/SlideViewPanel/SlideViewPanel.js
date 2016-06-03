@@ -10,9 +10,20 @@ class SlideViewPanel extends React.Component {
             minHeight: 500,
             overflowY: 'auto'
         };
+        const compSpeakerStyle = {
+            maxHeight: 50,
+            minHeight: 50,
+            overflowY: 'auto'
+        };
         return (
-            <div ref="slideViewPanel" className="ui bottom attached segment" style={compStyle}>
-                <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+          <div>
+              <div ref="slideViewPanel" className="ui bottom attached segment" style={compStyle}>
+                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
+                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+              </div>
+              <div ref="slideViewPanelSpeakerNotes" className="ui bottom attached segment" style={compSpeakerStyle}>
+                <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
+              </div>
             </div>
         );
     }
