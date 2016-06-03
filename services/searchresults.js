@@ -19,8 +19,13 @@ export default {
                 {'id': '5', 'type':'answer', 'aid': '87', 'explanation':'Introduction to RDF including'}
             ];
 
+            let entities = [{'id': '1', 'description':'slide'}, {'id': '2', 'description':'deck'}, {'id': '3', 'description':'answer'}];
+            let languages = [{'id': '1', 'description':'EN'}, {'id': '2', 'description':'ES'}];
+
+
+
             console.log(searchresults);
-            callback(null, {searchresults: searchresults});
+            callback(null, {results: searchresults, entities: entities, languages:languages});
         }
     }
     // other methods

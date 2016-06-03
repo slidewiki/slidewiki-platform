@@ -7,14 +7,10 @@ let ReactDOM = require('react-dom');
 class SearchBox extends React.Component {
 
     handleRedirect(searchstring){
-        //console.log('test' + this.refs.searchstring.value);
-        //let searchstring = this.refs.searchstring.value;
-        //let searchstring = 'RDFisGood';
-        //console.log(searchstring.value);
-        //console.log(this.value);
         this.context.executeAction(navigateAction, {
             //url: '/searchresults/' + searchstring
             url: '/searchresults/RDFisGood'
+            // url: '/searchresults'
         });
         return false;
     }

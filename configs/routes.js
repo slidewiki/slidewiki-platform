@@ -79,6 +79,7 @@ export default {
 
     searchresults: {
         path: '/searchresults/:searchstring?',
+        // path: '/searchresults',
         method: 'get',
         page: 'searchresults',
         title: 'SlideWiki -- Search results',
