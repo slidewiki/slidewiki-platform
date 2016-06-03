@@ -3,6 +3,7 @@ import {shortTitle, fullTitle} from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
+import loadSearchResults from '../actions/search/loadSearchResults';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -73,6 +74,18 @@ export default {
                 pageTitle: shortTitle + ' | User notifications'
             });
             done();
+        }
+    },
+
+    searchresults: {
+        path: '/searchresults/:searchstring?',
+        // path: '/searchresults',
+        method: 'get',
+        page: 'searchresults',
+        title: 'SlideWiki -- Search results',
+        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadSearchResults, payload, done);
         }
     },
 
