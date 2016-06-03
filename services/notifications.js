@@ -83,10 +83,10 @@ export default {
     },
     delete: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        const uid = args.uid;
-        const nid = args.nid;
+
         if (resource === 'notifications.item'){
             /*********connect to microservices*************/
+            const nid = args.newNotificationId;
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notification/delete',
@@ -102,6 +102,7 @@ export default {
             });
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
+            const uid = '112233445566778899000000'.substring(0, 24 - String(args.uid).length) + String(args.uid);//TODO solve these ID issues
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',

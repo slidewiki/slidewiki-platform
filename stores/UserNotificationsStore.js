@@ -28,18 +28,20 @@ class UserNotificationsStore extends BaseStore {
         this.newNotifications.forEach((newNotification) => {
             let notification = this.notifications.find((notification) => {return (notification.id === newNotification.activity_id);});
             if (notification !== undefined) {
-                notification.notificationId = newNotification.id;
+                notification.newNotificationId = newNotification.id;
             }
         });
     }
     clearNotificationNewParameter(payload) {
-        let notification = this.notifications.find((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
-        if (notification !== undefined) {
+        let index = this.newNotifications.findIndex((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
+        if (index >=0) {
+            this.newNotifications.splice(index, 1);
 
-            notification.newNotificationId = '';
+            let notification = this.notifications.find((notification) => {console.log(notification.newNotificationId);return (notification.newNotificationId === payload.newNotificationId);});
+            if (notification !== undefined) {
+                notification.newNotificationId = '';
+            }
 
-            let index = this.newNotifications.findIndex((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
-            newNotifications.splice(index, 1);
             this.emitChange();
         }
     }

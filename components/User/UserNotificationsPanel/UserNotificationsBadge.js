@@ -3,12 +3,12 @@ import { NavLink } from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsItem from './UserNotificationsItem';
-import loadUserNotifications from '../../../actions/user/loadNewUserNotifications';
+import loadNewUserNotifications from '../../../actions/user/loadNewUserNotifications';
 
 class UserNotificationsBadge extends React.Component {
     componentDidMount() {
         this.context.executeAction(loadNewUserNotifications, {
-            uid: 57//TODO get real user_id
+            uid: 1//TODO get real user_id
         });
         this.enablePopup();
     }
@@ -25,7 +25,7 @@ class UserNotificationsBadge extends React.Component {
                 on: 'hover',
                 position : 'bottom left',
                 delay: {
-                    show: 100,
+                    show: 300,
                     hide: 300
                 }
             });
@@ -63,7 +63,7 @@ class UserNotificationsBadge extends React.Component {
         return (
           <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
               <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
-                  <NavLink className="item right" routeName="notifications" navParams={{uid:57}} activeClass="active">
+                  <NavLink className="item right" routeName="notifications" navParams={{uid:1}} activeClass="active">
                       <i className="large icons">
                         <i className="newspaper icon"></i>
                         {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}

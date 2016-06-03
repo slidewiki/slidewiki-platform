@@ -3,7 +3,7 @@ export default function markAsReadUserNotifications(context, payload, done) {
         if (err) {
             context.dispatch('DELETE_ALL_USER_NOTIFICATIONS_FAILURE', err);
         } else {
-            context.dispatch('DELETE_aLL_USER_NOTIFICATIONS_SUCCESS', res);
+            context.dispatch('DELETE_ALL_USER_NOTIFICATIONS_SUCCESS', res);
         }
 
         done();
