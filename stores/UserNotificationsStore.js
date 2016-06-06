@@ -37,7 +37,7 @@ class UserNotificationsStore extends BaseStore {
         if (index >=0) {
             this.newNotifications.splice(index, 1);
 
-            let notification = this.notifications.find((notification) => {console.log(notification.newNotificationId);return (notification.newNotificationId === payload.newNotificationId);});
+            let notification = this.notifications.find((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
             if (notification !== undefined) {
                 notification.newNotificationId = '';
             }
