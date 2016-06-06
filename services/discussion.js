@@ -9,7 +9,7 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype, 'mode': args.mode};
 
-        const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;//TODO solve these ID issues
+        const content_id = selector.sid.startsWith('1122334455') ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
 
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
@@ -33,7 +33,7 @@ export default {
 
         if(resource === 'discussion.comment'){
             //TODO get real content_id
-            const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
+            const content_id = selector.sid.startsWith('1122334455') ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
 
             rp.post({
                 uri: Microservices.discussion.uri + '/comment/new',
