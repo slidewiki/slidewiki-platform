@@ -12,26 +12,22 @@ class SlideEditStore extends BaseStore {
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
         //console.log('test' + payload.slide.revisions[0].title + ' id: ' + payload.slide.id);
-        //console.log('test' + payload.slide.revisions);
+        console.log('test' + payload.slide.revisions[payload.slide.revisions.length-1]);
         if (payload.slide.revisions !== undefined)
         {
-            //this.id = payload.slide.id;
+            this.id = payload.slide.id;
             this.title = payload.slide.revisions[payload.slide.revisions.length-1].title;
             this.content = payload.slide.revisions[payload.slide.revisions.length-1].content;
-            //TODO speakernotes in database: now gives error:
-            //body: '{"statusCode":400,"error":"Bad Request","message":"\\"speakernotes\\" is not allowed","validation":{"source":"payload","keys":["speakernotes"]}}' } }
-            //this.speakernotes = payload.slide.revisions[0].speakernotes;
-            this.speakernotes = 'speaker notes: More information on test.com';
-
+            this.speakernotes = payload.slide.revisions[payload.slide.revisions.length-1].speakernotes;
             this.emitChange();
         }
         else
         {
             this.title = 'slide not found';
             this.content = 'slide not found';
+            this.speakernotes = 'slide not found';
             this.emitChange();
         }
-
     }
     saveSlide() {
         this.emitChange();

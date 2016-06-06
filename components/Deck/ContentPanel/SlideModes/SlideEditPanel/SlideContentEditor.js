@@ -27,6 +27,10 @@ class SlideContentEditor extends React.Component {
         let title = CKEDITOR.instances.inlineHeader.getData();
         let content = CKEDITOR.instances.inlineContent.getData();
         let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
+        //these fields should not be empty:
+        if (title === ''){title = ' ';}
+        if (content === ''){content = ' ';}
+        if (speakernotes === ''){speakernotes = ' ';}
         //update store
         this.props.SlideEditStore.title = title;
         this.props.SlideEditStore.content = content;

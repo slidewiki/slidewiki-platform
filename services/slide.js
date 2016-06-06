@@ -54,7 +54,8 @@ export default {
                     title: args.title,
                     //args.title
                     content: args.content,
-                    //TODO speakernotes: args.speakernotes,
+                    //TODO
+                    speakernotes: args.speakernotes,
                     //args.content
                     //todo: send the right user id
                     //TODO: speaker notes + in object model database in deck microservice
@@ -124,7 +125,8 @@ export default {
                     title: args.title,
                     //args.title
                     content: args.content,
-                    //TODO speakernotes: args.speakernotes,
+                    //TODO
+                    speakernotes: args.speakernotes,
                     //args.content
                     //todo: send the right user id
                     //TODO: speaker notes + in object model database in deck microservice

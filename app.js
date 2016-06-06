@@ -22,6 +22,7 @@ import SimilarContentStore from './stores/SimilarContentStore';
 import TabLinksStore from './stores/TabLinksStore';
 import ImportStore from './stores/ImportStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
+import SearchResultsStore from './stores/SearchResultsStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -47,7 +48,8 @@ const app = new Fluxible({
         SimilarContentStore,
         TabLinksStore,
         ImportStore,
-        UserNotificationsStore
+        UserNotificationsStore,
+        SearchResultsStore
     ]
 });
 
