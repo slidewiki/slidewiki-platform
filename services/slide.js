@@ -12,7 +12,7 @@ export default {
             //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
             //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
-                console.log(res);
+                //console.log(res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
@@ -24,7 +24,7 @@ export default {
             //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/allslide'}).then((res) => {
                 //console.log(JSON.parse(res));
-                console.log(res);
+                //console.log(res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
@@ -71,7 +71,7 @@ export default {
                     license: 'CC BY-SA'
                 })
             }).then((res) => {
-                console.log(JSON.parse(res));
+                //console.log(JSON.parse(res));
                 callback(null, {slide: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
@@ -110,7 +110,7 @@ export default {
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
-        console.log('sending update');
+        //console.log('sending update');
         if(resource === 'slide.content'){
           //TODO get real content_id
           //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
@@ -142,7 +142,7 @@ export default {
                     license: 'CC BY-SA'
                 })
             }).then((res) => {
-                console.log(JSON.parse(res));
+                //console.log(JSON.parse(res));
                 callback(null, {slide: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
