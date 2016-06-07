@@ -12,7 +12,7 @@ class SlideEditStore extends BaseStore {
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
         //console.log('test' + payload.slide.revisions[0].title + ' id: ' + payload.slide.id);
-        console.log('test' + payload.slide.revisions[payload.slide.revisions.length-1]);
+        //console.log('test' + payload.slide.revisions[payload.slide.revisions.length-1]);
         if (payload.slide.revisions !== undefined)
         {
             this.id = payload.slide.id;

@@ -17,10 +17,8 @@ class SlideEditPanel extends React.Component {
                                                 selector={this.props.selector} />;
         }
         return (
-            <div>
             <div ref="slideEditPanel" className="ui bottom attached segment">
                 {editorcontent}
-            </div>
             </div>
         );
     }

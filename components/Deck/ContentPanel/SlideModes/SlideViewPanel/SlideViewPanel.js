@@ -16,13 +16,15 @@ class SlideViewPanel extends React.Component {
             overflowY: 'auto'
         };
         return (
-          <div>
-              <div ref="slideViewPanel" className="ui bottom attached segment" style={compStyle}>
+          <div className="ui bottom attached segment">
+              <div ref="slideViewPanel" className="ui" style={compStyle}>
                   <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
                   <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
               </div>
-              <div ref="slideViewPanelSpeakerNotes" className="ui bottom attached segment" style={compSpeakerStyle}>
-                <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
+
+              <div ref="slideViewPanelSpeakerNotes" className="ui" style={compSpeakerStyle}>
+                  {this.props.SlideViewStore.speakernotes ? <b>Speaker Notes:</b> : ''}
+                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
               </div>
             </div>
         );
