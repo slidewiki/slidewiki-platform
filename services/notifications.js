@@ -64,7 +64,7 @@ export default {
                 callback(null, {notifications: notifications, subscriptions: mockupSubscriptions});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {notifications: {}, subscriptions: subscriptions});
+                callback(null, {notifications: {}, subscriptions: mockupSubscriptions});
             });
         } else if (resource === 'notifications.listnew'){
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).then((res) => {
