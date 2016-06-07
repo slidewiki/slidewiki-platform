@@ -41,7 +41,7 @@ function getSlideContent(sid){
   </body>
   </html>
   `;
-  return sampleContent;
+    return sampleContent;
 }
 
 export default function loadSimilarContents(context, payload, done) {
@@ -49,23 +49,21 @@ export default function loadSimilarContents(context, payload, done) {
         if (err) {
             context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', err);
         } else {
-            //context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
-            //for(let {id,title,author,authorId,date,liked,downloaded,imgSrc} of res.contents){
+
             for(let i=0; i< res.contents.length;i++){
              //TODO: get the htmlContent from slide service.
-              let contentHTML = getSlideContent(res.contents[i].id);
-              context.service.read('thumbnail.htmlcontent', {sid: res.contents[i].id, contentHTML : contentHTML}, {timeout: 30 * 1000}, (errThumb, resThumb) => {
-                  if(errThumb){
-                      context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', errThumb);
+                let contentHTML = getSlideContent(res.contents[i].id);
+                context.service.read('thumbnail.htmlcontent', {sid: res.contents[i].id, contentHTML : contentHTML}, {timeout: 30 * 1000}, (errThumb, resThumb) => {
+                    if(errThumb){
+                        context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', errThumb);
 
-                  } else{
-                      res.contents[i].imgSrc = resThumb.contents.src;
-                      context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
+                    } else{
+                        res.contents[i].imgSrc = resThumb.contents.src;
+                        context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
 
-                  }
-              });
+                    }
+                });
               //context.executeAction(getSlideThumbnail,{sid:id, contentHTML: contentHTML},done);
-
             }
 
         }

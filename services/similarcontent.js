@@ -3,6 +3,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
+
         let selector= {'sid': args.did, 'stype': args.stype};
 
         if(resource === 'similarcontent.list'){
@@ -10,9 +11,9 @@ export default {
             //todo
             /*********received data from microservices*************/
             let contents = [
-                {'id': '16', 'title': 'title deck related to ' + args.did, 'author': 'soeren' , 'authorId':'2' , 'date':'15/05/2016' ,'liked': '20', 'downloaded': '5'},
-                {'id': '28', 'title': 'title deck related to ' + args.did, 'author': 'soeren', 'authorId':'2' , 'date':'18/04/2016' ,'liked': '15', 'downloaded': '6'},
-                {'id': '39', 'title': 'title deck related to ' + args.did, 'author': 'ali1k', 'authorId':'1' , 'date':'03/05/2016' ,'liked': '10', 'downloaded': '4'}
+                {'id': '16', 'title': 'title deck related to ' + args.sid, 'author': 'soeren' , 'authorId':'2' , 'date':'15/05/2016' ,'liked': '20', 'downloaded': '5'},
+                {'id': '28', 'title': 'title deck related to ' + args.sid, 'author': 'soeren', 'authorId':'2' , 'date':'18/04/2016' ,'liked': '15', 'downloaded': '6'},
+                {'id': '39', 'title': 'title deck related to ' + args.sid, 'author': 'ali1k', 'authorId':'1' , 'date':'03/05/2016' ,'liked': '10', 'downloaded': '4'}
             ];
             callback(null, {contents: contents, selector: selector});
         }

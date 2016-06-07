@@ -6,21 +6,21 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
 
-        let selector= {'sid': args.sid, 'stype': args.stype};
+        let selector= {'sid': args.sid};
+
 
         if(resource === 'thumbnail.htmlcontent'){ //html code is provided
             let imgSrc;
             let webPage;
             let phInstance;
-            //TODO: get the htmlContent from slide service.
-            let hmtlcontent = '<html><body>TEST</body></html>';
+            let contents;
+
 
             phantom.create().then((instance) => {
                 phInstance = instance;
                 return instance.createPage();
             }).then((page) => {
-                page.setContent(hmtlcontent,'/slide/' + arg.sid);
-
+                page.setContent(args.contentHTML,'/slide/' + arg.sid);
                 webPage = page;
                 return page.renderBase64('PNG');
             }).then((src) => {
@@ -28,7 +28,7 @@ export default {
                 phInstance.exit();
                 res.render('users',{title: 'Users',
                 imgSrc: 'data:image/png;charset=utf-8;base64,'+ src});
-                let contents = 'src:' + imgSrc;
+                contents = 'src:' + imgSrc;
                 callback(null, {contents: contents, selector: selector});
 
             }).catch((error) => {
