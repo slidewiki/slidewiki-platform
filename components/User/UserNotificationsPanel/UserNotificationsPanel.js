@@ -4,8 +4,15 @@ import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/markAsReadUserNotifications';
+import loadUserNotifications from '../../../actions/user/loadUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
+    componentDidMount() {
+        context.executeAction(loadUserNotifications, {
+            uid: 1//TODO get real user_id
+        });
+    }
+
     handleSettingsClick() {
 
     }
@@ -19,7 +26,7 @@ class UserNotificationsPanel extends React.Component {
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {
-
+            uid: 1,
         });
     }
 
@@ -62,7 +69,7 @@ class UserNotificationsPanel extends React.Component {
                 <i className="ui large disabled checkmark box icon"></i>
             </a>
         );
-        if(this.props.UserNotificationsStore.newNotificationsCount > 0) {//if there are new notifications -> enable it
+        if(this.props.UserNotificationsStore.newNotifications.length > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
               <a className="item" onClick={this.handleMarkAsRead.bind(this)} >
                   <i className="ui large checkmark box icon"></i>
@@ -73,9 +80,7 @@ class UserNotificationsPanel extends React.Component {
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotificationsCount}</span></a>
-                    {/*<a className="item active" href={hrefPath}>Activity Feed</a>*/}
-
+                    <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotifications.length}</span></a>
                     <div className="menu">
                         <a className="item" onClick={this.handleSettingsClick.bind(this)}>
                             <i className="ui large settings icon"></i>

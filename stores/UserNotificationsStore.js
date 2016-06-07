@@ -4,40 +4,54 @@ class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.notifications = [];
-        this.newNotificationsCount = 0;
+        this.newNotifications = [];
         this.subscriptions = [];
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        this.newNotificationsCount = this.getNewNotificationsCount();
+        this.markNewNotifications();
+
+
+        // this.newNotifications = payload.newNotifications;
+
+
+
         this.subscriptions = payload.subscriptions;
         this.addVisibleParameterToNotifications();
         this.emitChange();
     }
-    clearNotificationNewParameter(payload) {
-        let notification = this.notifications.find((notification) => {return (notification.id === payload.id);});
-        if (notification !== undefined) {
-            if (notification.new) {
-                notification.new = false;
-                this.newNotificationsCount--;
+    loadNewNotifications(payload) {
+        this.newNotifications = payload.newNotifications;
+        this.emitChange();
+    }
+    markNewNotifications() {
+        this.newNotifications.forEach((newNotification) => {
+            let notification = this.notifications.find((notification) => {return (notification.id === newNotification.activity_id);});
+            if (notification !== undefined) {
+                notification.newNotificationId = newNotification.id;
             }
+        });
+    }
+    clearNotificationNewParameter(payload) {
+        let index = this.newNotifications.findIndex((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
+        if (index >=0) {
+            this.newNotifications.splice(index, 1);
+
+            let notification = this.notifications.find((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
+            if (notification !== undefined) {
+                notification.newNotificationId = '';
+            }
+
             this.emitChange();
         }
     }
     clearAllNotificationsNewParameter(payload) {
-        this.notifications.forEach((notification) => {notification.new = false;});
-        this.newNotificationsCount = 0;
+        this.notifications.forEach((notification) => {notification.newNotificationId = '';});
+        this.newNotifications = [];
+
         this.emitChange();
     }
-    getNewNotificationsCount() {
-        let count = 0;
-        this.notifications.forEach((notification) => {
-            if (notification.new !== undefined && notification.new === true) {
-                count++;
-            }
-        });
-        return count;
-    }
+
     updateNotificationsVisibility(payload) {
         let clickedSubscription = this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
         if (clickedSubscription !== undefined) {
@@ -117,7 +131,7 @@ class UserNotificationsStore extends BaseStore {
     getState() {
         return {
             notifications: this.notifications,
-            newNotificationsCount: this.newNotificationsCount,
+            newNotifications: this.newNotifications,
             subscriptions: this.subscriptions
         };
     }
@@ -126,7 +140,7 @@ class UserNotificationsStore extends BaseStore {
     }
     rehydrate(state) {
         this.notifications = state.notifications;
-        this.newNotificationsCount = state.newNotificationsCount;
+        this.newNotifications = state.newNotifications;
         this.subscriptions = state.subscriptions;
     }
 }
@@ -134,9 +148,10 @@ class UserNotificationsStore extends BaseStore {
 UserNotificationsStore.storeName = 'UserNotificationsStore';
 UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
+    'LOAD_NEW_USER_NOTIFICATIONS_SUCCESS': 'loadNewNotifications',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
-    'CLEAR_NOTIFICATION_NEW_PARAMETER': 'clearNotificationNewParameter',
-    'CLEAR_ALL_NOTIFICATIONS_NEW_PARAMETER': 'clearAllNotificationsNewParameter'
+    'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
+    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter'
 };
 
 export default UserNotificationsStore;

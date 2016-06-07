@@ -3,12 +3,12 @@ import { NavLink } from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsItem from './UserNotificationsItem';
-import loadUserNotifications from '../../../actions/user/loadUserNotifications';
+import loadNewUserNotifications from '../../../actions/user/loadNewUserNotifications';
 
 class UserNotificationsBadge extends React.Component {
     componentDidMount() {
-        this.context.executeAction(loadUserNotifications, {
-            uid: 57//TODO get real user_id
+        this.context.executeAction(loadNewUserNotifications, {
+            uid: 1//TODO get real user_id
         });
         this.enablePopup();
     }
@@ -17,7 +17,7 @@ class UserNotificationsBadge extends React.Component {
     }
     enablePopup() {
         let notificationsBadge = this.refs.notificationsBadge;
-        const visible = (this.props.UserNotificationsStore.newNotificationsCount > 0);
+        const visible = (this.props.UserNotificationsStore.newNotifications.length > 0);
         if (visible) {
             $(notificationsBadge).popup({
                 inline   : true,
@@ -25,7 +25,7 @@ class UserNotificationsBadge extends React.Component {
                 on: 'hover',
                 position : 'bottom left',
                 delay: {
-                    show: 100,
+                    show: 300,
                     hide: 300
                 }
             });
@@ -34,7 +34,7 @@ class UserNotificationsBadge extends React.Component {
 
     removePopupIfNeeded() {
         let notificationsBadge = this.refs.notificationsBadge;
-        const visible = (this.props.UserNotificationsStore.newNotificationsCount > 0);
+        const visible = (this.props.UserNotificationsStore.newNotifications.length > 0);
         if (!visible) {
             $(notificationsBadge).popup('destroy');
         }
@@ -50,25 +50,23 @@ class UserNotificationsBadge extends React.Component {
         const selector = this.props.selector;
 
         let noNewNotificationsMessage = '';
-        if (this.props.UserNotificationsStore.newNotificationsCount === 0) {
+        if (this.props.UserNotificationsStore.newNotifications.length === 0) {
             noNewNotificationsMessage = (<span><i className="ui big check circle outline icon" />There is no new notifications.</span>);
         }
-        const notifications = this.props.UserNotificationsStore.notifications;
-        const list = notifications.map((notification, index) => {
-            if (notification.new !== undefined && notification.new === true) {
-                return (
-                    <UserNotificationsItem notification={notification} key={index} selector={selector} />
-                );
-            }
+        const newNotifications = this.props.UserNotificationsStore.newNotifications;
+        const list = newNotifications.map((notification, index) => {
+            return (
+                <UserNotificationsItem notification={notification} key={index} selector={selector} />
+            );
         });
 
         return (
           <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
               <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
-                  <NavLink className="item right" routeName="notifications" navParams={{uid:57}} activeClass="active">
+                  <NavLink className="item right" routeName="notifications" navParams={{uid:1}} activeClass="active">
                       <i className="large icons">
                         <i className="newspaper icon"></i>
-                        {this.props.UserNotificationsStore.newNotificationsCount ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotificationsCount}</span> : ''}
+                        {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
                       </i>
                   </NavLink>
               </div>
