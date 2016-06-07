@@ -12,7 +12,7 @@ function adjustIDs(activity) {
         activity.use_info.target_id = adjustID(activity.use_info.target_id);
 }
 function adjustID(id) {
-    if (id.length === 24) {
+    if (id.length === 24 && id.startsWith('1122334455')) {
         return id.substring(20).replace(/^0+/, '');
     }
     return id;
@@ -40,7 +40,7 @@ export default {
             let subscriptionsString = '';
             // callback(null, {notifications: notifications, subscriptions: subscriptions});
             mockupSubscriptions.forEach((subscription) => {
-                const id = '112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id;//TODO solve these ID issues
+                const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
 
                 switch (subscription.type) {
                     case 'user':
@@ -102,7 +102,8 @@ export default {
             });
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
-            const uid = '112233445566778899000000'.substring(0, 24 - String(args.uid).length) + String(args.uid);//TODO solve these ID issues
+            let uid = String(args.uid);
+            uid = (!uid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - uid.length) + uid) : uid;//TODO solve these ID issues
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',
@@ -129,7 +130,7 @@ let mockupSubscriptions = [
   {id:'2', type: 'user', name: 'Nikola T.', selected: true},
   {id:'1', type: 'user', name: 'Dejan P.', selected: true},
   {id:'67', type: 'deck', name: 'RDF Data Model', selected: true},
-  {id:'671', type: 'slide', name: 'Introduction', selected: true}
+  {id:'575060ae4bc68d1000ea952b', type: 'slide', name: 'Introduction', selected: true}
 ];
 
 //Mockup data

@@ -62,7 +62,7 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
 
-        const content_id = selector.sid.startsWith('1122334455') ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
+        const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
 
         switch (resource) {
             case 'activities.list':
@@ -117,7 +117,7 @@ export default {
 
         if(resource === 'activity.comment'){
             //TODO get real content_id
-            const content_id = selector.sid.startsWith('1122334455') ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
+            const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
 
             rp.post({
                 uri: Microservices.activities.uri + '/activity/new',
