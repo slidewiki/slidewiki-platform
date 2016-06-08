@@ -54,6 +54,7 @@ fetchrPlugin.registerService(require('./services/questions'));
 fetchrPlugin.registerService(require('./services/discussion'));
 fetchrPlugin.registerService(require('./services/similarcontent'));
 fetchrPlugin.registerService(require('./services/import'));
+fetchrPlugin.registerService(require('./services/presentation'));
 
 server.use((req, res, next) => {
 

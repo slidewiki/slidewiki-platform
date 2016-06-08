@@ -1,5 +1,5 @@
 {
-  "base": "custom_modules/custom-semantic-ui/",
+  "base": "custom_modules/custom-semantic-ui",
   "paths": {
     "source": {
       "config": "src/theme.config",
