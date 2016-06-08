@@ -6,15 +6,15 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
         let selector= {'sid': args.sid};
-        console.log('entra en el servici');
+
         if(resource === 'thumbnail.htmlcontent'){ //html code is provided
             let imgSrc;
             let webPage;
             let phInstance;
-            let contents;
-
             //TODO: get the htmlContent from slide service.
             let sampleContent = `
+            <html>
+            <body>
             <h1>Deck #` + args.sid + `</h1>
             This is a sample deck content. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
             <br/>
@@ -45,24 +45,24 @@ export default {
                 </div>
               </div>
             </div>
+            </body>
+            </html>
             `;
             phantom.create().then((instance) => {
                 phInstance = instance;
                 return instance.createPage();
             }).then((page) => {
-                page.setContent(sampleContent,'/slide/' + arg.sid);
+                page.setContent(sampleContent,'/slide/' + args.sid);
                 webPage = page;
                 return page.renderBase64('PNG');
             }).then((src) => {
                 webPage.close();
                 phInstance.exit();
-                res.render('users',{title: 'Users',
-                imgSrc: 'data:image/png;charset=utf-8;base64,'+ src});
-                contents = 'src:' + imgSrc;
-                callback(null, {contents: contents, selector: selector});
+                imgSrc= 'data:image/png;charset=utf-8;base64,'+ src;
+                callback(null, {contents: {'src': imgSrc}, selector: selector});
 
             }).catch((error) => {
-                callback(error, {contents: contents, selector: selector});
+                callback(error, {contents: {'src': {}}, selector: selector});
                 phInstance.exit();
             });
 

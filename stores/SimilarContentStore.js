@@ -11,6 +11,15 @@ class SimilarContentStore extends BaseStore {
         this.selector = payload.selector;
         this.emitChange();
     }
+    updateSlideThumbnail(payload){
+
+        for(let i=0;i<this.contents.length;i++){
+            if(this.contents[i].id == payload.selector.sid){
+                this.contents[i].imgSrc = payload.contents.src;
+            }
+        }
+        this.emitChange();
+    }
     getState() {
         return {
             contents: this.contents,
@@ -28,7 +37,8 @@ class SimilarContentStore extends BaseStore {
 
 SimilarContentStore.storeName = 'SimilarContentStore';
 SimilarContentStore.handlers = {
-    'LOAD_SIMILAR_CONTENT_SUCCESS': 'updateSimilarContent'
+    'LOAD_SIMILAR_CONTENT_SUCCESS': 'updateSimilarContent',
+    'GET_SLIDE_THUMBNAIL_SUCCESS': 'updateSlideThumbnail'
 };
 
 export default SimilarContentStore;

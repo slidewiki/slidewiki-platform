@@ -1,13 +1,14 @@
 import React from 'react';
-import ThumbnailUrl from './ThumbnailUrl';
 
 class SimilarContentItem extends React.Component {
+
     render() {
+      
         return (
             <div className="item">
               <div className="ui card">
                 <a className="image" href={'/deck/' + this.props.data.id}>
-                    <ThumbnailUrl id={this.props.data.id} width="60px" height="40px"/>
+                    <img src={this.props.data.imgSrc} alt={'/deck/' + this.props.data.id} width="60px" height="40px"/>
                 </a>
 
                 <div className="content">
