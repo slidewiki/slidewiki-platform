@@ -3,9 +3,9 @@ import {BaseStore} from 'fluxible/addons';
 class PresentationStore extends BaseStore {
 
     constructor(dispatcher) {
-      console.log("In PresentationStore");
+        console.log('In PresentationStore');
         super(dispatcher);
-        //this.content = "";
+        this.content = '';
 
     }
     updatePresentation(payload) {
