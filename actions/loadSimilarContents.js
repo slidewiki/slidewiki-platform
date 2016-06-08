@@ -6,9 +6,11 @@ export default function loadSimilarContents(context, payload, done) {
         if (err) {
             context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', err);
         } else {
-            console.log('loadSimilarContents: '+ res.contents[0].id);
-            context.executeAction(getSlideThumbnail,payload,done);
             context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
+            for(let {id,title,author,authorId,date,liked,downloaded,imgSrc} of res.contents){
+              context.executeAction(getSlideThumbnail,{sid:id},done);
+            }
+          
         }
         let pageTitle = shortTitle + ' | Similar Content | ' + payload.params.stype + ' | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {
