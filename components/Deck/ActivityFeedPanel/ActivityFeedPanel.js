@@ -70,9 +70,9 @@ class ActivityFeedPanel extends React.Component {
             <div ref="activityFeedPanel">
                 <div className="ui top attached secondary pointing menu">
                     <a className="item active" href={hrefPath}>Activity Feed</a>
-                    <a className="item"><i className="ui large thumbs outline up icon"></i> 12</a>
-                    <a className="item"><i className="ui large share alternate icon"></i> 5</a>
-                    <a className="item"><i className="ui large download icon"></i> 2</a>
+                    <a className="item"><i tabIndex="0" className="ui large thumbs outline up icon"></i> 12</a>
+                    <a className="item"><i tabIndex="0" className="ui large share alternate icon"></i> 5</a>
+                    <a className="item"><i tabIndex="0" className="ui large download icon"></i> 2</a>
                     <div className="right menu">
                       <div className="item">
                         <div className="ui icon input">
@@ -86,16 +86,16 @@ class ActivityFeedPanel extends React.Component {
                     {activityDIV}
                 </div>
                 <div className="ui bottom attached tabular menu">
-                    <a className={allTabClass} onClick={this.handleTabClick.bind(this, 'all')}>
+                    <a tabIndex="0" className={allTabClass} onClick={this.handleTabClick.bind(this, 'all')}>
                         All
                     </a>
-                    <a className={discussionTabClass} onClick={this.handleTabClick.bind(this, 'discussion')}>
+                    <a tabIndex="0" className={discussionTabClass} onClick={this.handleTabClick.bind(this, 'discussion')}>
                         Comments
                     </a>
-                    <a className={historyTabClass} onClick={this.handleTabClick.bind(this, 'history')}>
+                    <a tabIndex="0" className={historyTabClass} onClick={this.handleTabClick.bind(this, 'history')}>
                         History
                     </a>
-                    <a className={usageTabClass} onClick={this.handleTabClick.bind(this, 'usage')}>
+                    <a tabIndex="0" className={usageTabClass} onClick={this.handleTabClick.bind(this, 'usage')}>
                         Usage
                     </a>
                 </div>
