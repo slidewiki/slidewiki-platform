@@ -8,6 +8,9 @@ export default {
         },
         'activities': {
             uri: 'http://activitiesservice.manfredfris.ch'
+        },
+        'notification': {
+            uri: 'http://notificationservice.manfredfris.ch'
         }
     }
 };

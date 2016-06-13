@@ -109,7 +109,7 @@ class DataSourceItem extends React.Component {
 
         const appendEdit = (
             <a className="edit" onClick={this.handleEdit.bind(this)}>
-                <i className="edit icon" />
+                <i tabIndex="0" className="edit icon" />
             </a>
         );
 

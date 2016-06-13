@@ -14,9 +14,7 @@ class ContributorsPanel extends React.Component {
     }
     enableAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;
-        $(accordionDIV).find('.ui.accordion').accordion({
-            exclusive: false
-        });
+        $(accordionDIV).find('.ui.accordion').accordion();
     }
     refreshAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;

@@ -26,7 +26,7 @@ class ContentModeMenu extends React.Component {
                 }
                 {!this.props.TabLinksStore.items.dataSources.count ? '' :
                     <NavLink className={'item' + (contentDetails.mode === 'datasources' ? ' active' : '')} href={ContentUtil.makeNodeURL(contentDetails.selector, 'datasources')}>
-                        Data Sources<span className="ui tiny circular label">{this.props.TabLinksStore.items.dataSources.count}</span>
+                        Sources<span className="ui tiny circular label">{this.props.TabLinksStore.items.dataSources.count}</span>
                     </NavLink>
                 }
                 <div className="item">

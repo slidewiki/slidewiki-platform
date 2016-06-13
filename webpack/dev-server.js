@@ -3,7 +3,7 @@ let webpack = require ('webpack');
 let config = require ('./dev.config');
 let shell = require ('shelljs');
 
-const host = process.env.HOST || '127.0.0.1';
+const host = process.env.HOST || '0.0.0.0';
 const mainPort = (process.env.PORT) || 3000;
 const devPort = (process.env.PORT + 1) || 3001;
 
