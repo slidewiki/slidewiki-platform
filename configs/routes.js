@@ -76,6 +76,19 @@ export default {
             done();
         }
     },
+    signin: {
+        path: '/signin',
+        method: 'get',
+        page: 'signin',
+        title: 'SlideWiki -- Sign in',
+        handler: require('../components/User/UserRegistration/UserRegistration'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Sign in'
+            });
+            done();
+        }
+    },
 
     searchresults: {
         path: '/searchresults/:searchstring?',

@@ -19,6 +19,7 @@ class Header extends React.Component {
                         <SearchBox />
                     </div>
                     <UserNotificationsBadge />
+                    <NavLink className="item" routeName="signin" activeClass="active">Sign in</NavLink>
                 </div>
             </div>
         );
