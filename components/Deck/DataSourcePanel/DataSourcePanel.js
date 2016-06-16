@@ -62,10 +62,10 @@ class DataSourcePanel extends React.Component {
                                 <input type="text" ref="comment" defaultValue={dataSource.comment}/>
                             </div>
                             <div className="ui hidden divider"></div>
-                            <div onClick={this.handleCancelClick.bind(this)} className="ui labeled icon button">
+                            <div tabIndex="0" onClick={this.handleCancelClick.bind(this)} className="ui labeled icon button">
                                 <i className="chevron left icon"></i> Cancel
                             </div>
-                            <div className="ui primary submit labeled icon button" onClick={this.handleSave.bind(this)}>
+                            <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleSave.bind(this)}>
                                 <i className="checkmark icon"></i> Save
                             </div>
                         </form>

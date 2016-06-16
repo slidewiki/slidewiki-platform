@@ -6,30 +6,29 @@ import ContributorsList from './ContributorsList';
 
 
 class ContributorsPanel extends React.Component {
-//var ContributorsPanel = React.createClass({
     componentDidMount() {
         this.enableAccordion();
     }
     componentDidUpdate(){
-        this.enableAccordion();
+        this.refreshAccordion();
     }
     enableAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;
         $(accordionDIV).find('.ui.accordion').accordion({
-            onChange: (value) => {
-                this.context.executeAction(navigateAction, {
-                    url: '/deck/' + value
-                });
-            }
+            exclusive: false
         });
+    }
+    refreshAccordion(status) {
+        let accordionDIV = this.refs.contributorsPanel;
+        $(accordionDIV).find('.ui.accordion').accordion('refresh');
     }
 
     render() {
         return (
             <div className="sw-contributors-panel" ref="contributorsPanel">
                 <div className="ui segments">
-                    <div className="ui secondary segment">
-                        <a href="/contributors/deck/57">Contributors</a>
+                    <div className="ui secondary segment top attached">
+                        <a href="/contributors/deck/57" className="ui">Contributors</a>
                     </div>
 
                     <div className="ui styled accordion">
@@ -55,23 +54,16 @@ class ContributorsPanel extends React.Component {
 	                    	<ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList>
 	                    </div>
                     </div>
-                    
-                    
+
                 </div>
 
              </div>
         );
     }
-
-//});
 }
 
-
-
-
-
 ContributorsPanel.contextTypes = {
-//    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired
 };
 ContributorsPanel = connectToStores(ContributorsPanel, [ContributorsStore], (context, props) => {
     return {

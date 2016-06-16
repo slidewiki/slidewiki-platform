@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import {shortTitle} from '../../configs/general';
 export default function loadSlideEdit(context, payload, done) {
     console.log(payload);
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {

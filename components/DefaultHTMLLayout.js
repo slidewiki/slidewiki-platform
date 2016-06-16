@@ -24,7 +24,6 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/bower_components/json3/lib/json3.min.js"></script>
                 <script src="/bower_components/es6-shim/es6-shim.min.js"></script>
                 <script src="/bower_components/es6-shim/es6-sham.min.js"></script>
-                <script src="/bower_components/ckeditor/ckeditor.js"></script>
                 {/* Above are added only to support IE browser */}
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
@@ -38,6 +37,10 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js"></script>
                 {/* All external vendors bundle*/}
                 <script src={'/public/js/vendor.bundle.js'}></script>
+                <script src="/bower_components/ckeditor/ckeditor.js"></script>
+                <script type="javascript">
+                    CKEDITOR.disableAutoInline = true; //need to disable auto-initate to config inline toolbars
+                </script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile}></script>
             </body>

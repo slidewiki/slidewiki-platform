@@ -10,7 +10,7 @@ class PresentationSlideList extends React.Component {
 
     console.log('[SWIK-134] flatTree', this.props.flatTree[0]);
 
-    var slides = this.props.PresentationStore.content;//"<section><h1>Stay classy, San Diego!</h1></section>";
+    var slides = this.props.PresentationStore.content;
 
     var returnList = [];
     if(slides !== undefined){
@@ -34,9 +34,11 @@ class PresentationSlideList extends React.Component {
   }
 
 	componentDidMount(){
-    console.log('[SWIK] Calling componentDidMount()');
 
-    Reveal.initialize();
+	    if(this.props.PresentationStore.content !== undefined){
+			Reveal.initialize();
+		}
+
   }
 
 

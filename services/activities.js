@@ -49,7 +49,7 @@ function adjustIDs(activity) {
         activity.use_info.target_id = adjustID(activity.use_info.target_id);
 }
 function adjustID(id) {
-    if (id.length === 24) {
+    if (id.length === 24 && id.startsWith('1122334455')) {
         return id.substring(20).replace(/^0+/, '');
     }
     return id;
@@ -62,7 +62,7 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
 
-        const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;//TODO solve these ID issues
+        const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
 
         switch (resource) {
             case 'activities.list':
@@ -107,6 +107,7 @@ export default {
                 break;
         }
     },
+    //Not used
     create: (req, resource, params, body, config, callback) => {
         //TODO get real user id and content name
         const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
@@ -116,7 +117,7 @@ export default {
 
         if(resource === 'activity.comment'){
             //TODO get real content_id
-            const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
+            const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
 
             rp.post({
                 uri: Microservices.activities.uri + '/activity/new',

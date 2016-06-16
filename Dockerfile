@@ -1,4 +1,4 @@
-FROM node:6.0-slim
+FROM node:6.2-slim
 MAINTAINER Ali Khalili "hyperir@gmail.com"
 
 RUN mkdir /nodeApp
@@ -9,16 +9,14 @@ WORKDIR /nodeApp
 # ---------------- #
 
 RUN apt-get update
+# is this really needed?
 RUN apt-get install -y git
 
 RUN npm install bower -g
 RUN npm install webpack -g
 
-ADD bower.json /nodeApp/
+ADD bower.json package.json /nodeApp/
 RUN bower install --allow-root
-
-ADD package.json /nodeApp/
-
 # Install only production dependencies? todo: handle webpack issue
 RUN npm install
 
