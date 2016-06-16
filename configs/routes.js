@@ -244,5 +244,14 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadTabLinks, payload, done);
         }
+    },
+    presentation: {
+      path: '/presentation/:id/:stype?/:sid?/:spath?/:mode?',
+      method: 'get',
+      page: 'presentation',
+      handler: require('../components/Deck/Presentation/Presentation'),
+      action: (context, payload, done) => {
+          context.executeAction(loadDeck, payload, done);
+      }
     }
 };
