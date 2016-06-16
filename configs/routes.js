@@ -246,12 +246,12 @@ export default {
         }
     },
     presentation: {
-      path: '/presentation/:id/:stype?/:sid?/:spath?/:mode?',
-      method: 'get',
-      page: 'presentation',
-      handler: require('../components/Deck/Presentation/Presentation'),
-      action: (context, payload, done) => {
-          context.executeAction(loadDeck, payload, done);
-      }
+        path: '/presentation/:id/:stype?/:sid?/:spath?/:mode?',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeck, payload, done);
+        }
     }
 };
