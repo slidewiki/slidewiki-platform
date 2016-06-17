@@ -1,4 +1,6 @@
 import React from 'react';
+import userSignIn from '../../../actions/user/userSignIn';
+import userSignUp from '../../../actions/user/userSignUp';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -107,9 +109,26 @@ class UserRegistration extends React.Component {
 
     }
 
+
+
+
+    componentDidUpdate(){
+
+    }
+
+
+
+
     handleSignIn() {
         console.log($('.ui.form.signin').form('is valid'));
         console.log($('.ui.form.signin').form('get values'));
+
+
+        this.context.executeAction(userSignIn, {
+            email: this.refs.email1.value,
+            password: this.refs.password1.value
+        });
+
         //
         // $('.ui.page.signup')
         //   .transition('drop')
@@ -123,6 +142,8 @@ class UserRegistration extends React.Component {
     handleSignUp() {
         console.log($('.ui.form.signup').form('is valid'));
         console.log($('.ui.form.signup').form('get values'));
+
+
         $('#firstname').val('');
         $('#lastname').val('');
         $('#email2').val('');
@@ -132,10 +153,18 @@ class UserRegistration extends React.Component {
         // this.refs.email2.value = '';
         // this.refs.reenteremail.value = '';
         // this.refs.password2.value = '';
-        $('.dimmer')
-          .dimmer('toggle')
-        ;
 
+        this.context.executeAction(userSignUp, {
+            firstname: this.refs.firstname.value,
+            lastname: this.refs.lastname.value,
+            email: this.refs.email1.value,
+            password: this.refs.password1.value
+        });
+
+
+        $('.dimmer')
+            .dimmer('toggle')
+        ;
 
     }
 
@@ -157,6 +186,9 @@ class UserRegistration extends React.Component {
                                     <button type="submit" className="ui blue labeled submit icon button">
                                         <i className="icon sign in"></i> Sign In
                                     </button>
+                                    <div className="ui floated right ">
+                                        <a href="">Can't access my account</a>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -167,7 +199,7 @@ class UserRegistration extends React.Component {
                                     <div className="center">
                                         <h2 className="ui inverted icon header">
                                             <i className="icon circular inverted green mail outline"></i>
-                                            Thans for signing up!
+                                            Thanks for signing up!
                                         </h2>
                                         <br/>
                                         To complete the registration process you must first confirm your account. An email has been sent to your address.
