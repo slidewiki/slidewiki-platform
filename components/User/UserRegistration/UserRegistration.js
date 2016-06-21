@@ -61,7 +61,7 @@ class UserRegistration extends React.Component {
                     ]
                 }
             },
-            onSuccess: this.handleSignUp
+            onSuccess: this.handleSignUp.bind(this)
         };
         const signinValidation = {
             fields: {
@@ -92,18 +92,18 @@ class UserRegistration extends React.Component {
                     ]
                 }
             },
-            onSuccess: this.handleSignIn
+            onSuccess: this.handleSignIn.bind(this)
         };
 
         $('.ui.form.signup').form(signupValidation);
         $('.ui.form.signin').form(signinValidation);
         // stop the forms from submitting normally
         $('.ui.form.signin').submit((e) => {
-            //e.preventDefault(); usually use this, but below works best here.
+            e.preventDefault(); //usually use this, but below works best here.
             return false;
         });
         $('.ui.form.signup').submit((e) => {
-            //e.preventDefault(); usually use this, but below works best here.
+            e.preventDefault(); //usually use this, but below works best here.
             return false;
         });
 
@@ -242,5 +242,9 @@ class UserRegistration extends React.Component {
         );
     }
 }
+
+UserRegistration.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default UserRegistration;

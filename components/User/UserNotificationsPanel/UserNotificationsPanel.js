@@ -8,7 +8,7 @@ import loadUserNotifications from '../../../actions/user/loadUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
     componentDidMount() {
-        context.executeAction(loadUserNotifications, {
+        this.context.executeAction(loadUserNotifications, {
             uid: 1//TODO get real user_id
         });
     }

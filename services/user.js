@@ -5,7 +5,6 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
 
-        //not used - data is already in the store
         if (resource === 'user.item'){
             let user = {};
 

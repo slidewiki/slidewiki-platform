@@ -1,5 +1,5 @@
 export default function userSignUp(context, payload, done) {
-    context.service.create('uew.new', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.create('user.registration', payload, {timeout: 20 * 1000}, (err, res) => {
         // if (err) {
         //     context.dispatch('DELETE_ALL_USER_NOTIFICATIONS_FAILURE', err);
         // } else {
