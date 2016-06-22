@@ -22,9 +22,6 @@ export default {
             let entities = [{'id': '1', 'description':'slide'}, {'id': '2', 'description':'deck'}, {'id': '3', 'description':'answer'}];
             let languages = [{'id': '1', 'description':'EN'}, {'id': '2', 'description':'ES'}];
 
-
-
-            console.log(searchresults);
             callback(null, {results: searchresults, entities: entities, languages:languages});
         }
     }
