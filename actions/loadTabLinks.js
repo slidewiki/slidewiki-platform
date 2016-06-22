@@ -6,6 +6,15 @@ import TabLinksStore from '../stores/TabLinksStore';
 
 
 export default function loadTabLinks(context, payload, done) {
+    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
+        console.log("Content type incorrect. Loading tab links failed.");
+
+    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
+        console.log("Slide id incorrect. Loading tab links failed.");
+
+    if (!(payload.params.mode || payload.params.mode === undefined))
+        console.log("Incorrect mode. Loading tab links failed.");
+
     let currentState = context.getStore(TabLinksStore).getState();
     let pageTitle = shortTitle + ' | TabLinks | ';
     let payloadCustom = payload;
