@@ -11,19 +11,19 @@ import loadSimilarContents from './loadSimilarContents';
 
 export default function loadDeck(context, payload, done) {
     if (!(Number.parseInt(payload.params.id) >= 0))
-        console.log("Deck id incorrect. Loading deck failed.");
+        console.log('Deck id incorrect. Loading deck failed.');
 
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        console.log("Content type incorrect. Loading deck failed.");
+        console.log('Content type incorrect. Loading deck failed.');
 
     if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        console.log("Slide id incorrect. Loading deck failed.");
+        console.log('Slide id incorrect. Loading deck failed.');
 
     if (!(payload.params.spath || payload.params.spath === undefined))
-        console.log("Incorrect path. Loading deck failed.");
+        console.log('Incorrect path. Loading deck failed.');
 
     if (!(payload.params.mode || payload.params.mode === undefined))
-        console.log("Incorrect mode. Loading deck failed.");
+        console.log('Incorrect mode. Loading deck failed.');
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();

@@ -4,10 +4,10 @@ import DeckTreeStore from '../../stores/DeckTreeStore';
 export default function loadDeckTree(context, payload, done) {
 
     if (!(Number.parseInt(payload.params.id) >= 0))
-        console.log("Deck id incorrect. Loading deck tree failed.");
+        console.log('Deck id incorrect. Loading deck tree failed.');
 
     if (!(payload.params.spath || payload.params.spath === undefined || payload.params.spath === ''))
-        console.log("Incorrect path. Loading deck tree failed.");
+        console.log('Incorrect path. Loading deck tree failed.');
 
     let currentSelector = context.getStore(DeckTreeStore).getSelector();
     let runFetchTree = 1;

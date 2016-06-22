@@ -2,10 +2,10 @@ import {shortTitle} from '../../configs/general';
 
 export default function loadActivities(context, payload, done) {
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        console.log("Content type incorrect. Loading activities failed.");
+        console.log('Content type incorrect. Loading activities failed.');
 
     if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        console.log("Slide id incorrect. Loading activities failed.");
+        console.log('Slide id incorrect. Loading activities failed.');
 
     context.service.read('activities.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
