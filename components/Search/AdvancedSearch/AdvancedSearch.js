@@ -31,7 +31,7 @@ class AdvancedSearch extends React.Component {
 
                         <div className="field">
                             <label>Language</label>
-                            <select name='lang' multiple='' className='ui dropdown'>
+                            <select name='lang' multiple='' className='ui fluid search dropdown'>
                               <option value=''>Select Language</option>
                               <option value='EN'>English</option>
                               <option value='ES'>Spanish</option>
@@ -52,11 +52,24 @@ class AdvancedSearch extends React.Component {
                         </div>
 
 
-                        <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAdvancedSearch.bind(this)}>
+                        <div className="ui primary submit labeled icon button" onClick={this.handleAdvancedSearch.bind(this)}>
                             <i className="icon edit"></i> Submit
                         </div>
 
                     </form>
+
+
+                    <select multiple='' name='skills' className='ui fluid normal dropdown'>
+                        <option value=''>Skills</option>
+                        <option value='angular'>Angular</option>
+                        <option value='css'>CSS</option>
+                        <option value='design'>Graphic Design</option>
+                        <option value='ember'>Ember</option>
+                        <option value='html'>HTML</option>
+                        <option value='ia'>Information Architecture</option>
+                        <option value='ui'>UI Design</option>
+                        <option value='ux'>User Experience</option>
+                    </select>
 
 
                 </div>
