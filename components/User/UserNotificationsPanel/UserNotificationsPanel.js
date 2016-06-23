@@ -66,13 +66,13 @@ class UserNotificationsPanel extends React.Component {
 
         let iconMarkAsRead = (//disabled icon
             <a className="item">
-                <i className="ui large disabled checkmark box icon"></i>
+                <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
             </a>
         );
         if(this.props.UserNotificationsStore.newNotifications.length > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
               <a className="item" onClick={this.handleMarkAsRead.bind(this)} >
-                  <i className="ui large checkmark box icon"></i>
+                  <i tabIndex="0" className="ui large checkmark box icon"></i>
               </a>
             );
         };
@@ -83,7 +83,7 @@ class UserNotificationsPanel extends React.Component {
                     <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotifications.length}</span></a>
                     <div className="menu">
                         <a className="item" onClick={this.handleSettingsClick.bind(this)}>
-                            <i className="ui large settings icon"></i>
+                            <i tabIndex="0" className="ui large settings icon"></i>
                         </a>
                         <div className="mark-read-icon">
                             {iconMarkAsRead}

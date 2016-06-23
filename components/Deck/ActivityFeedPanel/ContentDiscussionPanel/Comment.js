@@ -31,7 +31,7 @@ class Comment extends React.Component {
                 <div className="field">
                     <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
                 </div>
-                <div className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
+                <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
                     <i className="icon edit"></i> Add Reply
                 </div>
             </form>
@@ -51,7 +51,7 @@ class Comment extends React.Component {
                         {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
                     <div className="actions">
-                        <a className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+                        <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
                     </div>
                     { comment.replyBoxOpened ? replyBox : '' }
                 </div>

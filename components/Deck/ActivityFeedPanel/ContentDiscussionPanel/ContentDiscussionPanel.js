@@ -34,7 +34,7 @@ class ContentDiscussionPanel extends React.Component {
                     <div className="field">
                         <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
                     </div>
-                    <div className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
+                    <div tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
                         <i className="icon edit"></i> Add Comment
                     </div>
                 </form>

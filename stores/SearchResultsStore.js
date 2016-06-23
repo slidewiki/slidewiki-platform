@@ -19,7 +19,7 @@ class SearchResultsStore extends BaseStore {
         this.entities = [];
         this.languages = [];
 
-        console.log('111');
+        //console.log('111');
     }
     updateResults(payload) {
         this.results = payload.results;

@@ -14,7 +14,9 @@ class ContributorsPanel extends React.Component {
     }
     enableAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;
-        $(accordionDIV).find('.ui.accordion').accordion();
+        $(accordionDIV).find('.ui.accordion').accordion({
+            exclusive: false
+        });
     }
     refreshAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;
@@ -25,8 +27,8 @@ class ContributorsPanel extends React.Component {
         return (
             <div className="sw-contributors-panel" ref="contributorsPanel">
                 <div className="ui segments">
-                    <div className="ui secondary segment">
-                        <a href="/contributors/deck/57">Contributors</a>
+                    <div className="ui secondary segment top attached">
+                        <a href="/contributors/deck/57" className="ui">Contributors</a>
                     </div>
 
                     <div className="ui styled accordion">
