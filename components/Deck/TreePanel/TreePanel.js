@@ -41,10 +41,10 @@ class TreePanel extends React.Component {
             fontSize: '1.06em'
         };
         const treeDIVStyles = {
-            maxHeight: '400',
-            minHeight: '320',
+            maxHeight: 400,
+            minHeight: 320,
             overflowY: 'auto',
-            padding: '5'
+            padding: 5
         };
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;

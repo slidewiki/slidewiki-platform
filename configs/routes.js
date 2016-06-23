@@ -3,13 +3,15 @@ import {shortTitle, fullTitle} from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
+import loadSearchResults from '../actions/search/loadSearchResults';
 import loadDeck from '../actions/loadDeck';
-import loadSlideView from '../actions/loadSlideView';
-import loadSlideEdit from '../actions/loadSlideEdit';
+import loadSlideView from '../actions/slide/loadSlideView';
+import loadSlideEdit from '../actions/slide/loadSlideEdit';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
+import loadUserNotifications from '../actions/user/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/loadContentHistory';
@@ -19,6 +21,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
+import loadPresentation from '../actions/loadPresentation';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -61,6 +64,32 @@ export default {
             done();
         }
     },
+    notifications: {
+        path: '/notifications',
+        method: 'get',
+        page: 'notifications',
+        title: 'SlideWiki -- User notifications',
+        handler: require('../components/User/UserNotificationsPanel/UserNotificationsPanel'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | User notifications'
+            });
+            done();
+        }
+    },
+
+    searchresults: {
+        path: '/searchresults/:searchstring?',
+        // path: '/searchresults',
+        method: 'get',
+        page: 'searchresults',
+        title: 'SlideWiki -- Search results',
+        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadSearchResults, payload, done);
+        }
+    },
+
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
@@ -217,21 +246,15 @@ export default {
             context.executeAction(loadTabLinks, payload, done);
         }
     },
-// selector
-    // {id: 'id of parent deck',
-    // stype: 'type of selected content e.g. slide, deck or question',
-    // sid: 'id of selected content',
-    // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4',
-    // mode: 'interaction mode e.g. view or edit'}
     presentation: {
-      path: '/presentation/:id/:stype?/:sid?/:spath?/:mode?',
-      method: 'get',
-      page: 'presentation',
-      handler: require('../components/Deck/Presentation/Presentation'),
-      action: (context, payload, done) => {
-          context.executeAction(loadDeck, payload, done);
-      }
+        path: '/presentation/:id/',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckTree, payload, done);
+            //context.executeAction(loadPresentation, payload, done);
+            context.executeAction(loadDeck, payload, done);
+        }
     }
-
-
 };

@@ -10,32 +10,13 @@ class ContributorsStore extends BaseStore {
         this.listName = '';
     }
     updateContributors(payload) {
-        this.contributors = this.getContributors(payload.contributors);//payload.contributors;
+        this.contributors = this.getContributors(payload.contributors);
         this.creator = this.getCreator(payload.contributors);
         this.translators = this.getTranslators(payload.contributors);
         this.listName = payload.listName;
-
-        //console.log('listName: '+this.listName);
-
         this.emitChange();
     }
-
-    expand(payload) {
-
-        //console.log('expand ??');
-        //console.log('listName: '+this.listName);
-
-        if(this.creator!==null){
-            this.creator = [];
-            //console.log('expand 0');
-        }
-        else{
-            this.creator = this.getCreator(payload.contributors);
-            //console.log('expand: '+this.creator[0].username);
-        }
-        this.emitChange();
-    }
-
+    
     getState() {
         return {
             contributors: this.contributors,
@@ -75,9 +56,7 @@ class ContributorsStore extends BaseStore {
 
 ContributorsStore.storeName = 'ContributorsStore';
 ContributorsStore.handlers = {
-    'LOAD_CONTRIBUTORS_SUCCESS': 'updateContributors',
-    'EXPAND_CONTRIBUTORS_SUCCESS': 'expand'
-
+    'LOAD_CONTRIBUTORS_SUCCESS': 'updateContributors'
 };
 
 export default ContributorsStore;

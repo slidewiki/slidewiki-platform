@@ -16,6 +16,9 @@ class Comment extends React.Component {
             title: this.refs.title.value,
             text: this.refs.text.value
         });
+
+        this.refs.title.value = '';
+        this.refs.text.value = '';
     }
 
     render() {
@@ -28,11 +31,9 @@ class Comment extends React.Component {
                 <div className="field">
                     <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
                 </div>
-                <a className="add" onClick={this.handleAddReply.bind(this)}>
-                    <div className="ui primary submit labeled icon button">
-                        <i className="icon edit"></i> Add Reply
-                    </div>
-                </a>
+                <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
+                    <i className="icon edit"></i> Add Reply
+                </div>
             </form>
         );
         return (
@@ -50,7 +51,7 @@ class Comment extends React.Component {
                         {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
                     <div className="actions">
-                        <a className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+                        <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
                     </div>
                     { comment.replyBoxOpened ? replyBox : '' }
                 </div>

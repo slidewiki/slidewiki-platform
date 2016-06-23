@@ -1,29 +1,61 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import ImportStore from '../../stores/ImportStore'; //import store from file
-import loadImportFile from '../../actions/loadImportFile'; //import action from file
+import {NavLink, navigateAction} from 'fluxible-router';
+import ImportStore from '../../stores/ImportStore';
+import importFileSelect from '../../actions/importFileSelect';
+import loadImportFile from '../../actions/loadImportFile';
+import importFinished from '../../actions/importFinished';
+let ReactDOM = require('react-dom');
+//TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
 
 class Import extends React.Component {
+    componentDidMount(){
+        //after loading component - focus on select-file button
+        ReactDOM.findDOMNode(this.refs.selectbutton).focus();
+    }
+    componentDidUpdate(){
+        if (this.props.ImportStore.isAllowed && !this.props.ImportStore.isUploaded)
+        {
+            //if fileformat is correct and file is not yet being uploaded
+            ReactDOM.findDOMNode(this.refs.submitbutton).focus();
+        }
+    }
     handleFileSelect(){
-        //this.context.executeAction(restoreDeckPageLayout, {}); // example copied from deck.js
-        //alert("File selected");
-        //Check for correct format and, if correct, enable submit button - do via this.props.ImportStore.mode or this.props.ImportStore.uploadAllowed
-        //$('#ImportFile').enable();
+        //TODO - Check for correct format and
+        //Do this via flux flow - this.props.ImportStore.isAllowed
+        this.context.executeAction(importFileSelect, {});  // example copied from deck.js
         return false;
     }
     handleFileSubmit(){
-        //show mockup progress bar
-        //alert("File Submitted for upload");
+        //TODO: show mockup progress bar
+        //send loadImportFile event and get mock-up presentaton data from this.props.ImportStore.content from importStore.js
         this.context.executeAction(loadImportFile, {});  // example copied from deck.js
         return false;
     }
+    //redirect to presentation deck with id (input param)
+    handleRedirect(id){
+        this.context.executeAction(importFinished, {});  // destroy current state
+        this.context.executeAction(navigateAction, {
+            url: '/deck/' + id
+        });
+        return false;
+    }
     render() {
+        //variable for intermediate storage of output
         let outputDIV = '';
         if(this.props.ImportStore.isUploaded){
+            //show upload message
             outputDIV =  <div className="ui bottom attached segment">
                           <div dangerouslySetInnerHTML={{__html:this.props.ImportStore.content}} />
                          </div>;
+                         //TODO - Progressbar - nice feature = get upload state from store and show in upload state. E.g. importing slide 1 of 99. See example in slidecontrol.js
+            //mock-up timeout for redirect simulates time for uploading
+            setTimeout( () => {
+                //TODO - clear ImportStore - when user goes back to import page - gets initial state
+                this.handleRedirect(Math.floor(Math.random(1,1000000)*100));
+            }, 3000);
         }else{
+            //landing page - show file-select button and upload button
             outputDIV =      <div className="ui row">
                                 <div className="column">
                                     <div className="ui content">
@@ -31,16 +63,20 @@ class Import extends React.Component {
                                         <p>Select your presentation file and upload it to SlideWiki. </p>
                                     </div>
                                     <br />
-                                    <form className="ui form" onChange={this.handleFileSelect.bind(this)}>
-                                          <div className="ui input file focus animated">
-                                                <input type="file" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" tabIndex="0"></input>
-                                                <div tabIndex="0" id="submitbutton" className="ui focus animated button green" onClick={this.handleFileSubmit.bind(this)} onKeyDown={this.handleFileSubmit.bind(this)} >
-                                                      <div tabIndex="0" className="visible content" onClick={this.handleFileSubmit.bind(this)} onKeydown={this.handleFileSubmit.bind(this)}><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
-                                                      <div className="hidden content"><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
-                                                </div>
-                                                <div className="ui error message"></div>
+                                          <div className="ui input file focus animated" onChange={this.handleFileSelect.bind(this)}>
+                                                <input ref="selectbutton"  type="file" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
+                                                {!this.props.ImportStore.isAllowed ?
+                                                  <div tabIndex="0" ref="submitbutton" className="ui animated button green disabled">
+                                                    <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
+                                                    <div className="hidden content"><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
+                                                  </div>
+                                                  :
+                                                  <button tabIndex="0" ref="submitbutton" className="ui animated button green" onClick={this.handleFileSubmit.bind(this)} onChange={this.handleFileSubmit.bind(this)}>
+                                                    <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
+                                                    <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
+                                                  </button>
+                                                }
                                           </div>
-                                    </form>
                                     <br />
                                     <div className="ui content">
                                         <p>Presentation formats currently supported: Powerpoint (*.pptx) </p>

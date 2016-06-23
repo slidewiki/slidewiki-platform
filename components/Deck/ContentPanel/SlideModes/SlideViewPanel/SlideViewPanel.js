@@ -6,13 +6,26 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 class SlideViewPanel extends React.Component {
     render() {
         const compStyle = {
-            maxHeight: '500',
-            minHeight: '500',
+            maxHeight: 500,
+            minHeight: 500,
+            overflowY: 'auto'
+        };
+        const compSpeakerStyle = {
+            maxHeight: 50,
+            minHeight: 50,
             overflowY: 'auto'
         };
         return (
-            <div ref="slideViewPanel" className="ui bottom attached segment" style={compStyle}>
-                <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+          <div className="ui bottom attached segment">
+              <div ref="slideViewPanel" className="ui" style={compStyle}>
+                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
+                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+              </div>
+
+              <div ref="slideViewPanelSpeakerNotes" className="ui" style={compSpeakerStyle}>
+                  {this.props.SlideViewStore.speakernotes ? <b>Speaker Notes:</b> : ''}
+                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
+              </div>
             </div>
         );
     }

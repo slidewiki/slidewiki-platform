@@ -9,9 +9,9 @@ export default {
             //todo
             /*********received data from microservices*************/
             let contents = [
-                {'id': '16', 'title': 'item 1 related to ' + args.sid},
-                {'id': '28', 'title': 'item 2 related to ' + args.sid},
-                {'id': '39', 'title': 'item 3 related to ' + args.sid}
+                {'id': '16', 'title': 'title deck related to ' + args.sid, 'author': 'soeren' , 'authorId':'2' , 'date':'15/05/2016' ,'liked': '20', 'downloaded': '5'},
+                {'id': '28', 'title': 'title deck related to ' + args.sid, 'author': 'soeren', 'authorId':'2' , 'date':'18/04/2016' ,'liked': '15', 'downloaded': '6'},
+                {'id': '39', 'title': 'title deck related to ' + args.sid, 'author': 'ali1k', 'authorId':'1' , 'date':'03/05/2016' ,'liked': '10', 'downloaded': '4'}
             ];
             callback(null, {contents: contents, selector: selector});
         }

@@ -9,7 +9,7 @@ class Home extends React.Component {
                         <div className="column padding-reset">
                             <div className="ui huge message page grid">
                                 <img className="logo" src="/assets/images/logo_full.png" />
-                                <p>SlideWiki aims to revolutionize the way how educational material is authored, shared and used.</p>
+                                <p>SlideWiki revolutionises how educational material is authored, shared and used.</p>
                             </div>
                         </div>
                     </div>
@@ -26,7 +26,7 @@ class Home extends React.Component {
                             <div>
                                 Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
                                 <div className="ui divided list animated ">
-                                    <a className="item" href="/deck/56/slide/671">Try Sample Deck 1 &raquo;</a><a className="item" href="/deck/91">Try Sample Deck  2 &raquo;</a>
+                                    <a className="item" href="/deck/56/slide/575060ae4bc68d1000ea952b">Try Sample Deck 1 &raquo;</a><a className="item" href="/deck/91">Try Sample Deck  2 &raquo;</a>
                                 </div>
                             </div>
                         </div>
