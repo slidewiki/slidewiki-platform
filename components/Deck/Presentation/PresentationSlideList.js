@@ -3,13 +3,10 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import PresentationSlide from './PresentationSlide';
-import Reveal from 'reveal';
+
 
 class PresentationSlideList extends React.Component {
 	getSlides(){
-
-	    console.log('[SWIK-134] flatTree', this.props.flatTree[0]);
-
 	    var slides = this.props.PresentationStore.content;
 
 	    var returnList = [];
@@ -25,7 +22,7 @@ class PresentationSlideList extends React.Component {
 	}
 
 	componentDidMount(){
-		console.log('PresentationStore.content', this.props.PresentationStore.content)
+
 	    // if(this.props.PresentationStore.content !== ''){
 			Reveal.initialize();
 		// }
