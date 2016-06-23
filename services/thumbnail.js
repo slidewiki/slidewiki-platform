@@ -10,12 +10,12 @@ export default {
             let imgSrc;
             let webPage;
             let phInstance;
-            let contents;
+
             phantom.create().then((instance) => {
                 phInstance = instance;
                 return instance.createPage();
             }).then((page) => {
-                page.setContent(args.contentHTML,'/slide/' + arg.sid);
+                page.setContent(args.contentHTML,'/slide/' + args.sid);
                 webPage = page;
                 return page.renderBase64('PNG');
             }).then((src) => {
