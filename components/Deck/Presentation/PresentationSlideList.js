@@ -8,36 +8,27 @@ import Reveal from 'reveal';
 class PresentationSlideList extends React.Component {
 	getSlides(){
 
-    console.log('[SWIK-134] flatTree', this.props.flatTree[0]);
+	    console.log('[SWIK-134] flatTree', this.props.flatTree[0]);
 
-    var slides = this.props.PresentationStore.content;
+	    var slides = this.props.PresentationStore.content;
 
-    var returnList = [];
-    if(slides !== undefined){
-			//console.log("slides:", slides[0]['content']);
+	    var returnList = [];
+	    if(slides !== undefined){
+				for (var i = 0; i < slides.length; i++) {
+					let content = slides[i]['content'];
+					returnList.push(<PresentationSlide content={content}  key={i} />);
+				}
 
-			for (var i = 0; i < slides.length; i++) {
-				let content = slides[i]['content'];
-				//console.log('slides[i]', slides[i]['content']);
-				returnList.push(<PresentationSlide content={content} />);
-			}
+	      return returnList;
 
-      // for(var s in slides){
-      //   console.log("s:", s['content']);
-      //
-      // }
-      return returnList;//<PresentationSlide content={content} />
-
-    }
-
-
-  }
+    	}
+	}
 
 	componentDidMount(){
-
-	    if(this.props.PresentationStore.content !== undefined){
+		console.log('PresentationStore.content', this.props.PresentationStore.content)
+	    // if(this.props.PresentationStore.content !== ''){
 			Reveal.initialize();
-		}
+		// }
 
   }
 
@@ -46,7 +37,7 @@ class PresentationSlideList extends React.Component {
 		return(
 			<div className="slides">
 				<section></section>
-					{this.getSlides()}
+				{this.getSlides()}
 			</div>
 		)
 	}

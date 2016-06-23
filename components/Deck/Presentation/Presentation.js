@@ -7,23 +7,29 @@ import PresentationSlideList from './PresentationSlideList';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import loadPresentation from '../../../actions/loadPresentation';
 
+
 var playerCss = {
-    height: '700px'
+    height: '1280px'
 };
-var slides = <slide />;
+
 
 class Presentation extends React.Component{
 
 
   componentWillMount(){
     console.log("componentWillMount");
+
+    // let element = document.createElement('link');
+    // element.setAttribute('href', '/bower_components/reveal.js/css/themes/white.css');
+    // element.setAttribute('rel', 'stylesheet');
+    // element.setAttribute('type', 'text/css');
+
+
     this.context.executeAction(loadPresentation, {
 		  deck: this.props.DeckTreeStore.flatTree
 		});
 
   }
-
-  //See https://github.com/ryanflorence/react-training/blob/gh-pages/lessons/05-wrapping-dom-libs.md for info about integrating a separate library
 
 	render(){
     console.log("render");
