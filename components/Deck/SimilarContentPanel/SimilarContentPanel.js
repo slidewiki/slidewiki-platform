@@ -4,7 +4,9 @@ import SimilarContentStore from '../../../stores/SimilarContentStore';
 import SimilarContentList from './SimilarContentList';
 
 class SimilarContentPanel extends React.Component {
+
     render() {
+
         return (
             <div ref="similarContentPanel">
 
@@ -22,6 +24,7 @@ class SimilarContentPanel extends React.Component {
     }
 }
 SimilarContentPanel = connectToStores(SimilarContentPanel, [SimilarContentStore], (context, props) => {
+
     return {
         SimilarContentStore: context.getStore(SimilarContentStore).getState()
     };
