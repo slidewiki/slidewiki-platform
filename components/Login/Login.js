@@ -25,7 +25,7 @@ class Login extends React.Component {
                 <br/>
                 <div className="fields">
                  <button className="ui primary button" type="submit"  >Login</button>
-                 <button className="ui secondary button" type="reset">Cancel</button>
+              
                 </div>
                 </form>
               </div>
