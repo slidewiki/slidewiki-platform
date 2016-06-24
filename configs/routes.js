@@ -89,6 +89,20 @@ export default {
         }
     },
 
+    login:{
+      path: '/login',
+      method: 'get',
+      page: 'login',
+      title: 'SlideWiki -- Login',
+      handler: require('../components/Login/Login.js'),
+      action: (context, payload, done) => {
+          context.dispatch('UPDATE_PAGE_TITLE', {
+              pageTitle: shortTitle + ' | Login'
+          });
+          done();
+      }
+    },
+
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
