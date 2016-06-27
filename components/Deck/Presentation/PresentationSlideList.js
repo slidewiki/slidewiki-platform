@@ -12,8 +12,10 @@ class PresentationSlideList extends React.Component {
 	    var returnList = [];
 	    if(slides !== undefined){
 				for (var i = 0; i < slides.length; i++) {
-					let content = slides[i]['content'];
-					returnList.push(<PresentationSlide content={content}  key={i} />);
+					let speakerNotes = slides[i]['speakerNotes'];
+					let content = slides[i]['content'] + '<aside class="notes">' + speakerNotes + '</aside>';
+
+					returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={i} />);
 				}
 
 	      return returnList;

@@ -18,12 +18,8 @@ export default {
                 let presentation = [];
                 for (let i = 0; i < deck.length; i++) {
                     let slide = deck[i];
-                    presentation.push({'id': slide.id, 'content': get_sample_text(slide.id)});
+                    presentation.push({'id': slide.id, 'content': get_sample_text(slide.id), 'speakerNotes': get_sample_notes(slide.id)});
                 }
-              // for (var slide in deck) {
-              //   // console.log("slide id: ", slide);
-              //
-              // }
                 callback(null, {content: presentation});
             }
 
@@ -32,11 +28,6 @@ export default {
     },
 
 
-
-    // other methods
-    // create: (req, resource, params, body, config, callback) => {},
-    // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
 };
 
 
@@ -69,4 +60,8 @@ function get_sample_text(id){
         </p>
     </div>
     `;
+}
+
+function get_sample_notes(id){
+    return "These are some really important notes for Slide " + id;
 }
