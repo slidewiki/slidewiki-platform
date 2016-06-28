@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDom from 'react-dom';
 import userSignIn from '../../../actions/user/userSignIn';
 import userSignUp from '../../../actions/user/userSignUp';
 
@@ -7,89 +8,84 @@ class UserRegistration extends React.Component {
         //Form validations
         const signupValidation = {
             fields: {
-                firstname : {
+                firstname: {
                     identifier: 'firstname',
-                    rules: [
-                        {
-                            type   : 'empty',
-                            prompt : 'Please enter your first name'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your first name'
+                    }]
                 },
-                lastname : {
+                lastname: {
                     identifier: 'lastname',
-                    rules: [
-                        {
-                            type   : 'empty',
-                            prompt : 'Please enter your last name'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your last name'
+                    }]
                 },
-                email2 : {
+                email2: {
                     identifier: 'email2',
-                    rules: [
-                        {
-                            type   : 'empty',
-                            prompt : 'Please enter your email address'
-                        },
-                        {
-                            type   : 'email',
-                            prompt : 'Please enter a valid email address'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your email address'
+                    }, {
+                        type: 'email',
+                        prompt: 'Please enter a valid email address'
+                    }]
                 },
-                reenteremail : {
+                reenteremail: {
                     identifier: 'reenteremail',
-                    rules: [
-                        {
-                            type   : 'match[email2]',
-                            prompt : 'Your emails do not match'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please reenter your email address'
+                    }, {
+                        type: 'match[email2]',
+                        prompt: 'Your emails do not match'
+                    }]
                 },
                 password2: {
                     identifier: 'password2',
-                    rules: [
-                        {
-                            type   : 'empty',
-                            prompt : 'Please enter a password'
-                        },
-                        {
-                            type   : 'minLength[6]',
-                            prompt : 'Your password must be at least {ruleValue} characters'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter a password'
+                    }, {
+                        type: 'minLength[6]',
+                        prompt: 'Your password must be at least {ruleValue} characters long'
+                    }]
+                },
+                reenterpassword2: {
+                    identifier: 'reenterpassword2',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your password again'
+                    }, {
+                        type: 'match[password2]',
+                        prompt: 'Your passwords do not match'
+                    }]
                 }
             },
             onSuccess: this.handleSignUp.bind(this)
         };
         const signinValidation = {
             fields: {
-                email1 : {
+                email1: {
                     identifier: 'email1',
-                    rules: [
-                        {
-                            type   : 'empty',
-                            prompt : 'Please enter your email address'
-                        },
-                        {
-                            type   : 'email',
-                            prompt : 'Please enter a valid email address'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your email address'
+                    }, {
+                        type: 'email',
+                        prompt: 'Please enter a valid email address'
+                    }]
                 },
                 password1: {
                     identifier: 'password1',
-                    rules: [
-                        {
-                            type   : 'empty',
-                            prompt : 'Please enter a password'
-                        },
-                        {
-                            type   : 'minLength[6]',
-                            prompt : 'Your password must be at least {ruleValue} characters'
-                        }
-                    ]
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter a password'
+                    }, {
+                        type: 'minLength[6]',
+                        prompt: 'Your password must be at least {ruleValue} characters long'
+                    }]
                 }
             },
             onSuccess: this.handleSignIn.bind(this)
@@ -106,23 +102,16 @@ class UserRegistration extends React.Component {
             e.preventDefault(); //usually use this, but below works best here.
             return false;
         });
-
     }
 
-
-
-
-    componentDidUpdate(){
-
-    }
-
-
-
+    componentDidUpdate() {}
 
     handleSignIn() {
         console.log($('.ui.form.signin').form('is valid'));
         console.log($('.ui.form.signin').form('get values'));
 
+        $('#email1').val('');
+        $('#password1').val('');
 
         this.context.executeAction(userSignIn, {
             email: this.refs.email1.value,
@@ -143,12 +132,12 @@ class UserRegistration extends React.Component {
         console.log($('.ui.form.signup').form('is valid'));
         console.log($('.ui.form.signup').form('get values'));
 
-
         $('#firstname').val('');
         $('#lastname').val('');
         $('#email2').val('');
         $('#reenteremail').val('');
         $('#password2').val('');
+        $('#reenterpassword2').val('');
         // this.refs.lastname.value = '';
         // this.refs.email2.value = '';
         // this.refs.reenteremail.value = '';
@@ -161,84 +150,109 @@ class UserRegistration extends React.Component {
             password: this.refs.password1.value
         });
 
-
         $('.dimmer')
-            .dimmer('toggle')
-        ;
-
+            .dimmer('toggle');
     }
 
     render() {
         return (
-            <div className="ui page grid" >
-                <div className="ui row">
-                    <div className="column">
-                        <div className="ui centered page grid">
-                            <div className="ui blue segment compact page grid">
-                                <h2 className="ui dividing header">Sign In</h2>
-                                <form className="ui form signin">
-                                    <div className="ui icon input field">
-                                        <input type="text" name="email1" ref="email1" placeholder="Email"/><i className="mail icon"></i>
-                                    </div>
-                                    <div className="ui icon input field">
-                                        <input type="password" name="password1" ref="password1" placeholder="Password"/><i className="lock icon"></i>
-                                    </div>
-                                    <button type="submit" className="ui blue labeled submit icon button">
-                                        <i className="icon sign in"></i> Sign In
-                                    </button>
-                                    <div className="ui floated right ">
-                                        <a href="">Can't access my account</a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div className="ui horizontal section divider"> Or </div>
-                        <div className="ui centered page grid">
-                            <div className="ui dimmer">
-                                <div className="content">
-                                    <div className="center">
-                                        <h2 className="ui inverted icon header">
-                                            <i className="icon circular inverted green mail outline"></i>
-                                            Thanks for signing up!
-                                        </h2>
-                                        <br/>
-                                        To complete the registration process you must first confirm your account. An email has been sent to your address.
-                                        To confirm and activate your account please check your inbox and click on the link found in the email we just sent you.
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="ui green segment compact centered page grid">
-                                <h2 className="ui dividing header">Sign Up</h2>
-                                <form className="ui form signup" >
-                                    <div className="ui input field">
-                                        <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name"/>
-                                    </div><br/>
-                                    <div className="ui input field">
-                                        <input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name"/>
-                                    </div><br/>
-                                    <div className="ui input field">
-                                        <input type="text" id="email2" name="email2" ref="email2" placeholder="Email"/>
-                                    </div><br/>
-                                    <div className="ui input field">
-                                        <input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email"/>
-                                    </div><br/>
-                                    <div className="ui input field">
-                                        <input type="password" id="password2" name="password2" ref="password2" placeholder="Password"/>
-                                    </div><br/>
-                                    <div className="ui error message"></div>
-                                    <button type="submit" className="ui green labeled submit icon button" >
-                                        <i className="icon add user"></i> Sign Up
-                                    </button>
-                                    <div >
-                                        By clicking Sign Up, you agree to our <a href="">Terms</a>.
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div className="ui hidden divider"></div>
-                    </div>
-                </div>
-            </div>
+          <div className="ui page centered grid" >
+              <div className="ui three column row">
+                  <div className="seven wide column">
+                      <div className="ui blue padded center aligned segment">
+                          <h2 className="ui dividing header">Sign In</h2>
+                          <form className="ui form signin">
+                              <div className="ui icon input field">
+                                  <input type="email" id="email1" name="email1" ref="email1" placeholder="Email" autoFocus/><i className="mail icon"></i>
+                              </div><br/>
+                              <div className="ui icon input field">
+                                  <input type="password" id="password1" name="password1" ref="password1" placeholder="Password"/><i className="lock icon"></i>
+                              </div><br/>
+                              <div className="ui error message"></div>
+                              <button type="submit" className="ui blue labeled submit icon button">
+                                  <i className="icon sign in"></i> Sign In
+                              </button>
+                          </form>
+                          <br/>
+                          <div className="ui floated right ">
+                              <a href="">I can not access my account</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div className="two wide column">
+                      <div className="ui vertical section divider"> Or </div>
+                  </div>
+                  <div className="seven wide column">
+                      <div className="ui blue padded center aligned segment">
+                          <h2 className="ui dividing header">Social Login</h2>
+                          <div className="ui two column grid">
+                          <div className="wide column">
+                            <a href="" className="ui blue labeled icon button">
+                                <i className="large icon google"></i> Sign in with Google
+                            </a>
+                          </div>
+                          <div className="wide column">
+                          <a href="" className="ui dark grey labeled icon button">
+                              <i className="large icon github"></i> Sign in with Github
+                          </a>
+                          </div>
+                          </div>
+                          <br/>
+                          <div className="ui floated right ">
+                              <a href="">I can not access my account</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <br/>
+              <div className="ui horizontal section divider"> Or </div>
+              <div className="eight wide column">
+                  <div className="ui dimmer">
+                      <div className="content">
+                          <div className="center">
+                              <h2 className="ui inverted icon header">
+                                  <i className="icon circular inverted green mail outline"></i>
+                                  Thanks for signing up!
+                              </h2>
+                              <br/>
+                              To complete the registration process you must first confirm your account. An email has been sent to your address.
+                              To confirm and activate your account please check your inbox and click on the link found in the email we just sent you.
+                          </div>
+                      </div>
+                  </div>
+                  <div className="ui green padded center aligned segment">
+                      <h2 className="ui dividing header">Sign Up</h2>
+                      <form className="ui form signup" >
+                          <div className="ui input field">
+                              <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name"/>
+                          </div><br/>
+                          <div className="ui input field">
+                              <input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name"/>
+                          </div><br/>
+                          <div className="ui input field">
+                              <input type="email" id="email2" name="email2" ref="email2" placeholder="Email"/>
+                          </div><br/>
+                          <div className="ui input field">
+                              <input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email"/>
+                          </div><br/>
+                          <div className="ui input field">
+                              <input type="password" id="password2" name="password2" ref="password2" placeholder="Password"/>
+                          </div><br/>
+                          <div className="ui input field">
+                              <input type="password" id="reenterpassword2" name="reenterpassword2" ref="reenterpassword2" placeholder="Re-enter Password"/>
+                          </div><br/>
+                          <div className="ui error message"></div>
+                          <button type="submit" className="ui green labeled submit icon button" >
+                              <i className="icon add user"></i> Sign Up
+                          </button>
+                      </form>
+                      <br/>
+                      <div >
+                          By clicking Sign Up, you agree to our <a href="">Terms</a>.
+                      </div>
+                  </div>
+              </div>
+          </div>
         );
     }
 }
