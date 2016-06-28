@@ -132,22 +132,23 @@ class UserRegistration extends React.Component {
         console.log($('.ui.form.signup').form('is valid'));
         console.log($('.ui.form.signup').form('get values'));
 
+        let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+        let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
+
         $('#firstname').val('');
         $('#lastname').val('');
         $('#email2').val('');
         $('#reenteremail').val('');
         $('#password2').val('');
         $('#reenterpassword2').val('');
-        // this.refs.lastname.value = '';
-        // this.refs.email2.value = '';
-        // this.refs.reenteremail.value = '';
-        // this.refs.password2.value = '';
 
         this.context.executeAction(userSignUp, {
             firstname: this.refs.firstname.value,
             lastname: this.refs.lastname.value,
-            email: this.refs.email1.value,
-            password: this.refs.password1.value
+            username: username,
+            language: language,
+            email: this.refs.email2.value,
+            password: this.refs.password2.value
         });
 
         $('.dimmer')
@@ -157,6 +158,20 @@ class UserRegistration extends React.Component {
     render() {
         return (
           <div className="ui page centered grid" >
+              <div className="ui page dimmer">
+                  <div className="content">
+                      <div className="center">
+                          <h2 className="ui inverted icon header">
+                              <i className="icon circular inverted green mail outline"></i>
+                              Thanks for signing up!
+                          </h2>
+                          <br/>
+                          To complete the registration process you have to confirm your account. An email has been sent to your address.
+                          <br/>
+                          To confirm and activate your account please check your inbox and click on the link inside the email we just sent you.
+                      </div>
+                  </div>
+              </div>
               <div className="ui three column row">
                   <div className="seven wide column">
                       <div className="ui blue padded center aligned segment">
@@ -207,19 +222,6 @@ class UserRegistration extends React.Component {
               <br/>
               <div className="ui horizontal section divider"> Or </div>
               <div className="eight wide column">
-                  <div className="ui dimmer">
-                      <div className="content">
-                          <div className="center">
-                              <h2 className="ui inverted icon header">
-                                  <i className="icon circular inverted green mail outline"></i>
-                                  Thanks for signing up!
-                              </h2>
-                              <br/>
-                              To complete the registration process you must first confirm your account. An email has been sent to your address.
-                              To confirm and activate your account please check your inbox and click on the link found in the email we just sent you.
-                          </div>
-                      </div>
-                  </div>
                   <div className="ui green padded center aligned segment">
                       <h2 className="ui dividing header">Sign Up</h2>
                       <form className="ui form signup" >
