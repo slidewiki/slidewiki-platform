@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import userSignIn from '../../../actions/user/userSignIn';
 import userSignUp from '../../../actions/user/userSignUp';
+import { Microservices } from '../../../configs/microservices';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -101,6 +102,20 @@ class UserRegistration extends React.Component {
         $('.ui.form.signup').submit((e) => {
             e.preventDefault(); //usually use this, but below works best here.
             return false;
+        });
+
+        $('#github').on('click',(e) => {
+            e.preventDefault();
+            let win = window.open('' + Microservices.auth.uri + '/connect/github','_blank','width=1100,height=800,toolbar=0,status=0,');
+            let content;
+            win.onclose = () => {
+                console.log('Blabla');
+                console.log(win.document);
+            };
+        });
+        $('#google').on('click',(e) => {
+            e.preventDefault();
+            let win = window.open('' + Microservices.auth.uri + '/connect/google','_blank','toolbar=0,status=0,');
         });
     }
 
@@ -202,14 +217,14 @@ class UserRegistration extends React.Component {
                           <h2 className="ui dividing header">Social Login</h2>
                           <div className="ui two column grid">
                           <div className="wide column">
-                            <a href="" className="ui blue labeled icon button">
+                            <button id='google' className="ui blue labeled icon button">
                                 <i className="large icon google"></i> Sign in with Google
-                            </a>
+                            </button>
                           </div>
                           <div className="wide column">
-                          <a href="" className="ui dark grey labeled icon button">
+                          <button id='github' className="ui dark grey labeled icon button">
                               <i className="large icon github"></i> Sign in with Github
-                          </a>
+                          </button>
                           </div>
                           </div>
                           <br/>
