@@ -2,32 +2,36 @@ import React from 'react';
 import Modal from 'react-modal';
 
 const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)'
+    }
 };
 
 class LoginModal extends React.Component {
     constructor(props) {
-      super(props);
-      this.state = {openModal: false};
-      this.handleLoginButton = this.handleLoginButton.bind(this);
+        super(props);
+        this.state = {openModal: false};
+        this.handleLoginButton = this.handleLoginButton.bind(this);
+
     }
 
     handleLoginButton(){
-      this.setState({openModal: true});
+        this.setState({openModal: true});
+        console.log('handleLoginButton: '+this.state.openModal);
     }
+    componentWillReceiveProps(){
+        console.log('componentWillReceiveProps: '+this.state.openModal);
 
+    }
     render() {
-
-      return(
-        <div className="item right" >
-          <button id="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Login</button>
+        return(
+          <div className="item right" >
+            <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Login</button>
           <Modal isOpen={this.state.openModal}  style={customStyles}>
             <form className="ui form">
               <h1 className="ui header">Login</h1>
@@ -42,7 +46,7 @@ class LoginModal extends React.Component {
                 </div>
                 <br/>
                 <div className="fields">
-                  <button className="ui primary button" type="submit"  >Login</button>
+                  <button className="ui primary button" type="submit" >Login</button>
 
                 </div>
               </form>

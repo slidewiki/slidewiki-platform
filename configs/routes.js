@@ -90,17 +90,17 @@ export default {
     },
 
     login:{
-      path: '/login',
-      method: 'get',
-      page: 'login',
-      title: 'SlideWiki -- Login',
-      handler: require('../components/Login/Login.js'),
-      action: (context, payload, done) => {
-          context.dispatch('UPDATE_PAGE_TITLE', {
-              pageTitle: shortTitle + ' | Login'
-          });
-          done();
-      }
+        path: '/login',
+        method: 'get',
+        page: 'login',
+        title: 'SlideWiki -- Login',
+        handler: require('../components/Login/Login.js'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Login'
+            });
+            done();
+        }
     },
 
 
