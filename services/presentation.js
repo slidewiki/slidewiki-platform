@@ -63,5 +63,5 @@ function get_sample_text(id){
 }
 
 function get_sample_notes(id){
-    return "These are some really important notes for Slide " + id;
+    return 'These are some really important notes for Slide ' + id;
 }
