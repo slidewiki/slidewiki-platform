@@ -11,6 +11,10 @@ class DefaultHTMLLayout extends React.Component {
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+                {/* Latest compiled and minified  bootstrap CSS*/}
+                <link  href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+                {/* Bottstrap Optional theme*/}
+                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
             </head>
             <body>
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>

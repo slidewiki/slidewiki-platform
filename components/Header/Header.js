@@ -4,6 +4,7 @@ import SearchBox  from './SearchBox';
 import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
 import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import Login from '../Login/Login.js';
+import LoginModal from '../Login/LoginModal.js'
 
 class Header extends React.Component {
     render() {
@@ -22,6 +23,7 @@ class Header extends React.Component {
                     </div>
                     <UserNotificationsBadge />
                     <NavLink className="item right" routeName="login" activeClass="active">Login</NavLink>
+                    <LoginModal />
                 </div>
             </div>
         );
