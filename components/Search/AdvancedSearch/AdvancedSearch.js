@@ -10,25 +10,21 @@ class AdvancedSearch extends React.Component {
 
     handleRedirect(searchstring, deckid, userid){
         this.context.executeAction(navigateAction, {
-            url: '/searchresults/searchstring=' + this.refs.searchstring.value +
+            url:  '/search/advsearchresults/searchstring=' + this.refs.searchstring.value +
                   '/entity=' + this.refs.entity.value +
                   '/searchlang=' + this.refs.searchlang.value +
                   '/deckid=' + this.refs.deckid.value +
                   '/userid=' + this.refs.userid.value
         });
-        this.refs.searchstring.value='';
-        this.refs.deckid.value='';
-        this.refs.userid.value='';
         return false;
     }
 
     render() {
+
         return (
-            <div className="ui page grid" ref="about">
+
                 <div className="ui content">
                     <h2 className="ui header">Advanced Search</h2>
-
-
 
                     <form className="ui form success">
                         <div className="field">
@@ -71,6 +67,11 @@ class AdvancedSearch extends React.Component {
                             </div>
                         </div>
 
+                        <div class="ui checkbox" style={{marginTop: '1em', marginBottom: '1em'}}>
+                            <input name="revisions" type="checkbox"></input>
+                            <label>Include revisions</label>
+                        </div>
+
                         <div className="ui primary submit labeled icon button" onClick={this.handleRedirect.bind(this)}>
                             <i className="icon edit"></i> Submit
                         </div>
@@ -80,7 +81,6 @@ class AdvancedSearch extends React.Component {
                 </div>
 
 
-            </div>
         );
     }
 }

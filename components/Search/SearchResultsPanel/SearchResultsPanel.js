@@ -38,36 +38,11 @@ class SearchResultsPanel extends React.Component {
             );
         });
 
-        let filters = '';
-        if(this.props.SearchResultsStore.searchstring!=null){
-            filters = this.props.SearchResultsStore.searchstring;
-        }
-        if(this.props.SearchResultsStore.deckid!=null){
-            if(filters !== ''){
-                filters = filters + ', ' + this.props.SearchResultsStore.deckid;
-            }
-            else{filters = this.props.SearchResultsStore.deckid;}
-        }
-        if(this.props.SearchResultsStore.userid!=null){
-            if(filters !== ''){
-                filters = filters + ', ' + this.props.SearchResultsStore.userid;
-            }
-            else{filters = this.props.SearchResultsStore.userid;}
-        }
-        let filtersDiv = (<div className="item"><strong>Filters:</strong> {filters}</div>);
-
-
-        const infoStyles = {
-            fontWeight: 600
-        };
-
         return (
 
             <div ref="searchResultsPanel">
 
-                <div className="ui top attached secondary pointing menu">
-                    {filtersDiv}
-                </div>
+                <h2 className="ui header">Search Results</h2>
 
                 <div className="ui grid">
                     <div className="five wide column">

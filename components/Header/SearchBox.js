@@ -8,7 +8,8 @@ class SearchBox extends React.Component {
 
     handleRedirect(searchstring){
         this.context.executeAction(navigateAction, {
-            url: '/searchresults/searchstring=' + this.refs.searchstring.value
+            // url: '/searchresults/searchstring=' + this.refs.searchstring.value
+            url: '/search/results/searchstring=' + this.refs.searchstring.value
         });
         this.refs.searchstring.value='';
         return false;

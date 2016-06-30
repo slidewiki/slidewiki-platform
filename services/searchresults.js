@@ -23,6 +23,8 @@ export default {
             userid = args.userid;
         }
 
+        let searchstatus = args.searchstatus;
+
         if(resource === 'searchresults.list'){
             /*********connect to microservices*************/
             //todo
@@ -45,7 +47,7 @@ export default {
 
             callback(null, {results: searchresults, entities: entities, languages:languages,
                             searchstring:args.searchstring, entity:entity, searchlang:searchlang,
-                            deckid:deckid, userid:userid
+                            deckid:deckid, userid:userid, searchstatus:searchstatus
                            });
         }
     }

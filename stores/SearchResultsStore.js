@@ -9,6 +9,8 @@ class SearchResultsStore extends BaseStore {
         this.entity = '';
         this.deckid = '';
         this.userid = '';
+        this.searchstatus='';
+
         this.results = [];
         this.entities = [];
         this.languages = [];
@@ -20,6 +22,8 @@ class SearchResultsStore extends BaseStore {
         this.deckid = payload.deckid;
         this.userid = payload.userid;
         this.entity = payload.entity;
+        this.searchstatus= payload.searchstatus;
+
         this.results = payload.results;
 
         //Filter by deckid
@@ -95,8 +99,8 @@ class SearchResultsStore extends BaseStore {
 
         this.results.find((s) => {console.log('type: '+s.type);});
 
-        console.log('field: '+payload.field);
-        console.log('value: '+payload.value);
+        // console.log('field: '+payload.field);
+        // console.log('value: '+payload.value);
 
         this.emitChange();
     }
@@ -111,7 +115,8 @@ class SearchResultsStore extends BaseStore {
             searchlang: this.searchlang,
             entity: this.entity,
             deckid: this.deckid,
-            userid: this.userid
+            userid: this.userid,
+            searchstatus: this.searchstatus
         };
     }
     dehydrate() {
@@ -127,6 +132,7 @@ class SearchResultsStore extends BaseStore {
         this.entity = state.entity;
         this.deckid = state.deckid;
         this.userid = state.userid;
+        this.searchstatus = state.searchstatus;
     }
 
 }
