@@ -10,6 +10,7 @@ class SearchBox extends React.Component {
         this.context.executeAction(navigateAction, {
             url: '/searchresults/searchstring=' + this.refs.searchstring.value
         });
+        this.refs.searchstring.value='';
         return false;
     }
     render() {
