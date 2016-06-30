@@ -5,47 +5,20 @@ class Login extends React.Component {
 
     render() {
         return (
-        <div className="ui page grid">
-          <div className="ui row">
+        <div className="ui grid container">
 
-            <div className="column">
-              <div className="ui content">
-
-                <form className="ui form">
-                <h1 className="ui header">Login</h1>
-                <div className="ten wide field">
-                  <label>E-mail</label>
-                  <input type="email" name="email" placeholder="E-mail address" tabIndex="0"  aria-required="true"/>
-                </div>
-                <br/>
-                <div className="ten wide field">
-                  <label>Password</label>
-                  <input type="password" name="paswd" placeholder="Password" tabIndex="0" aria-required="true"/>
-                </div>
-                <br/>
-                <div className="fields">
-                 <button className="ui primary button" type="submit"  >Login</button>
-
-                </div>
-                </form>
-              </div>
-            </div>
-
-          </div>
-
-          <div className="ui four column row">
-              <div className="seven wide column">
+              <div className="ui seven wide column">
                   <div className="ui blue padded center aligned segment">
                       <h1 className="ui dividing header">Login</h1>
                       <form className="ui form signin">
 
-                          <div className="ui icon input field">
-                              <label>E-mail</label>
+                          <div className="ui ten wide icon input field">
+                              <div><label htmlFor="email1" hidden>Email</label></div>
                               <input type="email" id="email1" name="email1" ref="email1" placeholder="Email" autoFocus tabIndex="0"  aria-required="true"/><i className="mail icon"></i>
                           </div>
                           <br/>
-                          <div className="ui icon input field">
-                              <label>Password</label>
+                          <div className="ui ten wide icon input field">
+                              <div><label htmlFor="password1" hidden>Password</label></div>
                               <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0"  aria-required="true"/><i className="lock icon"></i>
                           </div><br/>
                           <div className="ui error message"></div>
@@ -59,7 +32,7 @@ class Login extends React.Component {
                       </div>
                   </div>
               </div>
-            </div>
+    
         </div>
         );
     }
