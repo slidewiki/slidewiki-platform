@@ -1,20 +1,16 @@
 import React from 'react';
-import Modal from 'react-modal';
-
-const customStyles = {
-    content : {
-        top                   : '15%',
-        left                  : '25%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%'
-
-    }
-};
+import {
+  Modal,
+  ModalHeader,
+  ModalTitle,
+  ModalClose,
+  ModalBody,
+  ModalFooter
+} from 'react-modal-bootstrap';
 
 
 
-class LoginModal extends React.Component {
+class LoginBootsModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {openModal: false};
@@ -35,14 +31,18 @@ class LoginModal extends React.Component {
     render() {
         return(
           <div className="item right" >
-            <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Login</button>
-            <Modal isOpen={this.state.openModal}  style={customStyles}>
-              <div className="ui container">
-                  <div className="ui right">
-                    <button type="cancel" className="ui basic button" onClick={this.handleExitButton}><i class="remove circle outline icon"></i>Close</button>
-                  </div>
+              <button ref="loginButton2" className="ui inverted button" onClick={this.handleLoginButton}>Login2</button>
+            <Modal isOpen={this.state.openModal}  onRequestHide={this.handleExitButton}>
+             <ModalHeader>
+               <ModalClose onClick={this.handleExitButton} aria-label="Close"/>
+               <ModalTitle> Login </ModalTitle>
+
+             </ModalHeader>
+              <ModalBody>
+                <div className="ui container">
+
                   <div className="ui blue padded center aligned segment">
-                    <h1 className="ui dividing header">Login</h1>
+
                       <form className="ui form signin">
                         <div className="ui five wide icon input field">
                           <div><label htmlFor="email1" hidden>Email</label></div>
@@ -57,19 +57,18 @@ class LoginModal extends React.Component {
                         <div className="ui error message"></div>
                         <button type="submit" className="ui blue labeled submit icon button"><i className="icon sign in"></i> Login</button>
                      </form>
-                  <br/>
-                  <div className="ui floated right">
-                      <a href="">I can not access my account</a>
+                     <br/>
+                     <div className="ui floated right ">
+                        <a href="">I can not access my account</a>
+                      </div>
+                    </div>
+                </div>
 
-
-              </div>
-            </div>
-          </div>
-
-          </Modal>
+              </ModalBody>
+            </Modal>
           </div>
       );
     }
 }
 
-export default LoginModal;
+export default LoginBootsModal;
