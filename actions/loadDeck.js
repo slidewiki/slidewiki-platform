@@ -10,8 +10,10 @@ import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
 
 export default function loadDeck(context, payload, done) {
-    if (!(Number.parseInt(payload.params.id) >= 0))
+    if (!(Number.parseInt(payload.params.id) >= 0)) {
         console.log('Deck id incorrect. Loading deck failed.');
+        //context.dispatch('DECK_ID_FAILURE', err, res);
+    }
 
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
         console.log('Content type incorrect. Loading deck failed.');
