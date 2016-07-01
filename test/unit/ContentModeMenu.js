@@ -12,10 +12,6 @@ import createStore from 'fluxible/addons/createStore';
 describe('ContentModeMenu', function(){
   var component = null;
 
-  let MockContentStore = createStore(
-      selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': '', page: 'content'};
-  );
-
 
   beforeEach('render and locate element', function(done){
 
@@ -38,7 +34,4 @@ describe('ContentModeMenu', function(){
   it('should render', function(){
     expect(component).to.exist;
   });
-  it('should have x==42', function(){
-
-  })
 });

@@ -14,6 +14,12 @@ var playerCss = {
     backgroundColor: '#ffffff'
 };
 
+if (process.env.BROWSER) {
+  require("style!../../../bower_components/reveal.js/css/reveal.css");
+  require("style!../../../bower_components/reveal.js/css/theme/white.css");
+}
+
+
 
 class Presentation extends React.Component{
 

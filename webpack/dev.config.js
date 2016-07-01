@@ -30,7 +30,8 @@ let webpackConfig = {
                     require.resolve('babel-loader')
                 ]
             },
-            { test: /\.json$/, loader: 'json-loader'}
+            { test: /\.json$/, loader: 'json-loader'},
+            { test: /\.css$/, loaders: ['style-loader', 'css-loader']}
         ]
     },
     node: {
@@ -48,7 +49,14 @@ let webpackConfig = {
             'process.env': {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV)
             }
+        }),
+        // For the css-loader
+        new webpack.DefinePlugin({
+            'process.env': {
+                BROWSER: JSON.stringify(true)
+            }
         })
+
     ],
     devtool: 'eval'
 };
