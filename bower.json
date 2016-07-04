@@ -8,10 +8,11 @@
   "license": "MIT",
   "homepage": "https://github.com/slidewiki/slidewiki-platform",
   "dependencies": {
-    "jquery"      : ">=1.8",
-    "es6-shim": "^0.35.0",
-    "es5-shim": "^4.5.8",
+    "ckeditor": "^4.5.9",
+    "jquery": "^3.0.0",
+    "es6-shim": "^0.35.1",
+    "es5-shim": "^4.5.9",
     "json3": "^3.3.2",
-    "ckeditor": "^4.5.9"
+    "reveal.js": "^3.3.0"
   }
 }
