@@ -4,7 +4,7 @@ import {shortTitle, fullTitle} from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
-import loadAdvancedSearchResults from '../actions/search/loadAdvancedSearchResults';
+import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -78,28 +78,29 @@ export default {
             done();
         }
     },
-    advancedsearch: {
-        path: '/advancedsearch',
-        method: 'get',
-        page: 'about',
-        title: 'SlideWiki -- About',
-        handler: require('../components/Search/AdvancedSearch/AdvancedSearch'),
-        action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | About'
-            });
-            done();
-        }
-    },
+    // advancedsearch: {
+    //     path: '/advancedsearch',
+    //     method: 'get',
+    //     page: 'about',
+    //     title: 'SlideWiki -- About',
+    //     handler: require('../components/Search/AdvancedSearch/AdvancedSearch'),
+    //     action: (context, payload, done) => {
+    //         context.dispatch('UPDATE_PAGE_TITLE', {
+    //             pageTitle: shortTitle + ' | About'
+    //         });
+    //         done();
+    //     }
+    // },
 
 //-----------------------------------Search routes------------------------------
     searchresults: {
-        path: '/searchresults/:searchstring?',
+        path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
         // path: '/searchresults',
         method: 'get',
-        page: 'searchresults',
-        title: 'SlideWiki -- Search results',
-        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
+        page: 'search',
+        title: 'SlideWiki -- Search',
+        handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
+        // handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }
