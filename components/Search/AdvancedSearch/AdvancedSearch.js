@@ -24,7 +24,7 @@ class AdvancedSearch extends React.Component {
         return (
 
                 <div className="ui content">
-                    <h2 className="ui header">Advanced Search</h2>
+                    <h2 className="ui header" style={{marginTop: '1em'}}>Advanced Search</h2>
 
                     <form className="ui form success">
                         <div className="field">
@@ -67,10 +67,46 @@ class AdvancedSearch extends React.Component {
                             </div>
                         </div>
 
-                        <div class="ui checkbox" style={{marginTop: '1em', marginBottom: '1em'}}>
-                            <input name="revisions" type="checkbox"></input>
-                            <label>Include revisions</label>
+                        <div className="four fields">
+                            <div className="field">
+                                <label>User</label>
+                                <input name="user" placeholder="User" type="text"></input>
+                            </div>
+
+                            <div className="field">
+                                <label>Tags</label>
+                                <input name="tags" placeholder="Tags" type="text"></input>
+                            </div>
+
+                            <div className="field">
+                                <label>User groups</label>
+                                <select name='usergroup' multiple='' className='ui fluid search dropdown' ref='usergroup'>
+                                  <option value=''>Select User group</option>
+                                  <option value='UNI'>Universities</option>
+                                  <option value='RC'>Research Centers</option>
+                                  <option value='OTHER'>Other</option>
+                                </select>
+                            </div>
+
+                            <div className="field">
+                                <label>Search fields</label>
+                                <select name='searchfields' multiple='' className='ui fluid search dropdown' ref='searchfields'>
+                                  <option value=''>Select Search field</option>
+                                  <option value='ALL'>All</option>
+                                  <option value='TITL'>Title</option>
+                                  <option value='CONT'>Content</option>
+                                </select>
+                            </div>
+
                         </div>
+
+                        <div className="field">
+                            <div className="ui checkbox" style={{marginTop: '1em', marginBottom: '1em'}}>
+                                <input name="revisions" type="checkbox"></input>
+                                <label>Include revisions</label>
+                            </div>
+                        </div>
+
 
                         <div className="ui primary submit labeled icon button" onClick={this.handleRedirect.bind(this)}>
                             <i className="icon edit"></i> Submit
@@ -79,7 +115,6 @@ class AdvancedSearch extends React.Component {
                     </form>
 
                 </div>
-
 
         );
     }
