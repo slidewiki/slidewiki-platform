@@ -90,7 +90,20 @@ export default {
             done();
         }
     },
-
+//-----------------------------------User routes------------------------------
+    userprofile: {
+        path: '/user/profile',
+        method: 'get',
+        page: 'userprofile',
+        title: 'SlideWiki -- Your profile',
+        handler: require('../components/User/UserProfile/UserProfile'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Your profile'
+            });
+            done();
+        }
+    },
 //-----------------------------------Search routes------------------------------
     searchresults: {
         path: '/searchresults/:searchstring?',
