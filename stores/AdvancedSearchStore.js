@@ -18,7 +18,7 @@ class AdvancedSearchStore extends BaseStore {
         this.deckid = payload.deckid;
         this.userid = payload.userid;
 
-        console.log('searchstring: '+payload.searchstring);
+        console.log(payload.searchstring);
         console.log('deckid: '+payload.deckid);
         console.log('userid: '+payload.userid);
 

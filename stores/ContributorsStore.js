@@ -16,7 +16,7 @@ class ContributorsStore extends BaseStore {
         this.listName = payload.listName;
         this.emitChange();
     }
-
+    
     getState() {
         return {
             contributors: this.contributors,
