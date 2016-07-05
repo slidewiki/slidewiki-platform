@@ -6,7 +6,7 @@ import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificat
 import Login from '../Login/Login.js';
 import LoginModal from '../Login/LoginModal.js';
 import LoginBootsModal from '../Login/LoginBootsModal.js';
-
+import LoginModalUI from '../Login/LoginModalUI.js';
 class Header extends React.Component {
     render() {
 
@@ -26,6 +26,7 @@ class Header extends React.Component {
                     <NavLink className="item right" routeName="login" activeClass="active">Login</NavLink>
                     <LoginModal />
                     <LoginBootsModal />
+                    <LoginModalUI />
                 </div>
             </div>
         );
