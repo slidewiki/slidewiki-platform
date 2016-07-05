@@ -12,9 +12,9 @@ class AdvancedSearch extends React.Component {
         this.context.executeAction(navigateAction, {
             url:  '/search/advsearchresults/searchstring=' + this.refs.searchstring.value +
                   '/entity=' + this.refs.entity.value +
-                  '/searchlang=' + this.refs.searchlang.value 
-                  // '/deckid=' + this.refs.deckid.value +
-                  // '/userid=' + this.refs.userid.value
+                  '/searchlang=' + this.refs.searchlang.value +
+                  '/deckid=' + this.refs.deckid.value +
+                  '/userid=' + this.refs.userid.value
         });
         return false;
     }
@@ -54,6 +54,30 @@ class AdvancedSearch extends React.Component {
                                 </select>
                             </div>
 
+
+
+                            <div className='field'>
+                                <label>Deck id</label>
+                                <input name='deckid' placeholder='Deck id' type='text' ref='deckid'></input>
+                            </div>
+
+                            <div className='field'>
+                                <label>User id</label>
+                                <input name='userid' placeholder='User id' type='text' ref='userid'></input>
+                            </div>
+                        </div>
+
+                        <div className="four fields">
+                            <div className="field">
+                                <label>User</label>
+                                <input name="user" placeholder="User" type="text"></input>
+                            </div>
+
+                            <div className="field">
+                                <label>Tags</label>
+                                <input name="tags" placeholder="Tags" type="text"></input>
+                            </div>
+
                             <div className="field">
                                 <label>User groups</label>
                                 <select name='usergroup' multiple='' className='ui fluid search dropdown' ref='usergroup'>
@@ -72,20 +96,6 @@ class AdvancedSearch extends React.Component {
                                   <option value='TITL'>Title</option>
                                   <option value='CONT'>Content</option>
                                 </select>
-                            </div>
-
-
-                        </div>
-
-                        <div className="two fields">
-                            <div className="field">
-                                <label>User</label>
-                                <input name="user" placeholder="User" type="text"></input>
-                            </div>
-
-                            <div className="field">
-                                <label>Tags</label>
-                                <input name="tags" placeholder="Tags" type="text"></input>
                             </div>
 
                         </div>
