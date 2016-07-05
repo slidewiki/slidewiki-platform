@@ -22,7 +22,6 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
-import loadPresentation from '../actions/loadPresentation';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -260,17 +259,6 @@ export default {
         handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
         action: (context, payload, done) => {
             context.executeAction(loadTabLinks, payload, done);
-        }
-    },
-    presentation: {
-        path: '/presentation/:id/',
-        method: 'get',
-        page: 'presentation',
-        handler: require('../components/Deck/Presentation/Presentation'),
-        action: (context, payload, done) => {
-            context.executeAction(loadDeckTree, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
-            context.executeAction(loadDeck, payload, done);
         }
     }
 };

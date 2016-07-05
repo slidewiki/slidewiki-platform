@@ -21,7 +21,6 @@ import ContentDiscussionStore from './stores/ContentDiscussionStore';
 import SimilarContentStore from './stores/SimilarContentStore';
 import TabLinksStore from './stores/TabLinksStore';
 import ImportStore from './stores/ImportStore';
-import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
@@ -50,7 +49,6 @@ const app = new Fluxible({
         SimilarContentStore,
         TabLinksStore,
         ImportStore,
-        PresentationStore,
         UserNotificationsStore,
         SearchResultsStore,
         AdvancedSearchStore

@@ -9,8 +9,6 @@ class DefaultHTMLLayout extends React.Component {
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
-                <link href="/bower_components/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
-                <link href="/bower_components/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
             </head>
@@ -34,12 +32,11 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/dimmer.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js"></script>
                 {/* All external vendors bundle*/}
-                <script src="/public/js/vendor.bundle.js"></script>
+                <script src={'/public/js/vendor.bundle.js'}></script>
                 <script src="/bower_components/ckeditor/ckeditor.js"></script>
                 <script type="javascript">
                     CKEDITOR.disableAutoInline = true; //need to disable auto-initate to config inline toolbars
                 </script>
-                <script src="/bower_components/reveal.js/js/reveal.js"></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile}></script>
             </body>
