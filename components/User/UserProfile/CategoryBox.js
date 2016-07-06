@@ -9,21 +9,16 @@ class CategoryBox extends React.Component {
 
     render() {
         return (
-          <div>
-            <div className="ui segments">
-              <div className="ui segment">
-                <p>Navigation</p>
-              </div>
-              <div className="ui secondary segment">
-                <p><i className="icon folder"></i> My Decks</p>
-              </div>
-              <div className="ui secondary segment">
-                <p><i className="icon setting"></i> Settings</p>
-              </div>
-              <div className="ui secondary segment">
-                <p><i className="icon bar chart"></i> My Stats</p>
-              </div>
-            </div>
+          <div className="ui vertical fluid buttons">
+              <button className="ui button">
+                <p><i className="icon folder"/> My Decks</p>
+              </button>
+              <button className="ui blue button">
+                <p><i className="icon setting selected active"/> Settings</p>
+              </button>
+              <button className="ui button">
+                <p><i className="icon bar chart"/> My Stats</p>
+              </button>
           </div>
         );
     }

@@ -11,12 +11,11 @@ class UserProfile extends React.Component {
 
     render() {
         return (
-          <div className="ui grid page">
+          <div className="ui stackable grid page">
 
               <div className="four wide column">
                   <CategoryBox />
-                  <div className="ui hidden divider"></div>
-                  <CategoryBox />
+                  <div className="ui hidden divider"/>
               </div>
 
               <div className="twelve wide column">
