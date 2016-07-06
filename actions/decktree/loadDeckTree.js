@@ -13,9 +13,9 @@ export default function loadDeckTree(context, payload, done) {
     });
     if(runFetchTree){
         //we need to load the whole tree for the first time
-        context.service.read('decktree.nodes', payload, {timeout: 20 * 1000}, (err, res) => {
+        context.service.read('decktree.nodes', payload, {}, (err, res) => {
             if (err) {
-                context.dispatch('LOAD_DECK_TREE_FAILURE', err);
+                context.dispatch('LOAD_DECK_TREE_FAILURE', err, res);
             } else {
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
             }
