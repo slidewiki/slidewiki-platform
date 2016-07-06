@@ -11,7 +11,7 @@ var sectionStyle = {
 
 class PresentationSlide extends React.Component {
 	componentDidMount(){
-		this.props.style = sectionStyle;
+		//this.props.style = sectionStyle;
 	}
 	render(){
 

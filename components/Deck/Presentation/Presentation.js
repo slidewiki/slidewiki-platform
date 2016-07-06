@@ -11,12 +11,14 @@ var playerCss = {
     fontSize: '100%',
     position: 'absolute',
     top: '0',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    zindex: '1000'
 };
 
 if (process.env.BROWSER) {
-  require("style!../../../bower_components/reveal.js/css/reveal.css");
-  require("style!../../../bower_components/reveal.js/css/theme/white.css");
+    let s = 'white';
+    require('style!../../../bower_components/reveal.js/css/reveal.css');
+    require('style!../../../bower_components/reveal.js/css/theme/' + s + '.css');
 }
 
 
