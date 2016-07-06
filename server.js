@@ -25,15 +25,14 @@ const env = process.env.NODE_ENV;
 const debug = debugLib('slidewiki-platform');
 
 const server = express();
-server.use(cookieParser());
-server.use(bodyParser.json());
-server.use(compression());
 server.use(favicon(path.join(__dirname, '/favicon.ico')));
 server.use('/public', express['static'](path.join(__dirname, '/build')));
 server.use('/bower_components', express['static'](path.join(__dirname, '/bower_components')));
 server.use('/custom_modules', express['static'](path.join(__dirname, '/custom_modules')));
 server.use('/assets', express['static'](path.join(__dirname, '/assets')));
-
+server.use(compression());
+server.use(cookieParser());
+server.use(bodyParser.json());
 server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
 let fetchrPlugin = app.getPlugin('FetchrPlugin');
