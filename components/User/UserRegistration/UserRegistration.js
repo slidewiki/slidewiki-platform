@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import userSignIn from '../../../actions/user/userSignIn';
 import userSignUp from '../../../actions/user/userSignUp';
+import resetUserRegistration from '../../../actions/user/resetUserRegistration';
 import { Microservices } from '../../../configs/microservices';
+import {connectToStores} from 'fluxible-addons-react';
+import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -119,12 +122,16 @@ class UserRegistration extends React.Component {
         });
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        if (this.props.UserRegistrationStore.userType === 'pending') {
+            $('.dimmer')
+                .dimmer('toggle');
+            this.context.executeAction(resetUserRegistration, {
+            });
+        }
+    }
 
     handleSignIn() {
-        console.log($('.ui.form.signin').form('is valid'));
-        console.log($('.ui.form.signin').form('get values'));
-
         $('#email1').val('');
         $('#password1').val('');
 
@@ -132,21 +139,9 @@ class UserRegistration extends React.Component {
             email: this.refs.email1.value,
             password: this.refs.password1.value
         });
-
-        //
-        // $('.ui.page.signup')
-        //   .transition('drop')
-        // ;
-
-
-        // this.refs.email1.value = '';
-        // this.refs.password1.value = '';
     }
 
     handleSignUp() {
-        console.log($('.ui.form.signup').form('is valid'));
-        console.log($('.ui.form.signup').form('get values'));
-
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
         let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
@@ -166,8 +161,6 @@ class UserRegistration extends React.Component {
             password: this.refs.password2.value
         });
 
-        $('.dimmer')
-            .dimmer('toggle');
     }
 
     render() {
@@ -277,5 +270,9 @@ class UserRegistration extends React.Component {
 UserRegistration.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+UserRegistration = connectToStores(UserRegistration, [UserRegistrationStore], (context, props) => {
+    return {
+        UserRegistrationStore: context.getStore(UserRegistrationStore).getState()
+    };
+});
 export default UserRegistration;
