@@ -8,6 +8,7 @@ class PresentationStore extends BaseStore {
         this.theme = '';
     }
     updatePresentation(payload) {
+        console.log('Payload: ', payload);
         this.content = payload.content;
         this.theme = payload.theme;
         this.emitChange();
@@ -19,8 +20,8 @@ class PresentationStore extends BaseStore {
             items: this.items,
             selector: this.selector,
             mode: this.mode,
-            content: this.content
-
+            content: this.content,
+            theme: this.theme
         };
     }
     dehydrate() {

@@ -13,9 +13,13 @@ var playerCss = {
     fontSize: '100%',
     position: 'absolute',
     top: '0',
-    backgroundColor: '#ffffff',
+    //backgroundColor: '#ffffff',
     zindex: '1000'
 };
+
+var clearStyle = {
+    clear: 'both'
+}
 
 if (process.env.BROWSER) {
     let s = 'white';
@@ -35,6 +39,7 @@ class Presentation extends React.Component{
         this.context.executeAction(loadPresentation, {
             deck: this.props.DeckTreeStore.flatTree
         });
+
     }
 
     componentDidUpdate(){
@@ -42,6 +47,23 @@ class Presentation extends React.Component{
         console.log('componentDidMount');
 	    if(this.slides.length > 0){
 			Reveal.initialize();
+            if (process.env.BROWSER) {
+                console.log(this.props.PresentationStore);
+                let s = this.props.PresentationStore.theme;
+                require('style!../../../bower_components/reveal.js/css/theme/' + s + '.css');
+                console.log("requiring");
+                console.log(this.playerCss.background);
+                while(this.playerCss.background === undefined || this.playerCss.background == ''){
+                    this.updateStyleForTheme();
+                    this.forceUpdate();
+                    // console.log(this.playerCss.background);
+                    // console.log('state: ', this.state);
+                }
+                // var updateStyle = setInterval(function(){
+                //     updateStyleForTheme();
+                // }, 100);
+
+            }
 		}
     }
 
@@ -49,15 +71,28 @@ class Presentation extends React.Component{
         console.log("Rendering");
         this.slides = this.getSlides();
         return(
-            <div className="reveal" style={this.playerCss}>
-                <div className="slides">
-    				{this.slides}
-    			</div>
+            <div>
+                <div className="reveal" style={this.playerCss}>
+                    <div className="slides">
+        				{this.slides}
+        			</div>
+                </div>
+                <br style={clearStyle} />
             </div>
         );
 	}
 
-//Previously in PresentationSlideList
+    updateStyleForTheme(){
+        //This function gets the background from body (where reveal puts it), and places it into this component.
+        //Needed to make it properly full screen
+        console.log('this', this);
+        let style = window.getComputedStyle(document.getElementsByTagName('body')[0]);
+        let background = style.background;
+        this.playerCss.background = background;
+        // this.setState({playerCss: this.playerCss});
+    }
+
+
     getSlides(){
         var slides = this.props.PresentationStore.content;
 
