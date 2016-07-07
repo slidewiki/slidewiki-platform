@@ -33,28 +33,28 @@ class CategoryBox extends React.Component {
     }
 
     render() {
-        let decks,settings,stats = '';
+        let decks = '',settings = '',stats = '';
         switch(this.props.UserProfileStore.toShow){
             case 'settings':
-                settings = 'selected active';
+                settings = 'selected active blue';
                 break;
             case 'stats':
-                stats = 'selected active';
+                stats = 'selected active blue';
                 break;
             default:
-                decks = 'selected active';
+                decks = 'selected active blue';
         }
 
         return (
           <div className="ui vertical fluid buttons">
-              <button className="ui button" onClick={this.myDecksClicked.bind(this)}>
-                <p><i className="icon folder {decks}"/> My Decks</p>
+              <button className={'ui ' + decks + ' button'} onClick={this.myDecksClicked.bind(this)}>
+                <p><i className="icon folder"/> My Decks</p>
               </button>
-              <button className="ui blue button" onClick={this.settingsClicked.bind(this)}>
-                <p><i className="icon setting {settings}"/> Settings</p>
+              <button className={'ui ' + settings + ' button'} onClick={this.settingsClicked.bind(this)}>
+                <p><i className="icon setting"/> Settings</p>
               </button>
-              <button className="ui button" onClick={this.myStatsClicked.bind(this)}>
-                <p><i className="icon bar chart {stats}"/> My Stats</p>
+              <button className={'ui ' + stats + ' button'} onClick={this.myStatsClicked.bind(this)}>
+                <p><i className="icon bar chart"/> My Stats</p>
               </button>
           </div>
         );
