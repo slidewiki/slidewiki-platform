@@ -56,7 +56,8 @@ class UserSettings extends React.Component {
                     <div className="sixteen wide column">
 
                       <div className="ui form">
-                        <h2>Personal Data</h2>
+                        <h2>About me</h2>
+                        <div className="ui hidden divider"/>
                         <div className="two fields">
                           <div className="ui labeled input field">
                             <div className="ui label">Firstname</div>
@@ -132,6 +133,8 @@ class UserSettings extends React.Component {
 
                   <div className="row">
                     <div className="sixteen wide column">
+                      <h2>Password</h2>
+                      <div className="ui hidden divider"/>
                       <div className="ui form">
                         <div className="two fields">
                           <div className="ui labeled input field">
@@ -164,6 +167,7 @@ class UserSettings extends React.Component {
               </div>
               <div className="content">
                 <p>This feature is currently missing. Please wait for future releases.</p>
+                {/*Include a nested accordion covering Google, Github, ....*/}
               </div>
             </div>
           </div>
