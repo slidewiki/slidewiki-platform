@@ -5,10 +5,11 @@ class PresentationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.content = '';
-
+        this.theme = '';
     }
     updatePresentation(payload) {
         this.content = payload.content;
+        this.theme = payload.theme;
         this.emitChange();
         //console.log("Updating content", payload.content);
     }

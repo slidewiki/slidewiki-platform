@@ -5,7 +5,7 @@ import connectToStores from 'fluxible-addons-react/connectToStores';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import TabLinksStore from '../../stores/TabLinksStore';
-import TabLinksStore from '../../stores/ContentStore';
+
 import createStore from 'fluxible/addons/createStore';
 
 

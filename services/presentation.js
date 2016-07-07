@@ -11,16 +11,16 @@ export default {
             /*********received data from microservices*************/
 
             let deck = args.deck;
-            //Data structure seems to change from a Map to an object
+
             if(deck[0] !== undefined){
-                let test = deck[0];
+                let theme = '';
 
                 let presentation = [];
                 for (let i = 0; i < deck.length; i++) {
                     let slide = deck[i];
                     presentation.push({'id': slide.id, 'content': get_sample_text(slide.id), 'speakerNotes': get_sample_notes(slide.id)});
                 }
-                callback(null, {content: presentation});
+                callback(null, {content: presentation, theme: get_sample_theme()});
             }
 
 
@@ -30,6 +30,13 @@ export default {
 
 };
 
+
+function get_sample_theme(){
+    let themes = ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white'];
+    let index = Math.floor(Math.random() * (themes.length - 1));
+    console.log('theme: ', themes[index]);
+    return themes[index];
+}
 
 function get_sample_text(id){
     return `
