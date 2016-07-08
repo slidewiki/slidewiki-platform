@@ -4,6 +4,7 @@ import {shortTitle, fullTitle} from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
+import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -21,6 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
+import loadPresentation from '../actions/loadPresentation';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -90,17 +92,18 @@ export default {
         }
     },
 
+//-----------------------------------Search routes------------------------------
     searchresults: {
-        path: '/searchresults/:searchstring?',
-        // path: '/searchresults',
+        path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
         method: 'get',
-        page: 'searchresults',
-        title: 'SlideWiki -- Search results',
-        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
+        page: 'search',
+        title: 'SlideWiki -- Search',
+        handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }
     },
+
 
 
     //-----------------------------------DeckPage routes------------------------------
@@ -256,6 +259,17 @@ export default {
         handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
         action: (context, payload, done) => {
             context.executeAction(loadTabLinks, payload, done);
+        }
+    },
+    presentation: {
+        path: '/presentation/:id/',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckTree, payload, done);
+            //context.executeAction(loadPresentation, payload, done);
+            context.executeAction(loadDeck, payload, done);
         }
     }
 };

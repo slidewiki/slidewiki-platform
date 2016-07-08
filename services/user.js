@@ -24,6 +24,7 @@ export default {
     },
 
     create: (req, resource, params, body, config, callback) => {
+        console.log('errorrrrrr');
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
             rp.post({
