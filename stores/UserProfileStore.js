@@ -3,21 +3,13 @@ import { BaseStore } from 'fluxible/addons';
 class UserProfileStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.toShow = '';
+        this.toShow = 'decks';
     }
     destructor() {
         this.toShow = '';
     }
-    changeToMyDecks(payload) {
-        this.toShow = 'decks';
-        this.emitChange();
-    }
-    changeToSettings(payload) {
-        this.toShow = 'settings';
-        this.emitChange();
-    }
-    changeToMyStats(payload) {
-        this.toShow = 'stats';
+    changeTo(payload) {
+        this.toShow = payload.dest;
         this.emitChange();
     }
     getState() {
@@ -33,9 +25,7 @@ class UserProfileStore extends BaseStore {
 
 UserProfileStore.storeName = 'UserProfileStore';
 UserProfileStore.handlers = {
-    'CHANGE_TO_MYDECKS': 'changeToMyDecks',
-    'CHANGE_TO_SETTINGS': 'changeToSettings',
-    'CHANGE_TO_MYSTATS': 'changeToMyStats'
+    'CHANGE_TO': 'changeTo'
 };
 
 export default UserProfileStore;

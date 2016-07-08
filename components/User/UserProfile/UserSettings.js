@@ -6,7 +6,6 @@ class UserSettings extends React.Component {
     componentDidMount() {
         this.enableAccordion();
     }
-
     componentDidUpdate() {
         this.refreshAccordion();
     }

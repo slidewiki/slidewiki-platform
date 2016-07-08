@@ -1,59 +1,28 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {connectToStores} from 'fluxible-addons-react';
-import UserProfileStore from '../../../stores/UserProfileStore';
-import changeToMyDecks from '../../../actions/user/userprofile/categoryBox';
-import changeToSettings from '../../../actions/user/userprofile/categoryBox';
-import changeToMyStats from '../../../actions/user/userprofile/categoryBox';
+import changeTo from '../../../actions/user/userprofile/categoryBox';
 
 class CategoryBox extends React.Component {
     componentDidMount() {}
-
     componentDidUpdate() {}
-
-    myDecksClicked(){
+    exchangeContent(dest){
         //TODO - Check for correct format and
         //Do this via flux flow - this.props.ImportStore.isAllowed
-        this.context.executeAction(changeToMyDecks, {});  // example copied from Import.js (that copied it from Deck.js)
-        return false;
-    }
-
-    settingsClicked(){
-        //TODO - Check for correct format and
-        //Do this via flux flow - this.props.ImportStore.isAllowed
-        this.context.executeAction(changeToSettings, {});  // example copied from Import.js (that copied it from Deck.js)
-        return false;
-    }
-
-    myStatsClicked(){
-        //TODO - Check for correct format and
-        //Do this via flux flow - this.props.ImportStore.isAllowed
-        this.context.executeAction(changeToMyStats, {});  // example copied from Import.js (that copied it from Deck.js)
-        return false;
+        this.context.executeAction(changeTo, {dest: dest});  // example copied from Import.js (that copied it from Deck.js)
     }
 
     render() {
-        let decks = '',settings = '',stats = '';
-        switch(this.props.UserProfileStore.toShow){
-            case 'settings':
-                settings = 'selected active blue';
-                break;
-            case 'stats':
-                stats = 'selected active blue';
-                break;
-            default:
-                decks = 'selected active blue';
-        }
+        let active = 'selected active blue';
 
         return (
           <div className="ui vertical fluid buttons">
-              <button className={'ui ' + decks + ' button'} onClick={this.myDecksClicked.bind(this)}>
+              <button className={ 'ui ' + ( this.props.toShow === 'decks' ? active : '' ) + ' button' } onClick={ this.exchangeContent.bind(this,'decks') }>
                 <p><i className="icon folder"/> My Decks</p>
               </button>
-              <button className={'ui ' + settings + ' button'} onClick={this.settingsClicked.bind(this)}>
+              <button className={ 'ui ' + ( this.props.toShow === 'settings' ? active : '' ) + ' button' } onClick={ this.exchangeContent.bind(this,'settings') }>
                 <p><i className="icon setting"/> Settings</p>
               </button>
-              <button className={'ui ' + stats + ' button'} onClick={this.myStatsClicked.bind(this)}>
+              <button className={ 'ui ' + ( this.props.toShow === 'stats' ? active : '' ) + ' button' } onClick={ this.exchangeContent.bind(this, 'stats') }>
                 <p><i className="icon bar chart"/> My Stats</p>
               </button>
           </div>
@@ -64,10 +33,5 @@ class CategoryBox extends React.Component {
 CategoryBox.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-CategoryBox = connectToStores(CategoryBox, [UserProfileStore], (context, props) => {
-    return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
-    };
-});
 
 export default CategoryBox;
