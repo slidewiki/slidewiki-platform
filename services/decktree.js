@@ -12,8 +12,9 @@ export default {
             rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).then((res) => {
                 callback(null, {deckTree: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
-                console.log(err);
-                callback(null, {deckTree: {}, selector: selector, 'page': params.page, 'mode': args.mode});
+                //console.log(err);
+                //we should report the error to the action creator
+                callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', details: err}, {});
             });
         }
     },
