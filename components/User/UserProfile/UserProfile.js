@@ -5,6 +5,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import CategoryBox from './CategoryBox';
 import UserSettings from './UserSettings';
+import UserDecks from './UserDecks';
 
 class UserProfile extends React.Component {
     componentDidMount() {}
@@ -20,8 +21,8 @@ class UserProfile extends React.Component {
             </div>
 
             <div className = "twelve wide column" >
-              { this.props.UserProfileStore.toShow === 'decks' ? '' : '' }
-              { this.props.UserProfileStore.toShow === 'settings' ? < UserSettings / > : '' }
+              { this.props.UserProfileStore.toShow === 'decks' ? <UserDecks /> : '' }
+              { this.props.UserProfileStore.toShow === 'settings' ? <UserSettings /> : '' }
               { this.props.UserProfileStore.toShow === 'stats' ? '' : '' }
               </div>
             </div>
