@@ -10,6 +10,7 @@ class DeckTreeStore extends BaseStore {
         this.nextSelector = Immutable.fromJS({});
         this.deckTree = Immutable.fromJS({});
         this.flatTree = Immutable.fromJS({});
+        this.error = 0;
     }
     updateDeckTree(payload) {
         this.selector = Immutable.fromJS(payload.selector);
@@ -31,6 +32,8 @@ class DeckTreeStore extends BaseStore {
         }
         //prepare next and prev node selector
         this.updatePrevNextSelectors();
+        //reset error state
+        this.error = 0;
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -400,7 +403,8 @@ class DeckTreeStore extends BaseStore {
             selector: this.selector,
             flatTree: this.flatTree,
             prevSelector: this.prevSelector,
-            nextSelector: this.nextSelector
+            nextSelector: this.nextSelector,
+            error: this.error
         };
     }
     dehydrate() {
@@ -412,6 +416,11 @@ class DeckTreeStore extends BaseStore {
         this.flatTree = Immutable.fromJS(state.flatTree);
         this.prevSelector = Immutable.fromJS(state.prevSelector);
         this.nextSelector = Immutable.fromJS(state.nextSelector);
+        this.error  = state.error;
+    }
+    handleDeckTreeError(err){
+        this.error = err;
+        this.emitChange();
     }
 }
 
@@ -424,7 +433,9 @@ DeckTreeStore.handlers = {
     'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode',
     'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
-    'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode'
+    'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
+    //error handling msges
+    'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
 };
 
 export default DeckTreeStore;

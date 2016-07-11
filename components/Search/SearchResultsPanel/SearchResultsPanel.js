@@ -4,9 +4,9 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
+import updateUserResultsVisibility from '../../../actions/search/updateUserResultsVisibility';
 
-
-class SearchPanel extends React.Component {
+class SearchResultsPanel extends React.Component {
 
     handleChangeToggle(field, value) {
         this.context.executeAction(updateUserResultsVisibility, {
@@ -38,24 +38,16 @@ class SearchPanel extends React.Component {
             );
         });
 
-
-        const infoStyles = {
-            fontWeight: 600
-        };
-
         return (
 
             <div ref="searchResultsPanel">
 
-
-                <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/results">Showing results for: {this.props.SearchResultsStore.query}</a>
-                </div>
+                <h2 className="ui header">Search Results</h2>
 
                 <div className="ui grid">
                     <div className="five wide column">
                         <div className="ui basic segment">
-                            <h4 className="ui header">Filters:</h4>
+                            <h4 className="ui header">Facets:</h4>
                             <label>Entities:</label>
                             <div className="subscriptions">
                                 <div ref="subscriptionslist">
@@ -91,13 +83,13 @@ class SearchPanel extends React.Component {
 
 }
 
-SearchPanel.contextTypes = {
+SearchResultsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-SearchPanel = connectToStores(SearchPanel, [SearchResultsStore], (context, props) => {
+SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
     return {
         SearchResultsStore: context.getStore(SearchResultsStore).getState()
     };
 });
 
-export default SearchPanel;
+export default SearchResultsPanel;

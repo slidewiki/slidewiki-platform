@@ -4,6 +4,7 @@ import {shortTitle, fullTitle} from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
+import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -78,17 +79,18 @@ export default {
         }
     },
 
+//-----------------------------------Search routes------------------------------
     searchresults: {
-        path: '/searchresults/:searchstring?',
-        // path: '/searchresults',
+        path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
         method: 'get',
-        page: 'searchresults',
-        title: 'SlideWiki -- Search results',
-        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
+        page: 'search',
+        title: 'SlideWiki -- Search',
+        handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }
     },
+
 
 
     //-----------------------------------DeckPage routes------------------------------
