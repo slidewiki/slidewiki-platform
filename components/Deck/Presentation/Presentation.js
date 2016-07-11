@@ -23,8 +23,7 @@ var clearStyle = {
 
 if (process.env.BROWSER) {
     let s = 'white';
-    require('style!../../../bower_components/reveal.js/css/reveal.css');
-    // require('style!../../../bower_components/reveal.js/css/theme/' + s + '.css');
+    require('../../../bower_components/reveal.js/css/reveal.css');
     console.log("requiring");
 }
 
@@ -50,10 +49,12 @@ class Presentation extends React.Component{
             if (process.env.BROWSER) {
                 console.log(this.props.PresentationStore);
                 let s = this.props.PresentationStore.theme;
-                require('style!../../../bower_components/reveal.js/css/theme/' + s + '.css');
+                require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
                 console.log("requiring");
                 console.log(this.playerCss.background);
-                while(this.playerCss.background === undefined || this.playerCss.background == ''){
+                //while(this.playerCss.background === undefined || this.playerCss.background === ''){
+                while(!this.playerCss.background){
+                    //console.log(this.playerCss.background);
                     this.updateStyleForTheme();
                     this.forceUpdate();
                     // console.log(this.playerCss.background);
@@ -85,7 +86,6 @@ class Presentation extends React.Component{
     updateStyleForTheme(){
         //This function gets the background from body (where reveal puts it), and places it into this component.
         //Needed to make it properly full screen
-        console.log('this', this);
         let style = window.getComputedStyle(document.getElementsByTagName('body')[0]);
         let background = style.background;
         this.playerCss.background = background;

@@ -32,7 +32,7 @@ let webpackConfig = {
                 ]
             },
             { test: /\.json$/, loader: 'json-loader'},
-            { test: /\.css$/, loaders: ['style-loader', 'css-loader']},
+           { test: /\.css$/, loader: 'style-loader!css-loader'},
             // { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, loader: 'url-loader?limit=100000' },
 
             //{ test: /\.css$/, loader: ExtractTextPlugin.extract("css") },
