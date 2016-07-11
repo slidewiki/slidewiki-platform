@@ -3,8 +3,9 @@ import { NavLink } from 'fluxible-router';
 import DeckPageStore from '../../../stores/DeckPageStore';
 
 class ErrorComponent extends React.Component {
-    let deckIdError = this.props.DeckPageStore.error ? this.props.DeckPageStore.error.msg : 0;
-    # TODO: use of deckIdError to show appropriate error message in render.
+    console.log(this.props.DeckPageStore, "From Error Component");
+    //let deckIdError = this.props.DeckPageStore.error ? this.props.DeckPageStore.error.msg : 0;
+    // TODO: use of deckIdError to show appropriate error message in render.
 
     render() {
         return (
@@ -14,5 +15,6 @@ class ErrorComponent extends React.Component {
         );
     }
 }
+
 
 export default ErrorComponent;
