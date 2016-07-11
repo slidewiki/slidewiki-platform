@@ -145,13 +145,6 @@ class UserRegistration extends React.Component {
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
         let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
-        $('#firstname').val('');
-        $('#lastname').val('');
-        $('#email2').val('');
-        $('#reenteremail').val('');
-        $('#password2').val('');
-        $('#reenterpassword2').val('');
-
         this.context.executeAction(userSignUp, {
             firstname: this.refs.firstname.value,
             lastname: this.refs.lastname.value,
@@ -160,6 +153,13 @@ class UserRegistration extends React.Component {
             email: this.refs.email2.value,
             password: this.refs.password2.value
         });
+
+        $('#firstname').val('');
+        $('#lastname').val('');
+        $('#email2').val('');
+        $('#reenteremail').val('');
+        $('#password2').val('');
+        $('#reenterpassword2').val('');
 
     }
 
