@@ -10,24 +10,31 @@ import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
 
 export default function loadDeck(context, payload, done) {
-    //console.log(context.getStore('DeckPageStore').error);
+    let http400 = "400 Bad request.";
     if (!(Number.parseInt(payload.params.id) >= 0)) {
-        console.log('Deck id incorrect. Loading deck failed.');
-        context.dispatch('DECK_ID_FAILURE', payload, done);
-        //done();
+        context.dispatch('DECK_ID_TYPE_ERROR', http400, "");
     }
 
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
+    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         console.log('Content type incorrect. Loading deck failed.');
+        context.dispatch('DECK_ID_TYPE_ERROR', http400, "");
+    }
 
-    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
+
+    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
         console.log('Slide id incorrect. Loading deck failed.');
+        context.dispatch('DECK_ID_TYPE_ERROR', http400, "");
+    }
 
-    if (!(payload.params.spath || payload.params.spath === undefined))
+    if (!(payload.params.spath || payload.params.spath === undefined)) {
         console.log('Incorrect path. Loading deck failed.');
+        context.dispatch('DECK_ID_TYPE_ERROR', http400, "");
+    }
 
-    if (!(payload.params.mode || payload.params.mode === undefined))
+    if (!(payload.params.mode || payload.params.mode === undefined)) {
         console.log('Incorrect mode. Loading deck failed.');
+        context.dispatch('DECK_ID_TYPE_ERROR', http400, "");
+    }
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
