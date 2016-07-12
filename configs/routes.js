@@ -65,7 +65,7 @@ export default {
             done();
         }
     },
-	migrate: {
+    migrate: {
         path: '/migrate',
         method: 'get',
         page: 'migrate',
