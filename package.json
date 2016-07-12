@@ -34,7 +34,8 @@
     "countLOC:details": "sloc -f cli-table -d -e node_modules\\|coverage\\|.git\\|bower_components ./",
     "start:watch": "nodemon",
     "validate": "npm ls",
-    "pull": "git pull --recurse-submodules"
+    "pull": "git pull --recurse-submodules",
+	"windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "pre-commit": [
     "lint",
