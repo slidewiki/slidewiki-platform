@@ -60,7 +60,6 @@ fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/thumbnail'));
 
-
 server.use((req, res, next) => {
 
     const context =  app.createContext({
