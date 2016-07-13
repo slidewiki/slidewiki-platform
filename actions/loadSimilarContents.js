@@ -2,7 +2,7 @@ import {shortTitle} from '../configs/general';
 import getSlideThumbnail from './getSlideThumbnail';
 
 function getSlideContent(sid){
-  let sampleContent = `
+    let sampleContent = `
   <html>
   <head>
     <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
@@ -59,11 +59,9 @@ export default function loadSimilarContents(context, payload, done) {
                 context.service.read('thumbnail.htmlcontent', {sid: res.contents[i].id, contentHTML : contentHTML}, {timeout: 30 * 1000}, (errThumb, resThumb) => {
                     if(errThumb){
                         context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', errThumb);
-
                     } else{
                         res.contents[i].imgSrc = resThumb.contents.src;
                         context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
-
                     }
                 });
               //context.executeAction(getSlideThumbnail,{sid:id, contentHTML: contentHTML},done);
