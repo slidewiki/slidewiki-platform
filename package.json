@@ -25,7 +25,7 @@
     "start": "node start.js",
     "build": "webpack --config ./webpack/prod.config.js && NODE_ENV=production npm start",
     "build:nostart": "webpack --config ./webpack/prod.config.js",
-    "dev": "node ./webpack/dev-server.js",
+    "dev": "./gen_version.sh && node ./webpack/dev-server.js",
     "lint": "eslint ./**/*.js",
     "test": "mocha test/unit/ --recursive --compilers js:babel-register --reporter spec",
     "coverage": "istanbul cover _mocha --include-all-sources tests/unit/*.js",
@@ -35,7 +35,7 @@
     "start:watch": "nodemon",
     "validate": "npm ls",
     "pull": "git pull --recurse-submodules",
-	"windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
+	  "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "pre-commit": [
     "lint",
