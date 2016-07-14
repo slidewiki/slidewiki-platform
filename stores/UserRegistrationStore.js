@@ -3,22 +3,39 @@ import {BaseStore} from 'fluxible/addons';
 class UserRegistrationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.userType = 'guest';
+        this.registrationStatus = 'guest';
+        this.errorMessage = '';
     }
 
-    handleCreateUserSuccess() {
-        this.userType = 'pending';
+    handleCreateUserSuccess(res) {
+        if(res.error) {
+            // this.errorMessage = err.error + ': ' + err.message;
+
+            this.errorMessage = res.error.message;
+            this.registrationStatus = 'error';
+        } else {
+            this.registrationStatus = 'pending';
+            this.errorMessage = '';
+        }
         this.emitChange();
     }
 
-    handleResetUserRegistration() {
-        this.userType = 'guest';
+    handleResetUserRegistrationStatus() {
+        this.registrationStatus = 'guest';
+        this.errorMessage = '';
+        // this.emitChange();
+    }
+
+    handleUserRegistrationError(err) {
+        this.errorMessage = err.message;
+        this.registrationStatus = 'error';
         this.emitChange();
     }
 
     getState() {
         return {
-            userType: this.userType
+            registrationStatus: this.registrationStatus,
+            errorMessage: this.errorMessage
         };
     }
 
@@ -26,14 +43,17 @@ class UserRegistrationStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.userType = state.userType;
+        this.registrationStatus = state.registrationStatus;
+        this.errorMessage = state.errorMessage;
     }
 }
 
 UserRegistrationStore.storeName = 'UserRegistrationStore';
 UserRegistrationStore.handlers = {
     'CREATE_USER_SUCCESS': 'handleCreateUserSuccess',
-    'RESET_USER_REGISTRATION': 'handleResetUserRegistration'
+    'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
+    //error handling msges
+    'CREATE_USER_FAILURE': 'handleUserRegistrationError'
 };
 
 export default UserRegistrationStore;
