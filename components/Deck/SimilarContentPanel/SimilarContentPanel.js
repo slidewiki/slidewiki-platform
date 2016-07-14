@@ -4,7 +4,7 @@ import SimilarContentStore from '../../../stores/SimilarContentStore';
 import SimilarContentList from './SimilarContentList';
 
 class SimilarContentPanel extends React.Component {
-    
+
     render() {
 
         return (

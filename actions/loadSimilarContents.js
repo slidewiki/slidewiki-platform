@@ -41,6 +41,7 @@ function getSlideContent(sid){
   </body>
   </html>
   `;
+
     return sampleContent;
 }
 
@@ -53,6 +54,7 @@ export default function loadSimilarContents(context, payload, done) {
             //for(let {id,title,author,authorId,date,liked,downloaded,imgSrc} of res.contents){
             for(let i=0; i< res.contents.length;i++){
              //TODO: get the htmlContent from slide service.
+
                 let contentHTML = getSlideContent(res.contents[i].id);
                 context.service.read('thumbnail.htmlcontent', {sid: res.contents[i].id, contentHTML : contentHTML}, {timeout: 30 * 1000}, (errThumb, resThumb) => {
                     if(errThumb){
@@ -63,6 +65,8 @@ export default function loadSimilarContents(context, payload, done) {
 
                     }
                 });
+
+
               //context.executeAction(getSlideThumbnail,{sid:id, contentHTML: contentHTML},done);
 
             }
