@@ -3,7 +3,7 @@ import React from 'react';
 class SimilarContentItem extends React.Component {
 
     render() {
-        console.log("render item");
+  
         return (
             <div className="item">
               <div className="ui card">
