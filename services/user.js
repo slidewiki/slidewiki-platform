@@ -27,7 +27,7 @@ export default {
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
             rp.post({
-                uri: Microservices.user.uri + '/raegister',
+                uri: Microservices.user.uri + '/register',
                 body: JSON.stringify({
                     email: args.email,
                     forename: args.firstname,
