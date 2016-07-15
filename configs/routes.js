@@ -26,6 +26,8 @@ import loadPresentation from '../actions/loadPresentation';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
+
+
     home: {
         path: '/',
         method: 'get',
@@ -101,7 +103,35 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadDeck, payload, (err, result) => {
+                console.log('context:', context);
+                if (err) {
+                    //res.status(400);
+                    console.log('error caught in callback');
+                    console.log('1:', err.message);
+                    console.log('2:', err.name);
+                    console.log('3:', err.statusCode);
+                }
+                else
+                    console.log('No error');
+                done();
+
+            });
+            /*
+                .then(() => {
+
+                    if (!(Number.parseInt(payload.params.id) >= 0)) {
+                        throw new TypeError('Deck id must be positive integer');
+                        console.log('Reached here.')
+                        done();
+                    }
+
+                })
+                .catch((err) => {
+                    console.log(err.name, '|', err.message);
+                });
+            */
+            //done();
         }
     },
     contributors: {
