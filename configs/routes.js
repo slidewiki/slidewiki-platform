@@ -67,6 +67,19 @@ export default {
             done();
         }
     },
+    migrate: {
+        path: '/migrate',
+        method: 'get',
+        page: 'migrate',
+        title: 'SlideWiki -- DataBase Migraton',
+        handler: require('../components/Migrate/Migrate'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | DataBase Migration'
+            });
+            done();
+        }
+    },
     notifications: {
         path: '/notifications',
         method: 'get',
