@@ -1,3 +1,6 @@
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
+
 export default {
     name: 'presentation',
     // At least one of the CRUD methods is Required
@@ -7,28 +10,39 @@ export default {
         //Load the whole presentation
         if(resource === 'presentation.content'){
             /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-
             let deck = args.deck;
+            let presentation = [];
+            let returnErr = false;
 
             if(deck[0] !== undefined){
-                let theme = '';
-
-                let presentation = [];
+               //Retrieve the content of each presentation
                 for (let i = 0; i < deck.length; i++) {
                     let slide = deck[i];
-                    presentation.push({'id': slide.id, 'content': get_sample_text(slide.id), 'speakerNotes': get_sample_notes(slide.id)});
-                }
-                callback(null, {content: presentation, theme: get_sample_theme()});
+                    let content;
+                    let slideServiceRes;
+                    rp.get({uri: Microservices.deck.uri + '/slide/' + slide.id}).then((res) => {
+                        slideServiceRes = JSON.parse(res);
+                        presentation.push({'id': slide.id, 'content': slideServiceRes.slide.revisions[slideServiceRes.slide.revisions.length-1].content, 'speakerNotes': slideServiceRes.slide.revisions[slideServiceRes.slide.revisions.length-1].speakernotes});
+
+
+                    }).catch((err) => {
+                        slideContent = '';
+                        presentation.push({'id': slide.id, 'content':'', 'speakerNotes': ''});
+                        returnErr = true;
+                    });
+
+                } //for
             }
+        }//If presentation.content
+        //TODO: Retrieve theme content from deck
+
+            /*********received data from microservices*************/
+        callback(null, {content: presentation, theme: get_sample_theme()});
 
 
-        }
-    },
-
-
+    }
 };
+
 
 
 function get_sample_theme(){

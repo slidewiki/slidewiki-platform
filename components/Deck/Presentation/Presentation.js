@@ -8,7 +8,7 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
 
-var playerCss = {
+let playerCss = {
     height: '100%',
     fontSize: '100%',
     position: 'absolute',
@@ -17,14 +17,14 @@ var playerCss = {
     zindex: '1000'
 };
 
-var clearStyle = {
+let clearStyle = {
     clear: 'both'
-}
+};
 
 if (process.env.BROWSER) {
     let s = 'white';
     require('../../../bower_components/reveal.js/css/reveal.css');
-    console.log("requiring");
+    console.log('requiring');
 }
 
 
@@ -44,13 +44,13 @@ class Presentation extends React.Component{
     componentDidUpdate(){
         console.log(this.slides);
         console.log('componentDidMount');
-	    if(this.slides.length > 0){
-			Reveal.initialize();
+        if(this.slides.length > 0){
+            Reveal.initialize();
             if (process.env.BROWSER) {
                 console.log(this.props.PresentationStore);
                 let s = this.props.PresentationStore.theme;
                 require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
-                console.log("requiring");
+                console.log('requiring');
                 console.log(this.playerCss.background);
                 //while(this.playerCss.background === undefined || this.playerCss.background === ''){
                 while(!this.playerCss.background){
@@ -65,11 +65,10 @@ class Presentation extends React.Component{
                 // }, 100);
 
             }
-		}
+        }
     }
-
-	render(){
-        console.log("Rendering");
+    render(){
+        console.log('Rendering');
         this.slides = this.getSlides();
         return(
             <div>
@@ -81,7 +80,7 @@ class Presentation extends React.Component{
                 <br style={clearStyle} />
             </div>
         );
-	}
+    }
 
     updateStyleForTheme(){
         //This function gets the background from body (where reveal puts it), and places it into this component.
@@ -94,18 +93,16 @@ class Presentation extends React.Component{
 
 
     getSlides(){
-        var slides = this.props.PresentationStore.content;
+        let slides = this.props.PresentationStore.content;
 
-        var returnList = [];
+        let returnList = [];
         if(slides !== ''){
-                for (var i = 0; i < slides.length; i++) {
-                    let speakerNotes = slides[i]['speakerNotes'];
-                    let content = slides[i]['content'] + '<aside class="notes">' + speakerNotes + '</aside>';
-
-                    returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={i} />);
-                }
-
-          return returnList;
+            for (let i = 0; i < slides.length; i++) {
+                let speakerNotes = slides[i].speakerNotes;
+                let content = slides[i].content + '<aside class="notes">' + speakerNotes + '</aside>';
+                returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={i} />);
+            }
+            return returnList;
 
         }
         else{
