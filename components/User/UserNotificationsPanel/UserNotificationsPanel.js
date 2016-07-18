@@ -60,6 +60,14 @@ class UserNotificationsPanel extends React.Component {
                     </div>
                 );
         });
+        const activityTypeList = this.props.UserNotificationsStore.activityTypes.map((at, index) => {
+            return (
+                <div className="ui item toggle checkbox" key={index} >
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={at.selected} onChange={this.handleChangeToggle.bind(this, at.type, 0)} />
+                    <label>{at.type.charAt(0).toUpperCase() + at.type.slice(1)}</label>
+                </div>
+            );
+        });
 
         const notifications = this.props.UserNotificationsStore.notifications;
         const selector = this.props.UserNotificationsStore.selector;
@@ -116,6 +124,14 @@ class UserNotificationsPanel extends React.Component {
                                 <div ref="subscriptionslist">
                                     <div className="ui relaxed list">
                                         {deckSubscriptionList}
+                                    </div>
+                                 </div>
+                            </div>
+                            <label>Activity types:</label>
+                            <div className="activityTypes">
+                                <div ref="activityTypeList">
+                                    <div className="ui relaxed list">
+                                        {activityTypeList}
                                     </div>
                                  </div>
                             </div>
