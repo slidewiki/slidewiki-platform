@@ -8,30 +8,18 @@ import loadTranslations from './loadTranslations';
 import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
+import error_desc from '../components/Error/errorDesc';
+let fumble = require('fumble');
 
 export default function loadDeck(context, payload, done) {
-    let http400 = '400 Bad request.';
-    //console.log(context);
-    //console.log(context.getServiceMeta());
-    /*
-    if (!(Number.parseInt(payload.params.id) >= 0)) {
-        //throw new Error('failed to find user');
-
-        context.dispatch('DECK_PARAMS_TYPE_ERROR', payload, (err, result) => {
-            console.log('hey');
-            console.log('Err:', err);
-            done();
-        });
+    if (!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+        let error = fumble.http.badRequest(error_desc.DECK_ID_TYPE_INCORRECT);
+        context.dispatch('DECK_ID_ERROR', {code: error.statusCode, message: error.message});
+        throw error;
     }
-    */
-    if (!(Number.parseInt(payload.params.id) >= 0)) {
-        throw new TypeError('Deck id must be positive integer');
-        //console.log('Reached here.');
-        //done();
-    }
+    /* TODO
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        //console.log('Content type incorrect. Loading deck failed.');
-        context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
+        context.dispatch('DECK_CONTENT_TYPE_ERROR', http400);
     }
 
 
@@ -40,7 +28,7 @@ export default function loadDeck(context, payload, done) {
         context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
     }
 
-    if (!(payload.params.spath || payload.params.spath === undefined)) {
+    if (!(payload.params.spath && (/^[0-9:;]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
         //console.log('Incorrect path. Loading deck failed.');
         context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
     }
@@ -49,7 +37,7 @@ export default function loadDeck(context, payload, done) {
         //console.log('Incorrect mode. Loading deck failed.');
         context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
     }
-
+    */
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;

@@ -62,7 +62,7 @@ class DeckPageStore extends BaseStore {
         this.componentsStatus = state.componentsStatus;
         this.error = state.error;
     }
-    handleDeckIdError(err) {
+    handleDeckParamErrors(err) {
         this.error = err;
         this.emitChange();
     }
@@ -74,7 +74,10 @@ DeckPageStore.handlers = {
     'EXPAND_CONTENET_PANEL': 'expandContentPanel',
     'HIDE_LEFT_COLUMN': 'hideLeftColumn',
     'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll',
-    'DECK_ID_TYPE_ERROR': 'handleDeckIdError',
+    'DECK_ID_ERROR': 'handleDeckParamErrors',
+    'DECK_CONTENT_ID_ERROR': 'handleDeckParamErrors',
+    'DECK_CONTENT_TYPE_ERROR': 'handleDeckParamErrors',
+    'DECK_CONTENT_PATH_ERROR': 'handleDeckParamErrors',
 };
 
 export default DeckPageStore;

@@ -23,15 +23,18 @@ class Deck extends React.Component {
         return false;
     }
     render() {
-        //console.log(this.props);
         if (this.props.DeckPageStore.error) {
             return (
                 <div ref="deck">
-                    <ErrorComponent errorMsg={this.props.DeckPageStore.error}/>
+                    <ErrorComponent
+                        code={this.props.DeckPageStore.error.code}
+                        message={this.props.DeckPageStore.error.message}
+                    />
                 </div>
             );
         }
         else {
+            console.log('')
             let status = this.props.DeckPageStore.componentsStatus;
             let translationPanelClass = classNames({
                 'four': status.TranslationPanel.columnSize===4,

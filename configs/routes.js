@@ -23,6 +23,7 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
+import showError from '../actions/showError';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -106,8 +107,6 @@ export default {
         }
     },
 
-
-
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
     deck: {
@@ -116,35 +115,9 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, (err, result) => {
-                console.log('context:', context);
-                if (err) {
-                    //res.status(400);
-                    console.log('error caught in callback');
-                    console.log('1:', err.message);
-                    console.log('2:', err.name);
-                    console.log('3:', err.statusCode);
-                }
-                else
-                    console.log('No error');
-                done();
-
-            });
-            /*
-                .then(() => {
-
-                    if (!(Number.parseInt(payload.params.id) >= 0)) {
-                        throw new TypeError('Deck id must be positive integer');
-                        console.log('Reached here.')
-                        done();
-                    }
-
-                })
-                .catch((err) => {
-                    console.log(err.name, '|', err.message);
-                });
-            */
-            //done();
+            context.executeAction(loadDeck, payload, done)
+                .then(() => { })
+                .catch((err) => {throw Error(err);});
         }
     },
     contributors: {

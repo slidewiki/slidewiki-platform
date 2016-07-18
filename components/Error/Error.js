@@ -8,11 +8,9 @@ class ErrorComponent extends React.Component {
             <div className="ui negative message padded stackable grid page">
                 <i className="close icon"></i>
                 <div className="header">
-                    {this.props.errorMsg}
+                    {this.props.code} {this.props.message.substr(0, this.props.message.indexOf('.'))}
                 </div>
-                <p>The request could not be understood by the server.
-                Please do not repeat the request without modifications.
-                Contact the server’s administrator if this problem persists.</p>
+                <p>{this.props.message.substr(this.props.message.indexOf('.') + 1)}</p>
             </div>
         );
     }
