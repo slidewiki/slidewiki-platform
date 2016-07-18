@@ -6,3 +6,5 @@ logs/*.log
 tmp.js
 coverage
 configs/microservices.js
+slidewiki
+migrate
