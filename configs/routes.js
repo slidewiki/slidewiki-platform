@@ -23,7 +23,6 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
-import showError from '../actions/showError';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
