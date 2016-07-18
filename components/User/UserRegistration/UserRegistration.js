@@ -9,22 +9,6 @@ import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
-
-
-
-
-//TODO remove this autofill data
-      $('#firstname').val('a');
-      $('#lastname').val('a');
-      $('#username').val('a');
-      $('#emailsignup').val('a@a.com');
-      $('#reenteremail').val('a@a.com');
-      $('#passwordsignup').val('aaaaaa');
-      $('#reenterpasswordsignup').val('aaaaaa');
-
-
-
-
         //Form validations
         const signupValidation = {
             fields: {
