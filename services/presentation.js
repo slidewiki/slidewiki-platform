@@ -8,10 +8,11 @@ export default {
         let args = params.params? params.params : params;
         //let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         //Load the whole presentation
+        let presentation = [];
         if(resource === 'presentation.content'){
             /*********connect to microservices*************/
             let deck = args.deck;
-            let presentation = [];
+
             let returnErr = false;
 
             if(deck[0] !== undefined){
@@ -25,8 +26,7 @@ export default {
                         presentation.push({'id': slide.id, 'content': slideServiceRes.slide.revisions[slideServiceRes.slide.revisions.length-1].content, 'speakerNotes': slideServiceRes.slide.revisions[slideServiceRes.slide.revisions.length-1].speakernotes});
 
 
-                    }).catch((err) => {
-                        slideContent = '';
+                    }).catch((err) => {                        
                         presentation.push({'id': slide.id, 'content':'', 'speakerNotes': ''});
                         returnErr = true;
                     });
