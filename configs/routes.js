@@ -4,7 +4,7 @@ import {shortTitle, fullTitle} from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
-import loadAdvancedSearchResults from '../actions/search/loadAdvancedSearchResults';
+import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -22,6 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
+import loadPresentation from '../actions/loadPresentation';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -64,6 +65,19 @@ export default {
             done();
         }
     },
+    migrate: {
+        path: '/migrate',
+        method: 'get',
+        page: 'migrate',
+        title: 'SlideWiki -- DataBase Migraton',
+        handler: require('../components/Migrate/Migrate'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | DataBase Migration'
+            });
+            done();
+        }
+    },
     notifications: {
         path: '/notifications',
         method: 'get',
@@ -73,19 +87,6 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | User notifications'
-            });
-            done();
-        }
-    },
-    advancedsearch: {
-        path: '/advancedsearch',
-        method: 'get',
-        page: 'about',
-        title: 'SlideWiki -- About',
-        handler: require('../components/Search/AdvancedSearch/AdvancedSearch'),
-        action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | About'
             });
             done();
         }
@@ -106,12 +107,11 @@ export default {
     },
 //-----------------------------------Search routes------------------------------
     searchresults: {
-        path: '/searchresults/:searchstring?',
-        // path: '/searchresults',
+        path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
         method: 'get',
-        page: 'searchresults',
-        title: 'SlideWiki -- Search results',
-        handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
+        page: 'search',
+        title: 'SlideWiki -- Search',
+        handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }
@@ -272,6 +272,17 @@ export default {
         handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
         action: (context, payload, done) => {
             context.executeAction(loadTabLinks, payload, done);
+        }
+    },
+    presentation: {
+        path: '/presentation/:id/',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckTree, payload, done);
+            //context.executeAction(loadPresentation, payload, done);
+            context.executeAction(loadDeck, payload, done);
         }
     }
 };
