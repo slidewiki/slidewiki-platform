@@ -1,6 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+//let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
