@@ -8,11 +8,10 @@ export default {
         let args = params.params? params.params : params;
         //let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         //Load the whole presentation
-
         if(resource === 'presentation.content'){
             /*********connect to microservices*************/
             let deck = args.deck;
-
+            let presentation = [];
             let returnErr = false;
 
             if(deck[0] !== undefined){
@@ -34,7 +33,8 @@ export default {
 
                 } //for
             }
-            callback(null, {content: presentation, theme: get_sample_theme()}); //TODO: Retrieve theme content from deck service
+            //provide response            
+            callback(null, {content: presentation, theme: get_sample_theme()});    //TODO: Retrieve theme content from deck
         }//If presentation.content
 
 
