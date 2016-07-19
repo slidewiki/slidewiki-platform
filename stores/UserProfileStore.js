@@ -8,10 +8,6 @@ class UserProfileStore extends BaseStore {
     destructor() {
         this.toShow = '';
     }
-    changeTo(payload) {
-        this.toShow = payload.dest;
-        this.emitChange();
-    }
     getState() {
         return { toShow: this.toShow };
     }
@@ -20,6 +16,10 @@ class UserProfileStore extends BaseStore {
     }
     rehydrate(state) {
         this.toShow = state.toShow;
+    }
+    changeTo(payload) {
+        this.toShow = payload.dest;
+        this.emitChange();
     }
 }
 

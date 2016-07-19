@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import { Microservices } from '../../../configs/microservices';
+import ActivityFeedPanel from '../../Deck/ActivityFeedPanel/ActivityFeedPanel';
 
 class UserDecks extends React.Component {
     componentDidMount() {
@@ -29,21 +30,27 @@ class UserDecks extends React.Component {
                 <div className="ui segment">
                   <div className="ui relaxed divided list">
                     <div className="item">
-                      <i className="large folder middle aligned icon"></i>
+                      <div className="ui tiny image">
+                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
+                      </div>
                       <div className="content">
                         <a className="header">Semantic-Org/Semantic-UI</a>
                         <div className="description">Updated 10 mins ago</div>
                       </div>
                     </div>
                     <div className="item">
-                      <i className="large folder middle aligned icon"></i>
+                      <div className="ui tiny image">
+                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
+                      </div>
                       <div className="content">
                         <a className="header">Semantic-Org/Semantic-UI-Docs</a>
                         <div className="description">Updated 22 mins ago</div>
                       </div>
                     </div>
                     <div className="item">
-                      <i className="large folder middle aligned icon"></i>
+                      <div className="ui tiny image">
+                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
+                      </div>
                       <div className="content">
                         <a className="header">Semantic-Org/Semantic-UI-Meteor</a>
                         <div className="description">Updated 34 mins ago</div>
@@ -53,8 +60,41 @@ class UserDecks extends React.Component {
                 </div>
               </div>
               <div className="ui hidden divider" />
-              <div className="ui raised segment">
-
+              <div className="ui segments">
+                <div className="ui secondary segment">
+                  <strong>Recently edited slides</strong>
+                </div>
+                <div className="ui segment">
+                  <div className="ui relaxed divided list">
+                    <div className="item">
+                      <div className="ui tiny image">
+                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
+                      </div>
+                      <div className="content">
+                        <a className="header">Semantic-Org/Semantic-UI/Slide 4</a>
+                        <div className="description">Updated 10 mins ago</div>
+                      </div>
+                    </div>
+                    <div className="item">
+                      <div className="ui tiny image">
+                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
+                      </div>
+                      <div className="content">
+                        <a className="header">Semantic-Org/Semantic-UI-Docs/Slide 20</a>
+                        <div className="description">Updated 22 mins ago</div>
+                      </div>
+                    </div>
+                    <div className="item">
+                      <div className="ui tiny image">
+                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
+                      </div>
+                      <div className="content">
+                        <a className="header">Semantic-Org/Semantic-UI-Meteor/Slide 1</a>
+                        <div className="description">Updated 34 mins ago</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="column">
@@ -62,9 +102,7 @@ class UserDecks extends React.Component {
 
               </div>
               <div className="ui hidden divider" />
-              <div className="ui raised segment">
-
-              </div>
+              <ActivityFeedPanel />
             </div>
           </div>
         );
