@@ -127,8 +127,7 @@ class UserNotificationsPanel extends React.Component {
                                     </div>
                                  </div>
                             </div>
-                            <br/>
-                            <label>Activity types:</label>
+                            <h4 className="ui header">Show activity types:</h4>
                             <div className="activityTypes">
                                 <div ref="activityTypeList">
                                     <div className="ui relaxed list">
