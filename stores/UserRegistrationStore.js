@@ -9,9 +9,7 @@ class UserRegistrationStore extends BaseStore {
 
     handleCreateUserSuccess(res) {
         if(res.error) {
-            // this.errorMessage = err.error + ': ' + err.message;
-
-            this.errorMessage = res.error.message;
+            this.errorMessage = JSON.parse(res.error.error).message;
             this.registrationStatus = 'error';
         } else {
             this.registrationStatus = 'pending';

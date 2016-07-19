@@ -135,6 +135,15 @@ class UserRegistration extends React.Component {
                 .dimmer('toggle');
             this.context.executeAction(resetUserRegistrationStatus, {
             });
+
+            //Clear input if successful registration
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#username').val('');
+            $('#emailsignup').val('');
+            $('#reenteremail').val('');
+            $('#passwordsignup').val('');
+            $('#reenterpasswordsignup').val('');
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
             $('.dimmer.error')
                 .dimmer('toggle');
@@ -165,15 +174,6 @@ class UserRegistration extends React.Component {
             email: this.refs.emailsignup.value,
             password: this.refs.passwordsignup.value
         });
-
-        $('#firstname').val('');
-        $('#lastname').val('');
-        $('#username').val('');
-        $('#emailsignup').val('');
-        $('#reenteremail').val('');
-        $('#passwordsignup').val('');
-        $('#reenterpasswordsignup').val('');
-
     }
 
     render() {
