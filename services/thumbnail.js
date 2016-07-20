@@ -6,6 +6,7 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
         let selector= {'sid': args.sid};
+
         if(resource === 'thumbnail.htmlcontent'){ //html code is provided
             let imgSrc;
             let webPage;

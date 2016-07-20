@@ -6,7 +6,6 @@ export default function getSlideThumbnail(context, payload, done) {
 
         } else {
             context.dispatch('GET_SLIDE_THUMBNAIL_SUCCESS', res);
-
         }
 
         done();

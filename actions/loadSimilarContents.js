@@ -51,8 +51,6 @@ export default function loadSimilarContents(context, payload, done) {
         if (err) {
             context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', err);
         } else {
-
-
             for(let i=0; i< res.contents.length;i++){
              //TODO: get the htmlContent from slide service.
                 let contentHTML = getSlideContent(res.contents[i].id);
@@ -62,6 +60,7 @@ export default function loadSimilarContents(context, payload, done) {
                     } else{
                         res.contents[i].imgSrc = resThumb.contents.src;
                         context.dispatch('LOAD_SIMILAR_CONTENT_SUCCESS', res);
+
                     }
                 });
               //context.executeAction(getSlideThumbnail,{sid:id, contentHTML: contentHTML},done);

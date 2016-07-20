@@ -15,6 +15,7 @@ class SimilarContentStore extends BaseStore {
 
         for(let i=0;i<this.contents.length;i++){
             if(this.contents[i].id === payload.selector.sid){
+
                 this.contents[i].imgSrc = payload.contents.src;
             }
         }

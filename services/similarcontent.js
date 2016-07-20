@@ -3,7 +3,6 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-
         let selector= {'sid': args.did, 'stype': args.stype};
 
         if(resource === 'similarcontent.list'){
