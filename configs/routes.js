@@ -23,6 +23,7 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
+import loadRouteNotFound from '../actions/loadRouteNotFound';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -272,6 +273,16 @@ export default {
             context.executeAction(loadDeckTree, payload, done);
             //context.executeAction(loadPresentation, payload, done);
             context.executeAction(loadDeck, payload, done);
+        }
+    },
+    notfound: {
+        path: '*',
+        method: 'get',
+        handler: require('../components/RouteNotFound/RouteNotFound'),
+        action: (context, payload, done) => {
+            context.executeAction(loadRouteNotFound, payload, done)
+                .then(() => { console.log('inside .then');})
+                .catch((err) => {throw Error(err);});
         }
     }
 };

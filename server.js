@@ -74,8 +74,23 @@ server.use((req, res, next) => {
     }, (err) => {
         if (err) {
             if (err.statusCode && err.statusCode === 404) {
+                // TODO refector the code in this if-else block
+                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+                debug('Rendering Application component into html');
+                const markup = ReactDOM.renderToString(createElementWithContext(context));
+                //todo: for future, we can choose to not include specific scripts in some predefined layouts
+                const htmlElement = React.createElement(HTMLComponent, {
+                    clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+                    context: context.getComponentContext(),
+                    state: exposed,
+                    markup: markup
+                });
+                const html = ReactDOM.renderToStaticMarkup(htmlElement);
+                debug('Sending markup');
+                res.type('html');
+                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
                 // Pass through to next middleware
-                next();
+                //next();
             } else {
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
                 debug('Rendering Application component into html');
