@@ -1,5 +1,5 @@
 
 export default {
-    branch: false,
-    head: false
+    branch: 'SWIK-283-user-registration',
+    head: '30c7c53'
 };
