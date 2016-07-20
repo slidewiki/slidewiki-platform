@@ -209,6 +209,7 @@ class UserRegistration extends React.Component {
           </div>
         );
 
+        const signUpLabelStyle = {width: '150px'};
         return (
             <div className="ui page centered grid" >
                 {dimmerMessageSuccess}
@@ -266,27 +267,34 @@ class UserRegistration extends React.Component {
                     <div className="ui green padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
                         <form className="ui form signup" >
-                            <div className="ui input field">
-                                <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name"/>
-                            </div><br/>
-                            <div className="ui input field">
-                                <input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name"/>
-                            </div><br/>
-                            <div className="ui input field">
-                                <input type="text" id="username" name="username" ref="username" placeholder="Username"/>
-                            </div><br/>
-                            <div className="ui input field">
-                                <input type="email" id="emailsignup" name="emailsignup" ref="emailsignup" placeholder="Email"/>
-                            </div><br/>
-                            <div className="ui input field">
-                                <input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email"/>
-                            </div><br/>
-                            <div className="ui input field">
-                                <input type="password" id="passwordsignup" name="passwordsignup" ref="passwordsignup" placeholder="Password"/>
-                            </div><br/>
-                            <div className="ui input field">
-                                <input type="password" id="reenterpasswordsignup" name="reenterpasswordsignup" ref="reenterpasswordsignup" placeholder="Re-enter Password"/>
-                            </div><br/>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>First Name * </label>
+                                <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" aria-required="true"/>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Last Name * </label>
+                                <input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Username * </label>
+                                <input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Email * </label>
+                                <input type="email" id="emailsignup" name="emailsignup" ref="emailsignup" placeholder="Email" aria-required="true"/>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Re-enter email * </label>
+                                <input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Password * </label>
+                                <input type="password" id="passwordsignup" name="passwordsignup" ref="passwordsignup" placeholder="Password" aria-required="true"/>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Re-enter Password * </label>
+                                <input type="password" id="reenterpasswordsignup" name="reenterpasswordsignup" ref="reenterpasswordsignup" placeholder="Re-enter Password" aria-required="true"/>
+                            </div>
                             <div className="ui error message"></div>
                             <button type="submit" className="ui green labeled submit icon button" >
                                 <i className="icon add user"></i> Sign Up
