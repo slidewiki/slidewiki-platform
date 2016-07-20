@@ -11,7 +11,7 @@ import ContentPanel from './ContentPanel/ContentPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import SimilarContentPanel from './SimilarContentPanel/SimilarContentPanel';
-import ErrorComponent from '../../components/Error/Error';
+import Error from '../../components/Error/Error';
 
 class Deck extends React.Component {
     handleExpandClick(){
@@ -23,18 +23,14 @@ class Deck extends React.Component {
         return false;
     }
     render() {
-        if (this.props.DeckPageStore.error) {
+        if(this.props.DeckPageStore.error) {
             return (
                 <div ref="deck">
-                    <ErrorComponent
-                        code={this.props.DeckPageStore.error.code}
-                        message={this.props.DeckPageStore.error.message}
-                    />
+                    <Error error={this.props.DeckPageStore.error} />
                 </div>
             );
         }
         else {
-            console.log('')
             let status = this.props.DeckPageStore.componentsStatus;
             let translationPanelClass = classNames({
                 'four': status.TranslationPanel.columnSize===4,

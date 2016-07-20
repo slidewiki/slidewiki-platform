@@ -8,36 +8,40 @@ import loadTranslations from './loadTranslations';
 import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
-import error_desc from '../components/Error/errorDesc';
+import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
 let fumble = require('fumble');
 
 export default function loadDeck(context, payload, done) {
-    if (!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
-        let error = fumble.http.badRequest(error_desc.DECK_ID_TYPE_INCORRECT);
-        context.dispatch('DECK_ID_ERROR', {code: error.statusCode, message: error.message});
-        throw error;
-    }
-    /* TODO
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        context.dispatch('DECK_CONTENT_TYPE_ERROR', http400);
+    if(!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_ID_TYPE_ERROR);
+        done(); // In place of done, you can also write: throw error
     }
 
-
-    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        //console.log('Slide id incorrect. Loading deck failed.');
-        context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
+    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_TYPE_ERROR);
+        done();
     }
 
-    if (!(payload.params.spath && (/^[0-9:;]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
-        //console.log('Incorrect path. Loading deck failed.');
-        context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
+    if(!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_ID_TYPE_ERROR);
+        done();
     }
 
-    if (!(payload.params.mode || payload.params.mode === undefined)) {
-        //console.log('Incorrect mode. Loading deck failed.');
-        context.dispatch('DECK_PARAMS_TYPE_ERROR', http400);
+    if(!(payload.params.spath && (/^[0-9a-z:;]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_PATH_ERROR);
+        done();
     }
-    */
+
+    if(!(['view', 'edit'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_MODE_ERROR);
+        done();
+    }
+
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;
