@@ -15,7 +15,7 @@ export default function loadDeck(context, payload, done) {
     if(!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_ID_TYPE_ERROR);
-        done(); // In place of done, you can also write: throw error
+        done();
     }
 
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {

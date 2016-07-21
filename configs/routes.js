@@ -115,9 +115,7 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done)
-                .then(() => { })
-                .catch((err) => {throw Error(err);});
+            context.executeAction(loadDeck, payload, done);
         }
     },
     contributors: {
@@ -280,9 +278,7 @@ export default {
         method: 'get',
         handler: require('../components/RouteNotFound/RouteNotFound'),
         action: (context, payload, done) => {
-            context.executeAction(loadRouteNotFound, payload, done)
-                .then(() => { console.log('inside .then');})
-                .catch((err) => {throw Error(err);});
+            context.executeAction(loadRouteNotFound, payload, done);
         }
     }
 };
