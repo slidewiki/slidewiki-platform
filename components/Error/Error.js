@@ -21,7 +21,6 @@ import URITooLong from '../../components/Error/URITooLong';
 */
 class Error extends React.Component {
     render() {
-        console.log('From Error component:', this.props);
         switch(this.props.error.statusCode) {
             case 400:
                 return (
