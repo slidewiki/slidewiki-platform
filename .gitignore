@@ -6,6 +6,6 @@ logs/*.log
 tmp.js
 coverage
 configs/microservices.js
+configs/version.js
 slidewiki
 migrate
-configs/version.js
