@@ -8,3 +8,4 @@ coverage
 configs/microservices.js
 slidewiki
 migrate
+configs/version.js
