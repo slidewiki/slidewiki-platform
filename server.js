@@ -34,7 +34,7 @@ server.use('/bower_components', express['static'](path.join(__dirname, '/bower_c
 server.use('/custom_modules', express['static'](path.join(__dirname, '/custom_modules')));
 server.use('/assets', express['static'](path.join(__dirname, '/assets')));
 
-server.use(csrf({cookie: true}));
+//server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
 let fetchrPlugin = app.getPlugin('FetchrPlugin');
 
@@ -62,10 +62,11 @@ fetchrPlugin.registerService(require('./services/searchresults'));
 server.use((req, res, next) => {
 
     const context =  app.createContext({
-        req: req, // The fetchr plugin depends on this
-        xhrContext: {
-            _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
-        }
+        req: req
+        //, // The fetchr plugin depends on this
+        //xhrContext: {
+        //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
+        //}
     });
 
     debug('Executing navigate action');
