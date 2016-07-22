@@ -5,14 +5,35 @@ export default {
     name: 'userProfile',
 
     delete: (req, resource, params, config, callback) => {
-        console.log('Remove User from service');
         //let args = params.params ? params.params : params;
-        rp.get({
-            uri: 'http://localhost:8000',
-            headers: { 'custom_header': '123456' },
-            resolveWithFullResponse: true
-        })
-        .then((res) => callback(null, {}))
+        rp({
+            method: 'DELETE',
+            uri: Microservices.user + '/user/' + id,
+            headers: {'----jwt----' : '123456'}, //TODO add proper JWT
+            json: true
+        }).then((body) => callback(null, {}))
+        .catch((err) => callback(err));
+    },
+
+    update: (req, resource, params, body, config, callback) => {
+        //let args = params.params ? params.params : params;
+        rp({
+            method: 'PUT',
+            uri: Microservices.user + '/user/' + id,
+            headers: {'----jwt----' : '123456'}, //TODO add proper JWT
+            json: true
+        }).then((body) => callback(null, {}))
+        .catch((err) => callback(err));
+    },
+
+    read: (req, resource, params, config, callback) => {
+        //let args = params.params ? params.params : params;
+        rp({
+            method: 'GET',
+            uri: Microservices.user + '/user/' + id,
+            headers: {'----jwt----' : '123456'}, //TODO add proper JWT
+            json: true
+        }).then((body) => callback(null, {}))
         .catch((err) => callback(err));
     }
 };

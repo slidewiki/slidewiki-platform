@@ -10,7 +10,7 @@ class Picture extends React.Component {
 
     useGravatar(e) {}
 
-    removeUser(e) {}
+    removePicture(e) {}
 
     render() {
         return (

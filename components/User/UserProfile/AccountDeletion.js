@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+//import ReactDom from 'react-dom';
+let ReactDOM = require('react-dom');
 import removeUser from '../../../actions/user/userprofile/removeUser';
 
 class AccountDeletion extends React.Component {
@@ -13,6 +14,7 @@ class AccountDeletion extends React.Component {
 
     showConfirmDialog(e) {
         $('.ui.modal').modal('show');
+        //ReactDOM.findDOMNode(this.refs.modal1).modal('show');
     }
 
     render() {
@@ -25,7 +27,7 @@ class AccountDeletion extends React.Component {
               </button>
             </div>
 
-          <div className="ui modal">
+          <div className="ui modal" ref="modal1">
             <div className="ui red header">
               Refuse the cake
             </div>
