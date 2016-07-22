@@ -137,13 +137,13 @@ class UserRegistration extends React.Component {
             });
 
             //Clear input if successful registration
-            $('#firstname').val('');
-            $('#lastname').val('');
-            $('#username').val('');
-            $('#emailsignup').val('');
-            $('#reenteremail').val('');
-            $('#passwordsignup').val('');
-            $('#reenterpasswordsignup').val('');
+            this.refs.firstname.value = '';
+            this.refs.lastname.value = '';
+            this.refs.username.value = '';
+            this.refs.emailsignup.value = '';
+            this.refs.reenteremail.value = '';
+            this.refs.passwordsignup.value = '';
+            this.refs.reenterpasswordsignup.value = '';
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
             $('.dimmer.error')
                 .dimmer('toggle');
@@ -153,8 +153,8 @@ class UserRegistration extends React.Component {
     }
 
     handleSignIn() {
-        $('#emailsignin').val('');
-        $('#passwordsignin').val('');
+        this.refs.emailsignin.value = '';
+        this.refs.passwordsignin.value = '';
 
         this.context.executeAction(userSignIn, {
             email: this.refs.emailsignin.value,

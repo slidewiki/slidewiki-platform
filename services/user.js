@@ -1,8 +1,7 @@
 import { Microservices } from '../configs/microservices';
+import { hashSalt } from '../configs/general';
 import rp from 'request-promise';
 import sha512 from 'js-sha512';
-
-const salt = '6cee6c6a420e0573d1a4ad8ecb44f2113d010a0c3aadd3c1251b9aa1406ba6a3';
 
 export default {
     name: 'user',
@@ -29,7 +28,7 @@ export default {
     create: (req, resource, params, body, config, callback) => {
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
-            const hashedPassword = sha512.sha512(args.password + salt);
+            const hashedPassword = sha512.sha512(args.password + hashSalt);
             rp.post({
                 uri: Microservices.user.uri + '/register',
                 body: JSON.stringify({
