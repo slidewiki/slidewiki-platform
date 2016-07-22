@@ -19,22 +19,20 @@ class ChangePassword extends React.Component {
             onSuccess: this.handleChangePassword.bind(this)
         };
         $('.ui.form.changePassword').form(changePasswordValidation);
-        $('.ui.form.changePassword').submit((e) => {
-            e.preventDefault();
-            return false;
-        });
     }
-    
+
     componentDidUpdate() {}
 
-    handleChangePassword() {}
+    handleChangePassword(e) {
+        return false;
+    }
 
     render() {
         return (
           <div>
             <h2>Password</h2>
             <div className="ui hidden divider"/>
-            <form className="ui form changePassword">
+            <form className="ui form changePassword" onSubmit={ this.handleChangePassword.bind(this) }>
               <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">Old Password</div>

@@ -4,7 +4,9 @@ import changeTo from '../../../actions/user/userprofile/categoryBox';
 
 class CategoryBox extends React.Component {
     componentDidMount() {}
+
     componentDidUpdate() {}
+
     exchangeContent(dest){
         //TODO - Check for correct format and
         //Do this via flux flow - this.props.ImportStore.isAllowed

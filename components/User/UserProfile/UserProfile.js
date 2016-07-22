@@ -9,6 +9,7 @@ import UserDecks from './UserDecks';
 
 class UserProfile extends React.Component {
     componentDidMount() {}
+
     componentDidUpdate() {}
 
     render() {

@@ -3,25 +3,24 @@ import ReactDom from 'react-dom';
 import removeUser from '../../../actions/user/userprofile/removeUser';
 
 class AccountDeletion extends React.Component {
-    componentDidMount() {
-        $('#removeAccount').click((e) => {
-            e.preventDefault();
-            $('.ui.modal').modal('show');
-        });
-        $('#confirmRemoveAccount').click((e) => {
-            e.preventDefault();
-            this.context.executeAction(removeUser, {});
-        });
-    }
+    componentDidMount() {}
 
     componentDidUpdate() {}
+
+    handleAccountDelete(e) {
+        this.context.executeAction(removeUser, {});
+    }
+
+    showConfirmDialog(e) {
+        $('.ui.modal').modal('show');
+    }
 
     render() {
         return (
           <div>
             <div className="ui centered grid">
               <p>In case you delete your account, all of your data will be deleted. This includes your user profile, your authorship of decks and slides, your linked social providers and also your authorship of any comments and discussions. <strong>This is NOT reversible!</strong></p>
-              <button className="ui centered red labeled icon button" id="removeAccount">
+              <button className="ui centered red labeled icon button" onClick={ this.showConfirmDialog.bind(this) }>
                 <i className="icon ban"/>Remove my account
               </button>
             </div>
@@ -41,7 +40,7 @@ class AccountDeletion extends React.Component {
               <div className="ui green right labeled icon deny button">
                 <i className="checkmark icon"></i> Cake? I am still in!
               </div>
-              <div className="ui red right labeled icon button" id="confirmRemoveAccount">
+              <div className="ui red right labeled icon button" onClick={ this.handleAccountDelete.bind(this) }>
                 <i className="sign out icon"></i> I don not like cake, I will leave!
               </div>
             </div>

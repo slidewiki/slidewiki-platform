@@ -6,6 +6,12 @@ class Picture extends React.Component {
 
     componentDidUpdate() {}
 
+    uploadNewPicture(e) {}
+
+    useGravatar(e) {}
+
+    removeUser(e) {}
+
     render() {
         return (
           <div>
@@ -15,15 +21,15 @@ class Picture extends React.Component {
                 </div>
                 <div className="eight wide column">
                   <div className="ui vertical buttons">
-                    <button className="ui blue labeled icon button">
+                    <button className="ui blue labeled icon button" onClick={ this.uploadNewPicture.bind(this) }>
                       <i className="icon upload"/>Upload new Image
                     </button>
                     <div className="ui hidden divider"/>
-                    <button className="ui green labeled icon button">
+                    <button className="ui green labeled icon button" onClick={ this.useGravatar.bind(this) }>
                       <i className="icon upload"/>Use Gravater Image
                     </button>
                     <div className="ui hidden divider"/>
-                    <button className="ui red labeled icon button">
+                    <button className="ui red labeled icon button" onClick={ this.removePicture.bind(this) }>
                       <i className="icon ban"/>Remove Image
                     </button>
                   </div>

@@ -2,19 +2,18 @@ import React from 'react';
 import ReactDom from 'react-dom';
 
 class ChangePersonalData extends React.Component {
-    componentDidMount() {
-        $('.ui.form.userdata').submit((e) => {
-            e.preventDefault();
-            return false;
-        });
-    }
+    componentDidMount() {}
 
     componentDidUpdate() {}
+
+    handleChangeUserdata(e) {
+        return false;
+    }
 
     render() {
         return (
           <div>
-            <form className="ui form userdata">
+            <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
               <h2>About me</h2>
               <div className="ui hidden divider"/>
               <div className="two fields">

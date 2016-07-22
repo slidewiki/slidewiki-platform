@@ -4,6 +4,7 @@ class UserProfileStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.toShow = 'decks';
+        this.userDeleted = false;
     }
     destructor() {
         this.toShow = '';
@@ -21,11 +22,20 @@ class UserProfileStore extends BaseStore {
         this.toShow = payload.dest;
         this.emitChange();
     }
+    userDeleted(payload){
+        this.userDeleted = true;
+        this.emitChange();
+    }
+    userDeleteFailed(payload){
+        
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
 UserProfileStore.handlers = {
-    'CHANGE_TO': 'changeTo'
+    'CHANGE_TO': 'changeTo',
+    'DELETE_USER_SUCCESS': 'userDeleted',
+    'DELETE_USER_FAILURE': 'userDeleteFailed'
 };
 
 export default UserProfileStore;

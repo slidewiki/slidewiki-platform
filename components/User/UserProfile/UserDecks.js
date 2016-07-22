@@ -4,20 +4,9 @@ import { Microservices } from '../../../configs/microservices';
 import ActivityFeedPanel from '../../Deck/ActivityFeedPanel/ActivityFeedPanel';
 
 class UserDecks extends React.Component {
-    componentDidMount() {
-        this.enableAccordion();
-    }
-    componentDidUpdate() {
-        this.refreshAccordion();
-    }
-    enableAccordion(status) {
-        $(this.refs.accordion).accordion();
-        $(this.refs.language).dropdown();
-    }
-    refreshAccordion(status) {
-        $(this.refs.accordion).accordion('refresh');
-        $(this.refs.language).dropdown('refresh');
-    }
+    componentDidMount() {}
+    
+    componentDidUpdate() {}
 
     render() {
         return (

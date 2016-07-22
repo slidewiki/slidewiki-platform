@@ -8,24 +8,21 @@ import Picture from './Picture';
 class UserSettings extends React.Component {
     componentDidMount() {
         this.enableAccordion();
-
-        $('.ui.form.userdata').submit((e) => {
-            e.preventDefault();
-            return false;
-        });
     }
+
     componentDidUpdate() {
         this.refreshAccordion();
     }
+
     enableAccordion(status) {
         $(this.refs.accordion).accordion();
         $(this.refs.language).dropdown();
     }
+
     refreshAccordion(status) {
         $(this.refs.accordion).accordion('refresh');
         $(this.refs.language).dropdown('refresh');
     }
-    handleChangePassword(){}
 
     render() {
         return (

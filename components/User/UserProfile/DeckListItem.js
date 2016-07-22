@@ -2,14 +2,9 @@ import React from 'react';
 import ReactDom from 'react-dom';
 
 class DeckListItem extends React.Component {
-    componentDidMount() {
-    }
-    componentDidUpdate() {
-    }
-    enableAccordion(status) {
-    }
-    refreshAccordion(status) {
-    }
+    componentDidMount() {}
+
+    componentDidUpdate() {}
 
     render() {
         return (
