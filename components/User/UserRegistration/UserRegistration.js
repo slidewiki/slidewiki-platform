@@ -177,6 +177,12 @@ class UserRegistration extends React.Component {
     }
 
     render() {
+        //TODO email confirmation
+        // const successMessage1 = 'To complete the registration process you have to confirm your account. An email has been sent to your address.';
+        // const successMessage2 = 'To confirm and activate your account please check your inbox and click on the link inside the email we just sent you.';
+        const successMessage1 = 'Thank you.';
+        const successMessage2 = 'You have successfully registered.';
+
         let dimmerMessageSuccess = (//pending message
             <div className="ui page dimmer success">
                 <div className="content">
@@ -186,9 +192,9 @@ class UserRegistration extends React.Component {
                             Thanks for signing up!
                         </h2>
                         <br/>
-                        To complete the registration process you have to confirm your account. An email has been sent to your address.
+                        {successMessage1}
                         <br/>
-                        To confirm and activate your account please check your inbox and click on the link inside the email we just sent you.
+                        {successMessage2}
                     </div>
                 </div>
             </div>
