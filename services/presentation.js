@@ -16,28 +16,45 @@ export default {
             let returnErr = false;
 
             if(deck[0] !== undefined){
+                // console.log(deck);
                //Retrieve the content of each presentation
                 for (let i = 0; i < deck.length; i++) {
                     let slide = deck[i];
-                    let content;
+                    if (slide.type !== 'slide'){
+                        continue;
+                    }
+                    // let content;
                     let slideServiceRes;
+                    console.log('slide ID: ', slide.id);
                     rp.get({uri: Microservices.deck.uri + '/slide/' + slide.id}).then((res) => {
+
+
+                        // console.log('\n\n\n\nres', res);
                         slideServiceRes = JSON.parse(res);
-                        presentation.push({'id': slide.id, 'content': slideServiceRes.slide.revisions[slideServiceRes.slide.revisions.length-1].content, 'speakerNotes': slideServiceRes.slide.revisions[slideServiceRes.slide.revisions.length-1].speakernotes});
+                        // console.log('\n\n\n', slideServiceRes);
+                        presentation.push({'id': slide.id, 'content': slideServiceRes.revisions[slideServiceRes.revisions.length-1].content, 'speakerNotes': slideServiceRes.revisions[slideServiceRes.revisions.length-1].speakernotes});
+                        console.log('presentation', presentation[0]);
+                        callback(null, {content: presentation, theme: get_sample_theme()});
 
-
-                    }).catch((err) => {                        
+                    }).catch((err) => {
+                        console.log('jfklsdjfklsdjfkldsjfkldsjf', err);
                         presentation.push({'id': slide.id, 'content':'', 'speakerNotes': ''});
                         returnErr = true;
+                        callback(null, {content: presentation, theme: get_sample_theme()});
                     });
+                    console.log('\n\n\n\n\n\npresentation2', presentation[0]);
+                    /*********received data from microservices*************/
 
                 } //for
-            }
+                // console.log('presentation2', presentation);
+            } //deck undifined
+
+
         }//If presentation.content
         //TODO: Retrieve theme content from deck
 
-            /*********received data from microservices*************/
-        callback(null, {content: presentation, theme: get_sample_theme()});
+        //     /*********received data from microservices*************/
+        // callback(null, {content: presentation, theme: get_sample_theme()});
 
 
     }
@@ -56,7 +73,7 @@ function get_sample_text(id){
     return `
     <h1> Slide #` + id + `</h1>
     <div>
-        <p style="font-size: 1.16em;">
+        <p style='font-size: 1.16em;'>
             Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus.
         </p>
         <ul>
@@ -64,18 +81,18 @@ function get_sample_text(id){
             <li>item 2 from slide ` + id + `</li>
             <li>item 3 from slide ` + id + `</li>
         </ul>
-        <p style="font-size: 1.2em;">
+        <p style='font-size: 1.2em;'>
             Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
         </p>
-        <p style="text-align:center">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink">
-                <text x="20"  y="40"
-                      style="font-family: Arial;
+        <p style='text-align:center'>
+            <svg xmlns='http://www.w3.org/2000/svg'
+                 xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <text x='20'  y='40'
+                      style='font-family: Arial;
                              font-size  : 25;
                              stroke     : #000000;
                              fill       : #` +((1<<24)*Math.random()|0).toString(16) + `;
-                            "
+                            '
                       > SVG Image ` + id + `</text>
             </svg>
         </p>

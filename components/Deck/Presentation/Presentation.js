@@ -44,9 +44,12 @@ class Presentation extends React.Component{
     componentDidUpdate(){
         console.log(this.slides);
         console.log('componentDidMount');
-        if(this.slides.length > 0){
-            Reveal.initialize();
+        if(this.slides.length > 0){                    
+
             if (process.env.BROWSER) {
+                Reveal.initialize();
+                // The fullscreen method should be better than the
+                //enterFullscreen();
                 console.log(this.props.PresentationStore);
                 let s = this.props.PresentationStore.theme;
                 require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
@@ -98,9 +101,10 @@ class Presentation extends React.Component{
         let returnList = [];
         if(slides !== ''){
             for (let i = 0; i < slides.length; i++) {
-                let speakerNotes = slides[i].speakerNotes;
-                let content = slides[i].content + '<aside class="notes">' + speakerNotes + '</aside>';
-                returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={i} />);
+                let slide = slides[i];
+                let speakerNotes = slide.speakerNotes;
+                let content = slide.content + '<aside class="notes">' + speakerNotes + '</aside>';
+                returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={slide.id} id={slide.id} />);
             }
             return returnList;
 
