@@ -1,4 +1,5 @@
 let webpack = require('webpack');
+
 let path = require('path');
 let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 let Visualizer = require('webpack-visualizer-plugin');
@@ -29,7 +30,11 @@ let webpackConfig = {
                     require.resolve('babel-loader')
                 ]
             },
-            { test: /\.json$/, loader: 'json-loader'}
+            { test: /\.json$/, loader: 'json-loader'},
+            { test: /\.css$/, loader: 'style-loader!css-loader'},
+            // Getting URLs for font files otherwise we get encoding errors in css-loader
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
+
         ]
     },
     node: {
@@ -41,6 +46,13 @@ let webpackConfig = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
+        // For the css-loader, we need BROWSER set to allow checks for client side
+        new webpack.DefinePlugin({
+            'process.env': {
+                BROWSER: JSON.stringify(true)
+            }
+        }),
+
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
             compress: {

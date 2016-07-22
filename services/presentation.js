@@ -32,13 +32,18 @@ export default {
                         // console.log('\n\n\n\nres', res);
                         slideServiceRes = JSON.parse(res);
                         // console.log('\n\n\n', slideServiceRes);
-                        presentation.push({'id': slide.id, 'content': slideServiceRes.revisions[slideServiceRes.revisions.length-1].content, 'speakerNotes': slideServiceRes.revisions[slideServiceRes.revisions.length-1].speakernotes});
+                        presentation.push({
+                            'id': slide.id,
+                            'content': slideServiceRes.revisions[slideServiceRes.revisions.length-1].content,
+                            'title': slideServiceRes.revisions[slideServiceRes.revisions.length-1].title,
+                            'speakerNotes': slideServiceRes.revisions[slideServiceRes.revisions.length-1].speakernotes
+                        });
                         console.log('presentation', presentation[0]);
                         callback(null, {content: presentation, theme: get_sample_theme()});
 
                     }).catch((err) => {
                         console.log('jfklsdjfklsdjfkldsjfkldsjf', err);
-                        presentation.push({'id': slide.id, 'content':'', 'speakerNotes': ''});
+                        presentation.push({'id': slide.id, 'content':'', 'title': '', 'speakerNotes': ''});
                         returnErr = true;
                         callback(null, {content: presentation, theme: get_sample_theme()});
                     });

@@ -44,7 +44,7 @@ class Presentation extends React.Component{
     componentDidUpdate(){
         console.log(this.slides);
         console.log('componentDidMount');
-        if(this.slides.length > 0){                    
+        if(this.slides.length > 0){
 
             if (process.env.BROWSER) {
                 Reveal.initialize();
@@ -103,7 +103,7 @@ class Presentation extends React.Component{
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
                 let speakerNotes = slide.speakerNotes;
-                let content = slide.content + '<aside class="notes">' + speakerNotes + '</aside>';
+                let content = slide.title + slide.content + '<aside class="notes">' + speakerNotes + '</aside>';
                 returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={slide.id} id={slide.id} />);
             }
             return returnList;
