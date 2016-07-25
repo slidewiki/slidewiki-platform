@@ -1,5 +1,5 @@
 
 export default {
-    branch: 'master',
-    head: '9f6c94a'
+    branch: 'SWIK-232-user-notifications',
+    head: '17db95f'
 };
