@@ -19,7 +19,7 @@ class DataSourceItem extends React.Component {
         return (DataSourceItem.urlRegEx.test(text));
     }
 
-    //shorten url label if it's longer then maxLength
+    //shorten url label if it is longer then maxLength
     shortenText(text) {
         const maxLength = 80, startLength = 25, endLength = 50;
         const textLength = text.length;

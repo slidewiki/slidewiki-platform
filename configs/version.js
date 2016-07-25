@@ -1,5 +1,5 @@
 
 export default {
     branch: 'master',
-    head: '91b3172'
+    head: '9f6c94a'
 };
