@@ -36,7 +36,7 @@
     "start:watch": "nodemon",
     "validate": "npm ls",
     "pull": "git pull --recurse-submodules",
-	  "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
+    "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "pre-commit": [
     "lint",
@@ -56,6 +56,7 @@
     "fluxible-addons-react": "^0.2.8",
     "fluxible-plugin-fetchr": "^0.3.9",
     "fluxible-router": "^0.4.15",
+    "identicons-react": "^0.1.0",
     "immutable": "^3.8.1",
     "lodash": "^4.13.1",
     "react": "^15.1.0",

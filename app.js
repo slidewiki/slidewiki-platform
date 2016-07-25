@@ -54,13 +54,8 @@ const app = new Fluxible({
         PresentationStore,
         UserNotificationsStore,
         SearchResultsStore,
-<<<<<<< HEAD
         AdvancedSearchStore,
         UserProfileStore,
-        MigrationStore
-=======
-        AdvancedSearchStore
->>>>>>> 60c6fcc49691bb6ddc2ca6733c0319f58e2389f8
     ]
 });
 

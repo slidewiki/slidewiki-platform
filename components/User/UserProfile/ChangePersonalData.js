@@ -1,16 +1,26 @@
 import React from 'react';
-import ReactDom from 'react-dom';
 
 class ChangePersonalData extends React.Component {
-    componentDidMount() {}
+    componentDidMount() {
+        $('.ui.dropdown').dropdown();
+    }
 
     componentDidUpdate() {}
 
     handleChangeUserdata(e) {
+        e.preventDefault();
         return false;
     }
 
     render() {
+        let lang = '';
+        switch (this.props.user.lang) {
+            case 'de_DE':
+                lang = 'German';
+                break;
+            default:
+                lang = 'English';
+        }
         return (
           <div>
             <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
@@ -19,46 +29,27 @@ class ChangePersonalData extends React.Component {
               <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">Firstname</div>
-                  <input type="text" placeholder="Roy" name="fname" required/>
+                  <input type="text" placeholder="John" name="fname" value={this.props.user.fname} required/>
                 </div>
                 <div className="ui labeled input field">
                   <div className="ui label">Lastname</div>
-                  <input type="text" placeholder="Meissner" name="lname" required/>
+                  <input type="text" placeholder="Doe" name="lname" value={this.props.user.lname} required/>
                 </div>
               </div>
 
               <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">E-Mail</div>
-                  <input type="email" placeholder="roy-meissner@gmx.net" name="email" required/>
+                  <input type="email" placeholder="j.doe@ex.org" name="email" value={this.props.user.email} required/>
                 </div>
                 <div className="ui field">
                   <div className="ui search selection dropdown field" ref="language" required>
-                    <input type="hidden" name="language"/>
+                    <input type="hidden" name="language" value={lang}/>
                     <i className="dropdown icon"/>
                     <div className="default text">Select Language</div>
                     <div className="menu">
-                      <div className="item">Arabic</div>
-                      <div className="item">Chinese</div>
-                      <div className="item">Danish</div>
-                      <div className="item">Dutch</div>
                       <div className="item">English</div>
-                      <div className="item">French</div>
                       <div className="item">German</div>
-                      <div className="item">Greek</div>
-                      <div className="item">Hungarian</div>
-                      <div className="item">Italian</div>
-                      <div className="item">Japanese</div>
-                      <div className="item">Korean</div>
-                      <div className="item">Lithuanian</div>
-                      <div className="item">Persian</div>
-                      <div className="item">Polish</div>
-                      <div className="item">Portuguese</div>
-                      <div className="item">Russian</div>
-                      <div className="item">Spanish</div>
-                      <div className="item">Swedish</div>
-                      <div className="item">Turkish</div>
-                      <div className="item">Vietnamese</div>
                     </div>
                   </div>
                 </div>
@@ -67,18 +58,18 @@ class ChangePersonalData extends React.Component {
               <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">Location</div>
-                  <input type="text" placeholder="Germany" name="country"/>
+                  <input type="text" placeholder="USA" name="country" value={this.props.user.location}/>
                 </div>
                 <div className="ui labeled input field">
                   <div className="ui label">Hometown</div>
-                  <input type="text" placeholder="Leipzig" name="hometown"/>
+                  <input type="text" placeholder="NYC" name="hometown" value={this.props.user.hometown}/>
                 </div>
               </div>
 
               <div className="two fields">
                 <div className="ui labeled input field">
-                  <div className="ui label">Birthday</div>
-                  <input type="date" min="1900-01-01" value="1990-09-11" name="bday"/>
+                  <div className="ui label">Organization</div>
+                  <input type="text" placeholder="Red Socks" name="organization" value={this.props.user.orga}/>
                 </div>
               </div>
 

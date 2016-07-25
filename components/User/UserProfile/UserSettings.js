@@ -38,13 +38,13 @@ class UserSettings extends React.Component {
 
                   <div className="row">
                     <div className="sixteen wide column">
-                    <Picture />
+                    <Picture imgURL = {this.props.user.picture} uname= {this.props.user.uname} />
                     </div>
                   </div>
 
                   <div className="row">
                     <div className="sixteen wide column">
-                      <ChangePersonalData />
+                      <ChangePersonalData user = { this.props.user} />
                     </div>
                   </div>
 

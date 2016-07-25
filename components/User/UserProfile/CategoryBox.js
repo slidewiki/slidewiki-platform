@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDom from 'react-dom';
 import changeTo from '../../../actions/user/userprofile/categoryBox';
 
 class CategoryBox extends React.Component {

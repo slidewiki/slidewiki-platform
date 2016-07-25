@@ -20,10 +20,9 @@ class UserProfile extends React.Component {
               <CategoryBox toShow = { this.props.UserProfileStore.toShow } />
               <div className = "ui hidden divider" />
             </div>
-
             <div className = "twelve wide column" >
               { this.props.UserProfileStore.toShow === 'decks' ? <UserDecks /> : '' }
-              { this.props.UserProfileStore.toShow === 'settings' ? <UserSettings /> : '' }
+              { this.props.UserProfileStore.toShow === 'settings' ? <UserSettings user = {this.props.UserProfileStore.user} /> : '' }
               { this.props.UserProfileStore.toShow === 'stats' ? <p>This feature is curently not implemented. Please wait for future realeses of SlideWiki</p> : '' }
               </div>
             </div>

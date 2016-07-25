@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDom from 'react-dom';
 
 class ChangePassword extends React.Component {
     componentDidMount() {
@@ -24,6 +23,7 @@ class ChangePassword extends React.Component {
     componentDidUpdate() {}
 
     handleChangePassword(e) {
+        e.preventDefault();
         return false;
     }
 
@@ -32,7 +32,7 @@ class ChangePassword extends React.Component {
           <div>
             <h2>Password</h2>
             <div className="ui hidden divider"/>
-            <form className="ui form changePassword" onSubmit={ this.handleChangePassword.bind(this) }>
+            <form className="ui form changePassword" onSubmit={ this.handleChangePassword.bind(this) } ref="changePassword">
               <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">Old Password</div>
