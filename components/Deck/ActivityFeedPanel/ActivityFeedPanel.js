@@ -31,60 +31,73 @@ class ActivityFeedPanel extends React.Component {
         }
     }
     render() {
-        let activityDIV ='';
-        switch (this.props.ActivityFeedStore.activityType) {
-            case 'all':
-                activityDIV = <ActivityList  />;
-                break;
-            case 'history':
-                activityDIV = <ContentHistoryPanel />;
-                break;
-            case 'discussion':
-                activityDIV = <ContentDiscussionPanel />;
-                break;
-            case 'usage':
-                activityDIV = <ContentUsagePanel />;
-                break;
-            default:
-                activityDIV = <ActivityList  />;
-
-        }
-        let allTabClass = classNames({
-            'item': true,
-            'active': (this.props.ActivityFeedStore.activityType === 'all')
-        });
-        let historyTabClass = classNames({
-            'item': true,
-            'active': (this.props.ActivityFeedStore.activityType === 'history')
-        });
-        let usageTabClass = classNames({
-            'item': true,
-            'active': (this.props.ActivityFeedStore.activityType === 'usage')
-        });
-        let discussionTabClass = classNames({
-            'item': true,
-            'active': (this.props.ActivityFeedStore.activityType === 'discussion')
-        });
+        let pointingMenu = '';
+        let activityDIV = '';
+        let tabularMenu = '';
         const hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
-        return (
-            <div ref="activityFeedPanel">
+
+        if (this.props.mode === 'user') {
+            pointingMenu = (
+                <div className="ui top attached secondary pointing menu">
+                    <a className="item active" href={hrefPath}>Activity Feed</a>
+                </div>
+            );
+            activityDIV = <ActivityList />;
+        } else {
+            //set activityDIV
+            switch (this.props.ActivityFeedStore.activityType) {
+                case 'all':
+                    activityDIV = <ActivityList />;
+                    break;
+                case 'history':
+                    activityDIV = <ContentHistoryPanel />;
+                    break;
+                case 'discussion':
+                    activityDIV = <ContentDiscussionPanel />;
+                    break;
+                case 'usage':
+                    activityDIV = <ContentUsagePanel />;
+                    break;
+                default:
+                    activityDIV = <ActivityList />;
+            }
+            //set pointingMenu
+            let allTabClass = classNames({
+                'item': true,
+                'active': (this.props.ActivityFeedStore.activityType === 'all')
+            });
+            let historyTabClass = classNames({
+                'item': true,
+                'active': (this.props.ActivityFeedStore.activityType === 'history')
+            });
+            let usageTabClass = classNames({
+                'item': true,
+                'active': (this.props.ActivityFeedStore.activityType === 'usage')
+            });
+            let discussionTabClass = classNames({
+                'item': true,
+                'active': (this.props.ActivityFeedStore.activityType === 'discussion')
+            });
+
+
+            pointingMenu = (
                 <div className="ui top attached secondary pointing menu">
                     <a className="item active" href={hrefPath}>Activity Feed</a>
                     <a className="item"><i tabIndex="0" className="ui large thumbs outline up icon"></i> 12</a>
                     <a className="item"><i tabIndex="0" className="ui large share alternate icon"></i> 5</a>
                     <a className="item"><i tabIndex="0" className="ui large download icon"></i> 2</a>
                     <div className="right menu">
-                      <div className="item">
-                        <div className="ui icon input">
-                            <input type="text" placeholder="Search in activity feed..." />
-                            <i className="search link icon"></i>
+                        <div className="item">
+                            <div className="ui icon input">
+                                <input type="text" placeholder="Search in activity feed..." />
+                                <i className="search link icon"></i>
+                            </div>
                         </div>
-                      </div>
                     </div>
                 </div>
-                <div className="ui segment attached">
-                    {activityDIV}
-                </div>
+            );
+            //set tabularMenu
+            tabularMenu = (
                 <div className="ui bottom attached tabular menu">
                     <a tabIndex="0" className={allTabClass} onClick={this.handleTabClick.bind(this, 'all')}>
                         All
@@ -99,6 +112,16 @@ class ActivityFeedPanel extends React.Component {
                         Usage
                     </a>
                 </div>
+            );
+        }
+
+        return (
+            <div ref="activityFeedPanel">
+                {pointingMenu}
+                <div className="ui segment attached">
+                    {activityDIV}
+                </div>
+                {tabularMenu}
             </div>
         );
     }
