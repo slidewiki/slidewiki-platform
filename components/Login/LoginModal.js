@@ -39,7 +39,9 @@ class LoginModal extends React.Component {
             <Modal isOpen={this.state.openModal}  style={customStyles}>
               <div className="ui container">
                   <div className="ui right">
-                    <button type="cancel" className="ui basic button" onClick={this.handleExitButton}><i class="remove circle outline icon"></i>Close</button>
+                    <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
+                      <i className="remove icon"></i>Close
+                    </button>
                   </div>
                   <div className="ui blue padded center aligned segment">
                     <h1 className="ui dividing header">Login</h1>
