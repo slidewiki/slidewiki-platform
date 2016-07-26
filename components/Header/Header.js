@@ -3,7 +3,6 @@ import { NavLink } from 'fluxible-router';
 import SearchBox  from './SearchBox';
 import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
 import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
-import Login from '../Login/Login.js';
 import LoginModal from '../Login/LoginModal.js';
 import LoginBootsModal from '../Login/LoginBootsModal.js';
 import LoginModalUI from '../Login/LoginModalUI.js';
@@ -23,7 +22,6 @@ class Header extends React.Component {
                         <SearchBox />
                     </div>
                     <UserNotificationsBadge />
-                    <NavLink className="item right" routeName="login" activeClass="active">Login</NavLink>
                     <LoginModal />
                     <LoginBootsModal />
                     <LoginModalUI />
