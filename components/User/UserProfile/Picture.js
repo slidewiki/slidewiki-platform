@@ -1,7 +1,8 @@
 import React from 'react';
-import ReactDOM  from 'react-dom';
+import ReactDOM from 'react-dom';
 import Identicons from 'identicons-react';
-import editPicture from '../../../actions/user/userprofile/editPicture';
+import md5 from 'md5';
+import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
 class Picture extends React.Component {
     componentDidMount() {}
@@ -10,22 +11,37 @@ class Picture extends React.Component {
 
     uploadNewPicture(e) {}
 
-    useGravatar(e) {}
+    useGravatar(e) {
+        let payload = {};
+        Object.assign(payload, this.props.user);
+        payload.picture = 'https://www.gravatar.com/avatar/' + md5(payload.email.trim().toLowerCase()) + '?d=mm&s=300';
+        this.context.executeAction(changeUserData, payload);
+    }
 
     removePicture(e) {
-        this.context.executeAction(editPicture, {remove: true});
+        let payload = {};
+        Object.assign(payload, this.props.user);
+        payload.picture = '';
+        this.context.executeAction(changeUserData, payload);
     }
 
     render() {
+        let picture = '';
+        if(this.props.user.picture === '')
+            picture = <div className="ui small centered rounded bordered image"><Identicons id={this.props.user.uname} width={150} size={5} /></div>;
+        else if(this.props.user.picture.includes('gravatar'))
+            picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={this.props.user.picture} className="ui small centered rounded bordered image"/></div>;
+        else
+            picture = <img src={this.props.user.picture} className="ui small centered rounded bordered image"/>;
         return (
           <div>
             <div className="ui centered  grid">
                 <div className="eight wide column">
-                  {this.props.imgURL === '' ?<div className="ui small centered rounded image"><Identicons id={this.props.uname} width={150} size={5} /></div> : <img src={this.props.imgURL} className="ui small centered rounded image"/> }
+                  {picture}
                 </div>
                 <div className="eight wide column">
                   <div className="ui vertical buttons">
-                    <button className="ui blue labeled icon button" onClick={ this.uploadNewPicture.bind(this) }>
+                    <button className="ui blue labeled icon button disabled" onClick={ this.uploadNewPicture.bind(this) }>
                       <i className="icon upload"/>Upload new Image
                     </button>
                     <div className="ui hidden divider"/>

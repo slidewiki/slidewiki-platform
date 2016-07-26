@@ -38,7 +38,7 @@ class UserSettings extends React.Component {
 
                   <div className="row">
                     <div className="sixteen wide column">
-                    <Picture imgURL = {this.props.user.picture} uname= {this.props.user.uname} />
+                    <Picture user = { this.props.user}/>
                     </div>
                   </div>
 

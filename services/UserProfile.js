@@ -17,17 +17,15 @@ export default {
 
     update: (req, resource, params, body, config, callback) => {
         //let args = params.params ? params.params : params;
-        if(resource === 'userProfile.removePicture'){
-            callback(null,{}); //TODO implement backend update call
-        } else {
-            rp({
-                method: 'PUT',
-                uri: Microservices.user + '/user/' + id,
-                headers: {'----jwt----' : '123456'}, //TODO add proper JWT
-                json: true
-            }).then((body) => callback(null, {}))
-            .catch((err) => callback(err));
-        }
+        callback(null, params); //TODO implement backend update call
+        // rp({
+        //     method: 'PUT',
+        //     uri: Microservices.user + '/user/' + id,
+        //     headers: {'----jwt----' : '123456'}, //TODO add proper JWT
+        //     json: true,
+        //     body: params
+        // }).then((body) => callback(null, params))
+        // .catch((err) => callback(err));
     },
 
     read: (req, resource, params, config, callback) => {

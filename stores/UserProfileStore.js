@@ -6,14 +6,14 @@ class UserProfileStore extends BaseStore {
         this.toShow = 'settings';
         this.user = {
             uname: 'rmeissn',
-            fname: 'Roy',
-            lname: 'Meissner',
-            email: 'roy-meissner@who.me',
-            lang: 'de_DE',
-            location: 'Germany',
-            hometown: 'Leipzig',
-            orga: 'InfAI',
-            picture: 'https://avatars2.githubusercontent.com/u/855967?v=3&s=460'
+            fname: '',
+            lname: '',
+            email: '',
+            lang: '',
+            location: '',
+            hometown: '',
+            orga: '',
+            picture: ''
         };
         this.userDeleted = false;
     }
@@ -61,19 +61,7 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUser(payload){
-        this.user.uname = '';
-        this.user.fname = '';
-        this.user.lname = '';
-        this.user.email = '';
-        this.user.lang = '';
-        this.user.location = '';
-        this.user.hometown = '';
-        this.user.orga = '';
-        this.user.picture = '';
-        this.emitChange();
-    }
-    removePicture(){
-        this.user.picture = '';
+        this.user = payload;
         this.emitChange();
     }
 }
@@ -83,7 +71,8 @@ UserProfileStore.handlers = {
     'CHANGE_TO': 'changeTo',
     'DELETE_USER_SUCCESS': 'userDeleted',
     'DELETE_USER_FAILURE': 'userDeleteFailed',
-    'REMOVE_PICTURE': 'removePicture'
+    'NEW_USER_DATA': 'fillInUser',
+    'EDIT_USER_FAILED': 'editUSERFailed'
 };
 
 export default UserProfileStore;
