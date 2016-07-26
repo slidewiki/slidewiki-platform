@@ -4,7 +4,6 @@ import SearchBox  from './SearchBox';
 import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
 import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
-import LoginModalUI from '../Login/LoginModalUI.js';
 
 class Header extends React.Component {
     render() {
@@ -23,7 +22,6 @@ class Header extends React.Component {
                     </div>
                     <UserNotificationsBadge />
                     <LoginModal />
-                    <LoginModalUI />
                 </div>
             </div>
         );
