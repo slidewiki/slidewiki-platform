@@ -15,31 +15,31 @@ export default function loadDeck(context, payload, done) {
     if(!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_ID_TYPE_ERROR);
-        done();
+        throw error;
     }
 
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        let error = fumble.http.badRequest();
+        let error = fumblle.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_TYPE_ERROR);
-        done();
+        throw error;
     }
 
     if(!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_ID_TYPE_ERROR);
-        done();
+        throw error;
     }
 
     if(!(payload.params.spath && (/^[0-9a-z:;]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_PATH_ERROR);
-        done();
+        throw error;
     }
 
     if(!(['view', 'edit'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_MODE_ERROR);
-        done();
+        throw error;
     }
 
     //we should store the current content state in order to avoid duplicate load of actions

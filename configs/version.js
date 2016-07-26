@@ -1,5 +1,5 @@
 
 export default {
     branch: 'SWIK-144_route_error_handling',
-    head: '2f7db31'
+    head: '1cd77c6'
 };
