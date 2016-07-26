@@ -125,7 +125,7 @@ class Deck extends React.Component {
                         <div className={activityFeedPanelClass}>
                             <div className="ui hidden divider"></div>
                             <div className="row">
-                                {this.props.DeckPageStore.mode !== 'view'? '' : <ActivityFeedPanel />}
+                                {this.props.DeckPageStore.mode !== 'view'? '' : <ActivityFeedPanel mode='deck' />}
                             </div>
                         </div>
                     </div>

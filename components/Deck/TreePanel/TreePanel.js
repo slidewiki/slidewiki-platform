@@ -52,6 +52,7 @@ class TreePanel extends React.Component {
         let nextSelector = this.props.DeckTreeStore.nextSelector;
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let rootNodeTitle = <strong> {rootNode.title} </strong>;
+        let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
@@ -67,6 +68,9 @@ class TreePanel extends React.Component {
                         <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
+
+                        {decktreeError ? <div className="ui error message" style={{'wordBreak': 'break-all', 'wordWrap': 'break-word'}}> {decktreeError} </div> : ''}
+
                         <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>

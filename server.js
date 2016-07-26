@@ -55,6 +55,7 @@ fetchrPlugin.registerService(require('./services/questions'));
 fetchrPlugin.registerService(require('./services/discussion'));
 fetchrPlugin.registerService(require('./services/similarcontent'));
 fetchrPlugin.registerService(require('./services/import'));
+fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 
@@ -88,7 +89,8 @@ server.use((req, res, next) => {
         const markup = ReactDOM.renderToString(createElementWithContext(context));
         //todo: for future, we can choose to not include specific scripts in some predefined layouts
         const htmlElement = React.createElement(HTMLComponent, {
-            clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+            //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+            clientFile: 'main.js',
             context: context.getComponentContext(),
             state: exposed,
             markup: markup

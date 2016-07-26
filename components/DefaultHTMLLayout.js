@@ -41,6 +41,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script type="javascript">
                     CKEDITOR.disableAutoInline = true; //need to disable auto-initate to config inline toolbars
                 </script>
+                <script src="/bower_components/reveal.js/js/reveal.js"></script>
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile}></script>
             </body>
