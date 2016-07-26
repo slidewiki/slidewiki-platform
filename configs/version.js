@@ -1,5 +1,5 @@
 
 export default {
-    branch: 'master',
-    head: '9f6c94a'
+    branch: 'SWIK243-login',
+    head: 'c8c287d'
 };

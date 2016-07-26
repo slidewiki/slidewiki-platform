@@ -1,5 +1,10 @@
 import React from 'react';
 import Modal from 'react-modal';
+import {connectToStores} from 'fluxible-addons-react';
+import userSignIn from '../../actions/user/userSignIn';
+import userSignOut from '../../actions/user/userSignOut';
+import UserProfileStore from '../../stores/UserProfileStore';
+import ReactDOM from 'react-dom';
 
 const customStyles = {
     content : {
@@ -23,20 +28,59 @@ class LoginModal extends React.Component {
 
     }
 
+    componentDidUpdate(prevProps, prevState) {//Workaround to set focus
+        if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
+            setTimeout(function() {
+                ReactDOM.findDOMNode(this.refs.username1).focus();
+            }.bind(this), 0);
+        }
+    }
+
     handleLoginButton(){
         this.setState({openModal: true});
 
+    }
+
+    handleSignoutButton() {
+        this.context.executeAction(userSignOut, {});
+    }
+
+    signin() {
+      this.context.executeAction(userSignIn, {
+          //email: this.refs.emailsignin.value,
+          username: this.refs.username1.value,
+          password: this.refs.password1.value
+      });
+
+      this.refs.username1.value = '';
+      this.refs.password1.value = '';
     }
 
     handleExitButton(){
         this.setState({openModal: false});
 
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.UserProfileStore.errorMessage !== '') {
+            $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
+        } else if (nextProps.UserProfileStore.userid !== ''){
+            this.handleExitButton();
+        }
+    }
     render() {
+        let loginButton = (
+            <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
+        );
+        if (this.props.UserProfileStore.username === '') {
+            loginButton = (
+                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
+            );
+        }
+
         return(
           <div className="item right" >
-            <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Login</button>
-            <Modal isOpen={this.state.openModal}  style={customStyles}>
+            {loginButton}
+            <Modal id='signinModal' isOpen={this.state.openModal}  style={customStyles}>
               <div className="ui container">
                   <div className="ui right">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
@@ -44,11 +88,11 @@ class LoginModal extends React.Component {
                     </button>
                   </div>
                   <div className="ui blue padded center aligned segment">
-                    <h1 className="ui dividing header">Login</h1>
-                      <form className="ui form signin">
+                    <h1 className="ui dividing header">Sign In</h1>
+                      <form className="ui form signin" onSubmit={(e) => {e.preventDefault();}}>
                         <div className="ui five wide icon input field">
-                          <div><label htmlFor="email1" hidden>Email</label></div>
-                          <input type="email" id="email1" name="email1" ref="email1" placeholder="Email" autoFocus tabIndex="0"  aria-required="true"/><i className="mail icon"></i>
+                          <div><label htmlFor="username1" hidden>Username</label></div>
+                          <input type="username1" id="username1" name="username1" ref="username1" placeholder="Username" autoFocus tabIndex="0"  aria-required="true"/><i className="user icon"></i>
                         </div>
                           <br/>
                         <div className="ui five wide icon input field">
@@ -57,7 +101,7 @@ class LoginModal extends React.Component {
                         </div>
                         <br/>
                         <div className="ui error message"></div>
-                        <button type="submit" className="ui blue labeled submit icon button"><i className="icon sign in"></i> Login</button>
+                        <button type="submit" className="ui blue labeled submit icon button" onClick={ this.signin.bind(this)}><i className="icon sign in"></i> Sign In</button>
                      </form>
                   <br/>
                   <div className="ui floated right">
@@ -74,4 +118,13 @@ class LoginModal extends React.Component {
     }
 }
 
+LoginModal.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
+LoginModal = connectToStores(LoginModal, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 export default LoginModal;
