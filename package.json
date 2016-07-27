@@ -57,6 +57,7 @@
     "fluxible-plugin-fetchr": "^0.3.10",
     "fluxible-router": "^0.4.16",
     "immutable": "^3.8.1",
+    "js-sha512": "^0.2.2",
     "lodash": "^4.14.0",
     "react": "^15.2.1",
     "react-custom-scrollbars": "^4.0.0",
