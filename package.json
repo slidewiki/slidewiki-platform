@@ -25,7 +25,7 @@
     "start": "node start.js",
     "build": "webpack --config ./webpack/prod.config.js && NODE_ENV=production npm start",
     "build:nostart": "webpack --config ./webpack/prod.config.js",
-    "dev": "bash ./gen_version.sh && node ./webpack/dev-server.js",
+    "dev": "node ./webpack/dev-server.js",
     "dev:windows": "node ./webpack/dev-server-windows.js",
     "lint": "eslint ./**/*.js",
     "test": "mocha test/unit/ --recursive --compilers js:babel-register --reporter spec",
