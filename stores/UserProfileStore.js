@@ -4,6 +4,11 @@ class UserProfileStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.toShow = 'settings';
+        this.dimmer = {
+            success: false,
+            failure: false,
+            userdeleted: false
+        };
         this.user = {
             uname: 'rmeissn',
             fname: '',
@@ -15,11 +20,15 @@ class UserProfileStore extends BaseStore {
             orga: '',
             picture: ''
         };
-        this.userDeleted = false;
     }
 
     destructor() {
         this.toShow = 'deck';
+        this.dimmer = {
+            success: false,
+            failure: false,
+            userdeleted: false
+        };
         this.user = {
             uname: '',
             fname: '',
@@ -31,11 +40,10 @@ class UserProfileStore extends BaseStore {
             orga: '',
             picture: ''
         };
-        this.userDeleted = false;
     }
 
     getState() {
-        return { toShow: this.toShow, user: this.user };
+        return { toShow: this.toShow, user: this.user, dimmer: this.dimmer};
     }
 
     dehydrate() {
@@ -45,6 +53,7 @@ class UserProfileStore extends BaseStore {
     rehydrate(state) {
         this.toShow = state.toShow;
         this.user = state.user;
+        this.dimmer = state.dimmer;
     }
 
     changeTo(payload) {
@@ -53,16 +62,25 @@ class UserProfileStore extends BaseStore {
     }
 
     userDeleted(payload){
-        this.userDeleted = true;
+        this.destructor();
         this.emitChange();
     }
 
-    userDeleteFailed(payload){
+    successMessage() {
+        this.dimmer.success = true;
+        this.emitChange();
+        this.dimmer.success = false;
     }
 
     fillInUser(payload){
-        this.user = payload;
+        Object.assign(this.user, payload);
+        this.successMessage();
+    }
+
+    actionFailed(payload){
+        this.dimmer.failure = true;
         this.emitChange();
+        this.dimmer.failure = false;
     }
 }
 
@@ -70,9 +88,10 @@ UserProfileStore.storeName = 'UserProfileStore';
 UserProfileStore.handlers = {
     'CHANGE_TO': 'changeTo',
     'DELETE_USER_SUCCESS': 'userDeleted',
-    'DELETE_USER_FAILURE': 'userDeleteFailed',
+    'DELETE_USER_FAILURE': 'actionFailed',
     'NEW_USER_DATA': 'fillInUser',
-    'EDIT_USER_FAILED': 'editUSERFailed'
+    'EDIT_USER_FAILED': 'actionFailed',
+    'NEW_PASSWORD': 'successMessage'
 };
 
 export default UserProfileStore;

@@ -12,6 +12,12 @@ class UserSettings extends React.Component {
 
     componentDidUpdate() {
         this.refreshAccordion();
+        if(this.props.dimmer.success === true)
+            $('#userDataDimmer').dimmer('show');
+        if(this.props.dimmer.userdeleted === true)
+            $('#userDeleteDimmer').dimmer('show');
+        if(this.props.dimmer.failure === true)
+            $('#failureDimmer').dimmer('show');
     }
 
     enableAccordion(status) {
@@ -71,6 +77,21 @@ class UserSettings extends React.Component {
               </div>
               <div className="content">
                 <AccountDeletion />
+              </div>
+            </div>
+            <div className="ui blurring page dimmer" id="userDataDimmer">
+              <div className="content">
+                <div className="center"><h1 className="ui inverted icon header"><i className="huge inverted checkmark icon"/>Changes have been applied</h1></div>
+              </div>
+            </div>
+            <div className="ui blurring page dimmer" id="userDeleteDimmer">
+              <div className="content">
+                <div className="center"><h1 className="ui inverted icon header"><i className="huge inverted checkmark icon"/>Your Account has been deleted</h1></div>
+              </div>
+            </div>
+            <div className="ui blurring page dimmer" id="failureDimmer">
+              <div className="content">
+                <div className="center"><h1 className="ui inverted icon header"><i className="huge inverted ban icon"/>Something went wrong</h1></div>
               </div>
             </div>
           </div>

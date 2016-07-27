@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Identicons from 'identicons-react';
-import md5 from 'md5';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
 class Picture extends React.Component {
@@ -14,7 +13,7 @@ class Picture extends React.Component {
     useGravatar(e) {
         let payload = {};
         Object.assign(payload, this.props.user);
-        payload.picture = 'https://www.gravatar.com/avatar/' + md5(payload.email.trim().toLowerCase()) + '?d=mm&s=300';
+        payload.picture = 'gravatar'; //hack to work with action changeUserData
         this.context.executeAction(changeUserData, payload);
     }
 
@@ -41,9 +40,11 @@ class Picture extends React.Component {
                 </div>
                 <div className="eight wide column">
                   <div className="ui vertical buttons">
+                    <div data-tooltip="This is currently not supported" data-position="right center" data-inverted="">
                     <button className="ui blue labeled icon button disabled" onClick={ this.uploadNewPicture.bind(this) }>
                       <i className="icon upload"/>Upload new Image
                     </button>
+                    </div>
                     <div className="ui hidden divider"/>
                     <button className="ui green labeled icon button" onClick={ this.useGravatar.bind(this) }>
                       <i className="icon user"/>Use Gravater Image

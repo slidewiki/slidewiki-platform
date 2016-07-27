@@ -5,7 +5,7 @@ import ActivityFeedPanel from '../../Deck/ActivityFeedPanel/ActivityFeedPanel';
 
 class UserDecks extends React.Component {
     componentDidMount() {}
-    
+
     componentDidUpdate() {}
 
     render() {
@@ -91,7 +91,7 @@ class UserDecks extends React.Component {
 
               </div>
               <div className="ui hidden divider" />
-              <ActivityFeedPanel />
+              <ActivityFeedPanel mode="user"/>
             </div>
           </div>
         );

@@ -1,4 +1,5 @@
 import React from 'react';
+import changePassword from '../../../actions/user/userprofile/changePassword';
 
 class ChangePassword extends React.Component {
     componentDidMount() {
@@ -24,6 +25,14 @@ class ChangePassword extends React.Component {
 
     handleChangePassword(e) {
         e.preventDefault();
+        let payload = {
+            oldpw: this.refs.oldPassword.value,
+            newpw: this.refs.newPassword.value
+        };
+        this.refs.oldPassword.value = '';
+        this.refs.newPassword.value = '';
+        this.refs.reenterPassword.value = '';
+        this.context.executeAction(changePassword, payload);
         return false;
     }
 
@@ -32,11 +41,11 @@ class ChangePassword extends React.Component {
           <div>
             <h2>Password</h2>
             <div className="ui hidden divider"/>
-            <form className="ui form changePassword" onSubmit={ this.handleChangePassword.bind(this) } ref="changePassword">
+            <form className="ui form changePassword">
               <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">Old Password</div>
-                  <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" required/>
+                  <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" ref="oldPassword" required/>
                 </div>
               </div>
               <div className="two fields">

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import md5 from 'md5';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
 class ChangePersonalData extends React.Component {
@@ -21,8 +20,6 @@ class ChangePersonalData extends React.Component {
         payload.location = this.refs.location.value;
         payload.hometown = this.refs.hometown.value;
         payload.orga = this.refs.orga.value;
-        if(this.props.user.email !== payload.email && payload.picture.includes('gravatar'))
-            payload.picture = 'https://www.gravatar.com/avatar/' + md5(payload.email.trim().toLowerCase()) + '?d=mm&s=300';
         this.context.executeAction(changeUserData, payload);
         return false;
     }
