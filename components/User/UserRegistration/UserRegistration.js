@@ -78,14 +78,11 @@ class UserRegistration extends React.Component {
         };
         const signinValidation = {
             fields: {
-                emailsignin: {
-                    identifier: 'emailsignin',
+                usernamesignin: {
+                    identifier: 'usernamesignin',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your email address'
-                    }, {
-                        type: 'email',
-                        prompt: 'Please enter a valid email address'
+                        prompt: 'Please enter your username'
                     }]
                 },
                 passwordsignin: {
@@ -153,13 +150,14 @@ class UserRegistration extends React.Component {
     }
 
     handleSignIn() {
-        this.refs.emailsignin.value = '';
-        this.refs.passwordsignin.value = '';
-
         this.context.executeAction(userSignIn, {
-            email: this.refs.emailsignin.value,
+            //email: this.refs.emailsignin.value,
+            username: this.refs.usernamesignin.value,
             password: this.refs.passwordsignin.value
         });
+
+        this.refs.usernamesignin.value = '';
+        this.refs.passwordsignin.value = '';
     }
 
     handleSignUp() {
@@ -226,7 +224,7 @@ class UserRegistration extends React.Component {
                             <h2 className="ui dividing header">Sign In</h2>
                             <form className="ui form signin">
                                 <div className="ui icon input field">
-                                    <input type="email" id="emailsignin" name="emailsignin" ref="emailsignin" placeholder="Email" autoFocus/><i className="mail icon"></i>
+                                    <input type="text" id="usernamesignin" name="usernamesignin" ref="usernamesignin" placeholder="Username" autoFocus/><i className="user icon"></i>
                                 </div><br/>
                                 <div className="ui icon input field">
                                     <input type="password" id="passwordsignin" name="passwordsignin" ref="passwordsignin" placeholder="Password"/><i className="lock icon"></i>

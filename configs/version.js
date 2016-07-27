@@ -1,5 +1,5 @@
 
 export default {
     branch: 'SWIK-283-user-registration',
-    head: '666dfe4'
+    head: '4f1749d'
 };

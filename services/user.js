@@ -23,6 +23,35 @@ export default {
                 user: user
             });
         }
+
+        if (resource === 'user.signin') {
+          
+            const hashedPassword = sha512.sha512(args.password + hashSalt);
+            rp.post({
+                uri: Microservices.user.uri + '/login',
+                body: JSON.stringify({
+                    // email: args.email,
+                    username: args.username,
+                    password: hashedPassword
+                }),
+                resolveWithFullResponse: true
+            })
+                .then((res) => {
+                    callback(null, {
+                        username: args.username,
+                        userid: JSON.parse(res.body).userid,
+                        jwt: res.headers['----jwt----'],
+                        selector: args.selector
+                    });
+                })
+                .catch((err) => {
+                    // console.log('Error', err);
+                    callback(err, {
+                        error: err,
+                        selector: args.selector
+                    });
+                });
+        }
     },
 
     create: (req, resource, params, body, config, callback) => {
@@ -48,7 +77,7 @@ export default {
                 })
                 .catch((err) => {
                     // console.log('Error', err);
-                    callback(null, {//TODO couldn't return the error using the first parameter
+                    callback(err, {
                         error: err,
                         selector: args.selector
                     });
@@ -56,7 +85,6 @@ export default {
         }
     }
         // other methods
-        // create: (req, resource, params, body, config, callback) => {},
         // update: (req, resource, params, body, config, callback) => {}
         // delete: (req, resource, params, config, callback) => {}
 };
