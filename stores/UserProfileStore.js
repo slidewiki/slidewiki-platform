@@ -14,10 +14,9 @@ class UserProfileStore extends BaseStore {
             fname: '',
             lname: '',
             email: '',
-            lang: '',
-            location: '',
-            hometown: '',
-            orga: '',
+            language: '',
+            country: '',
+            organization: '',
             picture: ''
         };
     }
@@ -34,10 +33,9 @@ class UserProfileStore extends BaseStore {
             fname: '',
             lname: '',
             email: '',
-            lang: '',
-            location: '',
-            hometown: '',
-            orga: '',
+            language: '',
+            country: '',
+            organization: '',
             picture: ''
         };
     }
@@ -73,8 +71,11 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUser(payload){
+        console.log(payload);
         Object.assign(this.user, payload);
-        this.successMessage();
+        console.log(this.user);
+        this.emitChange();
+        //this.successMessage();
     }
 
     actionFailed(payload){

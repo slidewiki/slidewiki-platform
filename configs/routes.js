@@ -23,6 +23,7 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
+import fetchUser from '../actions/user/userprofile/fetchUser';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -86,10 +87,7 @@ export default {
         title: 'SlideWiki -- Your profile',
         handler: require('../components/User/UserProfile/UserProfile'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Your profile'
-            });
-            done();
+            context.executeAction(fetchUser, payload, done);
         }
     },
 //-----------------------------------Search routes------------------------------

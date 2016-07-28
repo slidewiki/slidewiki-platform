@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { Microservices } from '../../../configs/microservices';
 import ActivityFeedPanel from '../../Deck/ActivityFeedPanel/ActivityFeedPanel';
+import DeckListItem from './DeckListItem';
 
 class UserDecks extends React.Component {
     componentDidMount() {}
@@ -18,33 +19,9 @@ class UserDecks extends React.Component {
                 </div>
                 <div className="ui segment">
                   <div className="ui relaxed divided list">
-                    <div className="item">
-                      <div className="ui tiny image">
-                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
-                      </div>
-                      <div className="content">
-                        <a className="header">Semantic-Org/Semantic-UI</a>
-                        <div className="description">Updated 10 mins ago</div>
-                      </div>
-                    </div>
-                    <div className="item">
-                      <div className="ui tiny image">
-                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
-                      </div>
-                      <div className="content">
-                        <a className="header">Semantic-Org/Semantic-UI-Docs</a>
-                        <div className="description">Updated 22 mins ago</div>
-                      </div>
-                    </div>
-                    <div className="item">
-                      <div className="ui tiny image">
-                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
-                      </div>
-                      <div className="content">
-                        <a className="header">Semantic-Org/Semantic-UI-Meteor</a>
-                        <div className="description">Updated 34 mins ago</div>
-                      </div>
-                    </div>
+                      <DeckListItem title='Semantic-Org/Semantic-UI' picture='http://semantic-ui.com/images/wireframe/image.png' updated='10'/>
+                      <DeckListItem title='Semantic-Org/Semantic-UI-Docs' picture='http://semantic-ui.com/images/wireframe/image.png' updated='22'/>
+                      <DeckListItem title='Semantic-Org/Semantic-UI-Meteor' picture='http://semantic-ui.com/images/wireframe/image.png' updated='34'/>
                   </div>
                 </div>
               </div>
@@ -55,33 +32,9 @@ class UserDecks extends React.Component {
                 </div>
                 <div className="ui segment">
                   <div className="ui relaxed divided list">
-                    <div className="item">
-                      <div className="ui tiny image">
-                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
-                      </div>
-                      <div className="content">
-                        <a className="header">Semantic-Org/Semantic-UI/Slide 4</a>
-                        <div className="description">Updated 10 mins ago</div>
-                      </div>
-                    </div>
-                    <div className="item">
-                      <div className="ui tiny image">
-                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
-                      </div>
-                      <div className="content">
-                        <a className="header">Semantic-Org/Semantic-UI-Docs/Slide 20</a>
-                        <div className="description">Updated 22 mins ago</div>
-                      </div>
-                    </div>
-                    <div className="item">
-                      <div className="ui tiny image">
-                        <img src="http://semantic-ui.com/images/wireframe/image.png"/>
-                      </div>
-                      <div className="content">
-                        <a className="header">Semantic-Org/Semantic-UI-Meteor/Slide 1</a>
-                        <div className="description">Updated 34 mins ago</div>
-                      </div>
-                    </div>
+                      <DeckListItem title='Semantic-Org/Semantic-UI/Slide 4' picture='http://semantic-ui.com/images/wireframe/image.png' updated='10'/>
+                      <DeckListItem title='Semantic-Org/Semantic-UI-Docs/Slide 20' picture='http://semantic-ui.com/images/wireframe/image.png' updated='22'/>
+                      <DeckListItem title='Semantic-Org/Semantic-UI-Meteor/Slide 1' picture='http://semantic-ui.com/images/wireframe/image.png' updated='34'/>
                   </div>
                 </div>
               </div>

@@ -9,9 +9,11 @@ class DeckListItem extends React.Component {
     render() {
         return (
             <div className="item">
-              <i className="large folder middle aligned icon"></i>
+              <div className="ui tiny image">
+                <img src={this.props.picture}/>
+              </div>
               <div className="content">
-                <a className="header">{this.props.title}}</a>
+                <a className="header">{this.props.title}</a>
                 <div className="description">Updated {this.props.updated} mins ago</div>
               </div>
             </div>

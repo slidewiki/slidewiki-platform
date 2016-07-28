@@ -16,17 +16,16 @@ class ChangePersonalData extends React.Component {
         payload.fname = this.refs.fname.value;
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
-        payload.lang = this.refs.language.value;
-        payload.location = this.refs.location.value;
-        payload.hometown = this.refs.hometown.value;
-        payload.orga = this.refs.orga.value;
+        payload.language = this.refs.language.value;
+        payload.country = this.refs.country.value;
+        payload.organization = this.refs.organization.value;
         this.context.executeAction(changeUserData, payload);
         return false;
     }
 
     render() {
         let lang = '';
-        switch (this.props.user.lang) {
+        switch (this.props.user.language) {
             case 'de_DE':
                 lang = 'German';
                 break;
@@ -55,13 +54,16 @@ class ChangePersonalData extends React.Component {
                   <input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/>
                 </div>
                 <div className="ui field">
-                  <div className="ui search selection dropdown field" ref="language" required>
-                    <input type="hidden" name="language" defaultValue={lang}/>
-                    <i className="dropdown icon"/>
-                    <div className="default text">Select Language</div>
-                    <div className="menu">
-                      <div className="item">English</div>
-                      <div className="item">German</div>
+                  <div className="ui labeled input field">
+                    <div className="ui label">Language</div>
+                    <div className="ui search selection dropdown">
+                      <input type="hidden" name="language" defaultValue={lang} ref="language" required/>
+                      <i className="dropdown icon"/>
+                      <div className="default text">Select Language</div>
+                      <div className="menu">
+                        <div className="item">English</div>
+                        <div className="item">German</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -69,19 +71,12 @@ class ChangePersonalData extends React.Component {
 
               <div className="two fields">
                 <div className="ui labeled input field">
-                  <div className="ui label">Location</div>
-                  <input type="text" placeholder="USA" name="country" defaultValue={this.props.user.location} ref="location"/>
+                  <div className="ui label">Country</div>
+                  <input type="text" placeholder="USA" name="country" defaultValue={this.props.user.country} ref="country"/>
                 </div>
-                <div className="ui labeled input field">
-                  <div className="ui label">Hometown</div>
-                  <input type="text" placeholder="NYC" name="hometown" defaultValue={this.props.user.hometown} ref="hometown"/>
-                </div>
-              </div>
-
-              <div className="two fields">
                 <div className="ui labeled input field">
                   <div className="ui label">Organization</div>
-                  <input type="text" placeholder="Red Socks" name="organization" defaultValue={this.props.user.orga} ref="orga"/>
+                  <input type="text" placeholder="Red Socks" name="organization" defaultValue={this.props.user.organization} ref="organization"/>
                 </div>
               </div>
 
