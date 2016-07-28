@@ -32,6 +32,7 @@ class Import extends React.Component {
         }
     }
     handleFileSelect(evt){
+        console.log("TESTING");
         console.log(evt.target.files[0]);
         let file = evt.target.files[0];
         this.props.ImportStore.file = file;
@@ -109,16 +110,16 @@ class Import extends React.Component {
 */
 
             outputDIV =      <div className="ui row">
-            <div id='test'></div>
             {this.props.ImportStore.htmlConvert}
                                 <div className="column">
                                     <div className="ui content">
                                         <h2 className="ui header">Upload your presentation</h2>
                                         <p>Select your presentation file and upload it to SlideWiki. </p>
+                                        <p>UPLOAD FOR FRONTEND/CLIENTSIDE-JS TEST OF PPTX2HTML LIBRARY (can use client-side/JS libraries/jquery, etc.. -> need to rewrite part of this): </p>
                                     </div>
                                     <br />
                                           <div className="ui input file focus animated" onChange={this.handleFileSelect.bind(this)}>
-                                                <input ref="selectbutton"  type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
+                                                <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
                                                 {!this.props.ImportStore.isAllowed ?
                                                   <div tabIndex="0" ref="submitbutton" className="ui animated button green disabled">
                                                     <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
@@ -132,14 +133,18 @@ class Import extends React.Component {
                                                 }
                                           </div>
                                     <br />
-                                     <FileUploader allowActionByKey="1"/>
                                     <br />
+                                    <br />
+                                    <p>UPLOAD FOR BACKEND(IMPORT-MICROSERVICE)+SERVERSIDE-JS TEST OF PPTX2HTML LIBRARY (NEEDS NODE.JS/ES6 libraries): </p>
+                                     <FileUploader allowActionByKey="1"/>
                                     <div className="ui content">
                                         <p>Presentation formats currently supported: Microsoft Powerpoint (*.pptx) and LibreOffice Open Document Presentation (*.odp) </p>
                                         <p>Planned future support for: Open/LibreOffice Impress (.odg and .otp), Prezi, and Apple Keynote (.key)</p>
                                     </div>
                                     <br />
+                                    <div id='test'>OUTPUT FRONTENDTEST</div>
                                 </div>
+
                             </div>;
                             //from https://github.com/risis-eu/risis-datasets/blob/2a790c3b20b6c83c775d144cd69393032cdfaf82/components/object/ObjectIEditor.js
                             //editor = <FileUploader spec={this.props.spec} config={this.props.config} onDataEdit={this.handleDataEdit.bind(this)} onEnterPress={this.handleEnterPress.bind(this)} allowActionByKey="1"/>;

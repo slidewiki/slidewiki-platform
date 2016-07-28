@@ -94,6 +94,8 @@ request
             //console.log(file);
             console.log(files[0]);
             //req.attach('file', file, file.name);
+            //need to convert to bytearray for sending over HTTP
+            // -or- convert to JSON in import-microservice
             req.attach('file', files[0], files[0].name);
         //});
         req.on('progress', function(e) {

@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 //'use strict';
 //jszip = require('./jszip.min.js');
 let JSZip = require('./jszip.min.js');
@@ -42,8 +42,9 @@ onmessage = function(e) {
 
 }
 */
-
-class Worker1 {
+//let self = module.exports = {
+class Convertor {
+    //constructor(data)
     constructor()
     {
 
@@ -53,10 +54,21 @@ class Worker1 {
         this.bodyFontSize = 20;
         this.otherFontSize = 16;
 
-        this.filesInfo = this.getContentTypes(zip);
-        this.slideSize = this.getSlideSize(zip);
-        this.themeContent = this.loadTheme(zip);
+        this.filesInfo; //= this.getContentTypes(zip);
+        this.slideSize; //= this.getSlideSize(zip);
+        this.themeContent; //= this.loadTheme(zip);
+
     //alert(this.themeContent);
+        this.slideHtml;
+        this.totalHtmlResult;
+
+        this.eachElement;
+
+
+
+
+
+        //return this.processPPTX(data);
 
     }
 
@@ -69,8 +81,11 @@ class Worker1 {
         let dateBefore = new Date();
 
         let zip = new JSZip(data);
+        this.filesInfo = this.getContentTypes(zip);
+        this.slideSize = this.getSlideSize(zip);
+        this.themeContent = this.loadTheme(zip);
 
-        let totalHtmlResult = '';
+        //this.totalHtmlResult = '';
 
         if (zip.file('docProps/thumbnail.jpeg') !== null) {
             let pptxThumbImg = functions.base64ArrayBuffer(zip.file('docProps/thumbnail.jpeg').asArrayBuffer());
@@ -78,21 +93,21 @@ class Worker1 {
     		//	"type": "pptx-thumb",
     		//	"data": pptxThumbImg
     		//});
-            //totalHtmlResult += pptxThumbImg;
+            //this.totalHtmlResult += pptxThumbImg;
         }
 
 
 
-    totalHtmlResult += this.filesInfo;
-    totalHtmlResult += this.slideSize;
-    totalHtmlResult += this.themeContent;
-    //console.log('test'+totalHtmlResult);
+    this.totalHtmlResult += this.filesInfo;
+    this.totalHtmlResult += this.slideSize;
+    this.totalHtmlResult += this.themeContent;
+    //console.log('test' + this.totalHtmlResult);
 
-    var slideHtml = '';
+    //this.slideHtml = '';
 	var numOfSlides = this.filesInfo["slides"].length;
 	for (var i=0; i<numOfSlides; i++) {
 		var filename = this.filesInfo["slides"][i];
-		slideHtml += this.processSingleSlide(zip, filename, i, this.slideSize);
+		this.slideHtml += this.processSingleSlide(zip, filename, i, this.slideSize);
 		//self.postMessage({
 		//	"type": "slide",
 		//	"data": slideHtml
@@ -102,10 +117,6 @@ class Worker1 {
 		//	"data": (i + 1) * 100 / numOfSlides
 		//});
 	}
-    console.log('slideHtml'+slideHtml);
-    //console.log('slideHtml'+slideHtml+'totalHtmlResult'+totalHtmlResult);
-    //totalHtmlResult += slideHtml;
-    return slideHtml;
 	var dateAfter = new Date();
 	//self.postMessage({
 	//	"type": "ExecutionTime",
@@ -114,6 +125,16 @@ class Worker1 {
     let ExecutionTime = dateAfter - dateBefore;
     console.log('execution time: '+ExecutionTime);
 
+    //console.log('slideHtml'+this.slideHtml);
+    //console.log('slideHtml'+slideHtml+'this.totalHtmlResult'+this.totalHtmlResult);
+    //this.totalHtmlResult += slideHtml;
+    return this.slideHtml;
+
+    /*TODO:
+    ALt tags (content placeholders) for images: located in p:sld, p:cSld, p:spTree, p:pic, p:nvPicPr, p:cNvPr, attrs, descr:
+    background-color, see step 3 below
+
+    */
 }
 
 readXmlFile(zip, filename) {
@@ -127,7 +148,7 @@ readXmlFile(zip, filename) {
 
 getContentTypes(zip) {
 	var ContentTypesJson = this.readXmlFile(zip, "[Content_Types].xml");
-    console.log('ContentTypesJson' + ContentTypesJson);
+    //console.log('ContentTypesJson' + ContentTypesJson);
 	var subObj = ContentTypesJson["Types"]["Override"];
 	var slidesLocArray = [];
 	var slideLayoutsLocArray = [];
@@ -161,7 +182,7 @@ getSlideSize(zip) {
 loadTheme(zip) {
 	var preResContent = this.readXmlFile(zip, "ppt/_rels/presentation.xml.rels");
 	var relationshipArray = preResContent["Relationships"]["Relationship"];
-    console.log(relationshipArray);
+    //console.log(relationshipArray);
 	var themeURI = undefined;
 	if (relationshipArray.constructor === Array) {
 		for (var i=0; i<relationshipArray.length; i++) {
@@ -252,9 +273,50 @@ processSingleSlide(zip, sldFileName, index, slideSize) {
 
 	// =====< Step 3 >=====
 	var content = this.readXmlFile(zip, sldFileName);
+    console.log('bgcolor check, content = ' + content+ ', path = ' + ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:srgbClr", "attrs", "val"] );
+    console.log(content);
 	var bgColor = this.getTextByPathList(content, ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:srgbClr", "attrs", "val"]);
 	if (bgColor === undefined) {
-		bgColor = "FFF";
+        //klaas: try scheme color == needs convertion to HEX RGB!!! e.g. accent2 is dark-red. Do manually?
+        bgColor = this.getTextByPathList(content, ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:schemeClr", "attrs", "val"]);
+
+        //assign default scheme RGB color codes for powerpoint 2016 for mac
+        //this does not work well if people change the default color scheme, or if they apply a different theme
+        switch(bgColor){
+        case 'bg1':
+            bgColor = "FFFFFF";
+            break;
+        case 'tx1':
+            bgColor = "000000";
+            break;
+        case 'bg2':
+            bgColor = "E7E6E6";
+            break;
+        case 'tx2':
+            bgColor = "44546A";
+            break;
+        case 'accent1':
+            bgColor = "5B9BD5";
+            break;
+        case 'accent2':
+            bgColor = "ED7D31";
+            break;
+        case 'accent3':
+            bgColor = "A5A5A5";
+            break;
+        case 'accent4':
+            bgColor = "FFC000";
+            break;
+        case 'accent5':
+            bgColor = "4472C4";
+            break;
+        case 'accent6':
+            bgColor = "70AD47";
+            break;
+        }
+        if (bgColor === undefined) {
+		    bgColor = "FFFFFF";
+        }
 	}
 	var nodes = content["p:sld"]["p:cSld"]["p:spTree"];
 	var warpObj = {
@@ -265,21 +327,25 @@ processSingleSlide(zip, sldFileName, index, slideSize) {
 		"slideMasterTextStyles": slideMasterTextStyles
 	};
 
-	var result = "<section style='width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
+	//var result = "<section style='width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
+    //var result = "<div style='width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
+    var result = "<div style='border-style: dotted; background-color: #" + bgColor + "' >"
 
 	for (var nodeKey in nodes) {
+        let that = this;
 		if (nodes[nodeKey].constructor === Array) {
 			for (var i=0; i<nodes[nodeKey].length; i++) {
-                console.log('nodeinslide');
-				result += this.processNodesInSlide(nodeKey, nodes[nodeKey][i], warpObj);
+                //console.log('nodeinslide' . nodes);
+				result += that.processNodesInSlide(nodeKey, nodes[nodeKey][i], warpObj);
 			}
 		} else {
-			result += this.processNodesInSlide(nodeKey, nodes[nodeKey], warpObj);
-            console.log('nodeinslide');
+			result += that.processNodesInSlide(nodeKey, nodes[nodeKey], warpObj);
+            //console.log('nodeinslide');
 		}
 	}
 
-	return result + "</section>";
+	//return result + "</section>";
+    return result + "</div>";
 }
 
 indexNodes(content) {
@@ -300,11 +366,12 @@ indexNodes(content) {
 		var targetNode = spTreeNode[key];
 
 		if (targetNode.constructor === Array) {
+            let that = this;
 			for (var i=0; i<targetNode.length; i++) {
 				var nvSpPrNode = targetNode[i]["p:nvSpPr"];
-				var id = this.getTextByPathList(nvSpPrNode, ["p:cNvPr", "attrs", "id"]);
-				var idx = this.getTextByPathList(nvSpPrNode, ["p:nvPr", "p:ph", "attrs", "idx"]);
-				var type = this.getTextByPathList(nvSpPrNode, ["p:nvPr", "p:ph", "attrs", "type"]);
+				var id = that.getTextByPathList(nvSpPrNode, ["p:cNvPr", "attrs", "id"]);
+				var idx = that.getTextByPathList(nvSpPrNode, ["p:nvPr", "p:ph", "attrs", "idx"]);
+				var type = that.getTextByPathList(nvSpPrNode, ["p:nvPr", "p:ph", "attrs", "type"]);
 
 				if (id !== undefined) {
 					idTable[id] = targetNode[i];
@@ -972,14 +1039,39 @@ genBuChar(node) {
 
 genSpanElement(node, slideLayoutSpNode, slideMasterSpNode, type, slideMasterTextStyles) {
 
-	var text = node["a:t"];
+	let text = node["a:t"]; //Klaas: makes object out of text this while it might need to be string...? (since this is about getSpanElement)
+    //text = text[0]; //does not always return array
+    /*["History of copied items is shared between branches", attrs: Object]
+0:"History of copied items is shared between branches"
+attrs:Object
+length:1
+__proto__: Array[0]
+*/
+    //console.log('genSpanElement() text = ');
+    //console.log(text);
+    console.log('genSpanElement() type of text = ' + typeof text);
+    //console.log('genSpanElement() node = ');
+    console.log(node);
 	if (typeof text !== 'string') {
-		text = this.getTextByPathList(node, ["a:fld", "a:t"]);
+        //Klaas: getTextByPathList() gets undefefined node if it contains text...
+		//text = this.getTextByPathList(node, ["a:fld", "a:t"]);
+        text = this.getTextByPathList(node, ["a:t"]);
+        console.log('genSpanElement() type of text, AFTER = ' + typeof text);
+
+        //if (typeof text !== undefined && typeof text !== 'string') { //klaas test
+        //    if (typeof text[0] === 'string') { //klaas test
+        //        text = text[0]; //klaas test
+        //    } //klaas test
+        //} //klaas test
 		if (typeof text !== 'string') {
-			text = "&nbsp;";
-			//debug("XXX: " + JSON.stringify(node));
+			//text = "&nbsp;";
+            if (typeof text !== 'undefined') { //klaas test
+                text = text[0]; //klaas test
+            } //klaas test
+			this.debug("XXX: " + JSON.stringify(node));
 		}
 	}
+    console.log('text = ' + text);
 
 	return "<span class='text-block' style='color: " + this.getFontColor(node, type, slideMasterTextStyles) +
 				"; font-size: " + this.getFontSize(node, slideLayoutSpNode, slideMasterSpNode, type, slideMasterTextStyles) +
@@ -988,7 +1080,8 @@ genSpanElement(node, slideLayoutSpNode, slideMasterSpNode, type, slideMasterText
 				"; font-style: " + this.getFontItalic(node, type, slideMasterTextStyles) +
 				"; text-decoration: " + this.getFontDecoration(node, type, slideMasterTextStyles) +
 				"; vertical-align: " + this.getTextVerticalAlign(node, type, slideMasterTextStyles) +
-				";'>" + text.replace(/\s/i, "&nbsp;") + "</span>";
+                ";'>" + text + "</span>";
+				//";'>" + text.replace(/\s/i, "&nbsp;") + "</span>";
 }
 
 genTable(node, warpObj) {
@@ -1470,7 +1563,7 @@ getFill(node, isSvgMode) {
 			lumOff = 0;
 		}
 		//console.log([lumMod, lumOff]);
-		fillColor = applyLumModify(fillColor, lumMod, lumOff);
+		fillColor = this.applyLumModify(fillColor, lumMod, lumOff);
 
 		if (isSvgMode) {
 			return fillColor;
@@ -1508,7 +1601,7 @@ getSchemeColorFromTheme(schemeClr) {
 extractChartData(serNode) {
 
 	var dataMat = new Array();
-
+    let that = this;
 	if (serNode["c:xVal"] !== undefined) {
 		var dataRow = new Array();
 		this.eachElement(serNode["c:xVal"]["c:numRef"]["c:numCache"]["c:pt"], function(innerNode, index) {
@@ -1523,21 +1616,26 @@ extractChartData(serNode) {
 		});
 		dataMat.push(dataRow);
 	} else if (serNode["c:val"] !== undefined) {
+
 		this.eachElement(serNode, function(innerNode, index) {
 			var dataRow = new Array();
-			var colName = getTextByPathList(innerNode, ["c:tx", "c:strRef", "c:strCache", "c:pt", "c:v"]) || index;
+            //Klaas: Typeerrorconvertor.js:1538 Uncaught TypeError: Cannot read property 'getTextByPathList' of undefined
+            //Klaas: is problem with scoping? it should work, unless there is recursion. then we need
+            //Klaas: ES7 => fat arrow, .bind(this) or that = this to keep track of lexical/dynamic scope
+			//var colName = this.getTextByPathList(innerNode, ["c:tx", "c:strRef", "c:strCache", "c:pt", "c:v"]) || index;
+            var colName = that.getTextByPathList(innerNode, ["c:tx", "c:strRef", "c:strCache", "c:pt", "c:v"]) || index;
 
 			// Category
 			var rowNames = {};
-			if (this.getTextByPathList(innerNode, ["c:cat", "c:strRef", "c:strCache", "c:pt"]) !== undefined) {
-				this.eachElement(innerNode["c:cat"]["c:strRef"]["c:strCache"]["c:pt"], function(innerNode, index) {
+			if (that.getTextByPathList(innerNode, ["c:cat", "c:strRef", "c:strCache", "c:pt"]) !== undefined) {
+				that.eachElement(innerNode["c:cat"]["c:strRef"]["c:strCache"]["c:pt"], function(innerNode, index) {
 					rowNames[innerNode["attrs"]["idx"]] = innerNode["c:v"];
 					return "";
 				});
 			}
 
 			// Value
-			this.eachElement(innerNode["c:val"]["c:numRef"]["c:numCache"]["c:pt"], function(innerNode, index) {
+			that.eachElement(innerNode["c:val"]["c:numRef"]["c:numCache"]["c:pt"], function(innerNode, index) {
 				dataRow.push({x: innerNode["attrs"]["idx"], y: parseFloat(innerNode["c:v"])});
 				return "";
 			});
@@ -1560,6 +1658,8 @@ extractChartData(serNode) {
  */
 getTextByPathStr(node, pathStr) {
 	return this.getTextByPathList(node, pathStr.trim().split(/\s+/));
+    //http://www.w3schools.com/jsref/jsref_split.asp
+    //return this.getTextByPathList(node, pathStr.trim().split(","));
 }
 
 /**
@@ -1579,7 +1679,12 @@ getTextByPathList(node, path) {
 
 	var l = path.length;
 	for (var i=0; i<l; i++) {
+        //klaas: this might be something that goes wrong...
 		node = node[path[i]];
+        console.log('node = ' + node + 'path = ' +  path[i]);
+        //console.log('node = ' + node + 'path = ' +  path);
+        console.log('node = ' + node + 'path.lenght = ' +  l);
+        console.log(node);
 		if (node === undefined) {
 			return undefined;
 		}
@@ -1652,9 +1757,9 @@ applyLumModify(rgbStr, factor, offset) {
  */
 debug(data) {
 	//self.postMessage({"type": "DEBUG", "data": data});
-    console.log(data);
+    //console.log(data);
 }
 }
-
-module.exports = {
-Worker1};
+export default Convertor;
+//module.exports = {
+//Convertor};

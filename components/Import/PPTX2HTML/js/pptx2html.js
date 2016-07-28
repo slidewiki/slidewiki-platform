@@ -2,8 +2,8 @@
 //require ('worker');
 //import worker from 'worker';
 //let worker = require('worker');
-//import worker from './worker';
-let worker = require('./worker');
+import Convertor from './convertor';
+//let worker = require('./worker');
 //import fs from 'fs';
 //var FileReader = require('filereader');
 //import React from 'react';
@@ -120,11 +120,12 @@ module.exports = {
                 //worker.processPPTX(arrayBuffer);
                 //console.log('reader result' + reader.result)
                 //let worker = new Worker('test');
-                let worker = new Worker1();
-                let test = worker.processPPTX(reader.result);
-                console.log(test);
-                //$('#test').html(test);
-                return test;
+                //let convertor = new Convertor(reader.result);
+                let convertor = new Convertor();
+                let test = convertor.processPPTX(reader.result);
+                //console.log(test);
+                $('#test').html(test);
+                //return test;
                 //this.context.executeAction(loadImportFile, {file: htmlConvert});
                 //return worker.processPPTX(reader.result);
             };
