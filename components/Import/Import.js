@@ -4,7 +4,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import ImportStore from '../../stores/ImportStore';
 import importFileSelect from '../../actions/importFileSelect';
 import loadImportFile from '../../actions/loadImportFile';
-import importFrontend from '../../actions/importFrontend';
+import importFrontend from '../../actions/importFrontEnd';
 import importFinished from '../../actions/importFinished';
 import FileUploader from './FileUploader';
 let ReactDOM = require('react-dom');
