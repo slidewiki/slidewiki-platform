@@ -273,8 +273,8 @@ processSingleSlide(zip, sldFileName, index, slideSize) {
 
 	// =====< Step 3 >=====
 	var content = this.readXmlFile(zip, sldFileName);
-    console.log('bgcolor check, content = ' + content+ ', path = ' + ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:srgbClr", "attrs", "val"] );
-    console.log(content);
+    //console.log('bgcolor check, content = ' + content+ ', path = ' + ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:srgbClr", "attrs", "val"] );
+    //console.log(content);
 	var bgColor = this.getTextByPathList(content, ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:srgbClr", "attrs", "val"]);
 	if (bgColor === undefined) {
         //klaas: try scheme color == needs convertion to HEX RGB!!! e.g. accent2 is dark-red in default schemeClr
@@ -328,9 +328,12 @@ processSingleSlide(zip, sldFileName, index, slideSize) {
 		"slideMasterTextStyles": slideMasterTextStyles
 	};
 
-	//var result = "<section style='width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
-    //var result = "<div style='width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
-    var result = "<div style='border-style: dotted; background-color: #" + bgColor + "' >"
+	//var result = "<section style='position: absolute;width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
+    //var result = "<div style='position: absolute;width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
+    //var result = "<div style='position: absolute;border-style: dotted; background-color: #" + bgColor + "' >"
+    //var result = "<div style='position: absolute;border-style: dotted; background-color: #" + bgColor + "' >"
+    var result = "<div style='position: relative;border-style: dotted;width:" + slideSize.width + "px; height:" + slideSize.height + "px; background-color: #" + bgColor + "'>"
+
 
 	for (var nodeKey in nodes) {
         let that = this;
@@ -449,7 +452,7 @@ processGroupSpNode(node, warpObj) {
 
 	var order = node["attrs"]["order"];
 
-	var result = "<div class='block group' style='z-index: " + order + "; top: " + (y - chy) + "px; left: " + (x - chx) + "px; width: " + (cx - chcx) + "px; height: " + (cy - chcy) + "px;'>";
+	var result = "<div class='block group' style='position: absolute;z-index: " + order + "; top: " + (y - chy) + "px; left: " + (x - chx) + "px; width: " + (cx - chcx) + "px; height: " + (cy - chcy) + "px;'>";
 
 	// Procsee all child nodes
 	for (var nodeKey in node) {
@@ -560,7 +563,7 @@ genShape(node, slideLayoutSpNode, slideMasterSpNode, id, name, idx, type, order,
 		var h = parseInt(ext["cy"]) * 96 / 914400;
 
 		result += "<svg class='drawing' _id='" + id + "' _idx='" + idx + "' _type='" + type + "' _name='" + name +
-				"' style='" +
+				"' style='position: absolute;" +
 					this.getPosition(slideXfrmNode, undefined, undefined) +
 					this.getSize(slideXfrmNode, undefined, undefined) +
 					" z-index: " + order + ";" +
@@ -832,7 +835,7 @@ genShape(node, slideLayoutSpNode, slideMasterSpNode, id, name, idx, type, order,
 
 		result += "<div class='block content " + this.getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +
 				"' _id='" + id + "' _idx='" + idx + "' _type='" + type + "' _name='" + name +
-				"' style='" +
+				"' style='position: absolute;" +
 					this.getPosition(slideXfrmNode, slideLayoutXfrmNode, slideMasterXfrmNode) +
 					this.getSize(slideXfrmNode, slideLayoutXfrmNode, slideMasterXfrmNode) +
 					" z-index: " + order + ";" +
@@ -848,7 +851,7 @@ genShape(node, slideLayoutSpNode, slideMasterSpNode, id, name, idx, type, order,
 
 		result += "<div class='block content " + this.getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +
 				"' _id='" + id + "' _idx='" + idx + "' _type='" + type + "' _name='" + name +
-				"' style='" +
+				"' style='position: absolute;" +
 					this.getPosition(slideXfrmNode, slideLayoutXfrmNode, slideMasterXfrmNode) +
 					this.getSize(slideXfrmNode, slideLayoutXfrmNode, slideMasterXfrmNode) +
 					this.getBorder(node, false) +
@@ -900,9 +903,9 @@ processPicNode(node, warpObj) {
 		default:
 			mimeType = "image/*";
 	}
-	return "<div class='block content' style='" + this.getPosition(xfrmNode, undefined, undefined) + this.getSize(xfrmNode, undefined, undefined) +
+	return "<div class='block content' style='position: absolute;" + this.getPosition(xfrmNode, undefined, undefined) + this.getSize(xfrmNode, undefined, undefined) +
 			" z-index: " + order + ";" +
-			"'><img src=\"data:" + mimeType + ";base64," + functions.base64ArrayBuffer(imgArrayBuffer) + "\" style='width: 100%; height: 100%'/></div>";
+			"'><img src=\"data:" + mimeType + ";base64," + functions.base64ArrayBuffer(imgArrayBuffer) + "\" style='position: absolute;width: 100%; height: 100%'/></div>";
 }
 
 processGraphicFrameNode(node, warpObj) {
@@ -1023,7 +1026,7 @@ genBuChar(node) {
 			}
 			var typeface = buFontAttrs["typeface"];
 
-			return "<span style='font-family: " + typeface +
+			return "<span style='position: relative;font-family: " + typeface +
 					"; margin-left: " + marginLeft * lvl + "px" +
 					"; margin-right: " + marginRight + "px" +
 					"; font-size: 20pt" +
@@ -1031,7 +1034,7 @@ genBuChar(node) {
 		}
 	} else {
 		//buChar = '•';
-		return "<span style='margin-left: " + 328600 * 96 / 914400 * lvl + "px" +
+		return "<span style='position: absolute;margin-left: " + 328600 * 96 / 914400 * lvl + "px" +
 					"; margin-right: " + 0 + "px;'></span>";
 	}
 
@@ -1050,14 +1053,14 @@ __proto__: Array[0]
 */
     //console.log('genSpanElement() text = ');
     //console.log(text);
-    console.log('genSpanElement() type of text = ' + typeof text);
+    //console.log('genSpanElement() type of text = ' + typeof text);
     //console.log('genSpanElement() node = ');
-    console.log(node);
+    ///console.log(node);
 	if (typeof text !== 'string') {
         //Klaas: getTextByPathList() gets undefefined node if it contains text...
 		//text = this.getTextByPathList(node, ["a:fld", "a:t"]);
         text = this.getTextByPathList(node, ["a:t"]);
-        console.log('genSpanElement() type of text, AFTER = ' + typeof text);
+        //console.log('genSpanElement() type of text, AFTER = ' + typeof text);
 
         //if (typeof text !== undefined && typeof text !== 'string') { //klaas test
         //    if (typeof text[0] === 'string') { //klaas test
@@ -1072,9 +1075,9 @@ __proto__: Array[0]
 			this.debug("XXX: " + JSON.stringify(node));
 		}
 	}
-    console.log('text = ' + text);
+    //console.log('text = ' + text);
 
-	return "<span class='text-block' style='color: " + this.getFontColor(node, type, slideMasterTextStyles) +
+	return "<span class='text-block' style='position: relative;color: " + this.getFontColor(node, type, slideMasterTextStyles) +
 				"; font-size: " + this.getFontSize(node, slideLayoutSpNode, slideMasterSpNode, type, slideMasterTextStyles) +
 				"; font-family: " + this.getFontType(node, type, slideMasterTextStyles) +
 				"; font-weight: " + this.getFontBold(node, type, slideMasterTextStyles) +
@@ -1090,7 +1093,7 @@ genTable(node, warpObj) {
 	var order = node["attrs"]["order"];
 	var tableNode = this.getTextByPathList(node, ["a:graphic", "a:graphicData", "a:tbl"]);
 	var xfrmNode = this.getTextByPathList(node, ["p:xfrm"]);
-	var tableHtml = "<table style='" + this.getPosition(xfrmNode, undefined, undefined) + this.getSize(xfrmNode, undefined, undefined) + " z-index: " + order + ";'>";
+	var tableHtml = "<table style='position: absolute;" + this.getPosition(xfrmNode, undefined, undefined) + this.getSize(xfrmNode, undefined, undefined) + " z-index: " + order + ";'>";
 
 	var trNodes = tableNode["a:tr"];
 	if (trNodes.constructor === Array) {
@@ -1141,7 +1144,7 @@ genChart(node, warpObj) {
 
 	var order = node["attrs"]["order"];
 	var xfrmNode = this.getTextByPathList(node, ["p:xfrm"]);
-	var result = "<div id='chart" + this.chartID + "' class='block content' style='" +
+	var result = "<div id='chart" + this.chartID + "' class='block content' style='position: absolute;" +
 					this.getPosition(xfrmNode, undefined, undefined) + this.getSize(xfrmNode, undefined, undefined) +
 					" z-index: " + order + ";'></div>";
 
@@ -1232,7 +1235,7 @@ genChart(node, warpObj) {
 genDiagram(node, warpObj) {
 	var order = node["attrs"]["order"];
 	var xfrmNode = this.getTextByPathList(node, ["p:xfrm"]);
-	return "<div class='block content' style='border: 1px dotted;" +
+	return "<div class='block content' style='position: absolute;border: 1px dotted;" +
 				this.getPosition(xfrmNode, undefined, undefined) + this.getSize(xfrmNode, undefined, undefined) +
 			"'>TODO: diagram</div>";
 }
@@ -1682,10 +1685,10 @@ getTextByPathList(node, path) {
 	for (var i=0; i<l; i++) {
         //klaas: this might be something that goes wrong...
 		node = node[path[i]];
-        console.log('node = ' + node + 'path = ' +  path[i]);
+        //console.log('node = ' + node + 'path = ' +  path[i]);
         //console.log('node = ' + node + 'path = ' +  path);
-        console.log('node = ' + node + 'path.lenght = ' +  l);
-        console.log(node);
+        //console.log('node = ' + node + 'path.lenght = ' +  l);
+        //console.log(node);
 		if (node === undefined) {
 			return undefined;
 		}
