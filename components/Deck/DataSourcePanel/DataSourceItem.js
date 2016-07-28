@@ -19,7 +19,7 @@ class DataSourceItem extends React.Component {
         return (DataSourceItem.urlRegEx.test(text));
     }
 
-    //shorten url label if it's longer then maxLength
+    //shorten url label if it is longer then maxLength
     shortenText(text) {
         const maxLength = 80, startLength = 25, endLength = 50;
         const textLength = text.length;
@@ -108,7 +108,7 @@ class DataSourceItem extends React.Component {
         const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
 
         const appendEdit = (
-            <a className="edit" onClick={this.handleEdit.bind(this)}>
+            <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
         );

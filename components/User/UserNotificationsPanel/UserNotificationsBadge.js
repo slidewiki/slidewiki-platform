@@ -46,6 +46,15 @@ class UserNotificationsBadge extends React.Component {
         return true;
     }
 
+    showPopup() {
+        let notificationsBadge = this.refs.notificationsBadge;
+        const visible = (this.props.UserNotificationsStore.newNotifications.length > 0);
+        if (visible) {
+            $(notificationsBadge).popup('show');
+        }
+        return true;
+    }
+
     render() {
         const selector = this.props.selector;
 
@@ -61,7 +70,7 @@ class UserNotificationsBadge extends React.Component {
         });
 
         return (
-          <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
+          <div onMouseOver={this.removePopupIfNeeded.bind(this)} onFocus={this.showPopup.bind(this)} onBlur={this.hidePopup.bind(this)}>
               <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
                   <NavLink className="item right" routeName="notifications" navParams={{uid:1}} activeClass="active">
                       <i className="large icons">
