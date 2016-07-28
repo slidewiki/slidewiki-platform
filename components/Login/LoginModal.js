@@ -30,9 +30,12 @@ class LoginModal extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {//Workaround to set focus
         if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
-            setTimeout(function() {
+            // setTimeout(function() {
+            //    ReactDOM.findDOMNode(this.refs.username1).focus();
+            // }.bind(this), 0);    
+            setTimeout(() => {
                 ReactDOM.findDOMNode(this.refs.username1).focus();
-            }.bind(this), 0);
+            }, 0);
         }
     }
 
@@ -46,14 +49,14 @@ class LoginModal extends React.Component {
     }
 
     signin() {
-      this.context.executeAction(userSignIn, {
+        this.context.executeAction(userSignIn, {
           //email: this.refs.emailsignin.value,
-          username: this.refs.username1.value,
-          password: this.refs.password1.value
-      });
+            username: this.refs.username1.value,
+            password: this.refs.password1.value
+        });
 
-      this.refs.username1.value = '';
-      this.refs.password1.value = '';
+        this.refs.username1.value = '';
+        this.refs.password1.value = '';
     }
 
     handleExitButton(){
@@ -67,6 +70,16 @@ class LoginModal extends React.Component {
             this.handleExitButton();
         }
     }
+    componentDidMount(){
+        if(typeof window !== 'undefined') {
+            console.log('montado');
+            Modal.setAppElement('#app');
+
+
+        }
+        console.log('montado fuera');
+    }
+
     render() {
         let loginButton = (
             <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
