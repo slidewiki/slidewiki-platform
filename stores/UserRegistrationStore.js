@@ -37,13 +37,6 @@ class UserRegistrationStore extends BaseStore {
         this.emitChange();
     }
 
-    handleUserSignInError(err) {
-        let rawMessage = JSON.parse(err.message).output.message;
-        this.errorMessage = this.extractMessage(rawMessage);
-        this.registrationStatus = 'error';
-        this.emitChange();
-    }
-
     extractMessage(raw) {
         const message = raw.substring(7, raw.length - 1);
         const message1 = message.replace(/\\\"/g, '"');
@@ -76,8 +69,7 @@ UserRegistrationStore.handlers = {
     'CREATE_USER_SUCCESS': 'handleCreateUserSuccess',
     'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
     //error handling msges
-    'CREATE_USER_FAILURE': 'handleUserRegistrationError',
-    'SIGNIN_FAILURE': 'handleUserSignInError'
+    'CREATE_USER_FAILURE': 'handleUserRegistrationError'
 };
 
 export default UserRegistrationStore;

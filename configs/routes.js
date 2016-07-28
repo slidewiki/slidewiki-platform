@@ -78,15 +78,15 @@ export default {
             done();
         }
     },
-    signin: {
-        path: '/signin',
+    signup: {
+        path: '/signup',
         method: 'get',
-        page: 'signin',
-        title: 'SlideWiki -- Sign in',
+        page: 'signup',
+        title: 'SlideWiki -- Sign up',
         handler: require('../components/User/UserRegistration/UserRegistration'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Sign in'
+                pageTitle: shortTitle + ' | Sign up'
             });
             done();
         }

@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
 import { Microservices } from '../../../configs/microservices';
-import userSignIn from '../../../actions/user/userSignIn';
 import userSignUp from '../../../actions/user/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/resetUserRegistrationStatus';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
+
+import ReCAPTCHA from 'react-google-recaptcha';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -72,40 +73,36 @@ class UserRegistration extends React.Component {
                         type: 'match[passwordsignup]',
                         prompt: 'Your passwords do not match'
                     }]
+                },
+                recaptcha: {
+                    identifier: 'recaptcha',
+                    rules: [{
+                        type: 'recaptcha',
+                        prompt: 'Please verify that you\'re a human'
+                    }]
                 }
             },
             onSuccess: this.handleSignUp.bind(this)
         };
-        const signinValidation = {
-            fields: {
-                usernamesignin: {
-                    identifier: 'usernamesignin',
-                    rules: [{
-                        type: 'empty',
-                        prompt: 'Please enter your username'
-                    }]
-                },
-                passwordsignin: {
-                    identifier: 'passwordsignin',
-                    rules: [{
-                        type: 'empty',
-                        prompt: 'Please enter a password'
-                    }, {
-                        type: 'minLength[6]',
-                        prompt: 'Your password must be at least {ruleValue} characters long'
-                    }]
-                }
-            },
-            onSuccess: this.handleSignIn.bind(this)
-        };
+
+
+
+        this.refs.firstname.value = 'a';
+        this.refs.lastname.value = 'a';
+        this.refs.username.value = 'dpaun';
+        this.refs.emailsignup.value = 'a@a.com';
+        this.refs.reenteremail.value = 'a@a.com';
+        this.refs.passwordsignup.value = 'aaaaaa';
+        this.refs.reenterpasswordsignup.value = 'aaaaaa';
+
+
+        // custom form validation rule for solved recaptcha
+        $.fn.form.settings.rules.recaptcha = (() => {
+            return (this.state !== null && this.state.grecaptcharesponse !== undefined);
+        });
 
         $('.ui.form.signup').form(signupValidation);
-        $('.ui.form.signin').form(signinValidation);
-        // stop the forms from submitting normally
-        $('.ui.form.signin').submit((e) => {
-            e.preventDefault(); //usually use this, but below works best here.
-            return false;
-        });
+        // stop the form from submitting normally
         $('.ui.form.signup').submit((e) => {
             e.preventDefault(); //usually use this, but below works best here.
             return false;
@@ -149,17 +146,6 @@ class UserRegistration extends React.Component {
         }
     }
 
-    handleSignIn() {
-        this.context.executeAction(userSignIn, {
-            //email: this.refs.emailsignin.value,
-            username: this.refs.usernamesignin.value,
-            password: this.refs.passwordsignin.value
-        });
-
-        this.refs.usernamesignin.value = '';
-        this.refs.passwordsignin.value = '';
-    }
-
     handleSignUp() {
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
@@ -170,7 +156,14 @@ class UserRegistration extends React.Component {
             username: this.refs.username.value,
             language: language,
             email: this.refs.emailsignup.value,
-            password: this.refs.passwordsignup.value
+            password: this.refs.passwordsignup.value,
+            grecaptcharesponse: this.state.grecaptcharesponse
+        });
+    }
+
+    onChange(response) {
+        this.setState({
+            'grecaptcharesponse': response
         });
     }
 
@@ -214,59 +207,15 @@ class UserRegistration extends React.Component {
         );
 
         const signUpLabelStyle = {width: '150px'};
+        const recaptchaStyle = {display: 'inline-block'};
+        const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET';
+
+
         return (
             <div className="ui page centered grid" >
                 {dimmerMessageSuccess}
                 {dimmerMessageError}
-                <div className="ui three column row">
-                    <div className="seven wide column">
-                        <div className="ui blue padded center aligned segment">
-                            <h2 className="ui dividing header">Sign In</h2>
-                            <form className="ui form signin">
-                                <div className="ui icon input field">
-                                    <input type="text" id="usernamesignin" name="usernamesignin" ref="usernamesignin" placeholder="Username" autoFocus/><i className="user icon"></i>
-                                </div><br/>
-                                <div className="ui icon input field">
-                                    <input type="password" id="passwordsignin" name="passwordsignin" ref="passwordsignin" placeholder="Password"/><i className="lock icon"></i>
-                                </div><br/>
-                                <div className="ui error message"></div>
-                                <button type="submit" className="ui blue labeled submit icon button">
-                                    <i className="icon sign in"></i> Sign In
-                                </button>
-                            </form>
-                            <br/>
-                            <div className="ui floated right ">
-                                <a href="">I can not access my account</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="two wide column">
-                        <div className="ui vertical section divider"> Or </div>
-                    </div>
-                    <div className="seven wide column">
-                        <div className="ui blue padded center aligned segment">
-                            <h2 className="ui dividing header">Social Login</h2>
-                            <div className="ui two column grid">
-                            <div className="wide column">
-                              <button id='google' className="ui blue labeled icon button">
-                                  <i className="large icon google"></i> Sign in with Google
-                              </button>
-                            </div>
-                            <div className="wide column">
-                            <button id='github' className="ui dark grey labeled icon button">
-                                <i className="large icon github"></i> Sign in with Github
-                            </button>
-                            </div>
-                            </div>
-                            <br/>
-                            <div className="ui floated right ">
-                                <a href="">I can not access my account</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br/>
-                <div className="ui horizontal section divider"> Or </div>
+
                 <div className="eight wide column">
                     <div className="ui green padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
@@ -298,6 +247,13 @@ class UserRegistration extends React.Component {
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Re-enter Password * </label>
                                 <input type="password" id="reenterpasswordsignup" name="reenterpasswordsignup" ref="reenterpasswordsignup" placeholder="Re-enter Password" aria-required="true"/>
+                            </div>
+                            <div >
+                                <input type="hidden" id="recaptcha" name="recaptcha"></input>
+                                <ReCAPTCHA style={recaptchaStyle}
+                                    ref="recaptcha"
+                                    sitekey={PUBLIC_KEY}
+                                    onChange={this.onChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
                             <button type="submit" className="ui green labeled submit icon button" >
