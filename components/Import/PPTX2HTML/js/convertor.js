@@ -277,7 +277,8 @@ processSingleSlide(zip, sldFileName, index, slideSize) {
     console.log(content);
 	var bgColor = this.getTextByPathList(content, ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:srgbClr", "attrs", "val"]);
 	if (bgColor === undefined) {
-        //klaas: try scheme color == needs convertion to HEX RGB!!! e.g. accent2 is dark-red. Do manually?
+        //klaas: try scheme color == needs convertion to HEX RGB!!! e.g. accent2 is dark-red in default schemeClr
+        //this is an improvement over PPTX2HTML, however, the drawback is that the colors can be incorrect if a different scheme is assigned.
         bgColor = this.getTextByPathList(content, ["p:sld", "p:cSld", "p:bg", "p:bgPr", "a:solidFill", "a:schemeClr", "attrs", "val"]);
 
         //assign default scheme RGB color codes for powerpoint 2016 for mac
