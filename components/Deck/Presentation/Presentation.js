@@ -23,7 +23,8 @@ let clearStyle = {
 
 if (process.env.BROWSER) {
     let s = 'white';
-    require('../../../bower_components/reveal.js/css/reveal.css');
+    let style = require('../../../bower_components/reveal.js/css/reveal.css');
+    style.placeholder1 === 'abcdefgh';
     console.log('requiring');
 }
 
