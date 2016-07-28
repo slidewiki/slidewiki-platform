@@ -87,7 +87,7 @@ class Import extends React.Component {
                             </div>;
         }
         return (
-            <div className="ui page grid" ref="import">
+            <div className="ui container grid" ref="import">
                 {outputDIV}
             </div>
         );
