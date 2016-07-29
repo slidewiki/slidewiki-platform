@@ -30,9 +30,6 @@ class LoginModal extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {//Workaround to set focus
         if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
-            // setTimeout(function() {
-            //    ReactDOM.findDOMNode(this.refs.username1).focus();
-            // }.bind(this), 0);    
             setTimeout(() => {
                 ReactDOM.findDOMNode(this.refs.username1).focus();
             }, 0);
@@ -72,12 +69,8 @@ class LoginModal extends React.Component {
     }
     componentDidMount(){
         if(typeof window !== 'undefined') {
-            console.log('montado');
             Modal.setAppElement('#app');
-
-
         }
-        console.log('montado fuera');
     }
 
     render() {
