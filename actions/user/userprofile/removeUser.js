@@ -10,6 +10,6 @@ export default function removeUser(context, payload, done) {
             //context.dispatch('DELETE_USER_SUCCESS', res);
             context.executeAction(navigateAction, { url: '/' });
         }
+        done();
     });
-    done();
 }

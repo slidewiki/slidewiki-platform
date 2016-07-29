@@ -10,7 +10,7 @@ class UserProfileStore extends BaseStore {
             userdeleted: false
         };
         this.user = {
-            uname: 'rmeissn',
+            uname: '',
             fname: '',
             lname: '',
             email: '',
@@ -71,11 +71,11 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUser(payload){
-        console.log(payload);
+        let uname = this.user.uname;
         Object.assign(this.user, payload);
-        console.log(this.user);
         this.emitChange();
-        //this.successMessage();
+        if(uname !== '')
+            this.successMessage();
     }
 
     actionFailed(payload){

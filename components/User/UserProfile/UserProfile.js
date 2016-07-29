@@ -8,14 +8,17 @@ import UserSettings from './UserSettings';
 import UserDecks from './UserDecks';
 
 class UserProfile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.currentcontent;
+    }
     componentDidMount() {}
 
     componentDidUpdate() {}
 
     render() {
-        return ( <
-            div className = "ui stackable grid page" >
-
+        return (
+          <div className = "ui stackable grid page" >
             <div className = "four wide column" >
               <CategoryBox toShow = { this.props.UserProfileStore.toShow } />
               <div className = "ui hidden divider" />
@@ -35,8 +38,7 @@ UserProfile.contextTypes = {
 };
 UserProfile = connectToStores(UserProfile, [UserProfileStore], (context, props) => {
     return {
-        UserProfileStore: context.getStore(UserProfileStore)
-            .getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 

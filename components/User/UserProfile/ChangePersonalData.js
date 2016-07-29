@@ -7,7 +7,9 @@ class ChangePersonalData extends React.Component {
         $('.ui.dropdown').dropdown();
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        console.log(this.props.user);
+    }
 
     handleChangeUserdata(e) {
         e.preventDefault();
@@ -19,6 +21,7 @@ class ChangePersonalData extends React.Component {
         payload.language = this.refs.language.value;
         payload.country = this.refs.country.value;
         payload.organization = this.refs.organization.value;
+        console.log(this.refs.language.value);
         this.context.executeAction(changeUserData, payload);
         return false;
     }
@@ -56,13 +59,13 @@ class ChangePersonalData extends React.Component {
                 <div className="ui field">
                   <div className="ui labeled input field">
                     <div className="ui label">Language</div>
-                    <div className="ui search selection dropdown">
-                      <input type="hidden" name="language" defaultValue={lang} ref="language" required/>
+                    <div className="ui fluid search selection dropdown required" >
+                      <input type="hidden" name="language" ref="language" defaultValue={lang} required/>
                       <i className="dropdown icon"/>
                       <div className="default text">Select Language</div>
                       <div className="menu">
-                        <div className="item">English</div>
-                        <div className="item">German</div>
+                        <div className="item" data-value="en_EN">English</div>
+                        <div className="item" data-value="de_DE">German</div>
                       </div>
                     </div>
                   </div>

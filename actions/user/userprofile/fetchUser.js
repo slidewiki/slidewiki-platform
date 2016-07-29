@@ -7,6 +7,6 @@ export default function fetchUser(context, payload, done) {
         } else {
             context.dispatch('NEW_USER_DATA', res);
         }
+        done();
     });
-    done();
 }

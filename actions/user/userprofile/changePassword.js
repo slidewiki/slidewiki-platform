@@ -8,6 +8,6 @@ export default function changePassword(context, payload, done) {
         } else {
             context.dispatch('NEW_PASSWORD', res);
         }
+        done();
     });
-    done();
 }
