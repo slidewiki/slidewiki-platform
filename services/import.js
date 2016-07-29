@@ -1,6 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-var util = require('util');
+import util from 'util';
 
 
 //add interface/API to get file from front-end react-dropzone. Get from components/import/FileUploader.js or Import.js
