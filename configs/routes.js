@@ -271,5 +271,16 @@ export default {
             //context.executeAction(loadPresentation, payload, done);
             context.executeAction(loadDeck, payload, done);
         }
+    },
+    importfile: {
+        path: '/importfile',
+        method: 'post',
+        page: 'importfile',
+        handler: require('../actions/loadImportFile'),
+        action: (context, payload, done) => {
+            context.executeAction(loadImportFile, payload, done);
+            //context.executeAction(loadPresentation, payload, done);
+            //context.executeAction(loadDeck, payload, done);
+        }
     }
 };

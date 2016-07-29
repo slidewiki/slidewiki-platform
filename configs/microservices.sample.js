@@ -14,6 +14,9 @@ export default {
         },
         'user': {
             uri: 'http://userservice.manfredfris.ch'
+        },
+        'import': {
+            uri: 'http://importservice.manfredfris.ch'
         }
     }
 };
