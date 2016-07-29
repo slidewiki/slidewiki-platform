@@ -6,6 +6,19 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = [];
         this.newNotifications = [];
         this.subscriptions = [];
+        this.activityTypes = [
+            {type:'add', selected: true},
+            {type:'comment', selected: true},
+            {type:'download', selected: true},
+            {type:'edit', selected: true},
+            {type:'rate', selected: true},
+            {type:'react', selected: true},
+            {type:'reply', selected: true},
+            {type:'share', selected: true},
+            {type:'translate', selected: true},
+            {type:'share', selected: true},
+            {type:'use', selected: true},
+        ];
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
@@ -53,7 +66,7 @@ class UserNotificationsStore extends BaseStore {
     }
 
     updateNotificationsVisibility(payload) {
-        let clickedSubscription = this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
+        let clickedSubscription = (payload.changedId === 0) ? this.activityTypes.find((at) => {return (at.type === payload.changedType);}) : this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
         if (clickedSubscription !== undefined) {
             clickedSubscription.selected = !clickedSubscription.selected;
             this.notifications.forEach((notification) => {
@@ -86,7 +99,7 @@ class UserNotificationsStore extends BaseStore {
     //     }
     // }
     isVisible(notification) {
-        return this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id);
+        return (this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id)) && this.isActivityTypeSelected(notification.activity_type);
     }
     isSubscribed(type, id) {
         let subscription = this.subscriptions.find((s) => {return ((s.type === type) && (s.id === id));});
@@ -94,6 +107,13 @@ class UserNotificationsStore extends BaseStore {
             return false;
         }
         return subscription.selected;
+    }
+    isActivityTypeSelected(type) {
+        let activityType = this.activityTypes.find((at) => {return ((at.type === type));});
+        if (activityType === undefined) {//not found
+            return false;
+        }
+        return activityType.selected;
     }
     addVisibleParameterToNotifications() {
         this.notifications.forEach((notification) => {
@@ -132,7 +152,8 @@ class UserNotificationsStore extends BaseStore {
         return {
             notifications: this.notifications,
             newNotifications: this.newNotifications,
-            subscriptions: this.subscriptions
+            subscriptions: this.subscriptions,
+            activityTypes: this.activityTypes
         };
     }
     dehydrate() {
@@ -142,6 +163,7 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = state.notifications;
         this.newNotifications = state.newNotifications;
         this.subscriptions = state.subscriptions;
+        this.activityTypes = state.activityTypes;
     }
 }
 

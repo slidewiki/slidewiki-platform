@@ -47,6 +47,15 @@ class UserNotificationsBadge extends React.Component {
         return true;
     }
 
+    showPopup() {
+        let notificationsBadge = this.refs.notificationsBadge;
+        const visible = (this.props.UserNotificationsStore.newNotifications.length > 0);
+        if (visible) {
+            $(notificationsBadge).popup('show');
+        }
+        return true;
+    }
+
     render() {
         const selector = this.props.selector;
 
@@ -60,6 +69,7 @@ class UserNotificationsBadge extends React.Component {
                 <UserNotificationsItem notification={notification} key={index} selector={selector} />
             );
         });
+
 
         if (this.props.UserProfileStore.username !== '') {
             return (
