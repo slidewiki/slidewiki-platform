@@ -97,7 +97,7 @@ export default {
                             });
                     } else {
                         const err = {
-                            message: '404 - "{"message": "Wrong captcha. Please verify that you are human."}"'
+                            message: '422 - "{"message": "Wrong captcha. Please verify that you are human."}"'
                         };
                         callback(err, {
                             error: err,

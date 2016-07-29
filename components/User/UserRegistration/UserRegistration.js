@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import { Microservices } from '../../../configs/microservices';
 import userSignUp from '../../../actions/user/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/resetUserRegistrationStatus';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
-
 import ReCAPTCHA from 'react-google-recaptcha';
+import ReactDOM from 'react-dom';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -85,18 +86,7 @@ class UserRegistration extends React.Component {
             onSuccess: this.handleSignUp.bind(this)
         };
 
-
-
-        this.refs.firstname.value = 'a';
-        this.refs.lastname.value = 'a';
-        this.refs.username.value = 'dpaun';
-        this.refs.emailsignup.value = 'a@a.com';
-        this.refs.reenteremail.value = 'a@a.com';
-        this.refs.passwordsignup.value = 'aaaaaa';
-        this.refs.reenterpasswordsignup.value = 'aaaaaa';
-
-
-        // custom form validation rule for solved recaptcha
+        // Custom form validation rule for checking if recaptcha is solved
         $.fn.form.settings.rules.recaptcha = (() => {
             return (this.state !== null && this.state.grecaptcharesponse !== undefined);
         });
@@ -107,43 +97,37 @@ class UserRegistration extends React.Component {
             e.preventDefault(); //usually use this, but below works best here.
             return false;
         });
-
-        $('#github').on('click',(e) => {
-            e.preventDefault();
-            let win = window.open('' + Microservices.auth.uri + '/connect/github','_blank','width=1100,height=800,toolbar=0,status=0,');
-            let content;
-            win.onclose = () => {
-                console.log('Blabla');
-                console.log(win.document);
-            };
-        });
-        $('#google').on('click',(e) => {
-            e.preventDefault();
-            let win = window.open('' + Microservices.auth.uri + '/connect/google','_blank','toolbar=0,status=0,');
-        });
     }
 
     componentDidUpdate() {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
-            $('.dimmer.success')
+            $('.dimmer.success').dimmer({
+                closable: false
+            })
                 .dimmer('toggle');
-            this.context.executeAction(resetUserRegistrationStatus, {
-            });
-
-            //Clear input if successful registration
-            this.refs.firstname.value = '';
-            this.refs.lastname.value = '';
-            this.refs.username.value = '';
-            this.refs.emailsignup.value = '';
-            this.refs.reenteremail.value = '';
-            this.refs.passwordsignup.value = '';
-            this.refs.reenterpasswordsignup.value = '';
+            ReactDOM.findDOMNode(this.refs.successCloseButton).focus();
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
-            $('.dimmer.error')
+            $('.dimmer.error').dimmer({
+                closable: false
+            })
                 .dimmer('toggle');
-            this.context.executeAction(resetUserRegistrationStatus, {
-            });
+            ReactDOM.findDOMNode(this.refs.errorCloseButton).focus();
         }
+    }
+
+    goHome() {
+        this.context.executeAction(resetUserRegistrationStatus, { });
+        this.context.executeAction(navigateAction, {//go to home page after registration
+            url: '/'
+        });
+    }
+
+    closeErrorDimmer() {
+        this.refs.recaptcha.reset();
+        this.state.grecaptcharesponse = undefined;
+        this.context.executeAction(resetUserRegistrationStatus, { });
+        $('.dimmer.error')
+            .dimmer('toggle');
     }
 
     handleSignUp() {
@@ -161,7 +145,7 @@ class UserRegistration extends React.Component {
         });
     }
 
-    onChange(response) {
+    onRecaptchaChange(response) {
         this.setState({
             'grecaptcharesponse': response
         });
@@ -171,21 +155,25 @@ class UserRegistration extends React.Component {
         //TODO email confirmation
         // const successMessage1 = 'To complete the registration process you have to confirm your account. An email has been sent to your address.';
         // const successMessage2 = 'To confirm and activate your account please check your inbox and click on the link inside the email we just sent you.';
-        const successMessage1 = 'Thank you.';
-        const successMessage2 = 'You have successfully registered.';
+        const successMessage1 = 'Thank you. You have successfully registered.';
+        const successMessage2 = 'Please sign in with your new credentials.';
 
         let dimmerMessageSuccess = (//pending message
             <div className="ui page dimmer success">
                 <div className="content">
                     <div className="center">
                         <h2 className="ui inverted icon header">
-                            <i className="icon circular inverted green mail outline"></i>
+                            <i className="icon circular inverted blue mail outline"></i>
                             Thanks for signing up!
                         </h2>
                         <br/>
                         {successMessage1}
                         <br/>
                         {successMessage2}
+                        <br/><br/>
+                        <button type="button" className="ui blue button" onClick={this.goHome.bind(this)} ref="successCloseButton" >
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>
@@ -201,6 +189,10 @@ class UserRegistration extends React.Component {
                       </h2>
                       <br/>
                       {this.props.UserRegistrationStore.errorMessage}
+                      <br/><br/>
+                      <button type="button" className="ui blue button" onClick={this.goHome.bind(this)} ref="errorCloseButton" >
+                          Close
+                      </button>
                   </div>
               </div>
           </div>
@@ -217,7 +209,7 @@ class UserRegistration extends React.Component {
                 {dimmerMessageError}
 
                 <div className="eight wide column">
-                    <div className="ui green padded center aligned segment">
+                    <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
                         <form className="ui form signup" >
                             <div className="ui inline field">
@@ -250,13 +242,10 @@ class UserRegistration extends React.Component {
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                <ReCAPTCHA style={recaptchaStyle}
-                                    ref="recaptcha"
-                                    sitekey={PUBLIC_KEY}
-                                    onChange={this.onChange.bind(this)} aria-required="true"/>
+                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={PUBLIC_KEY} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
-                            <button type="submit" className="ui green labeled submit icon button" >
+                            <button type="submit" className="ui blue labeled submit icon button" >
                                 <i className="icon add user"></i> Sign Up
                             </button>
                         </form>

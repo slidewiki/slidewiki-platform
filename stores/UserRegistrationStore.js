@@ -24,7 +24,7 @@ class UserRegistrationStore extends BaseStore {
     handleResetUserRegistrationStatus() {
         this.registrationStatus = 'guest';
         this.errorMessage = '';
-        // this.emitChange();
+        this.emitChange();
     }
 
     handleUserRegistrationError(err) {
