@@ -22,10 +22,9 @@ let clearStyle = {
 };
 
 if (process.env.BROWSER) {
-    let s = 'white';
-    let style = require('../../../bower_components/reveal.js/css/reveal.css');
-    style.placeholder1 === 'abcdefgh';
-    console.log('requiring');
+    // let s = 'white';
+    // let style = require('../../../bower_components/reveal.js/css/reveal.css');
+    // console.log('requiring');
 }
 
 
@@ -42,31 +41,31 @@ class Presentation extends React.Component{
 
     }
 
+    componentDidMount(){
+        let s = 'white';
+        let style = require('../../../bower_components/reveal.js/css/reveal.css');
+        //Hide the header and footer
+        $('.ui.footer.sticky.segment').css({'display': 'none'});
+        $('.ui.page.grid.inverted.blue.menu').css({'display': 'none'});
+        $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+        $('.ui.page.grid.inverted.blue.menu').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+    }
+
     componentDidUpdate(){
-        console.log(this.slides);
-        console.log('componentDidMount');
         if(this.slides.length > 0){
 
             if (process.env.BROWSER) {
-                Reveal.initialize();
-                // The fullscreen method should be better than the
-                //enterFullscreen();
+                Reveal.initialize({
+                    dependencies: [
+                    // //{ src: 'socket.io/socket.io.js', async: true },
+                        { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+                    ]
+                });
+
                 console.log(this.props.PresentationStore);
                 let s = this.props.PresentationStore.theme;
+
                 require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
-                console.log('requiring');
-                console.log(this.playerCss.background);
-                //while(this.playerCss.background === undefined || this.playerCss.background === ''){
-                while(!this.playerCss.background){
-                    //console.log(this.playerCss.background);
-                    this.updateStyleForTheme();
-                    this.forceUpdate();
-                    // console.log(this.playerCss.background);
-                    // console.log('state: ', this.state);
-                }
-                // var updateStyle = setInterval(function(){
-                //     updateStyleForTheme();
-                // }, 100);
 
             }
         }
