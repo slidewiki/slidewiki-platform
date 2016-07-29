@@ -7,15 +7,19 @@ class Home extends React.Component {
                 <div className="ui grid">
                     <div className="row">
                         <div className="column padding-reset">
-                            <div className="ui huge message page grid">
-                                <img className="logo" src="/assets/images/logo_full.png" />
-                                <p>SlideWiki revolutionises how educational material is authored, shared and used.</p>
+                            <div className="ui huge message centered grid">
+                                <div className="row">
+                                  <img className="logo" src="/assets/images/logo_full.png" />
+                                </div>
+                                <div className="row">
+                                  <p>SlideWiki revolutionises how educational material is authored, shared and used.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="ui hidden divider"></div>
-                <div className="ui page grid  stackable">
+                <div className="ui container grid stackable">
                     <div className="three column row">
                         <div className="column">
                           <h2 className="ui header">Features</h2>
