@@ -1,5 +1,5 @@
 
 export default {
-    branch: 'master',
-    head: '91b3172'
+    branch: 'swik-134-presentation-mode',
+    head: 'f344159'
 };

@@ -40,7 +40,7 @@ class PresentationStore extends BaseStore {
 
     getFlatTree(deck){
         let flatTree = [];
-        for (var d in deck) {
+        for (let d in deck) {
             if (d.type === 'slide') {
                 flatTree.push(d.id);
             }
