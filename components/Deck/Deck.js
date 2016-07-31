@@ -90,7 +90,7 @@ class Deck extends React.Component {
                 dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
             }
             return (
-                <div className="ui vertically padded stackable grid page" ref="deck">
+                <div className="ui vertically padded stackable grid container" ref="deck">
 
                     <div className={leftColClass}>
                         <div className="row">
@@ -134,7 +134,7 @@ class Deck extends React.Component {
                             <div className={activityFeedPanelClass}>
                                 <div className="ui hidden divider"></div>
                                 <div className="row">
-                                    {this.props.DeckPageStore.mode !== 'view'? '' : <ActivityFeedPanel />}
+                                    {this.props.DeckPageStore.mode !== 'view'? '' : <ActivityFeedPanel mode='deck' />}
                                 </div>
                             </div>
                         </div>
@@ -145,8 +145,6 @@ class Deck extends React.Component {
         }
     }
 }
-
-
 
 Deck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired

@@ -7,7 +7,7 @@ import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificat
 class Header extends React.Component {
     render() {
         return (
-            <div className="ui page grid inverted blue menu" ref="header">
+            <div className="ui grid inverted blue menu" ref="header">
                 <div className="ui container">
                     <a href="/" className="header item">
                         <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" />

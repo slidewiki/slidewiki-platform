@@ -27,8 +27,6 @@ import loadRouteNotFound from '../actions/loadRouteNotFound';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
-
-
     home: {
         path: '/',
         method: 'get',
@@ -93,6 +91,8 @@ export default {
             context.executeAction(loadSearchResults, payload, done);
         }
     },
+
+
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
@@ -258,6 +258,17 @@ export default {
             context.executeAction(loadDeckTree, payload, done);
             //context.executeAction(loadPresentation, payload, done);
             context.executeAction(loadDeck, payload, done);
+        }
+    },
+    importfile: {
+        path: '/importfile',
+        method: 'post',
+        page: 'importfile',
+        handler: require('../actions/loadImportFile'),
+        action: (context, payload, done) => {
+            context.executeAction(loadImportFile, payload, done);
+            //context.executeAction(loadPresentation, payload, done);
+            //context.executeAction(loadDeck, payload, done);
         }
     },
     notfound: {
