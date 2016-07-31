@@ -108,7 +108,7 @@ class DataSourceItem extends React.Component {
         const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
 
         const appendEdit = (
-            <a className="edit" onClick={this.handleEdit.bind(this)}>
+            <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
         );
