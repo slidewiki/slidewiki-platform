@@ -43,15 +43,11 @@ let webpackConfig = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
-        }),
+                NODE_ENV: JSON.stringify('production'),
+                // Mainly used to require CSS files with webpack, which can happen only on browser
+                // Used as `if (process.env.BROWSER)...`
+                BROWSER: JSON.stringify(true),
 
-        new webpack.DefinePlugin({
-          "process.env": {
-            // Mainly used to require CSS files with webpack, which can happen only on browser
-            // Used as `if (process.env.BROWSER)...`
-            BROWSER: JSON.stringify(true),
             }
         }),
 
