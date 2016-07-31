@@ -51,17 +51,10 @@ let webpackConfig = {
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
-        }),
-        // For the css-loader, we need BROWSER set to allow checks for client side
-        new webpack.DefinePlugin({
-            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                 BROWSER: JSON.stringify(true)
             }
         }),
-        // And an output CSS file to go into
-        // new ExtractTextPlugin('styles.css')
 
     ],
     devtool: 'eval'

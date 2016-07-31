@@ -23,10 +23,9 @@ let clearStyle = {
 
 if (process.env.BROWSER) {
     // let s = 'white';
-    // let style = require('../../../bower_components/reveal.js/css/reveal.css');
+    let style = require('../../../bower_components/reveal.js/css/reveal.css');
     // console.log('requiring');
 }
-
 
 class Presentation extends React.Component{
     constructor(props){
@@ -38,23 +37,26 @@ class Presentation extends React.Component{
         this.context.executeAction(loadPresentation, {
             deck: this.props.DeckTreeStore.flatTree
         });
-
     }
 
     componentDidMount(){
-        let s = 'white';
-        let style = require('../../../bower_components/reveal.js/css/reveal.css');
-        //Hide the header and footer
-        $('.ui.footer.sticky.segment').css({'display': 'none'});
-        $('.ui.page.grid.inverted.blue.menu').css({'display': 'none'});
-        $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-        $('.ui.page.grid.inverted.blue.menu').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+        if(process.env.BROWSER){
+            //Hide the header and footer
+            $('.ui.footer.sticky.segment').css({'display': 'none'});
+            $('.ui.page.grid.inverted.blue.menu').css({'display': 'none'});
+            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+            $('.ui.page.grid.inverted.blue.menu').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+
+        }
     }
 
     componentDidUpdate(){
         if(this.slides.length > 0){
 
             if (process.env.BROWSER) {
+
+                let s = this.props.PresentationStore.theme;
+                require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
                 Reveal.initialize({
                     dependencies: [
                     // //{ src: 'socket.io/socket.io.js', async: true },
@@ -62,10 +64,7 @@ class Presentation extends React.Component{
                     ]
                 });
 
-                console.log(this.props.PresentationStore);
-                let s = this.props.PresentationStore.theme;
-
-                require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
+                // console.log(this.props.PresentationStore);
 
             }
         }
@@ -84,16 +83,6 @@ class Presentation extends React.Component{
             </div>
         );
     }
-
-    updateStyleForTheme(){
-        //This function gets the background from body (where reveal puts it), and places it into this component.
-        //Needed to make it properly full screen
-        let style = window.getComputedStyle(document.getElementsByTagName('body')[0]);
-        let background = style.background;
-        this.playerCss.background = background;
-        // this.setState({playerCss: this.playerCss});
-    }
-
 
     getSlides(){
         let slides = this.props.PresentationStore.content;

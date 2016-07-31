@@ -25,7 +25,7 @@ export default {
                     }
                     // let content;
                     let slideServiceRes;
-                    console.log('slide ID: ', slide.id);
+                    //console.log('slide ID: ', slide.id);
                     rp.get({uri: Microservices.deck.uri + '/slide/' + slide.id}).then((res) => {
 
 
@@ -38,16 +38,16 @@ export default {
                             'title': slideServiceRes.revisions[slideServiceRes.revisions.length-1].title,
                             'speakerNotes': slideServiceRes.revisions[slideServiceRes.revisions.length-1].speakernotes
                         });
-                        console.log('presentation', presentation[0]);
+                        //console.log('presentation', presentation[0]);
                         callback(null, {content: presentation, theme: get_sample_theme()});
 
                     }).catch((err) => {
-                        console.log('jfklsdjfklsdjfkldsjfkldsjf', err);
+                        //console.log('jfklsdjfklsdjfkldsjfkldsjf', err);
                         presentation.push({'id': slide.id, 'content':'', 'title': '', 'speakerNotes': ''});
                         returnErr = true;
                         callback(null, {content: presentation, theme: get_sample_theme()});
                     });
-                    console.log('\n\n\n\n\n\npresentation2', presentation[0]);
+                    //console.log('\n\n\n\n\n\npresentation2', presentation[0]);
                     /*********received data from microservices*************/
 
                 } //for
@@ -70,7 +70,7 @@ export default {
 function get_sample_theme(){
     let themes = ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white'];
     let index = Math.floor(Math.random() * (themes.length - 1));
-    console.log('theme: ', themes[index]);
+    //console.log('theme: ', themes[index]);
     return themes[index];
 }
 

@@ -8,7 +8,9 @@ class PresentationStore extends BaseStore {
         this.theme = '';
     }
     updatePresentation(payload) {
-        console.log('Payload: ', payload);
+        // console.log('Payload: ', payload);
+        this.deck =
+        this.flatTree = this.getFlatTree(this.deck);
         this.content = payload.content;
         this.theme = payload.theme;
         this.emitChange();
@@ -21,7 +23,9 @@ class PresentationStore extends BaseStore {
             selector: this.selector,
             mode: this.mode,
             content: this.content,
-            theme: this.theme
+            theme: this.theme,
+            deck: this.deck,
+            flatTree: this.flatTree
         };
     }
     dehydrate() {
@@ -33,6 +37,17 @@ class PresentationStore extends BaseStore {
         this.mode = state.mode;
         this.content = state.content;
     }
+
+    getFlatTree(deck){
+        let flatTree = [];
+        for (var d in deck) {
+            if (d.type === 'slide') {
+                flatTree.push(d.id);
+            }
+        }
+        return flatTree;
+    }
+
 }
 
 PresentationStore.storeName = 'PresentationStore';

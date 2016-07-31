@@ -46,10 +46,12 @@ let webpackConfig = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        // For the css-loader, we need BROWSER set to allow checks for client side
+
         new webpack.DefinePlugin({
-            'process.env': {
-                BROWSER: JSON.stringify(true)
+          "process.env": {
+            // Mainly used to require CSS files with webpack, which can happen only on browser
+            // Used as `if (process.env.BROWSER)...`
+            BROWSER: JSON.stringify(true),
             }
         }),
 
