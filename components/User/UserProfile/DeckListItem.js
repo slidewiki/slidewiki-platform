@@ -1,20 +1,37 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import {navigateAction} from 'fluxible-router';
 
 class DeckListItem extends React.Component {
     componentDidMount() {}
 
     componentDidUpdate() {}
 
+    switchToDeck(id) {
+        context.executeAction(navigateAction, { url: '/deck/' + id });
+    }
+
+    exchangePrivateContent(e) {
+        e.preventDefault();
+        return false;
+    }
+
     render() {
+        let toInsert,picToInsert = '';
+        if (this.props.private === true){
+            toInsert = <div><a className="header" onClick={this.exchangePrivateContent.bind(this)}>{this.props.title}</a><div className="description">Updated {this.props.updated} mins ago</div><br/><a onClick={this.switchToDeck.bind(this, this.props.deckID)}>Go to deck</a></div>;
+            picToInsert = <a onClick={this.exchangePrivateContent.bind(this)}><img src={this.props.picture}/></a>;
+        } else {
+            toInsert = <div><a className="header" onClick={this.switchToDeck.bind(this, this.props.deckID)}>{this.props.title}</a><div className="description">Updated {this.props.updated} mins ago</div></div>;
+            picToInsert = <a onClick={this.switchToDeck.bind(this, this.props.deckID)}><img src={this.props.picture}/></a>;
+        }
         return (
             <div className="item">
               <div className="ui tiny image">
-                <img src={this.props.picture}/>
+                {picToInsert}
               </div>
               <div className="content">
-                <a className="header">{this.props.title}</a>
-                <div className="description">Updated {this.props.updated} mins ago</div>
+                {toInsert}
               </div>
             </div>
         );

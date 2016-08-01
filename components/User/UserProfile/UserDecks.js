@@ -19,9 +19,9 @@ class UserDecks extends React.Component {
                 </div>
                 <div className="ui segment">
                   <div className="ui relaxed divided list">
-                      <DeckListItem title='Semantic-Org/Semantic-UI' picture='http://semantic-ui.com/images/wireframe/image.png' updated='10'/>
-                      <DeckListItem title='Semantic-Org/Semantic-UI-Docs' picture='http://semantic-ui.com/images/wireframe/image.png' updated='22'/>
-                      <DeckListItem title='Semantic-Org/Semantic-UI-Meteor' picture='http://semantic-ui.com/images/wireframe/image.png' updated='34'/>
+                      <DeckListItem private={true} deckID={56} title='Semantic-Org/Semantic-UI' picture='http://semantic-ui.com/images/wireframe/image.png' updated='10'/>
+                      <DeckListItem private={true} deckID={56} title='Semantic-Org/Semantic-UI-Docs' picture='http://semantic-ui.com/images/wireframe/image.png' updated='22'/>
+                      <DeckListItem private={true} deckID={91} title='Semantic-Org/Semantic-UI-Meteor' picture='http://semantic-ui.com/images/wireframe/image.png' updated='34'/>
                   </div>
                 </div>
               </div>
@@ -32,9 +32,9 @@ class UserDecks extends React.Component {
                 </div>
                 <div className="ui segment">
                   <div className="ui relaxed divided list">
-                      <DeckListItem title='Semantic-Org/Semantic-UI/Slide 4' picture='http://semantic-ui.com/images/wireframe/image.png' updated='10'/>
-                      <DeckListItem title='Semantic-Org/Semantic-UI-Docs/Slide 20' picture='http://semantic-ui.com/images/wireframe/image.png' updated='22'/>
-                      <DeckListItem title='Semantic-Org/Semantic-UI-Meteor/Slide 1' picture='http://semantic-ui.com/images/wireframe/image.png' updated='34'/>
+                      <DeckListItem private={true} deckID={56} title='Semantic-Org/Semantic-UI/Slide 4' picture='http://semantic-ui.com/images/wireframe/image.png' updated='10'/>
+                      <DeckListItem private={true} deckID={91} title='Semantic-Org/Semantic-UI-Docs/Slide 20' picture='http://semantic-ui.com/images/wireframe/image.png' updated='22'/>
+                      <DeckListItem private={true} deckID={91} title='Semantic-Org/Semantic-UI-Meteor/Slide 1' picture='http://semantic-ui.com/images/wireframe/image.png' updated='34'/>
                   </div>
                 </div>
               </div>

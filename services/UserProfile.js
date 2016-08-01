@@ -67,7 +67,7 @@ export default {
             language: 'de_DE',
             country: 'Germany',
             picture: '',
-            organization: ''
+            organization: 'InfAI'
         };
         callback(null, template);
         // rp({
