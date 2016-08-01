@@ -53,8 +53,8 @@ export default {
             statusCode: 400,
             statusText: 'Bad Request',
             type: 'Syntax Error',
-            description: 'Inappropriate syntax is used for search URL.',
-            actionRequired: 'Please enter correct syntax of the search URL.'
+            description: 'Inappropriate syntax is used for search parameter.',
+            actionRequired: 'Please enter correct syntax of the search parameter.'
         }
     }
 };
