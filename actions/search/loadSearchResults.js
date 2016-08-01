@@ -1,6 +1,6 @@
 import {shortTitle} from '../../configs/general';
 import {ErrorsList} from '../../components/Error/util/ErrorDescriptionUtil';
-let fumble = require('fumble');
+const fumble = require('fumble');
 
 export default function loadSearchResults(context, payload, done) {
     if (!(payload.params.searchstring.startsWith('searchstring='))) {

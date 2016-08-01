@@ -9,7 +9,7 @@ import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
 import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
-let fumble = require('fumble');
+const fumble = require('fumble');
 
 export default function loadDeck(context, payload, done) {
     if(!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
