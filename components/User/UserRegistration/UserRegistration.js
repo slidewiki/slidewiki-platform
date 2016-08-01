@@ -190,7 +190,7 @@ class UserRegistration extends React.Component {
                       <br/>
                       {this.props.UserRegistrationStore.errorMessage}
                       <br/><br/>
-                      <button type="button" className="ui blue button" onClick={this.goHome.bind(this)} ref="errorCloseButton" >
+                      <button type="button" className="ui blue button" onClick={this.closeErrorDimmer.bind(this)} ref="errorCloseButton" >
                           Close
                       </button>
                   </div>
