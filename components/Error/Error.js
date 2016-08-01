@@ -14,6 +14,7 @@ import ServiceUnavailable from '../../components/Error/ServiceUnavailable';
 import TooManyRequests from '../../components/Error/TooManyRequests';
 import Unauthorized from '../../components/Error/Unauthorized';
 import URITooLong from '../../components/Error/URITooLong';
+import UnprocessableEntity from '../../components/Error/UnprocessableEntity';
 
 /**
 * Creates a generic error component that calls error specific component
@@ -60,6 +61,11 @@ class Error extends React.Component {
                     <URITooLong error={this.props.error} />
                 );
                 break;
+            case 422:
+                    return (
+                        <UnprocessableEntity error={this.props.error} />
+                    );
+                    break;
             case 429:
                 return (
                     // For rate limiting

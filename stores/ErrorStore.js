@@ -3,7 +3,7 @@ import {BaseStore} from 'fluxible/addons';
 class ErrorStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.error = {};
+        this.error = '';
     }
     getState() {
         return {
