@@ -36,7 +36,7 @@ export default function loadDeck(context, payload, done) {
         throw error;
     }
 
-    if(!(['view', 'edit'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_MODE_ERROR);
         throw error;
