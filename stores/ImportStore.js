@@ -40,10 +40,12 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadFailed(error) {
-        
+        //TODO: show an error
     }
     uploadSuccess(headers) {
-
+        this.isUploaded = true;
+        this.resultMessage = 'You presentation was uploaded to our servers. In a moment you will be redirected to it.';
+        this.emitChange();
     }
 }
 

@@ -4,6 +4,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import ImportStore from '../../stores/ImportStore';
 import storeFile from '../../actions/import/storeFile';
 import uploadFile from '../../actions/import/uploadFile';
+import importFinished from '../../actions/import/importFinished';
 //import FileUploader from './FileUploader';
 let ReactDOM = require('react-dom');
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
@@ -73,6 +74,7 @@ class Import extends React.Component {
             }
 
             // Reset progress indicator on new file selection.
+            //TODO: use react/fluxible style for DOM manipulation
             progress.style.width = '0%';
             progress.textContent = '0%';
 
@@ -174,7 +176,6 @@ class Import extends React.Component {
                                               <div className="progress"> </div>
                                           </div>
                                 </div>
-
                             </div>;
                             //TODO: use react/semantic-UI progress bar
 
