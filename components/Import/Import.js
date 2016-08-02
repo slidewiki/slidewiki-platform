@@ -2,11 +2,9 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import ImportStore from '../../stores/ImportStore';
-import importFileSelect from '../../actions/importFileSelect';
-import loadImportFile from '../../actions/loadImportFile';
-import importFrontend from '../../actions/importFrontEnd';
-import importFinished from '../../actions/importFinished';
-import FileUploader from './FileUploader';
+import storeFile from '../../actions/import/storeFile';
+import uploadFile from '../../actions/import/uploadFile';
+//import FileUploader from './FileUploader';
 let ReactDOM = require('react-dom');
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
 
@@ -22,11 +20,7 @@ class Import extends React.Component {
         ReactDOM.findDOMNode(this.refs.selectbutton).focus();
     }
     componentDidUpdate(){
-        if (!this.props.ImportStore.isUploaded)
-        {
-            //if fileformat is correct and file is not yet being uploaded
-            ReactDOM.findDOMNode(this.refs.submitbutton).focus();
-        }
+
     }
     handleFileSelect(evt){
         console.log('handleFileSelect()');
@@ -82,13 +76,20 @@ class Import extends React.Component {
             progress.style.width = '0%';
             progress.textContent = '0%';
 
+            let currentContext = this.context;
+
             // Closures to capture the file information/data
             reader.onloadend = (function(theFile) {
                 return function(e) {
-                    console.log('file was read: ', theFile);
+                    console.log('file was read: ', file);
                     console.log(e.target.result.length, 'bytes');
 
-                    //TODO Save it to store
+                    //Save it to store
+                    const payload = {
+                        file: file ? file : theFile,
+                        base64: e.target.result
+                    };
+                    currentContext.executeAction(storeFile, payload);
                 };
             })();
             reader.onerror = errorHandler;
@@ -102,20 +103,34 @@ class Import extends React.Component {
             reader.onload = function(e) {
                 // Ensure that the progress bar displays 100% at the end.
                 progress.style.width = '100%';
-                progress.textContent = '100%';
+                progress.textContent = '';//'100%';
                 setTimeout(() => {
                     progress.className = '';
                 }, 2000);
             };
 
             // Read in the file
-            reader.readAsText(file);
+            reader.readAsBinaryString(file);
+
+            ReactDOM.findDOMNode(this.refs.submitbutton).focus();
         }
 
         return false;
     }
     handleFileSubmit(){
         console.log('handleFileSubmit()');
+
+        if (this.props.ImportStore.file !== null) {
+            //call action
+            const payload = {
+                file: this.props.ImportStore.file,
+                base64: this.props.ImportStore.base64
+            };
+            this.context.executeAction(uploadFile, payload);
+        }
+        else {
+            console.error('Submission not possible');
+        }
 
         return false;
     }
