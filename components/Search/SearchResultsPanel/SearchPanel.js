@@ -4,33 +4,42 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch';
 import SearchResultsPanel from './SearchResultsPanel';
+import Error from '../../../components/Error/Error';
 
 class SearchPanel extends React.Component {
     render() {
-
-        let advSearchDiv='';
-        if(this.props.SearchResultsStore.searchstatus === 'advsearch' || this.props.SearchResultsStore.searchstatus === 'advsearchresults'){
-            advSearchDiv = <AdvancedSearch />;
-        }
-
-        let searchResultsDiv='';
-        if(this.props.SearchResultsStore.searchstatus === 'results' || this.props.SearchResultsStore.searchstatus === 'advsearchresults'){
-            searchResultsDiv = <SearchResultsPanel />;
-        }
-
-
-        return (
-            <div ref="searchPanel">
-
-                <div className='advancedSearch' style={{margin: '1em'}}>
-                    {advSearchDiv}
+        if(this.props.SearchResultsStore.error) {
+            return (
+                <div ref="deck">
+                    <Error error={this.props.SearchResultsStore.error} />
                 </div>
-                <div className='searchResults' style={{margin: '1em'}}>
-                    {searchResultsDiv}
-                </div>
+            );
+        }
+        else {
+            let advSearchDiv='';
+            if(this.props.SearchResultsStore.searchstatus === 'advsearch' || this.props.SearchResultsStore.searchstatus === 'advsearchresults'){
+                advSearchDiv = <AdvancedSearch />;
+            }
 
-            </div>
-        );
+            let searchResultsDiv='';
+            if(this.props.SearchResultsStore.searchstatus === 'results' || this.props.SearchResultsStore.searchstatus === 'advsearchresults'){
+                searchResultsDiv = <SearchResultsPanel />;
+            }
+
+
+            return (
+                <div ref="searchPanel">
+
+                    <div className='advancedSearch' style={{margin: '1em'}}>
+                        {advSearchDiv}
+                    </div>
+                    <div className='searchResults' style={{margin: '1em'}}>
+                        {searchResultsDiv}
+                    </div>
+
+                </div>
+            );
+        }
     }
 }
 
