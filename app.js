@@ -27,6 +27,7 @@ import UserRegistrationStore from './stores/UserRegistrationStore';
 import UserProfileStore from './stores/UserProfileStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
+import ErrorStore from './stores/ErrorStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -57,7 +58,8 @@ const app = new Fluxible({
         UserRegistrationStore,
         UserProfileStore,
         SearchResultsStore,
-        AdvancedSearchStore
+        AdvancedSearchStore,
+        ErrorStore,
     ]
 });
 
