@@ -1,17 +1,16 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import { Microservices } from '../../../configs/microservices';
+import {Microservices} from '../../../configs/microservices';
 import userSignUp from '../../../actions/user/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/resetUserRegistrationStatus';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import ReCAPTCHA from 'react-google-recaptcha';
-import ReactDOM from 'react-dom';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
-        //Form validations
+        //Form validation
         const signupValidation = {
             fields: {
                 firstname: {
@@ -92,22 +91,22 @@ class UserRegistration extends React.Component {
         });
 
         $('.ui.form.signup').form(signupValidation);
-        // stop the form from submitting normally
+        // Stop the form from submitting normally
         $('.ui.form.signup').submit((e) => {
-            e.preventDefault(); //usually use this, but below works best here.
+            e.preventDefault();
             return false;
         });
     }
 
     componentDidUpdate() {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
-            $('.dimmer.success').dimmer({
+            $('.dimmer.success').dimmer({//Show signup success message
                 closable: false
             })
                 .dimmer('toggle');
             ReactDOM.findDOMNode(this.refs.successCloseButton).focus();
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
-            $('.dimmer.error').dimmer({
+            $('.dimmer.error').dimmer({//Show error message
                 closable: false
             })
                 .dimmer('toggle');
@@ -123,10 +122,10 @@ class UserRegistration extends React.Component {
     }
 
     closeErrorDimmer() {
-        this.refs.recaptcha.reset();
+        this.refs.recaptcha.reset();// Reset recaptcha
         this.state.grecaptcharesponse = undefined;
         this.context.executeAction(resetUserRegistrationStatus, { });
-        $('.dimmer.error')
+        $('.dimmer.error') //Hide error message
             .dimmer('toggle');
     }
 
@@ -158,7 +157,7 @@ class UserRegistration extends React.Component {
         const successMessage1 = 'Thank you. You have successfully registered.';
         const successMessage2 = 'Please sign in with your new credentials.';
 
-        let dimmerMessageSuccess = (//pending message
+        let dimmerMessageSuccess = (// Success message
             <div className="ui page dimmer success">
                 <div className="content">
                     <div className="center">
@@ -179,7 +178,7 @@ class UserRegistration extends React.Component {
             </div>
         );
 
-        let dimmerMessageError = (//error message
+        let dimmerMessageError = (// Error message
           <div className="ui page dimmer error">
               <div className="content">
                   <div className="center">
@@ -200,8 +199,7 @@ class UserRegistration extends React.Component {
 
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
-        const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET';
-
+        const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'; // Public reCAPTCHA key
 
         return (
             <div className="ui page centered grid" >

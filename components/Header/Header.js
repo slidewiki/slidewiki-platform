@@ -20,7 +20,6 @@ class Header extends React.Component {
                     </div>
                     <NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
                     <UserNotificationsBadge />
-                    <NavLink className="item" routeName="signup" activeClass="active">Sign up</NavLink>
                 </div>
             </div>
         );
