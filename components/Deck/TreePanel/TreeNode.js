@@ -114,9 +114,6 @@ class TreeNode extends React.Component {
                     <button className="ui button" title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
                         <i className="copy icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleRenameClick.bind(this, nodeSelector)} title="rename">
-                        <i className="blue edit icon"></i>
-                    </button>
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
                         <i className="red trash circle icon"></i>
                     </button>

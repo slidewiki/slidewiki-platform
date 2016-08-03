@@ -1,14 +1,14 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../stores/ContentStore';
-import ContentModeMenu from './ContentModeMenu/ContentModeMenu';
+import ContentActionsHeader from './ContentActions/ContentActionsHeader';
+import ContentActionsFooter from './ContentActions/ContentActionsFooter';
 import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
 import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import DataSourcePanel from '../DataSourcePanel/DataSourcePanel';
-import SlideControl from './SlideModes/SlideControl';
 
 class ContentPanel extends React.Component {
     render() {
@@ -53,9 +53,9 @@ class ContentPanel extends React.Component {
         }
         return (
             <div ref="contentPanel">
-                <ContentModeMenu ContentStore={this.props.ContentStore} />
+                <ContentActionsHeader ContentStore={this.props.ContentStore} />
                 {targetComponent}
-                {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
+                <ContentActionsFooter ContentStore={this.props.ContentStore} />
              </div>
         );
     }
