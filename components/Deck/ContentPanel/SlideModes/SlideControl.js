@@ -74,7 +74,8 @@ class SlideControl extends React.Component {
     }
     updateProgressbar() {
         let percentage=(SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)/SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree))*100;
-        let progressbar = this.refs.progressbar;
+        //let progressbar = this.refs.progressbar;
+        let progressbar = '.slide-progress-bar';
         //the following part only executes when javascript is enabled!
         $(progressbar).progress({percent: percentage});
         //$(progressbar).show();

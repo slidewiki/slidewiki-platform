@@ -23,20 +23,25 @@ class ContentActionsFooter extends React.Component {
     }
     render() {
         return (
-            <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
-                {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
-                <div className="right menu">
-                    <div className="ui icon buttons large right floated">
-                        <button className="ui button">
-                            <i className="circle play large icon"></i>
-                        </button>
-                        <button className="ui button">
-                            <i className="print large icon"></i>
-                        </button>
-                        <button className="ui button">
-                            <i className="share external large icon"></i>
-                        </button>
-                        {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>}
+            <div className="ui">
+                <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
+                    <div className="bar"></div>
+                </div>
+                <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
+                    {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
+                    <div className="right menu">
+                        <div className="ui icon buttons large right floated">
+                            <button className="ui button">
+                                <i className="circle play large icon"></i>
+                            </button>
+                            <button className="ui button">
+                                <i className="print large icon"></i>
+                            </button>
+                            <button className="ui button">
+                                <i className="share external large icon"></i>
+                            </button>
+                            {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>}
+                        </div>
                     </div>
                 </div>
             </div>
