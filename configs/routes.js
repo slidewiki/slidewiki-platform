@@ -105,8 +105,6 @@ export default {
         }
     },
 
-
-
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
     deck: {
