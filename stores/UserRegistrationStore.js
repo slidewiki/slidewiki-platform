@@ -38,10 +38,10 @@ class UserRegistrationStore extends BaseStore {
     }
 
     extractMessage(raw) {
-        const message = raw.substring(7, raw.length - 1);
-        const message1 = message.replace(/\\\"/g, '"');
+        const message = raw.substring(7, raw.length - 1);// There is an error code at the beginning (e.g. 422 - "{\"statusCode\":422,\"error\":\"Unprocessable Entity\",\"message\":\"The username is already taken\"}")
+        const message1 = message.replace(/\\\"/g, '"');// replace \" with "
         let message2 = JSON.parse(message1).message;
-        if (message2 === undefined) {
+        if (message2 === undefined) {// Some errors do not have the message parameter
             message2 = JSON.parse(message1).error;
         }
         return message2;
@@ -68,7 +68,7 @@ UserRegistrationStore.storeName = 'UserRegistrationStore';
 UserRegistrationStore.handlers = {
     'CREATE_USER_SUCCESS': 'handleCreateUserSuccess',
     'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
-    //error handling msges
+    //error handling
     'CREATE_USER_FAILURE': 'handleUserRegistrationError'
 };
 
