@@ -23,6 +23,7 @@ import TabLinksStore from './stores/TabLinksStore';
 import ImportStore from './stores/ImportStore';
 import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
+import UserProfileStore from './stores/UserProfileStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
 import ErrorStore from './stores/ErrorStore';
@@ -53,6 +54,7 @@ const app = new Fluxible({
         ImportStore,
         PresentationStore,
         UserNotificationsStore,
+        UserProfileStore,
         SearchResultsStore,
         AdvancedSearchStore,
         ErrorStore,

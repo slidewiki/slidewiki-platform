@@ -3,9 +3,11 @@ import { NavLink } from 'fluxible-router';
 import SearchBox  from './SearchBox';
 import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
 import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
+import LoginModal from '../Login/LoginModal.js';
 
 class Header extends React.Component {
     render() {
+
         return (
             <div className="ui grid inverted blue menu" ref="header">
                 <div className="ui container">
@@ -20,6 +22,7 @@ class Header extends React.Component {
                     </div>
                     <NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
                     <UserNotificationsBadge />
+                    <LoginModal />
                 </div>
             </div>
         );
