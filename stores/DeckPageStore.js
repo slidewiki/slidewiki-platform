@@ -6,7 +6,7 @@ class DeckPageStore extends BaseStore {
         this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': ''};
         this.page = 'deck';
         this.mode = 'view';
-        this.componentsStatus = {'TranslationPanel': {visible: 1, columnSize: 4}, 'NavigationPanel': {visible: 1, columnSize: 12}, 'TreePanel': {visible: 1, columnSize: 4}, 'ContributorsPanel': {visible: 1, columnSize: 4}, 'SimilarContentPanel': {visible: 1, columnSize: 4}, 'ContentPanel': {visible: 1, columnSize: 12}, 'ActivityFeedPanel': {visible: 1, columnSize: 12}};
+        this.componentsStatus = {'NavigationPanel': {visible: 1, columnSize: 16}, 'TreePanel': {visible: 1, columnSize: 4}, 'ContributorsPanel': {visible: 1, columnSize: 4}, 'SimilarContentPanel': {visible: 1, columnSize: 4}, 'ContentPanel': {visible: 1, columnSize: 12}, 'ActivityFeedPanel': {visible: 1, columnSize: 12}};
         this.error = '';
     }
     updateContent(payload) {
@@ -16,7 +16,7 @@ class DeckPageStore extends BaseStore {
         this.emitChange();
     }
     restoreAll() {
-        this.componentsStatus = {'TranslationPanel': {visible: 1, columnSize: 4}, 'NavigationPanel': {visible: 1, columnSize: 12}, 'TreePanel': {visible: 1, columnSize: 4}, 'ContributorsPanel': {visible: 1, columnSize: 4}, 'SimilarContentPanel': {visible: 1, columnSize: 4}, 'ContentPanel': {visible: 1, columnSize: 12}, 'ActivityFeedPanel': {visible: 1, columnSize: 12}};
+        this.componentsStatus = {'NavigationPanel': {visible: 1, columnSize: 16}, 'TreePanel': {visible: 1, columnSize: 4}, 'ContributorsPanel': {visible: 1, columnSize: 4}, 'SimilarContentPanel': {visible: 1, columnSize: 4}, 'ContentPanel': {visible: 1, columnSize: 12}, 'ActivityFeedPanel': {visible: 1, columnSize: 12}};
         this.emitChange();
     }
     expandContentPanel() {

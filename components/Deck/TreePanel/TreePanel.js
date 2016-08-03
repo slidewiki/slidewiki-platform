@@ -56,16 +56,16 @@ class TreePanel extends React.Component {
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
-                    <div className="2 fluid ui attached bottom tertiary small icon buttons">
-                        <div className="ui button">
-                            <i className="blue search icon"></i>
+                    <div className="3 fluid ui attached bottom small icon buttons">
+                        <div className="ui basic button" title="Theme">
+                            <i className="theme large blue icon"></i>
                         </div>
-                        <div className="ui button">
-                            <i className="black ellipsis horizontal icon"></i>
+                        <div className="ui basic button" title="Fork">
+                            <i className="fork large blue icon"></i>
                         </div>
-                    </div>
-                    <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
+                        <div className="ui basic button" title="Translate">
+                            <i className="translate large blue  icon"></i>
+                        </div>
                     </div>
                     <div className="ui segment" style={treeDIVStyles}>
 
