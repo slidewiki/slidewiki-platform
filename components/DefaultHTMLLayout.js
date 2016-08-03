@@ -10,6 +10,7 @@ class DefaultHTMLLayout extends React.Component {
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
             </head>
             <body>
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
