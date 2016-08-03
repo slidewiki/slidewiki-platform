@@ -7,6 +7,7 @@ class DeckPageStore extends BaseStore {
         this.page = 'deck';
         this.mode = 'view';
         this.componentsStatus = {'TranslationPanel': {visible: 1, columnSize: 4}, 'NavigationPanel': {visible: 1, columnSize: 12}, 'TreePanel': {visible: 1, columnSize: 4}, 'ContributorsPanel': {visible: 1, columnSize: 4}, 'SimilarContentPanel': {visible: 1, columnSize: 4}, 'ContentPanel': {visible: 1, columnSize: 12}, 'ActivityFeedPanel': {visible: 1, columnSize: 12}};
+        this.error = '';
     }
     updateContent(payload) {
         this.selector= {'id': payload.params.id, 'spath': payload.params.spath, 'sid': payload.params.sid, 'stype': payload.params.stype};
@@ -47,7 +48,8 @@ class DeckPageStore extends BaseStore {
             selector: this.selector,
             page: this.page,
             mode: this.mode,
-            componentsStatus: this.componentsStatus
+            componentsStatus: this.componentsStatus,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -58,6 +60,11 @@ class DeckPageStore extends BaseStore {
         this.page = state.page;
         this.mode = state.mode;
         this.componentsStatus = state.componentsStatus;
+        this.error = state.error;
+    }
+    handleDeckParamErrors(err) {
+        this.error = err;
+        this.emitChange();
     }
 }
 
@@ -66,7 +73,8 @@ DeckPageStore.handlers = {
     'UPDATE_DECK_PAGE_CONTENT': 'updateContent',
     'EXPAND_CONTENET_PANEL': 'expandContentPanel',
     'HIDE_LEFT_COLUMN': 'hideLeftColumn',
-    'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll'
+    'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll',
+    'DECK_ERROR': 'handleDeckParamErrors',
 };
 
 export default DeckPageStore;

@@ -14,6 +14,8 @@ class SearchResultsStore extends BaseStore {
         this.results = [];
         this.entities = [];
         this.languages = [];
+
+        this.error = '';
     }
     updateResults(payload) {
 
@@ -116,7 +118,8 @@ class SearchResultsStore extends BaseStore {
             entity: this.entity,
             deckid: this.deckid,
             userid: this.userid,
-            searchstatus: this.searchstatus
+            searchstatus: this.searchstatus,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -133,14 +136,20 @@ class SearchResultsStore extends BaseStore {
         this.deckid = state.deckid;
         this.userid = state.userid;
         this.searchstatus = state.searchstatus;
+        this.error = state.error;
     }
 
+    handleSearchErrors(err) {
+        this.error = err;
+        this.emitChange();
+    }
 }
 
 SearchResultsStore.storeName = 'SearchResultsStore';
 SearchResultsStore.handlers = {
     'LOAD_RESULTS_SUCCESS': 'updateResults',
-    'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility'
+    'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility',
+    'SEARCH_ERROR': 'handleSearchErrors',
 };
 
 export default SearchResultsStore;

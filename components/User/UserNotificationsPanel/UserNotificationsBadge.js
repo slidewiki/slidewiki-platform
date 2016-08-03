@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
+import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsItem from './UserNotificationsItem';
 import loadNewUserNotifications from '../../../actions/user/loadNewUserNotifications';
 
@@ -46,6 +47,15 @@ class UserNotificationsBadge extends React.Component {
         return true;
     }
 
+    showPopup() {
+        let notificationsBadge = this.refs.notificationsBadge;
+        const visible = (this.props.UserNotificationsStore.newNotifications.length > 0);
+        if (visible) {
+            $(notificationsBadge).popup('show');
+        }
+        return true;
+    }
+
     render() {
         const selector = this.props.selector;
 
@@ -60,38 +70,45 @@ class UserNotificationsBadge extends React.Component {
             );
         });
 
-        return (
-          <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
-              <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
-                  <NavLink className="item right" routeName="notifications" navParams={{uid:1}} activeClass="active">
-                      <i className="large icons">
-                        <i className="newspaper icon"></i>
-                        {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
-                      </i>
-                  </NavLink>
-              </div>
-              <div id="popup" className="ui special flowing popup">
-                  <h5>Notifications</h5>
-                  <div ref="userNotificationsList">
-                      <div className="ui relaxed divided list">
-                          {list}
-                      </div>
-                      <div >
-                          {noNewNotificationsMessage}
+
+        if (this.props.UserProfileStore.username !== '') {
+            return (
+              <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
+                  <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
+                      <NavLink className="item right" routeName="notifications" navParams={{uid:1}} activeClass="active">
+                          {this.props.UserProfileStore.username}&nbsp;&nbsp;
+                          <i className="large icons">
+                            <i className="newspaper icon"></i>
+                            {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
+                          </i>
+                      </NavLink>
+                  </div>
+                  <div id="popup" className="ui special flowing popup">
+                      <h5>Notifications</h5>
+                      <div ref="userNotificationsList">
+                          <div className="ui relaxed divided list">
+                              {list}
+                          </div>
+                          <div >
+                              {noNewNotificationsMessage}
+                          </div>
                       </div>
                   </div>
               </div>
-          </div>
-        );
+            );
+        } else {
+            return null;
+        }
     }
 }
 
 UserNotificationsBadge.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-UserNotificationsBadge = connectToStores(UserNotificationsBadge, [UserNotificationsStore], (context, props) => {
+UserNotificationsBadge = connectToStores(UserNotificationsBadge, [UserNotificationsStore, UserProfileStore], (context, props) => {
     return {
-        UserNotificationsStore: context.getStore(UserNotificationsStore).getState()
+        UserNotificationsStore: context.getStore(UserNotificationsStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default UserNotificationsBadge;
