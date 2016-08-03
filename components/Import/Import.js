@@ -32,7 +32,7 @@ class Import extends React.Component {
         }
     }
     handleFileSelect(evt){
-        console.log("TESTING");
+        console.log('TESTING');
         console.log(evt.target.files[0]);
         let file = evt.target.files[0];
         this.props.ImportStore.file = file;
