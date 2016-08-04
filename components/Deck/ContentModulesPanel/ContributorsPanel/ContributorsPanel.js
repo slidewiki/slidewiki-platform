@@ -26,7 +26,7 @@ class ContributorsPanel extends React.Component {
     render() {
         return (
             <div className="sw-contributors-panel" ref="contributorsPanel">
-                <div className="ui segment">
+                <div className="ui">
                     <div className="ui styled accordion">
 	                    <div className="title" style={{color: '#4183C4'}}>
 	                      <i className="dropdown icon"></i>

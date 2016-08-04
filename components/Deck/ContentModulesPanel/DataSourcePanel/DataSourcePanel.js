@@ -74,7 +74,7 @@ class DataSourcePanel extends React.Component {
             );
         }
         return (
-            <div className="ui bottom attached segment" ref="dataSourcePanel">
+            <div className="ui bottom attached" ref="dataSourcePanel">
                 {content}
             </div>
         );

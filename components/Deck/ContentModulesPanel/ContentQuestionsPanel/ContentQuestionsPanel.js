@@ -53,7 +53,7 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         return (
-          <div ref="contentQuestionsPanel" className="ui bottom attached segment">
+          <div ref="contentQuestionsPanel" className="ui bottom attached">
             {content}
           </div>
         );
