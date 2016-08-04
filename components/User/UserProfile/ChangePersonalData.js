@@ -41,24 +41,24 @@ class ChangePersonalData extends React.Component {
               <h2>About me</h2>
               <div className="ui hidden divider"/>
               <div className="two fields">
-                <div className="ui labeled input field">
-                  <div className="ui label">Firstname</div>
+                <div className="ui field">
+                  <label>Firstname</label>
                   <input type="text" placeholder="John" name="fname" defaultValue={this.props.user.fname} ref="fname" required/>
                 </div>
-                <div className="ui labeled input field">
-                  <div className="ui label">Lastname</div>
+                <div className="ui field">
+                  <label>Lastname</label>
                   <input type="text" placeholder="Doe" name="lname" defaultValue={this.props.user.lname} ref="lname" required/>
                 </div>
               </div>
 
               <div className="two fields">
-                <div className="ui labeled input field">
-                  <div className="ui label">E-Mail</div>
+                <div className="ui field">
+                  <label>E-Mail</label>
                   <input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/>
                 </div>
                 <div className="ui field">
-                  <div className="ui labeled input field">
-                    <div className="ui label">Language</div>
+                  <div className="ui field">
+                    <label>Language</label>
                     <div className="ui fluid search selection dropdown required" >
                       <input type="hidden" name="language" ref="language" defaultValue={lang} required/>
                       <i className="dropdown icon"/>
@@ -73,12 +73,12 @@ class ChangePersonalData extends React.Component {
               </div>
 
               <div className="two fields">
-                <div className="ui labeled input field">
-                  <div className="ui label">Country</div>
+                <div className="ui field">
+                  <label>Country</label>
                   <input type="text" placeholder="USA" name="country" defaultValue={this.props.user.country} ref="country"/>
                 </div>
-                <div className="ui labeled input field">
-                  <div className="ui label">Organization</div>
+                <div className="ui field">
+                  <label>Organization</label>
                   <input type="text" placeholder="Red Socks" name="organization" defaultValue={this.props.user.organization} ref="organization"/>
                 </div>
               </div>

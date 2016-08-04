@@ -43,18 +43,18 @@ class ChangePassword extends React.Component {
             <div className="ui hidden divider"/>
             <form className="ui form changePassword">
               <div className="two fields">
-                <div className="ui labeled input field">
-                  <div className="ui label">Old Password</div>
+                <div className="ui field">
+                  <label>Old Password</label>
                   <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" ref="oldPassword" required/>
                 </div>
               </div>
               <div className="two fields">
-                <div className="ui labeled input field">
-                  <div className="ui label">New Password</div>
+                <div className="ui field">
+                  <label>New Password</label>
                   <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" id="newPassword" name="newPassword" ref="newPassword" required/>
                 </div>
-                <div className="ui labeled input field">
-                  <div className="ui label">Retype Password</div>
+                <div className="ui field">
+                  <label>Retype Password</label>
                   <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" id="reenterPassword" name="reenterPassword" ref="reenterPassword" required/>
                 </div>
               </div>
