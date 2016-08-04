@@ -105,8 +105,14 @@ class ContentModulesPanel extends React.Component {
                 <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
                 <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
                 <a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>
+
+                <a className="item">
+                    <img src="/assets/images/mock-avatars/helen.jpg"/>
+                    <img src="/assets/images/mock-avatars/elliot.jpg" />
+                    <img src="/assets/images/mock-avatars/jenny.jpg" />
+                    <img src="/assets/images/mock-avatars/joe.jpg" />
+                </a>
                 <div className="right menu">
-                    <a className="item"></a>
                 </div>
             </div>
         );

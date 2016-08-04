@@ -16,7 +16,7 @@ class ActivityFeedPanel extends React.Component {
 
         return (
             <div ref="activityFeedPanel">
-                <div className="ui segments">
+                <div className="ui compact segments">
                     <div className="ui secondary segment">
                         <a href={hrefPath}>Activity Feed</a>
                     </div>
