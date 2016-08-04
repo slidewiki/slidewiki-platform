@@ -215,7 +215,7 @@ export default {
         path: '/questions/:stype/:sid',
         method: 'get',
         page: 'questions',
-        handler: require('../components/Deck/ContentPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
+        handler: require('../components/Deck/ActivityFeedPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentQuestions, payload, done);
         }
@@ -236,15 +236,6 @@ export default {
         handler: require('../components/Deck/TreePanel/TreePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
-        }
-    },
-    contentmode: {
-        path: '/contentmode/:stype/:sid/:mode?',// '/contentmode/:stype/:sid/:spath?/:mode?',
-        method: 'get',
-        page: 'contentmode',
-        handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
-        action: (context, payload, done) => {
-            context.executeAction(loadTabLinks, payload, done);
         }
     },
     presentation: {

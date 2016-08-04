@@ -6,9 +6,11 @@ import loadActivities from '../../../actions/activityfeed/loadActivities';
 import loadContentDiscussion from '../../../actions/activityfeed/contentdiscussion/loadContentDiscussion';
 import loadContentHistory from '../../../actions/loadContentHistory';
 import loadContentUsage from '../../../actions/loadContentUsage';
+import loadContentQuestions from '../../../actions/loadContentQuestions';
 import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
 import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
 import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
+import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
 
@@ -27,15 +29,17 @@ class ActivityFeedPanel extends React.Component {
             case 'discussion':
                 this.context.executeAction(loadContentDiscussion, {params: this.props.ActivityFeedStore.selector});
                 break;
+            case 'questions':
+                this.context.executeAction(loadContentQuestions, {params: this.props.ActivityFeedStore.selector});
+                break;
             default:
         }
     }
     render() {
         let pointingMenu = '';
         let activityDIV = '';
-        let tabularMenu = '';
         const hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
-        
+
         if (this.props.mode === 'user') {
             pointingMenu = (
                 <div className="ui top attached secondary pointing menu">
@@ -58,6 +62,9 @@ class ActivityFeedPanel extends React.Component {
                 case 'usage':
                     activityDIV = <ContentUsagePanel />;
                     break;
+                case 'questions':
+                    activityDIV = <ContentQuestionsPanel />;
+                    break;
                 default:
                     activityDIV = <ActivityList />;
             }
@@ -78,39 +85,23 @@ class ActivityFeedPanel extends React.Component {
                 'item': true,
                 'active': (this.props.ActivityFeedStore.activityType === 'discussion')
             });
-
+            let questionsTabClass = classNames({
+                'item': true,
+                'active': (this.props.ActivityFeedStore.activityType === 'questions')
+            });
 
             pointingMenu = (
                 <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href={hrefPath}>Activity Feed</a>
-                    <a className="item"><i tabIndex="0" className="ui large thumbs outline up icon"></i> 12</a>
-                    <a className="item"><i tabIndex="0" className="ui large share alternate icon"></i> 5</a>
-                    <a className="item"><i tabIndex="0" className="ui large download icon"></i> 2</a>
+                    <a tabIndex="0" className={allTabClass} onClick={this.handleTabClick.bind(this, 'all')}>Activity Feed</a>
+                    <a tabIndex="0" className={questionsTabClass} onClick={this.handleTabClick.bind(this, 'questions')}>Questions</a>
+                    <a tabIndex="0" className={discussionTabClass} onClick={this.handleTabClick.bind(this, 'discussion')}>Comments</a>
+                    <a tabIndex="0" className={historyTabClass} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
+                    <a tabIndex="0" className={usageTabClass} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
                     <div className="right menu">
-                        <div className="item">
-                            <div className="ui icon input">
-                                <input type="text" placeholder="Search in activity feed..." />
-                                <i className="search link icon"></i>
-                            </div>
-                        </div>
+                        <a className="item"><i tabIndex="0" className="ui large thumbs outline up icon"></i> 12</a>
+                        <a className="item"><i tabIndex="0" className="ui large share alternate icon"></i></a>
+                        <a className="item"><i tabIndex="0" className="ui large download icon"></i> 2</a>
                     </div>
-                </div>
-            );
-            //set tabularMenu
-            tabularMenu = (
-                <div className="ui bottom attached tabular menu">
-                    <a tabIndex="0" className={allTabClass} onClick={this.handleTabClick.bind(this, 'all')}>
-                        All
-                    </a>
-                    <a tabIndex="0" className={discussionTabClass} onClick={this.handleTabClick.bind(this, 'discussion')}>
-                        Comments
-                    </a>
-                    <a tabIndex="0" className={historyTabClass} onClick={this.handleTabClick.bind(this, 'history')}>
-                        History
-                    </a>
-                    <a tabIndex="0" className={usageTabClass} onClick={this.handleTabClick.bind(this, 'usage')}>
-                        Usage
-                    </a>
                 </div>
             );
         }
@@ -121,7 +112,6 @@ class ActivityFeedPanel extends React.Component {
                 <div className="ui segment attached">
                     {activityDIV}
                 </div>
-                {tabularMenu}
             </div>
         );
     }

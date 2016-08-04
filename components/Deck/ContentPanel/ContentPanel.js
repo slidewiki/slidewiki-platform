@@ -7,7 +7,6 @@ import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
 import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
-import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import DataSourcePanel from '../DataSourcePanel/DataSourcePanel';
 
 class ContentPanel extends React.Component {
@@ -21,9 +20,6 @@ class ContentPanel extends React.Component {
                         break;
                     case 'edit':
                         targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
-                        break;
-                    case 'questions':
-                        targetComponent = <ContentQuestionsPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'datasources':
                         targetComponent = <DataSourcePanel  selector={this.props.ContentStore.selector} />;
@@ -39,9 +35,6 @@ class ContentPanel extends React.Component {
                         break;
                     case 'edit':
                         targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
-                        break;
-                    case 'questions':
-                        targetComponent = <ContentQuestionsPanel  selector={this.props.ContentStore.selector} />;
                         break;
                     case 'datasources':
                         targetComponent = <DataSourcePanel  selector={this.props.ContentStore.selector} />;

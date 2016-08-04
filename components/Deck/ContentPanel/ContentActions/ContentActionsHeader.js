@@ -1,16 +1,11 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import ContentUtil from '../util/ContentUtil';
-import {connectToStores} from 'fluxible-addons-react';
-import TabLinksStore from '../../../../stores/TabLinksStore';
 
 class ContentActionsHeader extends React.Component {
 
     render() {
         let contentDetails = this.props.ContentStore;
-        if(this.props.TabLinksStore.selector.page === 'contentmode'){
-            contentDetails = this.props.TabLinksStore;
-        }
         return (
             <div className="ui top attached tabular menu">
                 <NavLink className={'item' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(contentDetails.selector, 'view')}>
@@ -56,12 +51,5 @@ class ContentActionsHeader extends React.Component {
         );
     }
 }
-
-ContentActionsHeader = connectToStores(ContentActionsHeader, [TabLinksStore], (context, props) => {
-    return {
-        TabLinksStore: context.getStore(TabLinksStore).getState()
-    };
-});
-
 
 export default ContentActionsHeader;
