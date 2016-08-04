@@ -106,7 +106,7 @@ export default {
         path: '/contributors/:stype/:sid',
         method: 'get',
         page: 'contributors',
-        handler: require('../components/Deck/contentModulesPanel/ContributorsPanel/ContributorsPanel'),
+        handler: require('../components/Deck/ContentModulesPanel/ContributorsPanel/ContributorsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContributors, payload, done);
         }
