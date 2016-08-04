@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
@@ -73,6 +74,13 @@ class LoginModal extends React.Component {
         }
     }
 
+    handleSignupClick() {
+        this.setState({openModal: false});
+        this.context.executeAction(navigateAction, {
+            url: '/signup'
+        });
+    }
+
     render() {
         let loginButton = (
             <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
@@ -113,7 +121,9 @@ class LoginModal extends React.Component {
                     <div className="ui floated right">
                       <a href="">I can not access my account</a>
                       <br/><br/>
-                      <a href="/signup">Don't have an account? Sign up here.</a>
+                      <div onClick={this.handleSignupClick.bind(this)}>
+                          <a href="#">Don't have an account? Sign up here.</a>
+                      </div>
                     </div>
                   </div>
               </div>
