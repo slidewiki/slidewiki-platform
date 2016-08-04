@@ -24,6 +24,7 @@ import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import fetchUser from '../actions/user/userprofile/fetchUser';
+import loadRouteNotFound from '../actions/loadRouteNotFound';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -101,8 +102,6 @@ export default {
             context.executeAction(loadSearchResults, payload, done);
         }
     },
-
-
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
@@ -279,6 +278,14 @@ export default {
             context.executeAction(loadImportFile, payload, done);
             //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
+        }
+    },
+    notfound: {
+        path: '*',
+        method: 'get',
+        handler: require('../components/RouteNotFound/RouteNotFound'),
+        action: (context, payload, done) => {
+            context.executeAction(loadRouteNotFound, payload, done);
         }
     }
 };

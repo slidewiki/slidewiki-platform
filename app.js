@@ -23,9 +23,11 @@ import TabLinksStore from './stores/TabLinksStore';
 import ImportStore from './stores/ImportStore';
 import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
+import UserProfileStore from './stores/UserProfileStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
 import UserProfileStore from './stores/UserProfileStore';
+import ErrorStore from './stores/ErrorStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -53,9 +55,11 @@ const app = new Fluxible({
         ImportStore,
         PresentationStore,
         UserNotificationsStore,
+        UserProfileStore,
         SearchResultsStore,
         AdvancedSearchStore,
         UserProfileStore,
+        ErrorStore
     ]
 });
 
