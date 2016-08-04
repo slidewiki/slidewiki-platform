@@ -1,5 +1,7 @@
 import {shortTitle} from '../configs/general';
 import loadContentQuestions from './loadContentQuestions';
+import loadDataSourceCount from './datasource/loadDataSourceCount';
+import loadQuestionsCount from './loadQuestionsCount';
 import async from 'async';
 
 export default function loadContentModules(context, payload, done) {
@@ -13,6 +15,12 @@ export default function loadContentModules(context, payload, done) {
     async.parallel([
         (callback) => {
             context.executeAction(loadContentQuestions, payload, callback);
+        },
+        (callback) => {
+            context.executeAction(loadDataSourceCount, payload, callback);
+        },
+        (callback) => {
+            context.executeAction(loadQuestionsCount, payload, callback);
         }
     ],
     // final callback

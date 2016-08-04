@@ -4,7 +4,6 @@ import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
 import loadActivities from './activityfeed/loadActivities';
-import loadSimilarContents from './loadSimilarContents';
 import loadContentModules from './loadContentModules';
 import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
@@ -94,13 +93,6 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             if(runNonContentActions){
                 context.executeAction(loadContentModules, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadSimilarContents, payloadCustom, callback);
             }else{
                 callback();
             }
