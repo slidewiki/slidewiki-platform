@@ -1,5 +1,5 @@
 import React from 'react';
-import {formatDate} from '../util/ActivityFeedUtil';
+import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil';
 
 class ContentHistoryItem extends React.Component {
 
