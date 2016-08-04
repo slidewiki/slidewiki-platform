@@ -82,7 +82,7 @@ export default {
     },
 //-----------------------------------User routes------------------------------
     userprofile: {
-        path: '/user/profile',
+        path: '/user/:username',
         method: 'get',
         page: 'userprofile',
         title: 'SlideWiki -- Your profile',

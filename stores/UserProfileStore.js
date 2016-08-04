@@ -4,6 +4,7 @@ class UserProfileStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.toShow = 'settings';
+        this.showPublicUser = true;
         this.dimmer = {
             success: false,
             failure: false,
@@ -26,7 +27,8 @@ class UserProfileStore extends BaseStore {
     }
 
     destructor() {
-        this.toShow = 'deck';
+        this.toShow = 'decks';
+        this.showPublicUser = true;
         this.dimmer = {
             success: false,
             failure: false,
@@ -47,6 +49,7 @@ class UserProfileStore extends BaseStore {
     getState() {
         return {
             toShow: this.toShow,
+            showPublicUser: this.showPublicUser,
             user: this.user,
             dimmer: this.dimmer,
             username: this.username,
@@ -62,6 +65,7 @@ class UserProfileStore extends BaseStore {
 
     rehydrate(state) {
         this.toShow = state.toShow;
+        this.showPublicUser = state.showPublicUser;
         this.user = state.user;
         this.dimmer = state.dimmer;
         this.username = state.username;
@@ -89,9 +93,11 @@ class UserProfileStore extends BaseStore {
     fillInUser(payload){
         let uname = this.user.uname;
         Object.assign(this.user, payload);
+        if(this.user.uname !== this.username)
+            this.showPublicUser = true;
+        else
+            this.showPublicUser = false;
         this.emitChange();
-        if(uname !== '')
-            this.successMessage();
     }
 
     actionFailed(payload){
@@ -105,7 +111,6 @@ class UserProfileStore extends BaseStore {
         this.userid = payload.userid;
         this.jwt = payload.jwt;
         this.errorMessage = '';
-
         this.emitChange();
     }
 

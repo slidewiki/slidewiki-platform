@@ -18,7 +18,7 @@ class UserProfile extends React.Component {
     componentDidUpdate() {}
 
     publicOrPrivateProfile() {
-        if(true){ //There is an JWT and id available and the caller id matches the user id
+        if(!this.props.UserProfileStore.showPublicUser){
             return (
             <div className = "ui stackable grid page" >
               <div className = "four wide column" >

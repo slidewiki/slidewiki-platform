@@ -13,6 +13,7 @@ class UserDecks extends React.Component {
         return (
           <div className="ui stackable horitontally divided two column grid">
             <div className="column">
+            <h1 className="ui red">This view is currenty not working!</h1>
               <div className="ui segments">
                 <div className="ui secondary segment">
                   <strong>My Decks</strong>

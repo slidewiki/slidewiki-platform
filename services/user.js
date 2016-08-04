@@ -31,8 +31,8 @@ export default {
                 uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
                     // email: args.email,
-                    username: args.username,
-                    password: hashedPassword
+                    email: args.username,
+                    password: args.password.toString() //TODO add hashing as soon as register is working
                 }),
                 resolveWithFullResponse: true
             })
