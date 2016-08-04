@@ -9,7 +9,6 @@ import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
-import SimilarContentPanel from './SimilarContentPanel/SimilarContentPanel';
 import Error from '../../components/Error/Error';
 
 class Deck extends React.Component {
@@ -38,20 +37,17 @@ class Deck extends React.Component {
                 'hide-element': !status.NavigationPanel.visible
             });
             let leftColClass = classNames({
-                'four':  status.TreePanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4 || status.SimilarContentPanel.columnSize===4,
-                'twelve':  status.TreePanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12 || status.SimilarContentPanel.columnSize===12,
-                'sixteen':  status.TreePanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16 || status.SimilarContentPanel.columnSize===16,
-                'wide column': status.TreePanel.visible || status.ActivityFeedPanel.visible || status.SimilarContentPanel.visible,
-                'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible && !status.SimilarContentPanel.visible
+                'four':  status.TreePanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
+                'twelve':  status.TreePanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
+                'sixteen':  status.TreePanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
+                'wide column': status.TreePanel.visible || status.ActivityFeedPanel.visible,
+                'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible
             });
             let treePanelClass = classNames({
                 'hide-element': !status.TreePanel.visible
             });
             let ActivityFeedPanelClass = classNames({
                 'hide-element': !status.ActivityFeedPanel.visible
-            });
-            let similarContentPanelClass = classNames({
-                'hide-element': !status.SimilarContentPanel.visible
             });
             let rightColClass = classNames({
                 'four':  status.ContentPanel.columnSize===4 || status.ContentModulesPanel.columnSize===4,
@@ -72,7 +68,7 @@ class Deck extends React.Component {
                 'hide-element': !status.ContentModulesPanel.visible
             });
             let oneColumnMode = 0;
-            if(!status.TreePanel.visible && !status.ActivityFeedPanel.visible && !status.SimilarContentPanel.visible){
+            if(!status.TreePanel.visible && !status.ActivityFeedPanel.visible){
                 oneColumnMode = 1;
             }
             let dividerDIV = '';
@@ -104,11 +100,6 @@ class Deck extends React.Component {
                                 </div>
                             </div>
                             <div className="ui hidden divider"></div>
-                            <div className={similarContentPanelClass}>
-                                <div className="row">
-                                    <SimilarContentPanel />
-                                </div>
-                            </div>
                         </div>
                     </div>
 
