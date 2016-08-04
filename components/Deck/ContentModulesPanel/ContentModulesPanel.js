@@ -98,9 +98,9 @@ class ContentModulesPanel extends React.Component {
             outline: 'none'
         };
         pointingMenu = (
-            <div className="ui top attached secondary pointing menu">
-                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions</a>
-                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources</a>
+            <div className="ui top attached pointing menu">
+                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
+                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')}>Comments</a>
                 <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
                 <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
