@@ -3,11 +3,9 @@ import {shortTitle} from '../configs/general';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
-import loadContributors from './loadContributors';
-import loadTranslations from './loadTranslations';
-import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
 import loadSimilarContents from './loadSimilarContents';
+import loadContentModules from './loadContentModules';
 import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
 
@@ -81,13 +79,6 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadTranslations, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
                 context.executeAction(loadDeckTree, payloadCustom, callback);
             }else{
                 callback();
@@ -95,14 +86,14 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadContributors, payloadCustom, callback);
+                context.executeAction(loadActivities, payloadCustom, callback);
             }else{
                 callback();
             }
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadActivities, payloadCustom, callback);
+                context.executeAction(loadContentModules, payloadCustom, callback);
             }else{
                 callback();
             }

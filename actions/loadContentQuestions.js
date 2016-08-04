@@ -11,7 +11,7 @@ export default function loadContentQuestions(context, payload, done) {
             context.dispatch('LOAD_CONTENT_QUESTIONS_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_QUESTIONS_SUCCESS', res);
-            context.dispatch('UPDATE_ACTIVITY_TYPE_SUCCESS', {activityType: 'questions'});
+            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'questions'});
         }
         let pageTitle = shortTitle + ' | Content Questions | ' + payload.params.stype + ' | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {

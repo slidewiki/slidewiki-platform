@@ -25,7 +25,7 @@ class ContentActionsFooter extends React.Component {
         return (
             <div className="ui">
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
-                    <div className="bar"></div>
+                    {this.props.ContentStore.selector.stype === 'slide' ? <div className="bar"></div> : ''}
                 </div>
                 <div className="ui bottom attached tabular menu" style={{'background': '#DCDDDE'}}>
                     {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
@@ -38,7 +38,10 @@ class ContentActionsFooter extends React.Component {
                                 <i className="print large icon"></i>
                             </button>
                             <button className="ui button">
-                                <i className="share external large icon"></i>
+                                <i className="download large icon"></i>
+                            </button>
+                            <button className="ui button">
+                                <i className="share alternate large icon"></i>
                             </button>
                             {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>}
                         </div>

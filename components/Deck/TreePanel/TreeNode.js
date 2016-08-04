@@ -91,7 +91,7 @@ class TreeNode extends React.Component {
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
         });
-        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this, nodeSelector)}><i className="ui link ellipsis horizontal tiny icon right floated"></i></span>;
+        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this, nodeSelector)}><i className="ui link ellipsis horizontal icon right floated"></i></span>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
