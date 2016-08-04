@@ -91,7 +91,7 @@ class TreeNode extends React.Component {
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
         });
-        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this, nodeSelector)}><i className="ui link ellipsis horizontal tiny icon right floated"></i></span>;
+        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this, nodeSelector)}><i className="ui link ellipsis horizontal icon right floated"></i></span>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
@@ -114,11 +114,11 @@ class TreeNode extends React.Component {
                     <button className="ui button" title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
                         <i className="copy icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleRenameClick.bind(this, nodeSelector)} title="rename">
-                        <i className="blue edit icon"></i>
-                    </button>
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
                         <i className="red trash circle icon"></i>
+                    </button>
+                    <button className="ui button" title="Settings">
+                        <i className="black setting icon"></i>
                     </button>
                 </div>
             </div>

@@ -11,7 +11,7 @@ export default function loadContentHistory(context, payload, done) {
             context.dispatch('LOAD_CONTENT_HISTORY_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_HISTORY_SUCCESS', res);
-            context.dispatch('UPDATE_ACTIVITY_TYPE_SUCCESS', {activityType: 'history'});
+            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'history'});
         }
         let pageTitle = shortTitle + ' | Content History | ' + payload.params.stype + ' | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {

@@ -2,7 +2,7 @@ import React from 'react';
 import cancelQuestion from '../../../../actions/questions/cancelQuestion';
 
 class ContentQuestionForm extends React.Component {
-    
+
     handleCancelClick() {
         this.context.executeAction(cancelQuestion);
     }

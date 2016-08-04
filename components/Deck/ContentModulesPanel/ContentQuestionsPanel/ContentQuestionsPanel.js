@@ -6,12 +6,12 @@ import ContentQuestionsList from './ContentQuestionsList';
 import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
-      render() {        
+      render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
-        
-        //Button bar differs for Slide and Folder  
+
+        //Button bar differs for Slide and Folder
         let buttonBar = "";
         switch(selector.stype){
           case 'slide':
@@ -35,14 +35,14 @@ class ContentQuestionsPanel extends React.Component {
             );
             break;
         }
-        
+
         let content = (
           <div>
             {buttonBar}
             <ContentQuestionsList items={questions} />
           </div>
         );
-        
+
         if (question !== undefined && question !== null) {
           //Question is selected -> show its data
           content = (
@@ -50,10 +50,10 @@ class ContentQuestionsPanel extends React.Component {
               <ContentQuestionForm question={question} />
             </div>
           );
-        } 
+        }
 
         return (
-          <div ref="contentQuestionsPanel" className="ui bottom attached segment">
+          <div ref="contentQuestionsPanel" className="ui bottom attached">
             {content}
           </div>
         );

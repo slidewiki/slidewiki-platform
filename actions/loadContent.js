@@ -4,9 +4,6 @@ import loadDeckView from './loadDeckView';
 import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './slide/loadSlideView';
 import loadSlideEdit from './slide/loadSlideEdit';
-import loadTabLinks from './loadTabLinks';
-import loadContentQuestions from './loadContentQuestions';
-import loadDataSources from './datasource/loadDataSources';
 import ContentStore from '../stores/ContentStore';
 
 export default function loadContent(context, payload, done) {
@@ -44,12 +41,6 @@ export default function loadContent(context, payload, done) {
                     targetAction = loadDeckEdit;
                     //context.executeAction(loadDeckEdit, payloadCustom, done);
                     break;
-                case 'questions':
-                    targetAction = loadContentQuestions;
-                    break;
-                case 'datasources':
-                    targetAction = loadDataSources;
-                    break;
                 default:
                     targetAction = loadDeckView;
             }
@@ -62,12 +53,6 @@ export default function loadContent(context, payload, done) {
                 case 'edit':
                     targetAction = loadSlideEdit;
                     break;
-                case 'questions':
-                    targetAction = loadContentQuestions;
-                    break;
-                case 'datasources':
-                    targetAction = loadDataSources;
-                    break;
                 default:
                     targetAction = loadSlideView;
             }
@@ -79,13 +64,6 @@ export default function loadContent(context, payload, done) {
     async.parallel([
         (callback) => {
             context.executeAction(targetAction, payloadCustom, callback);
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadTabLinks, payloadCustom, callback);
-            }else{
-                callback();
-            }
         }
     ],
     // final callback

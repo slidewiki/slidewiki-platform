@@ -1,11 +1,11 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import DataSourceStore from '../../../stores/DataSourceStore';
+import DataSourceStore from '../../../../stores/DataSourceStore';
 import DataSourceList from './DataSourceList';
 import ShadowScrollbars from './Scrollbars/ShadowScrollbars';
-import saveDataSource from '../../../actions/datasource/saveDataSource';
-import cancelEditDataSource from '../../../actions/datasource/cancelEditDataSource';
+import saveDataSource from '../../../../actions/datasource/saveDataSource';
+import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataSource';
 
 class DataSourcePanel extends React.Component {
     handleCancelClick() {
@@ -74,7 +74,7 @@ class DataSourcePanel extends React.Component {
             );
         }
         return (
-            <div className="ui bottom attached segment" ref="dataSourcePanel">
+            <div className="ui bottom attached" ref="dataSourcePanel">
                 {content}
             </div>
         );
