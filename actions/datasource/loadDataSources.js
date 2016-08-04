@@ -5,6 +5,7 @@ export default function loadDataSources(context, payload, done) {
             context.dispatch('LOAD_DATASOURCES_FAILURE', err);
         } else {
             context.dispatch('LOAD_DATASOURCES_SUCCESS', res);
+            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'datasource'});
         }
         let pageTitle = shortTitle + ' | Data Sources | ' + payload.params.stype + ' | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import classNames from 'classnames';
-import loadDataSource from '../../../actions/datasource/loadDataSource';
+import loadDataSource from '../../../../actions/datasource/loadDataSource';
 
 class DataSourceItem extends React.Component {
     handleEdit() {

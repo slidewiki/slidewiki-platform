@@ -1,7 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
-import ContributorsStore from '../../../stores/ContributorsStore';
+import ContributorsStore from '../../../../stores/ContributorsStore';
 import ContributorsList from './ContributorsList';
 
 
@@ -26,11 +26,7 @@ class ContributorsPanel extends React.Component {
     render() {
         return (
             <div className="sw-contributors-panel" ref="contributorsPanel">
-                <div className="ui segments">
-                    <div className="ui secondary segment top attached">
-                        <a href="/contributors/deck/57" className="ui">Contributors</a>
-                    </div>
-
+                <div className="ui segment">
                     <div className="ui styled accordion">
 	                    <div className="title" style={{color: '#4183C4'}}>
 	                      <i className="dropdown icon"></i>
@@ -54,7 +50,6 @@ class ContributorsPanel extends React.Component {
 	                    	<ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList>
 	                    </div>
                     </div>
-
                 </div>
 
              </div>

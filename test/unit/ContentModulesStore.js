@@ -4,15 +4,15 @@ import provideContext from 'fluxible-addons-react/provideContext';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
-import TabLinksStore from '../../stores/TabLinksStore';
+import ContentModuleStore from '../../stores/ContentModulesStore';
 
 
 
-describe('ContentModeMenu', function(){
+describe('ContentModulesStore', function(){
   var component = null;
   beforeEach('render and locate element', function(done){
 
-    let testStores = [TabLinksStore];
+    let testStores = [ContentModuleStore];
     let context = createMockComponentContext({
       stores : testStores
     });
