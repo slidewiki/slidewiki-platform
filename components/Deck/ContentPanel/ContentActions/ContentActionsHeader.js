@@ -2,14 +2,14 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import classNames from 'classnames/bind';
 import ContentUtil from '../util/ContentUtil';
-import addTreeNode from '../../../../actions/decktree/addTreeNode';
+import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
 
 class ContentActionsHeader extends React.Component {
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "slide", id: 0}
-        this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
     }
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
