@@ -8,7 +8,7 @@ import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
-import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
+import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNode from '../../../actions/decktree/addTreeNode';
 
 class TreePanel extends React.Component {
@@ -34,7 +34,7 @@ class TreePanel extends React.Component {
         this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
     }
     handleDeleteNode(selector) {
-        this.context.executeAction(deleteTreeNode, selector);
+        this.context.executeAction(deleteTreeNodeAndNavigate, selector);
     }
     render() {
         const rootNodeStyles = {
