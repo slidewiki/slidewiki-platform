@@ -212,7 +212,7 @@ class UserRegistration extends React.Component {
                         <form className="ui form signup" >
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>First Name * </label>
-                                <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" aria-required="true"/>
+                                <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Last Name * </label>
