@@ -1,7 +1,7 @@
 import {shortTitle} from '../configs/general';
 import loadContentQuestions from './loadContentQuestions';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
-import loadQuestionsCount from './loadQuestionsCount';
+import loadQuestionsCount from './questions/loadQuestionsCount';
 import async from 'async';
 
 export default function loadContentModules(context, payload, done) {
