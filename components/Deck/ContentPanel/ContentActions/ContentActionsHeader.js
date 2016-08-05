@@ -2,9 +2,18 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import classNames from 'classnames/bind';
 import ContentUtil from '../util/ContentUtil';
+import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
+import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
 
 class ContentActionsHeader extends React.Component {
-
+    handleAddNode(selector, nodeSpec) {
+        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
+        //nodeSec: Object {type: "slide", id: 0}
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
+    }
+    handleDeleteNode(selector) {
+        this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+    }
     render() {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
@@ -33,41 +42,43 @@ class ContentActionsHeader extends React.Component {
                     <i className="ui large blue edit icon "></i> Edit
                 </NavLink>
                 <div className="right menu">
-                    <div className={addSlideClass}>
-                        <a className="" title="Add Slide">
+                    <button className={addSlideClass}>
+                        <a className="" title="Add Slide" onClick={this.handleAddNode.bind(this, contentDetails.selector, {type: 'slide', id: 0})}>
                         <i className="icons">
                           <i className="grey file large text icon"></i>
                           <i className="inverted corner plus icon"></i>
                         </i>
                         </a>
-                    </div>
-                    <div className={addDeckClass}>
+                    </button>
+                    <button className={addDeckClass} onClick={this.handleAddNode.bind(this, contentDetails.selector, {type: 'deck', id: 0})}>
                         <a className="" title="Add Deck">
                         <i className="medium icons">
                           <i className="yellow large folder icon"></i>
                           <i className="inverted corner plus icon"></i>
                         </i>
                         </a>
-                    </div>
-                    <div className={duplicateItemClass}>
+                    </button>
+                    <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, contentDetails.selector, {type: contentDetails.selector.stype, id: contentDetails.selector.sid})}>
                         <a className="" title="Duplicate">
                             <i className="grey large copy icon"></i>
                         </a>
-                    </div>
-                    <div className={dueleteItemClass}>
+                    </button>
+                    <button className={dueleteItemClass} onClick={this.handleDeleteNode.bind(this, contentDetails.selector)}>
                         <a className="" title="Delete">
                             <i className="red large trash icon"></i>
                         </a>
-                    </div>
-                    <div className="item ui small basic right attached button">
+                    </button>
+                    <button className="item ui small basic right attached button">
                         <a className="" title="Settings">
                             <i className="black large setting icon"></i>
                         </a>
-                    </div>
+                    </button>
                 </div>
             </div>
         );
     }
 }
-
+ContentActionsHeader.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 export default ContentActionsHeader;
