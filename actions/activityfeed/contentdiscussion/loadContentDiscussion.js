@@ -11,7 +11,7 @@ export default function loadContentDiscussion(context, payload, done) {
             context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_DISCUSSION_SUCCESS', res);
-            context.dispatch('UPDATE_ACTIVITY_TYPE_SUCCESS', {activityType: 'discussion'});
+            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'discussion'});
         }
         let pageTitle = shortTitle + ' | Content Discussion | ' + payload.params.stype + ' | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {
