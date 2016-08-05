@@ -20,7 +20,7 @@ export default {
     },
     create: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+        let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         let nodeSpec = {'id': String(args.nodeSpec.id), 'type': args.nodeSpec.type};
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
@@ -42,7 +42,7 @@ export default {
     },
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+        let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         if(resource === 'decktree.nodeTitle'){
             // only update if the value has changed
             if(params.oldValue === params.newValue){
