@@ -9,13 +9,45 @@ import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
 class AdvancedSearch extends React.Component {
 
     handleRedirect(searchstring, deckid, userid){
+
+        let searchparams='';
+        if(this.refs.advsearchstring.value !== '' /*undefined*/){
+            searchparams='q='+this.refs.advsearchstring.value;
+        }
+        else{
+            searchparams='q=*:*';
+        }
+        if(/*this.refs.entity.value !== undefined &&*/ this.refs.entity.value !== ''){
+            searchparams=searchparams+'+entity='+this.refs.entity.value;
+        }
+
+        if(/*this.refs.searchlang.value !== undefined &&*/ this.refs.searchlang.value !== ''){
+            searchparams=searchparams+'+lang='+this.refs.searchlang.value;
+        }
+
+        console.log('SEARCH STRING 2: '+searchparams);
+
+        //user groups
+
+        //search fields
+
+        //user
+
+        //tags
+
+        //include revisions
+
+
         this.context.executeAction(navigateAction, {
-            url:  '/search/advsearchresults/searchstring=' + this.refs.searchstring.value +
-                  '/entity=' + this.refs.entity.value +
-                  '/searchlang=' + this.refs.searchlang.value 
-                  // '/deckid=' + this.refs.deckid.value +
-                  // '/userid=' + this.refs.userid.value
+            url:  '/search/advsearchresults/' + encodeURIComponent(searchparams)
+            // url:  '/search/advsearchresults/searchstring=' + this.refs.searchstring.value +
+            //       '/' + this.refs.entity.value + //entity
+            //       '/' + this.refs.searchlang.value //language
+            //       // '/deckid=' + this.refs.deckid.value +
+            //       // '/userid=' + this.refs.userid.value
         });
+
+
         return false;
     }
 
@@ -28,7 +60,7 @@ class AdvancedSearch extends React.Component {
 
                     <form className="ui form success">
                         <div className="field">
-                            <input name='searchstring' placeholder='Text search' type='text' ref='searchstring'></input>
+                            <input name='advsearchstring' placeholder='Text search' type='text' ref='advsearchstring'></input>
                         </div>
 
                         <div className="four fields">
@@ -48,9 +80,9 @@ class AdvancedSearch extends React.Component {
                                 <label>Language</label>
                                 <select name='lang' multiple='' className='ui fluid search dropdown' ref='searchlang'>
                                   <option value=''>Select Language</option>
-                                  <option value='EN'>English</option>
-                                  <option value='ES'>Spanish</option>
-                                  <option value='GR'>Greek</option>
+                                  <option value='en'>English</option>
+                                  <option value='es'>Spanish</option>
+                                  <option value='gr'>Greek</option>
                                 </select>
                             </div>
 

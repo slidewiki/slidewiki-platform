@@ -7,9 +7,18 @@ let ReactDOM = require('react-dom');
 class SearchBox extends React.Component {
 
     handleRedirect(searchstring){
+
+        let searchstr = '';
+        if(this.refs.searchstring.value === ''){
+            searchstr=encodeURIComponent('*:*');
+        }
+        else{
+            searchstr=encodeURIComponent(this.refs.searchstring.value);
+        }
+
         this.context.executeAction(navigateAction, {
-            // url: '/searchresults/searchstring=' + this.refs.searchstring.value
-            url: '/search/results/searchstring=' + this.refs.searchstring.value
+            // url: '/search/results/q=' + encodeURIComponent(this.refs.searchstring.value)
+            url: '/search/results/q=' + searchstr
         });
         this.refs.searchstring.value='';
         return false;
@@ -18,7 +27,7 @@ class SearchBox extends React.Component {
         return (
             <div className="ui small icon input" ref="searchBox">
                 <input type="text" placeholder="Search..." ref="searchstring" />
-                <i className="search link icon" onClick={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
+                <i className="search link icon" onClick={this.handleRedirect.bind(this)} onEnter={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
             </div>
         );
     }

@@ -11,11 +11,19 @@ class SearchResultsStore extends BaseStore {
         this.userid = '';
         this.searchstatus='';
 
+        this.numFound='';
+        this.docs=[];
+
         this.results = [];
         this.entities = [];
         this.languages = [];
     }
     updateResults(payload) {
+
+        console.log('HELLO!!!!!!!!');
+        console.log('NUMBER: '+payload.numFound);
+
+        console.log('searchstring: '+payload.searchstring);
 
         this.searchstring = payload.searchstring;
         this.searchlang = payload.searchlang;
@@ -23,25 +31,32 @@ class SearchResultsStore extends BaseStore {
         this.userid = payload.userid;
         this.entity = payload.entity;
         this.searchstatus= payload.searchstatus;
-
         this.results = payload.results;
 
-        //Filter by deckid
-        if(payload.deckid.substring(payload.deckid.indexOf('=')+1)!==''){
-            this.results = this.filterByField(this.results, 'did', payload.deckid.substring(payload.deckid.indexOf('=')+1));
-        }
-        //Filter by userid
-        if(payload.userid.substring(payload.userid.indexOf('=')+1)!==''){
-            this.results = this.filterByField(this.results, 'uid', payload.userid.substring(payload.userid.indexOf('=')+1));
-        }
-        //Filter by language
-        if(payload.searchlang.substring(payload.searchlang.indexOf('=')+1)!==''){
-            this.results = this.filterByField(this.results, 'lang', payload.searchlang.substring(payload.searchlang.indexOf('=')+1));
-        }
-        //Filter by entity
-        if(payload.entity.substring(payload.entity.indexOf('=')+1)!==''){
-            this.results = this.filterByStringField(this.results, 'entity', payload.entity.substring(payload.entity.indexOf('=')+1));
-        }
+        this.numFound = payload.numFound;
+        this.docs = payload.docs;
+
+        console.log('RESULTS: '+this.results);
+
+
+        console.log('DOCS: '+this.docs);
+
+        // //Filter by deckid
+        // if(payload.deckid.substring(payload.deckid.indexOf('=')+1)!==''){
+        //     this.results = this.filterByField(this.results, 'did', payload.deckid.substring(payload.deckid.indexOf('=')+1));
+        // }
+        // //Filter by userid
+        // if(payload.userid.substring(payload.userid.indexOf('=')+1)!==''){
+        //     this.results = this.filterByField(this.results, 'uid', payload.userid.substring(payload.userid.indexOf('=')+1));
+        // }
+        // //Filter by language
+        // if(payload.searchlang.substring(payload.searchlang.indexOf('=')+1)!==''){
+        //     this.results = this.filterByField(this.results, 'lang', payload.searchlang.substring(payload.searchlang.indexOf('=')+1));
+        // }
+        // //Filter by entity
+        // if(payload.entity.substring(payload.entity.indexOf('=')+1)!==''){
+        //     this.results = this.filterByStringField(this.results, 'entity', payload.entity.substring(payload.entity.indexOf('=')+1));
+        // }
 
 
         this.entities = payload.entities;
@@ -50,47 +65,47 @@ class SearchResultsStore extends BaseStore {
         this.emitChange();
     }
 
-    filterByStringField(resultsAll, fieldName, fieldValue){
-        let filteredResults = [];
-        if(fieldName==='entity'){
-            resultsAll.forEach((result) => {
-                console.log('type: '+result.type);
-                console.log('fieldValue: '+fieldValue);
-                if(result.type.indexOf(fieldValue) > -1){
-                    filteredResults.push(result);
-                }
-            });
-        }
-
-        return filteredResults;
-    }
-
-    filterByField(resultsAll, fieldName, fieldValue){
-        let filteredResults = [];
-        if(fieldName==='did'){
-            resultsAll.forEach((result) => {
-                if(result.did === fieldValue){
-                    filteredResults.push(result);
-                }
-            });
-        }
-        else if (fieldName==='uid') {
-            resultsAll.forEach((result) => {
-                if(result.uid === fieldValue){
-                    filteredResults.push(result);
-                }
-            });
-        }
-        else if (fieldName==='lang') {
-            resultsAll.forEach((result) => {
-                if(result.lang === fieldValue){
-                    filteredResults.push(result);
-                }
-            });
-        }
-
-        return filteredResults;
-    }
+    // filterByStringField(resultsAll, fieldName, fieldValue){
+    //     let filteredResults = [];
+    //     if(fieldName==='entity'){
+    //         resultsAll.forEach((result) => {
+    //             console.log('type: '+result.type);
+    //             console.log('fieldValue: '+fieldValue);
+    //             if(result.type.indexOf(fieldValue) > -1){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //
+    //     return filteredResults;
+    // }
+    //
+    // filterByField(resultsAll, fieldName, fieldValue){
+    //     let filteredResults = [];
+    //     if(fieldName==='did'){
+    //         resultsAll.forEach((result) => {
+    //             if(result.did === fieldValue){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //     else if (fieldName==='uid') {
+    //         resultsAll.forEach((result) => {
+    //             if(result.uid === fieldValue){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //     else if (fieldName==='lang') {
+    //         resultsAll.forEach((result) => {
+    //             if(result.lang === fieldValue){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //
+    //     return filteredResults;
+    // }
 
 
     updateResultsVisibility(payload) {
@@ -116,7 +131,10 @@ class SearchResultsStore extends BaseStore {
             entity: this.entity,
             deckid: this.deckid,
             userid: this.userid,
-            searchstatus: this.searchstatus
+            searchstatus: this.searchstatus,
+
+            numFound: this.numFound,
+            docs: this.docs
         };
     }
     dehydrate() {
@@ -133,6 +151,9 @@ class SearchResultsStore extends BaseStore {
         this.deckid = state.deckid;
         this.userid = state.userid;
         this.searchstatus = state.searchstatus;
+
+        this.numFound = state.numFound;
+        this.docs = state.docs;
     }
 
 }

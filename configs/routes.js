@@ -78,14 +78,29 @@ export default {
             done();
         }
     },
+    // advancedsearch: {
+    //     path: '/advancedsearch',
+    //     method: 'get',
+    //     page: 'about',
+    //     title: 'SlideWiki -- About',
+    //     handler: require('../components/Search/AdvancedSearch/AdvancedSearch'),
+    //     action: (context, payload, done) => {
+    //         context.dispatch('UPDATE_PAGE_TITLE', {
+    //             pageTitle: shortTitle + ' | About'
+    //         });
+    //         done();
+    //     }
+    // },
 
 //-----------------------------------Search routes------------------------------
     searchresults: {
-        path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
+        // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
+        path: '/search/:searchstatus/:searchstring?',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
         handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
+        // handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }

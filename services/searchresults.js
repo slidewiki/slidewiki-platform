@@ -5,25 +5,57 @@ export default {
         let args = params.params? params.params : params;
         // let selector= {'stype': args.stype};
 
+        //Initialize the variables for the SOLR query
+        let q='';
+        let fq='';
+        let solrResponse='';
+
+
         let entity='';
         let searchlang='';
         let deckid='';
         let userid='';
 
-        if(args.entity !== undefined){
-            entity = args.entity;
-        }
-        if(args.searchlang !== undefined){
-            searchlang = args.searchlang;
-        }
-        if(args.deckid !== undefined){
-            deckid = args.deckid;
-        }
-        if(args.userid !== undefined){
-            userid = args.userid;
+        //Get search parameters
+        let searchstatus = args.searchstatus;
+        let searchstring=decodeURIComponent(args.searchstring);
+        let searchparams=searchstring.split('+');
+
+        console.log('SEARCH STRING: '+searchstring);
+
+        for(let i = 0; i < searchparams.length; i++){
+
+            console.log('PARAM: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
+
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'q'){
+
+                console.log('test: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
+
+                if(searchparams[i].substring(0, searchparams[i].indexOf('=')+1) === '' ){
+                    console.log('EMPTY Q');
+                    q='q=*:*';
+                }
+                else{
+                    console.log('TEST Q:'+searchparams[i].substring(searchparams[i].indexOf('=')) +':');
+                    q='q'+searchparams[i].substring(searchparams[i].indexOf('='));
+                }
+
+            }
+
+            console.log('Q: '+q);
+
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'entity'){
+                fq='&fq=entity%3A"'+searchparams[i].substring(searchparams[i].indexOf('=')).substring(1)+'"';
+            }
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'lang'){
+                fq=fq+'&fq=lang%3A"'+searchparams[i].substring(searchparams[i].indexOf('=')).substring(1)+'"';
+            }
         }
 
-        let searchstatus = args.searchstatus;
+
+
+
+
 
         if(resource === 'searchresults.list'){
             /*********connect to microservices*************/
@@ -44,11 +76,42 @@ export default {
             let languages = [{'id': '1', 'description':'EN'}, {'id': '2', 'description':'ES'}];
 
 
+            // // //////SOLR TEST START//////
 
-            callback(null, {results: searchresults, entities: entities, languages:languages,
-                            searchstring:args.searchstring, entity:entity, searchlang:searchlang,
-                            deckid:deckid, userid:userid, searchstatus:searchstatus
-                           });
+            let request = require('request');
+            let solrQuery = 'http://slidewiki.imis.athena-innovation.gr:8983/solr/swcore/select?'
+                        +q+fq+ /*'&fl=id%2C+title%2C+entity' +*/ '&wt=json&indent=true';
+
+            console.log('QUERY: '+solrQuery);
+
+            request({
+                uri: solrQuery,
+                method: 'GET'
+            }, (error, response, body) => {
+
+                solrResponse = JSON.parse(body);
+
+                console.log('RESPONSE: '+JSON.stringify(solrResponse));
+
+                console.log('qqqq');
+
+                // let numFound=0;
+                // let docs=[];
+
+                callback(null, {numFound: solrResponse.response.numFound, docs: solrResponse.response.docs,
+
+                    results: searchresults, entities: entities, languages:languages,
+                    searchstring:args.searchstring, entity:entity, searchlang:searchlang,
+                    deckid:deckid, userid:userid, searchstatus:searchstatus
+                });
+
+
+            });
+
+            // // //////SOLR TEST END////////
+
+
+
         }
     }
     // other methods

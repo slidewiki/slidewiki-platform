@@ -3,10 +3,18 @@ import classNames from 'classnames/bind';
 
 class SearchResultsItem extends React.Component {
 
+
+
     render() {
+
+        console.log('AAAAAAAAAAAA');
+
+
 
         const result = this.props.data;
         const imgpath = '/assets/images/search/';
+
+        console.log('RESULT: '+JSON.stringify(result));
 
         let IconNode = '';
         let ResultNode = '';
@@ -19,15 +27,14 @@ class SearchResultsItem extends React.Component {
             fontWeight: 600
         };
 
-        switch (result.type) {
+        switch (result.entity[0]) {
             case 'slide':
                 IconNode = (<img src={imgpath + 'slide.png'}   height={25} width={25}></img> );
                 ResultNode = (
                     <div className="info">
-                        <span style={infoStyles}>Slide <a href={'/slideview/' + result.sid}>{result.stitle + ' '}</a>
-                        of Deck <a href={'/deck/' + result.did}>{result.dtitle}</a></span>
+                        <span style={infoStyles}>Slide <a href={'/slideview/' + result.id}>{result.title[0]}</a></span>
                         <br/>
-                        <span style={contentStyles}>{result.description}</span>
+                        <span style={contentStyles}>{result.content[0].substring(0,100)+'...'}</span>
                     </div>
                 );
 
@@ -37,35 +44,35 @@ class SearchResultsItem extends React.Component {
                 IconNode = (<img src={imgpath + 'deck.png'}   height={25} width={25}></img> );
                 ResultNode = (
                     <div className="info">
-                        <span style={infoStyles}>Deck <a href={'/deck/' + result.did}>{result.dtitle}</a></span>
+                        <span style={infoStyles}>Deck <a href={'/deck/' + result.id}>{result.title[0]}</a></span>
                         <br/>
-                        <span style={contentStyles}>{result.description}</span>
+                        <span style={contentStyles}>{result.description_txt[0]}</span>
                     </div>
                 );
                 break;
 
-            case 'deck_revision':
-                IconNode = (<img src={imgpath + 'deck.png'}   height={25} width={25}></img> );
-                ResultNode = (
-                    <div className="info">
-                        <span style={infoStyles}>Deck <a href={'/deck/' + result.did}>{result.dtitle}</a></span>
-                        <br/>
-                        <span style={contentStyles}>{result.abstract + result.comment}</span>
-                    </div>
-                );
-                break;
-
-            case 'answer':
-                IconNode = (<img src={imgpath + 'answer.png'}   height={25} width={25}></img> );
-                ResultNode = (
-                    <div className="info">
-                        <span style={infoStyles}>Answer <a href={'/answer/' + result.aid}>{result.aid }</a>
-                        of question <a href={'/question/' + result.qid}>{result.qtitle }</a></span>
-                        <br/>
-                        <span style={contentStyles}>{result.explanation}</span>
-                    </div>
-                );
-                break;
+            // case 'deck_revision':
+            //     IconNode = (<img src={imgpath + 'deck.png'}   height={25} width={25}></img> );
+            //     ResultNode = (
+            //         <div className="info">
+            //             <span style={infoStyles}>Deck <a href={'/deck/' + result.did}>{result.dtitle}</a></span>
+            //             <br/>
+            //             <span style={contentStyles}>{result.abstract + result.comment}</span>
+            //         </div>
+            //     );
+            //     break;
+            //
+            // case 'answer':
+            //     IconNode = (<img src={imgpath + 'answer.png'}   height={25} width={25}></img> );
+            //     ResultNode = (
+            //         <div className="info">
+            //             <span style={infoStyles}>Answer <a href={'/answer/' + result.aid}>{result.aid }</a>
+            //             of question <a href={'/question/' + result.qid}>{result.qtitle }</a></span>
+            //             <br/>
+            //             <span style={contentStyles}>{result.explanation}</span>
+            //         </div>
+            //     );
+            //     break;
 
 
         }
