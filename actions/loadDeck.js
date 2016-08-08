@@ -3,16 +3,14 @@ import {shortTitle} from '../configs/general';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
-import loadContributors from './loadContributors';
-import loadTranslations from './loadTranslations';
-import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
-import loadSimilarContents from './loadSimilarContents';
+import loadContentModules from './loadContentModules';
 import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
 
 export default function loadDeck(context, payload, done) {
-    if(!(/^\d+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+    
+    if(!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_ID_TYPE_ERROR);
         throw error;
@@ -24,7 +22,7 @@ export default function loadDeck(context, payload, done) {
         throw error;
     }
 
-    if(!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_ID_TYPE_ERROR);
         throw error;
@@ -81,21 +79,7 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadTranslations, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
                 context.executeAction(loadDeckTree, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadContributors, payloadCustom, callback);
             }else{
                 callback();
             }
@@ -109,7 +93,7 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadSimilarContents, payloadCustom, callback);
+                context.executeAction(loadContentModules, payloadCustom, callback);
             }else{
                 callback();
             }

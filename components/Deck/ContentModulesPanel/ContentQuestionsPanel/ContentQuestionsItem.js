@@ -9,23 +9,23 @@ class ContentQuestionsItem extends React.Component {
       qstid: this.props.question.id
     });
   }
-    
+
   handleToggleAnwers() {
     this.context.executeAction(toggleAnswers, {question: this.props.question});
   }
-    
+
   render() {
-    const question = this.props.question;        
+    const question = this.props.question;
     const answers = (
       <ContentQuestionAnswersList items={question.answers} />
     );
-    
+
     const editIcon = (
       <a className="like" onClick={this.handleEditClick.bind(this)}>
         <i className="edit icon" />
       </a>
     );
-    
+
     let difficultyClass = "";
     switch (question.difficulty){
       case 1:
@@ -38,7 +38,7 @@ class ContentQuestionsItem extends React.Component {
         difficultyClass = "star icon orange";
         break;
     }
-      
+
     return (
       <div className="item">
         <i className={difficultyClass}></i>

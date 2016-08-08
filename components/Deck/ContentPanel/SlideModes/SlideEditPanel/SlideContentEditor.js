@@ -171,8 +171,8 @@ class SlideContentEditor extends React.Component {
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
                 <button tabIndex="0" ref="submitbutton" className="ui animated button green" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                  <div className="visible content"><i className="thumbs up icon"></i>Save <i className="thumbs up icon"></i></div>
-                  <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>Save <i className="thumbs up icon"></i></div>
+                  <div className="visible content"><i className="save icon"></i>Save</div>
+                  <div tabIndex="0" className="hidden content" ><i className="save icon"></i>Save</div>
                 </button>
             </div>
         );

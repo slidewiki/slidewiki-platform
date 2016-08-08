@@ -36,7 +36,7 @@
     "start:watch": "nodemon",
     "validate": "npm ls",
     "pull": "git pull --recurse-submodules",
-    "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
+	"build:windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "pre-commit": [
     "lint",

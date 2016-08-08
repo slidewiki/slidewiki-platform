@@ -8,7 +8,7 @@ import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
-import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
+import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNode from '../../../actions/decktree/addTreeNode';
 
 class TreePanel extends React.Component {
@@ -34,7 +34,7 @@ class TreePanel extends React.Component {
         this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
     }
     handleDeleteNode(selector) {
-        this.context.executeAction(deleteTreeNode, selector);
+        this.context.executeAction(deleteTreeNodeAndNavigate, selector);
     }
     render() {
         const rootNodeStyles = {
@@ -56,12 +56,15 @@ class TreePanel extends React.Component {
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
-                    <div className="2 fluid ui attached bottom tertiary small icon buttons">
-                        <div className="ui button">
-                            <i className="blue search icon"></i>
+                    <div className="3 fluid ui icon large buttons">
+                        <div className="ui basic attached button" title="Theme">
+                            <i className="theme black icon"></i>
                         </div>
-                        <div className="ui button">
-                            <i className="black ellipsis horizontal icon"></i>
+                        <div className="ui basic attached button" title="Fork">
+                            <i className="fork black icon"></i>
+                        </div>
+                        <div className="ui basic attached button" title="Translate">
+                            <i className="translate black icon"></i>
                         </div>
                     </div>
                     <div className="ui secondary segment">
