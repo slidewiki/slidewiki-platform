@@ -10,7 +10,7 @@ export default function loadContent(context, payload, done) {
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
         console.log('Content type incorrect. Loading content failed.');
 
-    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
+    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
         console.log('Slide id incorrect. Loading content failed.');
 
     if (!(payload.params.mode || payload.params.mode === undefined))
