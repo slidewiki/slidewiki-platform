@@ -3,7 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import ContributorsStore from '../../../../stores/ContributorsStore';
 import ContributorsList from './ContributorsList';
-
+import Error from '../../../../components/Error/Error';
 
 class ContributorsPanel extends React.Component {
     componentDidMount() {
@@ -24,37 +24,47 @@ class ContributorsPanel extends React.Component {
     }
 
     render() {
-        return (
-            <div className="sw-contributors-panel" ref="contributorsPanel">
-                <div className="ui">
-                    <div className="ui styled accordion">
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Creator
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
-	                    </div>
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Contributors
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>
-	                    </div>
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Translators
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList>
-	                    </div>
-                    </div>
+        if(this.props.ContributorsStore.error) {
+            return (
+                <div ref="deck">
+                    <Error error={this.props.ContributorsStore.error} />
                 </div>
+            );
+        }
+        else {
+            return (
+                <div className="sw-contributors-panel" ref="contributorsPanel">
+                    <div className="ui">
+                        <div className="ui styled accordion">
+    	                    <div className="title" style={{color: '#4183C4'}}>
+    	                      <i className="dropdown icon"></i>
+    	                      Creator
+    	                    </div>
+    	                    <div className="content">
+    	                    	<ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
+    	                    </div>
+    	                    <div className="title" style={{color: '#4183C4'}}>
+    	                      <i className="dropdown icon"></i>
+    	                      Contributors
+    	                    </div>
+    	                    <div className="content">
+    	                    	<ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>
+    	                    </div>
+    	                    <div className="title" style={{color: '#4183C4'}}>
+    	                      <i className="dropdown icon"></i>
+    	                      Translators
+    	                    </div>
+    	                    <div className="content">
+    	                    	<ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList>
+    	                    </div>
+                        </div>
+                    </div>
 
-             </div>
-        );
+                 </div>
+            );
+        }
     }
+
 }
 
 ContributorsPanel.contextTypes = {
