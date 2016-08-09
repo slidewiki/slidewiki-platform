@@ -12,7 +12,7 @@ export default {
             statusText: 'Bad Request',
             type: 'Type Error',
             description: 'Inappropriate data is added for deck content id.',
-            actionRequired: 'Please enter an alpha numeric value as deck content id.'
+            actionRequired: 'Please enter a correct deck content id. Deck content id can have alpha-numeric values seperated by a dash.'
         },
         DECK_CONTENT_TYPE_ERROR: {
             statusCode: 400,
