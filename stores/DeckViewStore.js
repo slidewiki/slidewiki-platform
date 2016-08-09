@@ -4,6 +4,7 @@ class DeckViewStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.content = '';
+        this.error = '';
     }
     updateContent(payload) {
         this.content = payload.content;
@@ -11,7 +12,8 @@ class DeckViewStore extends BaseStore {
     }
     getState() {
         return {
-            content: this.content
+            content: this.content,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -19,11 +21,17 @@ class DeckViewStore extends BaseStore {
     }
     rehydrate(state) {
         this.content = state.content;
+        this.error = state.error;
+    }
+    handleDeckParamErrors(err) {
+        this.error = err;
+        this.emitChange();
     }
 }
 
 DeckViewStore.storeName = 'DeckViewStore';
 DeckViewStore.handlers = {
+    'DECK_ERROR': 'handleDeckParamErrors',
     'LOAD_DECK_CONTENT_SUCCESS': 'updateContent'
 };
 
