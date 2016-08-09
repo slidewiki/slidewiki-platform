@@ -30,7 +30,7 @@ class ContentActionsHeader extends React.Component {
         });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck'
         });
         const dueleteItemClass = classNames({
             'item ui small basic left attached button': true,

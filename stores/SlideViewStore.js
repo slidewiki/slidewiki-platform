@@ -20,8 +20,8 @@ class SlideViewStore extends BaseStore {
         }
         else
         {
-            this.title = 'slide not found';
-            this.content = 'slide not found';
+            this.title = 'title not found';
+            this.content = 'content not found';
             this.emitChange();
         }
     }
