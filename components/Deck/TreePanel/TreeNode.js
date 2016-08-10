@@ -96,6 +96,10 @@ class TreeNode extends React.Component {
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
         });
+        const duplicateItemClass = classNames({
+            'ui button': true,
+            'disabled': this.props.item.get('type') === 'deck'
+        });
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
@@ -111,7 +115,7 @@ class TreeNode extends React.Component {
                           <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className="ui button" title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
+                    <button className={duplicateItemClass} title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
                         <i className="copy icon"></i>
                     </button>
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">

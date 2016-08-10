@@ -338,22 +338,40 @@ class DeckTreeStore extends BaseStore {
             this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
             this.selector = selectorIm;
         }
+
         let selectedRelPosition = this.getRelPositionFromPath(this.selector.get('spath')) - 1;
         let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-        //insert new node to tree
-        selectedNodeIndex.splice(-1,1);
-        selectedNodeIndex.splice(-1,1);
         let chain = this.deckTree;
-        selectedNodeIndex.forEach((item, index) => {
-            //chain will be a list of all nodes in the same level
-            chain = chain.get(item);
-        });
+
         let newNodePathString = '';
-        if(chain.get('path')){
-            newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+        //for decks, we should append it in the last child position
+        if(this.selector.get('stype')==='deck'){
+            selectedNodeIndex.forEach((item, index) => {
+                //chain will be a list of all nodes in the same level
+                chain = chain.get(item);
+            });
+            if(chain.get('path')){
+                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (chain.get('children').size + 1);
+            }else{
+                //for the first level node we don't need the ;
+                newNodePathString = newNode.get('id') + ':' + (chain.get('children').size + 1);
+            }
         }else{
-            //for the first level node we don't need the ;
-            newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
+            //for slides, we should append it next to slide
+            //insert new node to tree
+            selectedNodeIndex.splice(-1,1);
+            selectedNodeIndex.splice(-1,1);
+
+            selectedNodeIndex.forEach((item, index) => {
+                //chain will be a list of all nodes in the same level
+                chain = chain.get(item);
+            });
+            if(chain.get('path')){
+                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+            }else{
+                //for the first level node we don't need the ;
+                newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
+            }
         }
         //we need to update path for new node
         if(newNode.get('type') === 'slide'){
@@ -366,20 +384,33 @@ class DeckTreeStore extends BaseStore {
             newNode = newNode.set('editable', true);
             newNode = this.updatePathForImmTree(newNode, this.makePathArrFromString(newNodePathString));
         }
+        //add node to the child list
         chain = chain.get('children');
         //add node to the child list
-        chain = chain.insert(selectedRelPosition + 1, newNode);
+        if(this.selector.get('stype')==='slide'){
+            chain = chain.insert(selectedRelPosition + 1, newNode);
+        }else{
+            chain = chain.insert(chain.size, newNode);
+        }
+
         //update tree
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('children', (list) => chain) );
-        //set back to child list
-        selectedNodeIndex.push('children');
-        //update the sibling nodes after adding the node
-        this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
+        //update sibling in case of slide
+        if(this.selector.get('stype')==='slide'){
+            //set back to child list
+            selectedNodeIndex.push('children');
+            //update the sibling nodes after adding the node
+            this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
+        }
         //need to update flat tree for node absolute positions
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
         //deselect the selected node in tree
         //should update the selector: set to the new node
-        this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
+        if(this.selector.get('stype')==='slide'){
+            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
+        }else{
+            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(chain.size - 1)));
+        }
         this.emitChange();
     }
     updateNodeRelPosition(path, newPosition) {
