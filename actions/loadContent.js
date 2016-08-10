@@ -5,16 +5,27 @@ import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './slide/loadSlideView';
 import loadSlideEdit from './slide/loadSlideEdit';
 import ContentStore from '../stores/ContentStore';
+import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
+const fumble = require('fumble');
 
 export default function loadContent(context, payload, done) {
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        console.log('Content type incorrect. Loading content failed.');
+    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        let error = fumblle.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_TYPE_ERROR);
+        throw error;
+    }
 
-    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        console.log('Slide id incorrect. Loading content failed.');
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('SLIDE_ERROR', ErrorsList.SLIDE_ID_TYPE_ERROR);
+        throw error;
+    }
 
-    if (!(payload.params.mode || payload.params.mode === undefined))
-        console.log('Incorrect mode. Loading content failed.');
+    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_MODE_ERROR);
+        throw error;
+    }
 
     let currentState = context.getStore(ContentStore).getState();
     let payloadCustom = payload;
