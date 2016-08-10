@@ -44,6 +44,10 @@ class TreeNode extends React.Component {
         this.props.onRename(selector);
         e.stopPropagation();
     }
+    handleUndoRenameClick(selector, e){
+        this.props.onDoRename(selector);
+        e.stopPropagation();
+    }
     handleMenuClick(selector, e){
         this.props.onSwitchOnAction(selector);
         e.stopPropagation();
@@ -62,6 +66,9 @@ class TreeNode extends React.Component {
                 if(e.target.value.trim()){
                     this.props.onSave(selector, this.props.item.get('title'), e.target.value.trim());
                 }
+                break;
+            case 27: // escape
+                this.props.onUndoRename(selector);
                 break;
         }
     }
