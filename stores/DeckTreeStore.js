@@ -286,7 +286,8 @@ class DeckTreeStore extends BaseStore {
         try {
             this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => false));
             this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => false));
-            //this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
+            //should revert title changes after switch
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
         } catch (e) {
             //there might be the case when the node for old selector does not exist anymore
         }
