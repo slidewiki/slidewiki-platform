@@ -9,7 +9,6 @@ import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
 
 export default function loadDeck(context, payload, done) {
-
     if(!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
         let error = fumble.http.badRequest();
         context.dispatch('DECK_ERROR', ErrorsList.DECK_ID_TYPE_ERROR);
