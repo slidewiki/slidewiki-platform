@@ -254,6 +254,14 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => true));
         this.emitChange();
     }
+    //switch edtiable to false
+    undoRenameTreeNode(selector) {
+        let selectorIm = Immutable.fromJS(selector);
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //select new one
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
+        this.emitChange();
+    }
     saveTreeNode(payload) {
         let selectorIm = Immutable.fromJS(payload.selector);
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
@@ -462,6 +470,7 @@ DeckTreeStore.handlers = {
     'SELECT_TREE_NODE_SUCCESS': 'selectTreeNode',
     'TOGGLE_TREE_NODE_SUCCESS': 'toggleTreeNode',
     'RENAME_TREE_NODE_SUCCESS': 'renameTreeNode',
+    'UNDO_RENAME_TREE_NODE_SUCCESS': 'undoRenameTreeNode',
     'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode',
     'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',

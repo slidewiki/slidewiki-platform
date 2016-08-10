@@ -7,6 +7,7 @@ import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
+import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNode from '../../../actions/decktree/addTreeNode';
@@ -26,6 +27,9 @@ class TreePanel extends React.Component {
     }
     handleRenameNode(selector) {
         this.context.executeAction(renameTreeNode, selector);
+    }
+    handleUndoRenameNode(selector) {
+        this.context.executeAction(undoRenameTreeNode, selector);
     }
     handleSaveNode(selector, oldValue, newValue) {
         this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
@@ -74,7 +78,7 @@ class TreePanel extends React.Component {
 
                         {decktreeError ? <div className="ui error message" style={{'wordBreak': 'break-all', 'wordWrap': 'break-word'}}> {decktreeError} </div> : ''}
 
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onUndoRename={this.handleUndoRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>
