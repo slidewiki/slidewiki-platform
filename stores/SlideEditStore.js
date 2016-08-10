@@ -55,7 +55,7 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = state.speakernotes;
         this.error = state.error;
     }
-    handleDeckParamErrors(err) {
+    handleSlideParamErrors(err) {
         this.error = err;
         this.emitChange();
     }
@@ -63,7 +63,7 @@ class SlideEditStore extends BaseStore {
 
 SlideEditStore.storeName = 'SlideEditStore';
 SlideEditStore.handlers = {
-    'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleSlideParamErrors',
     'LOAD_SLIDE_EDIT_SUCCESS': 'updateContent',
     'SAVE_SLIDE_EDIT_SUCCESS': 'saveSlide',
     'ADD_SLIDE_EDIT_SUCCESS': 'addSlide'

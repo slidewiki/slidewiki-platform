@@ -8,7 +8,7 @@ class DeckViewPanel extends React.Component {
     render() {
         if(this.props.DeckViewStore.error) {
             return (
-                <div ref="deck">
+                <div ref="deckViewPanel">
                     <Error error={this.props.DeckViewStore.error} />
                 </div>
             );

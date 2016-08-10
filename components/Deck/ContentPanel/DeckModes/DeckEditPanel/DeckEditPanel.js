@@ -12,7 +12,7 @@ class DeckEditPanel extends React.Component {
     render() {
         if(this.props.DeckEditStore.error) {
             return (
-                <div ref="deck">
+                <div ref="deckEditPanel">
                     <Error error={this.props.DeckEditStore.error} />
                 </div>
             );

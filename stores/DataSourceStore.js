@@ -54,6 +54,7 @@ class DataSourceStore extends BaseStore {
 DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
     'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
     'SAVE_DATASOURCE_SUCCESS': 'saveDataSource',

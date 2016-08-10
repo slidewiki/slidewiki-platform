@@ -64,6 +64,7 @@ class ContributorsStore extends BaseStore {
 ContributorsStore.storeName = 'ContributorsStore';
 ContributorsStore.handlers = {
     'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_CONTRIBUTORS_SUCCESS': 'updateContributors'
 };
 

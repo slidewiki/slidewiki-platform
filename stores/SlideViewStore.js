@@ -8,6 +8,7 @@ class SlideViewStore extends BaseStore {
         this.title = '';
         this.content = '';
         this.speakernotes = '';
+        this.error = '';
     }
     updateContent(payload) {
         if (payload.slide.revisions !== undefined)
@@ -30,7 +31,8 @@ class SlideViewStore extends BaseStore {
             id: this.id,
             title: this.title,
             content: this.content,
-            speakernotes: this.speakernotes
+            speakernotes: this.speakernotes,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -41,11 +43,17 @@ class SlideViewStore extends BaseStore {
         this.title = state.title;
         this.content = state.content;
         this.speakernotes = state.speakernotes;
+        this.error = state.error;
+    }
+    handleSlideParamErrors(err) {
+        this.error = err;
+        this.emitChange();
     }
 }
 
 SlideViewStore.storeName = 'SlideViewStore';
 SlideViewStore.handlers = {
+    'SLIDE_ERROR': 'handleSlideParamErrors',
     'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent'
 };
 

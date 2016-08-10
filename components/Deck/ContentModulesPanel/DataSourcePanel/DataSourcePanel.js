@@ -26,7 +26,7 @@ class DataSourcePanel extends React.Component {
     render() {
         if(this.props.DataSourceStore.error) {
             return (
-                <div ref="deck">
+                <div ref="dataSourcePanel">
                     <Error error={this.props.DataSourceStore.error} />
                 </div>
             );

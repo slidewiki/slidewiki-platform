@@ -5,7 +5,7 @@ const fumble = require('fumble');
 export default function loadDeckView(context, payload, done) {
     if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
         let error = fumble.http.badRequest();
-        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_ID_TYPE_ERROR);
+        context.dispatch('SLIDE_ERROR', ErrorsList.SLIDE_ID_TYPE_ERROR);
         throw error;
     }
 

@@ -75,6 +75,7 @@ DeckPageStore.handlers = {
     'HIDE_LEFT_COLUMN': 'hideLeftColumn',
     'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll',
     'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleDeckParamErrors',
 };
 
 export default DeckPageStore;

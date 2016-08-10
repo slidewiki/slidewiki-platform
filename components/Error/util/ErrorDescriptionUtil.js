@@ -7,12 +7,12 @@ export default {
             description: 'Inappropriate data is added for deck id.',
             actionRequired: 'Please enter a numeric value as deck id.'
         },
-        DECK_CONTENT_ID_TYPE_ERROR: {
+        SLIDE_ID_TYPE_ERROR: {
             statusCode: 400,
             statusText: 'Bad Request',
             type: 'Type Error',
-            description: 'Inappropriate data is added for deck content id.',
-            actionRequired: 'Please enter a correct deck content id. Deck content id can have alpha-numeric values seperated by a dash.'
+            description: 'Inappropriate data is added for slide id.',
+            actionRequired: 'Please enter a correct slide id. Slide id can have alpha-numeric values seperated by a dash.'
         },
         DECK_CONTENT_TYPE_ERROR: {
             statusCode: 400,

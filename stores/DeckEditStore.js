@@ -23,7 +23,7 @@ class DeckEditStore extends BaseStore {
         this.deckProps = state.deckProps;
         this.error = state.error;
     }
-    handleDeckParamErrors(err) {
+    handleSlideParamErrors(err) {
         this.error = err;
         this.emitChange();
     }
@@ -31,7 +31,7 @@ class DeckEditStore extends BaseStore {
 
 DeckEditStore.storeName = 'DeckEditStore';
 DeckEditStore.handlers = {
-    'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleSlideParamErrors',
     'LOAD_DECK_PROPS_SUCCESS': 'updateProperties'
 };
 
