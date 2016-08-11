@@ -45,7 +45,7 @@ class ChangePassword extends React.Component {
               <div className="two fields">
                 <div className="ui field">
                   <label>Old Password</label>
-                  <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" ref="oldPassword" required/>
+                  <input type="password" placeholder="******" ref="oldPassword" required/>
                 </div>
               </div>
               <div className="two fields">

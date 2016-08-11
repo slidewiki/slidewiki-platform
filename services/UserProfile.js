@@ -1,6 +1,14 @@
 import { Microservices } from '../configs/microservices';
 import rp from 'request-promise';
 
+function isEmpty(toTest) {
+    return (toTest === undefined ||
+    toTest === null ||
+    toTest === '' ||
+    (toTest instanceof Object && Object.keys(toTest).length === 0) ||
+    (toTest instanceof Array && toTest.length === 0));
+}
+
 export default {
     name: 'userProfile',
 
@@ -12,7 +20,7 @@ export default {
             uri: Microservices.user.uri + '/user/' + params.params.id,
             headers: {'----jwt----' : params.params.jwt}
         }).then((body) => callback(null, params))
-        .catch((err) => {console.log(err);callback(err);});
+        .catch((err) => callback(err));
     },
 
     update: (req, resource, params, body, config, callback) => {
@@ -21,8 +29,6 @@ export default {
                 oldPassword: params.oldpw,
                 newPassword: params.newpw
             };
-            callback(null, {}); //TODO implement backend update call
-            return;
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/passwd',
@@ -30,21 +36,19 @@ export default {
                 json: true,
                 body: tosend
             }).then((body) => callback(null, {}))
-            .catch((err) => {console.log(err);callback(err);});
+            .catch((err) => callback(err));
         } else if (resource === 'userProfile.update'){
             let tosend = {
                 email: params.email,
                 username: params.uname,
-                surname: params.lname,
-                forename: params.fname,
-                language: params.language,
-                country: params.country,
-                picture: params.picture,
-                organization: params.organization,
-                description: ''
+                surname: !isEmpty(params.lname) ? params.lname : '',
+                forename: !isEmpty(params.fname) ? params.fname : '',
+                language: !isEmpty(params.language) ? params.language : '',
+                country: !isEmpty(params.country) ? params.country : '',
+                picture: !isEmpty(params.picture) ? params.picture : '',
+                organization: !isEmpty(params.organization) ? params.organization : '',
+                description: !isEmpty(params.description) ? params.description : ''
             };
-            callback(null, params); //TODO implement backend update call
-            return;
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
@@ -52,29 +56,14 @@ export default {
                 json: true,
                 body: tosend
             }).then((body) => callback(null, params))
-            .catch((err) => {console.log(err);callback(err);});
+            .catch((err) => callback(err));
         } else {
             callback('failure');
         }
     },
 
     read: (req, resource, params, config, callback) => {
-        // let template = {
-        //     email: 'roy-meissner@gmx.net',
-        //     uname: params.params.username,
-        //     lname: 'Meissner',
-        //     fname: 'Roy',
-        //     language: 'de_DE',
-        //     country: 'Germany',
-        //     picture: '',
-        //     organization: 'InfAI'
-        // };
-        // callback(null, template);
-        // return;
-        console.log(params);
         if(params.params.loggedInUser === params.params.username || params.params.id === params.params.username){
-            console.log('richtiger zweig');
-            console.log(params.params);
             rp({
                 method: 'GET',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
@@ -83,18 +72,19 @@ export default {
             }).then((body) => {
                 console.log(body);
                 let converted = {
-                    email: body.email,
                     uname: body.username,
-                    lname: body.surname,
-                    fname: body.forename,
-                    language: body.language,
-                    country: body.country === undefined ? '' : body.country, //optional
-                    picture: body.picture === undefined ? '' : body.picture, //optional
-                    organization : body.organization === undefined ? '' : body.organization //optional
+                    email: body.email,
+                    lname: !isEmpty(body.surname) ? body.surname : '',
+                    fname: !isEmpty(body.forename) ? body.forename : '',
+                    language: !isEmpty(body.language) ? body.language : '',
+                    country: !isEmpty(body.country) ? body.country : '',
+                    picture: !isEmpty(body.picture) ? body.picture : '',
+                    organization : !isEmpty(body.organization) ? body.organization : '',
+                    description: !isEmpty(body.description) ? body.description : ''
                 };
                 callback(null, converted);
             })
-            .catch((err) => {console.log(err);callback(err);});
+            .catch((err) => callback(err));
         } else {
             rp({
                 method: 'GET',
@@ -103,16 +93,18 @@ export default {
             }).then((body) => {
                 let converted = {
                     uname: body.username,
-                    lname: body.surname,
-                    fname: body.forename,
-                    language: body.language,
-                    country: body.country === undefined ? '' : body.country, //optional
-                    picture: body.picture === undefined ? '' : body.picture, //optional
-                    organization : body.organization === undefined ? '' : body.organization //optional
+                    email: !isEmpty(body.email) ? body.email : '',
+                    lname: !isEmpty(body.surname) ? body.surname : '',
+                    fname: !isEmpty(body.forename) ? body.forename : '',
+                    language: !isEmpty(body.language) ? body.language : '',
+                    country: !isEmpty(body.country) ? body.country : '',
+                    picture: !isEmpty(body.picture) ? body.picture : '',
+                    organization : !isEmpty(body.organization) ? body.organization : '',
+                    description: !isEmpty(body.description) ? body.description : ''
                 };
                 callback(null, converted);
             })
-            .catch((err) => {console.log(err);callback(err);});
+            .catch((err) => callback(err));
         }
 
     }

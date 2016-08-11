@@ -27,7 +27,7 @@ class UserProfile extends React.Component {
               </div>
               <div className = "twelve wide column" >
                 { this.props.UserProfileStore.toShow === 'decks' ? <UserDecks /> : '' }
-                { this.props.UserProfileStore.toShow === 'settings' ? <UserSettings user = {this.props.UserProfileStore.user} dimmer =  {this.props.UserProfileStore.dimmer}/> : '' }
+                { this.props.UserProfileStore.toShow === 'settings' ? <UserSettings user = {this.props.UserProfileStore.user} dimmer =  {this.props.UserProfileStore.dimmer} failures = {this.props.UserProfileStore.failures}/> : '' }
                 { this.props.UserProfileStore.toShow === 'stats' ? <h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3> : '' }
               </div>
             </div>);

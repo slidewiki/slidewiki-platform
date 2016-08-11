@@ -50,7 +50,7 @@ class UserSettings extends React.Component {
 
                   <div className="row">
                     <div className="sixteen wide column">
-                      <ChangePersonalData user = { this.props.user} />
+                      <ChangePersonalData user = { this.props.user} failures = {this.props.failures}/>
                     </div>
                   </div>
 

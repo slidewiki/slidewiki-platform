@@ -1,5 +1,6 @@
 import { shortTitle } from '../../../configs/general';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import loadRouteNotFound from '../../loadRouteNotFound';
 
 export default function fetchUser(context, payload, done) {
     payload.params.id = context.getStore(UserProfileStore).userid;
@@ -7,7 +8,10 @@ export default function fetchUser(context, payload, done) {
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;
     context.service.read('userProfile.read', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('EDIT_USER_FAILED', err);
+            if(err.statusCode === 404)
+                throw err;
+            else
+                context.dispatch('EDIT_USER_FAILED', err);
         } else {
             context.dispatch('NEW_USER_DATA', res);
         }

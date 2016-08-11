@@ -21,7 +21,6 @@ class ChangePersonalData extends React.Component {
         payload.language = this.refs.language.value;
         payload.country = this.refs.country.value;
         payload.organization = this.refs.organization.value;
-        console.log(this.refs.language.value);
         this.context.executeAction(changeUserData, payload);
         return false;
     }
@@ -35,6 +34,7 @@ class ChangePersonalData extends React.Component {
             default:
                 lang = 'English';
         }
+        let emailField = <div><label>E-Mail</label><input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/></div>;
         return (
           <div>
             <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
@@ -52,10 +52,7 @@ class ChangePersonalData extends React.Component {
               </div>
 
               <div className="two fields">
-                <div className="ui field">
-                  <label>E-Mail</label>
-                  <input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/>
-                </div>
+                {!this.props.failures.emailNotAllowed ? <div className="ui field"> {emailField} </div>: <div className="ui error field" data-tooltip="This email has already been used by someone else. Please, choose another one." data-position="top center" data-inverted=""> {emailField} </div>}
                 <div className="ui field">
                   <div className="ui field">
                     <label>Language</label>

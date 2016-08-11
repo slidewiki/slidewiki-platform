@@ -5,6 +5,9 @@ class UserProfileStore extends BaseStore {
         super(dispatcher);
         this.toShow = 'settings';
         this.showPublicUser = true;
+        this.failures = {
+            emailNotAllowed: false
+        };
         this.dimmer = {
             success: false,
             failure: false,
@@ -50,6 +53,7 @@ class UserProfileStore extends BaseStore {
         return {
             toShow: this.toShow,
             showPublicUser: this.showPublicUser,
+            failures: this.failures,
             user: this.user,
             dimmer: this.dimmer,
             username: this.username,
@@ -66,6 +70,7 @@ class UserProfileStore extends BaseStore {
     rehydrate(state) {
         this.toShow = state.toShow;
         this.showPublicUser = state.showPublicUser;
+        this.failures = state.failures;
         this.user = state.user;
         this.dimmer = state.dimmer;
         this.username = state.username;
@@ -104,6 +109,13 @@ class UserProfileStore extends BaseStore {
         this.dimmer.failure = true;
         this.emitChange();
         this.dimmer.failure = false;
+    }
+
+    emailNotAllowed(payload) {
+        console.log('emailNotAllowed');
+        this.failures.emailNotAllowed = true;
+        this.emitChange();
+        this.failures.emailNotAllowed = false;
     }
 
     handleSignInSuccess(payload) {
@@ -148,6 +160,7 @@ UserProfileStore.handlers = {
     'NEW_USER_DATA': 'fillInUser',
     'EDIT_USER_FAILED': 'actionFailed',
     'NEW_PASSWORD': 'successMessage',
+    'EMAIL_NOT_ALLOWED': 'emailNotAllowed',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
     'USER_SIGNOUT': 'handleSignOut'

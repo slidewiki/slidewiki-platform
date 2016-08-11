@@ -32,13 +32,13 @@ export default {
                 body: JSON.stringify({
                     // email: args.email,
                     email: args.username,
-                    password: args.password.toString() //TODO add hashing as soon as register is working
+                    password: args.password.toString(), //TODO add hashing as soon as register is working
                 }),
                 resolveWithFullResponse: true
             })
                 .then((res) => {
                     callback(null, {
-                        username: args.username,
+                        username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
                         jwt: res.headers['----jwt----'],
                         selector: args.selector
