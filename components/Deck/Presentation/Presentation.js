@@ -21,11 +21,6 @@ let clearStyle = {
     clear: 'both'
 };
 
-if (process.env.BROWSER) {
-    // let s = 'white';
-    let style = require('../../../bower_components/reveal.js/css/reveal.css');
-    // console.log('requiring');
-}
 
 class Presentation extends React.Component{
     constructor(props){
@@ -41,6 +36,7 @@ class Presentation extends React.Component{
 
     componentDidMount(){
         if(process.env.BROWSER){
+            let style = require('../../../bower_components/reveal.js/css/reveal.css');
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
             $('.ui.page.grid.inverted.blue.menu').css({'display': 'none'});
