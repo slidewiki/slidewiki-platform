@@ -10,7 +10,7 @@ import SlideEditStore from '../../../../../stores/SlideEditStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
-import DeckTreeStore from '../../../../../stores/DeckTreeStore';
+
 let ReactDOM = require('react-dom');
 
 class SlideContentEditor extends React.Component {
@@ -35,14 +35,14 @@ class SlideContentEditor extends React.Component {
         this.props.SlideEditStore.title = title;
         this.props.SlideEditStore.content = content;
         this.props.SlideEditStore.speakernotes = speakernotes;
-        let currentSelector = context.getStore(DeckTreeStore).getSelector();
+        let currentSelector = this.props.selector;
         //console.log('currentSelector: ' + currentSelector.id);
         let deckID = currentSelector.id;
         //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
         //TEST - create slide (before can be saved (=updated))
         //console.log(speakernotes);
         this.context.executeAction(saveSlide,
-          {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes});
+          {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
         //console.log('saving slide');
         return false;
     }
