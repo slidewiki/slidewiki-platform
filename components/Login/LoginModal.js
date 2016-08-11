@@ -17,49 +17,46 @@ const customStyles = {
     }
 };
 
-
-
 class LoginModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {openModal: false};
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.handleExitButton = this.handleExitButton.bind(this);
-
     }
 
     componentDidUpdate(prevProps, prevState) {//Workaround to set focus
         if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
             setTimeout(() => {
-                ReactDOM.findDOMNode(this.refs.username1).focus();
+                ReactDOM.findDOMNode(this.refs.email).focus();
             }, 0);
         }
     }
 
     handleLoginButton(){
         this.setState({openModal: true});
-
     }
 
     handleSignoutButton() {
         this.context.executeAction(userSignOut, {});
     }
 
-    signin() {
+    signin(e) {
+        e.preventDefault();
         this.context.executeAction(userSignIn, {
-          //email: this.refs.emailsignin.value,
-            username: this.refs.username1.value,
+            username: this.refs.email.value,
             password: this.refs.password1.value
         });
 
-        this.refs.username1.value = '';
+        this.refs.email.value = '';
         this.refs.password1.value = '';
+        return false;
     }
 
     handleExitButton(){
         this.setState({openModal: false});
-
     }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
@@ -67,6 +64,7 @@ class LoginModal extends React.Component {
             this.handleExitButton();
         }
     }
+
     componentDidMount(){
         if(typeof window !== 'undefined') {
             Modal.setAppElement('#app');
@@ -77,6 +75,7 @@ class LoginModal extends React.Component {
         let loginButton = (
             <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
         );
+
         if (this.props.UserProfileStore.username === '') {
             loginButton = (
                 <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
@@ -90,34 +89,31 @@ class LoginModal extends React.Component {
               <div className="ui container">
                   <div className="ui right">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
-                      <i className="remove icon"></i>Close
+                      <i className="remove icon"/>Close
                     </button>
                   </div>
                   <div className="ui blue padded center aligned segment">
                     <h1 className="ui dividing header">Sign In</h1>
-                      <form className="ui form signin" onSubmit={(e) => {e.preventDefault();}}>
+                      <form className="ui form signin" onSubmit={this.signin.bind(this)}>
                         <div className="ui five wide icon input field">
-                          <div><label htmlFor="username1" hidden>Username</label></div>
-                          <input type="username1" id="username1" name="username1" ref="username1" placeholder="Username" autoFocus tabIndex="0"  aria-required="true"/><i className="user icon"></i>
+                          <div><label htmlFor="email" hidden>E-Mail</label></div>
+                          <input type="email" id="email" name="email" ref="email" placeholder="E-Mail" autoFocus tabIndex="0"  aria-required="true" required/><i className="mail icon"/>
                         </div>
                           <br/>
                         <div className="ui five wide icon input field">
                           <div><label htmlFor="password1" hidden>Password</label></div>
-                          <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0"  aria-required="true"/><i className="lock icon"></i>
+                          <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0"  aria-required="true" required/><i className="lock icon"/>
                         </div>
                         <br/>
-                        <div className="ui error message"></div>
-                        <button type="submit" className="ui blue labeled submit icon button" onClick={ this.signin.bind(this)}><i className="icon sign in"></i> Sign In</button>
+                        <div className="ui error message"/>
+                        <button type="submit" className="ui blue labeled submit icon button"><i className="icon sign in"/> Sign In</button>
                      </form>
                   <br/>
                   <div className="ui floated right">
                       <a href="">I can not access my account</a>
-
-
               </div>
             </div>
           </div>
-
           </Modal>
           </div>
       );

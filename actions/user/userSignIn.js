@@ -6,10 +6,8 @@ export default function userSignIn(context, payload, done) {
             context.dispatch('SIGNIN_FAILURE', err);
             done();
         } else {
-            res.username = 'rmeissn';
-            console.log(res);
             context.dispatch('SIGNIN_SUCCESS', res);
-            context.executeAction(fetchUser, {params: {username: 'rmeissn'}});
+            context.executeAction(fetchUser, {params: {username: res.username}});
             done();
         }
     });
