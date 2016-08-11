@@ -26,7 +26,7 @@ class ContributorsPanel extends React.Component {
     render() {
         if(this.props.ContributorsStore.error) {
             return (
-                <div ref="deck">
+                <div ref="contributorsPanel">
                     <Error error={this.props.ContributorsStore.error} />
                 </div>
             );
