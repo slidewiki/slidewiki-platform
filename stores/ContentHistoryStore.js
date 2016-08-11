@@ -5,6 +5,7 @@ class ContentHistoryStore extends BaseStore {
         super(dispatcher);
         this.history = [];
         this.selector = {};
+        this.error = '';
     }
     updateHistory(payload) {
         this.history = payload.history;
@@ -14,7 +15,8 @@ class ContentHistoryStore extends BaseStore {
     getState() {
         return {
             history: this.history,
-            selector: this.selector
+            selector: this.selector,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -23,11 +25,18 @@ class ContentHistoryStore extends BaseStore {
     rehydrate(state) {
         this.history = state.history;
         this.selector = state.selector;
+        this.error = state.error;
+    }
+    handleDeckParamErrors(err) {
+        this.error = err;
+        this.emitChange();
     }
 }
 
 ContentHistoryStore.storeName = 'ContentHistoryStore';
 ContentHistoryStore.handlers = {
+    'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_CONTENT_HISTORY_SUCCESS': 'updateHistory'
 };
 
