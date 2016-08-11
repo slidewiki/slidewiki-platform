@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
+import ErrorStore from '../../stores/ErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
@@ -21,10 +22,10 @@ class Deck extends React.Component {
         return false;
     }
     render() {
-        if(this.props.DeckPageStore.error) {
+        if(this.props.ErrorStore.error) {
             return (
                 <div ref="deck">
-                    <Error error={this.props.DeckPageStore.error} />
+                    <Error error={this.props.ErrorStore.error} />
                 </div>
             );
         }
@@ -126,11 +127,13 @@ class Deck extends React.Component {
 }
 
 Deck.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    getState: React.PropTypes.func.isRequired
 };
-Deck = connectToStores(Deck, [DeckPageStore], (context, props) => {
+Deck = connectToStores(Deck, [DeckPageStore, ErrorStore], (context, props) => {
     return {
-        DeckPageStore: context.getStore(DeckPageStore).getState()
+        DeckPageStore: context.getStore(DeckPageStore).getState(),
+        ErrorStore: context.getStore(ErrorStore).getState()
     };
 });
 export default Deck;

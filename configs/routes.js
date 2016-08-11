@@ -22,7 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
-import loadRouteNotFound from '../actions/loadRouteNotFound';
+import routeNotFoundError from '../actions/errors';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -267,8 +267,8 @@ export default {
         path: '*',
         method: 'get',
         handler: require('../components/RouteNotFound/RouteNotFound'),
-        action: (context, payload, done) => {
-            context.executeAction(loadRouteNotFound, payload, done);
+        action: (context, payload) => {
+            context.executeAction(routeNotFoundError, payload);
         }
     }
 };
