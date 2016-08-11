@@ -109,24 +109,19 @@ class AddDeck extends React.Component {
             <option>
                 Select Language
             </option>
-            <option value="TD" >
-                Chad
-            </option>
-            <option value="CL" >
-                Chile
+            <option value="en_EN" >
+                English
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" ref="select_themes">
           <option value="" >Select Theme</option>
           <option value="DefaultTheme" >Default</option>
-          <option value="TH1" >Theme1</option>
-          <option value="TH2" >Theme2</option>
-          <option value="TH3" >Theme3</option>
         </select>;
         let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" ref="select_licences">
           <option value="" >Select License</option>
-          <option value="CCBY" >CC BY</option>
-          <option value="CCBHYSA" >CC BY-SA</option>
+          <option value="CC0" >CC0</option>
+          <option value="CC BY" >CC BY</option>
+          <option value="CC BY-SA" >CC BY-SA</option>
         </select>;
         return (
           <div className="ui container">
