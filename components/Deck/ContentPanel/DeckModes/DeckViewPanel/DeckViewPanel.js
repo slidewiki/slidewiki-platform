@@ -2,14 +2,15 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
+import ErrorStore from '../../../../../stores/ErrorStore';
 import Error from '../../../../../components/Error/Error';
 
 class DeckViewPanel extends React.Component {
     render() {
-        if(this.props.DeckViewStore.error) {
+        if(this.props.ErrorStore.error) {
             return (
                 <div ref="deckViewPanel">
-                    <Error error={this.props.DeckViewStore.error} />
+                    <Error error={this.props.ErrorStore.error} />
                 </div>
             );
         }
@@ -23,9 +24,10 @@ class DeckViewPanel extends React.Component {
     }
 }
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore], (context, props) => {
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ErrorStore], (context, props) => {
     return {
-        DeckViewStore: context.getStore(DeckViewStore).getState()
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
+        ErrorStore: context.getStore(ErrorStore).getState(),
     };
 });
 export default DeckViewPanel;

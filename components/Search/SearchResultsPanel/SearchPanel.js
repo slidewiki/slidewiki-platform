@@ -9,7 +9,7 @@ import Error from '../../../components/Error/Error';
 
 class SearchPanel extends React.Component {
     render() {
-        if(this.props.ErrorStore.error) {
+        if (this.props.ErrorStore.error) {
             return (
                 <div ref="searchPanel">
                     <Error error={this.props.ErrorStore.error} />

@@ -1,13 +1,9 @@
 import {shortTitle} from '../configs/general';
-import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
-const fumble = require('fumble');
+import { slideIdTypeError } from './errors';
 
 export default function loadDeckView(context, payload, done) {
-    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        let error = fumble.http.badRequest();
-        context.dispatch('SLIDE_ERROR', ErrorsList.SLIDE_ID_TYPE_ERROR);
-        throw error;
-    }
+    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
+        context.executeAction(slideIdTypeError, payload);
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

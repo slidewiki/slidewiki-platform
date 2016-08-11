@@ -10,19 +10,19 @@ const fumble = require('fumble');
 import { deckIdTypeError, deckContentTypeError, deckContentPathError, slideIdTypeError, deckModeError } from './errors';
 
 export default function loadDeck(context, payload, done) {
-    if(!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0))
+    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0))
         context.executeAction(deckIdTypeError, payload);
 
-    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
+    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
         context.executeAction(deckContentTypeError, payload);
 
-    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
+    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
         context.executeAction(slideIdTypeError, payload);
 
-    if(!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined))
+    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined))
         context.executeAction(deckContentPathError, payload);
 
-    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined))
+    if (!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined))
         context.executeAction(deckModeError, payload);
 
     //we should store the current content state in order to avoid duplicate load of actions

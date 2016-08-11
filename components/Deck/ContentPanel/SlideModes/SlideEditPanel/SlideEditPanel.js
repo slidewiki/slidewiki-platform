@@ -2,16 +2,17 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
+import ErrorStore from '../../../../../stores/ErrorStore';
 import SlideContentEditor from './SlideContentEditor';
 import Error from '../../../../../components/Error/Error';
 const ReactDOM = require('react-dom');
 
 class SlideEditPanel extends React.Component {
     render() {
-        if(this.props.SlideEditStore.error) {
+        if(this.props.ErrorStore.error) {
             return (
                 <div ref="slideEditPanel">
-                    <Error error={this.props.SlideEditStore.error} />
+                    <Error error={this.props.ErrorStore.error} />
                 </div>
             );
         }
@@ -38,9 +39,10 @@ SlideEditPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideEditPanel = connectToStores(SlideEditPanel, [SlideEditStore], (context, props) => {
+SlideEditPanel = connectToStores(SlideEditPanel, [SlideEditStore, ErrorStore], (context, props) => {
     return {
-        SlideEditStore: context.getStore(SlideEditStore).getState()
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        ErrorStore: context.getStore(ErrorStore).getState(),
     };
 });
 export default SlideEditPanel;

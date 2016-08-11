@@ -2,14 +2,15 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import ErrorStore from '../../../../../stores/ErrorStore';
 import Error from '../../../../../components/Error/Error';
 
 class SlideViewPanel extends React.Component {
     render() {
-        if(this.props.SlideViewStore.error) {
+        if(this.props.ErrorStore.error) {
             return (
                 <div ref="slideViewPanel">
-                    <Error error={this.props.SlideViewStore.error} />
+                    <Error error={this.props.ErrorStore.error} />
                 </div>
             );
         }
@@ -41,9 +42,10 @@ class SlideViewPanel extends React.Component {
     }
 }
 
-SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore], (context, props) => {
+SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, ErrorStore], (context, props) => {
     return {
-        SlideViewStore: context.getStore(SlideViewStore).getState()
+        SlideViewStore: context.getStore(SlideViewStore).getState(),
+        ErrorStore: context.getStore(ErrorStore).getState(),
     };
 });
 export default SlideViewPanel;

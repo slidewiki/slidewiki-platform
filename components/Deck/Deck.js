@@ -22,7 +22,7 @@ class Deck extends React.Component {
         return false;
     }
     render() {
-        if(this.props.ErrorStore.error) {
+        if (this.props.ErrorStore.error) {
             return (
                 <div ref="deck">
                     <Error error={this.props.ErrorStore.error} />

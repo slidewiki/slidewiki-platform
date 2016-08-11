@@ -34,7 +34,6 @@ ErrorStore.handlers = {
     'RESOURCE_NOT_FOUND_ERROR': 'handleError',
     'SLIDE_ERROR': 'handleError',
     'SEARCH_ERROR': 'handleError',
-    'SEARCH_ERROR': 'handleError',
 };
 
 export default ErrorStore;

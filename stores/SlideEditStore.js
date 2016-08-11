@@ -8,7 +8,6 @@ class SlideEditStore extends BaseStore {
         this.title = '';
         this.content = '';
         this.speakernotes = '';
-        this.error = '';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -51,7 +50,6 @@ class SlideEditStore extends BaseStore {
             title: this.title,
             content: this.content,
             speakernotes: this.speakernotes,
-            error: this.error,
         };
     }
     dehydrate() {
@@ -62,17 +60,11 @@ class SlideEditStore extends BaseStore {
         this.title = state.title;
         this.content = state.content;
         this.speakernotes = state.speakernotes;
-        this.error = state.error;
-    }
-    handleSlideParamErrors(err) {
-        this.error = err;
-        this.emitChange();
     }
 }
 
 SlideEditStore.storeName = 'SlideEditStore';
 SlideEditStore.handlers = {
-    'SLIDE_ERROR': 'handleSlideParamErrors',
     'LOAD_SLIDE_EDIT_SUCCESS': 'updateContent',
     'SAVE_SLIDE_EDIT_SUCCESS': 'saveSlide',
     'ADD_SLIDE_EDIT_SUCCESS': 'addSlide'
