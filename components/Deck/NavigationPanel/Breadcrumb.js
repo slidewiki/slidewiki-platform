@@ -30,7 +30,7 @@ class Breadcrumb extends React.Component {
             <div className="sw-breadcrumb" ref="breadcrumb">
                 <div className="ui large breadcrumb">
                     <div className="section">
-                        <NavLink href={'/deck/' + self.props.selector.get('id')}> {this.props.rootDeckName} </NavLink>
+                        <NavLink className="ui header" href={'/deck/' + self.props.selector.get('id')}> {this.props.rootDeckName} </NavLink>
                         <i className="right chevron icon divider"></i>
                     </div>
                     {list}

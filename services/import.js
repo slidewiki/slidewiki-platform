@@ -1,15 +1,99 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const util = require('util');
+
+
+//add interface/API to get file from front-end react-dropzone. Get from components/import/FileUploader.js or Import.js
+// ADD SERVICE IN ROUTE.JS TO GET URL!??!
+//context.service.create('import.content', payload, {timeout: 20 * 1000}, (err, res) => {
+//    if (err) {
+//        context.dispatch('LOAD_IMPORT_FILE_FAILURE', err);
+//    } else {
+        //console.log(res);
+//        context.dispatch('LOAD_IMPORT_FILE_SUCCESS', res);
+//    }
+    //let pageTitle = shortTitle + ' | Import presentation | ' + payload.params.stype + ' | ' + payload.params.sid;
+    //context.dispatch('UPDATE_PAGE_TITLE', {
+        //pageTitle: pageTitle
+    //});
+//    done();
 
 export default {
     name: 'import',
     // At least one of the CRUD methods is Required
-    read: (req, resource, params, config, callback) => {
+    //read: (req, resource, params, config, callback) => {
+    create: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
         if(resource === 'import.content'){
+            console.log(body);
+            console.log(params);
+            let file = params.file;
+            console.log(file);
+            console.log(util.inspect(file, {showHidden: false, depth: null}));
+            console.log(util.inspect(params.file, false, null));
+            let file2 = params;
+            console.log('parameters' + file2);
+            console.log(util.inspect(file2, {showHidden: false, depth: null}));
+            let file3 = args.file;
+            console.log('parameters' + file3);
+            console.log(util.inspect(file3, {showHidden: false, depth: null}));
+            let file4 = args;
+            console.log('parameters' + file4);
+            console.log(util.inspect(file4, {showHidden: false, depth: null}));
+            //console.log('length: ' + Buffer.byteLength(file));
+            //console.log('length: ' + file.length); does not work
             /*********connect to microservices*************/
             //todo
             //working dir Dropbox/pptx
+            //console.log('testservice' + args.file);
+            /*********connect to microservices*************/
+            //TODO - HEADER/MULTIPART THING -> application/vnd.openxmlformats-officedocument.presentationml.presentation
+            rp.post({
+                uri: Microservices.import.uri + '/importPPTX',
+                //headers: 'Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    //'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                headers: {
+                    //'Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                    //'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                    //,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                    //,'Content-Length': Buffer.byteLength(file)
+                    //,'Content-Length': 71066
+                },
+                //body:JSON.stringify({
+                //    file: args.file
+                //})
+                //body: {
+                //    file: params.file
+                //}
+                form: JSON.stringify({
+                    file: params.file,
+                    filename: 'one_slide_overview_content_revisioning.pptx',
+                    //filename: params.file.name,
+                    //contentType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                    contentType: 'multipart/form-data'
+                })
+                //data: params.file,
+                //body: args.file,
+                //body: 'test',
+                //body: params.file,
+                //content: file,
+                //body: {file: file}
+                //data: params.file,
+                //data: file
+                //content: file
+                //File: file
+                //data: 'testtesttest',
+                //body: 'testtesttest',
+                //HEADER MULTIPART!
+            }).then((res) => {
+                console.log('result of call to import-microservice' + res); //can comment when it is ready
+                //console.log(JSON.parse(res)); //can comment when it is ready
+                callback(null, {htmlConvert: res});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {htmlConvert: {}, file: args.file});
+            });
 
             /**********************/
             //option 1 - UNOCONV - https://github.com/dagwieers/unoconv - written in Python. (http://dag.wiee.rs/home-made/unoconv/)
@@ -102,17 +186,7 @@ export default {
             /**********************/
             //option 8 - implement myself - PPTX is zip file with HTML - takes a lot of time -> combine with option 5
             /*********received data from microservices*************/
-            let sampleImportFile = `
-            <div className="ui content">
-                <br />
-                <br />
-                <h1 className="ui header">Upload in progress. Once finished you will be redirected to the imported presentation</h1>
-                <br />
-                <p> TODO - Loading bar - mock-up random. See example in slidecontrol.js </p>
-                <br />
-            </div>
-            `;
-            callback(null, {content: sampleImportFile});
+
         }
     }
     // other methods

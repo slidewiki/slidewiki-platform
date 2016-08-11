@@ -19,13 +19,14 @@ import ContentUsageStore from './stores/ContentUsageStore';
 import ContentQuestionsStore from './stores/ContentQuestionsStore';
 import ContentDiscussionStore from './stores/ContentDiscussionStore';
 import SimilarContentStore from './stores/SimilarContentStore';
-import TabLinksStore from './stores/TabLinksStore';
+import ContentModulesStore from './stores/ContentModulesStore';
 import ImportStore from './stores/ImportStore';
 import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
+import UserProfileStore from './stores/UserProfileStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
-import MigrationStore from './stores/MigrationStore';
+import ErrorStore from './stores/ErrorStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -49,13 +50,14 @@ const app = new Fluxible({
         ContentQuestionsStore,
         ContentDiscussionStore,
         SimilarContentStore,
-        TabLinksStore,
+        ContentModulesStore,
         ImportStore,
         PresentationStore,
         UserNotificationsStore,
+        UserProfileStore,
         SearchResultsStore,
         AdvancedSearchStore,
-		MigrationStore
+        ErrorStore,
     ]
 });
 

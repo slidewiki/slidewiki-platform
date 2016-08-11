@@ -3,13 +3,43 @@ import {shortTitle} from '../configs/general';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
-import loadContributors from './loadContributors';
-import loadTranslations from './loadTranslations';
-import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
-import loadSimilarContents from './loadSimilarContents';
+import loadContentModules from './loadContentModules';
+import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
+const fumble = require('fumble');
 
 export default function loadDeck(context, payload, done) {
+
+    if(!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_ID_TYPE_ERROR);
+        throw error;
+    }
+
+    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        let error = fumblle.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_TYPE_ERROR);
+        throw error;
+    }
+
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_ID_TYPE_ERROR);
+        throw error;
+    }
+
+    if(!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_PATH_ERROR);
+        throw error;
+    }
+
+    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+        let error = fumble.http.badRequest();
+        context.dispatch('DECK_ERROR', ErrorsList.DECK_MODE_ERROR);
+        throw error;
+    }
+
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;
@@ -49,21 +79,7 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadTranslations, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
                 context.executeAction(loadDeckTree, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadContributors, payloadCustom, callback);
             }else{
                 callback();
             }
@@ -77,7 +93,7 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadSimilarContents, payloadCustom, callback);
+                context.executeAction(loadContentModules, payloadCustom, callback);
             }else{
                 callback();
             }
@@ -86,7 +102,7 @@ export default function loadDeck(context, payload, done) {
     // final callback
     (err, results) => {
         if (err){
-            console.log(err);
+            console.log(err, 'Something extra');
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle

@@ -68,7 +68,7 @@ class SlideControlUtil{
     //create last slide path
     static lastSlidePath(selector, flatTree, mode) {
         let node, path;
-        node = flatTree.get(flatTree.length - 1);
+        node = flatTree.get(flatTree.size - 1);
         path = '/deck/' + selector.get('id') + '/' + node.get('type') + '/' + node.get('id') + '/' + node.get('path') + '/' + mode;
         return path;
     }
