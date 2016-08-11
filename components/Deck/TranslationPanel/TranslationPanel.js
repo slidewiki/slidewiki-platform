@@ -3,6 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import TranslationStore from '../../../stores/TranslationStore';
 import TranslationList from './TranslationList';
+import Error from '../../../components/Error/Error';
 
 class TranslationPanel extends React.Component {
     componentDidMount() {
@@ -23,15 +24,24 @@ class TranslationPanel extends React.Component {
         });
     }
     render() {
-        return (
-            <div className="ui left aligned" ref="translationPanel">
-                <div className="ui fluid search selection dropdown">
-                    <div className="default text">{this.props.TranslationStore.currentLang.lang}</div>
-                    <i className="dropdown icon"></i>
-                        <TranslationList items={this.props.TranslationStore.translations} />
+        if(this.props.TranslationStore.error) {
+            return (
+                <div ref="translationPanel">
+                    <Error error={this.props.TranslationStore.error} />
                 </div>
-            </div>
-        );
+            );
+        }
+        else {
+            return (
+                <div className="ui left aligned" ref="translationPanel">
+                    <div className="ui fluid search selection dropdown">
+                        <div className="default text">{this.props.TranslationStore.currentLang.lang}</div>
+                        <i className="dropdown icon"></i>
+                            <TranslationList items={this.props.TranslationStore.translations} />
+                    </div>
+                </div>
+            );
+        }
     }
 }
 
