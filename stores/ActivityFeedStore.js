@@ -7,6 +7,7 @@ class ActivityFeedStore extends BaseStore {
         this.activities = [];
         this.selector = {};
         this.hasMore = true;
+        this.error = '';
     }
     updateActivities(payload) {
         this.activities = payload.activities;
@@ -39,7 +40,8 @@ class ActivityFeedStore extends BaseStore {
             activityType: this.activityType,
             selector: this.selector,
             hasMore: this.hasMore,
-            wasFetch: this.wasFetch
+            wasFetch: this.wasFetch,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -50,11 +52,18 @@ class ActivityFeedStore extends BaseStore {
         this.activityType = state.activityType;
         this.selector = state.selector;
         this.hasMore = state.hasMore;
+        this.error = state.error;
+    }
+    handleDeckParamErrors(err) {
+        this.error = err;
+        this.emitChange();
     }
 }
 
 ActivityFeedStore.storeName = 'ActivityFeedStore';
 ActivityFeedStore.handlers = {
+    'DECK_ERROR': 'handleDeckParamErrors',
+    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_ACTIVITIES_SUCCESS': 'updateActivities',
     'LOAD_MORE_ACTIVITIES_SUCCESS': 'loadMoreActivities',
     'UPDATE_ACTIVITY_TYPE_SUCCESS': 'updateActivityType',
