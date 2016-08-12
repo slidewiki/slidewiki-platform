@@ -9,6 +9,8 @@ class AddDeckStore extends BaseStore {
             licence: false,
             conditions: false
         };
+        this.redirectID = 0;
+        this.error = null;
     }
     destructor()
     {
@@ -18,10 +20,14 @@ class AddDeckStore extends BaseStore {
             licence: false,
             conditions: false
         };
+        this.redirectID = 0;
+        this.error = null;
     }
     getState() {
         return {
-            wrongFields: this.wrongFields
+            wrongFields: this.wrongFields,
+            redirectID: this.redirectID,
+            error: this.error
         };
     }
     dehydrate() {
@@ -29,6 +35,8 @@ class AddDeckStore extends BaseStore {
     }
     rehydrate(state) {
         this.wrongFields = state.wrongFields;
+        this.redirectID = state.redirectID;
+        this.error = state.error;
     }
 
     showWrongFields(wF) {
@@ -39,11 +47,25 @@ class AddDeckStore extends BaseStore {
 
         this.emitChange();
     }
+    uploadFailure(error) {
+        console.log('store - error', error.statusCode);
+        this.error = error;
+
+        this.emitChange();
+    }
+    uploadSuccess(deck) {
+        this.redirectID = Number.parseInt(deck.id);
+
+        this.emitChange();
+    }
 }
 
 AddDeckStore.storeName = 'AddDeckStore';
 AddDeckStore.handlers = {
-    'SHOW_WRONG_FIELDS': 'showWrongFields'
+    'SHOW_WRONG_FIELDS': 'showWrongFields',
+    'UPLOAD_FAILURE': 'uploadFailure',
+    'UPLOAD_SUCCESS': 'uploadSuccess',
+    'DESTRUCT': 'destructor'
 };
 
 export default AddDeckStore;

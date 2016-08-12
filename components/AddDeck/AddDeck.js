@@ -1,14 +1,18 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
+import Error from '../Error/Error';
 import AddDeckStore from '../../stores/AddDeckStore';
 import addDeckShowWrongFields from '../../actions/addDeckShowWrongFields';
+import addDeckSaveDeck from '../../actions/addDeckSaveDeck';
+import addDeckDestruct from '../../actions/addDeckDestruct';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
 class AddDeck extends React.Component {
     constructor(props) {
         super(props);
+        this.redirectID = 0;
     }
     componentDidMount(){
     }
@@ -41,7 +45,7 @@ class AddDeck extends React.Component {
         else {
             wrongFields.title = false;
         }
-        if (language === null || language === undefined || language.length !== 2) {
+        if (language === null || language === undefined || language.length !== 5) {
             wrongFields.language = true;
             everythingIsFine = false;
         }
@@ -72,7 +76,14 @@ class AddDeck extends React.Component {
         }
     }
     correctMetadata(title, language, description, theme, licence, tags, acceptedConditions) {
-
+        this.context.executeAction(addDeckSaveDeck, {
+            title: title,
+            language: language,
+            description: description,
+            theme: theme,
+            licence: licence,
+            tags: tags
+        });
     }
     handleCancel(x) {
         console.log('handleCancel: ', x);
@@ -82,8 +93,22 @@ class AddDeck extends React.Component {
             url: '/'
         });
     }
+    handleRedirect(){
+        this.context.executeAction(navigateAction, {
+            url: '/deck/' + this.redirectID
+        });
+        return false;
+    }
 
     render() {
+        if (this.props.AddDeckStore.redirectID !== 0) {
+            setTimeout( () => {
+                this.redirectID = this.props.AddDeckStore.redirectID;
+                this.handleRedirect();
+                this.context.executeAction(addDeckDestruct, {});
+            }, 1000);
+        }
+
         let fieldClass_title = classNames({
             'required': true,
             'field': true,
@@ -123,6 +148,13 @@ class AddDeck extends React.Component {
           <option value="CC BY" >CC BY</option>
           <option value="CC BY-SA" >CC BY-SA</option>
         </select>;
+
+        let errorView ='';
+        if (this.props.AddDeckStore.error !== null)
+            errorView = <Error error={this.props.AddDeckStore.error} />;
+        else
+            errorView ='';
+
         return (
           <div className="ui container">
           <h3>Add deck</h3>
@@ -200,6 +232,7 @@ class AddDeck extends React.Component {
                   </div>
               </div>
           </div>
+          {errorView}
       </div>
         );
     }
