@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import {shortTitle} from '../../configs/general';
 export default function addDeckSaveDeck(context, payload, done) {
     //enrich data
     payload.user = 1; //TODO

@@ -3,9 +3,9 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import Error from '../Error/Error';
 import AddDeckStore from '../../stores/AddDeckStore';
-import addDeckShowWrongFields from '../../actions/addDeckShowWrongFields';
-import addDeckSaveDeck from '../../actions/addDeckSaveDeck';
-import addDeckDestruct from '../../actions/addDeckDestruct';
+import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
+import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
+import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
