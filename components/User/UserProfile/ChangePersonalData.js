@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
+import classNames from 'classnames';
 
 class ChangePersonalData extends React.Component {
     componentDidMount() {
@@ -34,7 +35,12 @@ class ChangePersonalData extends React.Component {
             default:
                 lang = 'English';
         }
-        let emailField = <div><label>E-Mail</label><input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/></div>;
+        let emailClasses = classNames({
+            'ui': true,
+            'field': true,
+            'error': this.props.failures.emailNotAllowed
+        });
+        let emailToolTipp = this.props.failures.emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.': undefined;
         return (
           <div>
             <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
@@ -52,7 +58,10 @@ class ChangePersonalData extends React.Component {
               </div>
 
               <div className="two fields">
-                {!this.props.failures.emailNotAllowed ? <div className="ui field"> {emailField} </div>: <div className="ui error field" data-tooltip="This email has already been used by someone else. Please, choose another one." data-position="top center" data-inverted=""> {emailField} </div>}
+                <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="">
+                    <label>E-Mail</label>
+                    <input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/>
+                </div>
                 <div className="ui field">
                   <div className="ui field">
                     <label>Language</label>

@@ -9,7 +9,7 @@ export default function fetchUser(context, payload, done) {
     context.service.read('userProfile.read', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             if(err.statusCode === 404)
-                throw err;
+                console.log('test');
             else
                 context.dispatch('EDIT_USER_FAILED', err);
         } else {
