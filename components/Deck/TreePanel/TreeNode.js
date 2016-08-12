@@ -44,6 +44,10 @@ class TreeNode extends React.Component {
         this.props.onRename(selector);
         e.stopPropagation();
     }
+    handleUndoRenameClick(selector, e){
+        this.props.onDoRename(selector);
+        e.stopPropagation();
+    }
     handleMenuClick(selector, e){
         this.props.onSwitchOnAction(selector);
         e.stopPropagation();
@@ -63,6 +67,9 @@ class TreeNode extends React.Component {
                     this.props.onSave(selector, this.props.item.get('title'), e.target.value.trim());
                 }
                 break;
+            case 27: // escape
+                this.props.onUndoRename(selector);
+                break;
         }
     }
     render() {
@@ -78,7 +85,7 @@ class TreeNode extends React.Component {
         if(this.props.item.get('type') === 'deck'){
             childNodes = this.props.item.get('children').map((node, index) => {
                 return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
+                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onUndoRename={self.props.onUndoRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
                 );
             });
             //show/hide sub nodes based on the expanded state
