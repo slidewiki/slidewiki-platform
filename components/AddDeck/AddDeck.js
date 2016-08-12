@@ -155,6 +155,10 @@ class AddDeck extends React.Component {
         else
             errorView ='';
 
+        let hint_title = this.props.AddDeckStore.wrongFields.title ? 'The title is a must have.' : undefined;
+        let hint_language = this.props.AddDeckStore.wrongFields.language ? 'The language is a must have.' : undefined;
+        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'The licence is a must have.' : undefined;
+
         return (
           <div className="ui container">
           <h3>Add deck</h3>
@@ -178,13 +182,13 @@ class AddDeck extends React.Component {
                   </div>
                   <form className="ui form upload">
                       <div className="two fields">
-                          <div className={fieldClass_title} ref="div_title" >
+                          <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
                               <label>
                                   Title
                               </label>
                               <input type="text" name="deck-title" placeholder="Title" aria-required="true" ref="input_title" />
                           </div>
-                          <div className={fieldClass_language} ref="div_languages" >
+                          <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
                               <label id="language">
                                   Language
                               </label>
@@ -200,7 +204,7 @@ class AddDeck extends React.Component {
                               <label id="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
-                          <div className={fieldClass_licence} ref="div_licences" >
+                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
                               <label id="license">License</label>
                                   {licenceOptions}
                           </div>
