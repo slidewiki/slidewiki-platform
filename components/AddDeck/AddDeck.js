@@ -13,6 +13,8 @@ class AddDeck extends React.Component {
     constructor(props) {
         super(props);
         this.redirectID = 0;
+        this.percentage = 0;
+        this.filename = '';
     }
     componentDidMount(){
     }
@@ -99,6 +101,20 @@ class AddDeck extends React.Component {
         });
         return false;
     }
+    /*
+    use it like:
+      this.percentage++;
+      this.updateProgressBar();
+    */
+    updateProgressBar() {
+        $('#progressbar_addDeck_upload').progress({
+            percent: this.percentage,
+            text: {
+                active  : 'Uploading: {percent}%',
+                success : 'Slides uploaded!'
+            }
+        });
+    }
 
     render() {
         if (this.props.AddDeckStore.redirectID !== 0) {
@@ -171,10 +187,12 @@ class AddDeck extends React.Component {
                                   Upload file
                               </div>
                           </div>
-                          <div className="column" ref="div_filename"></div>
+                          <div className="column" ref="div_filename">
+                              {this.filename}
+                          </div>
                       </div>
                   </div>
-                  <div className="ui progress" data-percent="60" ref="div_progress">
+                  <div className="ui progress" ref="div_progress" id="progressbar_addDeck_upload" >
                       <div className="bar">
                           <div className="progress"></div>
                       </div>
