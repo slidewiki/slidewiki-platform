@@ -63,10 +63,6 @@ class DeckPageStore extends BaseStore {
         this.mode = state.mode;
         this.componentsStatus = state.componentsStatus;
     }
-    handleDeckParamErrors(err) {
-        this.error = err;
-        this.emitChange();
-    }
 }
 
 DeckPageStore.storeName = 'DeckPageStore';

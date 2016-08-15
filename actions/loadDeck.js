@@ -5,25 +5,33 @@ import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
 import loadActivities from './activityfeed/loadActivities';
 import loadContentModules from './loadContentModules';
-import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
-const fumble = require('fumble');
 import { deckIdTypeError, deckContentTypeError, deckContentPathError, slideIdTypeError, deckModeError } from './errors';
 
 export default function loadDeck(context, payload, done) {
-    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0))
-        context.executeAction(deckIdTypeError, payload);
+    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+        context.executeAction(deckIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        context.executeAction(deckContentTypeError, payload);
+    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        context.executeAction(slideIdTypeError, payload);
+    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined))
-        context.executeAction(deckContentPathError, payload);
+    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
+        context.executeAction(deckContentPathError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined))
-        context.executeAction(deckModeError, payload);
+    if (!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+        context.executeAction(deckModeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
@@ -85,9 +93,10 @@ export default function loadDeck(context, payload, done) {
         }
     ],
     // final callback
+
     (err, results) => {
         if (err){
-            console.log(err);
+            console.log('Error thrown:', err);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle

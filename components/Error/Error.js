@@ -15,6 +15,8 @@ import TooManyRequests from '../../components/Error/TooManyRequests';
 import Unauthorized from '../../components/Error/Unauthorized';
 import URITooLong from '../../components/Error/URITooLong';
 import UnprocessableEntity from '../../components/Error/UnprocessableEntity';
+import {connectToStores} from 'fluxible-addons-react';
+import ErrorStore from '../../stores/ErrorStore';
 
 /**
 * Creates a generic error component that calls error specific component
@@ -62,10 +64,10 @@ class Error extends React.Component {
                 );
                 break;
             case 422:
-                    return (
-                        <UnprocessableEntity error={this.props.error} />
-                    );
-                    break;
+                return (
+                    <UnprocessableEntity error={this.props.error} />
+                );
+                break;
             case 429:
                 return (
                     // For rate limiting

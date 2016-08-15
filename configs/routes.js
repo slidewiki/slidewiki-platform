@@ -22,7 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
-import routeNotFoundError from '../actions/errors';
+import { routeNotFoundError } from '../actions/errors';
 
 export default {
     //-----------------------------------HomePage routes------------------------------

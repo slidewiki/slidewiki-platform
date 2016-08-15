@@ -5,7 +5,6 @@ class TranslationStore extends BaseStore {
         super(dispatcher);
         this.translations = [];
         this.currentLang = {};
-        this.error = '';
     }
     updateTranslations(payload) {
         this.translations = payload.translations;
@@ -16,7 +15,6 @@ class TranslationStore extends BaseStore {
         return {
             translations: this.translations,
             currentLang: this.currentLang,
-            error: this.error,
         };
     }
     dehydrate() {
@@ -25,19 +23,12 @@ class TranslationStore extends BaseStore {
     rehydrate(state) {
         this.translations = state.translations;
         this.currentLang = state.currentLang;
-        this.error = state.error;
-    }
-    handleDeckParamErrors(err) {
-        this.error = err;
-        this.emitChange();
     }
 
 }
 
 TranslationStore.storeName = 'TranslationStore';
 TranslationStore.handlers = {
-    'DECK_ERROR': 'handleDeckParamErrors',
-    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_TRANSLATIONS_SUCCESS': 'updateTranslations'
 };
 

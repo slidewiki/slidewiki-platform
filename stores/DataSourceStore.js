@@ -6,7 +6,6 @@ class DataSourceStore extends BaseStore {
         this.datasources = [];
         this.datasource = null;
         this.selector = {};
-        this.error = '';
     }
     loadDataSources(payload) {
         this.datasources = payload.datasources;
@@ -33,7 +32,6 @@ class DataSourceStore extends BaseStore {
             datasources: this.datasources,
             datasource: this.datasource,
             selector: this.selector,
-            error: this.error,
         };
     }
     dehydrate() {
@@ -43,18 +41,11 @@ class DataSourceStore extends BaseStore {
         this.datasources = state.datasources;
         this.datasource = state.datasource;
         this.selector = state.selector;
-        this.error = state.error;
-    }
-    handleDeckParamErrors(err) {
-        this.error = err;
-        this.emitChange();
     }
 }
 
 DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
-    'DECK_ERROR': 'handleDeckParamErrors',
-    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
     'SAVE_DATASOURCE_SUCCESS': 'saveDataSource',

@@ -8,7 +8,6 @@ class ContributorsStore extends BaseStore {
         this.creator = [];
         this.translators = [];
         this.listName = '';
-        this.error = '';
     }
     updateContributors(payload) {
         this.contributors = this.getContributors(payload.contributors);
@@ -23,7 +22,6 @@ class ContributorsStore extends BaseStore {
             contributors: this.contributors,
             creator: this.creator,
             translators: this.translators,
-            error: this.error,
         };
     }
     dehydrate() {
@@ -33,7 +31,6 @@ class ContributorsStore extends BaseStore {
         this.contributors = state.contributors;
         this.creator = state.creator;
         this.translators = state.translators;
-        this.error = state.error;
     }
 
     getBasedonRole(role, list) {
@@ -55,16 +52,10 @@ class ContributorsStore extends BaseStore {
     getTranslators(contributorsAll){
         return this.getBasedonRole('translator', contributorsAll);
     }
-    handleDeckParamErrors(err) {
-        this.error = err;
-        this.emitChange();
-    }
 }
 
 ContributorsStore.storeName = 'ContributorsStore';
 ContributorsStore.handlers = {
-    'DECK_ERROR': 'handleDeckParamErrors',
-    'SLIDE_ERROR': 'handleDeckParamErrors',
     'LOAD_CONTRIBUTORS_SUCCESS': 'updateContributors'
 };
 
