@@ -138,21 +138,24 @@ class SlideContentEditor extends React.Component {
         const headerStyle = {
             minWidth: '100%',
             overflowY: 'auto',
-            borderStyle: 'dotted'
+            borderStyle: 'dashed dashed none dashed',
+            borderColor: '#e7e7e7'
         };
         const contentStyle = {
             minWidth: '100%',
             maxHeight: 450,
             minHeight: 450,
             overflowY: 'auto',
-            borderStyle: 'dotted'
+            borderStyle: 'dashed',
+            borderColor: '#e7e7e7'
         };
         const speakernotesStyle = {
             minWidth: '100%',
             maxHeight: 120,
             minHeight: 120,
             overflowY: 'auto',
-            borderStyle: 'dotted'
+            borderStyle: 'dashed',
+            borderColor: '#e7e7e7'
         };
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
