@@ -69,7 +69,7 @@ export default {
                 },
                 tags: params.tags,
                 title: params.title,
-                user: params.user.toString(),
+                user: params.userid.toString(),
                 license: params.licence
             };
             rp({
