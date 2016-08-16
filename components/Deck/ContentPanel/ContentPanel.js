@@ -7,59 +7,49 @@ import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
 import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
-import Error from '../../../components/Error/Error';
 
 class ContentPanel extends React.Component {
     render() {
-        if(this.props.ContentStore.error) {
-            return (
-                <div ref="contentPanel">
-                    <Error error={this.props.ContentStore.error} />
+        let targetComponent = '';
+        switch (this.props.ContentStore.selector.stype) {
+            case 'deck':
+                switch (this.props.ContentStore.mode) {
+                    case 'view':
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
+                        break;
+                    case 'edit':
+                        targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
+                        break;
+                    default:
+                        targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
+                }
+                break;
+            case 'slide':
+                switch (this.props.ContentStore.mode) {
+                    case 'view':
+                        targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
+                        break;
+                    case 'edit':
+                        targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
+                        break;
+                    default:
+                        targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
+                }
+                break;
+        }
+        return (
+            <div ref="contentPanel">
+                <div className="ui top attached">
+                    <ContentActionsHeader ContentStore={this.props.ContentStore} />
                 </div>
-            );
-        }
-        else {
-            let targetComponent = '';
-            switch (this.props.ContentStore.selector.stype) {
-                case 'deck':
-                    switch (this.props.ContentStore.mode) {
-                        case 'view':
-                            targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
-                            break;
-                        case 'edit':
-                            targetComponent = <DeckEditPanel  selector={this.props.ContentStore.selector} />;
-                            break;
-                        default:
-                            targetComponent = <DeckViewPanel  selector={this.props.ContentStore.selector} />;
-                    }
-                    break;
-                case 'slide':
-                    switch (this.props.ContentStore.mode) {
-                        case 'view':
-                            targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
-                            break;
-                        case 'edit':
-                            targetComponent = <SlideEditPanel selector={this.props.ContentStore.selector} />;
-                            break;
-                        default:
-                            targetComponent = <SlideViewPanel  selector={this.props.ContentStore.selector} />;
-                    }
-                    break;
-            }
-            return (
-                <div ref="contentPanel">
-                    <div className="ui top attached">
-                        <ContentActionsHeader ContentStore={this.props.ContentStore} />
-                    </div>
-                    <div className="ui top attached">
-                        {targetComponent}
-                    </div>
-                    <div className="ui bottom attached">
-                        <ContentActionsFooter ContentStore={this.props.ContentStore} />
-                    </div>
-                 </div>
-            );
-        }
+                <div className="ui top attached">
+                    {targetComponent}
+                </div>
+                <div className="ui bottom attached">
+                    <ContentActionsFooter ContentStore={this.props.ContentStore} />
+                </div>
+             </div>
+        );
     }
 }
 

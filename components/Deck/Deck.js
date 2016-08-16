@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
-//import ErrorStore from '../../stores/ErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
@@ -10,7 +9,6 @@ import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
-//import Error from '../../components/Error/Error';
 
 class Deck extends React.Component {
     handleExpandClick(){
@@ -122,8 +120,7 @@ Deck.contextTypes = {
 };
 Deck = connectToStores(Deck, [DeckPageStore], (context, props) => {
     return {
-        DeckPageStore: context.getStore(DeckPageStore).getState(),
-        //ErrorStore: context.getStore(ErrorStore).getState()
+        DeckPageStore: context.getStore(DeckPageStore).getState()
     };
 });
 export default Deck;
