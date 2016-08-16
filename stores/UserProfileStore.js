@@ -21,7 +21,8 @@ class UserProfileStore extends BaseStore {
             language: '',
             country: '',
             organization: '',
-            picture: ''
+            picture: '',
+            description: ''
         };
         this.username = '';
         this.userid = '';
@@ -45,7 +46,8 @@ class UserProfileStore extends BaseStore {
             language: '',
             country: '',
             organization: '',
-            picture: ''
+            picture: '',
+            description: ''
         };
     }
 

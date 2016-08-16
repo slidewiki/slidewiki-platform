@@ -18,12 +18,12 @@ class PublicUserData extends React.Component {
             {picture}
             <h2>{this.props.user.fname} {this.props.user.lname}</h2>
             <h3>{this.props.user.uname}</h3>
-            <p>{!this.isEmpty(this.props.user.description) ? <div>{this.props.user.description}</div> : ''}</p>
+            {!this.isEmpty(this.props.user.description) ? <p>{this.props.user.description}</p> : ''}
             <div className = "ui divider" />
             {!this.isEmpty(this.props.user.organization) ? <div><i className="ui users icon"/> {this.props.user.organization}<br/><br/></div> : ''}
             {!this.isEmpty(this.props.user.country) ? <div><i className="ui marker icon"/> {this.props.user.country}<br/><br/></div> : ''}
-            {!this.isEmpty(this.props.user.website) ? <div><i className="ui marker icon"/> {this.props.user.website}<br/><br/></div> : ''}
-            {!this.isEmpty(this.props.user.joined) ? <div><i className="ui marker icon"/> {this.props.user.joined}<br/><br/></div> : ''}
+            {!this.isEmpty(this.props.user.website) ? <div><i className="ui globe icon"/> {this.props.user.website}<br/><br/></div> : ''}
+            {!this.isEmpty(this.props.user.joined) ? <div><i className="ui clock icon"/> {this.props.user.joined}<br/><br/></div> : ''}
             <div className = "ui divider" />
 
           </div>

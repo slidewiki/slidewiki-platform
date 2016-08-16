@@ -2,15 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import classNames from 'classnames';
+import CountryDropdown from './CountryDropdown.js';
 
 class ChangePersonalData extends React.Component {
     componentDidMount() {
         $('.ui.dropdown').dropdown();
     }
 
-    componentDidUpdate() {
-        console.log(this.props.user);
-    }
+    componentDidUpdate() {}
 
     handleChangeUserdata(e) {
         e.preventDefault();
@@ -20,21 +19,14 @@ class ChangePersonalData extends React.Component {
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
         payload.language = this.refs.language.value;
-        payload.country = this.refs.country.value;
+        payload.country = this.refs.country.getCountry();
         payload.organization = this.refs.organization.value;
+        payload.description = this.refs.description.value;
         this.context.executeAction(changeUserData, payload);
         return false;
     }
 
     render() {
-        let lang = '';
-        switch (this.props.user.language) {
-            case 'de_DE':
-                lang = 'German';
-                break;
-            default:
-                lang = 'English';
-        }
         let emailClasses = classNames({
             'ui': true,
             'field': true,
@@ -65,13 +57,12 @@ class ChangePersonalData extends React.Component {
                 <div className="ui field">
                   <div className="ui field">
                     <label>Language</label>
-                    <div className="ui fluid search selection dropdown required" >
-                      <input type="hidden" name="language" ref="language" defaultValue={lang} required/>
+                    <div className="ui fluid search selection dropdown required" data-tooltip="There will be more in the future" data-position="top center" data-inverted="">
+                      <input type="hidden" name="language" ref="language" defaultValue={this.props.user.language} required/>
                       <i className="dropdown icon"/>
-                      <div className="default text">Select Language</div>
+                      <div className="default text">Select your language</div>
                       <div className="menu">
                         <div className="item" data-value="en_EN">English</div>
-                        <div className="item" data-value="de_DE">German</div>
                       </div>
                     </div>
                   </div>
@@ -80,13 +71,20 @@ class ChangePersonalData extends React.Component {
 
               <div className="two fields">
                 <div className="ui field">
-                  <label>Country</label>
-                  <input type="text" placeholder="USA" name="country" defaultValue={this.props.user.country} ref="country"/>
+                    <div className="ui field">
+                      <label>Country</label>
+                      <CountryDropdown country={this.props.user.country} ref="country"/>
+                    </div>
                 </div>
                 <div className="ui field">
                   <label>Organization</label>
-                  <input type="text" placeholder="Red Socks" name="organization" defaultValue={this.props.user.organization} ref="organization"/>
+                  <input type="text" placeholder="Google" name="organization" defaultValue={this.props.user.organization} ref="organization"/>
                 </div>
+              </div>
+
+              <div className="ui field">
+                <label>Bio</label>
+                <textarea rows="2" maxLength="120" placeholder="A few words about yourself" name="description" defaultValue={this.props.user.description} ref="description"/>
               </div>
 
               <button type="submit" className="ui blue labeled submit icon button">
