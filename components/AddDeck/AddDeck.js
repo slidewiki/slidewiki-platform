@@ -9,6 +9,8 @@ import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
+//TODO: update link to terms of use; 
+
 class AddDeck extends React.Component {
     constructor(props) {
         super(props);
@@ -235,7 +237,7 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" aria-labelledby="terms" aria-required="true" ref="checkbox_conditions" />
                               <label id="terms">
-                                  I agree to the terms and conditions
+                                  I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
                               </label>
                           </div>
                       </div>
