@@ -66,6 +66,20 @@ export default {
             done();
         }
     },
+    //TODO: add an initial loader for this page
+    addDeck: {
+        path: '/addDeck',
+        method: 'get',
+        page: 'addDeck',
+        title: 'SlideWiki -- Add Deck',
+        handler: require('../components/AddDeck/AddDeck'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Add Deck'
+            });
+            done();
+        }
+    },
     notifications: {
         path: '/notifications',
         method: 'get',
