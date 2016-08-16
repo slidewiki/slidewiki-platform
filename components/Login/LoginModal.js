@@ -45,7 +45,8 @@ class LoginModal extends React.Component {
         this.context.executeAction(userSignOut, {});
     }
 
-    signin() {
+    signin(e) {
+        e.preventDefault();
         this.context.executeAction(userSignIn, {
           //email: this.refs.emailsignin.value,
             email: this.refs.email1.value,
@@ -54,6 +55,7 @@ class LoginModal extends React.Component {
 
         this.refs.email1.value = '';
         this.refs.password1.value = '';
+        return false;
     }
 
     handleExitButton(){
@@ -90,24 +92,24 @@ class LoginModal extends React.Component {
               <div className="ui container">
                   <div className="ui right">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
-                      <i className="remove icon"></i>Close
+                      <i className="remove icon"/>Close
                     </button>
                   </div>
                   <div className="ui blue padded center aligned segment">
                     <h1 className="ui dividing header">Sign In</h1>
-                      <form className="ui form signin" onSubmit={(e) => {e.preventDefault();}}>
+                      <form className="ui form signin" onSubmit={this.signin.bind(this)}>
                         <div className="ui five wide icon input field">
-                          <div><label htmlFor="email1" hidden>Email</label></div>
-                          <input type="email1" id="email1" name="email1" ref="email1" placeholder="Email" autoFocus tabIndex="0"  aria-required="true"/><i className="user icon"></i>
+                          <div><label htmlFor="email1" hidden>E-Mail</label></div>
+                          <input type="email1" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
                         </div>
                           <br/>
                         <div className="ui five wide icon input field">
                           <div><label htmlFor="password1" hidden>Password</label></div>
-                          <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0"  aria-required="true"/><i className="lock icon"></i>
+                          <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0" aria-required="true" required/><i className="lock icon"/>
                         </div>
                         <br/>
-                        <div className="ui error message"></div>
-                        <button type="submit" className="ui blue labeled submit icon button" onClick={ this.signin.bind(this)}><i className="icon sign in"></i> Sign In</button>
+                        <div className="ui error message"/>
+                        <button type="submit" className="ui blue labeled submit icon button"><i className="icon sign in"/> Sign In</button>
                      </form>
                   <br/>
                   <div className="ui floated right">
