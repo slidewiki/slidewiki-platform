@@ -31,7 +31,7 @@ class LoginModal extends React.Component {
     componentDidUpdate(prevProps, prevState) {//Workaround to set focus
         if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
             setTimeout(() => {
-                ReactDOM.findDOMNode(this.refs.username1).focus();
+                ReactDOM.findDOMNode(this.refs.email1).focus();
             }, 0);
         }
     }
@@ -48,11 +48,11 @@ class LoginModal extends React.Component {
     signin() {
         this.context.executeAction(userSignIn, {
           //email: this.refs.emailsignin.value,
-            username: this.refs.username1.value,
+            email: this.refs.email1.value,
             password: this.refs.password1.value
         });
 
-        this.refs.username1.value = '';
+        this.refs.email1.value = '';
         this.refs.password1.value = '';
     }
 
@@ -97,8 +97,8 @@ class LoginModal extends React.Component {
                     <h1 className="ui dividing header">Sign In</h1>
                       <form className="ui form signin" onSubmit={(e) => {e.preventDefault();}}>
                         <div className="ui five wide icon input field">
-                          <div><label htmlFor="username1" hidden>Username</label></div>
-                          <input type="username1" id="username1" name="username1" ref="username1" placeholder="Username" autoFocus tabIndex="0"  aria-required="true"/><i className="user icon"></i>
+                          <div><label htmlFor="email1" hidden>Email</label></div>
+                          <input type="email1" id="email1" name="email1" ref="email1" placeholder="Email" autoFocus tabIndex="0"  aria-required="true"/><i className="user icon"></i>
                         </div>
                           <br/>
                         <div className="ui five wide icon input field">
