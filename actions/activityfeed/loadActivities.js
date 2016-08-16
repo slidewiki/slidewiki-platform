@@ -1,7 +1,6 @@
 import { shortTitle } from '../../configs/general';
 import { deckContentTypeError, slideIdTypeError } from '../loadErrors';
 
-
 export default function loadActivities(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});

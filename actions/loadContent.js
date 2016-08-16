@@ -5,7 +5,7 @@ import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './slide/loadSlideView';
 import loadSlideEdit from './slide/loadSlideEdit';
 import ContentStore from '../stores/ContentStore';
-import { deckContentTypeError, slideIdTypeError } from './loadErrors';
+import { deckContentTypeError, deckModeError, slideIdTypeError } from './loadErrors';
 
 export default function loadContent(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {

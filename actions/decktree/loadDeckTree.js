@@ -1,8 +1,8 @@
 import {shortTitle} from '../../configs/general';
 import DeckTreeStore from '../../stores/DeckTreeStore';
+import { deckIdTypeError, deckContentPathError } from './loadErrors';
 
 export default function loadDeckTree(context, payload, done) {
-
     if (!(Number.parseInt(payload.params.id) >= 0))
         console.log('Deck id incorrect. Loading deck tree failed.');
 
