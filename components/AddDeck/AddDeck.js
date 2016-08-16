@@ -3,13 +3,14 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import Error from '../Error/Error';
 import AddDeckStore from '../../stores/AddDeckStore';
+import UserProfileStore from '../../stores/UserProfileStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
-//TODO: update link to terms of use; 
+//TODO: update link to terms of use;
 
 class AddDeck extends React.Component {
     constructor(props) {
@@ -86,7 +87,8 @@ class AddDeck extends React.Component {
             description: description,
             theme: theme,
             licence: licence,
-            tags: tags
+            tags: tags,
+            userid: this.props.UserProfileStore.userid
         });
     }
     handleCancel(x) {
@@ -101,7 +103,6 @@ class AddDeck extends React.Component {
         this.context.executeAction(navigateAction, {
             url: '/deck/' + this.redirectID
         });
-        return false;
     }
     /*
     use it like:
@@ -119,6 +120,18 @@ class AddDeck extends React.Component {
     }
 
     render() {
+        //redirect to homepage if not logged in
+        if (!((this.props.UserProfileStore.username !== undefined && this.props.UserProfileStore.username !== null && this.props.UserProfileStore.username !== '')
+          && (this.props.UserProfileStore.userid !== undefined && this.props.UserProfileStore.userid !== null && this.props.UserProfileStore.userid !== '')
+          && (this.props.UserProfileStore.jwt !== undefined && this.props.UserProfileStore.jwt !== null && this.props.UserProfileStore.jwt !== ''))) {
+            setTimeout( () => {
+                this.context.executeAction(navigateAction, {
+                    url: '/'
+                });
+            }, 1);
+        }
+
+        //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
             setTimeout( () => {
                 this.redirectID = this.props.AddDeckStore.redirectID;
@@ -266,9 +279,10 @@ class AddDeck extends React.Component {
 AddDeck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-AddDeck = connectToStores(AddDeck, [AddDeckStore], (context, props) => {
+AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore], (context, props) => {
     return {
-        AddDeckStore: context.getStore(AddDeckStore).getState()
+        AddDeckStore: context.getStore(AddDeckStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default AddDeck;
