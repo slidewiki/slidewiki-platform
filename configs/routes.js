@@ -65,6 +65,7 @@ export default {
             done();
         }
     },
+    //TODO: add an initial loader for this page
     addDeck: {
         path: '/addDeck',
         method: 'get',
