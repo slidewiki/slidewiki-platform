@@ -1,18 +1,33 @@
 import React from 'react';
+import classNames from 'classnames';
+
+/**
+* Properties:
+*   required: true|false
+*   country:  country short code, like US or GB
+*/
 
 class CountryDropdown extends React.Component {
     componentDidMount() {}
 
     componentDidUpdate() {}
 
-    getCountry() {
+    getSelected() {
         return this.refs.country.value;
     }
 
     render() {
+        let classes = classNames({
+            'ui': true,
+            'fluid': true,
+            'search': true,
+            'selection': true,
+            'dropdown': true,
+            'required': this.props.required,
+        });
         return (
-            <div className="ui fluid search selection dropdown" >
-                <input type="hidden" name="country" ref="country" defaultValue={this.props.country}/>
+            <div className={classes} >
+                {this.props.required ? <input type="hidden" name="country" ref="country" defaultValue={this.props.country} required/> : <input type="hidden" name="country" ref="country" defaultValue={this.props.country}/>}
                 <i className="dropdown icon"/>
                 <div className="default text">Select your country</div>
                 <div className="menu">

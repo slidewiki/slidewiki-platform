@@ -1,20 +1,11 @@
-import { Microservices } from '../configs/microservices';
 import rp from 'request-promise';
-
-function isEmpty(toTest) {
-    return (toTest === undefined ||
-    toTest === null ||
-    toTest === '' ||
-    (toTest instanceof Object && Object.keys(toTest).length === 0) ||
-    (toTest instanceof Array && toTest.length === 0));
-}
+import { isEmpty } from '../../../common.js';
+import { Microservices } from '../configs/microservices';
 
 export default {
     name: 'userProfile',
 
     delete: (req, resource, params, config, callback) => {
-        callback(null, params); //TODO implement backend delete call
-        return;
         rp({
             method: 'DELETE',
             uri: Microservices.user.uri + '/user/' + params.params.id,
@@ -106,6 +97,5 @@ export default {
             })
             .catch((err) => callback(err));
         }
-
     }
 };

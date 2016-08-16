@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Identicons from 'identicons-react';
+import UserPicture from '../../common/UserPicture';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
 class Picture extends React.Component {
@@ -25,18 +24,11 @@ class Picture extends React.Component {
     }
 
     render() {
-        let picture = '';
-        if(this.props.user.picture === '')
-            picture = <div className="ui small centered rounded bordered image"><Identicons id={this.props.user.uname} width={150} size={5} /></div>;
-        else if(this.props.user.picture.includes('gravatar'))
-            picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={this.props.user.picture} className="ui small centered rounded bordered image"/></div>;
-        else
-            picture = <img src={this.props.user.picture} className="ui small centered rounded bordered image"/>;
         return (
           <div>
             <div className="ui centered  grid">
                 <div className="eight wide column">
-                  {picture}
+                  <UserPicture picture={this.props.user.picture} username={this.props.user.uname} link={false} private={true} width={150} centered={true} size={'small'}/>;
                 </div>
                 <div className="eight wide column">
                   <div className="ui vertical buttons">

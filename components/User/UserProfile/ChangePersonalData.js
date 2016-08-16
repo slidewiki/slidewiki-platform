@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import classNames from 'classnames';
-import CountryDropdown from './CountryDropdown.js';
+import CountryDropdown from '../../common/CountryDropdown.js';
+import LanguageDropdown from '../../common/LanguageDropdown.js';
 
 class ChangePersonalData extends React.Component {
     componentDidMount() {
@@ -18,8 +19,8 @@ class ChangePersonalData extends React.Component {
         payload.fname = this.refs.fname.value;
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
-        payload.language = this.refs.language.value;
-        payload.country = this.refs.country.getCountry();
+        payload.language = this.refs.language.getSelected();
+        payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
         this.context.executeAction(changeUserData, payload);
@@ -57,14 +58,7 @@ class ChangePersonalData extends React.Component {
                 <div className="ui field">
                   <div className="ui field">
                     <label>Language</label>
-                    <div className="ui fluid search selection dropdown required" data-tooltip="There will be more in the future" data-position="top center" data-inverted="">
-                      <input type="hidden" name="language" ref="language" defaultValue={this.props.user.language} required/>
-                      <i className="dropdown icon"/>
-                      <div className="default text">Select your language</div>
-                      <div className="menu">
-                        <div className="item" data-value="en_EN">English</div>
-                      </div>
-                    </div>
+                    <LanguageDropdown ref="language" required={true} language={this.props.user.language}/>
                   </div>
                 </div>
               </div>
@@ -73,7 +67,7 @@ class ChangePersonalData extends React.Component {
                 <div className="ui field">
                     <div className="ui field">
                       <label>Country</label>
-                      <CountryDropdown country={this.props.user.country} ref="country"/>
+                      <CountryDropdown ref="country" required={false} country={this.props.user.country}/>
                     </div>
                 </div>
                 <div className="ui field">
