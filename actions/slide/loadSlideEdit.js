@@ -1,9 +1,11 @@
 import {shortTitle} from '../../configs/general';
-import { slideIdTypeError } from '../errors';
+import { slideIdTypeError } from '../loadErrors';
 
 export default function loadSlideEdit(context, payload, done) {
-    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        context.executeAction(slideIdTypeError, payload);
+    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

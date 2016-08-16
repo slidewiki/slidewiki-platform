@@ -1,18 +1,15 @@
-import {shortTitle} from '../configs/general';
-import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
-const fumble = require('fumble');
+import { shortTitle } from '../configs/general';
+import { deckContentTypeError, slideIdTypeError } from './loadErrors';
 
 export default function loadContentHistory(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        let error = fumblle.http.badRequest();
-        context.dispatch('DECK_ERROR', ErrorsList.DECK_CONTENT_TYPE_ERROR);
-        throw error;
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
     }
 
     if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        let error = fumble.http.badRequest();
-        context.dispatch('SLIDE_ERROR', ErrorsList.SLIDE_ID_TYPE_ERROR);
-        throw error;
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
     }
 
     context.service.read('history.list', payload, {timeout: 20 * 1000}, (err, res) => {

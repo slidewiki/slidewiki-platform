@@ -1,5 +1,7 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
+import { connectToStores } from 'fluxible-addons-react';
+import ErrorStore from '../../stores/ErrorStore';
 import BadRequest from '../../components/Error/BadRequest';
 import BadGateway from '../../components/Error/BadGateway';
 import Forbidden from '../../components/Error/Forbidden';
@@ -15,8 +17,6 @@ import TooManyRequests from '../../components/Error/TooManyRequests';
 import Unauthorized from '../../components/Error/Unauthorized';
 import URITooLong from '../../components/Error/URITooLong';
 import UnprocessableEntity from '../../components/Error/UnprocessableEntity';
-import {connectToStores} from 'fluxible-addons-react';
-import ErrorStore from '../../stores/ErrorStore';
 
 /**
 * Creates a generic error component that calls error specific component
@@ -112,4 +112,12 @@ class Error extends React.Component {
     }
 }
 
+Error.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+Error = connectToStores(Error, [ErrorStore], (context, props) => {
+    return {
+        ErrorStore: context.getStore(ErrorStore).getState()
+    };
+});
 export default Error;

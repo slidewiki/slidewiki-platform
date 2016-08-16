@@ -5,7 +5,7 @@ import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
 import loadActivities from './activityfeed/loadActivities';
 import loadContentModules from './loadContentModules';
-import { deckIdTypeError, deckContentTypeError, deckContentPathError, slideIdTypeError, deckModeError } from './errors';
+import { deckIdTypeError, deckContentTypeError, deckContentPathError, slideIdTypeError, deckModeError, notFoundError } from './loadErrors';
 
 export default function loadDeck(context, payload, done) {
     if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {

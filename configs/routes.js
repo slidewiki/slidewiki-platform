@@ -1,5 +1,5 @@
 //general app config
-import {shortTitle, fullTitle} from '../configs/general';
+import { shortTitle, fullTitle } from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
@@ -22,7 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
-import { routeNotFoundError } from '../actions/errors';
+import loadNotFound from '../actions/loadNotFound';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -266,9 +266,9 @@ export default {
     notfound: {
         path: '*',
         method: 'get',
-        handler: require('../components/RouteNotFound/RouteNotFound'),
-        action: (context, payload) => {
-            context.executeAction(routeNotFoundError, payload);
+        handler: require('../components/Error/Dummy'),
+        action: (context, payload, done) => {
+            context.executeAction(loadNotFound, payload, done);
         }
     }
 };

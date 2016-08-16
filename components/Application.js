@@ -8,7 +8,7 @@ import { connectToStores, provideContext } from 'fluxible-addons-react';
 import { handleHistory } from 'fluxible-router';
 import pages from '../configs/routes';
 import ErrorStore from '../stores/ErrorStore';
-import Error from './Error/Error';
+import ErrorComponent from './Error/Error';
 
 class Application extends React.Component {
     render() {
@@ -17,7 +17,7 @@ class Application extends React.Component {
             return (
                 <div className="slidewiki-page">
                     <Header currentRoute={this.props.currentRoute} links={pages} />
-                    <Error error={this.props.ErrorStore.error} />
+                    <ErrorComponent error={this.props.ErrorStore.error} />
                     <Footer />
                 </div>
             );

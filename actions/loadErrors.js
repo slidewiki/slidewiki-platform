@@ -1,6 +1,6 @@
 import async from 'async';
 import ErrorStore from '../stores/ErrorStore';
-import {ErrorsList} from '../components/Error/util/ErrorDescriptionUtil';
+import { ErrorsList } from '../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
 
 export function deckIdTypeError(context, payload) {
