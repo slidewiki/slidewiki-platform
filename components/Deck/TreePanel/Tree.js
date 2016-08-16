@@ -123,7 +123,7 @@ class Tree extends React.Component {
         if(this.props.items && this.props.items.size){
             output = this.props.items.map((node, index) => {
                 return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
+                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onUndoRename={self.props.onUndoRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} mode={self.props.mode} page={self.props.page} rootNode={self.props.rootNode} key={index} />
                 );
             });
         }

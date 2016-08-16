@@ -12,7 +12,7 @@ cache:
   - "./node_modules"
   - "./bower_components"
 before_install:
-- if [ "$TRAVIS_BRANCH" == "master" ] ; then ./travis_scripts/install_compose.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/install_compose.sh ; fi
 before_script:
 - bower install
 script:
@@ -20,8 +20,8 @@ script:
 - npm run test
 after_success:
 - openssl aes-256-cbc -K $encrypted_3ef84d34223e_key -iv $encrypted_3ef84d34223e_iv -in deployment_keys.tar.enc -out deployment_keys.tar -d
-- if [ "$TRAVIS_BRANCH" == "master" ] ; then ./travis_scripts/dockerhub.sh ; fi
-- if [ "$TRAVIS_BRANCH" == "master" ] ; then ./travis_scripts/deploy.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/dockerhub.sh ; fi
+- if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/deploy.sh ; fi
 after_script:
 - rm -f deployment_keys.tar
 - rm -f ~/.docker/{cert.pem,key.pem,ca.pem,config.json}

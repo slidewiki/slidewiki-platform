@@ -4,7 +4,6 @@ import classNames from 'classnames/bind';
 class SearchResultsItem extends React.Component {
 
     render() {
-
         const result = this.props.data;
         const imgpath = '/assets/images/search/';
 

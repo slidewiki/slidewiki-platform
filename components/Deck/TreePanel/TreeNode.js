@@ -44,6 +44,10 @@ class TreeNode extends React.Component {
         this.props.onRename(selector);
         e.stopPropagation();
     }
+    handleUndoRenameClick(selector, e){
+        this.props.onDoRename(selector);
+        e.stopPropagation();
+    }
     handleMenuClick(selector, e){
         this.props.onSwitchOnAction(selector);
         e.stopPropagation();
@@ -63,6 +67,9 @@ class TreeNode extends React.Component {
                     this.props.onSave(selector, this.props.item.get('title'), e.target.value.trim());
                 }
                 break;
+            case 27: // escape
+                this.props.onUndoRename(selector);
+                break;
         }
     }
     render() {
@@ -78,7 +85,7 @@ class TreeNode extends React.Component {
         if(this.props.item.get('type') === 'deck'){
             childNodes = this.props.item.get('children').map((node, index) => {
                 return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
+                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onUndoRename={self.props.onUndoRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
                 );
             });
             //show/hide sub nodes based on the expanded state
@@ -96,6 +103,10 @@ class TreeNode extends React.Component {
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
         });
+        const duplicateItemClass = classNames({
+            'ui button': true,
+            'disabled': this.props.item.get('type') === 'deck'
+        });
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
@@ -111,7 +122,7 @@ class TreeNode extends React.Component {
                           <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className="ui button" title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
+                    <button className={duplicateItemClass} title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
                         <i className="copy icon"></i>
                     </button>
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
