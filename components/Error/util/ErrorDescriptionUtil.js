@@ -55,6 +55,11 @@ export default {
             description: 'Inappropriate syntax is used for search parameter.',
             actionRequired: 'Please enter correct syntax of the search parameter.'
         },
+        SERVICE_UNAVAILABLE: {
+            type: 'Service Unavailable',
+            description: 'The server is currently unable to handle the request due to one of the following reasons: temporary overload, maintenance or temporary connection error.',
+            actionRequired: 'Please try after some time.'
+        },
         TOO_MANY_REQUESTS_ERROR: {
             type: 'Too Many Requests',
             description: 'Too many requests are sent in a given amount of time.',

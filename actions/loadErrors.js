@@ -90,6 +90,14 @@ export function searchStringEmptyError(context, payload) {
     throw error;
 }
 
+export function serviceUnavailable(context, payload) {
+    const error = fumble.http.serviceUnavailable();
+    ErrorsList.SERVICE_UNAVAILABLE.statusCode = error.statusCode;
+    ErrorsList.SERVICE_UNAVAILABLE.statusText = error.message;
+    context.dispatch('SERVICE_UNAVAILABLE', ErrorsList.SERVICE_UNAVAILABLE);
+    throw error;
+}
+
 export function tooManyRequestsError(context, payload) {
     const error = fumble.http.tooManyRequests();
     ErrorsList.TOO_MANY_REQUESTS_ERROR.statusCode = error.statusCode;
