@@ -14,7 +14,7 @@ class SimilarContentStore extends BaseStore {
     getState() {
         return {
             contents: this.contents,
-            selector: this.selector
+            selector: this.selector,
         };
     }
     dehydrate() {

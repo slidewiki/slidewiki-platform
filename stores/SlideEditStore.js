@@ -49,7 +49,7 @@ class SlideEditStore extends BaseStore {
             id: this.id,
             title: this.title,
             content: this.content,
-            speakernotes: this.speakernotes
+            speakernotes: this.speakernotes,
         };
     }
     dehydrate() {

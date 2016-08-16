@@ -1,5 +1,5 @@
 import React from 'react';
-import {connectToStores} from 'fluxible-addons-react';
+import { connectToStores } from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import loadActivities from '../../../actions/activityfeed/loadActivities';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';

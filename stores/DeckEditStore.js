@@ -11,7 +11,7 @@ class DeckEditStore extends BaseStore {
     }
     getState() {
         return {
-            deckProps: this.deckProps
+            deckProps: this.deckProps,
         };
     }
     dehydrate() {
