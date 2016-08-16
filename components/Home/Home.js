@@ -30,7 +30,7 @@ class Home extends React.Component {
                             <div>
                                 Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
                                 <div className="ui divided list animated ">
-                                    <a className="item" href="/deck/56/slide/575060ae4bc68d1000ea952b">Try Sample Deck 1 &raquo;</a><a className="item" href="/deck/91">Try Sample Deck  2 &raquo;</a>
+                                    <a className="item" href="/deck/7">Try Sample Deck 1 &raquo;</a><a className="item" href="/deck/1">Try Sample Deck  2 &raquo;</a>
                                 </div>
                             </div>
                         </div>

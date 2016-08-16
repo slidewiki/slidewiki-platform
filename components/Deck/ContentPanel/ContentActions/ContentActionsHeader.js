@@ -21,16 +21,14 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const addSlideClass = classNames({
-            'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid
+            'item ui small basic left attached button': true
         });
         const addDeckClass = classNames({
-            'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid
+            'item ui small basic left attached button': true
         });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck'
         });
         const dueleteItemClass = classNames({
             'item ui small basic left attached button': true,
