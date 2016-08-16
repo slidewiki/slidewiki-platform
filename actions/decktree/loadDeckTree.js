@@ -3,11 +3,17 @@ import DeckTreeStore from '../../stores/DeckTreeStore';
 import { deckIdTypeError, deckContentPathError } from './loadErrors';
 
 export default function loadDeckTree(context, payload, done) {
-    if (!(Number.parseInt(payload.params.id) >= 0))
-        console.log('Deck id incorrect. Loading deck tree failed.');
+    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+        context.executeAction(deckIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(payload.params.spath || payload.params.spath === undefined || payload.params.spath === ''))
-        console.log('Incorrect path. Loading deck tree failed.');
+    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) ||
+        payload.params.spath === undefined ||
+        payload.params.spath === '')) {
+        context.executeAction(deckContentPathError, payload).catch((err) => {done(err);});
+        return;
+    }
 
     let currentSelector = context.getStore(DeckTreeStore).getSelector();
     let runFetchTree = 1;
