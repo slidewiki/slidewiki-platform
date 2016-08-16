@@ -9,12 +9,10 @@ class AddDeckPanel extends React.Component {
     }
     render() {
         return (
-          <NavLink className="item right" routeName="addDeck">
-              <button className="ui right labeled icon button">
-                  <i className="right plus icon"></i>
-                  Add deck
-              </button>
-          </NavLink>
+            <button className="ui right labeled icon button">
+                <i className="right plus icon"></i>
+                Add deck
+            </button>
         );
     }
 }

@@ -20,8 +20,10 @@ class Header extends React.Component {
                     <div className="item right">
                         <SearchBox />
                     </div>
-                    <AddDeckPanel />
                     <NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
+                    <NavLink className="item right" routeName="addDeck" activeClass="active">
+                        <AddDeckPanel />
+                    </NavLink>
                     <UserNotificationsBadge />
                     <LoginModal />
                 </div>
