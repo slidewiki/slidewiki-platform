@@ -22,6 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
+import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
 
 export default {
@@ -92,7 +93,17 @@ export default {
             done();
         }
     },
-
+//-----------------------------------User routes------------------------------
+    userprofile: {
+        path: '/user/:username',
+        method: 'get',
+        page: 'userprofile',
+        title: 'SlideWiki -- Your profile',
+        handler: require('../components/User/UserProfile/UserProfile'),
+        action: (context, payload, done) => {
+            context.executeAction(fetchUser, payload, done);
+        }
+    },
 //-----------------------------------Search routes------------------------------
     searchresults: {
         path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
