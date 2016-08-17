@@ -144,7 +144,8 @@ export default {
             }).then((res) => {
                 //console.log(res);
                 //todo:there seems to be an error here: SyntaxError: Unexpected end of JSON input
-                callback(null, {slide: JSON.parse(res), selector: selector});
+                //callback(null, {slide: JSON.parse(res), selector: selector});
+                callback(null, {slide: {}, selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {slide: {}, selector: selector});

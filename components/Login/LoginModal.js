@@ -36,7 +36,6 @@ class LoginModal extends React.Component {
 
     handleLoginButton(){
         this.setState({openModal: true});
-
     }
 
     handleSignoutButton() {
@@ -57,7 +56,6 @@ class LoginModal extends React.Component {
 
     handleExitButton(){
         this.setState({openModal: false});
-
     }
 
     componentWillReceiveProps(nextProps) {
@@ -85,6 +83,7 @@ class LoginModal extends React.Component {
         let loginButton = (
             <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
         );
+
         if (this.props.UserProfileStore.username === '') {
             loginButton = (
                 <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
