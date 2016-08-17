@@ -53,7 +53,6 @@ export default {
                 callback(null, {});
             });
         } else if (resource === 'user.checkusername') {
-          console.log(args.username);
             rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
