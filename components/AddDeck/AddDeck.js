@@ -1,7 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
-import Error from '../Error/Error';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';

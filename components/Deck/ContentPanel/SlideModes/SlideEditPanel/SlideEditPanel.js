@@ -3,7 +3,8 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import SlideContentEditor from './SlideContentEditor';
-let ReactDOM = require('react-dom');
+import Error from '../../../../../components/Error/Error';
+const ReactDOM = require('react-dom');
 
 class SlideEditPanel extends React.Component {
     render() {

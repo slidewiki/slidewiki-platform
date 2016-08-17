@@ -1,5 +1,5 @@
 //general app config
-import {shortTitle, fullTitle} from '../configs/general';
+import { shortTitle, fullTitle } from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
@@ -22,7 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
-import loadRouteNotFound from '../actions/loadRouteNotFound';
+import loadNotFound from '../actions/loadNotFound';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -119,7 +119,11 @@ export default {
     },
 
     //-----------------------------------DeckPage routes------------------------------
-    // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
+    // selector {id: 'id of parent deck; may contain [0-9-]',
+    // stype: 'type of selected content e.g. slide, deck or question',
+    // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
+    // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
+    // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     deck: {
         path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
         method: 'get',
@@ -289,9 +293,9 @@ export default {
     notfound: {
         path: '*',
         method: 'get',
-        handler: require('../components/RouteNotFound/RouteNotFound'),
+        handler: require('../components/Error/Dummy'),
         action: (context, payload, done) => {
-            context.executeAction(loadRouteNotFound, payload, done);
+            context.executeAction(loadNotFound, payload, done);
         }
     }
 };

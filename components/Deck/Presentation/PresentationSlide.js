@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
 import {NavLink} from 'fluxible-router';
 import {connectToStores, provideContext } from 'fluxible-addons-react';
 import PresentationStore from '../../../stores/PresentationStore';

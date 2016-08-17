@@ -14,7 +14,7 @@ class ContentHistoryStore extends BaseStore {
     getState() {
         return {
             history: this.history,
-            selector: this.selector
+            selector: this.selector,
         };
     }
     dehydrate() {
@@ -23,6 +23,9 @@ class ContentHistoryStore extends BaseStore {
     rehydrate(state) {
         this.history = state.history;
         this.selector = state.selector;
+    }
+    handleDeckParamErrors(err) {
+        this.emitChange();
     }
 }
 

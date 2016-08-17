@@ -39,7 +39,7 @@ class ActivityFeedStore extends BaseStore {
             activityType: this.activityType,
             selector: this.selector,
             hasMore: this.hasMore,
-            wasFetch: this.wasFetch
+            wasFetch: this.wasFetch,
         };
     }
     dehydrate() {
