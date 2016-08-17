@@ -2,10 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 
 /**
-* Properties:
-*   required: true|false
-*   country:  language short code, like en_EN or de_AT
-*/
+ * Properties:
+ *   required: true|false
+ *   country:  language short code, like en_EN or de_AT
+ */
 
 class LanguageDropdown extends React.Component {
     componentDidMount() {}

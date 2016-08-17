@@ -2,10 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 
 /**
-* Properties:
-*   required: true|false
-*   country:  country short code, like US or GB
-*/
+ * Properties:
+ *   required: true|false
+ *   country:  country short code, like US or GB
+ */
 
 class CountryDropdown extends React.Component {
     componentDidMount() {}
