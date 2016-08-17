@@ -21,7 +21,7 @@ class ContributorsStore extends BaseStore {
         return {
             contributors: this.contributors,
             creator: this.creator,
-            translators: this.translators
+            translators: this.translators,
         };
     }
     dehydrate() {

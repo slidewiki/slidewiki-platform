@@ -30,8 +30,7 @@ export default {
             rp.post({
                 uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
-                    // email: args.email,
-                    email: args.username,
+                    email: args.email,
                     password: args.password.toString(), //TODO add hashing as soon as register is working
                 }),
                 resolveWithFullResponse: true

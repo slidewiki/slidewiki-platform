@@ -1,5 +1,7 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
+import { connectToStores } from 'fluxible-addons-react';
+import ErrorStore from '../../stores/ErrorStore';
 import BadRequest from '../../components/Error/BadRequest';
 import BadGateway from '../../components/Error/BadGateway';
 import Forbidden from '../../components/Error/Forbidden';
@@ -62,10 +64,10 @@ class Error extends React.Component {
                 );
                 break;
             case 422:
-                    return (
-                        <UnprocessableEntity error={this.props.error} />
-                    );
-                    break;
+                return (
+                    <UnprocessableEntity error={this.props.error} />
+                );
+                break;
             case 429:
                 return (
                     // For rate limiting
@@ -110,4 +112,12 @@ class Error extends React.Component {
     }
 }
 
+Error.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+Error = connectToStores(Error, [ErrorStore], (context, props) => {
+    return {
+        ErrorStore: context.getStore(ErrorStore).getState()
+    };
+});
 export default Error;

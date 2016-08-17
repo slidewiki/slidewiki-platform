@@ -17,7 +17,6 @@ var playerCss = {
 
 class Presentation extends React.Component{
 
-
   componentWillMount(){
 
     this.context.executeAction(loadPresentation, {
