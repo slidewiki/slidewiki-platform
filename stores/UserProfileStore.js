@@ -6,7 +6,8 @@ class UserProfileStore extends BaseStore {
         this.toShow = 'settings';
         this.showPublicUser = true;
         this.failures = {
-            emailNotAllowed: false
+            emailNotAllowed: false,
+            wrongPassword: false
         };
         this.dimmer = {
             success: false,
@@ -107,6 +108,11 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    fillInEditedUser(payload) {
+        Object.assign(this.user, payload);
+        this.successMessage();
+    }
+
     actionFailed(payload) {
         this.dimmer.failure = true;
         this.emitChange();
@@ -118,6 +124,13 @@ class UserProfileStore extends BaseStore {
         this.failures.emailNotAllowed = true;
         this.emitChange();
         this.failures.emailNotAllowed = false;
+    }
+
+    wrongPassword() {
+        console.log('wrongPassword');
+        this.failures.wrongPassword = true;
+        this.emitChange();
+        this.failures.wrongPassword = false;
     }
 
     handleSignInSuccess(payload) {
@@ -163,10 +176,12 @@ UserProfileStore.handlers = {
     'DELETE_USER_SUCCESS': 'userDeleted',
     'DELETE_USER_FAILURE': 'actionFailed',
     'NEW_USER_DATA': 'fillInUser',
+    'NEW_EDITED_USER_DATA': 'fillInEditedUser',
     'FETCH_USER_FAILED': 'actionFailed',
     'EDIT_USER_FAILED': 'actionFailed',
     'NEW_PASSWORD': 'successMessage',
     'EMAIL_NOT_ALLOWED': 'emailNotAllowed',
+    'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
     'USER_SIGNOUT': 'handleSignOut'

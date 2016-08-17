@@ -10,15 +10,14 @@ export default function removeUser(context, payload, done) {
     context.service.delete('userProfile.remove', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             if (err.statusCode === 404) {
-                context.executeAction(notFoundError, {}).catch(() => { done(err); });
-                return;
+                context.dispatch('DELETE_USER_FAILURE', err);
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
                 return;
             } else
                 context.dispatch('DELETE_USER_FAILURE', err);
         } else {
-            context.executeAction(userSignOut, {});
+            //TODO logout user - context.executeAction(userSignOut, {}); throws an error
             context.executeAction(navigateAction, { url: '/' });
         }
         done();

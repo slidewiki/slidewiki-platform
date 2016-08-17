@@ -77,7 +77,7 @@ class ChangePersonalData extends React.Component {
 
                     <div className="ui field">
                         <label>Bio</label>
-                        <textarea rows="2" maxLength="120" placeholder="A few words about yourself" name="description" defaultValue={this.props.user.description} ref="description"/>
+                        <textarea rows="2" maxLength="120" placeholder="A few words about yourself - max 120 characters" name="description" defaultValue={this.props.user.description} ref="description"/>
                     </div>
 
                     <button type="submit" className="ui blue labeled submit icon button">

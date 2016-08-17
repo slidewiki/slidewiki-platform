@@ -21,7 +21,7 @@ export default function changeUserData(context, payload, done) {
             } else
                 context.dispatch('EDIT_USER_FAILED', err);
         } else {
-            context.dispatch('NEW_USER_DATA', res);
+            context.dispatch('NEW_EDITED_USER_DATA', res);
         }
         done();
     });

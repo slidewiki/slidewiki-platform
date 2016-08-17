@@ -28,7 +28,7 @@ class Picture extends React.Component {
             <div>
                 <div className="ui centered  grid">
                     <div className="eight wide column">
-                        <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ true } width={ 150 } centered={ true } size={ 'small' }/>;
+                        <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ true } width={ 150 } centered={ true } size={ 'small' }/>
                     </div>
                     <div className="eight wide column">
                         <div className="ui vertical buttons">

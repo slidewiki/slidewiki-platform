@@ -55,7 +55,7 @@ class UserSettings extends React.Component {
 
                             <div className="row">
                                 <div className="sixteen wide column">
-                                    <ChangePassword />
+                                    <ChangePassword failures={ this.props.failures }/>
                                 </div>
                             </div>
                         </div>

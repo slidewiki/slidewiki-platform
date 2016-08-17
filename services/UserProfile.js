@@ -1,5 +1,7 @@
+import sha512 from 'js-sha512';
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
+import { hashSalt } from '../configs/general';
 import { Microservices } from '../configs/microservices';
 
 export default {
@@ -18,8 +20,8 @@ export default {
     update: (req, resource, params, body, config, callback) => {
         if (resource === 'userProfile.updatePassword') {
             let tosend = {
-                oldPassword: params.oldpw,
-                newPassword: params.newpw
+                oldPassword: sha512.sha512(params.oldpw + hashSalt),
+                newPassword: sha512.sha512(params.newpw + hashSalt)
             };
             rp({
                 method: 'PUT',

@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import changePassword from '../../../actions/user/userprofile/changePassword';
 
 class ChangePassword extends React.Component {
@@ -38,13 +39,19 @@ class ChangePassword extends React.Component {
     }
 
     render() {
+        let passwordClasses = classNames({
+            'ui': true,
+            'field': true,
+            'error': this.props.failures.wrongPassword
+        });
+        let passwordToolTipp = this.props.failures.wrongPassword ? 'This is not the password you entered before - Please try again' : undefined;
         return (
             <div>
                 <h2>Password</h2>
                 <div className="ui hidden divider"/>
                 <form className="ui form changePassword">
                     <div className="two fields">
-                        <div className="ui field">
+                        <div className={ passwordClasses } data-tooltip={ passwordToolTipp } data-position="top center" data-inverted="">
                             <label>Old Password</label>
                             <input type="password" placeholder="******" ref="oldPassword" required/>
                         </div>

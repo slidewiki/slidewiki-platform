@@ -9,8 +9,7 @@ export default function changePassword(context, payload, done) {
     context.service.update('userProfile.updatePassword', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             if (err.statusCode === 404) {
-                context.executeAction(notFoundError, {}).catch(() => { done(err); });
-                return;
+                context.dispatch('WRONG_PASSWORD', err);
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
                 return;
