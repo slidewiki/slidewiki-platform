@@ -54,6 +54,11 @@ class UserRegistrationStore extends BaseStore {
         this.emitChange();
     }
 
+    handleUsernameChecked(payload) {
+        this.failures.usernameNotAllowed = payload.taken;
+        this.emitChange();
+    }
+
     getState() {
         return {
             registrationStatus: this.registrationStatus,
@@ -78,6 +83,7 @@ UserRegistrationStore.handlers = {
     'CREATE_USER_SUCCESS': 'handleCreateUserSuccess',
     'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
     'CHECK_EMAIL_SUCCESS': 'handleEmailChecked',
+    'CHECK_USERNAME_SUCCESS': 'handleUsernameChecked',
     //error handling
     'CREATE_USER_FAILURE': 'handleUserRegistrationError'
 };

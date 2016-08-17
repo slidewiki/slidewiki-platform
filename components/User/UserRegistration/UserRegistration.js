@@ -7,6 +7,7 @@ import {Microservices} from '../../../configs/microservices';
 import userSignUp from '../../../actions/user/registration/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
 import checkEmail from '../../../actions/user/registration/checkEmail';
+import checkUsername from '../../../actions/user/registration/checkUsername';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -34,10 +35,13 @@ class UserRegistration extends React.Component {
                     rules: [{
                         type: 'empty',
                         prompt: 'Please select your username'
+                    }, {
+                        type: 'uniqueUsername',
+                        prompt: 'The username is already in use'
                     }]
                 },
-                emailsignup: {
-                    identifier: 'emailsignup',
+                email: {
+                    identifier: 'email',
                     rules: [{
                         type: 'empty',
                         prompt: 'Please enter your email address'
@@ -55,12 +59,12 @@ class UserRegistration extends React.Component {
                         type: 'empty',
                         prompt: 'Please reenter your email address'
                     }, {
-                        type: 'match[emailsignup]',
+                        type: 'match[email]',
                         prompt: 'Your emails do not match'
                     }]
                 },
-                passwordsignup: {
-                    identifier: 'passwordsignup',
+                password: {
+                    identifier: 'password',
                     rules: [{
                         type: 'empty',
                         prompt: 'Please enter a password'
@@ -69,13 +73,13 @@ class UserRegistration extends React.Component {
                         prompt: 'Your password should be 8 characters or more long, have at least one lowercase character, one uppercase character and one number'
                     }]
                 },
-                reenterpasswordsignup: {
-                    identifier: 'reenterpasswordsignup',
+                reenterpassword: {
+                    identifier: 'reenterpassword',
                     rules: [{
                         type: 'empty',
                         prompt: 'Please enter your password again'
                     }, {
-                        type: 'match[passwordsignup]',
+                        type: 'match[password]',
                         prompt: 'Your passwords do not match'
                     }]
                 },
@@ -95,18 +99,14 @@ class UserRegistration extends React.Component {
             return (this.state !== null && this.state.grecaptcharesponse !== undefined);
         });
 
-
-
-
-
         $.fn.form.settings.rules.uniqueEmail = (() => {
-            return false;
+            const emailNotAllowed = this.props.UserRegistrationStore.failures.emailNotAllowed;
+            return (emailNotAllowed !== undefined) ? emailNotAllowed : true;
         });
-
-
-
-
-
+        $.fn.form.settings.rules.uniqueUsername = (() => {
+            const usernameNotAllowed = this.props.UserRegistrationStore.failures.usernameNotAllowed;
+            return (usernameNotAllowed !== undefined) ? usernameNotAllowed : true;
+        });
 
         $('.ui.form').form(validationRules);
 
@@ -153,8 +153,8 @@ class UserRegistration extends React.Component {
             lastname: this.refs.lastname.value,
             username: this.refs.username.value,
             language: language,
-            email: this.refs.emailsignup.value,
-            password: this.refs.passwordsignup.value,
+            email: this.refs.email.value,
+            password: this.refs.password.value,
             grecaptcharesponse: this.state.grecaptcharesponse
         });
         return false;
@@ -167,9 +167,16 @@ class UserRegistration extends React.Component {
     }
 
     checkEmail() {
-        const email = this.refs.emailsignup.value;
+        const email = this.refs.email.value;
         if (email !== '') {
             this.context.executeAction(checkEmail, {email: email});
+        }
+    }
+
+    checkUsername() {
+        const username = this.refs.username.value;
+        if (username !== '') {
+            this.context.executeAction(checkUsername, {username: username});
         }
     }
 
@@ -238,6 +245,20 @@ class UserRegistration extends React.Component {
         });
         let emailToolTipp = this.props.UserRegistrationStore.failures.emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
 
+        const usernameNotAllowed = this.props.UserRegistrationStore.failures.usernameNotAllowed;
+        let usernameClasses = classNames({
+            'ui': true,
+            'field': true,
+            'inline': true,
+            'error': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false
+        });
+        let usernameIconClasses = classNames({
+            'icon': true,
+            'inverted circular red remove': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false,
+            'inverted circular green checkmark': (usernameNotAllowed !== undefined) ? !usernameNotAllowed : false
+        });
+        let usernameToolTipp = this.props.UserRegistrationStore.failures.usernameNotAllowed ? 'This Username has already been used by someone else. Please choose another one.' : undefined;
+
         return (
             <div className="ui page centered grid" >
                 {dimmerMessageSuccess}
@@ -255,13 +276,13 @@ class UserRegistration extends React.Component {
                                 <label style={signUpLabelStyle}>Last Name * </label>
                                 <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
                             </div>
-                            <div className="ui inline field">
+                            <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
                                 <label style={signUpLabelStyle}>Username * </label>
-                                <div className="ui icon input"><input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                             </div>
                             <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
                                 <label style={signUpLabelStyle}>Email * </label>
-                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="emailsignup" name="emailsignup" ref="emailsignup" placeholder="Email" aria-required="true"/></div>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Re-enter email * </label>
@@ -269,11 +290,11 @@ class UserRegistration extends React.Component {
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Password * </label>
-                                <div className="ui icon input"><input type="password" id="passwordsignup" name="passwordsignup" ref="passwordsignup" placeholder="Password" aria-required="true"/></div>
+                                <div className="ui icon input"><input type="password" id="password" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Re-enter Password * </label>
-                                <div className="ui icon input"><input type="password" id="reenterpasswordsignup" name="reenterpasswordsignup" ref="reenterpasswordsignup" placeholder="Re-enter Password" aria-required="true"/></div>
+                                <div className="ui icon input"><input type="password" id="reenterpassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter Password" aria-required="true"/></div>
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
