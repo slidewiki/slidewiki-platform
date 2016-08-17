@@ -9,13 +9,14 @@ export default {
         rp({
             method: 'DELETE',
             uri: Microservices.user.uri + '/user/' + params.params.id,
-            headers: {'----jwt----' : params.params.jwt}
-        }).then((body) => callback(null, params))
+            headers: { '----jwt----': params.params.jwt }
+        })
+        .then((body) => callback(null, params))
         .catch((err) => callback(err));
     },
 
     update: (req, resource, params, body, config, callback) => {
-        if(resource === 'userProfile.updatePassword'){
+        if (resource === 'userProfile.updatePassword') {
             let tosend = {
                 oldPassword: params.oldpw,
                 newPassword: params.newpw
@@ -23,12 +24,13 @@ export default {
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/passwd',
-                headers: {'----jwt----' : params.params.jwt},
+                headers: { '----jwt----': params.params.jwt },
                 json: true,
                 body: tosend
-            }).then((body) => callback(null, {}))
+            })
+            .then((body) => callback(null, {}))
             .catch((err) => callback(err));
-        } else if (resource === 'userProfile.update'){
+        } else if (resource === 'userProfile.update') {
             let tosend = {
                 email: params.email,
                 username: params.uname,
@@ -43,10 +45,11 @@ export default {
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
-                headers: {'----jwt----' : params.params.jwt},
+                headers: { '----jwt----': params.params.jwt },
                 json: true,
                 body: tosend
-            }).then((body) => callback(null, params))
+            })
+            .then((body) => callback(null, params))
             .catch((err) => callback(err));
         } else {
             callback('failure');
@@ -54,13 +57,14 @@ export default {
     },
 
     read: (req, resource, params, config, callback) => {
-        if(params.params.loggedInUser === params.params.username || params.params.id === params.params.username){
+        if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
             rp({
                 method: 'GET',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
-                headers: {'----jwt----' : params.params.jwt},
+                headers: { '----jwt----': params.params.jwt },
                 json: true
-            }).then((body) => {
+            })
+            .then((body) => {
                 console.log(body);
                 let converted = {
                     uname: body.username,
@@ -70,7 +74,7 @@ export default {
                     language: !isEmpty(body.language) ? body.language : '',
                     country: !isEmpty(body.country) ? body.country : '',
                     picture: !isEmpty(body.picture) ? body.picture : '',
-                    organization : !isEmpty(body.organization) ? body.organization : '',
+                    organization: !isEmpty(body.organization) ? body.organization : '',
                     description: !isEmpty(body.description) ? body.description : ''
                 };
                 callback(null, converted);
@@ -81,7 +85,8 @@ export default {
                 method: 'GET',
                 uri: Microservices.user.uri + '/user/' + params.params.username,
                 json: true
-            }).then((body) => {
+            })
+            .then((body) => {
                 let converted = {
                     uname: body.username,
                     email: !isEmpty(body.email) ? body.email : '',
@@ -90,7 +95,7 @@ export default {
                     language: !isEmpty(body.language) ? body.language : '',
                     country: !isEmpty(body.country) ? body.country : '',
                     picture: !isEmpty(body.picture) ? body.picture : '',
-                    organization : !isEmpty(body.organization) ? body.organization : '',
+                    organization: !isEmpty(body.organization) ? body.organization : '',
                     description: !isEmpty(body.description) ? body.description : ''
                 };
                 callback(null, converted);

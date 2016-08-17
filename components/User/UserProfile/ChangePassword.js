@@ -18,7 +18,8 @@ class ChangePassword extends React.Component {
             },
             onSuccess: this.handleChangePassword.bind(this)
         };
-        $('.ui.form.changePassword').form(changePasswordValidation);
+        $('.ui.form.changePassword')
+            .form(changePasswordValidation);
     }
 
     componentDidUpdate() {}
@@ -38,32 +39,32 @@ class ChangePassword extends React.Component {
 
     render() {
         return (
-          <div>
-            <h2>Password</h2>
-            <div className="ui hidden divider"/>
-            <form className="ui form changePassword">
-              <div className="two fields">
-                <div className="ui field">
-                  <label>Old Password</label>
-                  <input type="password" placeholder="******" ref="oldPassword" required/>
-                </div>
-              </div>
-              <div className="two fields">
-                <div className="ui field">
-                  <label>New Password</label>
-                  <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" id="newPassword" name="newPassword" ref="newPassword" required/>
-                </div>
-                <div className="ui field">
-                  <label>Retype Password</label>
-                  <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" id="reenterPassword" name="reenterPassword" ref="reenterPassword" required/>
-                </div>
-              </div>
-              <button type="submit" className="ui blue labeled submit icon button">
-                <i className="icon checkmark"/>Submit Password
-              </button>
-              <div className="ui error message"/>
-            </form>
-          </div>
+            <div>
+                <h2>Password</h2>
+                <div className="ui hidden divider"/>
+                <form className="ui form changePassword">
+                    <div className="two fields">
+                        <div className="ui field">
+                            <label>Old Password</label>
+                            <input type="password" placeholder="******" ref="oldPassword" required/>
+                        </div>
+                    </div>
+                    <div className="two fields">
+                        <div className="ui field">
+                            <label>New Password</label>
+                            <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" id="newPassword" name="newPassword" ref="newPassword" required/>
+                        </div>
+                        <div className="ui field">
+                            <label>Retype Password</label>
+                            <input type="password" placeholder="******" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}" title="8 characters or more, at least one lowercase character, one uppercase character and one number" id="reenterPassword" name="reenterPassword" ref="reenterPassword" required/>
+                        </div>
+                    </div>
+                    <button type="submit" className="ui blue labeled submit icon button">
+                        <i className="icon checkmark"/>Submit Password
+                    </button>
+                    <div className="ui error message"/>
+                </form>
+            </div>
         );
     }
 }

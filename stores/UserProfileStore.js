@@ -86,7 +86,7 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
-    userDeleted(payload){
+    userDeleted(payload) {
         this.destructor();
         this.emitChange();
     }
@@ -97,17 +97,17 @@ class UserProfileStore extends BaseStore {
         this.dimmer.success = false;
     }
 
-    fillInUser(payload){
+    fillInUser(payload) {
         let uname = this.user.uname;
         Object.assign(this.user, payload);
-        if(this.user.uname !== this.username)
+        if (this.user.uname !== this.username)
             this.showPublicUser = true;
         else
             this.showPublicUser = false;
         this.emitChange();
     }
 
-    actionFailed(payload){
+    actionFailed(payload) {
         this.dimmer.failure = true;
         this.emitChange();
         this.dimmer.failure = false;
@@ -138,7 +138,8 @@ class UserProfileStore extends BaseStore {
     }
 
     handleSignInError(err) {
-        let rawMessage = JSON.parse(err.message).output.message;
+        let rawMessage = JSON.parse(err.message)
+            .output.message;
         this.errorMessage = this.extractMessage(rawMessage);
         this.emitChange();
     }
@@ -146,9 +147,11 @@ class UserProfileStore extends BaseStore {
     extractMessage(raw) {
         const message = raw.substring(7, raw.length - 1);
         const message1 = message.replace(/\\\"/g, '"');
-        let message2 = JSON.parse(message1).message;
+        let message2 = JSON.parse(message1)
+            .message;
         if (message2 === undefined) {
-            message2 = JSON.parse(message1).error;
+            message2 = JSON.parse(message1)
+                .error;
         }
         return message2;
     }
@@ -160,6 +163,7 @@ UserProfileStore.handlers = {
     'DELETE_USER_SUCCESS': 'userDeleted',
     'DELETE_USER_FAILURE': 'actionFailed',
     'NEW_USER_DATA': 'fillInUser',
+    'FETCH_USER_FAILED': 'actionFailed',
     'EDIT_USER_FAILED': 'actionFailed',
     'NEW_PASSWORD': 'successMessage',
     'EMAIL_NOT_ALLOWED': 'emailNotAllowed',
