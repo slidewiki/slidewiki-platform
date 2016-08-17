@@ -31,7 +31,6 @@ export default {
                 uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
                     email: args.email,
-                    // username: args.username,
                     password: hashedPassword
                 }),
                 resolveWithFullResponse: true
