@@ -1,6 +1,7 @@
 import { userSignOut } from '../userSignOut.js';
 import { navigateAction } from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import { notFoundError, methodNotAllowedError } from '../../loadErrors';
 
 export default function removeUser(context, payload, done) {
     payload.params = {};

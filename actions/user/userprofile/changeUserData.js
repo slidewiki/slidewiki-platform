@@ -1,5 +1,6 @@
 import md5 from 'md5';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import { notFoundError, methodNotAllowedError } from '../../loadErrors';
 
 export default function changeUserData(context, payload, done) {
     payload.params = {};

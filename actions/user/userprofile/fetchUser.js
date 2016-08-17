@@ -1,5 +1,5 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { notFoundError, methodNotAllowedError } from './loadErrors';
+import { notFoundError, methodNotAllowedError } from '../../loadErrors';
 
 export default function fetchUser(context, payload, done) {
     payload.params.id = context.getStore(UserProfileStore).userid;

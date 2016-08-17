@@ -1,5 +1,5 @@
 import rp from 'request-promise';
-import { isEmpty } from '../../../common.js';
+import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
 
 export default {
