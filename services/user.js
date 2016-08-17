@@ -8,22 +8,21 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
-        let selector = {
-            'id': parseInt(args.id),
-            'spath': args.spath,
-            'sid': args.sid,
-            'stype': args.stype,
-            'page': params.page
-        };
+        // let selector = {
+        //     'id': parseInt(args.id),
+        //     'spath': args.spath,
+        //     'sid': args.sid,
+        //     'stype': args.stype,
+        //     'page': params.page
+        // };
 
         if (resource === 'user.item') {
             let user = {};
             callback(null, {
                 user: user
             });
-        }
 
-        if (resource === 'user.signin') {
+        } else if (resource === 'user.signin') {
             const hashedPassword = sha512.sha512(args.password + hashSalt);
             rp.post({
                 uri: Microservices.user.uri + '/login',
@@ -38,17 +37,22 @@ export default {
                     callback(null, {
                         username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
-                        jwt: res.headers['----jwt----'],
-                        selector: args.selector
+                        jwt: res.headers['----jwt----']
                     });
                 })
                 .catch((err) => {
                     // console.log('Error', err);
                     callback(err, {
-                        error: err,
-                        selector: args.selector
+                        error: err
                     });
                 });
+        } else if (resource === 'user.checkemail') {
+            rp.get({uri: Microservices.user.uri + '/information/email/' + args.email}).then((res) => {
+                callback(null, JSON.parse(res));
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {});
+            });
         }
     },
 
@@ -81,15 +85,13 @@ export default {
                             .then((res) => {
                                 console.log('Res', JSON.parse(res));
                                 callback(null, {
-                                    res: res,
-                                    selector: args.selector
+                                    res: res
                                 });
                             })
                             .catch((err) => {
                                 // console.log('Error', err);
                                 callback(err, {
-                                    error: err,
-                                    selector: args.selector
+                                    error: err
                                 });
                                 // callback(null, {
                                 //     selector: args.selector
@@ -100,16 +102,14 @@ export default {
                             message: '422 - "{"message": "Wrong captcha. Please verify that you are human."}"'
                         };
                         callback(err, {
-                            error: err,
-                            selector: args.selector
+                            error: err
                         });
                     }
                 })
                 .catch((err) => {
                     // console.log('Error', err);
                     callback(err, {
-                        error: err,
-                        selector: args.selector
+                        error: err
                     });
                 });
         }

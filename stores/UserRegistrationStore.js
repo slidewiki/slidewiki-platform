@@ -5,6 +5,8 @@ class UserRegistrationStore extends BaseStore {
         super(dispatcher);
         this.registrationStatus = 'guest';
         this.errorMessage = '';
+        this.failures = {
+        };
     }
 
     handleCreateUserSuccess(res) {
@@ -47,9 +49,15 @@ class UserRegistrationStore extends BaseStore {
         return message2;
     }
 
+    handleEmailChecked(payload) {
+        this.failures.emailNotAllowed = payload.taken;
+        this.emitChange();
+    }
+
     getState() {
         return {
             registrationStatus: this.registrationStatus,
+            failures: this.failures,
             errorMessage: this.errorMessage
         };
     }
@@ -60,6 +68,7 @@ class UserRegistrationStore extends BaseStore {
 
     rehydrate(state) {
         this.registrationStatus = state.registrationStatus;
+        this.failures = state.failures;
         this.errorMessage = state.errorMessage;
     }
 }
@@ -68,6 +77,7 @@ UserRegistrationStore.storeName = 'UserRegistrationStore';
 UserRegistrationStore.handlers = {
     'CREATE_USER_SUCCESS': 'handleCreateUserSuccess',
     'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
+    'CHECK_EMAIL_SUCCESS': 'handleEmailChecked',
     //error handling
     'CREATE_USER_FAILURE': 'handleUserRegistrationError'
 };

@@ -1,17 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import {Microservices} from '../../../configs/microservices';
-import userSignUp from '../../../actions/user/userSignUp';
-import resetUserRegistrationStatus from '../../../actions/user/resetUserRegistrationStatus';
+import userSignUp from '../../../actions/user/registration/userSignUp';
+import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
+import checkEmail from '../../../actions/user/registration/checkEmail';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
         //Form validation
-        const signupValidation = {
+        const validationRules = {
             fields: {
                 firstname: {
                     identifier: 'firstname',
@@ -42,6 +44,9 @@ class UserRegistration extends React.Component {
                     }, {
                         type: 'email',
                         prompt: 'Please enter a valid email address'
+                    }, {
+                        type: 'uniqueEmail',
+                        prompt: 'The email address is already in use'
                     }]
                 },
                 reenteremail: {
@@ -90,12 +95,21 @@ class UserRegistration extends React.Component {
             return (this.state !== null && this.state.grecaptcharesponse !== undefined);
         });
 
-        $('.ui.form.signup').form(signupValidation);
-        // Stop the form from submitting normally
-        $('.ui.form.signup').submit((e) => {
-            e.preventDefault();
+
+
+
+
+        $.fn.form.settings.rules.uniqueEmail = (() => {
             return false;
         });
+
+
+
+
+
+
+        $('.ui.form').form(validationRules);
+
     }
 
     componentDidUpdate() {
@@ -129,7 +143,8 @@ class UserRegistration extends React.Component {
             .dimmer('toggle');
     }
 
-    handleSignUp() {
+    handleSignUp(e) {
+        e.preventDefault();
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
@@ -142,12 +157,20 @@ class UserRegistration extends React.Component {
             password: this.refs.passwordsignup.value,
             grecaptcharesponse: this.state.grecaptcharesponse
         });
+        return false;
     }
 
     onRecaptchaChange(response) {
         this.setState({
             'grecaptcharesponse': response
         });
+    }
+
+    checkEmail() {
+        const email = this.refs.emailsignup.value;
+        if (email !== '') {
+            this.context.executeAction(checkEmail, {email: email});
+        }
     }
 
     render() {
@@ -201,6 +224,20 @@ class UserRegistration extends React.Component {
         const recaptchaStyle = {display: 'inline-block'};
         const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'; // Public reCAPTCHA key
 
+        const emailNotAllowed = this.props.UserRegistrationStore.failures.emailNotAllowed;
+        let emailClasses = classNames({
+            'ui': true,
+            'field': true,
+            'inline': true,
+            'error': (emailNotAllowed !== undefined) ? emailNotAllowed : false
+        });
+        let emailIconClasses = classNames({
+            'icon': true,
+            'inverted circular red remove': (emailNotAllowed !== undefined) ? emailNotAllowed : false,
+            'inverted circular green checkmark': (emailNotAllowed !== undefined) ? !emailNotAllowed : false
+        });
+        let emailToolTipp = this.props.UserRegistrationStore.failures.emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
+
         return (
             <div className="ui page centered grid" >
                 {dimmerMessageSuccess}
@@ -209,34 +246,34 @@ class UserRegistration extends React.Component {
                 <div className="eight wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
-                        <form className="ui form signup" >
+                        <form className="ui form" >
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>First Name * </label>
-                                <input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/>
+                                <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Last Name * </label>
-                                <input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/>
+                                <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Username * </label>
-                                <input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/>
+                                <div className="ui icon input"><input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                             </div>
-                            <div className="ui inline field">
+                            <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
                                 <label style={signUpLabelStyle}>Email * </label>
-                                <input type="email" id="emailsignup" name="emailsignup" ref="emailsignup" placeholder="Email" aria-required="true"/>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="emailsignup" name="emailsignup" ref="emailsignup" placeholder="Email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Re-enter email * </label>
-                                <input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/>
+                                <div className="ui icon input"><input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Password * </label>
-                                <input type="password" id="passwordsignup" name="passwordsignup" ref="passwordsignup" placeholder="Password" aria-required="true"/>
+                                <div className="ui icon input"><input type="password" id="passwordsignup" name="passwordsignup" ref="passwordsignup" placeholder="Password" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Re-enter Password * </label>
-                                <input type="password" id="reenterpasswordsignup" name="reenterpasswordsignup" ref="reenterpasswordsignup" placeholder="Re-enter Password" aria-required="true"/>
+                                <div className="ui icon input"><input type="password" id="reenterpasswordsignup" name="reenterpasswordsignup" ref="reenterpasswordsignup" placeholder="Re-enter Password" aria-required="true"/></div>
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
@@ -244,7 +281,7 @@ class UserRegistration extends React.Component {
                             </div>
                             <div className="ui error message"></div>
                             <button type="submit" className="ui blue labeled submit icon button" >
-                                <i className="icon add user"></i> Sign Up
+                                <i className="icon add user"/> Sign Up
                             </button>
                         </form>
                         <br/>

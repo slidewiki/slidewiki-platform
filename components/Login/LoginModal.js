@@ -107,6 +107,7 @@ class LoginModal extends React.Component {
                       <div className="ui five wide icon input field">
                         <div><label htmlFor="email1" hidden>E-Mail</label></div>
                         <input type="email1" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+
                       </div>
                         <br/>
                       <div className="ui five wide icon input field">
@@ -120,6 +121,10 @@ class LoginModal extends React.Component {
                     <br/>
                     <div className="ui floated right">
                         <a href="">I can not access my account</a>
+                        <br/><br/>
+                        <div onClick={this.handleSignupClick.bind(this)}>
+                            <a href="#">Don't have an account? Sign up here.</a>
+                        </div>
                     </div>
                   </div>
               </div>
