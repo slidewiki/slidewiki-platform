@@ -1,16 +1,23 @@
-import { shortTitle } from '../../../configs/general';
-import {navigateAction} from 'fluxible-router';
+import { userSignOut } from '../userSignOut.js';
+import { navigateAction } from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
 export default function removeUser(context, payload, done) {
-    payload.params= {};
+    payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
-    context.service.delete('userProfile.remove', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.delete('userProfile.remove', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            context.dispatch('DELETE_USER_FAILURE', err);
+            if (err.statusCode === 404) {
+                context.executeAction(notFoundError, {}).catch(() => { done(err); });
+                return;
+            } else if (err.statusCode === 401) {
+                context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
+                return;
+            } else
+                context.dispatch('DELETE_USER_FAILURE', err);
         } else {
-            //TODO redirect user to homepage and logout
+            context.executeAction(userSignOut, {});
             context.executeAction(navigateAction, { url: '/' });
         }
         done();
