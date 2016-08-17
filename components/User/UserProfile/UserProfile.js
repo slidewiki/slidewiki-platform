@@ -37,9 +37,9 @@ class UserProfile extends React.Component {
                     </div>
                     <div className = "twelve wide column" >
                         <div className="ui three item stackable pointing secondary demo tabular menu">
-                            <div className="active item" data-tab="popular">Overview</div>
-                            <div className="item" data-tab="userdecks">Decks</div>
-                            <div className="item" data-tab="activity">Public activity</div>
+                            <div className="active link item" data-tab="popular">Overview</div>
+                            <div className="link item" data-tab="userdecks">Decks</div>
+                            <div className="link item" data-tab="activity">Public activity</div>
                         </div>
                         <div className="ui active tab" data-tab="popular">
                             <PublicUserDecks title={'Popular Decks'}/>
