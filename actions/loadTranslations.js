@@ -1,10 +1,16 @@
-import {shortTitle} from '../configs/general';
-export default function loadTranslations(context, payload, done) {
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        console.log('Content type incorrect. Loading translations failed.');
+import { shortTitle } from '../configs/general';
+import { deckContentTypeError, slideIdTypeError } from './loadErrors';
 
-    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        console.log('Slide id incorrect. Loading translations failed.');
+export default function loadTranslations(context, payload, done) {
+    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
     context.service.read('translation.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

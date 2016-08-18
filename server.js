@@ -58,7 +58,9 @@ fetchrPlugin.registerService(require('./services/similarcontent'));
 fetchrPlugin.registerService(require('./services/import'));
 fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
+fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
+fetchrPlugin.registerService(require('./services/UserProfile'));
 
 server.use((req, res, next) => {
 
@@ -75,7 +77,7 @@ server.use((req, res, next) => {
         url: req.url
     }, (err) => {
         if (err) {
-            // console.log(err);
+            console.log(err);
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';

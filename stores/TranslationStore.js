@@ -14,7 +14,7 @@ class TranslationStore extends BaseStore {
     getState() {
         return {
             translations: this.translations,
-            currentLang: this.currentLang
+            currentLang: this.currentLang,
         };
     }
     dehydrate() {
@@ -24,6 +24,7 @@ class TranslationStore extends BaseStore {
         this.translations = state.translations;
         this.currentLang = state.currentLang;
     }
+
 }
 
 TranslationStore.storeName = 'TranslationStore';

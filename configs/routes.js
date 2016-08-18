@@ -1,5 +1,5 @@
 //general app config
-import {shortTitle, fullTitle} from '../configs/general';
+import { shortTitle, fullTitle } from '../configs/general';
 //list of actions
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
@@ -20,10 +20,10 @@ import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
-import loadTabLinks from '../actions/loadTabLinks';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
-import loadRouteNotFound from '../actions/loadRouteNotFound';
+import fetchUser from '../actions/user/userprofile/fetchUser';
+import loadNotFound from '../actions/loadNotFound';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -66,6 +66,20 @@ export default {
             done();
         }
     },
+    //TODO: add an initial loader for this page
+    addDeck: {
+        path: '/addDeck',
+        method: 'get',
+        page: 'addDeck',
+        title: 'SlideWiki -- Add Deck',
+        handler: require('../components/AddDeck/AddDeck'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Add Deck'
+            });
+            done();
+        }
+    },
     notifications: {
         path: '/notifications',
         method: 'get',
@@ -79,7 +93,17 @@ export default {
             done();
         }
     },
-
+//-----------------------------------User routes------------------------------
+    userprofile: {
+        path: '/user/:username',
+        method: 'get',
+        page: 'userprofile',
+        title: 'SlideWiki -- Your profile',
+        handler: require('../components/User/UserProfile/UserProfile'),
+        action: (context, payload, done) => {
+            context.executeAction(fetchUser, payload, done);
+        }
+    },
 //-----------------------------------Search routes------------------------------
     searchresults: {
         path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
@@ -92,10 +116,12 @@ export default {
         }
     },
 
-
-
     //-----------------------------------DeckPage routes------------------------------
-    // selector {id: 'id of parent deck', stype: 'type of selected content e.g. slide, deck or question', sid: 'id of selected content', spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4', mode: 'interaction mode e.g. view or edit'}
+    // selector {id: 'id of parent deck; may contain [0-9-]',
+    // stype: 'type of selected content e.g. slide, deck or question',
+    // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
+    // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
+    // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     deck: {
         path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
         method: 'get',
@@ -109,7 +135,7 @@ export default {
         path: '/contributors/:stype/:sid',
         method: 'get',
         page: 'contributors',
-        handler: require('../components/Deck/ContributorsPanel/ContributorsPanel'),
+        handler: require('../components/Deck/ContentModulesPanel/ContributorsPanel/ContributorsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContributors, payload, done);
         }
@@ -172,7 +198,7 @@ export default {
         path: '/datasource/:stype/:sid',
         method: 'get',
         page: 'datasources',
-        handler: require('../components/Deck/DataSourcePanel/DataSourcePanel'),
+        handler: require('../components/Deck/ContentModulesPanel/DataSourcePanel/DataSourcePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDataSources, payload, done);
         }
@@ -199,7 +225,7 @@ export default {
         path: '/history/:stype/:sid',
         method: 'get',
         page: 'history',
-        handler: require('../components/Deck/ActivityFeedPanel/ContentHistoryPanel/ContentHistoryPanel'),
+        handler: require('../components/Deck/ContentModulesPanel/ContentHistoryPanel/ContentHistoryPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentHistory, payload, done);
         }
@@ -208,7 +234,7 @@ export default {
         path: '/usage/:stype/:sid',
         method: 'get',
         page: 'usage',
-        handler: require('../components/Deck/ActivityFeedPanel/ContentUsagePanel/ContentUsagePanel'),
+        handler: require('../components/Deck/ContentModulesPanel/ContentUsagePanel/ContentUsagePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentUsage, payload, done);
         }
@@ -217,7 +243,7 @@ export default {
         path: '/questions/:stype/:sid',
         method: 'get',
         page: 'questions',
-        handler: require('../components/Deck/ContentPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
+        handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentQuestions, payload, done);
         }
@@ -226,7 +252,7 @@ export default {
         path: '/discussion/:stype/:sid',
         method: 'get',
         page: 'discussion',
-        handler: require('../components/Deck/ActivityFeedPanel/ContentDiscussionPanel/ContentDiscussionPanel'),
+        handler: require('../components/Deck/ContentModulesPanel/ContentDiscussionPanel/ContentDiscussionPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadContentDiscussion, payload, done);
         }
@@ -238,15 +264,6 @@ export default {
         handler: require('../components/Deck/TreePanel/TreePanel'),
         action: (context, payload, done) => {
             context.executeAction(loadDeckTree, payload, done);
-        }
-    },
-    contentmode: {
-        path: '/contentmode/:stype/:sid/:mode?',// '/contentmode/:stype/:sid/:spath?/:mode?',
-        method: 'get',
-        page: 'contentmode',
-        handler: require('../components/Deck/ContentPanel/ContentModeMenu/ContentModeMenu'),
-        action: (context, payload, done) => {
-            context.executeAction(loadTabLinks, payload, done);
         }
     },
     presentation: {
@@ -274,9 +291,9 @@ export default {
     notfound: {
         path: '*',
         method: 'get',
-        handler: require('../components/RouteNotFound/RouteNotFound'),
+        handler: require('../components/Error/Dummy'),
         action: (context, payload, done) => {
-            context.executeAction(loadRouteNotFound, payload, done);
+            context.executeAction(loadNotFound, payload, done);
         }
     }
 };

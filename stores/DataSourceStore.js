@@ -31,7 +31,7 @@ class DataSourceStore extends BaseStore {
         return {
             datasources: this.datasources,
             datasource: this.datasource,
-            selector: this.selector
+            selector: this.selector,
         };
     }
     dehydrate() {

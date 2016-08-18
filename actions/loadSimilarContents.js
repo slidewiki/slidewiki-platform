@@ -1,11 +1,16 @@
-import {shortTitle} from '../configs/general';
+import { shortTitle } from '../configs/general';
+import { deckContentTypeError, slideIdTypeError } from './loadErrors';
+
 export default function loadSimilarContents(context, payload, done) {
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        console.log('Content type incorrect. Loading deck failed.');
+    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(/^[0-9a-zA-Z]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        console.log('Slide id incorrect. Loading similar content failed.');
-
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
     context.service.read('similarcontent.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

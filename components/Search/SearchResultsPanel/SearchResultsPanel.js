@@ -73,12 +73,7 @@ class SearchResultsPanel extends React.Component {
                     </div>
                 </div>
             </div>
-
-
-
-
-
-				);
+		);
     }
 
 }

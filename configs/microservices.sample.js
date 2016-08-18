@@ -12,6 +12,9 @@ export default {
         'notification': {
             uri: 'http://notificationservice.manfredfris.ch'
         },
+        'user': {
+            uri: 'http://userservice.manfredfris.ch'
+        },
         'import': {
             uri: 'http://importservice.manfredfris.ch'
         }
