@@ -6,6 +6,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
+import Import from '../Import/Import';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
@@ -18,13 +19,23 @@ class AddDeck extends React.Component {
         this.percentage = 0;
         this.filename = '';
     }
-    componentDidMount(){
+    componentDidMount() {
+        $('.ui.small.modal').modal({
+            onDeny: function(){
+                console.log('modal cancelled');
+            },
+            onApprove : function(data) {
+                console.log('modal clicked on upload', data);
+            }
+        });
     }
     componentDidUpdate(){
     }
 
-    handleUpload(x) {
-        console.log('handleUpload: ', x);
+    handleUploadModal(x) {
+        console.log('handleUploadModal: ', x);
+
+        $('.ui.small.modal').modal('show');
     }
     handleAddDeck(x) {
         console.log('handleAddDeck');
@@ -198,9 +209,10 @@ class AddDeck extends React.Component {
                   <div className="ui grid">
                       <div className="two column row">
                           <div className="column">
-                              <div className="ui primary button" aria-label="upload" tabIndex="0" onClick={this.handleUpload.bind(this)} >
+                              <div className="ui primary button" aria-label="upload" tabIndex="0" onClick={this.handleUploadModal.bind(this)} >
                                   Upload file
                               </div>
+                              <Import />
                           </div>
                           <div className="column" ref="div_filename">
                               {this.filename}

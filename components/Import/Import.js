@@ -17,8 +17,7 @@ class Import extends React.Component {
         this.currentcontent;
     }
     componentDidMount(){
-        //after loading component - focus on select-file button
-        ReactDOM.findDOMNode(this.refs.selectbutton).focus();
+
     }
     componentDidUpdate(){
 
@@ -41,8 +40,6 @@ class Import extends React.Component {
 
         if (isCorrect) {
             let reader = new FileReader();
-
-            let progress = this.refs.progress_bar;
 
             function abortRead() {
                 reader.abort();
@@ -81,8 +78,6 @@ class Import extends React.Component {
 
             // Reset progress indicator on new file selection.
             //TODO: use react/fluxible style for DOM manipulation
-            progress.style.width = '0%';
-            progress.textContent = '0%';
 
             let currentContext = this.context;
 
@@ -107,14 +102,14 @@ class Import extends React.Component {
                 console.error('File read cancelled');
             };
             reader.onloadstart = function(e) {
-                progress.className = 'loading';
+                // progress.className = 'loading';
             };
             reader.onload = function(e) {
                 // Ensure that the progress bar displays 100% at the end.
-                progress.style.width = '100%';
-                progress.textContent = '';//'100%';
+                // progress.style.width = '100%';
+                // progress.textContent = '';//'100%';
                 setTimeout(() => {
-                    progress.className = '';
+                    // progress.className = '';
                 }, 2000);
             };
 
@@ -164,24 +159,23 @@ class Import extends React.Component {
                 this.handleRedirect(Math.floor(Math.random(1,1000000)*100));
             }, 13000);
         } else {
-            outputDIV =      <div className="ui row">
-                                <div className="column">
-                                    <div className="ui content">
-                                        <h2 className="ui header">Upload your presentation</h2>
-                                        <p>Select your presentation file and upload it to SlideWiki. </p>
-                                    </div>
+            outputDIV =     <div className="ui small modal" ref="import">
+                                <div className="header">
+                                    <h2>Upload your presentation</h2>
+                                </div>
+                                <div className="content">
+                                    <p>Select your presentation file and upload it to SlideWiki.</p>
                                     <br />
-                                          <div className="ui input file focus animated">
-                                                <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
-                                                <button tabIndex="0" ref="submitbutton" className="ui animated button green" onClick={this.handleFileSubmit.bind(this)} onChange={this.handleFileSubmit.bind(this)}>
-                                                    <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
-                                                    <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
-                                                  </button>
-
-                                          </div>
-                                          <div className="" ref="progress_bar">
-                                              <div className="progress"> </div>
-                                          </div>
+                                    <div className="ui input file focus animated">
+                                          <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
+                                    </div>
+                                </div>
+                                <div className="actions">
+                                    <button tabIndex="0" ref="submitbutton" className="ui animated approve button green" onClick={this.handleFileSubmit.bind(this)} onChange={this.handleFileSubmit.bind(this)}>
+                                        <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
+                                        <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
+                                    </button>
+                                    <div className="ui cancel button red" tabIndex="0">Cancel</div>
                                 </div>
                             </div>;
                             //TODO: use react/semantic-UI progress bar
@@ -190,11 +184,7 @@ class Import extends React.Component {
                             //editor = <FileUploader spec={this.props.spec} config={this.props.config} onDataEdit={this.handleDataEdit.bind(this)} onEnterPress={this.handleEnterPress.bind(this)} allowActionByKey="1"/>;
 
         }
-        return (
-            <div className="ui container grid" ref="import">
-                {outputDIV}
-            </div>
-        );
+        return outputDIV;
     }
 }
 

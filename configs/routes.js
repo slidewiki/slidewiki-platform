@@ -53,19 +53,6 @@ export default {
             done();
         }
     },
-    import: {
-        path: '/import',
-        method: 'get',
-        page: 'import',
-        title: 'SlideWiki -- Import presentation',
-        handler: require('../components/Import/Import'),
-        action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Import presentation'
-            });
-            done();
-        }
-    },
     //TODO: add an initial loader for this page
     addDeck: {
         path: '/addDeck',
