@@ -3,6 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
+import ImportStore from '../../stores/ImportStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
@@ -17,7 +18,6 @@ class AddDeck extends React.Component {
         super(props);
         this.redirectID = 0;
         this.percentage = 0;
-        this.filename = '';
         this.uploadPending = false;
     }
     componentDidMount() {
@@ -225,7 +225,7 @@ class AddDeck extends React.Component {
                               <Import />
                           </div>
                           <div className="column" ref="div_filename">
-                              {this.filename}
+                              {this.props.ImportStore.filename.substr(0, 40)}
                           </div>
                       </div>
                   </div>
@@ -301,10 +301,11 @@ class AddDeck extends React.Component {
 AddDeck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore], (context, props) => {
+AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore, ImportStore], (context, props) => {
     return {
         AddDeckStore: context.getStore(AddDeckStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        ImportStore: context.getStore(ImportStore).getState()
     };
 });
 export default AddDeck;

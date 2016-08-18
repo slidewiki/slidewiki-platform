@@ -7,6 +7,7 @@ class ImportStore extends BaseStore {
         this.isUploaded = false;
         this.file = null;
         this.base64 = null;
+        this.filename = '';
     }
     destructor()
     {
@@ -14,13 +15,15 @@ class ImportStore extends BaseStore {
         this.isUploaded = false;
         this.file = null;
         this.base64 = null;
+        this.filename = '';
     }
     getState() {
         return {
             resultMessage: this.resultMessage,
             isUploaded: this.isUploaded,
             file: this.file,
-            base64: this.base64
+            base64: this.base64,
+            filename: this.filename
         };
     }
     dehydrate() {
@@ -31,12 +34,14 @@ class ImportStore extends BaseStore {
         this.isUploaded = state.isUploaded;
         this.file = state.file;
         this.base64 = state.base64;
+        this.filename = state.filename;
     }
 
     storeFile(payload) {
         console.log('ImportStore: storeFile()', payload);
         this.file = payload.file;
         this.base64 = payload.base64;
+        this.filename = this.file.name;
         this.emitChange();
     }
     uploadFailed(error) {
