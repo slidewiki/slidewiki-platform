@@ -27,6 +27,11 @@ class Import extends React.Component {
         console.log('handleFileSelect()');
         console.log(evt.target.files[0]);
         let file = evt.target.files[0];
+        if (file === null || file === undefined)
+            file = {
+                type: '',
+                size: 0
+            };
 
         //check metadata like size, file ending, ...
         let isCorrect = true;
@@ -52,9 +57,10 @@ class Import extends React.Component {
                         console.error('File is not readable');
                         break;
                     case evt.target.error.ABORT_ERR:
+                        console.info('Cancel clicked');
                         break; // noop
                     default:
-                        console.error('An error occurred reading this file.');
+                        console.error('An error occurred reading this file.', evt.target.error);
                 };
             }
 
@@ -84,6 +90,7 @@ class Import extends React.Component {
             reader.onloadend = (function(theFile) {
                 return function(e) {
                     console.log('file was read: ', file);
+                    console.log('also', theFile);
                     console.log(e.target.result.length, 'bytes');
 
                     //Save it to store
@@ -131,7 +138,7 @@ class Import extends React.Component {
             this.context.executeAction(uploadFile, payload);
         }
         else {
-            console.error('Submission not possible');
+            console.error('Submission not possible - no file or not pptx');
         }
 
         return false;
