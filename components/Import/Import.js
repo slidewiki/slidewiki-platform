@@ -7,6 +7,7 @@ import uploadFile from '../../actions/import/uploadFile';
 import importFinished from '../../actions/import/importFinished';
 //import FileUploader from './FileUploader';
 let ReactDOM = require('react-dom');
+let classNames = require('classnames');
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
 
 const MAX_FILESIZE = 300 * 1024 * 1024;
@@ -14,7 +15,7 @@ const MAX_FILESIZE = 300 * 1024 * 1024;
 class Import extends React.Component {
     constructor(props) {
         super(props);
-        this.currentcontent;
+        this.fileReadyForUpload = false;
     }
     componentDidMount(){
 
@@ -79,7 +80,7 @@ class Import extends React.Component {
             // Reset progress indicator on new file selection.
             //TODO: use react/fluxible style for DOM manipulation
 
-            let currentContext = this.context;
+            let that = this;
 
             // Closures to capture the file information/data
             reader.onloadend = (function(theFile) {
@@ -93,7 +94,9 @@ class Import extends React.Component {
                         file: file ? file : theFile,
                         base64: e.target.result
                     };
-                    currentContext.executeAction(storeFile, payload);
+                    that.context.executeAction(storeFile, payload);
+
+                    that.fileReadyForUpload = true;
                 };
             })();
             reader.onerror = errorHandler;
@@ -124,6 +127,8 @@ class Import extends React.Component {
     handleFileSubmit(){
         console.log('handleFileSubmit()');
 
+        this.fileReadyForUpload = false;
+
         if (this.props.ImportStore.file !== null) {
             //call action
             const payload = {
@@ -149,6 +154,16 @@ class Import extends React.Component {
     render() {
         //variable for intermediate storage of output
         let outputDIV = '';
+
+        let uploadBtn_classes = classNames({
+            'ui': true,
+            'animated': true,
+            'approve': true,
+            'disabled': !this.fileReadyForUpload,
+            'button': true,
+            'green': true
+        });
+
         if(this.props.ImportStore.isUploaded){
             //show upload message
             outputDIV =  <div className="ui bottom attached segment">
@@ -165,13 +180,13 @@ class Import extends React.Component {
                                 </div>
                                 <div className="content">
                                     <p>Select your presentation file and upload it to SlideWiki.</p>
-                                    <br />
+                                    <p>Only PowerPoint (.pptx) is supported.</p>
                                     <div className="ui input file focus animated">
                                           <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
                                     </div>
                                 </div>
                                 <div className="actions">
-                                    <button tabIndex="0" ref="submitbutton" className="ui animated approve button green" onClick={this.handleFileSubmit.bind(this)} onChange={this.handleFileSubmit.bind(this)}>
+                                    <button tabIndex="0" ref="submitbutton" className={uploadBtn_classes} onClick={this.handleFileSubmit.bind(this)} onChange={this.handleFileSubmit.bind(this)}>
                                         <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
                                         <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
                                     </button>

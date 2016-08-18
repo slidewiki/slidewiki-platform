@@ -18,14 +18,17 @@ class AddDeck extends React.Component {
         this.redirectID = 0;
         this.percentage = 0;
         this.filename = '';
+        this.uploadPending = false;
     }
     componentDidMount() {
+        let that = this;
         $('.ui.small.modal').modal({
             onDeny: function(){
                 console.log('modal cancelled');
             },
             onApprove : function(data) {
                 console.log('modal clicked on upload', data);
+                that.uploadPending = true;
             }
         });
     }
@@ -172,6 +175,13 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.conditions
         });
+        let btnClasses_submit = classNames({
+            'ui': true,
+            'primary': true,
+            'disabled': this.uploadPending,
+            'button': true
+        });
+
         let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
                 Select Language
@@ -270,7 +280,7 @@ class AddDeck extends React.Component {
               </div>
               <div className="two column row">
                   <div className="column">
-                      <div className="ui primary button" aria-label="submit" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                      <div className={btnClasses_submit} aria-label="submit" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                           Add deck
                       </div>
                   </div>
