@@ -7,6 +7,7 @@ class UserRegistrationStore extends BaseStore {
         this.errorMessage = '';
         this.failures = {
         };
+        this.suggestedUsernames = [];
     }
 
     handleCreateUserSuccess(res) {
@@ -55,14 +56,34 @@ class UserRegistrationStore extends BaseStore {
     }
 
     handleUsernameChecked(payload) {
-        this.failures.usernameNotAllowed = payload.taken;
+        this.failures.usernameNotAllowed = payload.res.taken;
+        if (this.failures.usernameNotAllowed) {
+            this.suggestedUsernames = this.suggestUsernames(payload.username, payload.res.alsoTaken);
+        } else {
+            this.suggestedUsernames = [];
+        }
         this.emitChange();
+    }
+
+    suggestUsernames(username, takenUsernames) {
+        let newUsernames = [];
+        for(let i=0; i <100; i++) {
+            let newUsername = username + Math.floor((Math.random() * 99) + 1);
+            if (!takenUsernames.includes(newUsername)) {
+                newUsernames.push(newUsername);
+                if (newUsernames.length > 2) {
+                    break;
+                }
+            }
+        }
+        return newUsernames;
     }
 
     getState() {
         return {
             registrationStatus: this.registrationStatus,
             failures: this.failures,
+            suggestedUsernames: this.suggestedUsernames,
             errorMessage: this.errorMessage
         };
     }
@@ -74,6 +95,7 @@ class UserRegistrationStore extends BaseStore {
     rehydrate(state) {
         this.registrationStatus = state.registrationStatus;
         this.failures = state.failures;
+        this.suggestedUsernames = state.suggestedUsernames;
         this.errorMessage = state.errorMessage;
     }
 }

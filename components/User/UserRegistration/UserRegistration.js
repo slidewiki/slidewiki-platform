@@ -101,11 +101,11 @@ class UserRegistration extends React.Component {
 
         $.fn.form.settings.rules.uniqueEmail = (() => {
             const emailNotAllowed = this.props.UserRegistrationStore.failures.emailNotAllowed;
-            return (emailNotAllowed !== undefined) ? emailNotAllowed : true;
+            return (emailNotAllowed !== undefined) ? !emailNotAllowed : true;
         });
         $.fn.form.settings.rules.uniqueUsername = (() => {
             const usernameNotAllowed = this.props.UserRegistrationStore.failures.usernameNotAllowed;
-            return (usernameNotAllowed !== undefined) ? usernameNotAllowed : true;
+            return (usernameNotAllowed !== undefined) ? !usernameNotAllowed : true;
         });
 
         $('.ui.form').form(validationRules);
@@ -243,7 +243,7 @@ class UserRegistration extends React.Component {
             'inverted circular red remove': (emailNotAllowed !== undefined) ? emailNotAllowed : false,
             'inverted circular green checkmark': (emailNotAllowed !== undefined) ? !emailNotAllowed : false
         });
-        let emailToolTipp = this.props.UserRegistrationStore.failures.emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
+        let emailToolTipp = emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
 
         const usernameNotAllowed = this.props.UserRegistrationStore.failures.usernameNotAllowed;
         let usernameClasses = classNames({
@@ -257,8 +257,10 @@ class UserRegistration extends React.Component {
             'inverted circular red remove': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false,
             'inverted circular green checkmark': (usernameNotAllowed !== undefined) ? !usernameNotAllowed : false
         });
-        let usernameToolTipp = this.props.UserRegistrationStore.failures.usernameNotAllowed ? 'This Username has already been used by someone else. Please choose another one.' : undefined;
-
+        let usernameToolTipp = usernameNotAllowed ? 'This Username has already been used by someone else. Please choose another one.' : undefined;
+        if (this.props.UserRegistrationStore.suggestedUsernames.length > 0) {
+            usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
+        }
         return (
             <div className="ui page centered grid" >
                 {dimmerMessageSuccess}
@@ -269,11 +271,11 @@ class UserRegistration extends React.Component {
                         <h2 className="ui dividing header">Sign Up</h2>
                         <form className="ui form" >
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle}>First Name * </label>
+                                <label style={signUpLabelStyle}>First name * </label>
                                 <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Last Name * </label>
+                                <label style={signUpLabelStyle}>Last name * </label>
                                 <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
@@ -293,8 +295,8 @@ class UserRegistration extends React.Component {
                                 <div className="ui icon input"><input type="password" id="password" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Re-enter Password * </label>
-                                <div className="ui icon input"><input type="password" id="reenterpassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter Password" aria-required="true"/></div>
+                                <label style={signUpLabelStyle}>Re-enter password * </label>
+                                <div className="ui icon input"><input type="password" id="reenterpassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>

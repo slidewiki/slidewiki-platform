@@ -54,7 +54,7 @@ export default {
             });
         } else if (resource === 'user.checkusername') {
             rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, {username: args.username, res: JSON.parse(res)});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {});
