@@ -25,6 +25,9 @@ export default function uploadFile(context, payload, done) {
     context.service.create('import', payload, {timeout: timeout * 1000}, {timeout: timeout * 1000}, (err, res) => {
         console.log('action got response from server', err);
 
+        //TODO: use correct headers
+        res.deckId = 165;
+
         context.myStuff.uploadFinished = true;
         if (err) {
             context.dispatch('UPLOAD_FAILED', err);

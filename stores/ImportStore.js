@@ -9,6 +9,7 @@ class ImportStore extends BaseStore {
         this.filename = '';
         this.uploadProgress = 0;
         this.fileReadyForUpload = false;
+        this.deckId = null;
     }
     destructor()
     {
@@ -18,6 +19,7 @@ class ImportStore extends BaseStore {
         this.filename = '';
         this.uploadProgress = 0;
         this.fileReadyForUpload = false;
+        this.deckId = null;
     }
     getState() {
         return {
@@ -26,7 +28,8 @@ class ImportStore extends BaseStore {
             base64: this.base64,
             filename: this.filename,
             fileReadyForUpload: this.fileReadyForUpload,
-            uploadProgress: this.uploadProgress
+            uploadProgress: this.uploadProgress,
+            deckId: this.deckId
         };
     }
     dehydrate() {
@@ -39,6 +42,7 @@ class ImportStore extends BaseStore {
         this.filename = state.filename;
         this.fileReadyForUpload = state.fileReadyForUpload;
         this.uploadProgress = state.uploadProgress;
+        this.deckId = state.deckId;
     }
 
     storeFile(payload) {
@@ -60,6 +64,7 @@ class ImportStore extends BaseStore {
         console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         this.uploadProgress = 100;
+        this.deckId = headers.deckId;
 
         this.file = null;
         this.base64 = null;

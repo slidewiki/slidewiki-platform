@@ -54,7 +54,7 @@ class AddDeckStore extends BaseStore {
         this.emitChange();
     }
     creationSuccess(deck) {
-        this.redirectID = Number.parseInt(deck.id);
+        this.redirectID = Number.parseInt(deck.id ? deck.id : deck._id);
 
         this.emitChange();
     }

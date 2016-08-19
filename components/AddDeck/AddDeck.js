@@ -33,7 +33,8 @@ class AddDeck extends React.Component {
         });
     }
     componentDidUpdate() {
-        this.updateProgressBar();
+        if (this.props.ImportStore.uploadProgress > 0 || this.props.ImportStore.filename !== '')
+            this.updateProgressBar();
     }
 
     handleUploadModal(x) {
@@ -102,7 +103,8 @@ class AddDeck extends React.Component {
             theme: theme,
             licence: licence,
             tags: tags,
-            userid: this.props.UserProfileStore.userid
+            userid: this.props.UserProfileStore.userid,
+            deckId: this.props.ImportStore.deckId
         });
     }
     handleCancel(x) {
@@ -203,7 +205,7 @@ class AddDeck extends React.Component {
         let btnClasses_upload = classNames({
             'ui': true,
             'primary': true,
-            'disabled': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
+            'disabled': (this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100) || this.props.ImportStore.isUploaded,
             'button': true
         });
 
