@@ -1,15 +1,20 @@
-import {shortTitle} from '../configs/general';
+import async from 'async';
+import { shortTitle } from '../configs/general';
 import loadContentQuestions from './loadContentQuestions';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
 import loadQuestionsCount from './questions/loadQuestionsCount';
-import async from 'async';
+import { deckContentTypeError, slideIdTypeError } from './loadErrors';
 
 export default function loadContentModules(context, payload, done) {
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined))
-        console.log('Content type incorrect. Loading content modules failed.');
+    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
-    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined))
-        console.log('Slide id incorrect. Loading content modules failed.');
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
 
         //load all required actions in parallel
     async.parallel([

@@ -29,7 +29,8 @@ const debug = debugLib('slidewiki-platform');
 
 const server = express();
 server.use(cookieParser());
-server.use(bodyParser.json());
+server.use(bodyParser.json({limit: '50mb'}));
+server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 server.use(compression());
 server.use(favicon(path.join(__dirname, '/favicon.ico')));
 server.use('/public', express['static'](path.join(__dirname, '/build')));
@@ -62,6 +63,7 @@ fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
+fetchrPlugin.registerService(require('./services/UserProfile'));
 
 server.use((req, res, next) => {
 
@@ -78,7 +80,7 @@ server.use((req, res, next) => {
         url: req.url
     }, (err) => {
         if (err) {
-            // console.log(err);
+            console.log(err);
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -138,6 +140,7 @@ server.use((req, res, next) => {
         res.end();
     });
 });
+
 
 const port = process.env.PORT || 3000;
 server.listen(port);

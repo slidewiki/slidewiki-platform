@@ -30,15 +30,14 @@ export default {
             rp.post({
                 uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
-                    // email: args.email,
-                    username: args.username,
+                    email: args.email,
                     password: hashedPassword
                 }),
                 resolveWithFullResponse: true
             })
                 .then((res) => {
                     callback(null, {
-                        username: args.username,
+                        username: JSON.parse(res.body).username,
                         userid: JSON.parse(res.body).userid,
                         jwt: res.headers['----jwt----'],
                         selector: args.selector

@@ -21,7 +21,7 @@ class ContentStore extends BaseStore {
     getState() {
         return {
             selector: this.selector,
-            mode: this.mode
+            mode: this.mode,
         };
     }
     dehydrate() {

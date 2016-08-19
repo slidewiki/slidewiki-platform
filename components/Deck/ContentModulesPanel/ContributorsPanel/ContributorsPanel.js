@@ -4,7 +4,6 @@ import classNames from 'classnames/bind';
 import ContributorsStore from '../../../../stores/ContributorsStore';
 import ContributorsList from './ContributorsList';
 
-
 class ContributorsPanel extends React.Component {
     componentDidMount() {
         this.enableAccordion();

@@ -247,6 +247,19 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => ! val));
         this.emitChange();
     }
+    updateTreeNode(payload) {
+        let selectorIm = Immutable.fromJS(payload.selector);
+        //set a default path in case of no path
+        if(!payload.selector.spath){
+            selectorIm = selectorIm.setIn(['spath'], this.generateASelectorPath(this.flatTree, selectorIm));
+        }
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //update the node
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.nodeSpec.title));
+        //todo: update path
+        this.emitChange();
+    }
     renameTreeNode(selector) {
         let selectorIm = Immutable.fromJS(selector);
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
@@ -264,6 +277,10 @@ class DeckTreeStore extends BaseStore {
     }
     saveTreeNode(payload) {
         let selectorIm = Immutable.fromJS(payload.selector);
+        //set a default path in case of no path
+        if(!payload.selector.spath){
+            selectorIm = selectorIm.setIn(['spath'], this.generateASelectorPath(this.flatTree, selectorIm));
+        }
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
         //select new one
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
@@ -473,6 +490,7 @@ DeckTreeStore.handlers = {
     'UNDO_RENAME_TREE_NODE_SUCCESS': 'undoRenameTreeNode',
     'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode',
     'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode',
+    'UPDATE_TREE_NODE_SUCCESS': 'updateTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     //error handling msges
