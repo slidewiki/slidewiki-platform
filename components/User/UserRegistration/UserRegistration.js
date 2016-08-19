@@ -168,14 +168,14 @@ class UserRegistration extends React.Component {
 
     checkEmail() {
         const email = this.refs.email.value;
-        if (email !== '') {
+        if (this.props.UserRegistrationStore.failures.usernameNotAllowed !== undefined || email !== '') {
             this.context.executeAction(checkEmail, {email: email});
         }
     }
 
     checkUsername() {
         const username = this.refs.username.value;
-        if (username !== '') {
+        if (this.props.UserRegistrationStore.failures.usernameNotAllowed !== undefined || username !== '') {
             this.context.executeAction(checkUsername, {username: username});
         }
     }

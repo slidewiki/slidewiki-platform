@@ -46,19 +46,28 @@ export default {
                     });
                 });
         } else if (resource === 'user.checkemail') {
-            rp.get({uri: Microservices.user.uri + '/information/email/' + args.email}).then((res) => {
-                callback(null, JSON.parse(res));
-            }).catch((err) => {
-                console.log(err);
-                callback(null, {});
-            });
+            let regExp = /\S+@\S+\.\S+/;
+            if (args.email === '' || !regExp.test(args.email)) {//Do not call microservice with invalid email
+                callback(null, {taken: undefined});
+            } else {
+                rp.get({uri: Microservices.user.uri + '/information/email/' + args.email}).then((res) => {
+                    callback(null, JSON.parse(res));
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {});
+                });
+            }
         } else if (resource === 'user.checkusername') {
-            rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
-                callback(null, {username: args.username, res: JSON.parse(res)});
-            }).catch((err) => {
-                console.log(err);
-                callback(null, {});
-            });
+            if (args.username === '') {//Do not call microservice with empty string
+                callback(null, {username: '', res: {taken: undefined, alsoTaken:[]}});
+            } else {
+                rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
+                    callback(null, {username: args.username, res: JSON.parse(res)});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {});
+                });
+            }
         }
     },
 
