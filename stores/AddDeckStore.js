@@ -47,13 +47,13 @@ class AddDeckStore extends BaseStore {
 
         this.emitChange();
     }
-    uploadFailure(error) {
+    creationFailure(error) {
         console.log('store - error', error.statusCode);
         this.error = error;
 
         this.emitChange();
     }
-    uploadSuccess(deck) {
+    creationSuccess(deck) {
         this.redirectID = Number.parseInt(deck.id);
 
         this.emitChange();
@@ -63,8 +63,8 @@ class AddDeckStore extends BaseStore {
 AddDeckStore.storeName = 'AddDeckStore';
 AddDeckStore.handlers = {
     'SHOW_WRONG_FIELDS': 'showWrongFields',
-    'UPLOAD_FAILURE': 'uploadFailure',
-    'UPLOAD_SUCCESS': 'uploadSuccess',
+    'CREATION_FAILURE': 'creationFailure',
+    'CREATION_SUCCESS': 'creationSuccess',
     'DESTRUCT': 'destructor'
 };
 

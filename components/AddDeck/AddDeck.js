@@ -7,6 +7,8 @@ import ImportStore from '../../stores/ImportStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
+import importFinished from '../../actions/import/importFinished';
+import uploadFile from '../../actions/import/uploadFile';
 import Import from '../Import/Import';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
@@ -16,9 +18,7 @@ let classNames = require('classnames');
 class AddDeck extends React.Component {
     constructor(props) {
         super(props);
-        this.redirectID = 0;
         this.percentage = 0;
-        this.uploadPending = false;
     }
     componentDidMount() {
         let that = this;
@@ -28,11 +28,12 @@ class AddDeck extends React.Component {
             },
             onApprove : function(data) {
                 console.log('modal clicked on upload', data);
-                that.uploadPending = true;
+                that.handleFileSubmit();
             }
         });
     }
-    componentDidUpdate(){
+    componentDidUpdate() {
+        this.updateProgressBar();
     }
 
     handleUploadModal(x) {
@@ -113,8 +114,10 @@ class AddDeck extends React.Component {
         });
     }
     handleRedirect(){
+        console.log('AddDeck: handleRedirect()');
+        this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.redirectID
+            url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
     /*
@@ -124,12 +127,28 @@ class AddDeck extends React.Component {
     */
     updateProgressBar() {
         $('#progressbar_addDeck_upload').progress({
-            percent: this.percentage,
+            percent: this.props.ImportStore.uploadProgress,
             text: {
                 active  : 'Uploading: {percent}%',
                 success : 'Slides uploaded!'
             }
         });
+    }
+    handleFileSubmit(){
+        console.log('handleFileSubmit()');
+
+        if (this.props.ImportStore.file !== null) {
+            //call action
+            const payload = {
+                file: this.props.ImportStore.file,
+                base64: this.props.ImportStore.base64
+            };
+            this.updateProgressBar();
+            this.context.executeAction(uploadFile, payload);
+        }
+        else {
+            console.error('Submission not possible - no file or not pptx');
+        }
     }
 
     render() {
@@ -178,9 +197,19 @@ class AddDeck extends React.Component {
         let btnClasses_submit = classNames({
             'ui': true,
             'primary': true,
-            'disabled': this.uploadPending,
+            'disabled': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
             'button': true
         });
+        let btnClasses_upload = classNames({
+            'ui': true,
+            'primary': true,
+            'disabled': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
+            'button': true
+        });
+
+        let filename = this.props.ImportStore.filename;
+        if (filename.length > 40)
+            filename = filename.substr(0, 40) + ' ...';
 
         let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
@@ -219,13 +248,13 @@ class AddDeck extends React.Component {
                   <div className="ui grid">
                       <div className="two column row">
                           <div className="column">
-                              <div className="ui primary button" aria-label="upload" tabIndex="0" onClick={this.handleUploadModal.bind(this)} >
+                              <div className={btnClasses_upload} aria-label="upload" tabIndex="0" onClick={this.handleUploadModal.bind(this)} >
                                   Upload file
                               </div>
                               <Import />
                           </div>
                           <div className="column" ref="div_filename">
-                              {this.props.ImportStore.filename.substr(0, 40)}
+                              {filename ? '"'+filename+'"' : ''}
                           </div>
                       </div>
                   </div>

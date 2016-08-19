@@ -18,16 +18,27 @@ export default {
             contentType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             //knownLength: params.file.size ? params.file.size : params.base64.length
         });
-        form.submit('http://localhost:8003/importPPTX', (err, res) => {
+        let request = form.submit({
+            port: '8003',
+            host: 'localhost',
+            path: '/importPPTX',
+            protocol: 'http:',
+            timeout: body.timeout
+        }, (err, res) => {
+            //res.setTimeout(body.timeout);
+
             if (err) {
                 console.error(err);
-                callback(err, null);
+                //only callback if no timeout
+                if (err.toString() !== 'Error: XMLHttpRequest timeout')
+                    callback(err, null);
                 return;
             }
+
             console.log('result of call to import-microservice', res.headers, res.statusCode);
             //res does not contain any data ...
             //the response data have to be send via headers
-            callback(err, res.headers);
+            callback(null, res.headers);
         });
     }
 };
