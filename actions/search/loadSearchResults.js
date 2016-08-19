@@ -5,6 +5,7 @@ export default function loadSearchResults(context, payload, done) {
         if (err) {
             context.dispatch('LOAD_RESULTS_FAILURE', err);
         } else {
+            // console.log("- action: LOAD_RESULTS_SUCCESS");
             context.dispatch('LOAD_RESULTS_SUCCESS', res);
         }
 

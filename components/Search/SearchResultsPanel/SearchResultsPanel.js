@@ -17,10 +17,11 @@ class SearchResultsPanel extends React.Component {
 
     render() {
         const results = this.props.SearchResultsStore.docs;  //this.props.SearchResultsStore.results;
+        // console.log("- panel" + results);
 
-        console.log('RESULTS PANEL: '+results);
+        // console.log('RESULTS PANEL: '+results);
 
-        console.log('RESULTS PANEL 2: '+this.props.SearchResultsStore.results);
+        // console.log('RESULTS PANEL 2: '+this.props.SearchResultsStore.results);
 
 
         const entities = this.props.SearchResultsStore.entities;

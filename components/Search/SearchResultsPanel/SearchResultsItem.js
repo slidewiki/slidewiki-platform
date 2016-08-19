@@ -7,14 +7,14 @@ class SearchResultsItem extends React.Component {
 
     render() {
 
-        console.log('AAAAAAAAAAAA');
+        // console.log('AAAAAAAAAAAA');
 
 
 
         const result = this.props.data;
         const imgpath = '/assets/images/search/';
 
-        console.log('RESULT: '+JSON.stringify(result));
+        // console.log('RESULT: '+JSON.stringify(result));
 
         let IconNode = '';
         let ResultNode = '';

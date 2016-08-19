@@ -20,29 +20,31 @@ export default {
         let searchstatus = args.searchstatus;
         let searchstring=decodeURIComponent(args.searchstring);
         let searchparams=searchstring.split('+');
+        entity = 'mpla';
 
         console.log('SEARCH STRING: '+searchstring);
+        console.log('SEARCH PARAMS: ' + searchparams );
 
         for(let i = 0; i < searchparams.length; i++){
 
-            console.log('PARAM: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
+            // console.log('PARAM: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
 
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'q'){
 
-                console.log('test: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
+                // console.log('test: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
 
                 if(searchparams[i].substring(0, searchparams[i].indexOf('=')+1) === '' ){
-                    console.log('EMPTY Q');
+                    // console.log('EMPTY Q');
                     q='q=*:*';
                 }
                 else{
-                    console.log('TEST Q:'+searchparams[i].substring(searchparams[i].indexOf('=')) +':');
+                    // console.log('TEST Q:'+searchparams[i].substring(searchparams[i].indexOf('=')) +':');
                     q='q'+searchparams[i].substring(searchparams[i].indexOf('='));
                 }
 
             }
 
-            console.log('Q: '+q);
+            // console.log('Q: '+q);
 
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'entity'){
                 fq='&fq=entity%3A"'+searchparams[i].substring(searchparams[i].indexOf('=')).substring(1)+'"';
@@ -53,24 +55,20 @@ export default {
         }
 
 
-
-
-
-
         if(resource === 'searchresults.list'){
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
         	//
-            let result = 'Searched for string: ' + args.searchstring + ' , result: RDF is a standard model for data';
+            // let result = 'Searched for string: ' + args.searchstring + ' , result: RDF is a standard model for data';
             //let result = 'Searched for string: "RDF" , result: RDF is a standard model for data';
-            let searchresults = [
-                {'id': '1', 'type':'slide', 'did': '24', 'sid': '12', 'uid':'23', 'description': 'RDF is a standard model for data', 'stitle':'Introuction', 'lang':'EN'},
-                {'id': '2', 'type':'deck', 'did': '23', 'uid':'24', 'description':'Everything about RDF is already said', 'lang':'EN'},
-                {'id': '3', 'type':'deck_revision', 'did': '23', 'uid':'25', 'title':'What Is RDF by rewriting it from', 'lang':'EN'},
-                {'id': '4', 'type':'deck_revision', 'did': '31', 'uid':'26', 'comment':'Introduction RDF is one of', 'lang':'ES'},
-                {'id': '5', 'type':'answer', 'did': '', 'aid': '87', 'uid':'23', 'explanation':'Introduction to RDF including', 'lang':'GR'}
-            ];
+            // // let searchresults = [
+            //     {'id': '1', 'type':'slide', 'did': '24', 'sid': '12', 'uid':'23', 'description': 'RDF is a standard model for data', 'stitle':'Introuction', 'lang':'EN'},
+            //     {'id': '2', 'type':'deck', 'did': '23', 'uid':'24', 'description':'Everything about RDF is already said', 'lang':'EN'},
+            //     {'id': '3', 'type':'deck_revision', 'did': '23', 'uid':'25', 'title':'What Is RDF by rewriting it from', 'lang':'EN'},
+            //     {'id': '4', 'type':'deck_revision', 'did': '31', 'uid':'26', 'comment':'Introduction RDF is one of', 'lang':'ES'},
+            //     {'id': '5', 'type':'answer', 'did': '', 'aid': '87', 'uid':'23', 'explanation':'Introduction to RDF including', 'lang':'GR'}
+            // ];
 
             let entities = [{'id': '1', 'description':'slide'}, {'id': '2', 'description':'deck'}, {'id': '3', 'description':'answer'}];
             let languages = [{'id': '1', 'description':'EN'}, {'id': '2', 'description':'ES'}];
@@ -91,18 +89,21 @@ export default {
 
                 solrResponse = JSON.parse(body);
 
-                console.log('RESPONSE: '+JSON.stringify(solrResponse));
+                // console.log('RESPONSE: '+JSON.stringify(solrResponse));
 
-                console.log('qqqq');
+                // console.log('qqqq');
 
                 // let numFound=0;
                 // let docs=[];
+                console.log('- service results ' + solrResponse.response.numFound);
 
                 callback(null, {numFound: solrResponse.response.numFound, docs: solrResponse.response.docs,
-
-                    results: searchresults, entities: entities, languages:languages,
-                    searchstring:args.searchstring, entity:entity, searchlang:searchlang,
-                    deckid:deckid, userid:userid, searchstatus:searchstatus
+                    searchstatus: searchstatus, entities: entities, languages:languages,
+                    searchstring: args.searchstring,
+                    entity: entity,
+                    // results: searchresults, entities: entities, languages:languages,
+                    // searchstring:args.searchstring, entity:entity, searchlang:searchlang,
+                    // deckid:deckid, userid:userid, searchstatus:searchstatus
                 });
 
 
