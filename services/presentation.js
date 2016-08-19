@@ -6,61 +6,32 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        //let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
+        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         //Load the whole presentation
         let presentation = [];
         if(resource === 'presentation.content'){
             /*********connect to microservices*************/
-            let deck = args.deck;
 
             let returnErr = false;
+            let slideServiceRes;
+            let theme = get_sample_theme();
+            rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id) + '/slides'}).then((res) => {
+                slideServiceRes = JSON.parse(res);
+                //console.log("slideServiceRes", slideServiceRes);
+                console.log('theme', theme);
+                callback(null, {content: slideServiceRes.children, theme: theme});
 
-            if(deck[0] !== undefined){
-                // console.log(deck);
-               //Retrieve the content of each presentation
-                for (let i = 0; i < deck.length; i++) {
-                    let slide = deck[i];
-                    if (slide.type !== 'slide'){
-                        continue;
-                    }
-                    // let content;
-                    let slideServiceRes;
-                    //console.log('slide ID: ', slide.id);
-                    rp.get({uri: Microservices.deck.uri + '/slide/' + slide.id}).then((res) => {
-
-
-                        // console.log('\n\n\n\nres', res);
-                        slideServiceRes = JSON.parse(res);
-                        // console.log('\n\n\n', slideServiceRes);
-                        presentation.push({
-                            'id': slide.id,
-                            'content': slideServiceRes.revisions[slideServiceRes.revisions.length-1].content,
-                            'title': slideServiceRes.revisions[slideServiceRes.revisions.length-1].title,
-                            'speakerNotes': slideServiceRes.revisions[slideServiceRes.revisions.length-1].speakernotes
-                        });
-                        //console.log('presentation', presentation[0]);
-                        callback(null, {content: presentation, theme: get_sample_theme()});
-
-                    }).catch((err) => {
-                        //console.log('jfklsdjfklsdjfkldsjfkldsjf', err);
-                        presentation.push({'id': slide.id, 'content':'', 'title': '', 'speakerNotes': ''});
-                        returnErr = true;
-                        callback(null, {content: presentation, theme: get_sample_theme()});
-                    });
-                    //console.log('\n\n\n\n\n\npresentation2', presentation[0]);
-                    /*********received data from microservices*************/
-
-                } //for
-                // console.log('presentation2', presentation);
-            } //deck undifined
-
+            }).catch((err) => {
+                console.log('There was an error!', err);
+                returnErr = true;
+                callback(null, {content: slideServiceRes, theme: theme});
+            });
 
         }//If presentation.content
         //TODO: Retrieve theme content from deck
 
         //     /*********received data from microservices*************/
         // callback(null, {content: presentation, theme: get_sample_theme()});
-
 
     }
 };

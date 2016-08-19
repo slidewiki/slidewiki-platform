@@ -244,9 +244,7 @@ export default {
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeckTree, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadPresentation, payload, done);
         }
     },
     presentationSlide: {
@@ -256,9 +254,7 @@ export default {
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeckTree, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadPresentation, payload, done);
         }
     },
     importfile: {

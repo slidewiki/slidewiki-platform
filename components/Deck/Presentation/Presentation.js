@@ -13,8 +13,6 @@ let playerCss = {
     fontSize: '100%',
     position: 'absolute',
     top: '0',
-    //backgroundColor: '#ffffff',
-    zindex: '1000'
 };
 
 let clearStyle = {
@@ -28,12 +26,6 @@ class Presentation extends React.Component{
         this.playerCss = playerCss;
         this.slides = [];
     }
-    componentWillMount(){
-        this.context.executeAction(loadPresentation, {
-            deck: this.props.DeckTreeStore.flatTree
-        });
-    }
-
     componentDidMount(){
         if(process.env.BROWSER){
             let style = require('../../../bower_components/reveal.js/css/reveal.css');
@@ -43,30 +35,48 @@ class Presentation extends React.Component{
             $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.page.grid.inverted.blue.menu').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
+            let s = this.props.PresentationStore.theme;
+            console.log("PresentationStore", this.props.PresentationStore);
+            if(!s){
+                s = 'white';
+            }
+            require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
+            Reveal.initialize({
+                dependencies: [
+                // //{ src: 'socket.io/socket.io.js', async: true },
+                    { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+            console.log('componentDidMount');
         }
     }
 
     componentDidUpdate(){
-        if(this.slides.length > 0){
-
-            if (process.env.BROWSER) {
-
-                let s = this.props.PresentationStore.theme;
-                require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
-                Reveal.initialize({
-                    dependencies: [
-                    // //{ src: 'socket.io/socket.io.js', async: true },
-                        { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
-                    ]
-                });
-
-                // console.log(this.props.PresentationStore);
-
-            }
-        }
+        let s = this.props.PresentationStore;
+        console.log('PresentationStore componentDidUpdate', s);
+        // if(!s){
+        //     s = 'white';
+        // }
     }
+    //     console.log('componentDidUpdate');
+    //     if(this.slides.length > 0){
+    //
+    //         if (process.env.BROWSER) {
+    //
+    //             // let s = this.props.PresentationStore.theme;
+    //             // require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
+    //             // Reveal.initialize({
+    //             //     dependencies: [
+    //             //     // //{ src: 'socket.io/socket.io.js', async: true },
+    //             //         { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+    //             //     ]
+    //             // });
+    //
+    //
+    //         }
+    //     }
+    // }
     render(){
-        console.log('Rendering');
         this.slides = this.getSlides();
         return(
             <div>
@@ -82,12 +92,14 @@ class Presentation extends React.Component{
 
     getSlides(){
         let slides = this.props.PresentationStore.content;
+        //console.log("PresentationStore", this.props.PresentationStore);
 
         let returnList = [];
-        if(slides !== ''){
+        if(slides){
+            console.log('slides');
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
-                let speakerNotes = slide.speakerNotes;
+                let speakerNotes = '';// slide.speakerNotes;
                 let content = slide.title + slide.content + '<aside class="notes">' + speakerNotes + '</aside>';
                 returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={slide.id} id={slide.id} />);
             }
@@ -95,6 +107,7 @@ class Presentation extends React.Component{
 
         }
         else{
+            console.log('Not slides');
             return (<section />);
         }
     }
@@ -105,9 +118,8 @@ Presentation.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-Presentation = connectToStores(Presentation, [DeckTreeStore, PresentationStore], (context, props) => {
+Presentation = connectToStores(Presentation, [PresentationStore], (context, props) => {
     return {
-        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         PresentationStore: context.getStore(PresentationStore).getState()
     };
 });

@@ -6,13 +6,12 @@ class PresentationStore extends BaseStore {
         super(dispatcher);
         this.content = '';
         this.theme = '';
+        this.selector = '';
     }
     updatePresentation(payload) {
-        // console.log('Payload: ', payload);
-        this.deck =
-        this.flatTree = this.getFlatTree(this.deck);
         this.content = payload.content;
         this.theme = payload.theme;
+        this.selector = payload.selector;
         this.emitChange();
         //console.log("Updating content", payload.content);
     }
@@ -23,9 +22,7 @@ class PresentationStore extends BaseStore {
             selector: this.selector,
             mode: this.mode,
             content: this.content,
-            theme: this.theme,
-            deck: this.deck,
-            flatTree: this.flatTree
+            theme: this.theme
         };
     }
     dehydrate() {
@@ -34,8 +31,8 @@ class PresentationStore extends BaseStore {
     rehydrate(state) {
         this.items = state.items;
         this.selector = state.selector;
-        this.mode = state.mode;
         this.content = state.content;
+        this.theme = state.theme;
     }
 
     getFlatTree(deck){
