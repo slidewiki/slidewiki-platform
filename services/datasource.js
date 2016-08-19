@@ -71,7 +71,7 @@ let mockupDataSources = [
 ];
 
 function getMockupDataSourcesForID(sid) {
-    const idWithoutDash = sid.split('-')[0];
+    const idWithoutDash = sid.split('-')[0];//remove revision version
     let dataSources = [];
 
     switch (idWithoutDash) {
