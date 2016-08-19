@@ -26,7 +26,8 @@ const debug = debugLib('slidewiki-platform');
 
 const server = express();
 server.use(cookieParser());
-server.use(bodyParser.json());
+server.use(bodyParser.json({limit: '50mb'}));
+server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 server.use(compression());
 server.use(favicon(path.join(__dirname, '/favicon.ico')));
 server.use('/public', express['static'](path.join(__dirname, '/build')));
@@ -136,6 +137,7 @@ server.use((req, res, next) => {
         res.end();
     });
 });
+
 
 const port = process.env.PORT || 3000;
 server.listen(port);
