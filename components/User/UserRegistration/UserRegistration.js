@@ -38,6 +38,12 @@ class UserRegistration extends React.Component {
                     }, {
                         type: 'uniqueUsername',
                         prompt: 'The username is already in use'
+                    }, {
+                        type   : 'maxLength[64]',
+                        prompt : 'Your username can not be longer than 64 characters'
+                    }, {
+                        type   : 'regExp[/^[a-z0-9]+$/i]',
+                        prompt : 'The username must contain only alphanumeric characters'
                     }]
                 },
                 email: {

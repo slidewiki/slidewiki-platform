@@ -44,13 +44,19 @@ class LoginModal extends React.Component {
 
     signin(e) {
         e.preventDefault();
-        this.context.executeAction(userSignIn, {
-            email: this.refs.email1.value,
-            password: this.refs.password1.value
-        });
+        const email = this.refs.email1.value;
+        let regExp = /\S+@\S+\.\S+/;
+        if (email === '' || !regExp.test(email)) {//Check if email is valid
+            $('.ui.form.signin').form('add errors', ['Please use a valid email address']);
+        } else {
+            this.context.executeAction(userSignIn, {
+                email: this.refs.email1.value,
+                password: this.refs.password1.value
+            });
 
-        this.refs.email1.value = '';
-        this.refs.password1.value = '';
+            this.refs.email1.value = '';
+            this.refs.password1.value = '';
+        }
         return false;
     }
 

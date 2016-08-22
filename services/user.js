@@ -58,7 +58,8 @@ export default {
                 });
             }
         } else if (resource === 'user.checkusername') {
-            if (args.username === '') {//Do not call microservice with empty string
+            let regExp = /^[a-z0-9]+$/i;
+            if (args.username === '' || !regExp.test(args.username)) {//Do not call microservice with invalid username
                 callback(null, {username: '', res: {taken: undefined, alsoTaken:[]}});
             } else {
                 rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
