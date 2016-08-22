@@ -22,6 +22,8 @@ class SearchResultsStore extends BaseStore {
         // facets
         this.entities = [];
         this.languages = [];
+
+        this.error = '';
     }
     updateResults(payload){
         // console.log("store: update results called");

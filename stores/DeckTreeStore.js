@@ -247,6 +247,19 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => ! val));
         this.emitChange();
     }
+    updateTreeNode(payload) {
+        let selectorIm = Immutable.fromJS(payload.selector);
+        //set a default path in case of no path
+        if(!payload.selector.spath){
+            selectorIm = selectorIm.setIn(['spath'], this.generateASelectorPath(this.flatTree, selectorIm));
+        }
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //update the node
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.nodeSpec.title));
+        //todo: update path
+        this.emitChange();
+    }
     renameTreeNode(selector) {
         let selectorIm = Immutable.fromJS(selector);
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
@@ -254,8 +267,20 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => true));
         this.emitChange();
     }
+    //switch edtiable to false
+    undoRenameTreeNode(selector) {
+        let selectorIm = Immutable.fromJS(selector);
+        let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
+        //select new one
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
+        this.emitChange();
+    }
     saveTreeNode(payload) {
         let selectorIm = Immutable.fromJS(payload.selector);
+        //set a default path in case of no path
+        if(!payload.selector.spath){
+            selectorIm = selectorIm.setIn(['spath'], this.generateASelectorPath(this.flatTree, selectorIm));
+        }
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
         //select new one
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
@@ -286,7 +311,8 @@ class DeckTreeStore extends BaseStore {
         try {
             this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => false));
             this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => false));
-            //this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
+            //should revert title changes after switch
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
         } catch (e) {
             //there might be the case when the node for old selector does not exist anymore
         }
@@ -338,22 +364,40 @@ class DeckTreeStore extends BaseStore {
             this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
             this.selector = selectorIm;
         }
+
         let selectedRelPosition = this.getRelPositionFromPath(this.selector.get('spath')) - 1;
         let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-        //insert new node to tree
-        selectedNodeIndex.splice(-1,1);
-        selectedNodeIndex.splice(-1,1);
         let chain = this.deckTree;
-        selectedNodeIndex.forEach((item, index) => {
-            //chain will be a list of all nodes in the same level
-            chain = chain.get(item);
-        });
+
         let newNodePathString = '';
-        if(chain.get('path')){
-            newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+        //for decks, we should append it in the last child position
+        if(this.selector.get('stype')==='deck'){
+            selectedNodeIndex.forEach((item, index) => {
+                //chain will be a list of all nodes in the same level
+                chain = chain.get(item);
+            });
+            if(chain.get('path')){
+                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (chain.get('children').size + 1);
+            }else{
+                //for the first level node we don't need the ;
+                newNodePathString = newNode.get('id') + ':' + (chain.get('children').size + 1);
+            }
         }else{
-            //for the first level node we don't need the ;
-            newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
+            //for slides, we should append it next to slide
+            //insert new node to tree
+            selectedNodeIndex.splice(-1,1);
+            selectedNodeIndex.splice(-1,1);
+
+            selectedNodeIndex.forEach((item, index) => {
+                //chain will be a list of all nodes in the same level
+                chain = chain.get(item);
+            });
+            if(chain.get('path')){
+                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (selectedRelPosition + 2);
+            }else{
+                //for the first level node we don't need the ;
+                newNodePathString = newNode.get('id') + ':' + (selectedRelPosition + 2);
+            }
         }
         //we need to update path for new node
         if(newNode.get('type') === 'slide'){
@@ -366,20 +410,33 @@ class DeckTreeStore extends BaseStore {
             newNode = newNode.set('editable', true);
             newNode = this.updatePathForImmTree(newNode, this.makePathArrFromString(newNodePathString));
         }
+        //add node to the child list
         chain = chain.get('children');
         //add node to the child list
-        chain = chain.insert(selectedRelPosition + 1, newNode);
+        if(this.selector.get('stype')==='slide'){
+            chain = chain.insert(selectedRelPosition + 1, newNode);
+        }else{
+            chain = chain.insert(chain.size, newNode);
+        }
+
         //update tree
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('children', (list) => chain) );
-        //set back to child list
-        selectedNodeIndex.push('children');
-        //update the sibling nodes after adding the node
-        this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
+        //update sibling in case of slide
+        if(this.selector.get('stype')==='slide'){
+            //set back to child list
+            selectedNodeIndex.push('children');
+            //update the sibling nodes after adding the node
+            this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
+        }
         //need to update flat tree for node absolute positions
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
         //deselect the selected node in tree
         //should update the selector: set to the new node
-        this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
+        if(this.selector.get('stype')==='slide'){
+            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
+        }else{
+            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(chain.size - 1)));
+        }
         this.emitChange();
     }
     updateNodeRelPosition(path, newPosition) {
@@ -430,8 +487,10 @@ DeckTreeStore.handlers = {
     'SELECT_TREE_NODE_SUCCESS': 'selectTreeNode',
     'TOGGLE_TREE_NODE_SUCCESS': 'toggleTreeNode',
     'RENAME_TREE_NODE_SUCCESS': 'renameTreeNode',
+    'UNDO_RENAME_TREE_NODE_SUCCESS': 'undoRenameTreeNode',
     'SAVE_TREE_NODE_SUCCESS': 'saveTreeNode',
     'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode',
+    'UPDATE_TREE_NODE_SUCCESS': 'updateTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     //error handling msges

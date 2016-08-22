@@ -6,11 +6,6 @@ class SearchResultsItem extends React.Component {
 
 
     render() {
-
-        // console.log('AAAAAAAAAAAA');
-
-
-
         const result = this.props.data;
         const imgpath = '/assets/images/search/';
 

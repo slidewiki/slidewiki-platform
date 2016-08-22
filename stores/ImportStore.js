@@ -3,49 +3,58 @@ import {BaseStore} from 'fluxible/addons';
 class ImportStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.content = '';
+        this.resultMessage = '';
         this.isUploaded = false;
-        this.isAllowed = false;
+        this.file = null;
+        this.base64 = null;
     }
     destructor()
     {
-        this.content = '';
+        this.resultMessage = '';
         this.isUploaded = false;
-        this.isAllowed = false;
-    }
-    showImportFile(payload) {
-        this.content = payload.content;
-        this.isUploaded = true;
-        this.emitChange();
-    }
-    checkFile(payload) {
-        //TODO: add logic in services/import or actions/importFileSelect.js to check if file is valid, based on file extension, content size, encoding, etc..
-        this.isAllowed = true;
-        //this.isUploaded = true;
-        this.emitChange();
+        this.file = null;
+        this.base64 = null;
     }
     getState() {
         return {
-            content: this.content,
+            resultMessage: this.resultMessage,
             isUploaded: this.isUploaded,
-            isAllowed: this.isAllowed
+            file: this.file,
+            base64: this.base64
         };
     }
     dehydrate() {
         return this.getState();
     }
     rehydrate(state) {
-        this.content = state.content;
+        this.resultMessage = state.resultMessage;
         this.isUploaded = state.isUploaded;
-        this.isAllowed = state.isAllowed;
+        this.file = state.file;
+        this.base64 = state.base64;
+    }
+
+    storeFile(payload) {
+        console.log('ImportStore: storeFile()', payload);
+        this.file = payload.file;
+        this.base64 = payload.base64;
+        this.emitChange();
+    }
+    uploadFailed(error) {
+        //TODO: show an error
+    }
+    uploadSuccess(headers) {
+        this.isUploaded = true;
+        this.resultMessage = 'You presentation was uploaded to our servers. In a moment you will be redirected to it.';
+        this.emitChange();
     }
 }
 
 ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
-    'LOAD_IMPORT_FILE_SUCCESS': 'showImportFile',
-    'IMPORT_FILE_SELECT': 'checkFile',
-    'IMPORT_FINISHED': 'destructor'
+    'STORE_FILE': 'storeFile',
+    'IMPORT_FINISHED': 'destructor',
+    'UPLOAD_FAILED': 'uploadFailed',
+    'UPLOAD_SUCCESS': 'uploadSuccess'
 };
 
 export default ImportStore;

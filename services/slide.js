@@ -109,7 +109,7 @@ export default {
     },
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
+        let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         //console.log('sending update');
         if(resource === 'slide.content'){
           //TODO get real content_id
@@ -142,11 +142,13 @@ export default {
                     license: 'CC BY-SA'
                 })
             }).then((res) => {
-                //console.log(JSON.parse(res));
-                callback(null, {slide: JSON.parse(res), selector: args.selector});
+                //console.log(res);
+                //todo:there seems to be an error here: SyntaxError: Unexpected end of JSON input
+                //callback(null, {slide: JSON.parse(res), selector: selector});
+                callback(null, {slide: {}, selector: selector});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {slide: {}, selector: args.selector});
+                callback(null, {slide: {}, selector: selector});
             });
         }
     },

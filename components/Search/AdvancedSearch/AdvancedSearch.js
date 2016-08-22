@@ -71,7 +71,6 @@ class AdvancedSearch extends React.Component {
 
                 <div className="ui content">
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
-                    {curEntity}
                     <form className="ui form success">
                         <div className="field">
                             <input name='searchstring' defaultValue={searchstring} placeholder='Text search' type='text' ref='searchstring'></input>

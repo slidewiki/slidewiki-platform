@@ -17,15 +17,24 @@ class SlideEditStore extends BaseStore {
         {
             this.id = payload.slide.id;
             this.title = payload.slide.revisions[payload.slide.revisions.length-1].title;
+            if(!this.title){
+                this.title = ' ';
+            }
             this.content = payload.slide.revisions[payload.slide.revisions.length-1].content;
+            if(!this.content){
+                this.content = ' ';
+            }
             this.speakernotes = payload.slide.revisions[payload.slide.revisions.length-1].speakernotes;
+            if(!this.speakernotes){
+                this.speakernotes = ' ';
+            }
             this.emitChange();
         }
         else
         {
-            this.title = 'slide not found';
-            this.content = 'slide not found';
-            this.speakernotes = 'slide not found';
+            this.title = 'title not found';
+            this.content = 'content not found';
+            this.speakernotes = 'speaker notes not found';
             this.emitChange();
         }
     }
@@ -40,7 +49,7 @@ class SlideEditStore extends BaseStore {
             id: this.id,
             title: this.title,
             content: this.content,
-            speakernotes: this.speakernotes
+            speakernotes: this.speakernotes,
         };
     }
     dehydrate() {

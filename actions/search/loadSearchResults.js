@@ -1,7 +1,8 @@
 import {shortTitle} from '../../configs/general';
+import { searchSyntaxError, searchStringEmptyError } from '../loadErrors';
 
 export default function loadSearchResults(context, payload, done) {
-
+    
     // if query is given, call service to fetch results
     if(payload.params.queryparams){
         context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {

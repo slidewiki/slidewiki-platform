@@ -3,13 +3,36 @@ import {shortTitle} from '../configs/general';
 import DeckPageStore from '../stores/DeckPageStore';
 import loadContent from './loadContent';
 import loadDeckTree from './decktree/loadDeckTree';
-import loadContributors from './loadContributors';
-import loadTranslations from './loadTranslations';
-import loadDataSources from './datasource/loadDataSources';
 import loadActivities from './activityfeed/loadActivities';
-import loadSimilarContents from './loadSimilarContents';
+import loadContentModules from './loadContentModules';
+import { deckIdTypeError, deckContentTypeError, deckContentPathError, slideIdTypeError, deckModeError } from './loadErrors';
 
 export default function loadDeck(context, payload, done) {
+    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+        context.executeAction(deckIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
+        context.executeAction(deckContentPathError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if (!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+        context.executeAction(deckModeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
     let runNonContentActions = 1;
@@ -49,21 +72,7 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadTranslations, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
                 context.executeAction(loadDeckTree, payloadCustom, callback);
-            }else{
-                callback();
-            }
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadContributors, payloadCustom, callback);
             }else{
                 callback();
             }
@@ -77,16 +86,17 @@ export default function loadDeck(context, payload, done) {
         },
         (callback) => {
             if(runNonContentActions){
-                context.executeAction(loadSimilarContents, payloadCustom, callback);
+                context.executeAction(loadContentModules, payloadCustom, callback);
             }else{
                 callback();
             }
         }
     ],
     // final callback
+
     (err, results) => {
         if (err){
-            console.log(err);
+            console.log('Error thrown:', err);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle

@@ -7,8 +7,9 @@ import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
+import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
-import deleteTreeNode from '../../../actions/decktree/deleteTreeNode';
+import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNode from '../../../actions/decktree/addTreeNode';
 
 class TreePanel extends React.Component {
@@ -27,6 +28,9 @@ class TreePanel extends React.Component {
     handleRenameNode(selector) {
         this.context.executeAction(renameTreeNode, selector);
     }
+    handleUndoRenameNode(selector) {
+        this.context.executeAction(undoRenameTreeNode, selector);
+    }
     handleSaveNode(selector, oldValue, newValue) {
         this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
@@ -34,7 +38,7 @@ class TreePanel extends React.Component {
         this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
     }
     handleDeleteNode(selector) {
-        this.context.executeAction(deleteTreeNode, selector);
+        this.context.executeAction(deleteTreeNodeAndNavigate, selector);
     }
     render() {
         const rootNodeStyles = {
@@ -56,12 +60,15 @@ class TreePanel extends React.Component {
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
-                    <div className="2 fluid ui attached bottom tertiary small icon buttons">
-                        <div className="ui button">
-                            <i className="blue search icon"></i>
+                    <div className="3 fluid ui icon large buttons">
+                        <div className="ui basic attached button" title="Theme">
+                            <i className="theme black icon"></i>
                         </div>
-                        <div className="ui button">
-                            <i className="black ellipsis horizontal icon"></i>
+                        <div className="ui basic attached button" title="Fork">
+                            <i className="fork black icon"></i>
+                        </div>
+                        <div className="ui basic attached button" title="Translate">
+                            <i className="translate black icon"></i>
                         </div>
                     </div>
                     <div className="ui secondary segment">
@@ -71,7 +78,7 @@ class TreePanel extends React.Component {
 
                         {decktreeError ? <div className="ui error message" style={{'wordBreak': 'break-all', 'wordWrap': 'break-word'}}> {decktreeError} </div> : ''}
 
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onUndoRename={this.handleUndoRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
                     </div>
                 </div>
              </div>

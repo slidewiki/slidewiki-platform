@@ -2,11 +2,11 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
+import ErrorStore from '../../../stores/ErrorStore';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch';
 import SearchResultsPanel from './SearchResultsPanel';
 
 class SearchPanel extends React.Component {
-
     render() {
         let advSearchDiv='';
 
@@ -30,7 +30,7 @@ class SearchPanel extends React.Component {
 
         let searchResultsDiv='';
 
-        if(this.props.queryparams){
+        if(this.props.SearchResultsStore.queryparams){
             searchResultsDiv = <SearchResultsPanel />;
         }
         else{
@@ -53,11 +53,12 @@ class SearchPanel extends React.Component {
 }
 
 SearchPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    // getState: React.PropTypes.func.isRequired,
 };
 SearchPanel = connectToStores(SearchPanel, [SearchResultsStore], (context, props) => {
     return {
-        queryparams: context.getStore(SearchResultsStore).getState().queryparams
+        SearchResultsStore: context.getStore(SearchResultsStore).getState()
     };
 });
 
