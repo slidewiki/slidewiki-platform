@@ -8,8 +8,6 @@ import SearchResultsPanel from './SearchResultsPanel';
 class SearchPanel extends React.Component {
 
     render() {
-        console.log("search panel - pre render");
-
         let advSearchDiv='';
 
         // let openExtraFields = false;
@@ -31,9 +29,8 @@ class SearchPanel extends React.Component {
 
 
         let searchResultsDiv='';
-        // console.log("panel " + this.props.SearchResultsStore.searchstatus);
-        console.log("string : " + this.props.SearchResultsStore.searchstring);
-        if(this.props.SearchResultsStore.searchstring /* || this.props.SearchResultsStore.searchstatus === 'advsearchresults' */){
+
+        if(this.props.queryparams){
             searchResultsDiv = <SearchResultsPanel />;
         }
         else{
@@ -60,7 +57,7 @@ SearchPanel.contextTypes = {
 };
 SearchPanel = connectToStores(SearchPanel, [SearchResultsStore], (context, props) => {
     return {
-        SearchResultsStore: context.getStore(SearchResultsStore).getState()
+        queryparams: context.getStore(SearchResultsStore).getState().queryparams
     };
 });
 

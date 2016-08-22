@@ -2,107 +2,85 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import AdvancedSearchStore from '../../../stores/AdvancedSearchStore';
-// import loadAdvancedSearchResults from '../../../actions/search/loadAdvancedSearchResults';
 import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 class AdvancedSearch extends React.Component {
-    // constructor(...args) {
-    //     super(...args);
-    //
-    //     this.state = {
-    //         openExtraFields: this.props.openExtraFields
-    //     };
-    //     console.log("- constructor " + this.props.openExtraFields);
-    // }
-    // componentWillReceiveProps(nextProps){
-    //     if(nextProps.openExtraFields !== 'undefined')
-    //         this.setCollapseState(nextProps.openExtraFields);
-    // }
-    handleRedirect(searchstring, deckid, userid){
+    handleRedirect(){
 
-        let searchparams='';
-        if(this.refs.advsearchstring.value !== '' /*undefined*/){
-            searchparams='q='+this.refs.advsearchstring.value;
+        // form query parameters
+        let queryparams='';
+
+        if(this.refs.searchstring && this.refs.searchstring.value){
+            queryparams = 'q=' + encodeURIComponent(this.refs.searchstring.value);
         }
         else{
-            searchparams='q=*:*';
-        }
-        if(this.refs.entity !== undefined && this.refs.entity.value !== ''){
-            searchparams=searchparams+'+entity='+this.refs.entity.value;
+            queryparams = 'q=' + encodeURIComponent('*:*');
         }
 
-        if(this.refs.searchlang !== undefined && this.refs.searchlang.value !== ''){
-            searchparams=searchparams+'+lang='+this.refs.searchlang.value;
+        if(this.refs.entity && this.refs.entity.value){
+            queryparams += '&entity=' + this.refs.entity.value;
         }
 
-        // console.log('SEARCH STRING 2: '+searchparams);
+        if(this.refs.lang && this.refs.lang.value){
+            queryparams += '&lang=' + this.refs.lang.value;
+        }
 
-        //user groups
+        if(this.refs.group && this.refs.group.value){
+            queryparams += '&group=' + this.refs.group.value;
+        }
 
-        //search fields
+        if(this.refs.fields && this.refs.fields.value){
+            queryparams += '&fields=' + this.refs.fields.value;
+        }
 
-        //user
+        if(this.refs.user && this.refs.user.value){
+            queryparams += '&user=' + encodeURIComponent(this.refs.user.value);
+        }
 
-        //tags
+        if(this.refs.tags && this.refs.tags.value){
+            queryparams += '&tags=' + encodeURIComponent(this.refs.tags.value);
+        }
 
-        //include revisions
-
+        // if(this.refs.revisions && this.refs.revisions.value){
+        //     queryparams += '&revisions=' + this.refs.revisions.value;
+        // }
 
         this.context.executeAction(navigateAction, {
-            url:  '/search/' + encodeURIComponent(searchparams)
-            // url:  '/search/advsearchresults/searchstring=' + this.refs.searchstring.value +
-            //       '/' + this.refs.entity.value + //entity
-            //       '/' + this.refs.searchlang.value //language
-            //       // '/deckid=' + this.refs.deckid.value +
-            //       // '/userid=' + this.refs.userid.value
+            url:  '/search/' + queryparams
         });
 
 
         return false;
     }
-    // toggleCollapseState(){
-    //     this.setState({ openExtraFields: !this.state.openExtraFields });
-    //     // this.context.executeAction(collapseExtraSearchFields, {
-    //         // collapseState: this.state.collapseState
-    //     // });
-    //     // console.log("- change state : " + this.state.open);
-    // }
-    // setCollapseState(val){
-    //     this.setState({ openExtraFields: val });
-    // }
-    // setCollapseState(collapseValue){
-    //     alert(collapseValue);
-    // }
     render() {
-        console.log("hereeeeeeeeeeeeee " + this.props.SearchResultsStore.entity);
-        // console.log("adv search panel - pre render");
+        // console.log("rendeeeeeeeeeeeeeer " + this.props.SearchResultsStore.searchstring);
+        let searchstring = '';
+        if(this.props.SearchResultsStore.searchstring){
+            searchstring = this.props.SearchResultsStore.searchstring;
+        }
 
-        // let extraSearchFields = <div ref="extraSearchFields">
-            ;
-// console.log("edw extra  " + this.state.openExtraFields);
-        // let extraSearchFieldsPanel = (this.state.openExtraFields) ? extraSearchFields : null;
-// console.log("edw extra  " + this.state.openExtraFields);
-        // console.log("panel " + this.props.AdvancedSearchStore.collapseState);
-        // console.log("panel status " + this.props.SearchResultsStore.searchstatus);
-        // let collapseState = (this.props.SearchResultsStore.searchstatus === 'results') ? true : false;
-        // this.setCollapseState(collapseState);
+        let curEntity = '';
+        if(this.props.SearchResultsStore.entity){
+            curEntity = this.props.SearchResultsStore.entity;
+        }
+        // console.log("edw cur " + curEntity);
 
         return (
 
                 <div className="ui content">
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
-
+                    {curEntity}
                     <form className="ui form success">
-                        <div className="field full">
-                            <input name='advsearchstring' /*defaultValue='mpla' */ placeholder='Text search' type='text' ref='advsearchstring'></input>
+                        <div className="field">
+                            <input name='searchstring' defaultValue={searchstring} placeholder='Text search' type='text' ref='searchstring'></input>
                         </div>
 
                         <div className="four fields">
                             <div className="field">
                                 <label>Entity</label>
-                                <select name='entity' multiple='' className='ui fluid search dropdown' ref='entity'>
+                                <select name='entity' /*defaultValue={curEntity}*/ multiple='' className='ui fluid search dropdown' ref='entity'>
                                   <option value=''>Select Entity</option>
                                   <option value='slide'>Slide</option>
                                   <option value='deck'>Deck</option>
@@ -114,7 +92,7 @@ class AdvancedSearch extends React.Component {
 
                             <div className="field">
                                 <label>Language</label>
-                                <select name='lang' multiple='' className='ui fluid search dropdown' ref='searchlang'>
+                                <select name='lang' multiple='' className='ui fluid search dropdown' ref='lang'>
                                   <option value=''>Select Language</option>
                                   <option value='en'>English</option>
                                   <option value='es'>Spanish</option>
@@ -124,21 +102,21 @@ class AdvancedSearch extends React.Component {
 
                             <div className="field">
                                 <label>User groups</label>
-                                <select name='usergroup' multiple='' className='ui fluid search dropdown' ref='usergroup'>
+                                <select name='group' multiple='' className='ui fluid search dropdown' ref='group'>
                                   <option value=''>Select User group</option>
-                                  <option value='UNI'>Universities</option>
-                                  <option value='RC'>Research Centers</option>
-                                  <option value='OTHER'>Other</option>
+                                  <option value='uni'>Universities</option>
+                                  <option value='rc'>Research Centers</option>
+                                  <option value='other'>Other</option>
                                 </select>
                             </div>
 
                             <div className="field">
                                 <label>Search fields</label>
-                                <select name='searchfields' multiple='' className='ui fluid search dropdown' ref='searchfields'>
+                                <select name='fields' multiple='' className='ui fluid search dropdown' ref='fields'>
                                   <option value=''>Select Search field</option>
-                                  <option value='ALL'>All</option>
-                                  <option value='TITL'>Title</option>
-                                  <option value='CONT'>Content</option>
+                                  <option value='all'>All</option>
+                                  <option value='title'>Title</option>
+                                  <option value='content'>Content</option>
                                 </select>
                             </div>
                         </div>
@@ -146,19 +124,19 @@ class AdvancedSearch extends React.Component {
                         <div className="two fields">
                             <div className="field">
                                 <label>User</label>
-                                <input name="user" placeholder="User" type="text"></input>
+                                <input name='user' placeholder="User" type="text" ref='user'></input>
                             </div>
 
                             <div className="field">
                                 <label>Tags</label>
-                                <input name="tags" placeholder="Tags" type="text"></input>
+                                <input name='tags' placeholder="Tags" type="text" ref='tags'></input>
                             </div>
 
                         </div>
 
                         <div className="field">
                             <div className="ui checkbox" style={{marginTop: '1em', marginBottom: '1em'}}>
-                                <input name="revisions" type="checkbox"></input>
+                                <input name='revisions' type="checkbox" ref='revisions'></input>
                                 <label>Include revisions</label>
                             </div>
                         </div>
@@ -179,16 +157,11 @@ class AdvancedSearch extends React.Component {
 AdvancedSearch.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-// AdvancedSearch = connectToStores(AdvancedSearch, [AdvancedSearchStore], (context, props) => {
-//     return {
-//         AdvancedSearchStore: context.getStore(AdvancedSearchStore).getState()
-//     };
-// });
+
 AdvancedSearch = connectToStores(AdvancedSearch, [SearchResultsStore], (context, props) => {
     return {
         SearchResultsStore: context.getStore(SearchResultsStore).getState()
     };
 });
-
 
 export default AdvancedSearch;

@@ -3,57 +3,68 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        // let selector= {'stype': args.stype};
 
         //Initialize the variables for the SOLR query
-        let q='';
-        let fq='';
-        let solrResponse='';
+        let q = '';
+        let fq = '';
+        let solrResponse = '';
 
-
-        let entity='';
-        let searchlang='';
-        let deckid='';
-        let userid='';
+        // init parameter variables
+        let searchstring = '';
+        let entity = '';
+        let lang = '';
+        let group = '';
+        let fields = '';
+        let user = '';
+        let tags = '';
+        // let revisions = '';
 
         //Get search parameters
-        let searchstatus = args.searchstatus;
-        let searchstring=decodeURIComponent(args.searchstring);
-        let searchparams=searchstring.split('+');
-        entity = 'mpla';
-
-        console.log('SEARCH STRING: '+searchstring);
-        console.log('SEARCH PARAMS: ' + searchparams );
+        let searchparams = args.queryparams.split('&');
+        console.log('service calledw with ' + searchparams );
 
         for(let i = 0; i < searchparams.length; i++){
 
-            // console.log('PARAM: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
-
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'q'){
-
-                // console.log('test: '+searchparams[i].substring(0, searchparams[i].indexOf('=')));
-
-                if(searchparams[i].substring(0, searchparams[i].indexOf('=')+1) === '' ){
-                    // console.log('EMPTY Q');
-                    q='q=*:*';
-                }
-                else{
-                    // console.log('TEST Q:'+searchparams[i].substring(searchparams[i].indexOf('=')) +':');
-                    q='q'+searchparams[i].substring(searchparams[i].indexOf('='));
-                }
-
+                searchstring = decodeURIComponent(searchparams[i].substring(searchparams[i].indexOf('=')+1));
             }
-
-            // console.log('Q: '+q);
 
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'entity'){
-                fq='&fq=entity%3A"'+searchparams[i].substring(searchparams[i].indexOf('=')).substring(1)+'"';
+                entity = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
             }
+
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'lang'){
-                fq=fq+'&fq=lang%3A"'+searchparams[i].substring(searchparams[i].indexOf('=')).substring(1)+'"';
+                lang = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
             }
+
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'group'){
+                group = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
+            }
+
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'fields'){
+                fields = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
+            }
+
+            // TODO CONTINUE WITH THE REST PARAMS
         }
 
+        // form solr query parameters
+        if(searchstring){
+            q = 'q=' + searchstring;
+        }
+        if(entity){
+            fq += '&fq=entity%3A"' + entity + '"';
+        }
+        if(lang){
+            fq += '&fq=lang%3A"' + lang + '"';
+        }
+        if(group){
+            console.log(group);
+        }
+        if(fields){
+            console.log(fields);
+        }
+        // TODO CONTINUE ALSO HERE
 
         if(resource === 'searchresults.list'){
             /*********connect to microservices*************/
@@ -97,13 +108,14 @@ export default {
                 // let docs=[];
                 console.log('- service results ' + solrResponse.response.numFound);
 
-                callback(null, {numFound: solrResponse.response.numFound, docs: solrResponse.response.docs,
-                    searchstatus: searchstatus, entities: entities, languages:languages,
-                    searchstring: args.searchstring,
+                callback(null, {
+                    numFound: solrResponse.response.numFound,
+                    docs: solrResponse.response.docs,
+                    queryparams: args.queryparams,
+                    entities: entities,
+                    languages:languages,
+                    searchstring: searchstring,
                     entity: entity,
-                    // results: searchresults, entities: entities, languages:languages,
-                    // searchstring:args.searchstring, entity:entity, searchlang:searchlang,
-                    // deckid:deckid, userid:userid, searchstatus:searchstatus
                 });
 
 

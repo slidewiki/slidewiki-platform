@@ -4,43 +4,43 @@ class SearchResultsStore extends BaseStore {
 
     constructor(dispatcher) {
         super(dispatcher);
+
+        this.queryparams = '';
         this.searchstring = '';
-        // this.searchlang='';
         this.entity = '';
-        // this.deckid = '';
-        // this.userid = '';
-        this.searchstatus='';
+        this.lang = '';
+        this.group = '';
+        this.fields = '';
+        this.user = '';
+        this.tags = '';
+        this.revisions = '';
 
-        this.numFound='';
-        this.docs=[];
+        // solr results
+        this.numFound= '' ;
+        this.docs = [];
 
-        // this.results = [];
+        // facets
         this.entities = [];
         this.languages = [];
-        this.open = false;
     }
-    updateResults(payload) {
-        // console.log('HELLO!!!!!!!!');
-        // console.log('NUMBER: '+payload.numFound);
-
-        // console.log(' - store : searchstring - ' + payload.searchstring);
-
+    updateResults(payload){
+        // console.log("store: update results called");
+        this.queryparams = payload.queryparams;
         this.searchstring = payload.searchstring;
-        // this.searchlang = payload.searchlang;
-        // this.deckid = payload.deckid;
-        // this.userid = payload.userid;
         this.entity = payload.entity;
-        this.searchstatus= payload.searchstatus;
-        // this.results = payload.results;
-
+        this.lang = payload.lang;
+        this.group = payload.group;
+        this.fields = payload.fields;
+        this.user = payload.user;
+        this.tags = payload.tags;
+        this.revisions = payload.revisions;
         this.numFound = payload.numFound;
         this.docs = payload.docs;
-
-        // console.log('RESULTS: '+this.results);
-
-        console.log('DOCS: '+this.docs + ' '  + this.numFound);
+        this.entities = payload.entities;
+        this.languages = payload.languages;
 
         this.emitChange();
+
         // //Filter by deckid
         // if(payload.deckid.substring(payload.deckid.indexOf('=')+1)!==''){
         //     this.results = this.filterByField(this.results, 'did', payload.deckid.substring(payload.deckid.indexOf('=')+1));
@@ -59,8 +59,11 @@ class SearchResultsStore extends BaseStore {
         // }
 
 
-        this.entities = payload.entities;
-        this.languages = payload.languages;
+
+    }
+    setQueryParams(payload){
+        this.queryparams = payload.queryparams;
+        this.emitChange();
     }
 
     // filterByStringField(resultsAll, fieldName, fieldValue){
@@ -120,49 +123,46 @@ class SearchResultsStore extends BaseStore {
 
     getState() {
         return {
-            // results: this.results,
-            entities: this.entities,
-            languages: this.languages,
-
+            queryparams: this.queryparams,
             searchstring: this.searchstring,
-            // searchlang: this.searchlang,
             entity: this.entity,
-            // deckid: this.deckid,
-            // userid: this.userid,
-            searchstatus: this.searchstatus,
-
+            lang: this.lang,
+            group: this.group,
+            fields: this.fields,
+            user: this.user,
+            tags: this.tags,
+            revisions: this.revisions,
             numFound: this.numFound,
             docs: this.docs,
-            // open: this.open
+            entities: this.entities,
+            languages: this.languages
         };
     }
     dehydrate() {
         return this.getState();
     }
     rehydrate(state) {
-        // this.results = state.results;
-        this.entities = state.entities;
-        this.languages = state.languages;
-
+        this.queryparams = state.queryparams;
         this.searchstring = state.searchstring;
-        // this.searchlang = state.searchlang,
-        this.entity = state.entity;
-        // this.deckid = state.deckid;
-        // this.userid = state.userid;
-        this.searchstatus = state.searchstatus;
-
+        this.entity - state.entity;
+        this.lang = state.lang;
+        this.group = state.group;
+        this.fields = state.fields;
+        this.user = state.user;
+        this.tags = state.tags;
+        this.revisions = state.revisions;
         this.numFound = state.numFound;
         this.docs = state.docs;
-        // this.open = state.open;
-        console.log('- state  reh:' + this.open);
+        this.entities = state.entities;
+        this.languages = state.languages;
     }
-
 }
 
 SearchResultsStore.storeName = 'SearchResultsStore';
 SearchResultsStore.handlers = {
     'LOAD_RESULTS_SUCCESS': 'updateResults',
-    'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility'
+    'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility',
+    'NO_QUERY_PARAMS': 'setQueryParams'
 };
 
 export default SearchResultsStore;

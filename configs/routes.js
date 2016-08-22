@@ -95,12 +95,11 @@ export default {
 //-----------------------------------Search routes------------------------------
     search: {
         // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
-        path: '/search/:searchstring?',
+        path: '/search/:queryparams?',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
         handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
-        // handler: require('../components/Search/SearchResultsPanel/SearchResultsPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }

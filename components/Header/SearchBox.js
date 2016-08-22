@@ -10,17 +10,17 @@ class SearchBox extends React.Component {
 
         let searchstr = 'q=';
         if(this.refs.searchstring.value === ''){
-            searchstr = searchstr + '*:*';
+            searchstr += encodeURIComponent('*:*');
         }
         else{
-            searchstr = searchstr + this.refs.searchstring.value;
+            searchstr += encodeURIComponent(this.refs.searchstring.value);
         }
 
         this.context.executeAction(navigateAction, {
-            // url: '/search/results/q=' + encodeURIComponent(this.refs.searchstring.value)
-            url: '/search/' + encodeURIComponent(searchstr)
+            url: '/search/' + searchstr
         });
-        this.refs.searchstring.value='';
+
+        this.refs.searchstring.value = '';
         return false;
     }
     render() {
@@ -35,10 +35,5 @@ class SearchBox extends React.Component {
 SearchBox.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-SearchBox = connectToStores(SearchBox, [SearchResultsStore], (context, props) => {
-    return {
-        SearchResultsStore: context.getStore(SearchResultsStore).getState()
-    };
-});
 
 export default SearchBox;

@@ -52,7 +52,7 @@ class SearchResultsPanel extends React.Component {
                 <h2 className="ui header">Search Results</h2>
 
                 <div className="ui grid">
-                    <div className="five wide column">
+                    <div className="four wide column">
                         <div className="ui basic segment">
                             <h4 className="ui header">Facets:</h4>
                             <label>Entities:</label>
@@ -73,19 +73,14 @@ class SearchResultsPanel extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="ten wide column">
+                    <div className="twelve wide column">
                         <div className="ui basic segment">
                             <SearchResultsList items={results} ></SearchResultsList>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-				);
+		);
     }
 
 }
