@@ -72,11 +72,13 @@ class LoginModal extends React.Component {
         }
     }
 
-    handleSignupClick() {
+    handleSignupClick(e) {
+        e.preventDefault();
         this.setState({openModal: false});
         this.context.executeAction(navigateAction, {
             url: '/signup'
         });
+        // return false;
     }
 
     render() {
@@ -121,9 +123,7 @@ class LoginModal extends React.Component {
                     <div className="ui floated right">
                         <a href="">I can not access my account</a>
                         <br/><br/>
-                        <div onClick={this.handleSignupClick.bind(this)}>
-                            <a href="#">Don't have an account? Sign up here.</a>
-                        </div>
+                        <a href="#" onClick={this.handleSignupClick.bind(this)}>Don't have an account? Sign up here.</a>
                     </div>
                   </div>
               </div>
