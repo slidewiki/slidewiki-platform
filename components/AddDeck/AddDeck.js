@@ -10,6 +10,7 @@ import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import Import from '../Import/Import';
+import Error from '../Error/Error';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
@@ -33,8 +34,11 @@ class AddDeck extends React.Component {
         });
     }
     componentDidUpdate() {
-        if (this.props.ImportStore.uploadProgress > 0 || this.props.ImportStore.filename !== '')
+        if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
             this.updateProgressBar();
+
+        if (this.props.ImportStore.error !== null)
+            this.showError();
     }
 
     handleUploadModal(x) {
@@ -111,6 +115,7 @@ class AddDeck extends React.Component {
         console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
 
+        this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/'
         });
@@ -122,19 +127,28 @@ class AddDeck extends React.Component {
             url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
-    /*
-    use it like:
-      this.percentage++;
-      this.updateProgressBar();
-    */
     updateProgressBar() {
+        console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
+
+        $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
+    }
+    initializeProgressBar() {
+        $('#progressbar_addDeck_upload').progress('set active');
+        $('#progressbar_addDeck_upload').progress('reset');
         $('#progressbar_addDeck_upload').progress({
-            percent: this.props.ImportStore.uploadProgress,
             text: {
                 active  : 'Uploading: {percent}%',
-                success : 'Slides uploaded!'
+                success : 'Slides uploaded!',
+                error   : 'Upload failed!'
             }
         });
+    }
+    showError() {
+        //update progress bar
+        $('#progressbar_addDeck_upload').progress('set error');
+
+        //show error in UI
+        //TODO
     }
     handleFileSubmit(){
         console.log('handleFileSubmit()');
@@ -145,7 +159,7 @@ class AddDeck extends React.Component {
                 file: this.props.ImportStore.file,
                 base64: this.props.ImportStore.base64
             };
-            this.updateProgressBar();
+            this.initializeProgressBar();
             this.context.executeAction(uploadFile, payload);
         }
         else {

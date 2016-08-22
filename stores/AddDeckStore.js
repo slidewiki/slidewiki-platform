@@ -49,7 +49,18 @@ class AddDeckStore extends BaseStore {
     }
     creationFailure(error) {
         console.log('store - error', error.statusCode);
+
         this.error = error;
+        this.error.actionRequired = 'Restart your action.';
+
+        try {
+            const errorBody = JSON.parse(error.body.message.substr(6));
+
+            this.error.type = errorBody.error;
+            this.error.description = errorBody.message;
+        } catch (e) {
+            this.error.description = error.message;
+        }
 
         this.emitChange();
     }
