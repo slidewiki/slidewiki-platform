@@ -6,15 +6,19 @@ import Comment from './Comment';
 import addComment from '../../../../actions/activityfeed/contentdiscussion/addComment';
 
 class ContentDiscussionPanel extends React.Component {
-    handleAddComment() {
-        this.context.executeAction(addComment, {
-            selector: this.props.ContentDiscussionStore.selector,
-            title: this.refs.title.value,
-            text: this.refs.text.value
-        });
+    handleAddComment(e) {
+        e.preventDefault();
+        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
+            this.context.executeAction(addComment, {
+                selector: this.props.ContentDiscussionStore.selector,
+                title: this.refs.title.value,
+                text: this.refs.text.value
+            });
 
-        this.refs.title.value = '';
-        this.refs.text.value = '';
+            this.refs.title.value = '';
+            this.refs.text.value = '';
+        }
+        return false;
     }
 
     render() {
@@ -27,16 +31,16 @@ class ContentDiscussionPanel extends React.Component {
         );
         return (
             <div className="ui comments" style={{maxWidth: 'none'}}>
-                <form className="ui reply form">
+                <form className="ui comment form">
                     <div className="ui input">
-                        <input type="text" ref="title" placeholder="Title"/>
+                        <input type="text" ref="title" placeholder="Title" required/>
                     </div>
                     <div className="field">
-                        <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
+                        <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
                     </div>
-                    <div tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
+                    <button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
                         <i className="icon edit"></i> Add Comment
-                    </div>
+                    </button>
                 </form>
                 <h3 className="ui dividing header">Comments</h3>
                 <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
