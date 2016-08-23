@@ -18,12 +18,25 @@ class SearchResultsStore extends BaseStore {
         // solr results
         this.numFound= '' ;
         this.docs = [];
+        this.allDocs = [];
 
         // facets
-        this.entities = [];
-        this.languages = [];
+        // this.filters = new Map();
+        this.entities = [
+            {'id': '1', 'description':'Slide', 'value':'slide'},
+            {'id': '2', 'description':'Deck', 'value':'deck'},
+            {'id': '3', 'description':'Answer', 'value':'answer'},
+            {'id': '4', 'description':'Question', 'value':'question'},
+            {'id': '5', 'description':'Comment', 'value':'comment'},
+        ];
+        this.languages = [
+            {'id': '1', 'description':'English', 'value':'en'},
+            {'id': '2', 'description':'Spanish', 'value':'es'},
+            {'id': '3', 'description':'Greek', 'value':'gr'},
+        ];
 
         this.error = '';
+        this.loading = true;
     }
     updateResults(payload){
         // console.log("store: update results called");
@@ -38,11 +51,12 @@ class SearchResultsStore extends BaseStore {
         this.revisions = payload.revisions;
         this.numFound = payload.numFound;
         this.docs = payload.docs;
-        this.entities = payload.entities;
-        this.languages = payload.languages;
+        this.allDocs = payload.docs;
+        this.loading = false;
+        // this.entities = payload.entities;
+        // this.languages = payload.languages;
 
         this.emitChange();
-
         // //Filter by deckid
         // if(payload.deckid.substring(payload.deckid.indexOf('=')+1)!==''){
         //     this.results = this.filterByField(this.results, 'did', payload.deckid.substring(payload.deckid.indexOf('=')+1));
@@ -64,7 +78,21 @@ class SearchResultsStore extends BaseStore {
 
     }
     setQueryParams(payload){
-        this.queryparams = payload.queryparams;
+        this.queryparams = '';
+        this.searchstring = '';
+        this.entity = '';
+        this.lang = '';
+        this.group = '';
+        this.fields = '';
+        this.user = '';
+        this.tags = '';
+        this.revisions = '';
+
+        // solr results
+        this.numFound= '' ;
+        this.docs = [];
+        this.allDocs = [];
+        this.loading = false;
         this.emitChange();
     }
 
@@ -110,16 +138,22 @@ class SearchResultsStore extends BaseStore {
     //     return filteredResults;
     // }
 
-
     updateResultsVisibility(payload) {
+        // console.log(JSON.stringify(this.docs));\
 
-        console.log('FACETS!!!!');
-
+        // this.updateFilters(payload.field, payload.value);
+        console.log('FACETS');
+        // console.log("edw " + this.filters.contains(payload));
+        // filteredDocs = this.filterByStringField();
         // this.results.find((s) => {console.log('type: '+s.type);});
 
         // console.log('field: '+payload.field);
         // console.log('value: '+payload.value);
 
+        this.emitChange();
+    }
+    showLoading(){
+        this.loading = true;
         this.emitChange();
     }
 
@@ -137,7 +171,8 @@ class SearchResultsStore extends BaseStore {
             numFound: this.numFound,
             docs: this.docs,
             entities: this.entities,
-            languages: this.languages
+            languages: this.languages,
+            loading: this.loading
         };
     }
     dehydrate() {
@@ -146,7 +181,7 @@ class SearchResultsStore extends BaseStore {
     rehydrate(state) {
         this.queryparams = state.queryparams;
         this.searchstring = state.searchstring;
-        this.entity - state.entity;
+        this.entity = state.entity;
         this.lang = state.lang;
         this.group = state.group;
         this.fields = state.fields;
@@ -157,6 +192,7 @@ class SearchResultsStore extends BaseStore {
         this.docs = state.docs;
         this.entities = state.entities;
         this.languages = state.languages;
+        this.loading = state.loading;
     }
 }
 
@@ -164,7 +200,8 @@ SearchResultsStore.storeName = 'SearchResultsStore';
 SearchResultsStore.handlers = {
     'LOAD_RESULTS_SUCCESS': 'updateResults',
     'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility',
-    'NO_QUERY_PARAMS': 'setQueryParams'
+    'NO_QUERY_PARAMS': 'setQueryParams',
+    'SHOW_LOADING': 'showLoading'
 };
 
 export default SearchResultsStore;

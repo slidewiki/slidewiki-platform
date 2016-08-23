@@ -8,29 +8,23 @@ import updateUserResultsVisibility from '../../../actions/search/updateUserResul
 
 class SearchResultsPanel extends React.Component {
 
-    handleChangeToggle(field, value) {
-        this.context.executeAction(updateUserResultsVisibility, {
-            field: field,
-            value: value
-        });
-    }
+    // handleChangeToggle(field, value) {
+    //     this.context.executeAction(updateUserResultsVisibility, {
+    //         field: field,
+    //         value: value
+    //     });
+    // }
 
     render() {
         const results = this.props.SearchResultsStore.docs;  //this.props.SearchResultsStore.results;
-        // console.log("- panel" + results);
-
-        // console.log('RESULTS PANEL: '+results);
-
-        // console.log('RESULTS PANEL 2: '+this.props.SearchResultsStore.results);
-
-
+        const numFound = this.props.SearchResultsStore.numFound;
         const entities = this.props.SearchResultsStore.entities;
         const languages = this.props.SearchResultsStore.languages;
 
         const entityList = entities.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} onChange={this.handleChangeToggle.bind(this, 'type', s.description)} />
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'type', s.description)}*/ />
                     <label>{s.description}</label>
                 </div>
             );
@@ -39,46 +33,55 @@ class SearchResultsPanel extends React.Component {
         const languageList = languages.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} onChange={this.handleChangeToggle.bind(this, 'lang', s.description)} />
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'lang', s.description)}*/ />
                     <label>{s.description}</label>
                 </div>
             );
         });
 
-        return (
-
-            <div ref="searchResultsPanel">
-
-                <h2 className="ui header">Search Results</h2>
-
-                <div className="ui grid">
-                    <div className="four wide column">
-                        <div className="ui basic segment">
-                            <h4 className="ui header">Facets:</h4>
-                            <label>Entities:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {entityList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Languages:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {languageList}
-                                    </div>
-                                 </div>
-                            </div>
+        let resultsDiv = <div ref="resultsDiv">
+            <h2 className="ui header">Search Results</h2>
+            <div className="ui grid">
+                <div className="four wide column">
+                    <div className="ui basic segment">
+                        <h4 className="ui header">Facets:</h4>
+                        <label>Entities:</label>
+                        <div className="subscriptions">
+                            <div ref="subscriptionslist">
+                                <div className="ui relaxed list">
+                                    {entityList}
+                                </div>
+                             </div>
                         </div>
-                    </div>
-                    <div className="twelve wide column">
-                        <div className="ui basic segment">
-                            <SearchResultsList items={results} ></SearchResultsList>
+                        <label>Languages:</label>
+                        <div className="subscriptions">
+                            <div ref="subscriptionslist">
+                                <div className="ui relaxed list">
+                                    {languageList}
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
+                <div className="twelve wide column">
+                    <div className="ui basic segment">
+                        <SearchResultsList items={results} ></SearchResultsList>
+                    </div>
+                </div>
+            </div>
+        </div>;
+
+        let noResultsDiv = <div ref="noResiltsDiv">
+            <div className="ui grid centered">
+                <h3>No results found for the specified input parameters.</h3>
+            </div>
+        </div>;
+
+        let resultsPanel = (numFound == 0) ? noResultsDiv : resultsDiv;
+
+        return (
+            <div ref="searchResultsPanel">
+                {resultsPanel}
             </div>
 		);
     }

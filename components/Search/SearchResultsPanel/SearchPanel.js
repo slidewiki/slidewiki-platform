@@ -21,22 +21,26 @@ class SearchPanel extends React.Component {
         // }
         // console.log("open : " + this.props.SearchResultsStore.searchstatus + " - " + openExtraFields);
         // if(this.props.SearchResultsStore.searchstatus === 'results'){
-            advSearchDiv = <AdvancedSearch />;
+            advSearchDiv = <AdvancedSearch
+                                searchstring={this.props.SearchResultsStore.searchstring}
+                                entity={this.props.SearchResultsStore.entity}
+            />;
         // }
         // else{
         //     advSearchDiv = <AdvancedSearch title={searchPanelTitle} openExtraFields={openExtraFields}/>;
         // }
-
+        let loadingDiv = <div className="ui basic segment">
+            <div className="ui active text loader">Loading</div>
+        </div>;
 
         let searchResultsDiv='';
 
         if(this.props.SearchResultsStore.queryparams){
             searchResultsDiv = <SearchResultsPanel />;
         }
-        else{
-            searchResultsDiv = null;
+        if(this.props.SearchResultsStore.loading){
+            searchResultsDiv = loadingDiv;
         }
-
 
         return (
             <div className="ui container" ref="searchPanel">

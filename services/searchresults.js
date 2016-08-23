@@ -26,7 +26,7 @@ export default {
         for(let i = 0; i < searchparams.length; i++){
 
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'q'){
-                searchstring = decodeURIComponent(searchparams[i].substring(searchparams[i].indexOf('=')+1));
+                searchstring = searchparams[i].substring(searchparams[i].indexOf('=')+1);
             }
 
             if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'entity'){
@@ -45,12 +45,18 @@ export default {
                 fields = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
             }
 
-            // TODO CONTINUE WITH THE REST PARAMS
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'user'){
+                user = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
+            }
+
+            if(searchparams[i].substring(0, searchparams[i].indexOf('=')) === 'tags'){
+                tags = searchparams[i].substring(searchparams[i].indexOf('=')).substring(1);
+            }
         }
 
         // form solr query parameters
         if(searchstring){
-            q = 'q=' + searchstring;
+            q = 'q=' + searchstring + '';
         }
         if(entity){
             fq += '&fq=entity%3A"' + entity + '"';
@@ -64,7 +70,7 @@ export default {
         if(fields){
             console.log(fields);
         }
-        // TODO CONTINUE ALSO HERE
+        // TODO CONTINUE WITH THE REST PARAMETERS
 
         if(resource === 'searchresults.list'){
             /*********connect to microservices*************/
@@ -81,8 +87,8 @@ export default {
             //     {'id': '5', 'type':'answer', 'did': '', 'aid': '87', 'uid':'23', 'explanation':'Introduction to RDF including', 'lang':'GR'}
             // ];
 
-            let entities = [{'id': '1', 'description':'slide'}, {'id': '2', 'description':'deck'}, {'id': '3', 'description':'answer'}];
-            let languages = [{'id': '1', 'description':'EN'}, {'id': '2', 'description':'ES'}];
+            // let entities = [{'id': '1', 'description':'slide'}, {'id': '2', 'description':'deck'}, {'id': '3', 'description':'answer'}];
+            // let languages = [{'id': '1', 'description':'EN'}, {'id': '2', 'description':'ES'}];
 
 
             // // //////SOLR TEST START//////
@@ -112,18 +118,21 @@ export default {
                     numFound: solrResponse.response.numFound,
                     docs: solrResponse.response.docs,
                     queryparams: args.queryparams,
-                    entities: entities,
-                    languages:languages,
+                    // entities: entities,
+                    // languages:languages,
                     searchstring: searchstring,
                     entity: entity,
+                    lang: lang,
+                    group: group,
+                    fields: fields,
+                    user: user,
+                    tags: tags
                 });
 
 
             });
 
             // // //////SOLR TEST END////////
-
-
 
         }
     }
