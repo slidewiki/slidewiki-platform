@@ -59,7 +59,6 @@ class ImportStore extends BaseStore {
     }
     uploadFailed(error) {
         console.log('ImportStore: uploadFailed()', error);
-        //TODO: show an error
         this.destructor();
 
         this.error = error;

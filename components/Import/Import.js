@@ -122,7 +122,6 @@ class Import extends React.Component {
                               <div className="ui cancel button red" tabIndex="0">Cancel</div>
                           </div>
                       </div>;
-                      //TODO: use react/semantic-UI progress bar
 
                       //from https://github.com/risis-eu/risis-datasets/blob/2a790c3b20b6c83c775d144cd69393032cdfaf82/components/object/ObjectIEditor.js
                       //editor = <FileUploader spec={this.props.spec} config={this.props.config} onDataEdit={this.handleDataEdit.bind(this)} onEnterPress={this.handleEnterPress.bind(this)} allowActionByKey="1"/>;

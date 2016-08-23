@@ -30,7 +30,7 @@ export default function uploadFile(context, payload, done) {
             context.dispatch('UPLOAD_FAILED', err);
             context.dispatch('CREATION_FAILURE', err);
         } else {
-            //TODO: use correct headers
+            //TODO: use correct headers - atm service is not ready
             res.deckId = 165;
 
             context.dispatch('UPLOAD_SUCCESS', res);
