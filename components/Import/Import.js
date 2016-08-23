@@ -3,6 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import ImportStore from '../../stores/ImportStore';
 import storeFile from '../../actions/import/storeFile';
+import importFinished from '../../actions/import/importFinished';
 //import FileUploader from './FileUploader';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
@@ -18,10 +19,14 @@ class Import extends React.Component {
 
     }
     componentDidUpdate(){
-
+        if (this.props.ImportStore.file === null)
+            $('#import_file_chooser').val('');
     }
     handleFileSelect(evt){
         console.log('handleFileSelect()');
+
+        this.context.executeAction(importFinished, null);
+
         console.log(evt.target.files[0]);
         let file = evt.target.files[0];
         if (file === null || file === undefined)
@@ -106,7 +111,7 @@ class Import extends React.Component {
                               <p>Select your presentation file and upload it to SlideWiki.</p>
                               <p>Only PowerPoint (.pptx) is supported.</p>
                               <div className="ui input file focus animated">
-                                    <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)}></input>
+                                    <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
                               </div>
                           </div>
                           <div className="actions">

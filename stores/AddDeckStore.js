@@ -69,6 +69,10 @@ class AddDeckStore extends BaseStore {
 
         this.emitChange();
     }
+    deleteError() {
+        this.error = null;
+        this.emitChange();
+    }
 }
 
 AddDeckStore.storeName = 'AddDeckStore';
@@ -76,7 +80,8 @@ AddDeckStore.handlers = {
     'SHOW_WRONG_FIELDS': 'showWrongFields',
     'CREATION_FAILURE': 'creationFailure',
     'CREATION_SUCCESS': 'creationSuccess',
-    'DESTRUCT': 'destructor'
+    'DESTRUCT': 'destructor',
+    'DELETE_ERROR': 'deleteError'
 };
 
 export default AddDeckStore;

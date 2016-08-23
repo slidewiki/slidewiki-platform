@@ -64,6 +64,11 @@ class ImportStore extends BaseStore {
 
         this.error = error;
 
+        this.file = null;
+        this.base64 = null;
+        this.filename = '';
+        this.fileReadyForUpload = false;
+
         this.emitChange();
     }
     uploadSuccess(headers) {

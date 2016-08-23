@@ -28,10 +28,11 @@ export default function uploadFile(context, payload, done) {
         context.myStuff.uploadFinished = true;
         if (err) {
             context.dispatch('UPLOAD_FAILED', err);
+            context.dispatch('CREATION_FAILURE', err);
         } else {
             //TODO: use correct headers
             res.deckId = 165;
-            
+
             context.dispatch('UPLOAD_SUCCESS', res);
         }
         done();

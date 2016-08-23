@@ -7,6 +7,7 @@ import ImportStore from '../../stores/ImportStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
+import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import Import from '../Import/Import';
@@ -48,6 +49,8 @@ class AddDeck extends React.Component {
     }
     handleAddDeck(x) {
         console.log('handleAddDeck');
+
+        this.context.executeAction(addDeckDeleteError, null);
 
         //validate input
         const title = this.refs.input_title.value;
@@ -115,6 +118,7 @@ class AddDeck extends React.Component {
         console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
 
+        this.context.executeAction(addDeckDeleteError, null);
         this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/'
@@ -152,6 +156,8 @@ class AddDeck extends React.Component {
     }
     handleFileSubmit(){
         console.log('handleFileSubmit()');
+
+        this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
             //call action
@@ -246,11 +252,11 @@ class AddDeck extends React.Component {
           <option value="CC BY-SA" >CC BY-SA</option>
         </select>;
 
-        let errorView ='';
+        let errorView = '';
         if (this.props.AddDeckStore.error !== null)
             errorView = <Error error={this.props.AddDeckStore.error} />;
         else
-            errorView ='';
+            errorView = '';
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'The title is a must have.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'The language is a must have.' : undefined;
