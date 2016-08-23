@@ -2,13 +2,13 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserNotificationsList from './UserNotificationsList';
-import updateUserNotificationsVisibility from '../../../actions/user/updateUserNotificationsVisibility';
-import markAsReadUserNotifications from '../../../actions/user/markAsReadUserNotifications';
-import loadUserNotifications from '../../../actions/user/loadUserNotifications';
+import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
+import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
+import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
     componentDidMount() {
-        context.executeAction(loadUserNotifications, {
+        this.context.executeAction(loadUserNotifications, {
             uid: 1//TODO get real user_id
         });
     }

@@ -1,4 +1,4 @@
-import {shortTitle} from '../../configs/general';
+import {shortTitle} from '../../../configs/general';
 
 export default function loadNewUserNotifications(context, payload, done) {
     context.service.read('notifications.listnew', payload, {timeout: 20 * 1000}, (err, res) => {

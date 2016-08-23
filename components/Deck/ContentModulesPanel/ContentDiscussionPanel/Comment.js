@@ -37,7 +37,7 @@ class Comment extends React.Component {
             </form>
         );
         return (
-            <div key={this.props.key} className="comment">
+            <div className="comment">
                 <a className="avatar">
                     {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <i className="ui icon user" />}
                 </a>
