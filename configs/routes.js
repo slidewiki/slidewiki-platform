@@ -12,7 +12,7 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
-import loadUserNotifications from '../actions/user/loadUserNotifications';
+import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/loadContentHistory';
@@ -76,6 +76,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | User notifications'
+            });
+            done();
+        }
+    },
+    signup: {
+        path: '/signup',
+        method: 'get',
+        page: 'signup',
+        title: 'SlideWiki -- Sign up',
+        handler: require('../components/User/UserRegistration/UserRegistration'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Sign up'
             });
             done();
         }

@@ -4,7 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsItem from './UserNotificationsItem';
-import loadNewUserNotifications from '../../../actions/user/loadNewUserNotifications';
+import loadNewUserNotifications from '../../../actions/user/notifications/loadNewUserNotifications';
 
 class UserNotificationsBadge extends React.Component {
     componentDidMount() {
