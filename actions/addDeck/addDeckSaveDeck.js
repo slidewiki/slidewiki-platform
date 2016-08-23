@@ -1,5 +1,5 @@
 import {shortTitle} from '../../configs/general';
-import UserProfileStore from '../stores/UserProfileStore';
+import UserProfileStore from '../../stores/UserProfileStore';
 export default function addDeckSaveDeck(context, payload, done) {
     //enrich data
     if (payload.userid === undefined || payload.userid === null || payload.userid === '')
