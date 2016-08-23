@@ -150,9 +150,6 @@ class AddDeck extends React.Component {
     showError() {
         //update progress bar
         $('#progressbar_addDeck_upload').progress('set error');
-
-        //show error in UI
-        //TODO
     }
     handleFileSubmit(){
         console.log('handleFileSubmit()');

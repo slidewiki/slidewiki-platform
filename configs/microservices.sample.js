@@ -16,7 +16,10 @@ export default {
             uri: 'http://userservice.manfredfris.ch'
         },
         'import': {
-            uri: 'http://importservice.manfredfris.ch'
+            uri: 'http://importservice.manfredfris.ch',
+            protocol: 'http:',
+            host: 'importservice.manfredfris.ch',
+            path: '/importPPTX'
         }
     }
 };
