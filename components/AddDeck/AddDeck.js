@@ -171,18 +171,6 @@ class AddDeck extends React.Component {
     }
 
     render() {
-        //redirect to homepage if not logged in
-        /* TODO: this code should go the the initial loader action
-        if (!((this.props.UserProfileStore.username !== undefined && this.props.UserProfileStore.username !== null && this.props.UserProfileStore.username !== '')
-          && (this.props.UserProfileStore.userid !== undefined && this.props.UserProfileStore.userid !== null && this.props.UserProfileStore.userid !== '')
-          && (this.props.UserProfileStore.jwt !== undefined && this.props.UserProfileStore.jwt !== null && this.props.UserProfileStore.jwt !== ''))) {
-            setTimeout( () => {
-                this.context.executeAction(navigateAction, {
-                    url: '/'
-                });
-            }, 1);
-        }
-        */
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
             setTimeout( () => {
