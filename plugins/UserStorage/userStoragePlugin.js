@@ -13,11 +13,13 @@ module.exports = function userStoragePlugin(options) {
             if (contextOptions.req) {
                 user = contextOptions.req.user;
             }
+            const user_cookieName = 'user_json_storage';
 
-            //from cookie plugin
+            //original from fluxible-plugin-cookie
             let req = contextOptions.req;
             let res = contextOptions.res;
 
+            //get cookies from cookie-parser plugin
             let cookies = req ? req.cookies : cookie.parse(document.cookie);
 
             // Returns a context plugin
@@ -28,10 +30,21 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugActionContext: function plugActionContext(actionContext) {
                     actionContext.getUser = function () {
-                        return user;
+                        let result = user;
+
+                        if (result === undefined || result === null || result === {}) {
+                            result = actionContext.getCookie(user_cookieName);
+                        }
+
+                        return result;
+                    };
+                    actionContext.setUser = function (newUser) {
+                        user = newUser;
+
+                        actionContext.setCookie(user_cookieName, JSON.stringify(newUser), {});
                     };
                     actionContext.setCookie = function (name, value, options) {
-                        var cookieStr = cookie.serialize(name, value, options);
+                        const cookieStr = cookie.serialize(name, value, options);
                         if (res) {
                             res.setHeader('Set-Cookie', cookieStr);
                         } else {
