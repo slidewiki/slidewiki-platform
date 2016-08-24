@@ -22,6 +22,16 @@ module.exports = function userStoragePlugin(options) {
             //get cookies from cookie-parser plugin
             let cookies = req ? req.cookies : cookie.parse(document.cookie);
 
+            const secondsCookieShouldBeValid = 60*60*24*14 ;  //2 weeks
+            let createExpire = () => {
+                let now = new Date();
+                let time = now.getTime();
+                let expireTime = time + 1000*secondsCookieShouldBeValid;
+                now.setTime(expireTime);
+
+                return now.toGMTString();
+            };
+
             // Returns a context plugin
             return {
                 /**
@@ -41,7 +51,10 @@ module.exports = function userStoragePlugin(options) {
                     actionContext.setUser = function (newUser) {
                         user = newUser;
 
-                        actionContext.setCookie(user_cookieName, JSON.stringify(newUser), {});
+                        actionContext.setCookie(user_cookieName, JSON.stringify(newUser), {
+                            expires: createExpire(),
+                            maxAge: secondsCookieShouldBeValid
+                        });
                     };
                     actionContext.deleteUser = function() {
                         actionContext.setUser({});
