@@ -12,11 +12,11 @@ import categoryBox from '../../actions/user/userprofile/categoryBox';
 
 class HeaderDropdown extends React.Component {
     componentDidMount(){
-        $('.ui.dropdown').dropdown({on: 'hover', action: 'nothing'});
+        $(this.refs.userDropDown).dropdown({on: 'hover', action: 'nothing'});
     }
 
     componentDidUpdate() {
-        $('.ui.dropdown').dropdown({on: 'hover', action: 'nothing'});
+        $(this.refs.userDropDown).dropdown({on: 'hover', action: 'nothing'});
     }
 
     handleSignout() {
@@ -39,7 +39,7 @@ class HeaderDropdown extends React.Component {
     render() {
         return(
             <div>
-            <div className="ui top left pointing dropdown">
+            <div className="ui top right pointing dropdown" onClick={ this.toProfile.bind(this) } ref="userDropDown">
                 <div className="text">
                     <UserPicture picture={ this.props.UserProfileStore.user.picture } username={ this.props.UserProfileStore.username } avatar={ true } width= { 50 }/>
                 </div>

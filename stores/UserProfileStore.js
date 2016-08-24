@@ -146,7 +146,7 @@ class UserProfileStore extends BaseStore {
         this.userid = '';
         this.jwt = '';
         this.errorMessage = '';
-
+        this.showPublicUser = true;
         this.emitChange();
     }
 
