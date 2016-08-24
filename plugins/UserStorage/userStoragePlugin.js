@@ -43,6 +43,9 @@ module.exports = function userStoragePlugin(options) {
 
                         actionContext.setCookie(user_cookieName, JSON.stringify(newUser), {});
                     };
+                    actionContext.deleteUser = function() {
+                        actionContext.setUser({});
+                    };
                     actionContext.setCookie = function (name, value, options) {
                         const cookieStr = cookie.serialize(name, value, options);
                         if (res) {
