@@ -159,7 +159,7 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.file !== null) {
             //call action
             const payload = {
-                file: this.props.ImportStore.file,
+                filename: this.props.ImportStore.file.name,
                 base64: this.props.ImportStore.base64
             };
             this.initializeProgressBar();

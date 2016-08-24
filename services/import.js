@@ -14,7 +14,7 @@ export default {
 
         //create a HTTP POST form request
         form.append('file', params.base64);
-        form.append('filename', params.file.name ? params.file.name : 'unknownfilename');
+        form.append('filename', params.filename ? params.filename : 'unknown');
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
             //knownLength: params.file.size ? params.file.size : params.base64.length
 
