@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
@@ -43,13 +44,19 @@ class LoginModal extends React.Component {
 
     signin(e) {
         e.preventDefault();
-        this.context.executeAction(userSignIn, {
-            email: this.refs.email1.value,
-            password: this.refs.password1.value
-        });
+        const email = this.refs.email1.value;
+        let regExp = /\S+@\S+\.\S+/;
+        if (email === '' || !regExp.test(email)) {//Check if email is valid
+            $('.ui.form.signin').form('add errors', ['Please use a valid email address']);
+        } else {
+            this.context.executeAction(userSignIn, {
+                email: this.refs.email1.value,
+                password: this.refs.password1.value
+            });
 
-        this.refs.email1.value = '';
-        this.refs.password1.value = '';
+            this.refs.email1.value = '';
+            this.refs.password1.value = '';
+        }
         return false;
     }
 
@@ -69,6 +76,15 @@ class LoginModal extends React.Component {
         if(typeof window !== 'undefined') {
             Modal.setAppElement('#app');
         }
+    }
+
+    handleSignupClick(e) {
+        e.preventDefault();
+        this.setState({openModal: false});
+        this.context.executeAction(navigateAction, {
+            url: '/signup'
+        });
+        // return false;
     }
 
     render() {
@@ -98,6 +114,7 @@ class LoginModal extends React.Component {
                       <div className="ui five wide icon input field">
                         <div><label htmlFor="email1" hidden>E-Mail</label></div>
                         <input type="email1" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+
                       </div>
                         <br/>
                       <div className="ui five wide icon input field">
@@ -111,6 +128,8 @@ class LoginModal extends React.Component {
                     <br/>
                     <div className="ui floated right">
                         <a href="">I can not access my account</a>
+                        <br/><br/>
+                        <a href="#" onClick={this.handleSignupClick.bind(this)}>Don't have an account? Sign up here.</a>
                     </div>
                   </div>
               </div>

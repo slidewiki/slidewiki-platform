@@ -1,7 +1,7 @@
 import React from 'react';
 import {formatDate} from '../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import classNames from 'classnames/bind';
-import readUserNotification from '../../../actions/user/readUserNotification';
+import readUserNotification from '../../../actions/user/notifications/readUserNotification';
 
 class UserNotificationsItem extends React.Component {
     handleClick(notification) {
