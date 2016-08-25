@@ -9,8 +9,8 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype, 'mode': args.mode};
 
-        const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
-
+        // const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
+        const content_id = selector.sid;
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
             // rp.get({uri: Microservices.discussion.uri + '/discussion/' + selector.stype + '/' + selector.id}).then((res) => {
@@ -31,10 +31,9 @@ export default {
         let args = params.params? params.params : params;
         let selector= args.selector;
 
-        if(resource === 'discussion.comment'){
-            //TODO get real content_id
-            const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
-
+        if(resource === 'discussion.comment'){            
+            // const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
+            const content_id = selector.sid;
             rp.post({
                 uri: Microservices.discussion.uri + '/comment/new',
                 body:JSON.stringify({
