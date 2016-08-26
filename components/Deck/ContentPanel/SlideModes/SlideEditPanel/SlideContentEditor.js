@@ -134,12 +134,13 @@ class SlideContentEditor extends React.Component {
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
-
+        //styles should match slideViewPanel for consistency
         const headerStyle = {
             minWidth: '100%',
             overflowY: 'auto',
             borderStyle: 'dashed dashed none dashed',
-            borderColor: '#e7e7e7'
+            borderColor: '#e7e7e7',
+            position: 'relative'
         };
         const contentStyle = {
             minWidth: '100%',
@@ -147,7 +148,8 @@ class SlideContentEditor extends React.Component {
             minHeight: 450,
             overflowY: 'auto',
             borderStyle: 'dashed',
-            borderColor: '#e7e7e7'
+            borderColor: '#e7e7e7',
+            position: 'relative'
         };
         const speakernotesStyle = {
             minWidth: '100%',
@@ -155,7 +157,8 @@ class SlideContentEditor extends React.Component {
             minHeight: 120,
             overflowY: 'auto',
             borderStyle: 'dashed',
-            borderColor: '#e7e7e7'
+            borderColor: '#e7e7e7',
+            position: 'relative'
         };
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>

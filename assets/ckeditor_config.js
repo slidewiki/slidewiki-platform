@@ -12,27 +12,36 @@
 
 CKEDITOR.editorConfig = function( config ) {
     config.toolbar = [
+            { name: 'document', items: ['Templates' ] },
             { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-            { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+            { name: 'links', items: [ 'Link', 'Unlink' ] },
+        '/',
+            { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
-        '/',
-            { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates' ] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-			{ name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
-            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
             { name: 'styles', items: [ 'Styles' ] },
-        '/',
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
             { name: 'styles', items: [ 'Format'] },
         '/',
+            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar'] },
+			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
-			{ name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
-            { name: 'styles', items: [ 'Font'] },
+			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+            { name: 'paragraph', items: ['CreateDiv']},
+            { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
+        '/',
     ];
+    //'HorizontalRule',
+    //, 'Anchor'
+    //'Smiley',
+    //, '-', 'BidiLtr', 'BidiRtl' //text direction
+    //, 'Iframe'
+    //'PageBreak',
+    //{ name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
     //paragraph --> , 'Language'
     //document --> 'NewPage',
 
+    //{ name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
     //{ name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
     //{ name: 'about', items: [ 'About' ] }
     config.floatSpacePreferRight = true;
@@ -43,6 +52,16 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.uiColor = '#4183C4';
     config.extraPlugins = 'sourcedialog',
+    config.extraPlugins = 'uploadimage',
+    config.extraPlugins = 'uploadwidget',
+    //config.uploadUrl = '../';
+    //config.uploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    config.filebrowserBrowseUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    config.filebrowserUploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //http://ckeditor.com/addon/uploadimage -->This plugin enables support for uploading images that were dropped or pasted into the editor.
+    //depends on http://ckeditor.com/addon/uploadwidget
+    // needs configuration: http://sdk.ckeditor.com/samples/fileupload.html +
+    // http://sdk.ckeditor.com/samples/fileupload.html#uploading-dropped-and-pasted-images
     // Show toolbar on startup (optional).
     //config.startupFocus = true
 
@@ -80,7 +99,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'forms,' +
 		'horizontalrule,' +
 		'htmlwriter,' +
-		'image,' +
+        'image2,' +
 		'iframe,' +
 		'indentlist,' +
 		'indentblock,' +
