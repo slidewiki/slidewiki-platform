@@ -20,8 +20,10 @@ class DeckViewPanel extends React.Component {
         };
 
         return (
-            //<div ref="deckViewPanel" className="ui bottom attached segment">
-
+            <div ref="deckViewPanel" className="ui bottom attached segment">
+                <div dangerouslySetInnerHTML={{__html:this.props.DeckViewStore.content}} />
+            </div>
+            /*
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
@@ -120,8 +122,8 @@ class DeckViewPanel extends React.Component {
 
                 </div>
             </div>
-                //<div dangerouslySetInnerHTML={{__html:this.props.DeckViewStore.content}} />
-            //</div>
+            */
+
         );
     }
 }
