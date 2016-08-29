@@ -3,6 +3,7 @@ import cookie from 'cookie';
 module.exports = function userStoragePlugin(options) {
     /**
      * @class userStorage
+     * Extends the flux context with function to use cookies and save and retrieve a user Object.
      */
     return {
         name: 'UserStoragePlugin',
@@ -22,6 +23,8 @@ module.exports = function userStoragePlugin(options) {
             //get cookies from cookie-parser plugin
             let cookies = req ? req.cookies : cookie.parse(document.cookie);
 
+            console.log('UserStoragePlugin plugContext:', cookies, res ? 'result is defined - server-side' : 'res is undefined - client-side');
+
             const secondsCookieShouldBeValid = 60*60*24*14 ;  //2 weeks
             let createExpire = () => {
                 let now = new Date();
@@ -29,8 +32,12 @@ module.exports = function userStoragePlugin(options) {
                 let expireTime = time + 1000*secondsCookieShouldBeValid;
                 now.setTime(expireTime);
 
-                return now.toGMTString();
+                return now;
             };
+
+            //get user from cookies if undefined
+            if (user === undefined && cookies !== undefined && cookies[user_cookieName] !== undefined)
+                user = JSON.parse(cookies[user_cookieName]);
 
             // Returns a context plugin
             return {
@@ -43,12 +50,15 @@ module.exports = function userStoragePlugin(options) {
                         let result = user;
 
                         if (result === undefined || result === null || result === {}) {
-                            result = actionContext.getCookie(user_cookieName);
+                            result = JSON.parse(actionContext.getCookie(user_cookieName));
                         }
 
                         return result;
                     };
                     actionContext.setUser = function (newUser) {
+                        if (typeof newUser !== 'object')
+                            return;
+
                         user = newUser;
 
                         actionContext.setCookie(user_cookieName, JSON.stringify(newUser), {
@@ -60,10 +70,13 @@ module.exports = function userStoragePlugin(options) {
                         actionContext.setUser({});
                     };
                     actionContext.setCookie = function (name, value, options) {
+                        console.log('userStoragePlugin actionContext setCookie:', name, value, options);
                         const cookieStr = cookie.serialize(name, value, options);
                         if (res) {
+                            console.log('userStoragePlugin actionContext setCookie: on server-side');
                             res.setHeader('Set-Cookie', cookieStr);
                         } else {
+                            console.log('userStoragePlugin actionContext setCookie: on client-side');
                             document.cookie = cookieStr;
                         }
                         cookies[name] = value;

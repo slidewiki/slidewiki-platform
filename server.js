@@ -66,7 +66,7 @@ server.use((req, res, next) => {
 
     const context =  app.createContext({
         req: req,
-        res: res
+        res: res  //for userStoragePlugin
         //, // The fetchr plugin depends on this
         //xhrContext: {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
