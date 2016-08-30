@@ -1,4 +1,5 @@
 import cookie from 'js-cookie';
+import cookieParser from 'cookie';
 
 module.exports = function userStoragePlugin(options) {
     /**
@@ -48,9 +49,18 @@ module.exports = function userStoragePlugin(options) {
 
                         let result = user;
 
-                        if (result === undefined || result === null || result === {}) {
-                            result = cookie.getJSON(user_cookieName);
-                            console.log('userStoragePlugin actionContext getUser: got user from cookies');
+                        try {
+                            if (result === undefined || result === {}) {
+                                if (res) {
+                                    result = JSON.parse(cookies[user_cookieName]);
+                                }
+                                else {
+                                    result = cookie.getJSON(user_cookieName);
+                                }
+                                console.log('userStoragePlugin actionContext getUser: got user from cookies');
+                            }
+                        } catch (e) {
+
                         }
 
                         return result;
@@ -61,24 +71,40 @@ module.exports = function userStoragePlugin(options) {
 
                         user = newUser;
 
-                        cookie.set(user_cookieName, newUser,{
-                            expires: createExpire(),
-                            maxAge: secondsCookieShouldBeValid
-                        });
+                        if (res) {
+                            res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, newUser, {
+                                expires: createExpire(),
+                                maxAge: secondsCookieShouldBeValid
+                            }));
+                        }
+                        else {
+                            cookie.set(user_cookieName, newUser,{
+                                expires: createExpire(),
+                                maxAge: secondsCookieShouldBeValid
+                            });
+                        }
                     };
                     actionContext.deleteUser = function() {
                         user = {};
 
-                        cookie.remove(user_cookieName);
+                        if (res) {
+                            res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, user, {
+                                expires: new Date(),
+                                maxAge: 1
+                            }));
+                        }
+                        else {
+                            cookie.remove(user_cookieName);
+                        }
                     };
-                    actionContext.setCookie = function (name, value, options) {
-                        console.log('userStoragePlugin actionContext setCookie:', name, value, options);
-                        const cookieStr = cookie.set(name, value, options);
-                        cookies[name] = value;
-                    };
-                    actionContext.getCookie = function (name) {
-                        return cookies[name] ? cookies[name] : cookie.get(name);
-                    };
+                    // actionContext.setCookie = function (name, value, options) {
+                    //     console.log('userStoragePlugin actionContext setCookie:', name, value, options);
+                    //     const cookieStr = cookie.set(name, value, options);
+                    //     cookies[name] = value;
+                    // };
+                    // actionContext.getCookie = function (name) {
+                    //     return cookies[name] ? cookies[name] : cookie.get(name);
+                    // };
                 },
                 /**
                  * Provides access to user
@@ -95,7 +121,25 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugStoreContext: function plugStoreContext(storeContext) {
                     storeContext.getUser = function () {
-                        return user;
+                        console.log('userStoragePlugin storeContext getUser()');
+
+                        let result = user;
+
+                        try {
+                            if (result === undefined || result === {}) {
+                                if (res) {
+                                    result = JSON.parse(cookies[user_cookieName]);
+                                }
+                                else {
+                                    result = cookie.getJSON(user_cookieName);
+                                }
+                                console.log('userStoragePlugin storeContext getUser: got user from cookies');
+                            }
+                        } catch (e) {
+
+                        }
+
+                        return result;
                     };
                 },
                 dehydrate: function () {
