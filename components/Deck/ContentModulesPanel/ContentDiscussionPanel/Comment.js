@@ -10,15 +10,16 @@ class Comment extends React.Component {
         this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
     }
 
-    handleAddReply() {
-        this.context.executeAction(addReply, {
-            comment: this.props.comment,
-            title: this.refs.title.value,
-            text: this.refs.text.value
-        });
-
-        this.refs.title.value = '';
-        this.refs.text.value = '';
+    handleAddReply(e) {
+        e.preventDefault();
+        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
+            this.context.executeAction(addReply, {
+                comment: this.props.comment,
+                title: this.refs.title.value,
+                text: this.refs.text.value
+            });
+        }
+        return false;
     }
 
     render() {
@@ -26,14 +27,14 @@ class Comment extends React.Component {
         const replyBox = (
             <form className="ui reply form">
                 <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title"/>
+                    <input type="text" ref="title" placeholder="Title" required/>
                 </div>
                 <div className="field">
-                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
+                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
                 </div>
-                <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
+                <button tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
                     <i className="icon edit"></i> Add Reply
-                </div>
+                </button>
             </form>
         );
         return (
