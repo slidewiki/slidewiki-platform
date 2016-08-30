@@ -86,7 +86,7 @@ export default {
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
             let toSend = {
-                description: params.description,
+                description: params.description ? params.description : 'empty',
                 language: params.language,
                 tags: params.tags,
                 title: params.title,

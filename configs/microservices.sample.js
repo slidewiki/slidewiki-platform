@@ -19,7 +19,8 @@ export default {
             uri: 'http://importservice.manfredfris.ch',
             protocol: 'http:',
             host: 'importservice.manfredfris.ch',
-            path: '/importPPTX'
+            path: '/importPPTX',
+            port: 80
         }
     }
 };

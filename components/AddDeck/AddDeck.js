@@ -228,11 +228,9 @@ class AddDeck extends React.Component {
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" ref="select_themes">
-          <option value="" >Select Theme</option>
           <option value="DefaultTheme" >Default</option>
         </select>;
         let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" ref="select_licences">
-          <option value="" >Select License</option>
           <option value="CC0" >CC0</option>
           <option value="CC BY" >CC BY</option>
           <option value="CC BY-SA" >CC BY-SA</option>
@@ -247,6 +245,7 @@ class AddDeck extends React.Component {
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'The title is a must have.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'The language is a must have.' : undefined;
         let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'The licence is a must have.' : undefined;
+        let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         return (
           <div className="ui container">
@@ -292,7 +291,7 @@ class AddDeck extends React.Component {
                           <textarea rows="4" aria-labelledby="deck-description" ref="textarea_description" ></textarea>
                       </div>
                       <div className="two fields">
-                          <div className="field" ref="div_themes" >
+                          <div className="field disabled" ref="div_themes" >
                               <label id="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
@@ -301,9 +300,9 @@ class AddDeck extends React.Component {
                                   {licenceOptions}
                           </div>
                       </div>
-                      <div className="fluid inline field ">
+                      <div className="fluid inline field">
                           <i className="ui tags large icon" aria-label="Add tags"></i>
-                          <input type="text" name="tags" placeholder="Add Tags" ref="input_tags" />
+                          <input type="text" name="tags" placeholder="Add Tags" ref="input_tags" data-tooltip={hint_tags} />
                       </div>
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
