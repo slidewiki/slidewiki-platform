@@ -12,9 +12,12 @@ export default {
         //for(let k in params) keys.push(k);
         //console.log('import service', keys, params.file, params.base64.length);
 
+        const defaultLicense = 'CC0';
         //create a HTTP POST form request
         form.append('file', params.base64);
         form.append('filename', params.filename ? params.filename : 'unknown');
+        form.append('user', params.user);
+        form.append('license', defaultLicense);
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
             //knownLength: params.file.size ? params.file.size : params.base64.length
 
