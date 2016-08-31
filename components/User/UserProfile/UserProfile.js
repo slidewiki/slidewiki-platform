@@ -4,6 +4,7 @@ import CategoryBox from './CategoryBox';
 import UserSettings from './UserSettings';
 import PublicUserData from './PublicUserData';
 import PublicUserDecks from './PublicUserDecks';
+import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
@@ -12,14 +13,18 @@ class UserProfile extends React.Component {
         $('.menu .item').tab();
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        $('.menu .item').tab();
+        if(this.props.UserProfileStore.jwt === '' && this.props.UserProfileStore.toShow !== '')
+            context.executeAction(navigateAction, { url: '/' });
+    }
 
     publicOrPrivateProfile() {
-        if(!this.props.UserProfileStore.showPublicUser){
+        if(this.props.UserProfileStore.toShow !== ''  && this.props.UserProfileStore.username !== ''){
             return (
                 <div className = "ui stackable grid page" >
                     <div className = "four wide column" >
-                        <CategoryBox toShow = { this.props.UserProfileStore.toShow } />
+                        <CategoryBox toShow = { this.props.UserProfileStore.toShow } username = { this.props.UserProfileStore.user.uname }/>
                         <div className = "ui hidden divider" />
                     </div>
                     <div className = "twelve wide column" >
