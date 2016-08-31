@@ -60,6 +60,20 @@ class ActivityFeedUtil {
 
         return 'moments ago';
     }
+
+    //build node URL based on the context
+    static makeNodeRevisionURL(selector, revisionId, mode) {
+        let nodeURL;
+        let sidWithRevision = selector.sid.split('-')[0] + '-' + revisionId;
+        //adapt URLs based on the current page
+        if(selector.spath){
+            nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + sidWithRevision + '/' + selector.spath + '/' + mode;
+        }else{
+            //for root node
+            nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + sidWithRevision + '/' + mode;
+        }
+        return nodeURL;
+    }
 }
 
 export default ActivityFeedUtil;
