@@ -2,6 +2,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
+import SlideViewPanel from '../../SlideModes/SlideViewPanel/SlideViewPanel';
 
 class DeckViewPanel extends React.Component {
     render() {
@@ -18,12 +19,17 @@ class DeckViewPanel extends React.Component {
             transitionDuration: '300ms',
             width: '9%'
         };
+        let slideThumbnail = [];
+        for (let i=0; i < 8; i++) {
+            slideThumbnail.push(<SlideViewPanel />);
+        }
 
         return (
+            /*
             <div ref="deckViewPanel" className="ui bottom attached segment">
                 <div dangerouslySetInnerHTML={{__html:this.props.DeckViewStore.content}} />
             </div>
-            /*
+            */
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
@@ -74,55 +80,11 @@ class DeckViewPanel extends React.Component {
                     <div className="ui  divider"></div>
 
                     <div className="ui four column grid container">
-                        <div className="column">
-                            <div className="ui segment">
-                                <div className="content" tabIndex="0">
-                                    <a href="http://google.com" className="ui small image" tabIndex="-1">
-                                        <img src="assets/images/wireframe/image.png" alt="thumbnail of slide" />
-                                    </a>
-                                    <a className="header">Introduction</a>
-                                    <div className="description">Slide 1 of 30</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="column">
-                            <div className="ui segment">
-                                <div className="content" tabIndex="0">
-                                    <a href="http://google.com" className="ui small image" tabIndex="-1">
-                                        <img src="assets/images/wireframe/image.png" alt="thumbnail of slide" />
-                                    </a>
-                                    <a className="header">Basic</a>
-                                    <div className="description">Slide 2 of 30</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="column">
-                            <div className="ui segment">
-                                <div className="content" tabIndex="0">
-                                    <a href="http://google.com" className="ui small image" tabIndex="-1">
-                                        <img src="assets/images/wireframe/image.png" alt="thumbnail of slide" />
-                                    </a>
-                                    <a className="header">Slide A</a>
-                                    <div className="description">Slide 3 of 30</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="column">
-                            <div className="ui segment">
-                                <div className="content" tabIndex="0">
-                                    <a href="http://google.com" className="ui small image" tabIndex="-1">
-                                        <img src="assets/images/wireframe/image.png" alt="thumbnail of slide" />
-                                    </a>
-                                    <a className="header">Slide B</a>
-                                    <div className="description">Slide 4 of 30</div>
-                                </div>
-                            </div>
-                        </div>
+                        { slideThumbnail }
                     </div>
 
                 </div>
             </div>
-            */
 
         );
     }
