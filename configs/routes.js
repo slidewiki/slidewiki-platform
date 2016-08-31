@@ -301,6 +301,17 @@ export default {
             //context.executeAction(loadDeck, payload, done);
         }
     },
+    slidethumbnail: {
+        path: '/slidethumbnail',
+        method: 'get',
+        page: 'slidethumbnail',
+        handler: require('../components/Deck/DeckModes/DeckViewPanel/SlideThumbnail'),
+        action: (context, payload, done) => {
+            context.executeAction(loadSlideThumbnails, payload, done);
+        }
+    },
+
+    /* This should be the last route in routes.js */
     notfound: {
         path: '*',
         method: 'get',
@@ -309,4 +320,5 @@ export default {
             context.executeAction(loadNotFound, payload, done);
         }
     }
+    /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/
 };
