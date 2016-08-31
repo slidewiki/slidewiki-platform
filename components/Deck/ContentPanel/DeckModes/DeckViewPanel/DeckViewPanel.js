@@ -2,7 +2,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
-import SlideViewPanel from '../../SlideModes/SlideViewPanel/SlideViewPanel';
+import SlideThumbnail from '../../DeckModes/DeckViewPanel/SlideThumbnail';
 
 class DeckViewPanel extends React.Component {
     render() {

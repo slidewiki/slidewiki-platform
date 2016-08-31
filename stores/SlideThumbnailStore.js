@@ -42,7 +42,7 @@ class SlideThumbnailStore extends BaseStore {
 
 SlideThumbnailStore.storeName = 'SlideThumbnailStore';
 SlideThumbnailStore.handlers = {
-    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateContent'
+    'LOAD_SLIDE_THUMBNAIL_CONTENT': 'updateContent'
 };
 
 export default SlideThumbnailStore;
