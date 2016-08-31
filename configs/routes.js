@@ -268,7 +268,7 @@ export default {
     },
     presentation: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id',
+        path: '/presentation/:id/',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
@@ -278,7 +278,7 @@ export default {
     },
     presentationSlide: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/*?/:sid?',
+        path: '/presentation/:id/*/:sid?/',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),

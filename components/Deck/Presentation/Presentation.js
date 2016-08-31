@@ -25,57 +25,56 @@ class Presentation extends React.Component{
         super(props);
         this.playerCss = playerCss;
         this.slides = [];
+        this.startingSlide = this.props.PresentationStore.selector.sid;
+        this.deck = this.props.PresentationStore.selector.id;
     }
+
     componentDidMount(){
         if(process.env.BROWSER){
             let style = require('../../../bower_components/reveal.js/css/reveal.css');
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
-            $('.ui.page.grid.inverted.blue.menu').css({'display': 'none'});
+            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
             $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-            $('.ui.page.grid.inverted.blue.menu').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
             let s = this.props.PresentationStore.theme;
-            console.log("PresentationStore", this.props.PresentationStore);
+
             if(!s){
-                s = 'white';
+                s = 'black';
             }
             require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
+            // if(this.startingSlide){
+            //     window.location.hash = '/slide-' + this.startingSlide;
+            // }
+
             Reveal.initialize({
+                history: true,
                 dependencies: [
-                // //{ src: 'socket.io/socket.io.js', async: true },
                     { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
                 ]
             });
-            console.log('componentDidMount');
+
+
         }
+    }
+    revealInit(){
+        Reveal.initialize({
+            history: true,
+            dependencies: [
+                { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+            ]
+        });
+        callback();
+    }
+    popup(callback){
+        this.revealInit();
+        callback()
     }
 
     componentDidUpdate(){
-        let s = this.props.PresentationStore;
-        console.log('PresentationStore componentDidUpdate', s);
-        // if(!s){
-        //     s = 'white';
-        // }
+
     }
-    //     console.log('componentDidUpdate');
-    //     if(this.slides.length > 0){
-    //
-    //         if (process.env.BROWSER) {
-    //
-    //             // let s = this.props.PresentationStore.theme;
-    //             // require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
-    //             // Reveal.initialize({
-    //             //     dependencies: [
-    //             //     // //{ src: 'socket.io/socket.io.js', async: true },
-    //             //         { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
-    //             //     ]
-    //             // });
-    //
-    //
-    //         }
-    //     }
-    // }
     render(){
         this.slides = this.getSlides();
         return(
@@ -92,22 +91,18 @@ class Presentation extends React.Component{
 
     getSlides(){
         let slides = this.props.PresentationStore.content;
-        //console.log("PresentationStore", this.props.PresentationStore);
 
         let returnList = [];
         if(slides){
-            console.log('slides');
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
-                let speakerNotes = '';// slide.speakerNotes;
-                let content = slide.title + slide.content + '<aside class="notes">' + speakerNotes + '</aside>';
-                returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={slide.id} id={slide.id} />);
+                let content = slide.title + slide.content + '<aside class="notes">' + slide.speakernotes + '</aside>';
+                returnList.push(<PresentationSlide content={content} key={slide.id} id={"slide-" + slide.id} />);
             }
             return returnList;
 
         }
         else{
-            console.log('Not slides');
             return (<section />);
         }
     }

@@ -17,14 +17,12 @@ export default {
             let theme = get_sample_theme();
             rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id) + '/slides'}).then((res) => {
                 slideServiceRes = JSON.parse(res);
-                //console.log("slideServiceRes", slideServiceRes);
-                console.log('theme', theme);
-                callback(null, {content: slideServiceRes.children, theme: theme});
+                callback(null, {content: slideServiceRes.children, theme: theme, selector: selector});
 
             }).catch((err) => {
                 console.log('There was an error!', err);
                 returnErr = true;
-                callback(null, {content: slideServiceRes, theme: theme});
+                callback(null, {content: slideServiceRes, theme: theme, selector: selector});
             });
 
         }//If presentation.content
@@ -41,8 +39,8 @@ export default {
 function get_sample_theme(){
     let themes = ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white'];
     let index = Math.floor(Math.random() * (themes.length - 1));
-    //console.log('theme: ', themes[index]);
-    return themes[index];
+    // Just hardcode this for now.  Change to themes[index] if we really want it random.
+    return themes[1];
 }
 
 function get_sample_text(id){

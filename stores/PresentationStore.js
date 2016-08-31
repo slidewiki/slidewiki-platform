@@ -7,13 +7,14 @@ class PresentationStore extends BaseStore {
         this.content = '';
         this.theme = '';
         this.selector = '';
+        this.currentSlide = '';
     }
     updatePresentation(payload) {
         this.content = payload.content;
         this.theme = payload.theme;
         this.selector = payload.selector;
         this.emitChange();
-        //console.log("Updating content", payload.content);
+
     }
 
     getState() {
