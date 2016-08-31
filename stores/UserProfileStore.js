@@ -29,6 +29,16 @@ class UserProfileStore extends BaseStore {
         this.userid = '';
         this.jwt = '';
         this.errorMessage = '';
+
+        let user = dispatcher.getContext().getUser();
+        console.log('UserProfileStore constructor:', user);
+        try {
+            this.jwt = user.jwt ? user.jwt : '';
+            this.username = user.username ? user.username : '';
+            this.userid = user.userid ? user.userid : '';
+        } catch (e) {
+            //empty user object
+        }
     }
 
     destructor() {
