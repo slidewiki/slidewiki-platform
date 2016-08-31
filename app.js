@@ -24,6 +24,7 @@ import ImportStore from './stores/ImportStore';
 import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
 import SearchResultsStore from './stores/SearchResultsStore';
+import SearchParamsStore from './stores/SearchParamsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
 import UserProfileStore from './stores/UserProfileStore';
 import ErrorStore from './stores/ErrorStore';
@@ -57,6 +58,7 @@ const app = new Fluxible({
         UserNotificationsStore,
         UserProfileStore,
         SearchResultsStore,
+        SearchParamsStore,
         AdvancedSearchStore,
         UserProfileStore,
         ErrorStore,

@@ -22,14 +22,14 @@ class SearchResultsItem extends React.Component {
             fontWeight: 600
         };
 
-        switch (result.entity[0]) {
+        switch (result.entity) {
             case 'slide':
                 IconNode = (<img src={imgpath + 'slide.png'}   height={25} width={25}></img> );
                 ResultNode = (
                     <div className="info">
-                        <span style={infoStyles}>Slide <a href={'/slideview/' + result.id}>{result.title[0]}</a></span>
+                        <span style={infoStyles}>Slide <a href={'/slideview/' + result.id}>{result.title}</a></span>
                         <br/>
-                        <span style={contentStyles}>{result.content[0].substring(0,100)+'...'}</span>
+                        <span style={contentStyles}>{result.description.substring(0,100)+'...'}</span>
                     </div>
                 );
 
@@ -39,9 +39,9 @@ class SearchResultsItem extends React.Component {
                 IconNode = (<img src={imgpath + 'deck.png'}   height={25} width={25}></img> );
                 ResultNode = (
                     <div className="info">
-                        <span style={infoStyles}>Deck <a href={'/deck/' + result.id}>{result.title[0]}</a></span>
+                        <span style={infoStyles}>Deck <a href={'/deck/' + result.id}>{result.title}</a></span>
                         <br/>
-                        <span style={contentStyles}>{result.description_txt[0]}</span>
+                        <span style={contentStyles}>{result.description.substring(0,100)+'...'}</span>
                     </div>
                 );
                 break;

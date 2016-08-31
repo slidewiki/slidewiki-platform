@@ -111,7 +111,7 @@ export default {
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
-        handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
+        handler: require('../components/Search/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }

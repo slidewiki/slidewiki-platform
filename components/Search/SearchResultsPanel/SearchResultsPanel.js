@@ -8,18 +8,11 @@ import updateUserResultsVisibility from '../../../actions/search/updateUserResul
 
 class SearchResultsPanel extends React.Component {
 
-    // handleChangeToggle(field, value) {
-    //     this.context.executeAction(updateUserResultsVisibility, {
-    //         field: field,
-    //         value: value
-    //     });
-    // }
-
     render() {
-        const results = this.props.SearchResultsStore.docs;  //this.props.SearchResultsStore.results;
-        const numFound = this.props.SearchResultsStore.numFound;
-        const entities = this.props.SearchResultsStore.entities;
-        const languages = this.props.SearchResultsStore.languages;
+        const results = this.props.results;  //this.props.SearchResultsStore.results;
+        const numFound = this.props.numFound;
+        const entities = this.props.entities;
+        const languages = this.props.languages;
 
         const entityList = entities.map((s, index) => {
             return (
@@ -91,10 +84,10 @@ class SearchResultsPanel extends React.Component {
 SearchResultsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
-    return {
-        SearchResultsStore: context.getStore(SearchResultsStore).getState()
-    };
-});
+// SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
+//     return {
+//         SearchResultsStore: context.getStore(SearchResultsStore).getState()
+//     };
+// });
 
 export default SearchResultsPanel;
