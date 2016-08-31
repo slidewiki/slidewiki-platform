@@ -13,6 +13,10 @@ import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 
 let ReactDOM = require('react-dom');
 
+//let simpledraggable = require('simple-draggable'); //remove window dependency
+//let SimpleDraggable = require('../../../../../assets/simpledraggable');
+
+
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -99,9 +103,71 @@ class SlideContentEditor extends React.Component {
         //if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
         this.currentcontent = this.props.content;
         ReactDOM.findDOMNode(this.refs.inlineHeader).focus();
-        //this.forceUpdate();
+
+        //let simpledraggable = require('simple-draggable');
+        //require('../../../../../assets/simpledraggable');
+        //alert('test' + document.querySelectorAll("div.draggable"));
+        //alert('test' + document.querySelectorAll("draggable"));
+        /*
+        SimpleDraggable('.draggable', {
+            onlyX: false
+          , onlyY: false
+          , onStart: function (event, element) {
+                // Do something on drag start
+                console.log('dragging start');
+            }
+          , onStop: function (event, element) {
+                // Do something on drag stop
+                console.log('dragging stop');
+            }
+          , onDrag: function (event, element) {
+                // Do something on drag drag
+                console.log('dragging element');
+            }
+        });
+        */
+
+        this.forceUpdate();
+
     }
     componentDidUpdate() {
+
+        //console.log('componentDidUpdate');
+        let simpledraggable = require('simple-draggable');
+        //let simpledraggable =
+        //require('../../../../../assets/simpledraggable');
+        //SimpleDraggable('div.draggable', {
+
+        SimpleDraggable('div.draggable', {
+            onlyX: false
+          , onlyY: false
+          , onStart: function (event, element) {
+                // Do something on drag start
+                //console.log('dragging start');
+          }
+          , onStop: function (event, element) {
+                // Do something on drag stop
+                //console.log('dragging stop');
+          }
+          , onDrag: function (event, element) {
+                // Do something on drag drag
+                //console.log('dragging element');
+          }
+        });
+        //based on querySelectorAll (selects based on class of elements - get all children + apply draggable x & y positioning)
+        //TODO: remove surrounding DIVS of some PPTX2HTML output elements
+        //########Works well with following PPTX2HTML output:
+        // (TODO: Add class='draggable' to output! as well as style="resize: both; overflow: auto;)
+        /*<div _id="4" _idx="1" _name="Text Placeholder 3" _type="body" class="draggable block content v-down" draggable="true" id="4" style="resize: both; overflow: auto; position: absolute; top: 245px; left: 52px; width: 612px; height: 122px; border: 1pt none rgb(0, 0, 0);">
+        <div class="h-left">&nbsp;<span class="text-block" style="color: #000; font-size: 28pt; font-family: Calibri; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">What can</span><br>
+        <br>
+        <span class="text-block" style="color: #000; font-size: 28pt; font-family: Calibri; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">we learn from </span></div>
+
+        <div class="h-left"><span class="text-block" style="color: #000; font-size: 28pt; font-family: Calibri; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">the technology market?</span></div>
+        </div>*/
+
+        //TODO change style elements of PPTX2HTML divs based on loading Firefox (+IE?) or Chrome (+Safari) (or other browsers?)
+
         /*
         if (typeof(CKEDITOR.instances.nonInline) !== 'undefined' && this.currentcontent !== this.props.content)
         {   */
@@ -134,12 +200,13 @@ class SlideContentEditor extends React.Component {
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
-
+        //styles should match slideViewPanel for consistency
         const headerStyle = {
             minWidth: '100%',
             overflowY: 'auto',
             borderStyle: 'dashed dashed none dashed',
-            borderColor: '#e7e7e7'
+            borderColor: '#e7e7e7',
+            position: 'relative'
         };
         const contentStyle = {
             minWidth: '100%',
@@ -147,7 +214,8 @@ class SlideContentEditor extends React.Component {
             minHeight: 450,
             overflowY: 'auto',
             borderStyle: 'dashed',
-            borderColor: '#e7e7e7'
+            borderColor: '#e7e7e7',
+            position: 'relative'
         };
         const speakernotesStyle = {
             minWidth: '100%',
@@ -155,7 +223,8 @@ class SlideContentEditor extends React.Component {
             minHeight: 120,
             overflowY: 'auto',
             borderStyle: 'dashed',
-            borderColor: '#e7e7e7'
+            borderColor: '#e7e7e7',
+            position: 'relative'
         };
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
