@@ -74,7 +74,7 @@ class ImportStore extends BaseStore {
         console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         this.uploadProgress = 100;
-        this.deckId = headers.deckId;
+        this.deckId = headers.deckid;
 
         this.file = null;
         this.base64 = null;
