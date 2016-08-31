@@ -44,9 +44,7 @@ class Presentation extends React.Component{
                 s = 'black';
             }
             require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
-            // if(this.startingSlide){
-            //     window.location.hash = '/slide-' + this.startingSlide;
-            // }
+
 
             Reveal.initialize({
                 history: true,
@@ -57,19 +55,6 @@ class Presentation extends React.Component{
 
 
         }
-    }
-    revealInit(){
-        Reveal.initialize({
-            history: true,
-            dependencies: [
-                { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
-            ]
-        });
-        callback();
-    }
-    popup(callback){
-        this.revealInit();
-        callback()
     }
 
     componentDidUpdate(){
@@ -96,6 +81,7 @@ class Presentation extends React.Component{
         if(slides){
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
+                console.log(slide);
                 let content = slide.title + slide.content + '<aside class="notes">' + slide.speakernotes + '</aside>';
                 returnList.push(<PresentationSlide content={content} key={slide.id} id={"slide-" + slide.id} />);
             }
