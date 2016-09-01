@@ -62,7 +62,7 @@ export default {
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
             let toSend = {
-                description: params.description,
+                description: params.description ? params.description : 'empty',
                 language: params.language,
                 translation: {
                     status: 'original'
@@ -81,6 +81,26 @@ export default {
             .catch((err) => callback(err));
         }
     },
-    // update: (req, resource, params, body, config, callback) => {}
+    update: (req, resource, params, body, config, callback) => {
+        if(resource === 'deck.update') {
+            if (params.tags.length === 1 && params.tags[0].length === 0)
+                params.tags = undefined;
+            let toSend = {
+                description: params.description ? params.description : 'empty',
+                language: params.language,
+                tags: params.tags,
+                title: params.title,
+                user: params.userid.toString(),
+                license: params.licence
+            };
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                json: true,
+                body: toSend
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
+        }
+    }
     // delete: (req, resource, params, config, callback) => {}
 };
