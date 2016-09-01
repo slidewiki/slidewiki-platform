@@ -1,5 +1,5 @@
 import React from 'react';
-import DeckListItem from './DeckListItem';
+import DeckCard from './DeckCard';
 
 class PublicUserDecks extends React.Component {
     componentDidMount() {}
@@ -17,20 +17,13 @@ class PublicUserDecks extends React.Component {
         content.title = content.title.slice(0,90);
         content.description = content.description.slice(0,110);
         return (
-            <div className="ui segments">
-                <div className="ui secondary segment">
-                    <strong>Popular Decks</strong>
-                </div>
-                <div className="ui segment">
-                    <div className="ui relaxed divided list">
-                        <DeckListItem content={content}/>
-                        <DeckListItem content={content}/>
-                        <DeckListItem content={content}/>
-                        <DeckListItem content={content}/>
-                        <DeckListItem content={content}/>
-                        <DeckListItem content={content}/>
-                    </div>
-                </div>
+            <div className="ui three doubling cards">
+              <DeckCard cardContent={content}/>
+              <DeckCard cardContent={content}/>
+              <DeckCard cardContent={content}/>
+              <DeckCard cardContent={content}/>
+              <DeckCard cardContent={content}/>
+              <DeckCard cardContent={content}/>
             </div>
         );
     }

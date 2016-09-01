@@ -1,5 +1,5 @@
 import React from 'react';
-import { navigateAction } from 'fluxible-router';
+import { NavLink } from 'fluxible-router';
 import loadActivities from '../../../actions/activityfeed/loadActivities';
 
 class DeckListItem extends React.Component {
@@ -7,41 +7,27 @@ class DeckListItem extends React.Component {
 
     componentDidUpdate() {}
 
-    switchToDeck(id) {
-        context.executeAction(navigateAction, { url: '/deck/' + id });
-    }
-
-    exchangePrivateContent(id) {
-        this.context.executeAction(loadActivities, { id: id + 'a', sid: '1122334455a' });
-        return false;
-    }
-
     render() {
-        let toInsert,picToInsert = '';
-        if (this.props.private === true) {
-            toInsert =  <div>
-                            <a className="header" onClick={ this.exchangePrivateContent.bind(this, this.props.deckID) }>{ this.props.title }</a>
-                            <div className="description">
-                                Updated { this.props.updated } mins ago
-                            </div>
-                            <br/>
-                            <a onClick={ this.switchToDeck.bind(this, this.props.deckID) }>Go to deck</a>
-                        </div>;
-            picToInsert = <a onClick={ this.exchangePrivateContent.bind(this, this.props.deckID) }><img src={ this.props.picture }/></a>;
-        } else {
-            toInsert =  <div>
-                            <a className="header" onClick={ this.switchToDeck.bind(this, this.props.deckID) }>{ this.props.title }</a>
-                            <div className="description">Updated { this.props.updated } mins ago</div>
-                        </div>;
-            picToInsert = <a onClick={ this.switchToDeck.bind(this, this.props.deckID) }><img src={ this.props.picture }/></a>;
-        }
         return (
             <div className="item">
-                <div className="ui tiny image">
-                    { picToInsert }
+                <div className="right floated content">
+                    <NavLink href="/"><i className="thumbs up icon"/>53 Likes</NavLink><br/>
+                    <NavLink href="/"><i className="fork icon"/>53 Forks</NavLink><br/>
+                    <NavLink href="/"><i className="comment icon"/>53 Comments</NavLink><br/>
+                    <NavLink href="/"><i className="download icon"/>53 Downloads</NavLink><br/>
                 </div>
+                <NavLink className="ui tiny middle aligned centered image" href={'/deck/' + this.props.content.deckID}>
+                    <img src={ this.props.content.picture }/>
+                </NavLink>
                 <div className="content">
-                    { toInsert }
+                    <NavLink className="header" href={'/deck/' + this.props.content.deckID}>{ this.props.content.title }</NavLink>
+                    <div className="meta">
+                        Updated { this.props.content.updated } mins ago
+                    </div>
+                    <br/>
+                    <div className="description">
+                        {this.props.content.description}
+                    </div>
                 </div>
             </div>
         );

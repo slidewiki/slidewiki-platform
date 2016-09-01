@@ -3,7 +3,9 @@ import UserDecks from './UserDecks';
 import CategoryBox from './CategoryBox';
 import UserSettings from './UserSettings';
 import PublicUserData from './PublicUserData';
+import PopularDecks from './PopularDecks';
 import PublicUserDecks from './PublicUserDecks';
+import Preview from './preview';
 import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -35,6 +37,7 @@ class UserProfile extends React.Component {
                 </div>
             );
         } else { // just an id
+            //<h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>
             return (
                 <div className = "ui stackable grid page" >
                     <div className = "four wide column" >
@@ -47,13 +50,21 @@ class UserProfile extends React.Component {
                             <div className="link item" data-tab="activity">Public activity</div>
                         </div>
                         <div className="ui active tab" data-tab="popular">
-                            <PublicUserDecks title={'Popular Decks'}/>
+                        <div className="ui segments">
+                            <div className="ui secondary segment">
+                                <strong>Popular Decks</strong>
+                            </div>
+                            <div className="ui segment">
+                                <PopularDecks/>
+                            </div>
+                        </div>
+                            <div className="ui divider"/>
                         </div>
                         <div className="ui tab" data-tab="userdecks">
-                            <PublicUserDecks title={'All Decks'}/>
+                            <PublicUserDecks/>
                         </div>
                         <div className="ui tab" data-tab="activity">
-                            <h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>
+                            <Preview/>
                         </div>
                     </div>
                 </div>
