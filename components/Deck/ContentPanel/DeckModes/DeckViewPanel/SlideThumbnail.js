@@ -3,7 +3,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideThumbnailStore from '../../../../../stores/SlideThumbnailStore';
 
-class SlideViewPanel extends React.Component {
+class SlideThumbnail extends React.Component {
     render() {
         const compStyle = {
             maxHeight: 500,
@@ -24,8 +24,8 @@ class SlideViewPanel extends React.Component {
                     </a>
                     <a className="header">Slide B</a>
                     <div className="description">Slide 4 of 30</div>
-                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
-                  <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+                    <div dangerouslySetInnerHTML={{__html:this.props.SlideThumbnailStore.title}} />
+                    <div dangerouslySetInnerHTML={{__html:this.props.SlideThumbnailStore.content}} />
                  </div>
             </div>
         </div>
@@ -38,4 +38,4 @@ SlideThumbnail = connectToStores(SlideThumbnail, [SlideThumbnailStore], (context
         SlideThumbnailStore: context.getStore(SlideThumbnailStore).getState()
     };
 });
-export default SlideThumbnailStore;
+export default SlideThumbnail;

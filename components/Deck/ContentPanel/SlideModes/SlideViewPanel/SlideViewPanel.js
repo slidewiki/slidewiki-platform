@@ -16,21 +16,6 @@ class SlideViewPanel extends React.Component {
             overflowY: 'auto'
         };
         return (
-            <div className="column">
-                <div ref="slideViewPanel" className="ui segment">
-                    <div class="content" tabIndex="0">
-                        <a href="http://google.com" className="ui small image" tabIndex="-1">
-                            <img src="assets/images/wireframe/image.png" alt="thumbnail of slide" />
-                        </a>
-                        <a className="header">Slide B</a>
-                        <div className="description">Slide 4 of 30</div>
-                      <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
-                      <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
-                     </div>
-                </div>
-            </div>
-        /*
-
           <div className="ui bottom attached segment">
               <div ref="slideViewPanel" className="ui" style={compStyle}>
                   <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
@@ -42,7 +27,6 @@ class SlideViewPanel extends React.Component {
                   <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
               </div>
             </div>
-        */
         );
     }
 }

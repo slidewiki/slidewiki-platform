@@ -20,9 +20,9 @@ class DeckViewPanel extends React.Component {
             width: '9%'
         };
         let slideThumbnail = [];
-        for (let i=0; i < 8; i++) {
-            slideThumbnail.push(<SlideViewPanel />);
-        }
+        //for (let i=0; i < 1; i++) {
+    //        slideThumbnail.push(<SlideThumbnail />);
+//        }
 
         return (
             /*
@@ -31,6 +31,8 @@ class DeckViewPanel extends React.Component {
             </div>
             */
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
+                Below is the content:
+                {this.props.DeckViewStore.content}
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
 
@@ -80,9 +82,8 @@ class DeckViewPanel extends React.Component {
                     <div className="ui  divider"></div>
 
                     <div className="ui four column grid container">
-                        { slideThumbnail }
+                        //<SlideThumbnail />
                     </div>
-
                 </div>
             </div>
 

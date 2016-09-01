@@ -24,6 +24,7 @@ import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import loadSlideThumbnails from '../actions/loadSlideThumbnails';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -305,7 +306,7 @@ export default {
         path: '/slidethumbnail',
         method: 'get',
         page: 'slidethumbnail',
-        handler: require('../components/Deck/DeckModes/DeckViewPanel/SlideThumbnail'),
+        handler: require('../components/Deck/ContentPanel/DeckModes/DeckViewPanel/SlideThumbnail'),
         action: (context, payload, done) => {
             context.executeAction(loadSlideThumbnails, payload, done);
         }

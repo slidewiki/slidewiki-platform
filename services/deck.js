@@ -6,10 +6,20 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        if(resource === 'deck.content'){
+        if (resource === 'deck.content') {
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/slides'})
+                .then((res) => {
+                    console.log('From deck.js service:', res);
+                    callback(null, {content: res});})
+                .catch((err) => {
+                    console.log(err);
+                    callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', content: err}, {});});
+                    //callback(null, {content: {}, selector: selector, 'page': params.page, 'mode': args.mode});
+        }
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
+            /*
             let sampleContent = `
             <h1>Deck #` + args.sid + `</h1>
             This is a sample deck content. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
@@ -43,7 +53,8 @@ export default {
             </div>
             `;
             callback(null, {content: sampleContent});
-        } else if(resource === 'deck.properties'){
+            */
+        else if (resource === 'deck.properties') {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
