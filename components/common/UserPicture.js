@@ -30,6 +30,7 @@ class UserPicture extends React.Component {
             'huge': this.props.size === 'huge',
             'massive': this.props.size === 'massive',
             'centered': this.props.centered,
+            'avatar': this.props.avatar,
             'rounded': true,
             'bordered': true,
             'image': true,

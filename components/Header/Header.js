@@ -10,22 +10,24 @@ class Header extends React.Component {
     render() {
 
         return (
-            <div className="ui grid inverted blue menu" ref="header">
+            <div className="ui inverted blue menu" ref="header">
                 <div className="ui container">
-                    <a href="/" className="header item">
+                    <NavLink className="item" routeName="home">
                         <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" />
                         &nbsp; SlideWiki
-                    </a>
-                    <NavLink className="item" routeName="about" activeClass="active">About</NavLink>
-                    <div className="item right">
-                        <SearchBox />
+                    </NavLink>
+                    <div className="item">
+                        <SearchBox className="item"/>
                     </div>
                     <NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
-                    <NavLink className="item right" routeName="addDeck" activeClass="active">
-                        <AddDeckPanel />
-                    </NavLink>
-                    <UserNotificationsBadge />
-                    <LoginModal />
+
+                    <div className="right menu">
+                        <NavLink className="ui item" routeName="addDeck" activeClass="active">
+                            <AddDeckPanel />
+                        </NavLink>
+                        <UserNotificationsBadge className="zi item"/>
+                        <LoginModal className="ui item"/>
+                    </div>
                 </div>
             </div>
         );
