@@ -1,5 +1,6 @@
 import Fluxible from 'fluxible';
 import fetchrPlugin from 'fluxible-plugin-fetchr';
+import userStoragePlugin from './plugins/UserStorage/userStoragePlugin';
 import Application from './components/Application';
 import ApplicationStore from './stores/ApplicationStore';
 import RouteStore from './stores/RouteStore';
@@ -69,5 +70,6 @@ const app = new Fluxible({
 app.plug(fetchrPlugin({
     xhrPath: '/api' // Path for XHR to be served from
 }));
+app.plug(userStoragePlugin({}));
 
 module.exports = app;

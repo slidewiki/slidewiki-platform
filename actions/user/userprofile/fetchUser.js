@@ -1,5 +1,6 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { notFoundError, methodNotAllowedError } from '../../loadErrors';
+import { isEmpty } from '../../../common.js';
 
 export default function fetchUser(context, payload, done) {
     payload.params.id = context.getStore(UserProfileStore).userid;
@@ -16,6 +17,17 @@ export default function fetchUser(context, payload, done) {
             } else
                 context.dispatch('FETCH_USER_FAILED', err);
         } else {
+            if(!isEmpty(payload.params.category)){
+                if(context.getStore(UserProfileStore).username === payload.params.username)
+                    res.category = isEmpty(payload.params.category) ? '' : payload.params.category;
+                else{
+                    context.executeAction(notFoundError, {}).catch(() => { done(err); });
+                    return;
+                }
+            } else{
+                res.category = '';
+            }
+            res.onlyPicture = !isEmpty(payload.onlyPicture) ? payload.onlyPicture : false;
             context.dispatch('NEW_USER_DATA', res);
         }
         done();

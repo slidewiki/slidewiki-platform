@@ -22,6 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
+import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
 
@@ -53,20 +54,6 @@ export default {
             done();
         }
     },
-    import: {
-        path: '/import',
-        method: 'get',
-        page: 'import',
-        title: 'SlideWiki -- Import presentation',
-        handler: require('../components/Import/Import'),
-        action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Import presentation'
-            });
-            done();
-        }
-    },
-    //TODO: add an initial loader for this page
     addDeck: {
         path: '/addDeck',
         method: 'get',
@@ -77,7 +64,7 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Add Deck'
             });
-            done();
+            context.executeAction(loadAddDeck, null, done);
         }
     },
     notifications: {
@@ -108,7 +95,7 @@ export default {
     },
 //-----------------------------------User routes------------------------------
     userprofile: {
-        path: '/user/:username',
+        path: '/user/:username/:category?',
         method: 'get',
         page: 'userprofile',
         title: 'SlideWiki -- Your profile',

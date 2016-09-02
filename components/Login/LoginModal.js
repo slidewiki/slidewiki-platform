@@ -5,6 +5,7 @@ import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
+import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 
 const customStyles = {
@@ -36,10 +37,6 @@ class LoginModal extends React.Component {
 
     handleLoginButton(){
         this.setState({openModal: true});
-    }
-
-    handleSignoutButton() {
-        this.context.executeAction(userSignOut, {});
     }
 
     signin(e) {
@@ -89,7 +86,7 @@ class LoginModal extends React.Component {
 
     render() {
         let loginButton = (
-            <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
+            <HeaderDropdown/>
         );
 
         if (this.props.UserProfileStore.username === '') {
