@@ -15,7 +15,8 @@ class ContentHistoryItem extends React.Component {
             <i className="undo icon"/>
         </a>
         );
-        let revisionLink = <NavLink href={ActivityFeedUtil.makeNodeRevisionURL(this.props.selector, revision.id, 'view')}>Revision {revision.id} </NavLink>;
+        let revisionLink = <NavLink
+        href={ActivityFeedUtil.makeNodeRevisionURL(this.props.selector, revision.id)}>Revision {revision.id} </NavLink>;
         return (
         <div className="item">
             <div className="content">
