@@ -83,7 +83,7 @@ class Import extends React.Component {
             };
 
             // Read in the file
-            reader.readAsBinaryString(file);
+            reader.readAsDataURL(file);
 
             ReactDOM.findDOMNode(this.refs.submitbutton).focus();
         }
