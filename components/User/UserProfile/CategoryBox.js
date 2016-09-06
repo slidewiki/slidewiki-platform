@@ -1,31 +1,25 @@
 import React from 'react';
-import changeTo from '../../../actions/user/userprofile/categoryBox';
+import { NavLink } from 'fluxible-router';
 
 class CategoryBox extends React.Component {
     componentDidMount() {}
 
     componentDidUpdate() {}
 
-    exchangeContent(dest) {
-        //TODO - Check for correct format and
-        //Do this via flux flow - this.props.ImportStore.isAllowed
-        this.context.executeAction(changeTo, { dest: dest }); // example copied from Import.js (that copied it from Deck.js)
-    }
-
     render() {
         let active = 'selected active blue';
-        
+
         return (
             <div className="ui vertical fluid buttons">
-                <button className={ 'ui ' + ( this.props.toShow === 'decks' ? active : '' ) + ' button' } onClick={ this.exchangeContent.bind(this,'decks') }>
+                <NavLink className={ 'ui ' + ( this.props.toShow === 'decks' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/decks'}>
                     <p><i className="icon folder"/> My Decks</p>
-                </button>
-                <button className={ 'ui ' + ( this.props.toShow === 'settings' ? active : '' ) + ' button' } onClick={ this.exchangeContent.bind(this,'settings') }>
+                </NavLink>
+                <NavLink className={ 'ui ' + ( this.props.toShow === 'settings' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/settings'}>
                     <p><i className="icon setting"/> Settings</p>
-                </button>
-                <button className={ 'ui ' + ( this.props.toShow === 'stats' ? active : '' ) + ' button' } onClick={ this.exchangeContent.bind(this, 'stats') }>
+                </NavLink>
+                <NavLink className={ 'ui ' + ( this.props.toShow === 'stats' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/stats'}>
                     <p><i className="icon bar chart"/> My Stats</p>
-                </button>
+                </NavLink>
             </div>
         );
     }
