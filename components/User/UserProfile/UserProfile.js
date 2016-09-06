@@ -4,8 +4,6 @@ import CategoryBox from './CategoryBox';
 import UserSettings from './UserSettings';
 import PublicUserData from './PublicUserData';
 import PopularDecks from './PopularDecks';
-import PublicUserDecks from './PublicUserDecks';
-import Preview from './preview';
 import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -55,16 +53,22 @@ class UserProfile extends React.Component {
                                 <strong>Popular Decks</strong>
                             </div>
                             <div className="ui segment">
-                                <PopularDecks/>
+                                <PopularDecks size={3}/>
                             </div>
                         </div>
                             <div className="ui divider"/>
                         </div>
                         <div className="ui tab" data-tab="userdecks">
-                            <PublicUserDecks/>
+                        <div className="ui segments">
+                            <div className="ui secondary segment">
+                                <strong>All Decks</strong>
+                            </div>
+                            <div className="ui segment">
+                                <PopularDecks size={0}/>
+                            </div>
+                        </div>
                         </div>
                         <div className="ui tab" data-tab="activity">
-                            <Preview/>
                         </div>
                     </div>
                 </div>

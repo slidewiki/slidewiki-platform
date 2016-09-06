@@ -16,14 +16,13 @@ class PublicUserDecks extends React.Component {
         };
         content.title = content.title.slice(0,90);
         content.description = content.description.slice(0,110);
+        let size = this.props.size === 0 ? 10 : this.props.size; //TODO show all decks instead of ten
+        let cards = [...Array(size)].map( (_,i) => <DeckCard cardContent={content}/>);
         return (
             <div className="ui three doubling cards">
-              <DeckCard cardContent={content}/>
-              <DeckCard cardContent={content}/>
-              <DeckCard cardContent={content}/>
-              <DeckCard cardContent={content}/>
-              <DeckCard cardContent={content}/>
-              <DeckCard cardContent={content}/>
+                {[...Array(size)].map( (_,i) => {
+                    return <DeckCard cardContent={content}/>;
+                })}
             </div>
         );
     }
