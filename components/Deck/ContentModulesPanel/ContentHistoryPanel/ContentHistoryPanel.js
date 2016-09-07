@@ -7,12 +7,8 @@ class ContentHistoryPanel extends React.Component {
     render() {
         return (
             <div ref="contentHistoryPanel" className="ui">
-                {/*History related to {this.props.ContentHistoryStore.selector.stype}
-                #{this.props.ContentHistoryStore.selector.sid}.
-                <br/>*/}
-                {/*<NavLink href={'/history/' + this.props.ContentHistoryStore.selector.stype + '/' + this.props.ContentHistoryStore.selector.sid}>{'/history/' + this.props.ContentHistoryStore.selector.stype + '/' + this.props.ContentHistoryStore.selector.sid}</NavLink>*/}
                 <div>
-                    <ContentHistoryList items={this.props.ContentHistoryStore.history} selector={this.props.ContentHistoryStore.selector}/>
+                    <ContentHistoryList revisions={this.props.ContentHistoryStore.history} selector={this.props.ContentHistoryStore.selector}/>
                 </div>
             </div>
         );
