@@ -8,6 +8,7 @@ import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
+import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import Import from '../Import/Import';
@@ -135,13 +136,20 @@ class AddDeck extends React.Component {
         console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
 
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
+        let noOfSlides = this.props.ImportStore.noOfSlides;
+        let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
+        let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
+        (noOfSlides === 1) ? 'Converting file' :
+        (this.props.ImportStore.uploadProgress === 100) ? 'Slides uploaded!' : 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides;
+        $('#progresslabel_addDeck_upload').text(progressLabel);
     }
     initializeProgressBar() {
         $('#progressbar_addDeck_upload').progress('set active');
         $('#progressbar_addDeck_upload').progress('reset');
         $('#progressbar_addDeck_upload').progress({
             text: {
-                active  : 'Uploading: {percent}%',
+                // active  : 'Uploading: {percent}%',
+                // active  : 'Importing: {percent}%',
                 success : 'Slides uploaded!',
                 error   : 'Upload failed!'
             }
@@ -174,11 +182,20 @@ class AddDeck extends React.Component {
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
-            setTimeout( () => {
-                this.redirectID = this.props.AddDeckStore.redirectID;
-                this.handleRedirect();
-                this.context.executeAction(addDeckDestruct, {});
-            }, 1000);
+
+            this.redirectID = this.props.AddDeckStore.redirectID;
+            this.handleRedirect();
+            this.context.executeAction(addDeckDestruct, {});
+
+        }
+
+        if (this.props.ImportStore.noOfSlides < this.props.ImportStore.totalNoOfSlides &&
+            this.props.ImportStore.uploadProgress < 100 &&
+            this.props.ImportStore.error === null) {
+                setTimeout( () => {
+                    console.log('called');
+                    this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
+                }, 100);
         }
 
         let fieldClass_title = classNames({
@@ -269,7 +286,7 @@ class AddDeck extends React.Component {
                       <div className="bar">
                           <div className="progress"></div>
                       </div>
-                      <div className="label" ref="div_progress_text" ></div>
+                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
                   <form className="ui form upload">
                       <div className="two fields">
