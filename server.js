@@ -29,7 +29,8 @@ const debug = debugLib('slidewiki-platform');
 
 const server = express();
 server.use(cookieParser());
-server.use(bodyParser.json());
+server.use(bodyParser.json({limit: '50mb'}));
+server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 server.use(compression());
 server.use(favicon(path.join(__dirname, '/favicon.ico')));
 server.use('/public', express['static'](path.join(__dirname, '/build')));
@@ -37,7 +38,7 @@ server.use('/bower_components', express['static'](path.join(__dirname, '/bower_c
 server.use('/custom_modules', express['static'](path.join(__dirname, '/custom_modules')));
 server.use('/assets', express['static'](path.join(__dirname, '/assets')));
 
-server.use(csrf({cookie: true}));
+//server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
 let fetchrPlugin = app.getPlugin('FetchrPlugin');
 
@@ -60,15 +61,18 @@ fetchrPlugin.registerService(require('./services/similarcontent'));
 fetchrPlugin.registerService(require('./services/import'));
 fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
+fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
+fetchrPlugin.registerService(require('./services/UserProfile'));
 
 server.use((req, res, next) => {
 
     const context =  app.createContext({
-        req: req, // The fetchr plugin depends on this
-        xhrContext: {
-            _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
-        }
+        req: req
+        //, // The fetchr plugin depends on this
+        //xhrContext: {
+        //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
+        //}
     });
 
     debug('Executing navigate action');
@@ -76,11 +80,41 @@ server.use((req, res, next) => {
         url: req.url
     }, (err) => {
         if (err) {
+            console.log(err);
             if (err.statusCode && err.statusCode === 404) {
+                // TODO refector the code in this if-else block
+                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+                debug('Rendering Application component into html');
+                const markup = ReactDOM.renderToString(createElementWithContext(context));
+                //todo: for future, we can choose to not include specific scripts in some predefined layouts
+                const htmlElement = React.createElement(HTMLComponent, {
+                    clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+                    context: context.getComponentContext(),
+                    state: exposed,
+                    markup: markup
+                });
+                const html = ReactDOM.renderToStaticMarkup(htmlElement);
+                debug('Sending markup');
+                res.type('html');
+                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
                 // Pass through to next middleware
-                next();
+                //next();
             } else {
-                next(err);
+                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+                debug('Rendering Application component into html');
+                const markup = ReactDOM.renderToString(createElementWithContext(context));
+                //todo: for future, we can choose to not include specific scripts in some predefined layouts
+                const htmlElement = React.createElement(HTMLComponent, {
+                    clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+                    context: context.getComponentContext(),
+                    state: exposed,
+                    markup: markup
+                });
+                const html = ReactDOM.renderToStaticMarkup(htmlElement);
+                debug('Sending markup');
+                res.type('html');
+                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
+                //next(err);
             }
             return;
         }
@@ -92,7 +126,8 @@ server.use((req, res, next) => {
         const markup = ReactDOM.renderToString(createElementWithContext(context));
         //todo: for future, we can choose to not include specific scripts in some predefined layouts
         const htmlElement = React.createElement(HTMLComponent, {
-            clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+            //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+            clientFile: 'main.js',
             context: context.getComponentContext(),
             state: exposed,
             markup: markup
@@ -105,6 +140,7 @@ server.use((req, res, next) => {
         res.end();
     });
 });
+
 
 const port = process.env.PORT || 3000;
 server.listen(port);

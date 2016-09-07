@@ -4,12 +4,25 @@ import loadDeckView from './loadDeckView';
 import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './slide/loadSlideView';
 import loadSlideEdit from './slide/loadSlideEdit';
-import loadTabLinks from './loadTabLinks';
-import loadContentQuestions from './loadContentQuestions';
-import loadDataSources from './datasource/loadDataSources';
 import ContentStore from '../stores/ContentStore';
+import { deckContentTypeError, deckModeError, slideIdTypeError } from './loadErrors';
 
 export default function loadContent(context, payload, done) {
+    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
+        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
+    if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
+        context.executeAction(deckModeError, payload).catch((err) => {done(err);});
+        return;
+    }
+
     let currentState = context.getStore(ContentStore).getState();
     let payloadCustom = payload;
     let runNonContentActions = 1;
@@ -35,12 +48,6 @@ export default function loadContent(context, payload, done) {
                     targetAction = loadDeckEdit;
                     //context.executeAction(loadDeckEdit, payloadCustom, done);
                     break;
-                case 'questions':
-                    targetAction = loadContentQuestions;
-                    break;
-                case 'datasources':
-                    targetAction = loadDataSources;
-                    break;
                 default:
                     targetAction = loadDeckView;
             }
@@ -53,12 +60,6 @@ export default function loadContent(context, payload, done) {
                 case 'edit':
                     targetAction = loadSlideEdit;
                     break;
-                case 'questions':
-                    targetAction = loadContentQuestions;
-                    break;
-                case 'datasources':
-                    targetAction = loadDataSources;
-                    break;
                 default:
                     targetAction = loadSlideView;
             }
@@ -70,13 +71,6 @@ export default function loadContent(context, payload, done) {
     async.parallel([
         (callback) => {
             context.executeAction(targetAction, payloadCustom, callback);
-        },
-        (callback) => {
-            if(runNonContentActions){
-                context.executeAction(loadTabLinks, payloadCustom, callback);
-            }else{
-                callback();
-            }
         }
     ],
     // final callback

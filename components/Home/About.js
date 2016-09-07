@@ -3,7 +3,7 @@ import React from 'react';
 class About extends React.Component {
     render() {
         return (
-            <div className="ui page grid" ref="about">
+            <div className="ui container grid" ref="about">
                 <div className="ui row">
                     <div className="column">
                         <div className="ui content">

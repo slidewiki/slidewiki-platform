@@ -5,13 +5,10 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import SlideControlUtil from './util/SlideControlUtil';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
-import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
-import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 class SlideControl extends React.Component {
     constructor(props) {
         super(props);
-        this.state={expanded: 0};
     }
     componentDidMount() {
         this.updateProgressbar();
@@ -37,16 +34,6 @@ class SlideControl extends React.Component {
             'fastBackward': (event) => this.handleBackwardClick(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)
         };
         return handlers;
-    }
-    handleExpandClick(){
-        this.context.executeAction(expandContentPanel, {});
-        this.state.expanded = 1;
-        return false;
-    }
-    handleCollapseClick(){
-        this.context.executeAction(restoreDeckPageLayout, {});
-        this.state.expanded = 0;
-        return false;
     }
     handleNextClick(selector, flatTree, mode){
         let nextPath = SlideControlUtil.nextSlidePath(selector, flatTree, mode);
@@ -87,7 +74,8 @@ class SlideControl extends React.Component {
     }
     updateProgressbar() {
         let percentage=(SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)/SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree))*100;
-        let progressbar = this.refs.progressbar;
+        //let progressbar = this.refs.progressbar;
+        let progressbar = '.slide-progress-bar';
         //the following part only executes when javascript is enabled!
         $(progressbar).progress({percent: percentage});
         //$(progressbar).show();
@@ -99,22 +87,14 @@ class SlideControl extends React.Component {
         };
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl" style={compStyle}>
-                <div className="ui panel bottom attached">
-                    <div className="ui teal bottom attached progress" ref="progressbar">
-                      <div className="bar"></div>
+                <div className="ui icon buttons large left floated">
+                    <div className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the first slide (shift + left arrow)"><i className="icon fast backward"></i></div>
+                    <div className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the previous slide (left arrow)"><i className="step backward icon"></i></div>
+                    <div className="ui grey large button">
+                    {SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}
                     </div>
-                    <div className="ui bottom attached segment center aligned">
-                        <div className="compact ui icon buttons">
-                            <div className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the first slide (shift + left arrow)"><i className="icon step backward"></i></div>
-                            <div className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the previous slide (left arrow)"><i className="caret left blue icon"></i></div>
-                            <div className="ui blue button">{SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}</div>
-                            <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the next slide (right arrow)"><i className="icon caret blue right"></i></div>
-                            <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the firlastst slide (shift + right arrow)"><i className="icon step forward"></i></div>
-                            {this.state.expanded ? <div className="ui yellow button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="icon compress"></i></div> : <div className="ui teal button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="icon expand"></i></div>}
-
-                        </div>
-                    </div>
-
+                    <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the next slide (right arrow)"><i className="icon step forward"></i></div>
+                    <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the firlastst slide (shift + right arrow)"><i className="icon fast forward"></i></div>
                 </div>
             </HotKeys>
         );

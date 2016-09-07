@@ -1,6 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+//let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
@@ -32,11 +32,8 @@ let webpackConfig = {
                 ]
             },
             { test: /\.json$/, loader: 'json-loader'},
-           { test: /\.css$/, loader: 'style-loader!css-loader'},
-            // { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, loader: 'url-loader?limit=100000' },
-
-            //{ test: /\.css$/, loader: ExtractTextPlugin.extract("css") },
-            //{ test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, loader: 'url-loader?limit=100000' }
+            { test: /\.css$/, loader: 'style-loader!css-loader'},
+            // Getting URLs for font files otherwise we get encoding errors in css-loader
             { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
 
         ]
@@ -54,17 +51,10 @@ let webpackConfig = {
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-            }
-        }),
-        // For the css-loader, we need BROWSER set
-        new webpack.DefinePlugin({
-            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                 BROWSER: JSON.stringify(true)
             }
         }),
-        // And an output CSS file to go into
-        // new ExtractTextPlugin('styles.css')
 
     ],
     devtool: 'eval'

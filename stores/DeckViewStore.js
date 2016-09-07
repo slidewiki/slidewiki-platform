@@ -11,7 +11,7 @@ class DeckViewStore extends BaseStore {
     }
     getState() {
         return {
-            content: this.content
+            content: this.content,
         };
     }
     dehydrate() {

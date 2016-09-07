@@ -13,19 +13,11 @@ let playerCss = {
     fontSize: '100%',
     position: 'absolute',
     top: '0',
-    //backgroundColor: '#ffffff',
-    zindex: '1000'
 };
 
 let clearStyle = {
     clear: 'both'
 };
-
-if (process.env.BROWSER) {
-    let s = 'white';
-    require('../../../bower_components/reveal.js/css/reveal.css');
-    console.log('requiring');
-}
 
 
 class Presentation extends React.Component{
@@ -33,42 +25,57 @@ class Presentation extends React.Component{
         super(props);
         this.playerCss = playerCss;
         this.slides = [];
+        this.startingSlide = this.props.PresentationStore.selector.sid;
+        this.deck = this.props.PresentationStore.selector.id;
     }
-    componentWillMount(){
-        this.context.executeAction(loadPresentation, {
-            deck: this.props.DeckTreeStore.flatTree
-        });
 
+    componentDidMount(){
+        if(process.env.BROWSER){
+            let style = require('../../../bower_components/reveal.js/css/reveal.css');
+            //Hide the header and footer
+            $('.ui.footer.sticky.segment').css({'display': 'none'});
+            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
+            $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+            $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+
+            let s = this.props.PresentationStore.theme;
+
+            if(!s){
+                s = 'black';
+            }
+            require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
+            // if(this.startingSlide){
+            //     window.location.hash = '/slide-' + this.startingSlide;
+            // }
+
+            Reveal.initialize({
+                history: true,
+                dependencies: [
+                    { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+
+
+        }
+    }
+    revealInit(){
+        Reveal.initialize({
+            history: true,
+            dependencies: [
+                { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+            ]
+        });
+        callback();
+    }
+    popup(callback){
+        this.revealInit();
+        callback()
     }
 
     componentDidUpdate(){
-        console.log(this.slides);
-        console.log('componentDidMount');
-        if(this.slides.length > 0){
-            Reveal.initialize();
-            if (process.env.BROWSER) {
-                console.log(this.props.PresentationStore);
-                let s = this.props.PresentationStore.theme;
-                require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
-                console.log('requiring');
-                console.log(this.playerCss.background);
-                //while(this.playerCss.background === undefined || this.playerCss.background === ''){
-                while(!this.playerCss.background){
-                    //console.log(this.playerCss.background);
-                    this.updateStyleForTheme();
-                    this.forceUpdate();
-                    // console.log(this.playerCss.background);
-                    // console.log('state: ', this.state);
-                }
-                // var updateStyle = setInterval(function(){
-                //     updateStyleForTheme();
-                // }, 100);
 
-            }
-        }
     }
     render(){
-        console.log('Rendering');
         this.slides = this.getSlides();
         return(
             <div>
@@ -82,25 +89,15 @@ class Presentation extends React.Component{
         );
     }
 
-    updateStyleForTheme(){
-        //This function gets the background from body (where reveal puts it), and places it into this component.
-        //Needed to make it properly full screen
-        let style = window.getComputedStyle(document.getElementsByTagName('body')[0]);
-        let background = style.background;
-        this.playerCss.background = background;
-        // this.setState({playerCss: this.playerCss});
-    }
-
-
     getSlides(){
         let slides = this.props.PresentationStore.content;
 
         let returnList = [];
-        if(slides !== ''){
+        if(slides){
             for (let i = 0; i < slides.length; i++) {
-                let speakerNotes = slides[i].speakerNotes;
-                let content = slides[i].content + '<aside class="notes">' + speakerNotes + '</aside>';
-                returnList.push(<PresentationSlide content={content} speakerNotes={speakerNotes}  key={i} />);
+                let slide = slides[i];
+                let content = slide.title + slide.content + '<aside class="notes">' + slide.speakernotes + '</aside>';
+                returnList.push(<PresentationSlide content={content} key={slide.id} id={"slide-" + slide.id} />);
             }
             return returnList;
 
@@ -116,9 +113,8 @@ Presentation.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-Presentation = connectToStores(Presentation, [DeckTreeStore, PresentationStore], (context, props) => {
+Presentation = connectToStores(Presentation, [PresentationStore], (context, props) => {
     return {
-        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         PresentationStore: context.getStore(PresentationStore).getState()
     };
 });

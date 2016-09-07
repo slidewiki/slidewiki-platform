@@ -14,7 +14,7 @@ class PresentationSlide extends React.Component {
 		render(){
 
 				return (
-					<section dangerouslySetInnerHTML={{__html:this.props.content}} />
+					<section dangerouslySetInnerHTML={{__html:this.props.content}} id={this.props.id} />
 				);
 		}
 

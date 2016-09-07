@@ -6,13 +6,15 @@ class PresentationStore extends BaseStore {
         super(dispatcher);
         this.content = '';
         this.theme = '';
+        this.selector = '';
+        this.currentSlide = '';
     }
     updatePresentation(payload) {
-        console.log('Payload: ', payload);
         this.content = payload.content;
         this.theme = payload.theme;
+        this.selector = payload.selector;
         this.emitChange();
-        //console.log("Updating content", payload.content);
+
     }
 
     getState() {
@@ -30,9 +32,20 @@ class PresentationStore extends BaseStore {
     rehydrate(state) {
         this.items = state.items;
         this.selector = state.selector;
-        this.mode = state.mode;
         this.content = state.content;
+        this.theme = state.theme;
     }
+
+    getFlatTree(deck){
+        let flatTree = [];
+        for (let d in deck) {
+            if (d.type === 'slide') {
+                flatTree.push(d.id);
+            }
+        }
+        return flatTree;
+    }
+
 }
 
 PresentationStore.storeName = 'PresentationStore';
