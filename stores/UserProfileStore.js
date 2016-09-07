@@ -3,8 +3,7 @@ import { BaseStore } from 'fluxible/addons';
 class UserProfileStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.toShow = 'settings';
-        this.showPublicUser = true;
+        this.toShow = '';
         this.failures = {
             emailNotAllowed: false,
             wrongPassword: false
@@ -28,6 +27,7 @@ class UserProfileStore extends BaseStore {
         this.username = '';
         this.userid = '';
         this.jwt = '';
+        this.userpicture = undefined;
         this.errorMessage = '';
 
         let user = dispatcher.getContext().getUser();
@@ -43,7 +43,6 @@ class UserProfileStore extends BaseStore {
 
     destructor() {
         this.toShow = 'decks';
-        this.showPublicUser = true;
         this.dimmer = {
             success: false,
             failure: false,
@@ -60,18 +59,19 @@ class UserProfileStore extends BaseStore {
             picture: '',
             description: ''
         };
+        this.userpicture = undefined;
     }
 
     getState() {
         return {
             toShow: this.toShow,
-            showPublicUser: this.showPublicUser,
             failures: this.failures,
             user: this.user,
             dimmer: this.dimmer,
             username: this.username,
             userid: this.userid,
             jwt: this.jwt,
+            userpicture: this.userpicture,
             errorMessage: this.errorMessage
         };
     }
@@ -82,13 +82,13 @@ class UserProfileStore extends BaseStore {
 
     rehydrate(state) {
         this.toShow = state.toShow;
-        this.showPublicUser = state.showPublicUser;
         this.failures = state.failures;
         this.user = state.user;
         this.dimmer = state.dimmer;
         this.username = state.username;
         this.userid = state.userid;
         this.jwt = state.jwt;
+        this.userpicture = state.userpicture;
         this.errorMessage = state.errorMessage;
     }
 
@@ -109,17 +109,19 @@ class UserProfileStore extends BaseStore {
     }
 
     fillInUser(payload) {
-        let uname = this.user.uname;
-        Object.assign(this.user, payload);
-        if (this.user.uname !== this.username)
-            this.showPublicUser = true;
-        else
-            this.showPublicUser = false;
+        if(this.username === payload.uname)
+            this.userpicture = payload.picture;
+        if(!payload.onlyPicture){
+            Object.assign(this.user, payload);
+            this.toShow = payload.category;
+        }
         this.emitChange();
     }
 
     fillInEditedUser(payload) {
         Object.assign(this.user, payload);
+        if(this.username === payload.uname)
+            this.userpicture = payload.picture;
         this.successMessage();
     }
 
@@ -155,8 +157,8 @@ class UserProfileStore extends BaseStore {
         this.username = '';
         this.userid = '';
         this.jwt = '';
+        this.userpicture = undefined;
         this.errorMessage = '';
-
         this.emitChange();
     }
 

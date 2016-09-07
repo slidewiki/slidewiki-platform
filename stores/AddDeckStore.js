@@ -47,15 +47,30 @@ class AddDeckStore extends BaseStore {
 
         this.emitChange();
     }
-    uploadFailure(error) {
+    creationFailure(error) {
         console.log('store - error', error.statusCode);
+
         this.error = error;
+        this.error.actionRequired = 'Restart your action.';
+
+        try {
+            const errorBody = JSON.parse(error.body.message.substr(6));
+
+            this.error.type = errorBody.error;
+            this.error.description = errorBody.message;
+        } catch (e) {
+            this.error.description = error.message;
+        }
 
         this.emitChange();
     }
-    uploadSuccess(deck) {
-        this.redirectID = Number.parseInt(deck.id);
+    creationSuccess(deck) {
+        this.redirectID = Number.parseInt(deck.id ? deck.id : deck._id);
 
+        this.emitChange();
+    }
+    deleteError() {
+        this.error = null;
         this.emitChange();
     }
 }
@@ -63,9 +78,10 @@ class AddDeckStore extends BaseStore {
 AddDeckStore.storeName = 'AddDeckStore';
 AddDeckStore.handlers = {
     'SHOW_WRONG_FIELDS': 'showWrongFields',
-    'UPLOAD_FAILURE': 'uploadFailure',
-    'UPLOAD_SUCCESS': 'uploadSuccess',
-    'DESTRUCT': 'destructor'
+    'CREATION_FAILURE': 'creationFailure',
+    'CREATION_SUCCESS': 'creationSuccess',
+    'DESTRUCT': 'destructor',
+    'DELETE_ERROR': 'deleteError'
 };
 
 export default AddDeckStore;
