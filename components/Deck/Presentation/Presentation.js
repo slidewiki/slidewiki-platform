@@ -9,6 +9,7 @@ import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
 
 let playerCss = {
+    display: 'none',
     height: '100%',
     position: 'absolute',
     top: '0',
@@ -26,23 +27,30 @@ class Presentation extends React.Component{
         this.slides = [];
         this.startingSlide = this.props.PresentationStore.selector.sid;
         this.deck = this.props.PresentationStore.selector.id;
+        this.revealDiv = null;
     }
 
     componentDidMount(){
         if(process.env.BROWSER){
-            let style = require('../../../bower_components/reveal.js/css/reveal.css');
+             //loading reveal style
+            require('../../../bower_components/reveal.js/css/reveal.css');
+            
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
             $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
-            let s = this.props.PresentationStore.theme;
+            let styleName = this.props.PresentationStore.theme;
 
-            if(!s){
-                s = 'black';
+            if(!styleName){
+                styleName = 'black';
             }
-            require('../../../bower_components/reveal.js/css/theme/' + s + '.css');
+
+            //loading selected style for presentation
+            require('../../../bower_components/reveal.js/css/theme/' + styleName + '.css');
+
+            this.revealDiv.style.display = 'inline';
 
 
             Reveal.initialize({
@@ -63,10 +71,10 @@ class Presentation extends React.Component{
         this.slides = this.getSlides();
         return(
             <div>
-                <div className="reveal" style={this.playerCss}>
+                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} >
                     <div className="slides">
-        				{this.slides}
-        			</div>
+        			     	{this.slides}
+        			      </div>
                 </div>
                 <br style={clearStyle} />
             </div>
