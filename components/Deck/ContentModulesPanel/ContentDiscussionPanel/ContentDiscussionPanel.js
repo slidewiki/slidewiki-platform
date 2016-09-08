@@ -46,7 +46,7 @@ class ContentDiscussionPanel extends React.Component {
                 </form>
                 <h3 className="ui dividing header">Comments</h3>
                 <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
-                    {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} />); })}
+                    {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} userid={this.props.UserProfileStore.userid} />); })}
                 </div>
             </div>
         );

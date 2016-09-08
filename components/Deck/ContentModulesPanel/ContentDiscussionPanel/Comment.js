@@ -3,7 +3,6 @@ import {connectToStores} from 'fluxible-addons-react';
 import invertReplyBoxFlag from '../../../../actions/activityfeed/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
-import UserProfileStore from '../../../../stores/UserProfileStore';
 import addReply from '../../../../actions/activityfeed/contentdiscussion/addReply';
 
 class Comment extends React.Component {
@@ -18,7 +17,7 @@ class Comment extends React.Component {
                 comment: this.props.comment,
                 title: this.refs.title.value,
                 text: this.refs.text.value,
-                userid: this.props.UserProfileStore.userid
+                userid: this.props.userid
             });
         }
         return false;
@@ -42,7 +41,7 @@ class Comment extends React.Component {
         return (
             <div className="comment">
                 <a className="avatar">
-                    {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <i className="ui icon user" />}
+                    {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <img src='/assets/images/mock-avatars/user-alt-128.png' height={16} width={16}></img>}
                 </a>
                 <div className="content">
                     <a className="author" href={'/user/' + comment.author.username}>{comment.author.username}</a>
@@ -68,10 +67,9 @@ Comment.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-Comment = connectToStores(Comment, [ContentDiscussionStore, UserProfileStore], (context, props) => {
+Comment = connectToStores(Comment, [ContentDiscussionStore], (context, props) => {
     return {
-        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState()
     };
 });
 export default Comment;
