@@ -40,8 +40,8 @@ export default {
             let subscriptionsString = '';
             // callback(null, {notifications: notifications, subscriptions: subscriptions});
             mockupSubscriptions.forEach((subscription) => {
-                const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
-
+                // const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
+                const id = subscription.id;
                 switch (subscription.type) {
                     case 'user':
                         subscriptionsString += '/u' + id;
@@ -129,8 +129,8 @@ export default {
 let mockupSubscriptions = [
   {id:'2', type: 'user', name: 'Nikola T.', selected: true},
   {id:'1', type: 'user', name: 'Dejan P.', selected: true},
-  {id:'67', type: 'deck', name: 'RDF Data Model', selected: true},
-  {id:'575060ae4bc68d1000ea952b', type: 'slide', name: 'Introduction', selected: true}
+  {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
+  {id:'8', type: 'slide', name: 'Introduction', selected: true}
 ];
 
 //Mockup data
