@@ -9,12 +9,12 @@ class PresentationStore extends BaseStore {
         this.selector = '';
         this.currentSlide = '';
     }
+
     updatePresentation(payload) {
         this.content = payload.content;
         this.theme = payload.theme;
         this.selector = payload.selector;
         this.emitChange();
-
     }
 
     getState() {
@@ -29,21 +29,12 @@ class PresentationStore extends BaseStore {
     dehydrate() {
         return this.getState();
     }
+
     rehydrate(state) {
         this.items = state.items;
         this.selector = state.selector;
         this.content = state.content;
         this.theme = state.theme;
-    }
-
-    getFlatTree(deck){
-        let flatTree = [];
-        for (let d in deck) {
-            if (d.type === 'slide') {
-                flatTree.push(d.id);
-            }
-        }
-        return flatTree;
     }
 
 }
