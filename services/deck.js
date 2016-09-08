@@ -32,7 +32,7 @@ export default {
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
             Promise.all([deckPromise, slidesPromise, userPromise]).then((data) => {
                 console.log(data);
-                callback(null, {deckMetaData: JSON.parse(data[0]), slidesData: JSON.parse(data[1]), userData: JSON.parse(data[2])});
+                callback(null, {deckData: JSON.parse(data[0]), slidesData: JSON.parse(data[1]), userData: JSON.parse(data[2])});
             }).catch((err) => {
                 console.log(err);
                 callback({msg: 'Error in resolving promiese', content: err}, {});
@@ -49,9 +49,9 @@ export default {
             });
             return slidesRes.then(() => {
                 console.log('After slidesRes resolved');
-                //let data = {deckMetaData: JSON.parse(deckRes.value()), slidesData: JSON.parse(slidesRes.values())};
+                //let data = {deckData: JSON.parse(deckRes.value()), slidesData: JSON.parse(slidesRes.values())};
                 console.log(deckRes);
-                callback(null, {deckMetaData: JSON.parse(deckRes), slidesData: JSON.parse(slidesRes)});
+                callback(null, {deckData: JSON.parse(deckRes), slidesData: JSON.parse(slidesRes)});
             }).catch((err) => {
                 callback({msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...', content: err}, {});
             });
@@ -67,7 +67,7 @@ export default {
                     rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/slides'})
                         .then((slidesRes) => {
                             console.log('Slides data:', slidesRes);
-                            callback(null, {deckMetaData: JSON.parse(deckRes), slidesData: JSON.parse(slidesRes)});
+                            callback(null, {deckData: JSON.parse(deckRes), slidesData: JSON.parse(slidesRes)});
                         })
                         .catch((err) => {
                             console.log(err);

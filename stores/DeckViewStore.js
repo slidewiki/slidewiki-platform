@@ -3,19 +3,19 @@ import {BaseStore} from 'fluxible/addons';
 class DeckViewStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.deckMetaData = '';
+        this.deckData = '';
         this.slidesData = '';
         this.userData = '';
     }
     updateContent(payload) {
-        this.deckMetaData = payload.deckMetaData;
+        this.deckData = payload.deckData;
         this.slidesData = payload.slidesData;
         this.userData = payload.userData;
         this.emitChange();
     }
     getState() {
         return {
-            deckMetaData: this.deckMetaData,
+            deckData: this.deckData,
             slidesData: this.slidesData,
             userData: this.userData,
         };
@@ -24,7 +24,7 @@ class DeckViewStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.deckMetaData = state.deckMetaData;
+        this.deckData = state.deckData;
         this.slidesData = state.slidesData;
         this.userData = state.userData;
     }
