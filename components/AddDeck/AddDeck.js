@@ -139,8 +139,10 @@ class AddDeck extends React.Component {
         let noOfSlides = this.props.ImportStore.noOfSlides;
         let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
         let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
-        (noOfSlides === 1) ? 'Converting file' :
-        (this.props.ImportStore.uploadProgress === 100) ? 'Slides uploaded!' : 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides;
+          (noOfSlides === 1) ? 'Converting file' :
+          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides :
+          (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
+          'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(progressLabel);
     }
     initializeProgressBar() {
