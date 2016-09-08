@@ -10,7 +10,6 @@ import loadPresentation from '../../../actions/loadPresentation';
 
 let playerCss = {
     height: '100%',
-    fontSize: '100%',
     position: 'absolute',
     top: '0',
 };
