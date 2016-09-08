@@ -21,17 +21,13 @@ export default {
                 callback(null, {discussion: {}, selector: selector});
             });
         }
-
     },
 
     create: (req, resource, params, body, config, callback) => {
-        //TODO get the real user id
-        const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
-
         let args = params.params? params.params : params;
         let selector= args.selector;
 
-        if(resource === 'discussion.comment'){            
+        if(resource === 'discussion.comment'){
             // const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
             const content_id = selector.sid;
             rp.post({
@@ -39,7 +35,7 @@ export default {
                 body:JSON.stringify({
                     title: args.title,
                     text: args.text,
-                    user_id: randomUserId,
+                    user_id: args.userid,
                     content_id: content_id,
                     content_kind: selector.stype
                 })
@@ -57,7 +53,7 @@ export default {
                 body:JSON.stringify({
                     title: args.title,
                     text: args.text,
-                    user_id: randomUserId,
+                    user_id: args.userid,
                     content_id: args.comment.content_id,
                     content_kind: args.comment.content_kind,
                     parent_comment: args.comment.id
@@ -69,7 +65,6 @@ export default {
                 callback(null, {comment: {}, selector: args.selector});
             });
         }
-
     }
     // other methods
     // update: (req, resource, params, body, config, callback) => {}

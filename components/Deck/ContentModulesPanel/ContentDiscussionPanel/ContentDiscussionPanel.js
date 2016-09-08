@@ -2,6 +2,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
+import UserProfileStore from '../../../../stores/UserProfileStore';
 import Comment from './Comment';
 import addComment from '../../../../actions/activityfeed/contentdiscussion/addComment';
 
@@ -12,7 +13,8 @@ class ContentDiscussionPanel extends React.Component {
             this.context.executeAction(addComment, {
                 selector: this.props.ContentDiscussionStore.selector,
                 title: this.refs.title.value,
-                text: this.refs.text.value
+                text: this.refs.text.value,
+                userid: this.props.UserProfileStore.userid
             });
 
             this.refs.title.value = '';
@@ -55,9 +57,10 @@ ContentDiscussionPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-ContentDiscussionPanel = connectToStores(ContentDiscussionPanel, [ContentDiscussionStore], (context, props) => {
+ContentDiscussionPanel = connectToStores(ContentDiscussionPanel, [ContentDiscussionStore, UserProfileStore], (context, props) => {
     return {
-        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState()
+        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default ContentDiscussionPanel;
