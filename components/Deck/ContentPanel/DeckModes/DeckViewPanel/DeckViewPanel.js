@@ -3,6 +3,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
 import SlideThumbnail from '../../DeckModes/DeckViewPanel/SlideThumbnail';
+import CustomDate from '../../../util/CustomDate';
 
 class DeckViewPanel extends React.Component {
     render() {
@@ -23,6 +24,11 @@ class DeckViewPanel extends React.Component {
         //for (let i=0; i < 1; i++) {
     //        slideThumbnail.push(<SlideThumbnail />);
 //        }
+        const activeVersion = this.props.DeckViewStore.deckData.active;
+        const deckTitle = this.props.DeckViewStore.deckData.revisions[activeVersion - 1].title;
+        const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
+        const deckDescription = this.props.DeckViewStore.deckData.description;
+        const deckCreator = this.props.DeckViewStore.userData.username;
 
         return (
             /*
@@ -32,18 +38,17 @@ class DeckViewPanel extends React.Component {
             */
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
                 Below is the content:
-                {this.props.DeckViewStore.content}
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
 
                         <div className="column">
                             <div className="content">
-                                <h3 className="ui header">Semantic Web</h3>
-                                <div className="meta">Creater: soren</div>
-                                <div className="meta">Date: 1st January 2016</div>
+                                <h3 className="ui header">{deckTitle}</h3>
+                                <div className="meta">Creater: {deckCreator}</div>
+                                <div className="meta">Date: {deckDate}</div>
                                 <div className="description">
                                     <p></p>
-                                    <p>A description which may flow for several lines and give context to the content. Vix eu enim singulis, quo id debitis nonumes. Mel ut homero causae, sed ex ipsum equidem, est nulla platonem ei. Persecuti temporibus eu sit, ei purto tacimates vulputate pri. </p>
+                                    <p>{deckDescription}</p>
                                 </div>
 
                             </div>
