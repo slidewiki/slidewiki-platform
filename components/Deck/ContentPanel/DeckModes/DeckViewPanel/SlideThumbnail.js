@@ -6,7 +6,9 @@ import SlideThumbnailStore from '../../../../../stores/SlideThumbnailStore';
 class SlideThumbnail extends React.Component {
     render() {
         const slides = [];
-        for (let slideNumber = 0; slideNumber < 8; slideNumber++) {//this.props.slidesData.children.length; slideNumber++) {
+        /* We do not want to show all slides; 8 slides at max fits well in the available mockup. */
+        const maxSlidesToShow = this.props.slidesData.children.length > 8 ? 8 : this.props.slidesData.children.length;
+        for (let slideNumber = 0; slideNumber < maxSlidesToShow; slideNumber++) {
             slides.push(
                 <div className="column">
                     <div className="ui segment">
