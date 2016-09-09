@@ -14,12 +14,18 @@ export default {
         const content_id = selector.sid;
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
-            // rp.get({uri: Microservices.discussion.uri + '/discussion/' + selector.stype + '/' + selector.id}).then((res) => {
             rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id}).then((res) => {
                 callback(null, {discussion: JSON.parse(res), selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {discussion: {}, selector: selector});
+            });
+        } else if(resource === 'discussion.count'){
+            rp.get({uri: Microservices.discussion.uri + '/discussion/count/' + content_kind + '/' + content_id}).then((res) => {
+                callback(null, {count: res, selector: selector});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {count: 0, selector: selector});
             });
         }
     },
