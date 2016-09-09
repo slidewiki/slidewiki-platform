@@ -142,13 +142,22 @@ export default {
                     license: 'CC BY-SA'
                 })
             }).then((res) => {
-                //console.log(res);
-                //todo:there seems to be an error here: SyntaxError: Unexpected end of JSON input
-                //callback(null, {slide: JSON.parse(res), selector: selector});
-                callback(null, {slide: {}, selector: selector});
+                let resParse = JSON.parse(res);
+                let newSlideID = resParse._id + '-'+resParse.revisions[0].id;
+                //update the path for new slide revision
+                let path = selector.spath;
+                let pathArr = path.split(';');
+                if(pathArr.length){
+                    let lastPath = pathArr[pathArr.length-1];
+                    let lastPathPosition = lastPath.split(':')[1];
+                    pathArr[pathArr.length-1] = newSlideID + ':' + lastPathPosition;
+                }else{
+                    pathArr=[];
+                }
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {slide: {}, selector: selector});
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
             });
         }
     },
