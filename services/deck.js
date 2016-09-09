@@ -31,7 +31,9 @@ export default {
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
             Promise.all([deckPromise, slidesPromise, userPromise]).then((data) => {
-                console.log(data);
+                console.log('deck data:', JSON.parse(data[0]));
+                console.log('slides data:', JSON.parse(data[1]));
+                console.log('user data:', JSON.parse(data[2]));
                 callback(null, {deckData: JSON.parse(data[0]), slidesData: JSON.parse(data[1]), userData: JSON.parse(data[2])});
             }).catch((err) => {
                 console.log(err);
