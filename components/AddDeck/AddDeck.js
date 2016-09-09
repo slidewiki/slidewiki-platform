@@ -28,10 +28,12 @@ class AddDeck extends React.Component {
         $('.ui.small.modal').modal({
             onDeny: function(){
                 console.log('modal cancelled');
+                $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
             },
             onApprove : function(data) {
                 console.log('modal clicked on upload', data);
                 that.handleFileSubmit();
+                $('.ui.small.modal').modal('hide');
             }
         });
     }
@@ -134,14 +136,13 @@ class AddDeck extends React.Component {
     }
     updateProgressBar() {
         console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
-
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = this.props.ImportStore.noOfSlides;
         let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
         let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
           (noOfSlides === 1) ? 'Converting file' :
           (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides :
-          (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
+          (String(noOfSlides) === String(totalNoOfSlides)) ? 'Slides uploaded!' :
           'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(progressLabel);
     }
