@@ -1,0 +1,24 @@
+/*
+A couple of minor changes which allow Reveal.js styles to be on other pages.
+Most useful on slide view and edit mode, so we can see what our slides will
+look like
+*/
+html, body{
+    overflow-x:hidden;
+    overflow-y: auto;
+}
+
+.reveal{
+    clear:both;
+    min-height: 500px;
+    max-height: 700px;
+}
+
+
+/*
+Remove settings from the themes
+*/
+body{
+    background: #ffffff;
+    background-color: #ffffff;
+}
