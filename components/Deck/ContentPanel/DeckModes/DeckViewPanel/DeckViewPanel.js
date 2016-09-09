@@ -37,14 +37,13 @@ class DeckViewPanel extends React.Component {
             </div>
             */
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
-                Below is the content:
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
 
                         <div className="column">
                             <div className="content">
                                 <h3 className="ui header">{deckTitle}</h3>
-                                <div className="meta">Creater: {deckCreator}</div>
+                                <div className="meta">Creator: {deckCreator}</div>
                                 <div className="meta">Date: {deckDate}</div>
                                 <div className="description">
                                     <p></p>
