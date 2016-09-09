@@ -12,9 +12,9 @@ const customStyles = {
     content : {
         top                   : '15%',
         left                  : '25%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%'
+        right                 : '25%',
+        bottom                : 'auto'
+        // marginRight           : '-50%'
 
     }
 };
@@ -100,7 +100,7 @@ class LoginModal extends React.Component {
             {loginButton}
             <Modal id='signinModal' isOpen={this.state.openModal}  style={customStyles}>
               <div className="ui container">
-                  <div className="ui right">
+                  <div className="ui right floated">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
                       <i className="remove icon"/>Close
                     </button>
