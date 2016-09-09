@@ -34,13 +34,14 @@ class Presentation extends React.Component{
         if(process.env.BROWSER){
              //loading reveal style
             require('../../../bower_components/reveal.js/css/reveal.css');
-            
+
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
             $('.ui.footer.sticky.segment').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
-
+            $('.ui.horizontal.segments.footer').css({'display': 'none'});
+            $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             let styleName = this.props.PresentationStore.theme;
 
             if(!styleName){
