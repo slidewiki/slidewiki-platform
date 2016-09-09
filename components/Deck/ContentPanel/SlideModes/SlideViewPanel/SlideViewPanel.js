@@ -41,7 +41,7 @@ class SlideViewPanel extends React.Component {
     }
     componentDidMount(){
         if(process.env.BROWSER){
-            console.log('Loading the Reveal stylesheets')
+            
             require('../../../../../bower_components/reveal.js/css/reveal.css');
             // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
             // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
