@@ -29,7 +29,6 @@ class DeckViewPanel extends React.Component {
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = this.props.DeckViewStore.deckData.description;
         const deckCreator = this.props.DeckViewStore.userData.username;
-
         return (
             /*
             <div ref="deckViewPanel" className="ui bottom attached segment">
@@ -86,7 +85,7 @@ class DeckViewPanel extends React.Component {
                     <div className="ui  divider"></div>
 
                     <div className="ui four column grid container">
-                        //<SlideThumbnail />
+                        <SlideThumbnail slidesData={this.props.DeckViewStore.slidesData} />
                     </div>
                 </div>
             </div>
