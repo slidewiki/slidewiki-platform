@@ -25,6 +25,11 @@ class Comment extends React.Component {
 
     render() {
         const comment = this.props.comment;
+        const replyLink = (
+            <div className="actions">
+                <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+            </div>
+        );
         const replyBox = (
             <form className="ui reply form">
                 <div className="ui input">
@@ -52,12 +57,10 @@ class Comment extends React.Component {
                         <strong>{comment.title}</strong><br/>
                         {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
-                    <div className="actions">
-                        <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
-                    </div>
+                    { (String(this.props.userid) !== '') ? replyLink : ''}
                     { comment.replyBoxOpened ? replyBox : '' }
                 </div>
-                {comment.replies?<div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} />); })}</div> : ''}
+                {comment.replies?<div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
             </div>
         );
     }
