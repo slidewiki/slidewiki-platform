@@ -184,13 +184,14 @@ class AddDeck extends React.Component {
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
-
+            // setTimeout( () => {
             this.redirectID = this.props.AddDeckStore.redirectID;
             this.handleRedirect();
             this.context.executeAction(addDeckDestruct, {});
-
+            // }, 1000);
         }
 
+        //check number of slides in order to update progressbar
         if (this.props.ImportStore.noOfSlides < this.props.ImportStore.totalNoOfSlides &&
             this.props.ImportStore.uploadProgress < 100 &&
             this.props.ImportStore.error === null) {
