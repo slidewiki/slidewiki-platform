@@ -255,8 +255,9 @@ class DeckTreeStore extends BaseStore {
         }
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
         //update the node
-        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.nodeSpec.title));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.nodeSpec.path));
         //todo: update path
         this.emitChange();
     }
