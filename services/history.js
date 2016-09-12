@@ -69,17 +69,24 @@ export default {
             });
         }
     },
-
-    // other methods
-    // create: (req, resource, params, body, config, callback) => {},
     update: (req, resource, params, body, config, callback) => {
         let args = params.params ? params.params : params;
+        let selector= {'id': args.selector.id, 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         if (resource === 'history.revert') {
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            callback(null, {id: args.id});
+            let immediateParentId = findImmediateParentId(selector);
+            rp.post({
+                uri: Microservices.deck.uri + '/' + selector.stype + '/revert/' + selector.sid.split('-')[0],
+                body: JSON.stringify({
+                    revision_id: String(args.revisionId),
+                    root_deck: immediateParentId
+                })
+            }).then((res) => {
+                callback(null, params);
+            }).catch((err) => {
+                callback(err, {
+                    error: err
+                });
+            });
         }
     }
-    // delete: (req, resource, params, config, callback) => {}
 };
