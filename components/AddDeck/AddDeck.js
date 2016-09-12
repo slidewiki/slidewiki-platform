@@ -193,8 +193,7 @@ class AddDeck extends React.Component {
         }
 
         //check number of slides in order to update progressbar
-        if (this.props.ImportStore.noOfSlides < this.props.ImportStore.totalNoOfSlides &&
-            this.props.ImportStore.uploadProgress < 100 &&
+        if (this.props.ImportStore.uploadProgress < 100 &&
             this.props.ImportStore.error === null) {
                 setTimeout( () => {
                     this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
