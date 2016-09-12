@@ -88,7 +88,7 @@ class ImportStore extends BaseStore {
         // this.uploadProgress = 100;
         this.uploadProgress = 33;
         this.deckId = headers.deckid;
-        this.totalNoOfSlides = headers.noofslides;
+        this.totalNoOfSlides = parseInt(headers.noofslides);
 
         this.file = null;
         this.base64 = null;

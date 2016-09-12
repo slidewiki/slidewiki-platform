@@ -192,14 +192,6 @@ class AddDeck extends React.Component {
             // }, 1000);
         }
 
-        //check number of slides in order to update progressbar
-        if (this.props.ImportStore.noOfSlides < this.props.ImportStore.totalNoOfSlides &&
-            this.props.ImportStore.uploadProgress < 100 &&
-            this.props.ImportStore.error === null) {
-                setTimeout( () => {
-                    this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
-                }, 100);
-        }
 
         let fieldClass_title = classNames({
             'required': true,
@@ -267,6 +259,15 @@ class AddDeck extends React.Component {
         let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'The licence is a must have.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
+        //check number of slides in order to update progressbar
+        if (this.props.ImportStore.deckId !== null &&
+            this.props.ImportStore.uploadProgress < 100 &&
+            this.props.ImportStore.error === null) {
+                setTimeout( () => {
+                    this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
+                }, 100);
+        }
+        
         return (
           <div className="ui container">
           <h3>Add deck</h3>
