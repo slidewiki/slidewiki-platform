@@ -10,12 +10,11 @@ export default function saveSlide(context, payload, done) {
         if (err) {
             context.dispatch('SAVE_SLIDE_EDIT_FAILURE', err);
         } else {
-            console.log('qwe', payload, res);
             context.dispatch('SAVE_SLIDE_EDIT_SUCCESS', res);
             //TODO: retrieve the new revision number from deck-service and send it to decktree
-            context.dispatch('UPDATE_TREE_NODE_SUCCESS', {selector: payload.selector, nodeSpec: {title: striptags(payload.title), id: payload.id}});
+            context.dispatch('UPDATE_TREE_NODE_SUCCESS', {selector: payload.selector, nodeSpec: {title: striptags(payload.title), id: res.slide.id, path: res.slide.path}});
             //update the URL: redirect to view after edit
-            let newURL = '/deck/' + res.selector.id + '/' + res.selector.stype + '/' + res.selector.sid + '/' + res.selector.spath;
+            let newURL = '/deck/' + res.selector.id + '/' + res.selector.stype + '/' + res.slide.id + '/' + res.slide.path;
             context.executeAction(navigateAction, {
                 url: newURL
             });
