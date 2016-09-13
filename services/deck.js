@@ -21,8 +21,9 @@ export default {
             });
             /* Create user data promise which is dependent on deck data promise */
             let userRes = deckPromise.then((deckData) => {
-                //TODO Replace user id '4' with JSON.parse(data[0]).user when deckservice and userservice data is in sync
-                return rp.get({uri: Microservices.user.uri + '/user/' + '15'});//(JSON.parse(deckData).user).toString()});//JSON.parse(deckData).user});
+                // TODO Replace hard coded user id '15' with the commented JSON data;
+                // This should be done when deckservice and userservice data is in sync;
+                return rp.get({uri: Microservices.user.uri + '/user/' + '15'});//(JSON.parse(deckData).user).toString()});
             });
             /* Catch errors from the user data response */
             let userPromise = userRes.catch((err) => {
@@ -31,9 +32,9 @@ export default {
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
             Promise.all([deckPromise, slidesPromise, userPromise]).then((data) => {
-                //console.log('deck data:', JSON.parse(data[0]));
-                //console.log('slides data:', JSON.parse(data[1]));
-                //console.log('user data:', JSON.parse(data[2]));
+                //console.log('deck data:', data[0]);
+                //console.log('slides data:', data[1]);
+                //console.log('user data:', data[2]);
                 callback(null, {deckData: JSON.parse(data[0]), slidesData: JSON.parse(data[1]), userData: JSON.parse(data[2])});
             }).catch((err) => {
                 //console.log(err);
