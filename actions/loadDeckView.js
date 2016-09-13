@@ -9,7 +9,6 @@ export default function loadDeckView(context, payload, done) {
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            //context.dispatch('LOAD_DECK_CONTENT_FAILURE', err);
             context.executeAction(serviceUnavailable, payload).catch((error) => {done(error);});
             return;
         } else {
