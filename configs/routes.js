@@ -25,7 +25,6 @@ import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
-import loadSlideThumbnails from '../actions/loadSlideThumbnails';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -289,17 +288,6 @@ export default {
             //context.executeAction(loadDeck, payload, done);
         }
     },
-    /*
-    slidethumbnail: {
-        path: '/slidethumbnail',
-        method: 'get',
-        page: 'slidethumbnail',
-        handler: require('../components/Deck/ContentPanel/DeckModes/DeckViewPanel/SlideThumbnail'),
-        action: (context, payload, done) => {
-            context.executeAction(loadSlideThumbnails, payload, done);
-        }
-    },
-    */
     /* This should be the last route in routes.js */
     notfound: {
         path: '*',
