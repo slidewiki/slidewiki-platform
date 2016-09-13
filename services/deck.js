@@ -51,6 +51,14 @@ export default {
                 'tags': ['RDF', 'Semantic Web', 'Linked Data']
             };
             callback(null, {deckProps: deckProps});
+        } else if(resource === 'deck.numberofslides'){
+            let args = params.params? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'}).then((res) => {
+                callback(null, {noofslides: JSON.parse(res).children.length});
+            }).catch((err) => {
+                console.log('serviceErr', err);
+                callback(null, {noofslides: 0});
+            });
         }
     },
     // other methods

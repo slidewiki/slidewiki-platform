@@ -8,6 +8,7 @@ import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
+import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import Import from '../Import/Import';
@@ -27,10 +28,12 @@ class AddDeck extends React.Component {
         $('.ui.small.modal').modal({
             onDeny: function(){
                 console.log('modal cancelled');
+                $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
             },
             onApprove : function(data) {
                 console.log('modal clicked on upload', data);
                 that.handleFileSubmit();
+                $('.ui.small.modal').modal('hide');
             }
         });
     }
@@ -133,15 +136,23 @@ class AddDeck extends React.Component {
     }
     updateProgressBar() {
         console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
-
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
+        let noOfSlides = this.props.ImportStore.noOfSlides;
+        let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
+        let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
+          (noOfSlides === 1) ? 'Converting file' :
+          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides :
+          (String(noOfSlides) === String(totalNoOfSlides)) ? 'Slides uploaded!' :
+          'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
+        $('#progresslabel_addDeck_upload').text(progressLabel);
     }
     initializeProgressBar() {
         $('#progressbar_addDeck_upload').progress('set active');
         $('#progressbar_addDeck_upload').progress('reset');
         $('#progressbar_addDeck_upload').progress({
             text: {
-                active  : 'Uploading: {percent}%',
+                // active  : 'Uploading: {percent}%',
+                // active  : 'Importing: {percent}%',
                 success : 'Slides uploaded!',
                 error   : 'Upload failed!'
             }
@@ -174,12 +185,13 @@ class AddDeck extends React.Component {
     render() {
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
-            setTimeout( () => {
-                this.redirectID = this.props.AddDeckStore.redirectID;
-                this.handleRedirect();
-                this.context.executeAction(addDeckDestruct, {});
-            }, 1000);
+            // setTimeout( () => {
+            this.redirectID = this.props.AddDeckStore.redirectID;
+            this.handleRedirect();
+            this.context.executeAction(addDeckDestruct, {});
+            // }, 1000);
         }
+
 
         let fieldClass_title = classNames({
             'required': true,
@@ -247,6 +259,15 @@ class AddDeck extends React.Component {
         let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'The licence is a must have.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
+        //check number of slides in order to update progressbar
+        if (this.props.ImportStore.deckId !== null &&
+            this.props.ImportStore.uploadProgress < 100 &&
+            this.props.ImportStore.error === null) {
+                setTimeout( () => {
+                    this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
+                }, 100);
+        }
+        
         return (
           <div className="ui container">
           <h3>Add deck</h3>
@@ -269,7 +290,7 @@ class AddDeck extends React.Component {
                       <div className="bar">
                           <div className="progress"></div>
                       </div>
-                      <div className="label" ref="div_progress_text" ></div>
+                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
                   <form className="ui form upload">
                       <div className="two fields">

@@ -9,7 +9,8 @@ let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 //TODO - nice feature (later/non-critical) = drag & drop + upload multiple files
 
-const MAX_FILESIZE = 300 * 1024 * 1024;
+const MAX_FILESIZE_MB = 300;
+const MAX_FILESIZE = MAX_FILESIZE_MB * 1024 * 1024;
 
 class Import extends React.Component {
     constructor(props) {
@@ -109,7 +110,7 @@ class Import extends React.Component {
                           </div>
                           <div className="content">
                               <p>Select your presentation file and upload it to SlideWiki.</p>
-                              <p>Only PowerPoint (.pptx) is supported.</p>
+                              <p>Only PowerPoint (.pptx) is supported (Max size: {MAX_FILESIZE_MB}MB).</p>
                               <div className="ui input file focus animated">
                                     <input ref="selectbutton" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
                               </div>
