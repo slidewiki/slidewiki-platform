@@ -24,6 +24,7 @@ class DeckViewPanel extends React.Component {
         let deckTags = [];
 
         const activeVersion = this.props.DeckViewStore.deckData.active;
+        const totalRevisions = this.props.DeckViewStore.deckData.revisions.length;
         const deckTitle = this.props.DeckViewStore.deckData.revisions[activeVersion - 1].title;
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = this.props.DeckViewStore.deckData.description;
@@ -66,7 +67,7 @@ class DeckViewPanel extends React.Component {
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="theme icon" aria-label="Theme"></i>Simple</div>
                                     <div className="ui large label" tabIndex="0" >
-                                        <i className="fork icon" aria-label="Number of versions"></i>5</div>
+                                        <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
                                 </div>
                                 {this.props.DeckViewStore.deckData.tags.length > 0 ? <div className="ui divider"></div>: ''}
                                 <div className="ui tag labels large meta">
