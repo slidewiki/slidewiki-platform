@@ -70,8 +70,8 @@ class DeckViewPanel extends React.Component {
                                 </div>
                                 {this.props.DeckViewStore.deckData.tags.length > 0 ? <div className="ui divider"></div>: ''}
                                 <div className="ui tag labels large meta">
-                                    {this.props.DeckViewStore.deckData.tags.map((tag) => {
-                                        return <a className="ui label" tabIndex="0" >{tag}</a>;
+                                    {this.props.DeckViewStore.deckData.tags.map((tag, index) => {
+                                        return <a className="ui label" key={index} tabIndex="0" >{tag}</a>;
                                     })}
                                 </div>
                             </div>
