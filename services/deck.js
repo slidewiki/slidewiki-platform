@@ -23,7 +23,7 @@ export default {
             let userRes = deckPromise.then((deckData) => {
                 // TODO Replace hard coded user id '15' with the commented JSON data;
                 // This should be done when deckservice and userservice data is in sync;
-                return rp.get({uri: Microservices.user.uri + '/user/' + '15'});//(JSON.parse(deckData).user).toString()});
+                return rp.get({uri: Microservices.user.uri + '/user/' + (JSON.parse(deckData).user).toString()});
             });
             /* Catch errors from the user data response */
             let userPromise = userRes.catch((err) => {
