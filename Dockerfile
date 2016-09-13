@@ -12,14 +12,20 @@ RUN bower install --allow-root
 # Install only production dependencies? todo: handle webpack issue
 RUN npm install
 
-# ----------------- #
-#   Configuration   #
-# ----------------- #
+# -------------------------------------- #
+#   Default Microservice Configuration   #
+# -------------------------------------- #
 
-RUN if [ ! -e /nodeApp/configs/microservices.js ]; then cp /nodeApp/configs/microservices.sample.js /nodeApp/configs/microservices.js; fi
+ENV SERVICE_URL_DECK="http://deckservice.manfredfris.ch" \
+    SERVICE_URL_DISCUSSION="http://discussionservice.manfredfris.ch" \
+    SERVICE_URL_ACTIVITIES="http://activitiesservice.manfredfris.ch" \
+    SERVICE_URL_NOTIFICATION="http://notificationservice.manfredfris.ch" \
+    SERVICE_URL_USER="http://userservice.manfredfris.ch" \
+    SERVICE_URL_IMPORT="http://importservice.manfredfris.ch" \
+    SERVICE_VAR_IMPORT_HOST="importservice.manfredfris.ch"
 
 # -------- #
 #   Run!   #
 # -------- #
 
-ENTRYPOINT ["npm", "run", "build"]
+ENTRYPOINT ["./entrypoint.sh"]
