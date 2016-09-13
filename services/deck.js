@@ -31,97 +31,15 @@ export default {
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
             Promise.all([deckPromise, slidesPromise, userPromise]).then((data) => {
-                console.log('deck data:', JSON.parse(data[0]));
-                console.log('slides data:', JSON.parse(data[1]));
-                console.log('user data:', JSON.parse(data[2]));
+                //console.log('deck data:', JSON.parse(data[0]));
+                //console.log('slides data:', JSON.parse(data[1]));
+                //console.log('user data:', JSON.parse(data[2]));
                 callback(null, {deckData: JSON.parse(data[0]), slidesData: JSON.parse(data[1]), userData: JSON.parse(data[2])});
             }).catch((err) => {
-                console.log(err);
+                //console.log(err);
                 callback({msg: 'Error in resolving promiese', content: err}, {});
             });
-
-        /*
-
-            let deckRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid});
-            let slidesRes = deckRes.then(() => {
-                console.log('Inside slidesRes promise');
-                return rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/slides'});
-            }).catch((err) => {
-                callback({msg: 'Error in retrieving deck meta data ' + Microservices.deck.uri + ',', content: err}, {});
-            });
-            return slidesRes.then(() => {
-                console.log('After slidesRes resolved');
-                //let data = {deckData: JSON.parse(deckRes.value()), slidesData: JSON.parse(slidesRes.values())};
-                console.log(deckRes);
-                callback(null, {deckData: JSON.parse(deckRes), slidesData: JSON.parse(slidesRes)});
-            }).catch((err) => {
-                callback({msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...', content: err}, {});
-            });
-        */
-
-            /*
-            // Get deck meta data
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid})
-                .then((deckRes) => {
-                    console.log('Deck meta data:', deckRes);
-
-                    // Retrieving slides for the given deck
-                    rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/slides'})
-                        .then((slidesRes) => {
-                            console.log('Slides data:', slidesRes);
-                            callback(null, {deckData: JSON.parse(deckRes), slidesData: JSON.parse(slidesRes)});
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            callback({msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...', content: err}, {});
-                        });
-
-                })
-                .catch((err) => {
-                    console.log(err);
-                    callback({msg: 'Error in retrieving deck meta data ' + Microservices.deck.uri + ',', content: err}, {});
-                });
-                */
-                //callback(null, {content: {}, selector: selector, 'page': params.page, 'mode': args.mode});
         }
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            /*
-            let sampleContent = `
-            <h1>Deck #` + args.sid + `</h1>
-            This is a sample deck content. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-            <br/>
-            <br/>
-            <div class="ui cards segment center aligned">
-              <div class="card">
-                <div class="content">
-                  <div class="header">Slide 1 from ` + args.sid + `</div>
-                  <div class="description">
-                    Elliot Fu is a film-maker from New York.
-                  </div>
-                </div>
-                <div class="ui bottom attached button">
-                  <i class="eye icon"></i>
-                  See details
-                </div>
-              </div>
-              <div class="card">
-                <div class="content">
-                  <div class="header">Slide 2 from ` + args.sid + `</div>
-                  <div class="description">
-                    Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
-                  </div>
-                </div>
-                <div class="ui bottom attached button">
-                  <i class="eye icon"></i>
-                  See details
-                </div>
-              </div>
-            </div>
-            `;
-            callback(null, {content: sampleContent});
-            */
         else if (resource === 'deck.properties') {
             /*********connect to microservices*************/
             //todo
