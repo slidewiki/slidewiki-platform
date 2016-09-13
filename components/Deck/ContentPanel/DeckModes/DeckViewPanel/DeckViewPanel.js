@@ -34,8 +34,8 @@ class DeckViewPanel extends React.Component {
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
         const maxSlideThumbnails = 4;
 
-        // TODO remove hard coded tags before submtting pull request.
-        this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
+        // Comment the below line for tags before submtting pull request.
+        //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
