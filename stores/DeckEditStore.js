@@ -4,14 +4,18 @@ class DeckEditStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.deckProps = {};
+        this.selector = {};
+
     }
     updateProperties(payload) {
         this.deckProps = payload.deckProps;
+        this.selector = payload.selector;
         this.emitChange();
     }
     getState() {
         return {
             deckProps: this.deckProps,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -19,6 +23,7 @@ class DeckEditStore extends BaseStore {
     }
     rehydrate(state) {
         this.deckProps = state.deckProps;
+        this.selector = state.selector;
     }
 }
 
