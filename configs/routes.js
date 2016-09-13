@@ -289,6 +289,7 @@ export default {
             //context.executeAction(loadDeck, payload, done);
         }
     },
+    /*
     slidethumbnail: {
         path: '/slidethumbnail',
         method: 'get',
@@ -298,7 +299,7 @@ export default {
             context.executeAction(loadSlideThumbnails, payload, done);
         }
     },
-
+    */
     /* This should be the last route in routes.js */
     notfound: {
         path: '*',
