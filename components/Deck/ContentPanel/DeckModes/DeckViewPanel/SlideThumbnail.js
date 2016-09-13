@@ -1,7 +1,6 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import SlideThumbnailStore from '../../../../../stores/SlideThumbnailStore';
 
 class SlideThumbnail extends React.Component {
     render() {
@@ -12,7 +11,7 @@ class SlideThumbnail extends React.Component {
             <div className="ui four column grid container">
                 {this.props.slidesData.children.map((slide, index) => {
                     if (index < maxSlideThumbnails) {
-                        return  <div className="column">
+                        return  <div key={index} className="column">
                                     <div className="ui card">
                                         <div className="content" tabIndex="0">
                                             <a href="http://localhost:3000/" className="ui small image" tabIndex="-1">
@@ -33,9 +32,4 @@ class SlideThumbnail extends React.Component {
     }
 }
 
-SlideThumbnail = connectToStores(SlideThumbnail, [SlideThumbnailStore], (context, props) => {
-    return {
-        SlideThumbnailStore: context.getStore(SlideThumbnailStore).getState()
-    };
-});
 export default SlideThumbnail;
