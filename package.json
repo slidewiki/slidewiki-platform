@@ -69,6 +69,7 @@
     "identicons-react": "^0.1.0",
     "immutable": "^3.8.1",
     "install": "^0.8.1",
+    "iso-639-1": "^1.2.1",
     "js-cookie": "^2.1.2",
     "js-sha512": "^0.2.2",
     "lodash": "^4.15.0",

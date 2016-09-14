@@ -2,7 +2,9 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
-import SlideThumbnail from '../../DeckModes/DeckViewPanel/SlideThumbnail';
+//import SlideThumbnail from '../../DeckModes/DeckViewPanel/SlideThumbnail';
+import ThumbnailShow from '../../../../Thumbnail/ThumbnailShow';
+
 import CustomDate from '../../../util/CustomDate';
 let ISO6391 = require('iso-639-1');
 
@@ -22,6 +24,8 @@ class DeckViewPanel extends React.Component {
             width: '9%'
         };
         let deckTags = [];
+        // Uncomment the below line if you want to test with sample tags
+        //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
 
         const activeVersion = this.props.DeckViewStore.deckData.active;
         const totalRevisions = this.props.DeckViewStore.deckData.revisions.length;
@@ -31,12 +35,9 @@ class DeckViewPanel extends React.Component {
         const deckCreator = this.props.DeckViewStore.userData.username;
         const deckLanguageCode = this.props.DeckViewStore.deckData.language;
         let deckLanguage = ISO6391.getName(deckLanguageCode);
-        deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;  
+        deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
         const maxSlideThumbnails = 4;
-
-        // Comment the below line for tags before submtting pull request.
-        //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
@@ -81,7 +82,16 @@ class DeckViewPanel extends React.Component {
                         </div>
                     </div>
                     <div className="ui  divider"></div>
-                    <SlideThumbnail slidesData={this.props.DeckViewStore.slidesData} maxSlideThumbnails={maxSlideThumbnails} />
+                    {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
+                        if (index < maxSlideThumbnails) {
+                            return <ThumbnailShow key={index} slideId={slide.id}
+                                                  slideTitle={slide.title}
+                                                  slideContent={slide.content}
+                                                  slideIndex={index}
+                                                  totalSlides={totalSlides}
+                            />;
+                        }
+                    })}
                 </div>
             </div>
 
