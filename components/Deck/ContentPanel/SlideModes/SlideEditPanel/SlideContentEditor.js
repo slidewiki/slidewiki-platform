@@ -56,7 +56,6 @@ class SlideContentEditor extends React.Component {
     }
     componentDidMount() {
         if(process.env.BROWSER){
-
             require('../../../../../bower_components/reveal.js/css/reveal.css');
             // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
             // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
@@ -257,6 +256,14 @@ class SlideContentEditor extends React.Component {
 
         };
 
+        //TODO: We need to be able to change the colour based on the particular theme we're using
+        // Reveal sets the background for body, here we need to specify it for just the slides.
+        let revealSlideStyle = {
+            // #222 is the colour for the 'black' theme
+            //backgroundColor: '#222',
+
+        };
+
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*
@@ -272,7 +279,6 @@ class SlideContentEditor extends React.Component {
 
         return (
             <div>
-
                 <div className="reveal">
                     <div className="slides" style={revealSlideStyle}>
                             <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
