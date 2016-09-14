@@ -1,14 +1,18 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
-//import SlideThumbnail from '../../DeckModes/DeckViewPanel/SlideThumbnail';
 import ThumbnailShow from '../../../../Thumbnail/ThumbnailShow';
 
 import CustomDate from '../../../util/CustomDate';
 let ISO6391 = require('iso-639-1');
+let jsdom = require('jsdom').jsdom;
 
 class DeckViewPanel extends React.Component {
+    getTextFromHtml(html) {
+        let doc = jsdom(html);
+        return doc.documentElement.textContent;
+    }
     render() {
         const heightStyle = {
             height: '450px'
@@ -86,12 +90,12 @@ class DeckViewPanel extends React.Component {
                         {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
                             if (index < maxSlideThumbnails) {
                                 return (<div key={index} className="column">
-                                            <div className="ui card">
+                                            <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href="http://localhost:3000/" className="ui small image" tabIndex="-1">
                                                         <ThumbnailShow key={index} slideId={slide.id} slideTitle={slide.title} slideContent={slide.content} />;
                                                     </a>
-                                                    <a className="header" dangerouslySetInnerHTML={{__html:slide.title}} />
+                                                    <a href="http://localhost:3000"><h5>{this.getTextFromHtml(slide.title)}</h5></a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
                                                 </div>
                                             </div>
