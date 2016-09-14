@@ -35,6 +35,7 @@ class DeckViewPanel extends React.Component {
         const deckCreator = this.props.DeckViewStore.userData.username;
         const deckLanguageCode = this.props.DeckViewStore.deckData.language;
         let deckLanguage = ISO6391.getName(deckLanguageCode);
+        // If deckLanguage is not as per ISO-639-1 (e.g. en-EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
         deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
         const maxSlideThumbnails = 4;
@@ -43,7 +44,6 @@ class DeckViewPanel extends React.Component {
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
-
                         <div className="column">
                             <div className="content">
                                 <h3 className="ui header">{deckTitle}</h3>
@@ -82,19 +82,26 @@ class DeckViewPanel extends React.Component {
                         </div>
                     </div>
                     <div className="ui  divider"></div>
-                    {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
-                        if (index < maxSlideThumbnails) {
-                            return <ThumbnailShow key={index} slideId={slide.id}
-                                                  slideTitle={slide.title}
-                                                  slideContent={slide.content}
-                                                  slideIndex={index}
-                                                  totalSlides={totalSlides}
-                            />;
-                        }
-                    })}
+                    <div key={this.props.slideIndex} className="ui four column grid container">
+                        {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
+                            if (index < maxSlideThumbnails) {
+                                return (<div key={index} className="column">
+                                            <div className="ui card">
+                                                <div className="content" tabIndex="0">
+                                                    <a href="http://localhost:3000/" className="ui small image" tabIndex="-1">
+                                                        <ThumbnailShow key={index} slideId={slide.id} slideTitle={slide.title} slideContent={slide.content} />;
+                                                    </a>
+                                                    <a className="header" dangerouslySetInnerHTML={{__html:slide.title}} />
+                                                    <div className="description">Slide {index + 1} of {totalSlides}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                );
+                            }
+                        })}
+                    </div>
                 </div>
             </div>
-
         );
     }
 }
