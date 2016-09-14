@@ -109,8 +109,8 @@ class LoginModal extends React.Component {
                     <h1 className="ui dividing header">Sign In</h1>
                     <form className="ui form signin" onSubmit={this.signin.bind(this)}>
                       <div className="ui five wide icon input field">
-                        <div><label htmlFor="email1" hidden>E-Mail</label></div>
-                        <input type="email1" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+                        <div><label htmlFor="username" hidden>E-Mail</label></div>
+                        <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
 
                       </div>
                         <br/>

@@ -1,27 +1,27 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
-import SlideThumbnail from '../../DeckModes/DeckViewPanel/SlideThumbnail';
+import ThumbnailShow from '../../../../Thumbnail/ThumbnailShow';
 import CustomDate from '../../../util/CustomDate';
 let ISO6391 = require('iso-639-1');
+let jsdom = require('jsdom').jsdom;
 
 class DeckViewPanel extends React.Component {
+    getTextFromHtml(html) {
+        let doc = jsdom(html);
+        let text = doc.documentElement.textContent.trim();
+        if (text.length > 25) {
+            text = text.substr(0, 21) + '...';
+        }
+        return text;
+    }
     render() {
         const heightStyle = {
             height: '450px'
         };
-        const bottomTabularMenu = {
-            background: '#DCDDDE'
-        };
-        const bottomTabularMenuOutline = {
-            outline: 'none'
-        };
-        const transitionDuration = {
-            transitionDuration: '300ms',
-            width: '9%'
-        };
-        let deckTags = [];
+        // Uncomment the below line if you want to test with sample tags
+        //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
 
         const activeVersion = this.props.DeckViewStore.deckData.active;
         const totalRevisions = this.props.DeckViewStore.deckData.revisions.length;
@@ -30,18 +30,17 @@ class DeckViewPanel extends React.Component {
         const deckDescription = this.props.DeckViewStore.deckData.description;
         const deckCreator = this.props.DeckViewStore.userData.username;
         const deckLanguageCode = this.props.DeckViewStore.deckData.language;
-        const deckLanguage = ISO6391.getName(deckLanguageCode);
+        let deckLanguage = ISO6391.getName(deckLanguageCode);
+        // If deckLanguage is not as per ISO-639-1 (e.g. en-EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
+        deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
-        const maxSlideThumbnails = 4;
-
-        // Comment the below line for tags before submtting pull request.
-        //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
+        const maxSlideThumbnails = 3;
+        const deckURL = 'http://' + this.props.DeckViewStore.deckData.host + '/deck/' + this.props.DeckViewStore.deckData._id + '-' + activeVersion;
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
                 <div className="ui segment" style={heightStyle}>
                     <div className="ui two column grid container">
-
                         <div className="column">
                             <div className="content">
                                 <h3 className="ui header">{deckTitle}</h3>
@@ -80,10 +79,26 @@ class DeckViewPanel extends React.Component {
                         </div>
                     </div>
                     <div className="ui  divider"></div>
-                    <SlideThumbnail slidesData={this.props.DeckViewStore.slidesData} maxSlideThumbnails={maxSlideThumbnails} />
+                    <div key={this.props.slideIndex} className="ui three column grid container">
+                        {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
+                            if (index < maxSlideThumbnails) {
+                                return (<div key={index} className="column">
+                                            <div className="ui fluid card">
+                                                <div className="content" tabIndex="0">
+                                                    <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
+                                                        <ThumbnailShow key={index} slideId={slide.id} slideTitle={slide.title} slideContent={slide.content} />
+                                                    </a>
+                                                    <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
+                                                    <div className="description">Slide {index + 1} of {totalSlides}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                );
+                            }
+                        })}
+                    </div>
                 </div>
             </div>
-
         );
     }
 }
