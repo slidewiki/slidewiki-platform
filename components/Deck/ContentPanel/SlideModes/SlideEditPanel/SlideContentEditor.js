@@ -30,9 +30,9 @@ class SlideContentEditor extends React.Component {
         //let slide.content = 'test';
         //this.context.executeAction(saveSlide, {slide});
         //let slide = 'test';
-        //let title = CKEDITOR.instances.inlineHeader.getData();
+        let title = CKEDITOR.instances.inlineHeader.getData();
         //let title = this.refs.inlineHeader.value;
-        let title = this.refs.title.value;
+        //let title = this.refs.title.value;
         let content = CKEDITOR.instances.inlineContent.getData();
         let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
         //these fields should not be empty:
@@ -276,9 +276,11 @@ class SlideContentEditor extends React.Component {
                 <div className="reveal">
                     <div className="slides" style={revealSlideStyle}>
                             <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                            <hr />
                             <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                     </div>
                 </div>
+                <hr />
                 <br />
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
