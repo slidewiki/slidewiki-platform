@@ -19,7 +19,6 @@ let webpackConfig = {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
         filename: '[name].js',
-        libraryTarget: 'commonjs',
     },
     module: {
         loaders: [
@@ -39,7 +38,6 @@ let webpackConfig = {
     },
     node: {
         setImmediate: false,
-        fs: 'empty'
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

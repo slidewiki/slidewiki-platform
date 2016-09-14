@@ -9,11 +9,11 @@ export default {
     Options: {
         screenSize: {
             width: '1024',
-            height: '550',
+            height: '900',
         },
         shotSize: {
             width: '1024',
-            height: '550',
+            height: '900',
         },
         shotOffset: {
             left: 0,

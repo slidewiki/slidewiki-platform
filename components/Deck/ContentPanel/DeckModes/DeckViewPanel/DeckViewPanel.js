@@ -3,7 +3,6 @@ import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
 import ThumbnailShow from '../../../../Thumbnail/ThumbnailShow';
-
 import CustomDate from '../../../util/CustomDate';
 let ISO6391 = require('iso-639-1');
 let jsdom = require('jsdom').jsdom;
@@ -11,23 +10,16 @@ let jsdom = require('jsdom').jsdom;
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
         let doc = jsdom(html);
-        return doc.documentElement.textContent;
+        let text = doc.documentElement.textContent.trim();
+        if (text.length > 25) {
+            text = text.substr(0, 21) + '...';
+        }
+        return text;
     }
     render() {
         const heightStyle = {
             height: '450px'
         };
-        const bottomTabularMenu = {
-            background: '#DCDDDE'
-        };
-        const bottomTabularMenuOutline = {
-            outline: 'none'
-        };
-        const transitionDuration = {
-            transitionDuration: '300ms',
-            width: '9%'
-        };
-        let deckTags = [];
         // Uncomment the below line if you want to test with sample tags
         //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
 
@@ -42,7 +34,8 @@ class DeckViewPanel extends React.Component {
         // If deckLanguage is not as per ISO-639-1 (e.g. en-EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
         deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
-        const maxSlideThumbnails = 4;
+        const maxSlideThumbnails = 3;
+        const deckURL = 'http://' + this.props.DeckViewStore.deckData.host + '/deck/' + this.props.DeckViewStore.deckData._id + '-' + activeVersion;
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
@@ -86,16 +79,16 @@ class DeckViewPanel extends React.Component {
                         </div>
                     </div>
                     <div className="ui  divider"></div>
-                    <div key={this.props.slideIndex} className="ui four column grid container">
+                    <div key={this.props.slideIndex} className="ui three column grid container">
                         {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
                             if (index < maxSlideThumbnails) {
                                 return (<div key={index} className="column">
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
-                                                    <a href="http://localhost:3000/" className="ui small image" tabIndex="-1">
-                                                        <ThumbnailShow key={index} slideId={slide.id} slideTitle={slide.title} slideContent={slide.content} />;
+                                                    <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
+                                                        <ThumbnailShow key={index} slideId={slide.id} slideTitle={slide.title} slideContent={slide.content} />
                                                     </a>
-                                                    <a href="http://localhost:3000"><h5>{this.getTextFromHtml(slide.title)}</h5></a>
+                                                    <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
                                                 </div>
                                             </div>
