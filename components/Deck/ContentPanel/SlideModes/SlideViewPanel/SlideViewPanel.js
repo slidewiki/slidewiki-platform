@@ -5,15 +5,23 @@ import SlideViewStore from '../../../../../stores/SlideViewStore';
 
 class SlideViewPanel extends React.Component {
     render() {
+        //styles should match slideContentEditor for consistency
+        const compHeaderStyle = {
+            minWidth: '100%',
+            overflowY: 'auto',
+            position: 'relative'
+        };
         const compStyle = {
-            maxHeight: 500,
-            minHeight: 500,
-            overflowY: 'auto'
+            maxHeight: 450,
+            minHeight: 450,
+            overflowY: 'auto',
+            position: 'relative'
         };
         const compSpeakerStyle = {
             maxHeight: 50,
             minHeight: 50,
-            overflowY: 'auto'
+            overflowY: 'auto',
+            position: 'relative'
         };
         //TODO: We need to be able to change the colour based on the particular theme we're using
         // Reveal sets the background for body, here we need to specify it for just the slides.
@@ -22,6 +30,7 @@ class SlideViewPanel extends React.Component {
             //backgroundColor: '#222',
 
         };
+
         return (
           <div className="ui bottom attached segment">
               <div ref="slideViewPanel" className="ui" style={compStyle}>
@@ -41,7 +50,6 @@ class SlideViewPanel extends React.Component {
     }
     componentDidMount(){
         if(process.env.BROWSER){
-            
             require('../../../../../bower_components/reveal.js/css/reveal.css');
             // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
             // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
