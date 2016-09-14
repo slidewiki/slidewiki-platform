@@ -21,6 +21,8 @@ class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
         this.currentcontent;
+
+
     }
     handleSaveButton(){
         //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
@@ -53,6 +55,17 @@ class SlideContentEditor extends React.Component {
         return false;
     }
     componentDidMount() {
+        if(process.env.BROWSER){
+
+            require('../../../../../bower_components/reveal.js/css/reveal.css');
+            // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
+            // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
+            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
+            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
+            require('../../SetupReveal.css');
+
+
+        }
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
@@ -220,12 +233,11 @@ class SlideContentEditor extends React.Component {
         };
         const contentStyle = {
             minWidth: '100%',
-            maxHeight: 450,
-            minHeight: 450,
+            // maxHeight: 450,
+            // minHeight: 450,
             overflowY: 'auto',
             borderStyle: 'dashed',
             borderColor: '#e7e7e7',
-            position: 'relative'
         };
         const speakernotesStyle = {
             minWidth: '100%',
@@ -236,6 +248,15 @@ class SlideContentEditor extends React.Component {
             borderColor: '#e7e7e7',
             position: 'relative'
         };
+
+        //TODO: We need to be able to change the colour based on the particular theme we're using
+        // Reveal sets the background for body, here we need to specify it for just the slides.
+        let revealSlideStyle = {
+            // #222 is the colour for the 'black' theme
+            //backgroundColor: '#222',
+
+        };
+
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*
@@ -251,9 +272,13 @@ class SlideContentEditor extends React.Component {
 
         return (
             <div>
-                <div style={headerStyle} contentEditable='true' name='title' ref='title' id='title' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
 
-                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                <div className="reveal">
+                    <div className="slides" style={revealSlideStyle}>
+                            <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                            <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                    </div>
+                </div>
                 <br />
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
@@ -262,6 +287,7 @@ class SlideContentEditor extends React.Component {
                   <div tabIndex="0" className="hidden content" ><i className="save icon"></i>Save</div>
                 </button>
             </div>
+
         );
     }
 }

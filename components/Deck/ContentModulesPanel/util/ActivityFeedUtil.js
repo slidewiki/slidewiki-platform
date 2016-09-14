@@ -5,13 +5,14 @@ class ActivityFeedUtil {
     static breakLines(text) {
         return text.split('\n').map((line, key) => {
             return (
-                <span key={key}>
+            <span key={key}>
                     {line}
-                    <br />
+                <br />
                 </span>
             );
         });
     }
+
     // returns how many days there are in a given month of the given year
     static daysInMonth(month, year) {
         if (month <= 7) {
@@ -29,6 +30,7 @@ class ActivityFeedUtil {
         const nowTime = now.getTime();
         return ActivityFeedUtil.formatDate(nowTime - millis);
     }
+
     // turn time millis into a string such as '1 hour ago'
     static formatDate(date) {
         const now = new Date();
@@ -40,7 +42,7 @@ class ActivityFeedUtil {
         const monthDiff = now.getMonth() - then.getMonth();
         if (yearDiff > 0 && monthDiff >= 0) return yearDiff + ' years ago';
 
-        const trueMonthDiff = (monthDiff < 0) ? 12+monthDiff : monthDiff ;
+        const trueMonthDiff = (monthDiff < 0) ? 12 + monthDiff : monthDiff;
         const dayDiff = now.getDate() - then.getDate();
         if (monthDiff > 0 && dayDiff >= 0) return trueMonthDiff + ' months ago';
 
@@ -59,6 +61,22 @@ class ActivityFeedUtil {
         if (seconds > 0) return seconds + ' seconds ago';
 
         return 'moments ago';
+    }
+
+    //build node URL based on the context
+    static makeNodeRevisionURL(selector, revisionId) {
+        let nodeURL;
+        let sidWithRevision = selector.sid.split('-')[0] + '-' + revisionId;
+
+        if (selector.stype === 'deck' && selector.id === selector.sid) {
+            nodeURL = '/deck/' + sidWithRevision;
+        } else {
+            nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + sidWithRevision;
+        }
+        if (selector.spath) {
+            nodeURL += '/' + selector.spath;
+        }
+        return nodeURL;
     }
 }
 
