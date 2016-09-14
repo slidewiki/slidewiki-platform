@@ -16,13 +16,13 @@ class SlideThumbnail extends React.Component {
             minHeight: 50,
             overflowY: 'auto'
         };
-        const slides = [];
+        const deckId = this.props.slidesData.id;
         /* We do not want to show all slides; */
         const maxSlideThumbnails = this.props.maxSlideThumbnails === undefined ? this.props.slidesData.children.length : this.props.maxSlideThumbnails;
         let thumbnailHTML = '';
         this.props.slidesData.children.map((slide, index) => {
             if (index < maxSlideThumbnails) {
-                thumbnailHTML = ReactDOM.renderToString(
+                thumbnailHTML = ReactDOM.renderToStaticMarkup(
                     <div className="ui bottom attached segment">
                         <div className="ui" style={compStyle}>Hello
                             <div dangerouslySetInnerHTML={{__html:slide.title}} />
@@ -30,14 +30,16 @@ class SlideThumbnail extends React.Component {
                         </div>
                     </div>
                 );
+                /*
                 webshot(
                     thumbnailHTML,
-                    '/home/v/Workspace/slidewiki-platform/assets/images/slideThumbnail' +  '-' + index + '.png',
+                    '/home/v/Workspace/slidewiki-platform/assets/images/' + deckId +  '_' + slide.id + '.png',
                     {siteType:'html'},
                     (err) => {
                         console.log(err);
                     }
                 );
+                */
             }
 
         });
@@ -49,7 +51,7 @@ class SlideThumbnail extends React.Component {
                                     <div className="ui card">
                                         <div className="content" tabIndex="0">
                                             <a href="http://localhost:3000/" className="ui small image" tabIndex="-1">
-                                                <img src="/assets/images/slideThumbnail-1.png" alt="thumbnail of slide" />
+                                                <img src={'/assets/images/' + deckId + '_' + slide.id + '.png'} alt="thumbnail of slide" />
                                             </a>
                                             <a className="header" dangerouslySetInnerHTML={{__html:slide.title}} />
                                             <div className="description">Slide {index + 1} of {this.props.slidesData.children.length}</div>

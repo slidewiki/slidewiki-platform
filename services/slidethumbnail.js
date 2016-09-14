@@ -7,36 +7,63 @@ export default {
     name: 'slidethumbnail',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        console.log('Reached here');
+        console.log('Inside slidethumbnail read service');
         let args = params.params? params.params : params;
-        let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
-        if(resource === 'slidethumbnail.content'){
-            /*********connect to microservices*************/
-            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
-            rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
-            //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
-                console.log('From slide service:', res);
-                callback(null, ReactDOM.renderToString(<h1>res.title</h1>));
-                //callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
-            }).catch((err) => {
-                console.log(err);
-                callback(null, {slide: {}, selector: selector, 'page': params.page, 'mode': args.mode});
-            });
+        if(resource === 'slidethumbnail.content') {
+            /* Create promise for slides data */
+            let slidesRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'})
+                .then((data) => {
+                    console.log('slides data:', data);
+                    let thumbnailHTML = '';
+                    const compStyle = {
+                        maxHeight: 500,
+                        minHeight: 500,
+                        overflowY: 'auto'
+                    };
+                    const compSpeakerStyle = {
+                        maxHeight: 50,
+                        minHeight: 50,
+                        overflowY: 'auto'
+                    };
+
+                    data.children.map((slide, index) => {
+                        thumbnailHTML = ReactDOM.renderToStaticMarkup(
+                            <div className="ui bottom attached segment">
+                                <div className="ui" style={compStyle}>Hello
+                                    <div dangerouslySetInnerHTML={{__html:slide.title}} />
+                                    <div dangerouslySetInnerHTML={{__html:slide.content}} />
+                                </div>
+                            </div>
+                        );
+
+                        webshot(
+                            thumbnailHTML,
+                            '/home/v/Workspace/slidewiki-platform/assets/images/' + deckId +  '_' + slide.id + '.png',
+                            {siteType:'html'},
+                            (err) => {
+                                console.log(err);
+                            }
+                        );
+                    });
+                    callback(null, 'Thumbnails created successfully');
+                })
+                .catch((err) => {
+                    callback({msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...', content: err}, {});
+                });
         }
+
         if(resource === 'slidethumbnail.all'){
-            /*********connect to microservices*************/
-            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/allslide'}).then((res) => {
-                //console.log(JSON.parse(res));
-                //console.log(res);
-                callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
+                callback(null, res);
             }).catch((err) => {
                 console.log(err);
-                callback(null, {slide: {}, selector: selector, 'page': params.page, 'mode': args.mode});
+                callback(null, err);
             });
         }
     },
+
     create: (req, resource, params, body, config, callback) => {
+        console.log('Inside slidethumbnail create service');
         //TODO get real user id and content name
         const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
 

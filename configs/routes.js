@@ -25,7 +25,8 @@ import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
-import loadSlideThumbnails from '../actions/loadSlideThumbnails';
+//import loadSlideThumbnails from '../actions/loadSlideThumbnails';
+import createSlideThumbnails from '../actions/createSlideThumbnails';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -159,6 +160,15 @@ export default {
             context.executeAction(loadContent, payload, done);
         }
     },
+    slidethumbnails: {
+        path: '/slidethumbnails/:sid',
+        method: 'get',
+        page: 'slidethumbnails',
+        handler: require('../components/Deck/ContentPanel/DeckModes/DeckViewPanel/DeckViewPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(createSlideThumbnail, payload, done);
+        }
+    },
     slideview: {
         path: '/slideview/:sid',
         method: 'get',
@@ -287,15 +297,6 @@ export default {
             context.executeAction(loadImportFile, payload, done);
             //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
-        }
-    },
-    slidethumbnail: {
-        path: '/slidethumbnail/:sid',
-        method: 'get',
-        page: 'slidethumbnail',
-        handler: require('../components/TestComponent'),
-        action: (context, payload, done) => {
-            context.executeAction(loadSlideThumbnails, payload, done);
         }
     },
     /* This should be the last route in routes.js */

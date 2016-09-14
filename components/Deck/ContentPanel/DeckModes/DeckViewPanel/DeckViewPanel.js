@@ -30,7 +30,8 @@ class DeckViewPanel extends React.Component {
         const deckDescription = this.props.DeckViewStore.deckData.description;
         const deckCreator = this.props.DeckViewStore.userData.username;
         const deckLanguageCode = this.props.DeckViewStore.deckData.language;
-        const deckLanguage = ISO6391.getName(deckLanguageCode);
+        let deckLanguage = ISO6391.getName(deckLanguageCode);
+        deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;  
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
         const maxSlideThumbnails = 4;
 
