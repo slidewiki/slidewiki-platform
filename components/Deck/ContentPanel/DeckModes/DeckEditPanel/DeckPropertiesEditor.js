@@ -1,41 +1,36 @@
 import React from 'react';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
-import DeckEditStore from '../../../../../stores/DeckEditStore';
 import {navigateAction} from 'fluxible-router';
 import ContentUtil from '../../util/ContentUtil';
+import DeckEditStore from '../../../../../stores/DeckEditStore';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
+import saveDeckRevision from '../../../../../actions/saveDeckRevision';
+
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {validationErrors: {}};
+        this.state = this.getStateFromProps(props);
     }
 
-    handleSaveDeck() {
-        const title = this.refs.titleInput.value;
-        const language = this.refs.langSelect.value;
-        const description = this.refs.descriptionTextArea.value;
-        const theme = this.refs.themeSelect.value;
-        const licence = this.refs.licenceSelect.value;
-        const tags = this.refs.tagsInput.value.split(', ');
-        let validationErrors = {}, isValid = true;
+    getStateFromProps(props) {
+        return {
+            validationErrors: {},
+            title: props.deckProps.title || '',
+            language: props.deckProps.language || '',
+            description: props.deckProps.description || '',
+            theme: props.deckProps.theme || '',
+            licence: props.deckProps.licence || '',
+            tags: props.deckProps.tags != null ? props.deckProps.tags.join() : ''
+        };
+    }
 
-        if (title == null || title.length === 0) {
-            validationErrors.title = 'The title is a must have.';
-            isValid = false;
-        }
-        this.setState({validationErrors: validationErrors});
-        if (isValid) {
-            this.context.executeAction(saveDeckEdit, {
-                deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
-                title: title,
-                language: language,
-                description: description,
-                theme: theme,
-                licence: licence,
-                tags: tags
-            });
+    componentWillReceiveProps(newProps) {
+        //check if props have changed to reinitialize state (for handling route changes)
+        if (newProps.deckProps !== this.props.deckProps) {
+            this.setState(this.getStateFromProps(newProps));
         }
     }
 
@@ -45,7 +40,42 @@ class DeckPropertiesEditor extends React.Component {
         });
     }
 
+    handleSave(withNewRevision) {
+        const saveAction = withNewRevision? saveDeckRevision : saveDeckEdit;
+        let validationErrors = {}, isValid = true;
+
+        if (this.state.title == null || this.state.title.length === 0) {
+            validationErrors.title = 'The title is a must have.';
+            isValid = false;
+        }
+        this.setState({validationErrors: validationErrors});
+        if (isValid) {
+            this.context.executeAction(saveAction, {
+                deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
+                title: this.state.title,
+                language: this.state.language,
+                description: this.state.description,
+                theme: this.state.theme,
+                licence: this.state.licence,
+                tags: this.state.tags.split(', ')
+            });
+        }
+    }
+
+    handleChange(fieldName, event) {
+        var stateChange = {};
+        stateChange[fieldName] = event.target.value;
+        console.log(stateChange);
+        this.setState(stateChange);
+    }
+
     render() {
+        let userΙd = this.props.UserProfileStore.userid;
+        let isUserEditor = false;
+        if (userΙd != null && userΙd !== '' && this.props.DeckEditStore.editors.includes(userΙd)) {
+            isUserEditor = true;
+        }
+
         let titleFieldClass = classNames({
             'required': true,
             'field': true,
@@ -61,26 +91,30 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.licence != null
         });
-        let saveButtonClass = classNames({
-            'ui': true,
-            'primary': true,
-            'button': true
-        });
-
         let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true"
-                                      ref="langSelect">
+                                      selected={this.state.language}
+                                      onChange={this.handleChange.bind(this, 'language')}>
+            <option>
+                Select Language
+            </option>
             <option value="en_EN">
                 English
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" ref="themeSelect">
+        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" selected={this.state.theme}
+                                   onChange={this.handleChange.bind(this, 'theme')}>
             <option value="DefaultTheme">Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" ref="licenceSelect">
+        let licenceOptions = <select className="ui search dropdown" aria-labelledby="licence"
+                                     selected={this.state.licence}
+                                     onChange={this.handleChange.bind(this, 'licence')}>
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>
             <option value="CC BY-SA">CC BY-SA</option>
         </select>;
+
+        let saveDeckButton = isUserEditor ? <div className='ui primary button' aria-label="save" tabIndex="0"
+                                                 onClick={this.handleSave.bind(this, false)}>Save</div> : '';
 
         return (
         <div className="ui container">
@@ -92,8 +126,10 @@ class DeckPropertiesEditor extends React.Component {
                                 <label>
                                     Title
                                 </label>
-                                <input type="text" name="deck-title" placeholder="Title" aria-required="true"
-                                       defaultValue={this.props.deckProps.title} ref="titleInput"/>
+                                <input type="text" name="deck-title" value={this.state.title}
+                                       onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
+                                       aria-required="true"/>
+
                             </div>
                             <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
                                 <label id="language">
@@ -105,7 +141,8 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="field">
                             <label id="deck-description">Description</label>
                             <textarea rows="4" aria-labelledby="deck-description"
-                                      defaultValue={this.props.deckProps.description} ref="descriptionTextArea"/>
+                                      value={this.state.description}
+                                      onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
                             <div className="field disabled">
@@ -113,18 +150,20 @@ class DeckPropertiesEditor extends React.Component {
                                 {themeOptions}
                             </div>
                             <div className={licenceFieldClass} data-tooltip={this.state.validationErrors.licence}>
-                                <label id="license">License</label>
+                                <label id="licence">licence</label>
                                 {licenceOptions}
                             </div>
                         </div>
                         <div className="fluid inline field" data-tooltip={this.state.validationErrors.tags}>
                             <i className="ui tags large icon" aria-label="Add tags"></i>
-                            <input type="text" name="tags" placeholder="Add Tags" ref="tagsInput"
+                            <input type="text" name="tags" placeholder="Add Tags" value={this.state.tags}
+                                   onChange={this.handleChange.bind(this, 'tags')}
                                    data-tooltip={this.state.validationErrors.tags}/>
                         </div>
-                        <div className={saveButtonClass} aria-label="save" tabIndex="0"
-                             onClick={this.handleSaveDeck.bind(this)}>
-                            Save
+                        {saveDeckButton}
+                        <div className='ui primary button' aria-label="save" tabIndex="0"
+                             onClick={this.handleSave.bind(this, true)}>
+                            Save new revision
                         </div>
                         <div className="ui secondary button" aria-label="cancel" tabIndex="0"
                              onClick={this.handleCancel.bind(this)}>
@@ -143,9 +182,11 @@ class DeckPropertiesEditor extends React.Component {
 DeckPropertiesEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore], (context, props) => {
+
+DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, UserProfileStore], (context, props) => {
     return {
-        DeckEditStore: context.getStore(DeckEditStore).getState()
+        DeckEditStore: context.getStore(DeckEditStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 
