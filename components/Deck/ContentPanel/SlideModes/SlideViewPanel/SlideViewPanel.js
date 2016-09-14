@@ -30,13 +30,7 @@ class SlideViewPanel extends React.Component {
             //backgroundColor: '#222',
 
         };
-        //TODO: We need to be able to change the colour based on the particular theme we're using
-        // Reveal sets the background for body, here we need to specify it for just the slides.
-        let revealSlideStyle = {
-            // #222 is the colour for the 'black' theme
-            //backgroundColor: '#222',
 
-        };
         return (
           <div className="ui bottom attached segment">
               <div ref="slideViewPanel" className="ui" style={compStyle}>
