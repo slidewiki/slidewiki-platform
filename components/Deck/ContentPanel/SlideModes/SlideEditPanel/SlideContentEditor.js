@@ -28,7 +28,9 @@ class SlideContentEditor extends React.Component {
         //let slide.content = 'test';
         //this.context.executeAction(saveSlide, {slide});
         //let slide = 'test';
-        let title = CKEDITOR.instances.inlineHeader.getData();
+        //let title = CKEDITOR.instances.inlineHeader.getData();
+        //let title = this.refs.inlineHeader.value;
+        let title = this.refs.title.value;
         let content = CKEDITOR.instances.inlineContent.getData();
         let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
         //these fields should not be empty:
@@ -50,15 +52,11 @@ class SlideContentEditor extends React.Component {
         //console.log('saving slide');
         return false;
     }
-    handleLoadTestButton(){
-        this.context.executeAction(loadSlideAll, 'test');
-        //console.log('load all slides test');
-        return false;
-    }
     componentDidMount() {
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
+        /*
         if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
@@ -78,6 +76,9 @@ class SlideContentEditor extends React.Component {
             uiColor: '#4183C4',
             removeButtons: 'Undo, Clipboard, Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
         });}
+        */
+        CKEDITOR.disableAutoInline = true;
+        //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
         //TODO - remove more buttons speakernotes
         if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
             toolbarGroups: [
@@ -99,10 +100,14 @@ class SlideContentEditor extends React.Component {
             uiColor: '#4183C4',
             removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
         });}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
+        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
+        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../custom_modules/ckeditor/config.js'});}
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent');}
+        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent');}
         //if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
         this.currentcontent = this.props.content;
-        ReactDOM.findDOMNode(this.refs.inlineHeader).focus();
+        //ReactDOM.findDOMNode(this.refs.inlineHeader).focus();
+        //ReactDOM.findDOMNode(this.refs.title).focus();
 
         //let simpledraggable = require('simple-draggable');
         //require('../../../../../assets/simpledraggable');
@@ -126,16 +131,19 @@ class SlideContentEditor extends React.Component {
             }
         });
         */
-
-        this.forceUpdate();
+        //setTimeout(this.forceUpdate(), 500);
+        //this.forceUpdate();
 
     }
     componentDidUpdate() {
 
         //console.log('componentDidUpdate');
-        let simpledraggable = require('simple-draggable');
+        //let simpledraggable = require('simple-draggable');
         //let simpledraggable =
-        //require('../../../../../assets/simpledraggable');
+        //../../../../../../assets/ckeditor_config.js
+        //require('../../../../../assets/simple-draggable.js');
+        /*
+        require('../../../../../custom_modules/simple-draggable/lib/index.js');
         //SimpleDraggable('div.draggable', {
 
         SimpleDraggable('div.draggable', {
@@ -143,17 +151,18 @@ class SlideContentEditor extends React.Component {
           , onlyY: false
           , onStart: function (event, element) {
                 // Do something on drag start
-                //console.log('dragging start');
+                console.log('dragging start');
           }
           , onStop: function (event, element) {
                 // Do something on drag stop
-                //console.log('dragging stop');
+                console.log('dragging stop');
           }
           , onDrag: function (event, element) {
                 // Do something on drag drag
-                //console.log('dragging element');
+                console.log('dragging element');
           }
         });
+        */
         //based on querySelectorAll (selects based on class of elements - get all children + apply draggable x & y positioning)
         //TODO: remove surrounding DIVS of some PPTX2HTML output elements
         //########Works well with following PPTX2HTML output:
@@ -168,14 +177,15 @@ class SlideContentEditor extends React.Component {
 
         //TODO change style elements of PPTX2HTML divs based on loading Firefox (+IE?) or Chrome (+Safari) (or other browsers?)
 
-        /*
-        if (typeof(CKEDITOR.instances.nonInline) !== 'undefined' && this.currentcontent !== this.props.content)
-        {   */
+
+        //if (typeof(CKEDITOR.instances.nonInline) !== 'undefined' && this.currentcontent !== this.props.content)
+        //{
         /*If an instance of CKeditor exists,
             **and
             **the content of the slide has changed because of navigating to different slide (not because of WYSIWYG edit = is handleEditorChange() instead )
             ** TODO - probably a more fluent solution would be to use a CKeditor function for updating.
-            *//*
+            */
+            /*
             CKEDITOR.instances.nonInline.destroy();
             CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});
             //if (typeof(CKEDITOR.instances.inlineHeader) !== 'undefined'){CKEDITOR.instances.inlineHeader.destroy();CKEDITOR.inline('inlineHeader');}
@@ -183,20 +193,20 @@ class SlideContentEditor extends React.Component {
             //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) !== 'undefined'){CKEDITOR.instances.inlineSpeakerNotes.destroy();CKEDITOR.inline('inlineSpeakerNotes');}
             this.currentcontent = this.props.content;
             //alert('CKEDITOR destroyed, and content updated');
-        }
-        */
+        }*/
+
     }
     componentWillUnmount() {
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
-        CKEDITOR.instances.inlineHeader.destroy();
+        //CKEDITOR.instances.inlineHeader.destroy();
         CKEDITOR.instances.inlineContent.destroy();
         CKEDITOR.instances.inlineSpeakerNotes.destroy();
     }
-    handleEditorChange(e) {
+    //handleEditorChange(e) {
         //http://docs.ckeditor.com/#!/guide/dev_savedata
         //console.log(e.target.getContent());
-    }
+    //}
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
@@ -229,15 +239,20 @@ class SlideContentEditor extends React.Component {
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*
-        <button tabIndex="0" ref="loadalltestbutton" className="ui animated button green" onClick={this.handleLoadTestButton.bind(this)} onChange={this.handleLoadTestButton.bind(this)}>
-          <div className="visible content"><i className="thumbs up icon"></i>Load all test <i className="thumbs up icon"></i></div>
-          <div tabIndex="0" className="hidden content" ><i className="thumbs up icon"></i>Load all test <i className="thumbs up icon"></i></div>
-        </button>
-        */
+         <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+         Slide title (in deck): <label htmlFor='title' hidden>Slide title (in deck)</label>
+         <input type='title' id='title' name='title' ref='title' defaultValue={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50'/>
+         <hr/>
+         <input type='text' id='title' name='title' ref='title' defaultValue={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50'/>
+            <input type="text" name="deck-title" placeholder="Title" aria-required="true" ref="title" />
+            Slide title (in deck): <label htmlFor='title' hidden>Slide title (in deck)</label>
+            <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
+                    */
 
         return (
             <div>
-                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                <div style={headerStyle} contentEditable='true' name='title' ref='title' id='title' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+
                 <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                 <br />
                 <b>Speaker notes:</b><br />
