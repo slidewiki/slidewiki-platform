@@ -1,5 +1,5 @@
 import {shortTitle} from '../../configs/general';
-import { slideIdTypeError } from '../loadErrors';
+import { slideIdTypeError, serviceUnavailable } from '../loadErrors';
 
 export default function loadSlideView(context, payload, done) {
     console.log('load slide view called');
@@ -10,10 +10,9 @@ export default function loadSlideView(context, payload, done) {
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log('loadSlideView error:', err);
-            //context.dispatch('LOAD_SLIDE_CONTENT_FAILURE', err);
+            context.executeAction(serviceUnavailable, payload).catch((error) => {done(error);});
+            return;
         } else {
-            console.log('Res from loadSlideView:', res);
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
         }
         let pageTitle = shortTitle + ' | Slide View | ' + payload.params.sid;
