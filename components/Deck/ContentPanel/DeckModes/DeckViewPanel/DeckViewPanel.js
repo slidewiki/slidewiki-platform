@@ -25,13 +25,15 @@ class DeckViewPanel extends React.Component {
 
         const activeVersion = this.props.DeckViewStore.deckData.active;
         const totalRevisions = this.props.DeckViewStore.deckData.revisions.length;
+        // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
+        const deckTheme = 'Simple'; //this.props.DeckViewStore.deckData.theme;
         const deckTitle = this.props.DeckViewStore.deckData.revisions[activeVersion - 1].title;
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = this.props.DeckViewStore.deckData.description;
         const deckCreator = this.props.DeckViewStore.userData.username;
         const deckLanguageCode = this.props.DeckViewStore.deckData.language;
         let deckLanguage = ISO6391.getName(deckLanguageCode);
-        // If deckLanguage is not as per ISO-639-1 (e.g. en-EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
+        // If deckLanguageCode is not as per ISO-639-1 (e.g. en-EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
         deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;
         const totalSlides = this.props.DeckViewStore.slidesData.children.length;
         const maxSlideThumbnails = 3;
@@ -64,7 +66,7 @@ class DeckViewPanel extends React.Component {
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>
                                     <div className="ui large label" tabIndex="0" >
-                                        <i className="theme icon" aria-label="Theme"></i>Simple</div>
+                                        <i className="theme icon" aria-label="Theme"></i>{deckTheme}</div>
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
                                 </div>
@@ -86,7 +88,13 @@ class DeckViewPanel extends React.Component {
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        <ThumbnailShow key={index} slideId={slide.id} slideTitle={slide.title} slideContent={slide.content} />
+                                                        // Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details
+                                                        <ThumbnailShow key={index}
+                                                            slideId={slide.id}
+                                                            slideTitle={slide.title}
+                                                            slideContent={slide.content}
+                                                            action="new" // the other options are "update" and "skip"
+                                                        />
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
