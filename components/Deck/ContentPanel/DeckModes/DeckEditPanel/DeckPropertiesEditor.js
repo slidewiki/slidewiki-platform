@@ -41,13 +41,24 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     handleSave(withNewRevision) {
-        const saveAction = withNewRevision? saveDeckRevision : saveDeckEdit;
+        const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
         if (this.state.title == null || this.state.title.length === 0) {
             validationErrors.title = 'The title is a must have.';
             isValid = false;
         }
+
+        if (this.state.language == null || this.state.language.length !== 5) {
+            validationErrors.language = 'The language is a must have.';
+            isValid = false;
+        }
+
+        if (this.state.licence == null || this.state.licence.length < 2) {
+            validationErrors.licence = 'The licence is a must have.';
+            isValid = false;
+        }
+
         this.setState({validationErrors: validationErrors});
         if (isValid) {
             this.context.executeAction(saveAction, {
@@ -57,7 +68,8 @@ class DeckPropertiesEditor extends React.Component {
                 description: this.state.description,
                 theme: this.state.theme,
                 licence: this.state.licence,
-                tags: this.state.tags.split(', ')
+                tags: this.state.tags.split(','),
+                selector: this.props.selector
             });
         }
     }
@@ -65,14 +77,13 @@ class DeckPropertiesEditor extends React.Component {
     handleChange(fieldName, event) {
         var stateChange = {};
         stateChange[fieldName] = event.target.value;
-        console.log(stateChange);
         this.setState(stateChange);
     }
 
     render() {
         let userΙd = this.props.UserProfileStore.userid;
         let isUserEditor = false;
-        if (userΙd != null && userΙd !== '' && this.props.DeckEditStore.editors.includes(userΙd)) {
+        if (userΙd != null && userΙd !== '' && this.props.DeckEditStore.editors.includes(String(userΙd))) {
             isUserEditor = true;
         }
 
@@ -92,7 +103,7 @@ class DeckPropertiesEditor extends React.Component {
             'error': this.state.validationErrors.licence != null
         });
         let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true"
-                                      selected={this.state.language}
+                                      value={this.state.language}
                                       onChange={this.handleChange.bind(this, 'language')}>
             <option>
                 Select Language
@@ -106,7 +117,7 @@ class DeckPropertiesEditor extends React.Component {
             <option value="DefaultTheme">Default</option>
         </select>;
         let licenceOptions = <select className="ui search dropdown" aria-labelledby="licence"
-                                     selected={this.state.licence}
+                                     value={this.state.licence}
                                      onChange={this.handleChange.bind(this, 'licence')}>
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>

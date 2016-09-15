@@ -48,8 +48,15 @@ export default {
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
             Promise.all([deckPromise, editorsPromise]).then((res) => {
                 let deck = JSON.parse(res[0]), editors = JSON.parse(res[1]);
+                let deckProps = {
+                    description: deck.description,
+                    language: deck.language,
+                    tags: deck.tags,
+                    title: deck.revisions[0].title,
+                    licence: deck.revisions[0].license
+                };
                 callback(null, {
-                    deckProps: deck.revisions[0],
+                    deckProps: deckProps,
                     editors: editors
                 });
             }).catch((err) => {
