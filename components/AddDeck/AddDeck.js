@@ -225,13 +225,14 @@ class AddDeck extends React.Component {
             'primary': true,
             'disabled': (this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100) || this.props.ImportStore.isUploaded,
             'button': true
+                                                                                                            
         });
 
         let filename = this.props.ImportStore.filename;
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true" ref="select_languages">
+        let languageOptions = <select className="ui search dropdown"  id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
                 Select Language
             </option>
@@ -239,10 +240,11 @@ class AddDeck extends React.Component {
                 English
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" ref="select_themes">
+        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
+          <option value="DefaultTheme" >Default</option>
           <option value="DefaultTheme" >Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" ref="select_licences">
+        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licences">
           <option value="CC0" >CC0</option>
           <option value="CC BY" >CC BY</option>
           <option value="CC BY-SA" >CC BY-SA</option>
@@ -254,9 +256,9 @@ class AddDeck extends React.Component {
         else
             errorView = '';
 
-        let hint_title = this.props.AddDeckStore.wrongFields.title ? 'The title is a must have.' : undefined;
-        let hint_language = this.props.AddDeckStore.wrongFields.language ? 'The language is a must have.' : undefined;
-        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'The licence is a must have.' : undefined;
+        let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
+        let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
+        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'Please select a licence.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
@@ -270,14 +272,47 @@ class AddDeck extends React.Component {
         
         return (
           <div className="ui container">
-          <h3>Add deck</h3>
+          <h3>Create a deck </h3>
+              
           <div className="ui grid">
               <div className="sixteen wide column">
-                  <div className="ui grid">
-                      <div className="two column row">
+                  <form className="ui form upload">
+                          <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                              <label htmlFor="title">
+                                  Title
+                              </label>
+                              <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                          </div>
+                          
+                      <div className="field">
+                          <label htmlFor="deck-description">Description</label>
+                          <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
+                      </div>
+                      <div className="three fields">
+                          <div className="field disabled" ref="div_themes" >
+                              <label htmlFor="themes">Choose deck theme</label>
+                                  {themeOptions}
+                          </div>
+                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
+                              <label htmlFor="license">License</label>
+                                  {licenceOptions}
+                          </div>
+                          <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
+                              <label htmlFor="language">
+                                  Language
+                              </label>
+                              {languageOptions}
+                          </div>
+                      </div>
+                    
+                        <div className="ui message" id="uploadDesc">
+                          <p>Select exisiting slides to your new deck. Currently only PowerPoint files are supported.</p>
+                          </div>
+                     <div className="ui grid">
+                         <div className="two column row">
                           <div className="column">
-                              <div className={btnClasses_upload} aria-label="upload" tabIndex="0" onClick={this.handleUploadModal.bind(this)} >
-                                  Upload file
+                              <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
+                                  Upload
                               </div>
                               <Import />
                           </div>
@@ -292,62 +327,40 @@ class AddDeck extends React.Component {
                       </div>
                       <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
-                  <form className="ui form upload">
-                      <div className="two fields">
-                          <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
-                              <label>
-                                  Title
-                              </label>
-                              <input type="text" name="deck-title" placeholder="Title" aria-required="true" ref="input_title" />
-                          </div>
-                          <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
-                              <label id="language">
-                                  Language
-                              </label>
-                              {languageOptions}
-                          </div>
-                      </div>
                       <div className="field">
-                          <label id="deck-description">Description</label>
-                          <textarea rows="4" aria-labelledby="deck-description" ref="textarea_description" ></textarea>
-                      </div>
-                      <div className="two fields">
-                          <div className="field disabled" ref="div_themes" >
-                              <label id="themes">Choose deck theme</label>
-                                  {themeOptions}
-                          </div>
-                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
-                              <label id="license">License</label>
-                                  {licenceOptions}
+                          <label htmlFor="tags">Add tags</label>
+                          <div className="ui left icon input">
+                              <i className="tags icon"></i>
+                          <input type="text" aria-labelledby="tags" id="tags" placeholder="Add tags" ref="input_tags" data-tooltip={hint_tags} />
                           </div>
                       </div>
-                      <div className="fluid inline field">
-                          <i className="ui tags large icon" aria-label="Add tags"></i>
-                          <input type="text" name="tags" placeholder="Add Tags" ref="input_tags" data-tooltip={hint_tags} />
-                      </div>
+
+
+                <div className="two column row">
+                    <div className="column">
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
-                              <input type="checkbox" tabIndex="0" aria-labelledby="terms" aria-required="true" ref="checkbox_conditions" />
-                              <label id="terms">
+                              <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
+                              <label htmlFor="terms">
                                   I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
                               </label>
                           </div>
+                      </div>   
+                    </div>
+                  <div className="column">
+                      <div className="ui right floated buttons">
+                      <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                          Create deck
+                        </div>            
+                      <div className="ui secondary button" aria-label="cancel" role="button" tabIndex="0" onClick={this.handleCancel.bind(this)} >
+                          Cancel
+                        </div>
                       </div>
+               </div>                   
+              </div>
                   </form>
               </div>
-              <div className="two column row">
-                  <div className="column">
-                      <div className={btnClasses_submit} aria-label="submit" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
-                          Add deck
-                      </div>
-                  </div>
-                  <div className="column">
-                      <div className="ui secondary button" aria-label="cancel" tabIndex="0" onClick={this.handleCancel.bind(this)} >
-                          Cancel
-                      </div>
-                  </div>
-              </div>
-          </div>
+            </div>
           {errorView}
       </div>
         );
