@@ -1,3 +1,4 @@
+/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */
 export default {
     SizeCSS : {
         maxHeight: 500,

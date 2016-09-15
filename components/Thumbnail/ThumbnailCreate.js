@@ -4,14 +4,16 @@ import classNames from 'classnames/bind';
 import webshot from 'webshot';
 import fs from 'fs';
 import path from 'path';
-import { SizeCSS, AbsoluteDirpath, Options } from './Properties';
+import { SizeCSS, AbsoluteDirpath, Options } from './ThumbnailOptions';
 
+/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */
 class ThumbnailCreate extends React.Component {
     render() {
         const thumbnailFilepath = path.join(AbsoluteDirpath, this.props.slideId + '.png');
+        let thumbnailHTML = '';
         fs.stat(thumbnailFilepath, (err, stats) => {
-            if (err) {
-                let thumbnailHTML = ReactDOM.renderToStaticMarkup(
+            if ((err && this.props.action === 'new') || this.props.action === 'update') {
+                thumbnailHTML = ReactDOM.renderToStaticMarkup(
                     <div className="ui bottom attached segment">
                         <div className="ui" >
                             <div dangerouslySetInnerHTML={{__html:this.props.slideTitle}} />
@@ -20,7 +22,7 @@ class ThumbnailCreate extends React.Component {
                     </div>
                 );
                 webshot(thumbnailHTML, thumbnailFilepath, Options, (err) => {
-                    console.log(err);
+                    console.log('Error while creating thumbnail:', err);
                 });
             }
         });

@@ -82,18 +82,18 @@ class DeckViewPanel extends React.Component {
                     </div>
                     <div className="ui  divider"></div>
                     <div key={this.props.slideIndex} className="ui three column grid container">
+                        {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                         {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
                             if (index < maxSlideThumbnails) {
                                 return (<div key={index} className="column">
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        // Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details
                                                         <ThumbnailShow key={index}
                                                             slideId={slide.id}
                                                             slideTitle={slide.title}
                                                             slideContent={slide.content}
-                                                            action="new" // the other options are "update" and "skip"
+                                                            action="new"
                                                         />
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
