@@ -117,6 +117,28 @@ export default {
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
+            //update a deck by creating a new revision and setting it as active
+        } else if (resource === 'deck.updateWithRevision') {
+            if (params.tags.length === 1 && params.tags[0].length === 0)
+                params.tags = undefined;
+            let toSend = {
+                description: params.description ? params.description : 'empty',
+                language: params.language,
+                tags: params.tags,
+                title: params.title,
+                user: params.userid.toString(),
+                license: params.licence
+            };
+            if (params.root_deck != null){
+                toSend.root_deck = params.root_deck;
+            }
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                json: true,
+                body: toSend
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
         }
     }
     // delete: (req, resource, params, config, callback) => {}
