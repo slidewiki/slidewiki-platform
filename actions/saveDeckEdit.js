@@ -3,15 +3,16 @@ import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 
 export default function saveDeckEdit(context, payload, done) {
-    let userId = context.getStore(UserProfileStore).userid;
+    //enrich with user id
+    let userid = context.getStore(UserProfileStore).userid;
 
-    if (userId == null || userId === '') {
+    if (userid == null || userid === '') {
         context.executeAction(navigateAction, {
             url: '/'
         });
     } else {
         //enrich with user id
-        payload.userid = userId;
+        payload.userid = userid;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
@@ -28,5 +29,4 @@ export default function saveDeckEdit(context, payload, done) {
         });
     }
 }
-
 

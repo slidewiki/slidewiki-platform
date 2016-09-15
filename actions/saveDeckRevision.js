@@ -2,18 +2,17 @@ import UserProfileStore from '../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 
-
 export default function saveDeckRevision(context, payload, done) {
     //enrich with user id
-    let userId = context.getStore(UserProfileStore).userid;
+    let userid = context.getStore(UserProfileStore).userid;
 
-    if (userId == null || userId === '') {
+    if (userid == null || userid === '') {
         context.executeAction(navigateAction, {
             url: '/'
         });
     } else {
         //enrich with user id
-        payload.userid = userId;
+        payload.userid = userid;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
