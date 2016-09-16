@@ -45,17 +45,17 @@ class DeckPropertiesEditor extends React.Component {
         let validationErrors = {}, isValid = true;
 
         if (this.state.title == null || this.state.title.length === 0) {
-            validationErrors.title = 'The title is a must have.';
+            validationErrors.title = 'Please enter a title.';
             isValid = false;
         }
 
         if (this.state.language == null || this.state.language.length !== 5) {
-            validationErrors.language = 'The language is a must have.';
+            validationErrors.language = 'Please select a language.';
             isValid = false;
         }
 
         if (this.state.licence == null || this.state.licence.length < 2) {
-            validationErrors.licence = 'The licence is a must have.';
+            validationErrors.licence = 'Please select a licence.';
             isValid = false;
         }
 
@@ -81,9 +81,9 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
-        let userΙd = this.props.UserProfileStore.userid;
+        let userid = this.props.UserProfileStore.userid;
         let isUserEditor = false;
-        if (userΙd != null && userΙd !== '' && this.props.DeckEditStore.editors.includes(String(userΙd))) {
+        if (userid != null && userid !== '' && this.props.DeckEditStore.editors.includes(String(userid))) {
             isUserEditor = true;
         }
 
@@ -102,7 +102,7 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.licence != null
         });
-        let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true"
+        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true"
                                       value={this.state.language}
                                       onChange={this.handleChange.bind(this, 'language')}>
             <option>
@@ -112,11 +112,11 @@ class DeckPropertiesEditor extends React.Component {
                 English
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" selected={this.state.theme}
+        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme" selected={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
             <option value="DefaultTheme">Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" aria-labelledby="licence"
+        let licenceOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.licence}
                                      onChange={this.handleChange.bind(this, 'licence')}>
             <option value="CC0">CC0</option>
@@ -124,7 +124,7 @@ class DeckPropertiesEditor extends React.Component {
             <option value="CC BY-SA">CC BY-SA</option>
         </select>;
 
-        let saveDeckButton = isUserEditor ? <div className='ui primary button' aria-label="save" tabIndex="0"
+        let saveDeckButton = isUserEditor ? <div className='ui primary button' role="button" aria-describedby="saveDeck" tabIndex="0"
                                                  onClick={this.handleSave.bind(this, false)}>Save</div> : '';
 
         return (
@@ -161,7 +161,7 @@ class DeckPropertiesEditor extends React.Component {
                                 {themeOptions}
                             </div>
                             <div className={licenceFieldClass} data-tooltip={this.state.validationErrors.licence}>
-                                <label id="licence">licence</label>
+                                <label id="licence">License</label>
                                 {licenceOptions}
                             </div>
                         </div>
@@ -172,11 +172,11 @@ class DeckPropertiesEditor extends React.Component {
                                    data-tooltip={this.state.validationErrors.tags}/>
                         </div>
                         {saveDeckButton}
-                        <div className='ui primary button' aria-label="save" tabIndex="0"
+                        <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision" tabIndex="0"
                              onClick={this.handleSave.bind(this, true)}>
                             Save new revision
                         </div>
-                        <div className="ui secondary button" aria-label="cancel" tabIndex="0"
+                        <div className="ui secondary button" role="button" aria-describedby="cancel" tabIndex="0"
                              onClick={this.handleCancel.bind(this)}>
                             Cancel
                         </div>
