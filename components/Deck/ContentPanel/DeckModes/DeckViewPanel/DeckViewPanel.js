@@ -34,7 +34,6 @@ class DeckViewPanel extends React.Component {
         // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
         const deckTheme = 'Simple'; //this.props.DeckViewStore.deckData.theme;
         const deckTitle = this.getDeckTitle(activeVersion, this.props.DeckViewStore.deckData.revisions);
-        console.log(deckTitle);
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = this.props.DeckViewStore.deckData.description;
         const deckCreator = this.props.DeckViewStore.userData.username;
