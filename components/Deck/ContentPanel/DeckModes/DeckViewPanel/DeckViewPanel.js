@@ -16,6 +16,12 @@ class DeckViewPanel extends React.Component {
         }
         return text;
     }
+    getDeckTitle(activeVersion, revisions) {
+        for (let index of revisions) {
+            if (index.id === activeVersion)
+                return index.title;
+        }
+    }
     render() {
         const heightStyle = {
             height: '450px'
@@ -27,7 +33,8 @@ class DeckViewPanel extends React.Component {
         const totalRevisions = this.props.DeckViewStore.deckData.revisions.length;
         // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
         const deckTheme = 'Simple'; //this.props.DeckViewStore.deckData.theme;
-        const deckTitle = this.props.DeckViewStore.deckData.revisions[activeVersion - 1].title;
+        const deckTitle = this.getDeckTitle(activeVersion, this.props.DeckViewStore.deckData.revisions);
+        console.log(deckTitle);
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = this.props.DeckViewStore.deckData.description;
         const deckCreator = this.props.DeckViewStore.userData.username;
