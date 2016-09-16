@@ -108,7 +108,8 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.licence
+                license: params.licence,
+                new_revision: false
             };
             rp({
                 method: 'PUT',
@@ -127,7 +128,8 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.licence
+                license: params.licence,
+                new_revision: true
             };
             if (params.root_deck != null){
                 toSend.root_deck = params.root_deck;
