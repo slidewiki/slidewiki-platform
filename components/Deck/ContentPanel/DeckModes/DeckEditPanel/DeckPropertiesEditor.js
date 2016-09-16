@@ -83,7 +83,7 @@ class DeckPropertiesEditor extends React.Component {
     render() {
         let userid = this.props.UserProfileStore.userid;
         let isUserEditor = false;
-        if (userid != null && userid !== '' && this.props.DeckEditStore.editors.includes(String(userid))) {
+        if (userid != null && userid !== '' && this.props.DeckEditStore.editors.includes(userid)) {
             isUserEditor = true;
         }
 

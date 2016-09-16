@@ -48,12 +48,13 @@ export default {
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
             Promise.all([deckPromise, editorsPromise]).then((res) => {
                 let deck = JSON.parse(res[0]), editors = JSON.parse(res[1]);
+                let revision = deck.revisions[0];
                 let deckProps = {
-                    description: deck.description,
+                    description: revision.description != null ? revision.description : deck.description,
                     language: deck.language,
-                    tags: deck.tags,
-                    title: deck.revisions[0].title,
-                    licence: deck.revisions[0].license
+                    tags: revision.tags != null ? revision.tags : deck.tags,
+                    title: revision.title != null ? revision.title : deck.title,
+                    licence: revision.license != null ? revision.license : deck.license
                 };
                 callback(null, {
                     deckProps: deckProps,
@@ -131,7 +132,7 @@ export default {
                 license: params.licence,
                 new_revision: true
             };
-            if (params.root_deck != null){
+            if (params.root_deck != null) {
                 toSend.root_deck = params.root_deck;
             }
             rp({
