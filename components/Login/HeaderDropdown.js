@@ -28,7 +28,7 @@ class HeaderDropdown extends React.Component {
         return(
             <div className="ui top right pointing dropdown" ref="userDropDown">
                 <div className="text">
-                    <i className="large user icon"/> My Profile
+                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 50 }/>
                 </div>
                 <div className="menu">
                     <div className="header">
