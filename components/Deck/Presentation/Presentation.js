@@ -89,8 +89,11 @@ class Presentation extends React.Component{
         if(slides){
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
-              //  console.log(slide);
-                let content = slide.title + slide.content + '<aside class="notes">' + slide.speakernotes + '</aside>';
+                let notes = ''
+                if(slide.speakernotes){
+                    notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
+                }
+                let content = slide.title + slide.content + notes;
                 returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
             }
             return returnList;
