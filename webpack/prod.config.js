@@ -33,12 +33,8 @@ let webpackConfig = {
             { test: /\.json$/, loader: 'json-loader'},
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-<<<<<<< HEAD
             { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
 
-=======
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}            
->>>>>>> master
         ]
     },
     node: {
@@ -48,14 +44,10 @@ let webpackConfig = {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('production'),
-<<<<<<< HEAD
                 // Mainly used to require CSS files with webpack, which can happen only on browser
                 // Used as `if (process.env.BROWSER)...`
                 BROWSER: JSON.stringify(true),
 
-=======
-                BROWSER: JSON.stringify(true)
->>>>>>> master
             }
         }),
 
