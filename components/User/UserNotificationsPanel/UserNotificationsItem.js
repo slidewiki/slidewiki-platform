@@ -29,7 +29,7 @@ class UserNotificationsItem extends React.Component {
             'ui icon': true,
             'big': this.props.iconSize === 'big'
         });
-        const viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : 'deckview') + notification.content_id;
+        const viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
         switch (notification.activity_type) {
             case 'translate':
                 const translateIconClass = allIconClass.concat(' translate');

@@ -12,9 +12,9 @@ const customStyles = {
     content : {
         top                   : '15%',
         left                  : '25%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%'
+        right                 : '25%',
+        bottom                : 'auto'
+        // marginRight           : '-50%'
 
     }
 };
@@ -100,7 +100,7 @@ class LoginModal extends React.Component {
             {loginButton}
             <Modal id='signinModal' isOpen={this.state.openModal}  style={customStyles}>
               <div className="ui container">
-                  <div className="ui right">
+                  <div className="ui right floated">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
                       <i className="remove icon"/>Close
                     </button>
@@ -109,8 +109,8 @@ class LoginModal extends React.Component {
                     <h1 className="ui dividing header">Sign In</h1>
                     <form className="ui form signin" onSubmit={this.signin.bind(this)}>
                       <div className="ui five wide icon input field">
-                        <div><label htmlFor="email1" hidden>E-Mail</label></div>
-                        <input type="email1" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+                        <div><label htmlFor="username" hidden>E-Mail</label></div>
+                        <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
 
                       </div>
                         <br/>

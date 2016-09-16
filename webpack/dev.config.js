@@ -35,7 +35,6 @@ let webpackConfig = {
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             // Getting URLs for font files otherwise we get encoding errors in css-loader
             { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
-
         ]
     },
     node: {

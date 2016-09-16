@@ -3,9 +3,15 @@ A couple of minor changes which allow Reveal.js styles to be on other pages.
 Most useful on slide view and edit mode, so we can see what our slides will
 look like
 */
+
+
 html, body{
     overflow-x:hidden;
     overflow-y: auto;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    line-height: 1.4285em;
+    border-color: rgba(0, 0, 0, 0.875088);
 }
 
 .reveal{
@@ -21,4 +27,5 @@ Remove settings from the themes
 body{
     background: #ffffff;
     background-color: #ffffff;
+
 }
