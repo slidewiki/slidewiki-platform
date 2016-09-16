@@ -154,38 +154,27 @@ class SlideContentEditor extends React.Component {
         //let simpledraggable =
         //../../../../../../assets/ckeditor_config.js
         //require('../../../../../assets/simple-draggable.js');
-        if(process.env.BROWSER){
-
-        //require('../../../../../custom_modules/simple-draggable/lib/index.js');
+        /*
+        require('../../../../../custom_modules/simple-draggable/lib/index.js');
         //SimpleDraggable('div.draggable', {
-        //test on: http://localhost:3000/deck/344-2/slide/1397-1/1397-1:10/edit
-        //SimpleDraggable('.pptx2html.div.draggable', {
-        //SimpleDraggable('.div.draggable', {
-        //alert($('.pptx2html.div').css("position"));
-        //alert($('.pptx2html .block').css("position"));
-            if ($('.pptx2html .block').css('position') === 'absolute')
-            {/*add border*/ $('.pptx2html .block')
-                .css({'borderStyle': 'dashed dashed none dashed', 'borderColor': '#33cc33'});
-            }
 
-            //SimpleDraggable('.pptx2html .block', {
-            SimpleDraggable('.block', {
-                onlyX: false
-              , onlyY: false
-              , onStart: function (event, element) {
-                  // Do something on drag start
-                  console.log('dragging start');
-              }
-              , onStop: function (event, element) {
-                  // Do something on drag stop
-                  console.log('dragging stop');
-              }
-              , onDrag: function (event, element) {
-                  // Do something on drag drag
-                  console.log('dragging element');
-              }
-            });
-        }
+        SimpleDraggable('div.draggable', {
+            onlyX: false
+          , onlyY: false
+          , onStart: function (event, element) {
+                // Do something on drag start
+                console.log('dragging start');
+          }
+          , onStop: function (event, element) {
+                // Do something on drag stop
+                console.log('dragging stop');
+          }
+          , onDrag: function (event, element) {
+                // Do something on drag drag
+                console.log('dragging element');
+          }
+        });
+        */
         //based on querySelectorAll (selects based on class of elements - get all children + apply draggable x & y positioning)
         //TODO: remove surrounding DIVS of some PPTX2HTML output elements
         //########Works well with following PPTX2HTML output:
