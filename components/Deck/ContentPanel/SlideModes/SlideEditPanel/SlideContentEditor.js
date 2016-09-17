@@ -125,24 +125,38 @@ class SlideContentEditor extends React.Component {
         //require('../../../../../assets/simpledraggable');
         //alert('test' + document.querySelectorAll("div.draggable"));
         //alert('test' + document.querySelectorAll("draggable"));
-        /*
-        SimpleDraggable('.draggable', {
-            onlyX: false
-          , onlyY: false
-          , onStart: function (event, element) {
-                // Do something on drag start
-                console.log('dragging start');
+        if(process.env.BROWSER){
+
+        //require('../../../../../custom_modules/simple-draggable/lib/index.js');
+        //SimpleDraggable('div.draggable', {
+        //test on: http://localhost:3000/deck/344-2/slide/1397-1/1397-1:10/edit
+        //SimpleDraggable('.pptx2html.div.draggable', {
+        //SimpleDraggable('.div.draggable', {
+        //alert($('.pptx2html.div').css("position"));
+        //alert($('.pptx2html .block').css("position"));
+            if ($('.pptx2html .block').css('position') === 'absolute')
+            {/*add border*/ $('.pptx2html .block')
+                .css({'borderStyle': 'dashed dashed none dashed', 'borderColor': '#33cc33'});
             }
-          , onStop: function (event, element) {
-                // Do something on drag stop
-                console.log('dragging stop');
-            }
-          , onDrag: function (event, element) {
-                // Do something on drag drag
-                console.log('dragging element');
-            }
-        });
-        */
+            //SimpleDraggable('.pptx2html .block', {
+            SimpleDraggable('.block', {
+                onlyX: false
+              , onlyY: false
+              , onStart: function (event, element) {
+                  // Do something on drag start
+                  console.log('dragging start');
+              }
+              , onStop: function (event, element) {
+                  // Do something on drag stop
+                  console.log('dragging stop');
+              }
+              , onDrag: function (event, element) {
+                  // Do something on drag drag
+                  console.log('dragging element');
+              }
+            });
+        }
+
         //setTimeout(this.forceUpdate(), 500);
         //this.forceUpdate();
 
