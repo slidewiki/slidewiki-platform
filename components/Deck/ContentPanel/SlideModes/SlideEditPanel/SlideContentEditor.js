@@ -152,27 +152,32 @@ class SlideContentEditor extends React.Component {
         //alert($('.pptx2html .block').css("position"));
             if ($('.pptx2html .block').css('position') === 'absolute')
             {/*add border*/ $('.pptx2html .block')
-                .css({'borderStyle': 'dashed dashed none dashed', 'borderColor': '#33cc33'});
+                .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             }
-            SimpleDraggable('.pptx2html .block', {
+            /*
             //SimpleDraggable('.block', {
+            SimpleDraggable('.pptx2html .block', {
                 onlyX: false
               , onlyY: false
               , onStart: function (event, element) {
                   // Do something on drag start
-                  console.log('dragging start');
+                  //console.log('dragging start');
               }
               , onStop: function (event, element) {
                   // Do something on drag stop
-                  console.log('dragging stop');
+                 // console.log('dragging stop');
               }
               , onDrag: function (event, element) {
                   // Do something on drag drag
-                  console.log('dragging element');
+                 // console.log('dragging element');
               }
-            });
+          });*/
+          SimpleDraggable('.pptx2html .block', {
+              onlyX: false
+            , onlyY: false
+          });          
         }
-        
+
         //based on querySelectorAll (selects based on class of elements - get all children + apply draggable x & y positioning)
         //TODO: remove surrounding DIVS of some PPTX2HTML output elements
         //########Works well with following PPTX2HTML output:
