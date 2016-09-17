@@ -125,6 +125,22 @@ class SlideContentEditor extends React.Component {
         //require('../../../../../assets/simpledraggable');
         //alert('test' + document.querySelectorAll("div.draggable"));
         //alert('test' + document.querySelectorAll("draggable"));
+
+
+        //setTimeout(this.forceUpdate(), 500);
+        this.forceUpdate();
+
+    }
+    componentDidUpdate() {
+
+        //console.log('componentDidUpdate');
+        //let simpledraggable = require('simple-draggable');
+        //let simpledraggable =
+        //../../../../../../assets/ckeditor_config.js
+        //require('../../../../../assets/simple-draggable.js');
+
+        //require('../../../../../custom_modules/simple-draggable/lib/index.js');
+
         if(process.env.BROWSER){
 
         //require('../../../../../custom_modules/simple-draggable/lib/index.js');
@@ -138,8 +154,8 @@ class SlideContentEditor extends React.Component {
             {/*add border*/ $('.pptx2html .block')
                 .css({'borderStyle': 'dashed dashed none dashed', 'borderColor': '#33cc33'});
             }
-            //SimpleDraggable('.pptx2html .block', {
-            SimpleDraggable('.block', {
+            SimpleDraggable('.pptx2html .block', {
+            //SimpleDraggable('.block', {
                 onlyX: false
               , onlyY: false
               , onStart: function (event, element) {
@@ -156,39 +172,7 @@ class SlideContentEditor extends React.Component {
               }
             });
         }
-
-        //setTimeout(this.forceUpdate(), 500);
-        //this.forceUpdate();
-
-    }
-    componentDidUpdate() {
-
-        //console.log('componentDidUpdate');
-        //let simpledraggable = require('simple-draggable');
-        //let simpledraggable =
-        //../../../../../../assets/ckeditor_config.js
-        //require('../../../../../assets/simple-draggable.js');
-        /*
-        require('../../../../../custom_modules/simple-draggable/lib/index.js');
-        //SimpleDraggable('div.draggable', {
-
-        SimpleDraggable('div.draggable', {
-            onlyX: false
-          , onlyY: false
-          , onStart: function (event, element) {
-                // Do something on drag start
-                console.log('dragging start');
-          }
-          , onStop: function (event, element) {
-                // Do something on drag stop
-                console.log('dragging stop');
-          }
-          , onDrag: function (event, element) {
-                // Do something on drag drag
-                console.log('dragging element');
-          }
-        });
-        */
+        
         //based on querySelectorAll (selects based on class of elements - get all children + apply draggable x & y positioning)
         //TODO: remove surrounding DIVS of some PPTX2HTML output elements
         //########Works well with following PPTX2HTML output:
