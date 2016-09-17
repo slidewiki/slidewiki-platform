@@ -36,7 +36,6 @@ class DefaultHTMLLayout extends React.Component {
                 {/* All external vendors bundle*/}
                 <script src="/public/js/vendor.bundle.js"></script>
                 <script src="/custom_modules/ckeditor/ckeditor.js"></script>
-                <script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script type="javascript">
                     //CKEDITOR.disableAutoInline = false; //need to disable auto-initate to config inline toolbars
                     CKEDITOR.disableAutoInline = true; //need to disable auto-initate to config inline toolbars
