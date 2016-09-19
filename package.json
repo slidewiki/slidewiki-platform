@@ -45,14 +45,12 @@
     "lint"
   ],
   "dependencies": {
-    "acorn": "^4.0.2",
     "async": "^2.0.1",
     "body-parser": "^1.15.2",
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
-    "cross-spawn": "^4.0.0",
     "css-loader": "^0.25.0",
     "csurf": "^1.9.0",
     "debug": "^2.2.0",
@@ -69,14 +67,11 @@
     "identicons-react": "^0.1.0",
     "immutable": "^3.8.1",
     "install": "^0.8.1",
-    "iso-639-1": "^1.2.1",
     "js-cookie": "^2.1.2",
     "js-sha512": "^0.2.2",
     "lodash": "^4.15.0",
     "md5": "^2.2.1",
-    "natives": "^1.1.0",
     "npm": "^3.10.7",
-    "phantomjs-prebuilt": "^2.1.12",
     "react": "^15.3.1",
     "react-custom-scrollbars": "^4.0.0",
     "react-dom": "^15.3.1",
@@ -96,8 +91,7 @@
     "superagent": "^2.0.0",
     "superagent-csrf": "^1.0.0",
     "superagent-csrf-middleware": "^0.3.0",
-    "url-loader": "^0.5.7",
-    "webshot": "^0.18.0"
+    "url-loader": "^0.5.7"
   },
   "devDependencies": {
     "babel-cli": "6.14.0",

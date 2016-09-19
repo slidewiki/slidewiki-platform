@@ -62,7 +62,7 @@ const app = new Fluxible({
         AdvancedSearchStore,
         UserProfileStore,
         ErrorStore,
-        AddDeckStore,
+        AddDeckStore
     ]
 });
 
