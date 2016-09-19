@@ -297,6 +297,7 @@ export default {
             //context.executeAction(loadDeck, payload, done);
         }
     },
+    /* This should be the last route in routes.js */
     notfound: {
         path: '*',
         method: 'get',
@@ -305,4 +306,5 @@ export default {
             context.executeAction(loadNotFound, payload, done);
         }
     }
+    /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/
 };
