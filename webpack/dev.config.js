@@ -18,7 +18,7 @@ let webpackConfig = {
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
-        filename: '[name].js',
+        filename: '[name].js'
     },
     module: {
         loaders: [
@@ -37,7 +37,7 @@ let webpackConfig = {
         ]
     },
     node: {
-        setImmediate: false,
+        setImmediate: false
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
@@ -54,10 +54,7 @@ let webpackConfig = {
             }
         })
     ],
-    devtool: 'eval',
-    externals: [
-        /^(?!\.|\/).+/i,
-    ]
+    devtool: 'eval'
 };
 
 module.exports = webpackConfig;
