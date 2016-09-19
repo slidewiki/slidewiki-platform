@@ -11,6 +11,9 @@ class ImportStore extends BaseStore {
         this.fileReadyForUpload = false;
         this.deckId = null;
         this.error = null;
+        this.noOfSlides = 0;
+        this.totalNoOfSlides = 0;
+        this.safetyCounter = 0;
     }
     destructor()
     {
@@ -22,6 +25,9 @@ class ImportStore extends BaseStore {
         this.fileReadyForUpload = false;
         this.deckId = null;
         this.error = null;
+        this.noOfSlides = 0;
+        this.totalNoOfSlides = 0;
+        this.safetyCounter = 0;
     }
     getState() {
         return {
@@ -32,7 +38,10 @@ class ImportStore extends BaseStore {
             fileReadyForUpload: this.fileReadyForUpload,
             uploadProgress: this.uploadProgress,
             deckId: this.deckId,
-            error: this.error
+            error: this.error,
+            noOfSlides: this.noOfSlides,
+            totalNoOfSlides: this.totalNoOfSlides,
+            safetyCounter: this.safetyCounter
         };
     }
     dehydrate() {
@@ -47,6 +56,9 @@ class ImportStore extends BaseStore {
         this.uploadProgress = state.uploadProgress;
         this.deckId = state.deckId;
         this.error = state.error;
+        this.noOfSlides = state.noOfSlides;
+        this.totalNoOfSlides = state.totalNoOfSlides;
+        this.safetyCounter = state.safetyCounter;
     }
 
     storeFile(payload) {
@@ -73,8 +85,10 @@ class ImportStore extends BaseStore {
     uploadSuccess(headers) {
         console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
-        this.uploadProgress = 100;
+        // this.uploadProgress = 100;
+        this.uploadProgress = 33;
         this.deckId = headers.deckid;
+        this.totalNoOfSlides = parseInt(headers.noofslides);
 
         this.file = null;
         this.base64 = null;
@@ -86,6 +100,9 @@ class ImportStore extends BaseStore {
         console.log('ImportStore: uploadStarted()');
         this.uploadProgress = 10;
         this.error = null;
+        this.noOfSlides = 0;
+        this.totalNoOfSlides = 0;
+        this.safetyCounter = 0;
         this.emitChange();
     }
     uploadMoreProgress(progress) {
@@ -100,6 +117,23 @@ class ImportStore extends BaseStore {
 
         this.emitChange();
     }
+    slidesProgress(res) {
+        if (this.noOfSlides < res.noofslides) {
+            this.safetyCounter = 0;
+            this.noOfSlides = res.noofslides;
+            if (this.noOfSlides < this.totalNoOfSlides) {
+                this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
+            } else {
+                this.uploadProgress = 100;
+            }
+        } else {
+            if (++this.safetyCounter > 50) {//50 times the call was made, and no change in noOfSlides
+                this.uploadProgress = 100;
+            }
+        }
+
+        this.emitChange();
+    }
 }
 
 ImportStore.storeName = 'ImportStore';
@@ -109,7 +143,8 @@ ImportStore.handlers = {
     'UPLOAD_FAILED': 'uploadFailed',
     'UPLOAD_SUCCESS': 'uploadSuccess',
     'UPLOAD_STARTED': 'uploadStarted',
-    'UPLOAD_MORE_PROGRESS': 'uploadMoreProgress'
+    'UPLOAD_MORE_PROGRESS': 'uploadMoreProgress',
+    'SLIDES_PROGRESS': 'slidesProgress'
 };
 
 export default ImportStore;

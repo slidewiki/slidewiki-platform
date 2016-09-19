@@ -35,8 +35,10 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/tab.min.js"></script>
                 {/* All external vendors bundle*/}
                 <script src="/public/js/vendor.bundle.js"></script>
-                <script src="/bower_components/ckeditor/ckeditor.js"></script>
+                <script src="/custom_modules/ckeditor/ckeditor.js"></script>
+                <script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script type="javascript">
+                    //CKEDITOR.disableAutoInline = false; //need to disable auto-initate to config inline toolbars
                     CKEDITOR.disableAutoInline = true; //need to disable auto-initate to config inline toolbars
                 </script>
                 <script src="/bower_components/reveal.js/js/reveal.js"></script>
