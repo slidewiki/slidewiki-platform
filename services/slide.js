@@ -110,8 +110,6 @@ export default {
           //TODO get real content_id
           //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
-            const root_deck_id = '68';
-            const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
             /*********connect to microservices*************/
             rp.put({
                 uri: Microservices.deck.uri + '/slide/' + args.id,
@@ -123,10 +121,9 @@ export default {
                     //TODO
                     speakernotes: args.speakernotes,
                     //args.content
-                    //todo: send the right user id
                     //TODO: speaker notes + in object model database in deck microservice
-                    user: randomUserId,
-                    root_deck: args.deckID,
+                    user: args.userid.toString(),
+                    root_deck: args.root_deck,
                     parent_slide: {
                         id: content_id,
                         revision: content_id
