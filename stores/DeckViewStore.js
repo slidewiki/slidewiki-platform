@@ -3,30 +3,22 @@ import {BaseStore} from 'fluxible/addons';
 class DeckViewStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.deckData = '';
-        this.slidesData = '';
-        this.userData = '';
+        this.content = '';
     }
     updateContent(payload) {
-        this.deckData = payload.deckData;
-        this.slidesData = payload.slidesData;
-        this.userData = payload.userData;
+        this.content = payload.content;
         this.emitChange();
     }
     getState() {
         return {
-            deckData: this.deckData,
-            slidesData: this.slidesData,
-            userData: this.userData,
+            content: this.content,
         };
     }
     dehydrate() {
         return this.getState();
     }
     rehydrate(state) {
-        this.deckData = state.deckData;
-        this.slidesData = state.slidesData;
-        this.userData = state.userData;
+        this.content = state.content;
     }
 }
 
