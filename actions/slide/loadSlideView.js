@@ -1,8 +1,7 @@
 import {shortTitle} from '../../configs/general';
-import { slideIdTypeError, serviceUnavailable } from '../loadErrors';
+import { slideIdTypeError } from '../loadErrors';
 
 export default function loadSlideView(context, payload, done) {
-    console.log('load slide view called');
     if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
         return;
@@ -10,8 +9,7 @@ export default function loadSlideView(context, payload, done) {
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.executeAction(serviceUnavailable, payload).catch((error) => {done(error);});
-            return;
+            context.dispatch('LOAD_SLIDE_CONTENT_FAILURE', err);
         } else {
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
         }
