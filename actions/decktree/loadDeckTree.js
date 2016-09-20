@@ -17,7 +17,7 @@ export default function loadDeckTree(context, payload, done) {
 
     let currentSelector = context.getStore(DeckTreeStore).getSelector();
     let runFetchTree = 1;
-    if(parseInt(currentSelector.id) === parseInt(payload.params.id)){
+    if(currentSelector.id === payload.params.id){
         runFetchTree = 0;
     }
     let pageTitle = shortTitle + ' | Deck Tree | ' + payload.params.id;
