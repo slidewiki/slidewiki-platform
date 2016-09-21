@@ -52,9 +52,11 @@ let webpackConfig = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                 BROWSER: JSON.stringify(true)
             }
-        })
+        }),
+        new webpack.IgnorePlugin(/vertx/)
     ],
-    devtool: 'eval'
+    devtool: 'eval',
+    target: 'node' // in order to ignore built-in modules like path, fs, etc.
 };
 
 module.exports = webpackConfig;
