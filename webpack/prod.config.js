@@ -32,7 +32,7 @@ let webpackConfig = {
             { test: /\.json$/, loader: 'json-loader'},
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}            
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
         ]
     },
     node: {
@@ -66,7 +66,10 @@ let webpackConfig = {
         }),
         new Visualizer()
     ],
-    devtool: 'source-map'
+    devtool: 'source-map',
+    externals: [
+        /^(?!\.|\/).+/i,
+    ]
 };
 
 module.exports = webpackConfig;
