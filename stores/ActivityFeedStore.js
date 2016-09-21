@@ -34,23 +34,23 @@ class ActivityFeedStore extends BaseStore {
         this.emitChange();
     }
     addCommentActivity(payload) {
-      const comment = payload.comment;
-      console.log(comment);
-      const activityType = (comment.parent_comment === undefined) ? 'comment' : 'reply';
-      const newActivity = {
-          activity_type: activityType,
-          user_id: comment.user_id,
-          content_id: comment.content_id,
-          content_kind: comment.content_kind,
-          content_name: comment.content_name,
-          comment_info: {
-              comment_id: comment.id,
-              text: comment.title
-          },
-          author: comment.author
-      };
-      this.activities.unshift(newActivity);//add to the beginning
-      this.emitChange();
+        const comment = payload.comment;
+        console.log(comment);
+        const activityType = (comment.parent_comment === undefined) ? 'comment' : 'reply';
+        const newActivity = {
+            activity_type: activityType,
+            user_id: comment.user_id,
+            content_id: comment.content_id,
+            content_kind: comment.content_kind,
+            content_name: comment.content_name,
+            comment_info: {
+                comment_id: comment.id,
+                text: comment.title
+            },
+            author: comment.author
+        };
+        this.activities.unshift(newActivity);//add to the beginning
+        this.emitChange();
     }
     getState() {
         return {
