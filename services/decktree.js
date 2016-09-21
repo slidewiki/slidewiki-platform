@@ -29,8 +29,7 @@ export default {
                 body:JSON.stringify({
                     selector: selector,
                     nodeSpec: nodeSpec,
-                    //todo: send the right user id
-                    user: '1'
+                    user: args.userid.toString()
                 })
             }).then((res) => {
                 callback(null, {node: JSON.parse(res), selector: args.selector});
@@ -52,8 +51,7 @@ export default {
             rp.put({
                 uri: Microservices.deck.uri + '/decktree/node/rename',
                 body:JSON.stringify({
-                    //todo: send the right user id
-                    user: '1',
+                    user: args.userid.toString(),
                     selector: selector,
                     name: params.newValue
                 })
@@ -74,8 +72,7 @@ export default {
                 method: 'DELETE',
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 body:JSON.stringify({
-                    //todo: send the right user id
-                    user: '1',
+                    user: args.userid.toString(),
                     selector: selector
                 })
             };
