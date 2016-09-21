@@ -17,7 +17,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
     config.extraPlugins = 'sourcedialog';
-    config.line_height="0.25;0.5;0.75;1;1.5;2;";
+    config.line_height=";0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;";
 
     config.toolbar = [
             { name: 'document', items: ['Templates' ] },
