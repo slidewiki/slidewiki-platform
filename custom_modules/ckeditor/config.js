@@ -32,7 +32,7 @@ CKEDITOR.editorConfig = function( config ) {
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
             { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
             { name: 'paragraph', items: ['CreateDiv']},
-            { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
+            { name: 'document', items: [ 'Sourcedialog', 'LineHeight', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
     //'HorizontalRule',
@@ -55,7 +55,8 @@ CKEDITOR.editorConfig = function( config ) {
     ///config.toolbarLocation = 'bottom';
 
     config.uiColor = '#4183C4';
-    config.extraPlugins = 'sourcedialog',
+    //config.extraPlugins = 'sourcedialog',
+    config.extraPlugins = 'sourcedialog, lineheight';
 
 
     //configuration to prevent lay-out change onload
