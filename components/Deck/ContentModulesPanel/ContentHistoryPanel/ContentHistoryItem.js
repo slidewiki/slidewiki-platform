@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import revertRevision from '../../../../actions/revertRevision';
+import revertRevision from '../../../../actions/history/revertRevision';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 
 
