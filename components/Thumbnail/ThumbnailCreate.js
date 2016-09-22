@@ -9,7 +9,7 @@ import { SizeCSS, AbsoluteDirpath, Options } from './ThumbnailOptions';
 /* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */
 class ThumbnailCreate extends React.Component {
     render() {
-        const thumbnailFilepath = path.join(AbsoluteDirpath, this.props.slideId + '.jpg');
+        const thumbnailFilepath = path.join(AbsoluteDirpath, this.props.slideId + '.png');
         let thumbnailHTML = '';
         fs.stat(thumbnailFilepath, (err, stats) => {
             if ((err && this.props.action === 'new') || this.props.action === 'update') {

@@ -17,7 +17,7 @@ class ThumbnailShow extends React.Component {
                         return '';
                     }
                 })()}
-                <img src={path.join(RelativeImagePath, this.props.slideId + '.jpg')} alt={'thumbnail of slide ' + this.props.slideId} />
+                <img src={path.join(RelativeImagePath, this.props.slideId + '.png')} alt={'thumbnail of slide ' + this.props.slideId} />
             </span>
         );
     }
