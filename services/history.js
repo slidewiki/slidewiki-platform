@@ -3,6 +3,10 @@ import rp from 'request-promise';
 
 //extracts the id of the immediate parent deck from the path string
 function findImmediateParentId(selector) {
+    //no parent
+    if (!selector.sid || (selector.stype === 'deck' && selector.sid === selector.id)) {
+        return null;
+    }
     let arr = selector.spath.split(';');
     //root deck is parent
     if (arr.length <= 1) {
@@ -94,27 +98,21 @@ export default {
     },
     update: (req, resource, params, body, config, callback) => {
         let args = params.params ? params.params : params;
-        let selector = {
-            'id': args.selector.id,
-            'spath': args.selector.spath,
-            'sid': String(args.selector.sid),
-            'stype': args.selector.stype
-        };
         if (resource === 'history.revert') {
-            let immediateParentId = findImmediateParentId(selector);
-            console.log({
-                revision_id: String(args.revisionId),
-                root_deck: immediateParentId
-            });
+            let immediateParentId = findImmediateParentId(args.selector);
+            let requestBody = {
+                revision_id: String(args.revisionId)
+            };
+            if (immediateParentId != null) {
+                requestBody.root_deck = immediateParentId;
+            }
             rp.post({
-                uri: Microservices.deck.uri + '/' + selector.stype + '/revert/' + selector.sid.split('-')[0],
-                body: JSON.stringify({
-                    revision_id: String(args.revisionId),
-                    root_deck: immediateParentId
-                })
-            }).then((slide) => {
-                callback(null, slide);
+                uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],
+                body: JSON.stringify(requestBody)
+            }).then((res) => {
+                callback(null, JSON.parse(res));
             }).catch((err) => {
+                console.log(err);
                 callback(err, {
                     error: err
                 });
