@@ -96,6 +96,13 @@ module.exports = function userStoragePlugin(options) {
                         else {
                             cookie.remove(user_cookieName);
                         }
+
+                        //SWIK-493 refresh page
+                        try {
+                            location.reload();
+                        } catch (e) {
+                            //nothing - server side
+                        }
                     };
                     // actionContext.setCookie = function (name, value, options) {
                     //     console.log('userStoragePlugin actionContext setCookie:', name, value, options);
