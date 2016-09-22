@@ -37,12 +37,28 @@ export default function saveDeckRevision(context, payload, done) {
                 context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
             } else {
                 context.dispatch('SAVE_DECK_REVISION_SUCCESS', res);
-                context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
-                    selector: payload.selector,
-                    nodeSpec: {title: striptags(payload.title)}
-                });
+                let newSid = res._id + '-' + res.revisions[0].id;
+                let newPath = '', newURL;
+                //root deck case
+                if (payload.selector.id === payload.selector.sid) {
+                    newURL = '/deck/' + newSid;
+                } else {
+                    if (payload.selector.spath !== '') {
+                        let pathArr = payload.selector.spath.split(';');
+                        let lastPath = pathArr[pathArr.length - 1];
+                        let lastPathPosition = lastPath.split(':')[1];
+                        pathArr[pathArr.length - 1] = newSid + ':' + lastPathPosition;
+                        newPath = pathArr.join(';');
+                    }
+                    newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + newSid + '/' + newPath;
+                    // if deck edited is subdeck update the corresponding tree node. Not necessary in the root deck case,
+                    // since with navigate action the deck tree will be refetched
+                    context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
+                        selector: payload.selector,
+                        nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
+                    });
+                }
                 //update the URL: redirect to view after edit
-                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + payload.selector.sid + '/' + payload.selector.spath;
                 context.executeAction(navigateAction, {
                     url: newURL
                 });
@@ -51,5 +67,3 @@ export default function saveDeckRevision(context, payload, done) {
         });
     }
 }
-
-
