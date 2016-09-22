@@ -1,5 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 import { NavLink } from 'fluxible-router';
+import { timeSince } from '../../../common';
 
 class DeckCard extends React.Component {
     componentDidMount() {}
@@ -8,24 +10,24 @@ class DeckCard extends React.Component {
 
     render() {
         return (
-            <div className="card">
+            <div className='card'>
                 <NavLink className="ui medium centered image" href={'/deck/' + this.props.cardContent.deckID}>
                     <img src={ this.props.cardContent.picture }/>
                 </NavLink>
                 <div className="content">
-                    <div className="header">{this.props.cardContent.title}}</div>
+                    <div className="header"><NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}}</NavLink></div>
                     <div className="meta">
-                        <span className="date">Last updated {this.props.cardContent.updated} ago</span>
+                        <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
                     </div>
                     <div className="description">
                         {this.props.cardContent.description}
                     </div>
                 </div>
                 <div className="extra content">
-                    <NavLink href="/"><i className="thumbs up icon"/>53</NavLink>
-                    <NavLink href="/" className="right floated"><i className="fork icon"/>53</NavLink><br/>
-                    <NavLink href="/"><i className="comment icon"/>53</NavLink>
-                    <NavLink href="/" className="right floated"><i className="download icon"/>53</NavLink>
+                    <NavLink href={'/deck/' + this.props.cardContent.deckID}><i className="thumbs up icon"/>X</NavLink>
+                    <NavLink href={'/deck/' + this.props.cardContent.deckID} className="right floated"><i className="fork icon"/>X</NavLink><br/>
+                    <NavLink href={'/deck/' + this.props.cardContent.deckID}><i className="comment icon"/>X</NavLink>
+                    <NavLink href={'/deck/' + this.props.cardContent.deckID} className="right floated"><i className="download icon"/>X</NavLink>
                 </div>
             </div>
         );

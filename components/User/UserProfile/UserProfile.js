@@ -1,5 +1,4 @@
 import React from 'react';
-import UserDecks from './UserDecks';
 import CategoryBox from './CategoryBox';
 import UserSettings from './UserSettings';
 import PublicUserData from './PublicUserData';
@@ -7,6 +6,7 @@ import PopularDecks from './PopularDecks';
 import { navigateAction } from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import { isEmpty } from '../../../common';
 
 class UserProfile extends React.Component {
     componentDidMount() {
@@ -28,7 +28,6 @@ class UserProfile extends React.Component {
                         <div className = "ui hidden divider" />
                     </div>
                     <div className = "twelve wide column" >
-                        { this.props.UserProfileStore.toShow === 'decks' ? <UserDecks /> : '' }
                         { this.props.UserProfileStore.toShow === 'settings' ? <UserSettings user = { this.props.UserProfileStore.user } dimmer =  {this.props.UserProfileStore.dimmer} failures = { this.props.UserProfileStore.failures }/> : '' }
                         { this.props.UserProfileStore.toShow === 'stats' ? <h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3> : '' }
                     </div>
@@ -49,6 +48,7 @@ class UserProfile extends React.Component {
                         </div>
                         <div className="ui active tab" data-tab="popular">
                         <div className="ui segments">
+                            {(this.props.UserProfileStore.userDecks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                             <div className="ui secondary segment">
                                 <strong>Popular Decks</strong>
                             </div>
@@ -60,6 +60,7 @@ class UserProfile extends React.Component {
                         </div>
                         <div className="ui tab" data-tab="userdecks">
                         <div className="ui segments">
+                            {(this.props.UserProfileStore.userDecks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                             <div className="ui secondary segment">
                                 <strong>All Decks</strong>
                             </div>

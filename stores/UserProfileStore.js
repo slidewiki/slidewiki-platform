@@ -24,6 +24,7 @@ class UserProfileStore extends BaseStore {
             picture: '',
             description: ''
         };
+        this.userDecks = undefined;
         this.username = '';
         this.userid = '';
         this.jwt = '';
@@ -60,6 +61,7 @@ class UserProfileStore extends BaseStore {
             description: ''
         };
         this.userpicture = undefined;
+        this.userDecks = [];
     }
 
     getState() {
@@ -67,6 +69,7 @@ class UserProfileStore extends BaseStore {
             toShow: this.toShow,
             failures: this.failures,
             user: this.user,
+            userDecks: this.userDecks,
             dimmer: this.dimmer,
             username: this.username,
             userid: this.userid,
@@ -84,6 +87,7 @@ class UserProfileStore extends BaseStore {
         this.toShow = state.toShow;
         this.failures = state.failures;
         this.user = state.user;
+        this.userDecks = state.userDecks;
         this.dimmer = state.dimmer;
         this.username = state.username;
         this.userid = state.userid;
@@ -123,6 +127,13 @@ class UserProfileStore extends BaseStore {
         if(this.username === payload.uname)
             this.userpicture = payload.picture;
         this.successMessage();
+    }
+
+    fillInUserDecks(payload) {
+        this.userDecks = [];
+        Object.assign(this.userDecks, payload);
+        console.log(this.userDecks);
+        this.emitChange();
     }
 
     actionFailed(payload) {
@@ -187,6 +198,7 @@ UserProfileStore.handlers = {
     'DELETE_USER_FAILURE': 'actionFailed',
     'NEW_USER_DATA': 'fillInUser',
     'NEW_EDITED_USER_DATA': 'fillInEditedUser',
+    'NEW_USER_DECKS': 'fillInUserDecks',
     'FETCH_USER_FAILED': 'actionFailed',
     'EDIT_USER_FAILED': 'actionFailed',
     'NEW_PASSWORD': 'successMessage',
