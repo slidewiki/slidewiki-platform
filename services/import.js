@@ -12,22 +12,36 @@ export default {
         //for(let k in params) keys.push(k);
         //console.log('import service', keys, params.file, params.base64.length);
 
+        const defaultLicense = 'CC0';
         //create a HTTP POST form request
-        form.append('file', params.base64, {
-            filename: params.file.name ? params.file.name : 'unknown',
-            contentType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        form.append('file', params.base64);
+        form.append('filename', params.filename ? params.filename : 'unknown');
+        form.append('user', params.user);
+        form.append('license', defaultLicense);
+        form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
             //knownLength: params.file.size ? params.file.size : params.base64.length
-        });
-        form.submit('http://localhost:8003/importPPTX', (err, res) => {
+
+        let request = form.submit({
+            port: Microservices.import.port ? Microservices.import.port : 80,
+            host: Microservices.import.host,
+            path: Microservices.import.path ? Microservices.import.path : '/',
+            protocol: Microservices.import.protocol ? Microservices.import.protocol : 'http:',
+            timeout: body.timeout
+        }, (err, res) => {
+            //res.setTimeout(body.timeout);
+
             if (err) {
                 console.error(err);
-                callback(err, null);
+                //only callback if no timeout
+                if (err.toString() !== 'Error: XMLHttpRequest timeout')
+                    callback(err, null);
                 return;
             }
+
             console.log('result of call to import-microservice', res.headers, res.statusCode);
             //res does not contain any data ...
             //the response data have to be send via headers
-            callback(err, res.headers);
+            callback(null, res.headers);
         });
     }
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import {formatDate} from '../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import classNames from 'classnames/bind';
-import readUserNotification from '../../../actions/user/readUserNotification';
+import readUserNotification from '../../../actions/user/notifications/readUserNotification';
 
 class UserNotificationsItem extends React.Component {
     handleClick(notification) {
@@ -29,7 +29,7 @@ class UserNotificationsItem extends React.Component {
             'ui icon': true,
             'big': this.props.iconSize === 'big'
         });
-        const viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : 'deckview') + notification.content_id;
+        const viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
         switch (notification.activity_type) {
             case 'translate':
                 const translateIconClass = allIconClass.concat(' translate');

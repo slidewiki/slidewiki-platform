@@ -3,9 +3,16 @@ import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import AddDeckStore from '../../stores/AddDeckStore';
 import UserProfileStore from '../../stores/UserProfileStore';
+import ImportStore from '../../stores/ImportStore';
 import addDeckShowWrongFields from '../../actions/addDeck/addDeckShowWrongFields';
 import addDeckSaveDeck from '../../actions/addDeck/addDeckSaveDeck';
 import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
+import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
+import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
+import importFinished from '../../actions/import/importFinished';
+import uploadFile from '../../actions/import/uploadFile';
+import Import from '../Import/Import';
+import Error from '../Error/Error';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
@@ -14,20 +21,39 @@ let classNames = require('classnames');
 class AddDeck extends React.Component {
     constructor(props) {
         super(props);
-        this.redirectID = 0;
         this.percentage = 0;
-        this.filename = '';
     }
-    componentDidMount(){
+    componentDidMount() {
+        let that = this;
+        $('.ui.small.modal').modal({
+            onDeny: function(){
+                console.log('modal cancelled');
+                $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
+            },
+            onApprove : function(data) {
+                console.log('modal clicked on upload', data);
+                that.handleFileSubmit();
+                $('.ui.small.modal').modal('hide');
+            }
+        });
     }
-    componentDidUpdate(){
+    componentDidUpdate() {
+        if (this.props.ImportStore.uploadProgress > 0 || (this.props.ImportStore.filename !== '' && this.props.ImportStore.uploadProgress === 100))
+            this.updateProgressBar();
+
+        if (this.props.ImportStore.error !== null)
+            this.showError();
     }
 
-    handleUpload(x) {
-        console.log('handleUpload: ', x);
+    handleUploadModal(x) {
+        console.log('handleUploadModal: ', x);
+
+        $('.ui.small.modal').modal('show');
     }
     handleAddDeck(x) {
         console.log('handleAddDeck');
+
+        this.context.executeAction(addDeckDeleteError, null);
 
         //validate input
         const title = this.refs.input_title.value;
@@ -87,58 +113,85 @@ class AddDeck extends React.Component {
             theme: theme,
             licence: licence,
             tags: tags,
-            userid: this.props.UserProfileStore.userid
+            userid: this.props.UserProfileStore.userid,
+            deckId: this.props.ImportStore.deckId
         });
     }
     handleCancel(x) {
         console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
 
+        this.context.executeAction(addDeckDeleteError, null);
+        this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/'
         });
     }
     handleRedirect(){
+        console.log('AddDeck: handleRedirect()');
+        this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
-            url: '/deck/' + this.redirectID
+            url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
-    /*
-    use it like:
-      this.percentage++;
-      this.updateProgressBar();
-    */
     updateProgressBar() {
+        console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
+        $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
+        let noOfSlides = this.props.ImportStore.noOfSlides;
+        let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
+        let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
+          (noOfSlides === 1) ? 'Converting file' :
+          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides :
+          (String(noOfSlides) === String(totalNoOfSlides)) ? 'Slides uploaded!' :
+          'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
+        $('#progresslabel_addDeck_upload').text(progressLabel);
+    }
+    initializeProgressBar() {
+        $('#progressbar_addDeck_upload').progress('set active');
+        $('#progressbar_addDeck_upload').progress('reset');
         $('#progressbar_addDeck_upload').progress({
-            percent: this.percentage,
             text: {
-                active  : 'Uploading: {percent}%',
-                success : 'Slides uploaded!'
+                // active  : 'Uploading: {percent}%',
+                // active  : 'Importing: {percent}%',
+                success : 'Slides uploaded!',
+                error   : 'Upload failed!'
             }
         });
     }
+    showError() {
+        //update progress bar
+        $('#progressbar_addDeck_upload').progress('set error');
+    }
+    handleFileSubmit(){
+        console.log('handleFileSubmit()');
+
+        this.context.executeAction(addDeckDeleteError, null);
+
+        if (this.props.ImportStore.file !== null) {
+            //call action
+            const payload = {
+                filename: this.props.ImportStore.file.name,
+                user: this.props.UserProfileStore.userid,
+                base64: this.props.ImportStore.base64
+            };
+            this.initializeProgressBar();
+            this.context.executeAction(uploadFile, payload);
+        }
+        else {
+            console.error('Submission not possible - no file or not pptx');
+        }
+    }
 
     render() {
-        //redirect to homepage if not logged in
-        /* TODO: this code should go the the initial loader action
-        if (!((this.props.UserProfileStore.username !== undefined && this.props.UserProfileStore.username !== null && this.props.UserProfileStore.username !== '')
-          && (this.props.UserProfileStore.userid !== undefined && this.props.UserProfileStore.userid !== null && this.props.UserProfileStore.userid !== '')
-          && (this.props.UserProfileStore.jwt !== undefined && this.props.UserProfileStore.jwt !== null && this.props.UserProfileStore.jwt !== ''))) {
-            setTimeout( () => {
-                this.context.executeAction(navigateAction, {
-                    url: '/'
-                });
-            }, 1);
-        }
-        */
         //redirect to new deck if created
         if (this.props.AddDeckStore.redirectID !== 0) {
-            setTimeout( () => {
-                this.redirectID = this.props.AddDeckStore.redirectID;
-                this.handleRedirect();
-                this.context.executeAction(addDeckDestruct, {});
-            }, 1000);
+            // setTimeout( () => {
+            this.redirectID = this.props.AddDeckStore.redirectID;
+            this.handleRedirect();
+            this.context.executeAction(addDeckDestruct, {});
+            // }, 1000);
         }
+
 
         let fieldClass_title = classNames({
             'required': true,
@@ -161,7 +214,25 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.conditions
         });
-        let languageOptions = <select className="ui search dropdown" aria-labelledby="language" aria-required="true" ref="select_languages">
+        let btnClasses_submit = classNames({
+            'ui': true,
+            'primary': true,
+            'disabled': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
+            'button': true
+        });
+        let btnClasses_upload = classNames({
+            'ui': true,
+            'primary': true,
+            'disabled': (this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100) || this.props.ImportStore.isUploaded,
+            'button': true
+                                                                                                            
+        });
+
+        let filename = this.props.ImportStore.filename;
+        if (filename.length > 40)
+            filename = filename.substr(0, 40) + ' ...';
+
+        let languageOptions = <select className="ui search dropdown"  id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
                 Select Language
             </option>
@@ -169,41 +240,84 @@ class AddDeck extends React.Component {
                 English
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" ref="select_themes">
-          <option value="" >Select Theme</option>
+        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
+          <option value="DefaultTheme" >Default</option>
           <option value="DefaultTheme" >Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" ref="select_licences">
-          <option value="" >Select License</option>
+        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licences">
           <option value="CC0" >CC0</option>
           <option value="CC BY" >CC BY</option>
           <option value="CC BY-SA" >CC BY-SA</option>
         </select>;
 
-        let errorView ='';
+        let errorView = '';
         if (this.props.AddDeckStore.error !== null)
             errorView = <Error error={this.props.AddDeckStore.error} />;
         else
-            errorView ='';
+            errorView = '';
 
-        let hint_title = this.props.AddDeckStore.wrongFields.title ? 'The title is a must have.' : undefined;
-        let hint_language = this.props.AddDeckStore.wrongFields.language ? 'The language is a must have.' : undefined;
-        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'The licence is a must have.' : undefined;
+        let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
+        let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
+        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'Please select a licence.' : undefined;
+        let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
+        //check number of slides in order to update progressbar
+        if (this.props.ImportStore.deckId !== null &&
+            this.props.ImportStore.uploadProgress < 100 &&
+            this.props.ImportStore.error === null) {
+                setTimeout( () => {
+                    this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
+                }, 100);
+        }
+        
         return (
           <div className="ui container">
-          <h3>Add deck</h3>
+          <h3>Create a deck </h3>
+              
           <div className="ui grid">
               <div className="sixteen wide column">
-                  <div className="ui grid">
-                      <div className="two column row">
+                  <form className="ui form upload">
+                          <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                              <label htmlFor="title">
+                                  Title
+                              </label>
+                              <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                          </div>
+                          
+                      <div className="field">
+                          <label htmlFor="deck-description">Description</label>
+                          <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
+                      </div>
+                      <div className="three fields">
+                          <div className="field disabled" ref="div_themes" >
+                              <label htmlFor="themes">Choose deck theme</label>
+                                  {themeOptions}
+                          </div>
+                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
+                              <label htmlFor="license">License</label>
+                                  {licenceOptions}
+                          </div>
+                          <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
+                              <label htmlFor="language">
+                                  Language
+                              </label>
+                              {languageOptions}
+                          </div>
+                      </div>
+                    
+                        <div className="ui message" id="uploadDesc">
+                          <p>Select exisiting slides to your new deck. Currently only PowerPoint files are supported.</p>
+                          </div>
+                     <div className="ui grid">
+                         <div className="two column row">
                           <div className="column">
-                              <div className="ui primary button" aria-label="upload" tabIndex="0" onClick={this.handleUpload.bind(this)} >
-                                  Upload file
+                              <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
+                                  Upload
                               </div>
+                              <Import />
                           </div>
                           <div className="column" ref="div_filename">
-                              {this.filename}
+                              {filename ? '"'+filename+'"' : ''}
                           </div>
                       </div>
                   </div>
@@ -211,64 +325,42 @@ class AddDeck extends React.Component {
                       <div className="bar">
                           <div className="progress"></div>
                       </div>
-                      <div className="label" ref="div_progress_text" ></div>
+                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
-                  <form className="ui form upload">
-                      <div className="two fields">
-                          <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
-                              <label>
-                                  Title
-                              </label>
-                              <input type="text" name="deck-title" placeholder="Title" aria-required="true" ref="input_title" />
-                          </div>
-                          <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
-                              <label id="language">
-                                  Language
-                              </label>
-                              {languageOptions}
-                          </div>
-                      </div>
                       <div className="field">
-                          <label id="deck-description">Description</label>
-                          <textarea rows="4" aria-labelledby="deck-description" ref="textarea_description" ></textarea>
-                      </div>
-                      <div className="two fields">
-                          <div className="field" ref="div_themes" >
-                              <label id="themes">Choose deck theme</label>
-                                  {themeOptions}
-                          </div>
-                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
-                              <label id="license">License</label>
-                                  {licenceOptions}
+                          <label htmlFor="tags">Add tags</label>
+                          <div className="ui left icon input">
+                              <i className="tags icon"></i>
+                          <input type="text" aria-labelledby="tags" id="tags" placeholder="Add tags" ref="input_tags" data-tooltip={hint_tags} />
                           </div>
                       </div>
-                      <div className="fluid inline field ">
-                          <i className="ui tags large icon" aria-label="Add tags"></i>
-                          <input type="text" name="tags" placeholder="Add Tags" ref="input_tags" />
-                      </div>
+
+
+                <div className="two column row">
+                    <div className="column">
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
-                              <input type="checkbox" tabIndex="0" aria-labelledby="terms" aria-required="true" ref="checkbox_conditions" />
-                              <label id="terms">
+                              <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
+                              <label htmlFor="terms">
                                   I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
                               </label>
                           </div>
+                      </div>   
+                    </div>
+                  <div className="column">
+                      <div className="ui right floated buttons">
+                      <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                          Create deck
+                        </div>            
+                      <div className="ui secondary button" aria-label="cancel" role="button" tabIndex="0" onClick={this.handleCancel.bind(this)} >
+                          Cancel
+                        </div>
                       </div>
+               </div>                   
+              </div>
                   </form>
               </div>
-              <div className="two column row">
-                  <div className="column">
-                      <div className="ui primary button" aria-label="submit" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
-                          Add deck
-                      </div>
-                  </div>
-                  <div className="column">
-                      <div className="ui secondary button" aria-label="cancel" tabIndex="0" onClick={this.handleCancel.bind(this)} >
-                          Cancel
-                      </div>
-                  </div>
-              </div>
-          </div>
+            </div>
           {errorView}
       </div>
         );
@@ -279,10 +371,11 @@ class AddDeck extends React.Component {
 AddDeck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore], (context, props) => {
+AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore, ImportStore], (context, props) => {
     return {
         AddDeckStore: context.getStore(AddDeckStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        ImportStore: context.getStore(ImportStore).getState()
     };
 });
 export default AddDeck;

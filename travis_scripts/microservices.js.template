@@ -1,0 +1,26 @@
+export default {
+    Microservices: {
+        'deck': {
+            uri: '${SERVICE_URL_DECK}'
+        },
+        'discussion': {
+            uri: '${SERVICE_URL_DISCUSSION}'
+        },
+        'activities': {
+            uri: '${SERVICE_URL_ACTIVITIES}'
+        },
+        'notification': {
+            uri: '${SERVICE_URL_NOTIFICATION}'
+        },
+        'user': {
+            uri: '${SERVICE_URL_USER}'
+        },
+        'import': {
+            uri: '${SERVICE_URL_IMPORT}',
+            protocol: 'http:',
+            host: '${SERVICE_VAR_IMPORT_HOST}',
+            path: '/importPPTX',
+            port: 80
+        }
+    }
+};

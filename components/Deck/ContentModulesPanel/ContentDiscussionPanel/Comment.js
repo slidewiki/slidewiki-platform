@@ -10,39 +10,46 @@ class Comment extends React.Component {
         this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
     }
 
-    handleAddReply() {
-        this.context.executeAction(addReply, {
-            comment: this.props.comment,
-            title: this.refs.title.value,
-            text: this.refs.text.value
-        });
-
-        this.refs.title.value = '';
-        this.refs.text.value = '';
+    handleAddReply(e) {
+        e.preventDefault();
+        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
+            this.context.executeAction(addReply, {
+                comment: this.props.comment,
+                title: this.refs.title.value,
+                text: this.refs.text.value,
+                userid: this.props.userid
+            });
+        }
+        return false;
     }
 
     render() {
         const comment = this.props.comment;
+        const replyLink = (
+            <div className="actions">
+                <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+            </div>
+        );
         const replyBox = (
             <form className="ui reply form">
                 <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title"/>
+                    <input type="text" ref="title" placeholder="Title" required/>
                 </div>
                 <div className="field">
-                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text"></textarea>
+                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
                 </div>
-                <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
+                <button tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
                     <i className="icon edit"></i> Add Reply
-                </div>
+                </button>
             </form>
         );
         return (
-            <div key={this.props.key} className="comment">
+            <div className="comment">
                 <a className="avatar">
-                    {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <i className="ui icon user" />}
+                    {(comment.author.avatar && comment.author.avatar !== '') ? <img src={comment.author.avatar} height={16} width={16}></img> : <img src='/assets/images/mock-avatars/user-alt-128.png' height={16} width={16}></img>}
                 </a>
                 <div className="content">
-                    <a className="author" href={'/user/' + comment.author.id}>{comment.author.username}</a>
+                    <a className="author" href={'/user/' + comment.author.username}>{comment.author.username}</a>
                     <div className="metadata">
                         <span className="date">{ActivityFeedUtil.formatDate(comment.timestamp)}</span>
                     </div>
@@ -50,12 +57,10 @@ class Comment extends React.Component {
                         <strong>{comment.title}</strong><br/>
                         {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
-                    <div className="actions">
-                        <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
-                    </div>
+                    { (String(this.props.userid) !== '') ? replyLink : ''}
                     { comment.replyBoxOpened ? replyBox : '' }
                 </div>
-                {comment.replies?<div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} />); })}</div> : ''}
+                {comment.replies?<div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
             </div>
         );
     }

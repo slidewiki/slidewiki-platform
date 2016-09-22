@@ -1,18 +1,20 @@
 import React from 'react';
 import Modal from 'react-modal';
 import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
+import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 
 const customStyles = {
     content : {
         top                   : '15%',
         left                  : '25%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%'
+        right                 : '25%',
+        bottom                : 'auto'
+        // marginRight           : '-50%'
 
     }
 };
@@ -37,19 +39,21 @@ class LoginModal extends React.Component {
         this.setState({openModal: true});
     }
 
-    handleSignoutButton() {
-        this.context.executeAction(userSignOut, {});
-    }
-
     signin(e) {
         e.preventDefault();
-        this.context.executeAction(userSignIn, {
-            email: this.refs.email1.value,
-            password: this.refs.password1.value
-        });
+        const email = this.refs.email1.value;
+        let regExp = /\S+@\S+\.\S+/;
+        if (email === '' || !regExp.test(email)) {//Check if email is valid
+            $('.ui.form.signin').form('add errors', ['Please use a valid email address']);
+        } else {
+            this.context.executeAction(userSignIn, {
+                email: this.refs.email1.value,
+                password: this.refs.password1.value
+            });
 
-        this.refs.email1.value = '';
-        this.refs.password1.value = '';
+            this.refs.email1.value = '';
+            this.refs.password1.value = '';
+        }
         return false;
     }
 
@@ -71,9 +75,18 @@ class LoginModal extends React.Component {
         }
     }
 
+    handleSignupClick(e) {
+        e.preventDefault();
+        this.setState({openModal: false});
+        this.context.executeAction(navigateAction, {
+            url: '/signup'
+        });
+        // return false;
+    }
+
     render() {
         let loginButton = (
-            <button ref="signoutButton" className="ui inverted button" onClick={this.handleSignoutButton.bind(this)}>Sign Out</button>
+            <HeaderDropdown/>
         );
 
         if (this.props.UserProfileStore.username === '') {
@@ -87,7 +100,7 @@ class LoginModal extends React.Component {
             {loginButton}
             <Modal id='signinModal' isOpen={this.state.openModal}  style={customStyles}>
               <div className="ui container">
-                  <div className="ui right">
+                  <div className="ui right floated">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
                       <i className="remove icon"/>Close
                     </button>
@@ -96,8 +109,9 @@ class LoginModal extends React.Component {
                     <h1 className="ui dividing header">Sign In</h1>
                     <form className="ui form signin" onSubmit={this.signin.bind(this)}>
                       <div className="ui five wide icon input field">
-                        <div><label htmlFor="email1" hidden>E-Mail</label></div>
-                        <input type="email1" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+                        <div><label htmlFor="username" hidden>E-Mail</label></div>
+                        <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+
                       </div>
                         <br/>
                       <div className="ui five wide icon input field">
@@ -111,6 +125,8 @@ class LoginModal extends React.Component {
                     <br/>
                     <div className="ui floated right">
                         <a href="">I can not access my account</a>
+                        <br/><br/>
+                        <a href="#" onClick={this.handleSignupClick.bind(this)}>Don't have an account? Sign up here.</a>
                     </div>
                   </div>
               </div>

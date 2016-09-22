@@ -12,7 +12,7 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
-import loadUserNotifications from '../actions/user/loadUserNotifications';
+import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/loadContentHistory';
@@ -22,6 +22,7 @@ import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loa
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
+import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
 
@@ -53,20 +54,6 @@ export default {
             done();
         }
     },
-    import: {
-        path: '/import',
-        method: 'get',
-        page: 'import',
-        title: 'SlideWiki -- Import presentation',
-        handler: require('../components/Import/Import'),
-        action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Import presentation'
-            });
-            done();
-        }
-    },
-    //TODO: add an initial loader for this page
     addDeck: {
         path: '/addDeck',
         method: 'get',
@@ -77,7 +64,7 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Add Deck'
             });
-            done();
+            context.executeAction(loadAddDeck, null, done);
         }
     },
     notifications: {
@@ -93,9 +80,22 @@ export default {
             done();
         }
     },
+    signup: {
+        path: '/signup',
+        method: 'get',
+        page: 'signup',
+        title: 'SlideWiki -- Sign up',
+        handler: require('../components/User/UserRegistration/UserRegistration'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Sign up'
+            });
+            done();
+        }
+    },
 //-----------------------------------User routes------------------------------
     userprofile: {
-        path: '/user/:username',
+        path: '/user/:username/:category?',
         method: 'get',
         page: 'userprofile',
         title: 'SlideWiki -- Your profile',

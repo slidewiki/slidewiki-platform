@@ -1,44 +1,31 @@
-FROM node:6.2-slim
+FROM slidewiki/runtime:latest
 MAINTAINER Ali Khalili "hyperir@gmail.com"
 
-RUN mkdir /nodeApp
 WORKDIR /nodeApp
 
 # ---------------- #
 #   Installation   #
 # ---------------- #
 
-RUN apt-get update
-# is this really needed?
-RUN apt-get install -y git
-
-RUN npm install bower -g
-RUN npm install webpack -g
-
-ADD bower.json package.json /nodeApp/
+ADD . /nodeApp
 RUN bower install --allow-root
 # Install only production dependencies? todo: handle webpack issue
 RUN npm install
 
-ADD . /nodeApp
+# -------------------------------------- #
+#   Default Microservice Configuration   #
+# -------------------------------------- #
 
-# ----------------- #
-#   Configuration   #
-# ----------------- #
-
-RUN cp /nodeApp/configs/microservices.sample.js /nodeApp/configs/microservices.js
-
-EXPOSE 3000
-
-# ----------- #
-#   Cleanup   #
-# ----------- #
-
-RUN apt-get autoremove -y && apt-get -y clean && \
-		rm -rf /var/lib/apt/lists/*
+ENV SERVICE_URL_DECK="http://deckservice.manfredfris.ch" \
+    SERVICE_URL_DISCUSSION="http://discussionservice.manfredfris.ch" \
+    SERVICE_URL_ACTIVITIES="http://activitiesservice.manfredfris.ch" \
+    SERVICE_URL_NOTIFICATION="http://notificationservice.manfredfris.ch" \
+    SERVICE_URL_USER="http://userservice.manfredfris.ch" \
+    SERVICE_URL_IMPORT="http://importservice.manfredfris.ch" \
+    SERVICE_VAR_IMPORT_HOST="importservice.manfredfris.ch"
 
 # -------- #
 #   Run!   #
 # -------- #
 
-ENTRYPOINT ["npm", "run", "build"]
+ENTRYPOINT ["./entrypoint.sh"]

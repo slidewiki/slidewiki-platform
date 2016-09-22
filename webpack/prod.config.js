@@ -22,7 +22,10 @@ let webpackConfig = {
                     require.resolve('babel-loader')
                 ]
             },
-            { test: /\.json$/, loader: 'json-loader'}
+            { test: /\.json$/, loader: 'json-loader'},
+            { test: /\.css$/, loader: 'style-loader!css-loader'},
+            // Getting URLs for font files otherwise we get encoding errors in css-loader
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}            
         ]
     },
     node: {
@@ -31,7 +34,8 @@ let webpackConfig = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify('production')
+                NODE_ENV: JSON.stringify('production'),
+                BROWSER: JSON.stringify(true)
             }
         }),
         new webpack.optimize.DedupePlugin(),
