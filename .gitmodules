@@ -1,3 +1,9 @@
 [submodule "custom_modules/custom-semantic-ui"]
 	path = custom_modules/custom-semantic-ui
 	url = https://github.com/slidewiki/custom-semantic-ui.git
+[submodule "custom_modules/ckeditor"]
+	path = custom_modules/ckeditor
+	url = https://github.com/slidewiki/ckeditor-releases.git
+[submodule "custom_modules/simple-draggable"]
+	path = custom_modules/simple-draggable
+    url = https://github.com/slidewiki/simple-draggable.git

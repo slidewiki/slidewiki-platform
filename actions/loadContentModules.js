@@ -3,6 +3,7 @@ import { shortTitle } from '../configs/general';
 import loadContentQuestions from './loadContentQuestions';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
 import loadQuestionsCount from './questions/loadQuestionsCount';
+import loadCommentsCount from './activityfeed/contentdiscussion/loadCommentsCount';
 import { deckContentTypeError, slideIdTypeError } from './loadErrors';
 
 export default function loadContentModules(context, payload, done) {
@@ -26,6 +27,9 @@ export default function loadContentModules(context, payload, done) {
         },
         (callback) => {
             context.executeAction(loadQuestionsCount, payload, callback);
+        },
+        (callback) => {
+            context.executeAction(loadCommentsCount, payload, callback);
         }
     ],
     // final callback

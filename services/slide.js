@@ -33,19 +33,15 @@ export default {
         }
     },
     create: (req, resource, params, body, config, callback) => {
-        //TODO get real user id and content name
-        const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
-
+        //TODO get real content name
         let args = params.params? params.params : params;
         //let selector= args.selector;
         //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
         if(resource === 'slide.content'){
-
             //TODO get real content_id
             //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
-            const root_deck_id = '68';
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/slide/new',
@@ -57,10 +53,9 @@ export default {
                     //TODO
                     speakernotes: args.speakernotes,
                     //args.content
-                    //todo: send the right user id
                     //TODO: speaker notes + in object model database in deck microservice
-                    user: randomUserId,
-                    root_deck: args.deckID,
+                    user: args.userid.toString(),
+                    root_deck: args.root_deck,
                     parent_slide: {
                         id: content_id,
                         revision: content_id
@@ -115,8 +110,6 @@ export default {
           //TODO get real content_id
           //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
-            const root_deck_id = '68';
-            const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
             /*********connect to microservices*************/
             rp.put({
                 uri: Microservices.deck.uri + '/slide/' + args.id,
@@ -128,10 +121,9 @@ export default {
                     //TODO
                     speakernotes: args.speakernotes,
                     //args.content
-                    //todo: send the right user id
                     //TODO: speaker notes + in object model database in deck microservice
-                    user: randomUserId,
-                    root_deck: args.deckID,
+                    user: args.userid.toString(),
+                    root_deck: args.root_deck,
                     parent_slide: {
                         id: content_id,
                         revision: content_id
@@ -142,13 +134,22 @@ export default {
                     license: 'CC BY-SA'
                 })
             }).then((res) => {
-                //console.log(res);
-                //todo:there seems to be an error here: SyntaxError: Unexpected end of JSON input
-                //callback(null, {slide: JSON.parse(res), selector: selector});
-                callback(null, {slide: {}, selector: selector});
+                let resParse = JSON.parse(res);
+                let newSlideID = resParse._id + '-'+resParse.revisions[0].id;
+                //update the path for new slide revision
+                let path = selector.spath;
+                let pathArr = path.split(';');
+                if(pathArr.length){
+                    let lastPath = pathArr[pathArr.length-1];
+                    let lastPathPosition = lastPath.split(':')[1];
+                    pathArr[pathArr.length-1] = newSlideID + ':' + lastPathPosition;
+                }else{
+                    pathArr=[];
+                }
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {slide: {}, selector: selector});
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
             });
         }
     },
