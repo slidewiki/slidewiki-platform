@@ -128,7 +128,7 @@ class TreeNode extends React.Component {
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
                         <i className="red trash circle icon"></i>
                     </button>
-                    <button className="ui button" title="Settings">
+                    <button className="ui disabled button" title="Settings">
                         <i className="black setting icon"></i>
                     </button>
                 </div>

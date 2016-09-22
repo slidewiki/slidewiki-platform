@@ -42,78 +42,284 @@
         for (var i = 0; i < allElms.length; ++i) {
             (function (cEl) {
 
-                // TODO
-                // document.body.appendChild(cEl);
-                cEl.style.position = "absolute";
 
                 // create _simpleDraggable object for this dom element
+                // KLAAS -> added resize
                 cEl._simpleDraggable = {
-                   drag: false
+                   drag: false,
+                   resize: false
                 }
 
+                //ondragstart="return false;" ondrop="return false;"
+
                 // listen for mousedown
-                cEl.addEventListener("mousedown", function (e) {
+                // KLAAS ADAPT -> first event listener for showin resize elements onclick
+                //cEl.addEventListener("mousedown", function (e) {
+                //cEl.addEventListener("mouseover", function (e) {
+                //cEl.addEventListener("onclick", function (e) {
 
-                    // set true for drag field
-                    cEl._simpleDraggable.drag = true;
+                //for showing only when element is selected
+                //mousein / mouseout
+                //onfocusout / onfoucusin
+                //onfocus / onblur
+                //mouseenter / mouseleave
+                cEl.addEventListener("mouseenter", function (e) {
 
-                    // set the mouse position on the page
-                    cEl._simpleDraggable.mousePos = {
-                        x: e.clientX
-                      , y: e.clientY
-                    };
+                    // TODO
+                    // document.body.appendChild(cEl);
+                    //KLAAS ADAPT
+                    //cEl.style.position = "absolute";
 
-                    // set the element position
-                    cEl._simpleDraggable.elPos = {
-                        x: cEl.offsetLeft
-                      , y: cEl.offsetTop
-                    }
 
-                    // call start handler
-                    options.onStart.call(this, e, cEl);
+                    //KLAAS ADAPT
+
+                    //disable firefox resize and drag
+                    //this is an DOM element property -> is different from internal class variable -> cEl._simpleDraggable.resize
+                    cEl.resize = 'none';
+                    // fetch our section element
+                    //var section = document.querySelector("section");
+
+                    //KLAAS -> for drag button
+                    //let div = document.createElement("div");
+                    cEl.dragdiv = document.createElement("div");
+                    cEl.dragdiv.style.position = "absolute";
+                    //div.style.top = cEl.style.top - 20 ;
+                    //div.style.top = "-20" ;
+                    //div.style.left = cEl.style.left - 20 ;
+                    /*
+                    var textnode = document.createTextNode("##");         // Create a text node
+                    //textnode.style.position = "absolute";
+                    textnode.contentEditable = false;
+                    div.appendChild(textnode);
+                    div.contentEditable = false;
+                    */
+
+                    let imgdrag = document.createElement("IMG");
+                    imgdrag.style.position = "absolute";
+                    imgdrag.src = '../../../../../assets/images/cursor_drag_arrow.png';
+                    imgdrag.disabled = true;
+                    imgdrag.draggable = false;
+                    imgdrag.contentEditable = false;
+                    cEl.dragdiv.appendChild(imgdrag);
+                    cEl.dragdiv.contentEditable = false;
+
+                    // prepend our span eleement to our section element
+                    //alert(cEl.style.top);
+                    //alert(cEl.style.top -20);
+                    //alert(cEl.style);
+                    //alert(cEl.offsetLeft); //css style declaration
+                    //alert(cEl.offsetLeft - 20); //css style declaration
+                    //textnode.offsetLeft = cEl.offsetLeft - 20 ;
+                    //textnode.offsetTop = cEl.offsetTop - 20 ;
+
+                    //position drag icon in topleft corner of parent element
+                    //cEl.dragdiv.style.left = parseInt(cEl.style.left) - 30 + "px";
+                    //cEl.dragdiv.style.top = parseInt(cEl.style.top) - 30 + "px";
+                    cEl.insertBefore( cEl.dragdiv, cEl.firstChild );
+                    //cEl._simpleDraggable.elPos.x
+                    //KLAAS ADAPT END
+                    //cEl.style.left = (cEl._simpleDraggable.elPos.x + e.clientX - cEl._simpleDraggable.mousePos.x) + "px";
+
+
+                    //drag mousehandlers
+                    //KLAAS ADAPT -> applies to dragdiv in top-left corner only
+                    cEl.dragdiv.addEventListener("mousedown", function (e) {
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+
+                        // set true for drag field
+                        cEl._simpleDraggable.drag = true;
+
+                        // set the mouse position on the page
+                        cEl._simpleDraggable.mousePos = {
+                            x: e.clientX
+                          , y: e.clientY
+                        };
+
+                        // set the element position
+                        cEl._simpleDraggable.elPos = {
+                            x: cEl.offsetLeft
+                          , y: cEl.offsetTop
+                        }
+
+                        // call start handler
+                        options.onStart.call(this, e, cEl);
+                    });
+
+
+                    // listen for mouse up
+                    //cEl.addEventListener("mouseup", function (e) {
+                    //KLAAS ADAPT -> apply to div in top-left corner only
+                    cEl.dragdiv.addEventListener("mouseup", function (e) {
+                        //alert('test');
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+
+                        // drag: false
+                        cEl._simpleDraggable.drag = false;
+
+                        // call stop handler
+                        options.onStop.call(this, e, cEl);
+                    });
+
+                    // listen for mouse out of body
+                    //KLAAS ADAPT -> disable listener
+                    /*
+                    document.body.addEventListener("mouseout", function (e) {
+
+                        // drag: false
+                        cEl._simpleDraggable.drag = false;
+
+                        // call stop hanlder
+                        options.onStop.call(this, e, cEl);
+                    });
+                    */
+
+                    //KLAAS -> for resize button
+                    cEl.resizediv = document.createElement("div");
+                    cEl.resizediv.style.position = "absolute";
+                    let imgresize = document.createElement("IMG");
+                    imgresize.style.position = "absolute";
+                    imgresize.src = '../../../../../assets/images/cursor_resize_arrow.png';
+                    imgresize.disabled = true;
+                    imgresize.draggable = false;
+                    imgresize.contentEditable = false;
+                    cEl.resizediv.appendChild(imgresize);
+                    cEl.resizediv.contentEditable = false;
+                    //cEl.insertAfter( cEl.resizediv, cEl.lastChild );
+                    //position resize icon to bottom right of parent element
+                    cEl.appendChild(cEl.resizediv);
+                    //cEl.resizediv.style.left = parseInt(cEl.style.left) + parseInt(cEl.style.width) + "px";
+                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                    cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+                    //alert(cEl.resizediv.style);
+                    //cEl.resizediv.style.right = (cEl.style.right) + "px";
+                    //alert(cEl.style.right + "px");
+                    //alert(temp + "px");
+
+                    //resize mousehandlers
+                    cEl.resizediv.addEventListener("mousedown", function (e) {
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+
+                        // set true for drag field
+                        cEl._simpleDraggable.resize = true;
+
+                        // set the mouse position on the page
+                        cEl._simpleDraggable.mousePos = {
+                            x: e.clientX
+                          , y: e.clientY
+                        };
+
+                        // set the element position
+                        cEl._simpleDraggable.elPos = {
+                            x: cEl.offsetLeft
+                          , y: cEl.offsetTop
+                        }
+
+                        // get current element width and height
+                        cEl._simpleDraggable.elDim = {
+                            w: cEl.offsetWidth
+                          , h: cEl.offsetHeight
+                        }
+
+                        // call start handler
+                        options.onStart.call(this, e, cEl);
+                    });
+
+
+                    // listen for mouse up
+                    //cEl.addEventListener("mouseup", function (e) {
+                    //KLAAS ADAPT -> apply to div in top-left corner only
+                    cEl.resizediv.addEventListener("mouseup", function (e) {
+                        //alert('test');
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+
+                        // drag: false
+                        cEl._simpleDraggable.resize = false;
+
+                        // call stop handler
+                        options.onStop.call(this, e, cEl);
+                    });
+
+                    // listen for mouse move
+                    // Klaas: 2 parts -> 1 for dragging, 1 for resize
+                    document.body.addEventListener("mousemove", function (e) {
+
+                        //DRAGGING
+                        // if drag is NOT true, return
+                        //if drag is true
+                        if (cEl._simpleDraggable.drag === true) {
+
+                            // if drag handler returns false, don't do anything
+                            if (options.onDrag.call(this, e, cEl) === false) {
+                                return;
+                            }
+                            console.log('drag');
+
+                            // move only on y axis
+                            if (!options.onlyY) {
+                                cEl.style.left = (cEl._simpleDraggable.elPos.x + e.clientX - cEl._simpleDraggable.mousePos.x) + "px";
+                                console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
+                            }
+
+                            // move only on x axis
+                            if (!options.onlyX) {
+                                cEl.style.top = (cEl._simpleDraggable.elPos.y + e.clientY - cEl._simpleDraggable.mousePos.y) + "px";
+                            }
+                        } else if (cEl._simpleDraggable.resize === true)
+                        {
+                            //KLAAS ADDED -> resize
+                            // if drag handler returns false, don't do anything
+                            // KLAAS -> did not set this callack -> CAN BE REMOVED?
+                            if (options.onDrag.call(this, e, cEl) === false) {
+                                return;
+                            }
+                            console.log('resize');
+
+                            // resize only on y axis
+                            if (!options.onlyY) {
+                                //calculate width as well
+                                //cEl.style.left = (cEl._simpleDraggable.elPos.x) + "px";
+                                cEl.style.width = (cEl._simpleDraggable.elDim.w + e.clientX - cEl._simpleDraggable.mousePos.x) + "px";
+                            }
+
+                            // resize only on x axis
+                            if (!options.onlyX) {
+                                ////calculate height as well:
+                                //cEl.style.top = (cEl._simpleDraggable.elPos.y) + "px";
+                                console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
+                                console.log(cEl.style.height);
+                                cEl.style.height = (cEl._simpleDraggable.elDim.h + e.clientY - cEl._simpleDraggable.mousePos.y) + "px";
+                                console.log((cEl._simpleDraggable.elDim.w + e.clientY - cEl._simpleDraggable.mousePos.y) + "px");
+                                console.log(cEl.style.height);
+                            }
+                            //move resize button with resized borders of element
+                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                            cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+                        }
+                        else
+                        { return; }
+                    });
+                });
+                //mousein / mouseout
+                //onfocusout / onfoucusin
+                //onfocus / onblur
+                //mouseenter / mouseleave
+                //for removing when element is not selected
+                cEl.addEventListener("mouseleave", function (e) {
+                    //alert('test');
+                    //remove div for drag
+                    //cEl.insertBefore( div, cEl.firstChild ); //inverse of this
+            		cEl.removeChild(cEl.dragdiv);
+                    cEl.removeChild(cEl.resizediv);
                 });
 
-                // listen for mouse up
-                cEl.addEventListener("mouseup", function (e) {
-
-                    // drag: false
-                    cEl._simpleDraggable.drag = false;
-
-                    // call stop handler
-                    options.onStop.call(this, e, cEl);
-                });
-
-                // listen for mouse out of body
-                document.body.addEventListener("mouseout", function (e) {
-
-                    // drag: false
-                    cEl._simpleDraggable.drag = false;
-
-                    // call stop hanlder
-                    options.onStop.call(this, e, cEl);
-                });
-
-                // listen for mouse move
-                document.body.addEventListener("mousemove", function (e) {
-
-                    // if drag is NOT true, return
-                    if (!cEl._simpleDraggable.drag) { return; }
-
-                    // if drag handler returns false, don't do anything
-                    if (options.onDrag.call(this, e, cEl) === false) {
-                        return;
-                    }
-
-                    // move only on y axis
-                    if (!options.onlyY) {
-                        cEl.style.left = (cEl._simpleDraggable.elPos.x + e.clientX - cEl._simpleDraggable.mousePos.x) + "px";
-                    }
-
-                    // move only on x axis
-                    if (!options.onlyX) {
-                        cEl.style.top = (cEl._simpleDraggable.elPos.y + e.clientY - cEl._simpleDraggable.mousePos.y) + "px";
-                    }
-                })
             })(allElms[i])
         }
     };

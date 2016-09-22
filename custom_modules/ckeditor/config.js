@@ -14,15 +14,20 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
 
+    config.uiColor = '#4183C4';
+    //config.extraPlugins = 'sourcedialog',
+    config.extraPlugins = 'sourcedialog';
+    config.line_height=";0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;";
 
     config.toolbar = [
             { name: 'document', items: ['Templates' ] },
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
         '/',
             { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
+            { name: 'styles', items: [ 'lineheight' ] },
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
@@ -30,11 +35,11 @@ CKEDITOR.editorConfig = function( config ) {
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
             { name: 'paragraph', items: ['CreateDiv']},
             { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
+    //{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
     //'HorizontalRule',
     //, 'Anchor'
     //'Smiley',
@@ -54,8 +59,6 @@ CKEDITOR.editorConfig = function( config ) {
     //config.floatSpacePinnedOffsetX = 1000;
     ///config.toolbarLocation = 'bottom';
 
-    config.uiColor = '#4183C4';
-    config.extraPlugins = 'sourcedialog',
 
 
     //configuration to prevent lay-out change onload
@@ -101,6 +104,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'link,' +
 		'list,' +
 		'liststyle,' +
+        'lineheight,' +
 		'magicline,' +
 		'maximize,' +
 		'newpage,' +
