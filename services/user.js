@@ -129,8 +129,25 @@ export default {
                     });
                 });
         }
+    },
+
+    // other methods
+    update: (req, resource, params, body, config, callback) => {
+        if (resource === 'user.resetPassword') {
+            rp.post({
+                uri: Microservices.user.uri + '/resetPassword',
+                body: JSON.stringify({
+                    email: params.email,
+                    language: params.language
+                }),
+                resolveWithFullResponse: true
+            }).then((res) => {
+                callback(null, JSON.parse(res));
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
     }
-        // other methods
-        // update: (req, resource, params, body, config, callback) => {}
         // delete: (req, resource, params, config, callback) => {}
 };
