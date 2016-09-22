@@ -14,6 +14,7 @@ class SearchParamsStore extends BaseStore {
         this.user = '';
         this.tags = '';
         this.revisions = false;
+        this.license = '';
         this.fetch = false;
 
         // facets
@@ -63,6 +64,7 @@ class SearchParamsStore extends BaseStore {
         this.user = (params.user || '');
         this.tags = (params.tags || '');
         this.revisions = params.revisions;
+        this.license = params.license;
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -77,6 +79,7 @@ class SearchParamsStore extends BaseStore {
         this.user = '';
         this.tags = '';
         this.revisions = false;
+        this.license = '';
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -94,6 +97,7 @@ class SearchParamsStore extends BaseStore {
             revisions: this.revisions,
             entities: this.entities,
             languages: this.languages,
+            license: this.license,
             fetch: this.fetch
         };
     }
@@ -112,6 +116,7 @@ class SearchParamsStore extends BaseStore {
         this.revisions = state.revisions;
         this.entities = state.entities;
         this.languages = state.languages;
+        this.license = state.license;
         this.fetch = state.fetch;
     }
 }

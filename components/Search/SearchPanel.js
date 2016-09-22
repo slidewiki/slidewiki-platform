@@ -31,7 +31,7 @@ class SearchPanel extends React.Component {
         </div>;
 
         let errorDiv = <div className="ui grid centered">
-            <h3>An error occured while fetching search results.</h3>
+            <h3>An error occured while fetching search results</h3>
         </div>;
 
         let searchResultsDiv='';

@@ -7,13 +7,15 @@ import loadSearchResults from '../../../actions/search/loadSearchResults';
 import updateUserResultsVisibility from '../../../actions/search/updateUserResultsVisibility';
 
 class SearchResultsPanel extends React.Component {
-
+    changePage(){
+        context.executeAction(loadSearchResults, {page: 'next'});
+    }
     render() {
         const results = this.props.results;  //this.props.SearchResultsStore.results;
         const numFound = this.props.numFound;
         const entities = this.props.entities;
         const languages = this.props.languages;
-
+        
         const entityList = entities.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >

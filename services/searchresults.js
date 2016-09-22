@@ -47,8 +47,9 @@ export default {
                 }
                 else{
                     solrResponse = JSON.parse(body);
-                    numFound = solrResponse.response.numFound;
-                    docs = solrResponse.response.docs;
+                    // console.log(solrResponse);
+                    numFound = solrResponse.numFound;
+                    docs = solrResponse.docs;
                 }
 
                 callback(null, {

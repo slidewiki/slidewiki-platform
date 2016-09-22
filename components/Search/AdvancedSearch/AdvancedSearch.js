@@ -16,7 +16,8 @@ class AdvancedSearch extends React.Component {
             fields: this.props.paramsStore.fields,
             user: this.props.paramsStore.user,
             tags: this.props.paramsStore.tags,
-            revisions: this.props.paramsStore.revisions
+            revisions: this.props.paramsStore.revisions,
+            license: this.props.paramsStore.license
         };
     }
     componentWillReceiveProps(nextProps){
@@ -28,6 +29,10 @@ class AdvancedSearch extends React.Component {
         let curstate = {};
         curstate[event.target.name] = event.target.value;
         this.setState(curstate);
+    }
+    clearInput(){
+        this.setState({searchstring: ''});
+        this.refs.searchstring.focus();
     }
     // shouldComponentUpdate(nextProps, nextState) {
     //     return (nextProps.searchstring != this.state.searchstring);
@@ -72,6 +77,10 @@ class AdvancedSearch extends React.Component {
             queryparams.tags = this.refs.tags.value.trim();
         }
 
+        if(this.refs.license && this.refs.license.value){
+            queryparams.license = this.refs.license.value.trim();
+        }
+
         // if(this.refs.revisions && this.refs.revisions.value){
         //     queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
         // }
@@ -112,15 +121,31 @@ class AdvancedSearch extends React.Component {
         });
         let searchstring = decodeURIComponent(this.state.searchstring);
         let defaultSearchstring = (searchstring == '*:*') ? '' : searchstring;
-
+        let clearInputIcon = '';
+        if(defaultSearchstring){
+            clearInputIcon = <i className="remove link icon" onClick={this.clearInput.bind(this)} ></i>;
+        }
         return (
                 <div className="ui content">
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
                     <form className="ui form success">
                         <div className="field">
-                            <input name='searchstring' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' type='text' ref='searchstring'></input>
+                            <div className="ui icon input">
+                                <input name='searchstring' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' type='text' ref='searchstring'></input>
+                                {clearInputIcon}
+                            </div>
                         </div>
-                        <div className="three fields">
+                        <div className="four fields">
+                            <div className="field">
+                                <label>Search field</label>
+                                <select name='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
+                                  <option value=''>Select Search field</option>
+                                  <option value='title'>Title</option>
+                                  <option value='content'>Content</option>
+                                  <option value='description'>Description</option>
+                                </select>
+                            </div>
+
                             <div className="field">
                                 <label>Entity</label>
                                 <select name='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
@@ -138,13 +163,15 @@ class AdvancedSearch extends React.Component {
                             </div>
 
                             <div className="field">
-                                <label>Search field</label>
-                                <select name='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
+                                <label>License</label>
+                                <select name='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
                                   <option value=''>Select Search field</option>
-                                  <option value='title'>Title</option>
-                                  <option value='content'>Content</option>
+                                  <option value='CC0'>CC0</option>
+                                  <option value='CC BY'>CC BY</option>
+                                  <option value='CC BY-SA'>CC BY-SA</option>
                                 </select>
                             </div>
+
                         </div>
 
                         <div className="two fields">
