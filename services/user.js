@@ -144,7 +144,6 @@ export default {
             }).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
-                console.log(err);
                 callback(err, {});
             });
         }

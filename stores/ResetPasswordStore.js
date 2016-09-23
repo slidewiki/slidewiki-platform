@@ -13,7 +13,7 @@ class ResetPasswordStore extends BaseStore {
         this.emitChange();
     }
 
-    handleResetUserRegistrationStatus() {
+    reset() {
         this.componentStatus = 'guest';
         this.errorMessage = '';
         this.emitChange();
@@ -61,7 +61,7 @@ class ResetPasswordStore extends BaseStore {
 ResetPasswordStore.storeName = 'ResetPasswordStore';
 ResetPasswordStore.handlers = {
     'RESET_PASSWORD_SUCCESS': 'handleSuccess',
-    'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
+    'RESET_RESET_PASSWORD': 'reset',
     //error handling
     'RESET_PASSWORD_FAILURE': 'handleError'
 };

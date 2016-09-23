@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import resetPassword from '../../actions/user/resetPassword';
+import resetPasswordResetStore from '../../actions/user/resetPasswordResetStore';
 import ResetPasswordStore from '../../stores/ResetPasswordStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -53,6 +54,7 @@ class ResetPassword extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log('ResetPassword componentDidUpdate()');
         if (this.props.ResetPasswordStore.componentStatus === 'pending') {
             $('.dimmer.success').dimmer({//Show signup success message
                 closable: false
@@ -60,6 +62,7 @@ class ResetPassword extends React.Component {
                 .dimmer('toggle');
             ReactDOM.findDOMNode(this.refs.successCloseButton).focus();
         } else if (this.props.ResetPasswordStore.componentStatus === 'error') {
+            console.log('ResetPassword componentDidUpdate: showing error modal');
             $('.dimmer.error').dimmer({//Show error message
                 closable: false
             })
@@ -69,6 +72,7 @@ class ResetPassword extends React.Component {
     }
 
     goHome() {
+        this.context.executeAction(resetPasswordResetStore, { });
         this.context.executeAction(navigateAction, {//go to home page after registration
             url: '/'
         });
@@ -77,7 +81,7 @@ class ResetPassword extends React.Component {
     closeErrorDimmer() {
         this.refs.recaptcha.reset();// Reset recaptcha
         this.state.grecaptcharesponse = undefined;
-        this.context.executeAction(resetUserRegistrationStatus, { });
+        this.context.executeAction(resetPasswordResetStore, { });
         $('.dimmer.error') //Hide error message
             .dimmer('toggle');
     }
@@ -101,6 +105,7 @@ class ResetPassword extends React.Component {
     }
 
     render() {
+        console.log('----------------------');
         const successMessage1 = 'Your password is now an automated created one.';
         const successMessage2 = 'Please check your inbox.';
 
@@ -164,7 +169,7 @@ class ResetPassword extends React.Component {
 
                 <div className="eight wide column">
                     <div className="ui blue padded center aligned segment">
-                        <h2 className="ui dividing header">Reset Password</h2>
+                        <h2 className="ui dividing header">Reset Password {this.props.ResetPasswordStore.componentStatus} </h2>
                         <form className="ui form" >
                             <div className={emailClasses} data-position="top center" data-inverted="">
                                 <label style={signUpLabelStyle}>Email * </label>
@@ -194,7 +199,7 @@ class ResetPassword extends React.Component {
 ResetPassword.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-ResetPassword = connectToStores(ResetPassword, [], (context, props) => {
+ResetPassword = connectToStores(ResetPassword, [ResetPasswordStore], (context, props) => {
     return {
         ResetPasswordStore: context.getStore(ResetPasswordStore).getState()
     };
