@@ -20,14 +20,12 @@ class ResetPasswordStore extends BaseStore {
     }
 
     handleError(err) {
-        console.log('Store ResetPasswordStore handleError()');
         let rawMessage = err.message.message ;
         if (rawMessage === undefined) {
             rawMessage = err.message;
         }
         this.errorMessage = this.extractMessage(rawMessage);
         this.componentStatus = 'error';
-        console.log('Store ResetPasswordStore handleError: message', this.errorMessage, 'status', this.componentStatus);
         this.emitChange();
     }
 

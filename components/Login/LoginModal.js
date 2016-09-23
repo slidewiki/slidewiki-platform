@@ -84,6 +84,14 @@ class LoginModal extends React.Component {
         // return false;
     }
 
+    handleCannotAccessAccountClick(e) {
+        e.preventDefault();
+        this.setState({openModal: false});
+        this.context.executeAction(navigateAction, {
+            url: '/resetPassword'
+        });
+    }
+
     render() {
         let loginButton = (
             <HeaderDropdown/>
@@ -124,7 +132,7 @@ class LoginModal extends React.Component {
                     </form>
                     <br/>
                     <div className="ui floated right">
-                        <a href="">I can not access my account</a>
+                        <a href="#" onClick={this.handleCannotAccessAccountClick.bind(this)}>I can not access my account</a>
                         <br/><br/>
                         <a href="#" onClick={this.handleSignupClick.bind(this)}>Don't have an account? Sign up here.</a>
                     </div>

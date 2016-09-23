@@ -54,7 +54,6 @@ class ResetPassword extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('ResetPassword componentDidUpdate()');
         if (this.props.ResetPasswordStore.componentStatus === 'pending') {
             $('.dimmer.success').dimmer({//Show signup success message
                 closable: false
@@ -62,7 +61,6 @@ class ResetPassword extends React.Component {
                 .dimmer('toggle');
             ReactDOM.findDOMNode(this.refs.successCloseButton).focus();
         } else if (this.props.ResetPasswordStore.componentStatus === 'error') {
-            console.log('ResetPassword componentDidUpdate: showing error modal');
             $('.dimmer.error').dimmer({//Show error message
                 closable: false
             })
@@ -105,7 +103,6 @@ class ResetPassword extends React.Component {
     }
 
     render() {
-        console.log('----------------------');
         const successMessage1 = 'Your password is now an automated created one.';
         const successMessage2 = 'Please check your inbox.';
 
