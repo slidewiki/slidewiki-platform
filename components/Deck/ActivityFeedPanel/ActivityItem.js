@@ -22,7 +22,7 @@ class ActivityItem extends React.Component {
             fontStyle: 'italic',
             fontWeight: 400
         };
-        const viewPath = ((node.content_kind === 'slide') ? '/slideview/' : '/deckview/') + node.content_id;
+        const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
         switch (node.activity_type) {
             case 'translate':
                 IconNode = (<i className="ui big translate icon"></i>);

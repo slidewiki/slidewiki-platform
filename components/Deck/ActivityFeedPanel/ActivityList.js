@@ -9,7 +9,7 @@ class ActivityList extends React.Component {
     renderItem(index, key) {
         return (
             <div className="ui item" key={key} style={{ margin: '1em 0'}}>
-                <ActivityItem activity={this.props.ActivityFeedStore.activities[index]} />
+                <ActivityItem selector={this.props.ActivityFeedStore.selector} activity={this.props.ActivityFeedStore.activities[index]} />
             </div>
         );
     }
