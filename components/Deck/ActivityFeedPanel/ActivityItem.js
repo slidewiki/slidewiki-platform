@@ -23,6 +23,8 @@ class ActivityItem extends React.Component {
             fontWeight: 400
         };
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
+        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id === this.props.selector.sid) ? (<span> {'this ' + node.content_kind} </span>) :
+            (<span>{node.content_kind + ' '}<a href={viewPath}>{node.content_name}</a></span>);
         switch (node.activity_type) {
             case 'translate':
                 IconNode = (<i className="ui big translate icon"></i>);
@@ -30,8 +32,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'translated ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>{' to '}
+                        </a> {'translated '} {nodeRef} {' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
                         <a href={viewPath}>{node.translation_info.language}</a>
                         <br/>
@@ -45,8 +46,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'shared ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>{' on '}
+                        </a> {'shared '} {nodeRef} {' on '}
                         <a target="_blank" href={node.share_info.postURI}>{node.share_info.platform}</a>
                         <br/>
                         {DateDiv}
@@ -59,8 +59,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'created ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'created '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -72,8 +71,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'edited ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'edited '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -85,8 +83,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'commented on ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'commented on '} {nodeRef}
                         <br/>
                         <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
                         <br/>
@@ -101,8 +98,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
                         </a>
-                        <span> replied to a comment </span>{'on ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        <span> replied to a comment </span>{'on ' } {nodeRef}
                         <br/>
                         <span style={commentStyles}>{'"' + node.comment_info.text + '"'}</span>
                         <br/>
@@ -116,8 +112,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'used ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'used '} {nodeRef}
                         {' in deck '}<a href={'/deckview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
                         <br/>
                         {DateDiv}
@@ -130,8 +125,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'rated ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'rated '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -143,8 +137,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'liked ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'liked '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -156,8 +149,7 @@ class ActivityItem extends React.Component {
                     <div className="summary">
                         <a className="user" href={'/user/' + node.user_id}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'downloaded ' + node.content_kind + ' '}
-                        <a href={viewPath}>{node.content_name}</a>
+                        </a> {'downloaded '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>

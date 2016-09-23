@@ -71,6 +71,13 @@ class ActivityList extends React.Component {
         //        </div>
         //    );
         //});
+
+        if (this.props.ActivityFeedStore.activities.length === 0) {
+            return (
+                <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
+            )
+        }
+
         const listStyles = {
             maxHeight: '400px',
             overflowY: 'auto'
