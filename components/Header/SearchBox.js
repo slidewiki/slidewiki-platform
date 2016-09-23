@@ -9,8 +9,9 @@ class SearchBox extends React.Component {
     handleRedirect(searchstring){
 
         let searchstr = 'q=';
-        if(this.refs.searchstring.value === ''){
-            searchstr += encodeURIComponent('*:*');
+        if(this.refs.searchstring.value.trim() === ''){
+            // searchstr += encodeURIComponent('*:*');
+            return;
         }
         else{
             searchstr += encodeURIComponent(this.refs.searchstring.value);

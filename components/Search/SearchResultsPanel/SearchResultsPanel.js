@@ -15,7 +15,7 @@ class SearchResultsPanel extends React.Component {
         const numFound = this.props.numFound;
         const entities = this.props.entities;
         const languages = this.props.languages;
-        
+
         const entityList = entities.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
@@ -36,28 +36,7 @@ class SearchResultsPanel extends React.Component {
 
         let resultsDiv = <div ref="resultsDiv">
             <h2 className="ui header">Search Results</h2>
-            <div className="ui grid">
-                <div className="four wide column">
-                    <div className="ui basic segment">
-                        <h4 className="ui header">Facets:</h4>
-                        <label>Entities:</label>
-                        <div className="subscriptions">
-                            <div ref="subscriptionslist">
-                                <div className="ui relaxed list">
-                                    {entityList}
-                                </div>
-                             </div>
-                        </div>
-                        <label>Languages:</label>
-                        <div className="subscriptions">
-                            <div ref="subscriptionslist">
-                                <div className="ui relaxed list">
-                                    {languageList}
-                                </div>
-                             </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="ui grid centered">
                 <div className="twelve wide column">
                     <div className="ui basic segment">
                         <SearchResultsList items={results} ></SearchResultsList>

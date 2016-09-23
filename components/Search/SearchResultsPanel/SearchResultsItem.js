@@ -34,7 +34,7 @@ class SearchResultsItem extends React.Component {
                 break;
             case 'deck':
                 resultLink = '/deck/' + item.parent_id + '-' + item.id;
-                resultContent = result.description.substring(0 ,100) + '...';
+                resultContent = (result.description) ? result.description.substring(0 ,100) + '...' : '';
                 break;
         }
         ResultNode = (

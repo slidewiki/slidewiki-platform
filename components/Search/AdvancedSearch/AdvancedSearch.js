@@ -99,6 +99,9 @@ class AdvancedSearch extends React.Component {
         return encodedParams;
     }
     handleRedirect(){
+        if(this.refs.searchstring.value.trim() === ''){
+            return;
+        }
         this.context.executeAction(navigateAction, {
             url:  '/search/' + this.getEncodedParams()
         });
@@ -143,6 +146,7 @@ class AdvancedSearch extends React.Component {
                                   <option value='title'>Title</option>
                                   <option value='content'>Content</option>
                                   <option value='speakernotes'>Speakernotes</option>
+                                  <option value='description'>Description</option>
                                 </select>
                             </div>
 
