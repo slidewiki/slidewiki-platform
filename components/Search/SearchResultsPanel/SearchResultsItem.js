@@ -29,11 +29,11 @@ class SearchResultsItem extends React.Component {
 
         switch (result.kind) {
             case 'slide':
-                resultLink = '/slide/' + item.id;
+                resultLink = '/deck/' + item.parent_deck + '/slide/' + item.parent_id + '-' + item.id;
                 resultContent = (item.content) ? item.content.substring(0, 100) + '...' : '';
                 break;
             case 'deck':
-                resultLink = '/deck/' + item._id;
+                resultLink = '/deck/' + item.parent_id + '-' + item.id;
                 resultContent = result.description.substring(0 ,100) + '...';
                 break;
         }

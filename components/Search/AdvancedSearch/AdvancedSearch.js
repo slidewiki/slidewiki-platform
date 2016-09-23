@@ -81,9 +81,9 @@ class AdvancedSearch extends React.Component {
             queryparams.license = this.refs.license.value.trim();
         }
 
-        // if(this.refs.revisions && this.refs.revisions.value){
-        //     queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
-        // }
+        if(this.refs.revisions && this.refs.revisions.value){
+            queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
+        }
 
         return this.encodeParams(queryparams);
     }
@@ -142,7 +142,7 @@ class AdvancedSearch extends React.Component {
                                   <option value=''>Select Search field</option>
                                   <option value='title'>Title</option>
                                   <option value='content'>Content</option>
-                                  <option value='description'>Description</option>
+                                  <option value='speakernotes'>Speakernotes</option>
                                 </select>
                             </div>
 
