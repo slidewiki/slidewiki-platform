@@ -3,14 +3,17 @@ import { isEmpty } from '../../../common';
 import DeckCard from './DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { fetchUserDecks } from '../../../actions/user/userprofile/fetchUserDecks';
+
 
 class PublicUserDecks extends React.Component {
+
     componentDidMount() {
-        context.executeAction(fetchUserDecks, {params: {username: this.props.UserProfileStore.user.uname}});
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+
+        //TODO hier müsste auch ein aufruf, aber whr. endlosschleife...
+    }
 
     render() {
         let content = this.props.UserProfileStore.userDecks;
@@ -18,13 +21,13 @@ class PublicUserDecks extends React.Component {
         if (content !== undefined && content.length !== 0 && this.props.size === 0)
             size = content.length;
         else if (content !== undefined && content.length !== 0 && this.props.size !== 0)
-            size = this.props.size;
+            size = content.length < 3 ? content.length : this.props.size;
         let divs = '';
         if(size > 0) {
             divs = (<div className="ui three doubling cards">
                 {[...Array(size).keys()].map( (i) => <DeckCard key={i} cardContent={content[i]}/>)}
             </div>);
-        } else{
+        } else {
             divs = <h3>No decks available</h3>;
         }
         return (

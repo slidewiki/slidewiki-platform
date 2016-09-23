@@ -11,7 +11,6 @@ export function fetchUserDecks(context, payload, done) {
         if (err) {
             if (err.statusCode === 404) {
                 context.dispatch('NEW_USER_DECKS', []);
-                return;
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
                 return;

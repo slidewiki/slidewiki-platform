@@ -33,7 +33,6 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/form.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/tab.min.js"></script>
-                <script src="/custom_modules/custom-semantic-ui/dist/components/loader.min.js"></script>
                 {/* All external vendors bundle*/}
                 <script src="/public/js/vendor.bundle.js"></script>
                 <script src="/custom_modules/ckeditor/ckeditor.js"></script>

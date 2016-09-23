@@ -25,6 +25,7 @@ class UserProfileStore extends BaseStore {
             description: ''
         };
         this.userDecks = undefined;
+        this.lastUser = '';
         this.username = '';
         this.userid = '';
         this.jwt = '';
@@ -32,7 +33,7 @@ class UserProfileStore extends BaseStore {
         this.errorMessage = '';
 
         let user = dispatcher.getContext().getUser();
-        console.log('UserProfileStore constructor:', user);
+        //console.log('UserProfileStore constructor:', user);
         try {
             this.jwt = user.jwt ? user.jwt : '';
             this.username = user.username ? user.username : '';
@@ -60,6 +61,7 @@ class UserProfileStore extends BaseStore {
             picture: '',
             description: ''
         };
+        this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
     }
@@ -75,7 +77,8 @@ class UserProfileStore extends BaseStore {
             userid: this.userid,
             jwt: this.jwt,
             userpicture: this.userpicture,
-            errorMessage: this.errorMessage
+            errorMessage: this.errorMessage,
+            lastUser: this.lastUser
         };
     }
 
@@ -94,6 +97,7 @@ class UserProfileStore extends BaseStore {
         this.jwt = state.jwt;
         this.userpicture = state.userpicture;
         this.errorMessage = state.errorMessage;
+        this.lastUser = state.lastUser;
     }
 
     changeTo(payload) {
@@ -132,7 +136,8 @@ class UserProfileStore extends BaseStore {
     fillInUserDecks(payload) {
         this.userDecks = [];
         Object.assign(this.userDecks, payload);
-        console.log(this.userDecks);
+        this.lastUser = this.user.uname;
+        //console.log(this.userDecks);
         this.emitChange();
     }
 
@@ -170,6 +175,7 @@ class UserProfileStore extends BaseStore {
         this.jwt = '';
         this.userpicture = undefined;
         this.errorMessage = '';
+        this.userDecks = undefined;
         this.emitChange();
     }
 
