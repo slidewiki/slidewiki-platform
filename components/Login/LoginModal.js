@@ -88,7 +88,7 @@ class LoginModal extends React.Component {
         e.preventDefault();
         this.setState({openModal: false});
         this.context.executeAction(navigateAction, {
-            url: '/resetPassword'
+            url: '/resetpassword'
         });
     }
 
