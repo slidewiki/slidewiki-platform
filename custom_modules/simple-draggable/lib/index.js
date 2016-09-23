@@ -260,17 +260,19 @@
                             if (options.onDrag.call(this, e, cEl) === false) {
                                 return;
                             }
-                            console.log('drag');
+                            //console.log('drag');
 
                             // move only on y axis
                             if (!options.onlyY) {
-                                cEl.style.left = (cEl._simpleDraggable.elPos.x + e.clientX - cEl._simpleDraggable.mousePos.x) + "px";
-                                console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
+                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
+                                cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )  + "px";
+                                //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                             }
 
                             // move only on x axis
                             if (!options.onlyX) {
-                                cEl.style.top = (cEl._simpleDraggable.elPos.y + e.clientY - cEl._simpleDraggable.mousePos.y) + "px";
+                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
+                                cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / 0.5 )  + "px";
                             }
                         } else if (cEl._simpleDraggable.resize === true)
                         {
@@ -280,25 +282,28 @@
                             if (options.onDrag.call(this, e, cEl) === false) {
                                 return;
                             }
-                            console.log('resize');
+                            //console.log('resize');
 
                             // resize only on y axis
                             if (!options.onlyY) {
                                 //calculate width as well
                                 //cEl.style.left = (cEl._simpleDraggable.elPos.x) + "px";
-                                cEl.style.width = (cEl._simpleDraggable.elDim.w + e.clientX - cEl._simpleDraggable.mousePos.x) + "px";
+                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
+                                cEl.style.width = (cEl._simpleDraggable.elDim.w  + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )   + "px";
                             }
 
                             // resize only on x axis
                             if (!options.onlyX) {
                                 ////calculate height as well:
                                 //cEl.style.top = (cEl._simpleDraggable.elPos.y) + "px";
-                                console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
-                                console.log(cEl.style.height);
-                                cEl.style.height = (cEl._simpleDraggable.elDim.h + e.clientY - cEl._simpleDraggable.mousePos.y) + "px";
-                                console.log((cEl._simpleDraggable.elDim.w + e.clientY - cEl._simpleDraggable.mousePos.y) + "px");
-                                console.log(cEl.style.height);
+                                //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
+                                //console.log(cEl.style.height);
+                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
+                                cEl.style.height = ((cEl._simpleDraggable.elDim.h + (e.clientY - cEl._simpleDraggable.mousePos.y) / 0.5 )  ) + "px";
+                                //console.log(((cEl._simpleDraggable.elDim.w + e.clientY - cEl._simpleDraggable.mousePos.y) * 2) + "px");
+                                //console.log(cEl.style.height);
                             }
+                            //cEl.style.transform = 'scale(0.5)';
                             //move resize button with resized borders of element
                             cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
                             cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";

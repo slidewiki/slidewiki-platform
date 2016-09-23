@@ -60,13 +60,29 @@ class SlideContentEditor extends React.Component {
     }
     componentDidMount() {
         if(process.env.BROWSER){
-            require('../../../../../bower_components/reveal.js/css/reveal.css');
+            //require('../../../../../bower_components/reveal.js/css/reveal.css');
             // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
             // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
             // require('../../../../../bower_components/reveal.js/css/theme/black.css');
             // require('../../../../../bower_components/reveal.js/css/theme/black.css');
-            require('../../SetupReveal.css');
+            //require('../../SetupReveal.css');
 
+            //Function toi fit contents in edit and view component
+            //$(".pptx2html").addClass('schaal');
+            //$(".pptx2html [style*='absolute']").addClass('schaal');
+            //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+            //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+            if ($('.pptx2html').length)
+            {
+                $(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+                //make z-index of pptx2html output negative for preventing overlap over CKeditor and login modal
+                //use algorithm for selecting all elements in simple-draggable!!
+                //z-index = z-index -999999
+                //$(".pptx2html [style*='absolute']").css({'z-index': '-1'});
+            } else {
+                //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+                //$(".pptx2html").css({'z-index': ''});
+            }
 
         }
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
@@ -296,10 +312,10 @@ class SlideContentEditor extends React.Component {
 
         return (
             <div>
+            <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+            <hr />
                 <div className="reveal">
                     <div className="slides" style={revealSlideStyle}>
-                            <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
-                            <hr />
                             <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                     </div>
                 </div>
