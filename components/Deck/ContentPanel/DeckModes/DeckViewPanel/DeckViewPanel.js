@@ -6,6 +6,7 @@ import ThumbnailShow from '../../../../Thumbnail/ThumbnailShow';
 import CustomDate from '../../../util/CustomDate';
 import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
+import lodash from 'lodash';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -30,21 +31,26 @@ class DeckViewPanel extends React.Component {
         // Uncomment the below line if you want to test with sample tags
         //this.props.DeckViewStore.deckData.tags = ['linked data', 'information extraction', 'presentation'];
 
-        const activeVersion = this.props.DeckViewStore.deckData.active;
-        const totalRevisions = this.props.DeckViewStore.deckData.revisions.length;
+        const activeVersion = lodash.get(this.props.DeckViewStore.deckData, 'this.props.DeckViewStore.deckData.active', undefined);
+        const totalRevisions = lodash.get(this.props.DeckViewStore.deckData, 'this.props.DeckViewStore.deckData.revisions.length', undefined);
         // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
         const deckTheme = 'Simple'; //this.props.DeckViewStore.deckData.theme;
-        const deckTitle = this.getDeckTitle(activeVersion, this.props.DeckViewStore.deckData.revisions);
+        const deckTitle = activeVersion === undefined ? '' : this.getDeckTitle(activeVersion, this.props.DeckViewStore.deckData.revisions);
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
-        const deckDescription = this.props.DeckViewStore.deckData.description;
-        const deckCreator = this.props.DeckViewStore.userData.username;
-        const deckLanguageCode = this.props.DeckViewStore.deckData.language;
-        let deckLanguage = ISO6391.getName(deckLanguageCode);
+        const deckDescription = lodash.get(this.props.DeckViewStore.deckData, 'this.props.DeckViewStore.deckData.description', undefined);
+        const deckCreator = lodash.get(this.props.DeckViewStore.userData, 'this.props.DeckViewStore.userData.username', undefined);
+        const deckLanguageCode = lodash.get(this.props.DeckViewStore.deckData, 'this.props.DeckViewStore.deckData.language', undefined);
+        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
         // If deckLanguageCode is not as per ISO-639-1 (e.g. en-EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
-        deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en'? 'English': deckLanguage;
-        const totalSlides = this.props.DeckViewStore.slidesData.children.length;
+
+        if (deckLanguageCode)
+            deckLanguage = deckLanguage === '' && deckLanguageCode.substr(0, 2) === 'en' ? 'English': deckLanguage;
+
+        const totalSlides = lodash.get(this.props.DeckViewStore.slideData.children, 'this.props.DeckViewStore.slidesData.children.length', undefined);
         const maxSlideThumbnails = 3;
-        const deckURL = 'http://' + this.props.DeckViewStore.deckData.host + '/deck/' + this.props.DeckViewStore.deckData._id + '-' + activeVersion;
+        const host = lodash.get(this.props.DeckViewStore.deckData, 'this.props.DeckViewStore.deckData.host', undefined);
+        const deckId = lodash.get(this.props.DeckViewStore.deckData, 'this.props.DeckViewStore.deckData._id', undefined);
+        const deckURL = (host && deckId ? 'http://' + host + '/deck/' + deckId + '-' + activeVersion : '');
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
