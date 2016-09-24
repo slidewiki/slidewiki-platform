@@ -21,6 +21,9 @@ import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 
 const env = process.env.NODE_ENV;
+// So we can check whether we are in the browser or not.  Required for webpack-load-css
+//otherwise it will try and transpile CSS into JavaScript.
+process.env.BROWSER = false;
 
 const debug = debugLib('slidewiki-platform');
 
