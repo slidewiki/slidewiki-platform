@@ -5,12 +5,16 @@ class PresentationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.content = '';
-
+        this.theme = '';
+        this.selector = '';
+        this.currentSlide = '';
     }
+
     updatePresentation(payload) {
         this.content = payload.content;
+        this.theme = payload.theme;
+        this.selector = payload.selector;
         this.emitChange();
-        //console.log("Updating content", payload.content);
     }
 
     getState() {
@@ -18,19 +22,21 @@ class PresentationStore extends BaseStore {
             items: this.items,
             selector: this.selector,
             mode: this.mode,
-            content: this.content
-
+            content: this.content,
+            theme: this.theme
         };
     }
     dehydrate() {
         return this.getState();
     }
+
     rehydrate(state) {
         this.items = state.items;
         this.selector = state.selector;
-        this.mode = state.mode;
         this.content = state.content;
+        this.theme = state.theme;
     }
+
 }
 
 PresentationStore.storeName = 'PresentationStore';

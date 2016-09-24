@@ -1,5 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
+//let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
@@ -18,7 +19,7 @@ let webpackConfig = {
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
-        filename: '[name].js',
+        filename: '[name].js'
     },
     module: {
         loaders: [
@@ -37,7 +38,7 @@ let webpackConfig = {
         ]
     },
     node: {
-        setImmediate: false,
+        setImmediate: false
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
