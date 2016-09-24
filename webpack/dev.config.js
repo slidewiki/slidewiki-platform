@@ -19,7 +19,7 @@ let webpackConfig = {
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',
-        filename: '[name].js',
+        filename: '[name].js'
     },
     module: {
         loaders: [
@@ -38,7 +38,7 @@ let webpackConfig = {
         ]
     },
     node: {
-        setImmediate: false,
+        setImmediate: false
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
@@ -54,12 +54,10 @@ let webpackConfig = {
                 BROWSER: JSON.stringify(true)
             }
         }),
-
+        new webpack.IgnorePlugin(/vertx/)
     ],
     devtool: 'eval',
-    externals: [
-        /^(?!\.|\/).+/i,
-    ]
+    target: 'node' // in order to ignore built-in modules like path, fs, etc.
 };
 
 module.exports = webpackConfig;

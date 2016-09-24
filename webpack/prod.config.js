@@ -69,12 +69,11 @@ let webpackConfig = {
                 return JSON.stringify(data, null, 2);
             }
         }),
-        new Visualizer()
+        new Visualizer(),
+        new webpack.IgnorePlugin(/vertx/)
     ],
     devtool: 'source-map',
-    externals: [
-        /^(?!\.|\/).+/i,
-    ]
+    target: 'node'
 };
 
 module.exports = webpackConfig;
