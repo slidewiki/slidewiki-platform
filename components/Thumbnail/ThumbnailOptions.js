@@ -24,5 +24,6 @@ export default {
         },
         timeout: 7000, //in ms
         siteType:'html',
+        phantomPath: require('phantomjs2').path
     }
 };
