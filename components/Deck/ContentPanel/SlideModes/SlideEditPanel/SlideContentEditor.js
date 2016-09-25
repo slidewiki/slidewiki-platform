@@ -10,6 +10,8 @@ import SlideEditStore from '../../../../../stores/SlideEditStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
+import ResizeAware from 'react-resize-aware';
+import { findDOMNode } from 'react-dom'
 
 let ReactDOM = require('react-dom');
 
@@ -241,13 +243,14 @@ class SlideContentEditor extends React.Component {
                 //}
             });
 
+            ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
+              console.log('Component has been resized!');
+          });
         //setTimeout(this.forceUpdate(), 500);
         this.forceUpdate();
 
     }
     componentDidUpdate() {
-
-
     }
     componentWillUnmount() {
         //TODO
@@ -311,7 +314,7 @@ class SlideContentEditor extends React.Component {
                     */
 
         return (
-            <div>
+            <ResizeAware ref='container' style={{position: 'relative'}}>
             <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
             <hr />
                 <div className="reveal">
@@ -327,7 +330,7 @@ class SlideContentEditor extends React.Component {
                   <div className="visible content"><i className="save icon"></i>Save</div>
                   <div tabIndex="0" className="hidden content" ><i className="save icon"></i>Save</div>
                 </button>
-            </div>
+            </ResizeAware>
 
         );
     }
