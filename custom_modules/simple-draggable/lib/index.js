@@ -42,6 +42,15 @@
         for (var i = 0; i < allElms.length; ++i) {
             (function (cEl) {
 
+                //http://stackoverflow.com/questions/9251837/how-to-remove-all-listeners-in-an-element
+                //var old_element = document.getElementById("btn");
+                //var new_element = old_element.cloneNode(true);
+                //old_element.parentNode.replaceChild(new_element, old_element);
+
+                //var old_element = document.getElementById("btn");
+                var new_element = cEl.cloneNode(true);
+                cEl.parentNode.replaceChild(new_element, cEl);
+                var cEl = new_element;
 
                 // create _simpleDraggable object for this dom element
                 // KLAAS -> added resize
@@ -49,6 +58,13 @@
                    drag: false,
                    resize: false
                 }
+
+                //TODO: remove previous event listeners:
+                //cEl.removeEventListener("mouseenter", <function>);
+                //Note: To remove event handlers, the function specified with the addEventListener() method must be an external function, like in the example above (myFunction).
+                //Anonymous functions, like "element.removeEventListener("event", function(){ myScript });" will not work.
+
+
 
                 //ondragstart="return false;" ondrop="return false;"
 
@@ -261,18 +277,18 @@
                                 return;
                             }
                             //console.log('drag');
-
                             // move only on y axis
                             if (!options.onlyY) {
-                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
-                                cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )  + "px";
+                                // use variable scale factor calculated from slide edit component size
+                                //cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )  + "px";
+                                cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )  + "px";
                                 //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                             }
 
                             // move only on x axis
                             if (!options.onlyX) {
-                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
-                                cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / 0.5 )  + "px";
+                                // use variable scale factor calculated from slide edit component size
+                                cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio )  + "px";
                             }
                         } else if (cEl._simpleDraggable.resize === true)
                         {
@@ -288,8 +304,8 @@
                             if (!options.onlyY) {
                                 //calculate width as well
                                 //cEl.style.left = (cEl._simpleDraggable.elPos.x) + "px";
-                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
-                                cEl.style.width = (cEl._simpleDraggable.elDim.w  + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )   + "px";
+                                // use variable scale factor calculated from slide edit component size
+                                cEl.style.width = (cEl._simpleDraggable.elDim.w  + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )   + "px";
                             }
 
                             // resize only on x axis
@@ -298,8 +314,8 @@
                                 //cEl.style.top = (cEl._simpleDraggable.elPos.y) + "px";
                                 //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                                 //console.log(cEl.style.height);
-                                //TODO replace 0.5 by variable scale factor calculated from slide edit component size
-                                cEl.style.height = ((cEl._simpleDraggable.elDim.h + (e.clientY - cEl._simpleDraggable.mousePos.y) / 0.5 )  ) + "px";
+                                // use variable scale factor calculated from slide edit component size
+                                cEl.style.height = ((cEl._simpleDraggable.elDim.h + (e.clientY - cEl._simpleDraggable.mousePos.y) / options.ratio )  ) + "px";
                                 //console.log(((cEl._simpleDraggable.elDim.w + e.clientY - cEl._simpleDraggable.mousePos.y) * 2) + "px");
                                 //console.log(cEl.style.height);
                             }
