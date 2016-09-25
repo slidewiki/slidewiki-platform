@@ -33,6 +33,10 @@ class SlideContentEditor extends React.Component {
         //remove editing borders:
         $('.pptx2html [style*="absolute"]')
         .css({'borderStyle': '', 'borderColor': ''});
+
+        //reset scaling of pptx2html element to get original size
+        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+        
         //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
         //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
         //let slide.content = 'test';
