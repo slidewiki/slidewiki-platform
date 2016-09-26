@@ -25,7 +25,7 @@ class Header extends React.Component {
                         <NavLink className="ui item" routeName="addDeck" activeClass="active">
                             <AddDeckPanel />
                         </NavLink>
-                        <UserNotificationsBadge className="zi item"/>
+                        <UserNotificationsBadge className="ui item"/>
                         <LoginModal className="ui item"/>
                     </div>
                 </div>
