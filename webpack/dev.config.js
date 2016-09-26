@@ -22,6 +22,7 @@ let webpackConfig = {
         filename: '[name].js'
     },
     module: {
+        noParse: /\.md/,
         loaders: [
             {
                 test: /\.(js|jsx)$/,
@@ -54,7 +55,7 @@ let webpackConfig = {
                 BROWSER: JSON.stringify(true)
             }
         }),
-        new webpack.IgnorePlugin(/vertx/)
+        new webpack.IgnorePlugin(/vertx/),
     ],
     devtool: 'eval',
     target: 'node' // in order to ignore built-in modules like path, fs, etc.
