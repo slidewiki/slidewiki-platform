@@ -1,11 +1,15 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
+import revertRevision from '../../../../actions/history/revertRevision';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 
 
 class ContentHistoryItem extends React.Component {
 
     handleRevertClick() {
+        this.context.executeAction(revertRevision, {
+            selector: this.props.selector, revisionId: this.props.revision.id
+        });
     }
 
     render() {

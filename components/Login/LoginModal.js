@@ -98,7 +98,7 @@ class LoginModal extends React.Component {
         return(
           <div className="item right" >
             {loginButton}
-            <Modal id='signinModal' isOpen={this.state.openModal}  style={customStyles}>
+            <Modal id='signinModal' isOpen={this.state.openModal} onRequestClose={this.handleExitButton} shouldCloseOnOverlayClick={false} style={customStyles}>
               <div className="ui container">
                   <div className="ui right floated">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>

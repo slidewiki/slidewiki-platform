@@ -6,10 +6,13 @@ import TestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import ContentModuleStore from '../../stores/ContentModulesStore';
 
+import createStore from 'fluxible/addons/createStore';
 
 
 describe('ContentModulesStore', function(){
   var component = null;
+
+
   beforeEach('render and locate element', function(done){
 
     let testStores = [ContentModuleStore];
@@ -20,8 +23,8 @@ describe('ContentModulesStore', function(){
     let testComponent = provideContext(connectToStores(component, testStores, function(){
       return {};
     }));
-
-    component = TestUtils.renderIntoDocument(<testComponent context={context} />);
+    let x = 42;
+    component = TestUtils.renderIntoDocument(<testComponent context={context} abc={x} />);
 
     done();
 

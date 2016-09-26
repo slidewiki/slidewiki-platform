@@ -15,7 +15,7 @@ import loadActivities from '../actions/activityfeed/loadActivities';
 import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
-import loadContentHistory from '../actions/loadContentHistory';
+import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loadContentDiscussion';
@@ -267,14 +267,23 @@ export default {
         }
     },
     presentation: {
+        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeckTree, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadPresentation, payload, done);
+        }
+    },
+    presentationSlide: {
+        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
+        path: '/presentation/:id/*/:sid?/',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadPresentation, payload, done);
         }
     },
     importfile: {
