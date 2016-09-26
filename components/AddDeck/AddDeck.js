@@ -60,10 +60,10 @@ class AddDeck extends React.Component {
         const language = this.refs.select_languages.value;
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
-        const licence = this.refs.select_licences.value;
+        const license = this.refs.select_licenses.value;
         const tags = this.refs.input_tags.value.split(', ');
         const acceptedConditions = this.refs.checkbox_conditions.checked;
-        console.log(title, language, description, theme, licence, tags, acceptedConditions);
+        console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
         let everythingIsFine = true;
@@ -82,12 +82,12 @@ class AddDeck extends React.Component {
         else {
             wrongFields.language = false;
         }
-        if (licence === null || licence === undefined || licence.length < 2) {
-            wrongFields.licence = true;
+        if (license === null || license === undefined || license.length < 2) {
+            wrongFields.license = true;
             everythingIsFine = false;
         }
         else {
-            wrongFields.licence = false;
+            wrongFields.license = false;
         }
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
@@ -102,16 +102,16 @@ class AddDeck extends React.Component {
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
-            this.correctMetadata(title, language, description, theme, licence, tags, acceptedConditions);
+            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
         }
     }
-    correctMetadata(title, language, description, theme, licence, tags, acceptedConditions) {
+    correctMetadata(title, language, description, theme, license, tags, acceptedConditions) {
         this.context.executeAction(addDeckSaveDeck, {
             title: title,
             language: language,
             description: description,
             theme: theme,
-            licence: licence,
+            license: license,
             tags: tags,
             userid: this.props.UserProfileStore.userid,
             deckId: this.props.ImportStore.deckId
@@ -203,10 +203,10 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.language
         });
-        let fieldClass_licence = classNames({
+        let fieldClass_license = classNames({
             'required': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.licence
+            'error': this.props.AddDeckStore.wrongFields.license
         });
         let fieldClass_conditions = classNames({
             'required': true,
@@ -244,7 +244,7 @@ class AddDeck extends React.Component {
           <option value="DefaultTheme" >Default</option>
           <option value="DefaultTheme" >Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licences">
+        let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
           <option value="CC0" >CC0</option>
           <option value="CC BY" >CC BY</option>
           <option value="CC BY-SA" >CC BY-SA</option>
@@ -258,7 +258,7 @@ class AddDeck extends React.Component {
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
-        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'Please select a licence.' : undefined;
+        let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
@@ -293,9 +293,9 @@ class AddDeck extends React.Component {
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
-                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
+                          <div className={fieldClass_license} data-tooltip={hint_license} ref="div_licenses" >
                               <label htmlFor="license">License</label>
-                                  {licenceOptions}
+                                  {licenseOptions}
                           </div>
                           <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
                               <label htmlFor="language">

@@ -22,7 +22,7 @@ class DeckPropertiesEditor extends React.Component {
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            licence: props.deckProps.licence || '',
+            license: props.deckProps.license || '',
             tags: props.deckProps.tags != null ? props.deckProps.tags.join() : ''
         };
     }
@@ -41,6 +41,7 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     handleSave(withNewRevision) {
+        console.log("fdsgfxgfdhfcvb\n\n\n\n\n");
         const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
@@ -54,8 +55,8 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
-        if (this.state.licence == null || this.state.licence.length < 2) {
-            validationErrors.licence = 'Please select a licence.';
+        if (this.state.license == null || this.state.license.length < 2) {
+            validationErrors.license = 'Please select a license.';
             isValid = false;
         }
 
@@ -67,7 +68,7 @@ class DeckPropertiesEditor extends React.Component {
                 language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
-                licence: this.state.licence,
+                license: this.state.license,
                 tags: this.state.tags.split(','),
                 selector: this.props.selector
             });
@@ -97,10 +98,10 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.language != null
         });
-        let licenceFieldClass = classNames({
+        let licenseFieldClass = classNames({
             'required': true,
             'field': true,
-            'error': this.state.validationErrors.licence != null
+            'error': this.state.validationErrors.license != null
         });
         let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true"
                                       value={this.state.language}
@@ -116,9 +117,9 @@ class DeckPropertiesEditor extends React.Component {
                                    onChange={this.handleChange.bind(this, 'theme')}>
             <option value="DefaultTheme">Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
-                                     value={this.state.licence}
-                                     onChange={this.handleChange.bind(this, 'licence')}>
+        let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
+                                     value={this.state.license}
+                                     onChange={this.handleChange.bind(this, 'license')}>
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>
             <option value="CC BY-SA">CC BY-SA</option>
@@ -160,9 +161,9 @@ class DeckPropertiesEditor extends React.Component {
                                 <label id="themes">Choose deck theme</label>
                                 {themeOptions}
                             </div>
-                            <div className={licenceFieldClass} data-tooltip={this.state.validationErrors.licence}>
-                                <label id="licence">License</label>
-                                {licenceOptions}
+                            <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
+                                <label id="license">License</label>
+                                {licenseOptions}
                             </div>
                         </div>
                         <div className="fluid inline field" data-tooltip={this.state.validationErrors.tags}>

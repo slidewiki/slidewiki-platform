@@ -62,7 +62,7 @@ export default {
                     language: deck.language,
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
-                    licence: revision.license != null ? revision.license : deck.license
+                    license: revision.license != null ? revision.license : deck.license
                 };
                 callback(null, {
                     deckProps: deckProps,
@@ -117,7 +117,7 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.licence,
+                license: params.license,
                 new_revision: false
             };
             rp({
@@ -137,7 +137,7 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.licence,
+                license: params.license,
                 new_revision: true
             };
             if (params.root_deck != null) {
