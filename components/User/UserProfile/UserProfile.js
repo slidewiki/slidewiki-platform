@@ -10,26 +10,19 @@ import { isEmpty } from '../../../common';
 import { fetchUserDecks } from '../../../actions/user/userprofile/fetchUserDecks';
 
 class UserProfile extends React.Component {
-    constructor() {
-        super();
-        this.lastUser = '';
-        this.initializing = false;
-    }
     componentDidMount() {
         $('.menu .item').tab();
-        this.initializing = true;
-        context.executeAction(fetchUserDecks, {params: {username: this.props.UserProfileStore.user.uname}}, (() => this.initializing = false));
     }
 
     componentDidUpdate() {
         $('.menu .item').tab();
         if(this.props.UserProfileStore.jwt === '' && this.props.UserProfileStore.toShow !== '')
-            context.executeAction(navigateAction, { url: '/' });
-        if (this.initializing === false && (this.lastUser === '' || this.lastUser !== this.props.UserProfileStore.user.uname )) {
-            this.initializing = true;
-            this.lastUser = this.props.UserProfileStore.user.uname;
-            context.executeAction(fetchUserDecks, {params: {username: this.props.UserProfileStore.user.uname}}, (() => this.initializing = false));
-        }
+            context.executeAction(navigateAction, { url: '/' }); //TODO Als Kondition in die route verschieben
+        // if (this.initializing === false && (this.lastUser === '' || this.lastUser !== this.props.UserProfileStore.user.uname )) {
+        //     this.initializing = true;
+        //     this.lastUser = this.props.UserProfileStore.user.uname;
+        //     context.executeAction(fetchUserDecks, {params: {username: this.props.UserProfileStore.user.uname}}, (() => this.initializing = false));
+        // }
     }
 
     publicOrPrivateProfile() {

@@ -11,12 +11,11 @@ class PublicUserDecks extends React.Component {
     }
 
     componentDidUpdate() {
-
-        //TODO hier müsste auch ein aufruf, aber whr. endlosschleife...
     }
 
     render() {
         let content = this.props.UserProfileStore.userDecks;
+        console.log(content);
         let size = 0;
         if (content !== undefined && content.length !== 0 && this.props.size === 0)
             size = content.length;

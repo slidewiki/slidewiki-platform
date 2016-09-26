@@ -137,7 +137,6 @@ class UserProfileStore extends BaseStore {
         this.userDecks = [];
         Object.assign(this.userDecks, payload);
         this.lastUser = this.user.uname;
-        //console.log(this.userDecks);
         this.emitChange();
     }
 

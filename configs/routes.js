@@ -25,6 +25,8 @@ import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import async from 'async';
+import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -101,7 +103,18 @@ export default {
         title: 'SlideWiki -- Your profile',
         handler: require('../components/User/UserProfile/UserProfile'),
         action: (context, payload, done) => {
-            context.executeAction(fetchUser, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(fetchUser, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
+                }
+            ],
+          (err, result) => {
+              if(err) console.log(err);
+              done();
+          });
         }
     },
 //-----------------------------------Search routes------------------------------
