@@ -48,7 +48,15 @@ export default {
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
             Promise.all([deckPromise, editorsPromise]).then((res) => {
                 let deck = JSON.parse(res[0]), editors = JSON.parse(res[1]);
-                let revision = deck.revisions[0];
+                let revision;
+                //if deck's sid does not specify revision, find the active revision from the corresponding field
+                if (args.sid.split('-').length < 2) {
+                    revision = deck.revisions.find((rev) => {
+                        return rev.id === deck.active;
+                    });
+                } else {
+                    revision = deck.revisions[0];
+                }
                 let deckProps = {
                     description: revision.description != null ? revision.description : deck.description,
                     language: deck.language,
