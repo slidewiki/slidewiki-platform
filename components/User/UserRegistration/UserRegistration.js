@@ -154,7 +154,8 @@ class UserRegistration extends React.Component {
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
         if (language.length === 2) {
             language += '-' + language.toUpperCase();
-        }// let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
+        }
+        // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
         this.context.executeAction(userSignUp, {
             firstname: this.refs.firstname.value,
