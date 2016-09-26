@@ -28,7 +28,7 @@ class ActivityList extends React.Component {
     }
     componentDidMount() {
         this.loading = false;
-        this.refs.activityList.addEventListener('scroll', this.onScroll.bind(this));
+        //this.refs.activityList.addEventListener('scroll', this.onScroll.bind(this));
     }
     componentWillReceiveProps(nextProps) {
         // TODO: same as in the ActivityFeedStore; check if there is more elegant way to tell the component that action loadMoreActivities (in the onScroll function) was executed
