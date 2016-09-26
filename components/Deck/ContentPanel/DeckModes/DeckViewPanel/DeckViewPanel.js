@@ -45,6 +45,10 @@ class DeckViewPanel extends React.Component {
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
         // If deckLanguageCode is not as per ISO-639-1 (e.g. en_EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
         deckLanguage = (deckLanguage === '' && deckLanguageCode && deckLanguageCode.substr(0, 2) === 'en') ? 'English': deckLanguage;
+        // default English
+        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+        // TODO when flag code is available, remove the hard coded flag
+        const countryFlag = 'gb';
 
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData.children, 'children.length', undefined);
         const maxSlideThumbnails = 3;
@@ -65,7 +69,6 @@ class DeckViewPanel extends React.Component {
                                     <p></p>
                                     <p>{deckDescription}</p>
                                 </div>
-
                             </div>
                         </div>
 
@@ -75,7 +78,7 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui hidden divider"></div>
                                 <div className="meta">
                                     <div className="ui large label" >
-                                        <i className="gb flag" aria-label="Language"></i>{deckLanguage}</div>
+                                        <i className={countryFlag + ' flag'} aria-label="Language"></i>{deckLanguage}</div>
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>
                                     <div className="ui large label" tabIndex="0" >
