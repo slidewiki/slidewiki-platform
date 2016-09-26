@@ -8,13 +8,13 @@ import fetchUser from '../../actions/user/userprofile/fetchUser';
 
 class HeaderDropdown extends React.Component {
     componentDidMount(){
-        $(this.refs.userDropDown).dropdown({on: 'hover', action: 'nothing'});
+        $(this.refs.userDropDown).dropdown({action: 'select'});//{on: 'hover', action: 'nothing'}
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
 
     componentDidUpdate() {
-        $(this.refs.userDropDown).dropdown({on: 'hover', action: 'nothing'});
+        $(this.refs.userDropDown).dropdown({action: 'select'});//{on: 'hover', action: 'nothing'}
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
@@ -28,9 +28,13 @@ class HeaderDropdown extends React.Component {
         return(
             <div className="ui top right pointing dropdown" ref="userDropDown">
                 <div className="text">
-                    <NavLink href={ '/user/' + this.props.UserProfileStore.username }><UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 50 }/></NavLink>
+                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 50 }/>
                 </div>
                 <div className="menu">
+                    <div className="header">
+                        <h4>{this.props.UserProfileStore.username}</h4>
+                    </div>
+                    <div className="divider"></div>
                     <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username }>
                         <i className="user icon link"/> My Profile
                     </NavLink>
