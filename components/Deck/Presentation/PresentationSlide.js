@@ -5,20 +5,18 @@ import {connectToStores, provideContext } from 'fluxible-addons-react';
 import PresentationStore from '../../../stores/PresentationStore';
 import SlideViewStore from '../../../stores/SlideViewStore';
 
-var sectionStyle = {
-	'top': 'unset !important'
-}
+let sectionStyle = { 'top': 'unset !important'};
 
 class PresentationSlide extends React.Component {
-	componentDidMount(){
-		this.props.style = sectionStyle;
-	}
-	render(){
+		componentDidMount(){
+		//this.props.style = sectionStyle;
+		}
+		render(){
 
-		return (
-			<section dangerouslySetInnerHTML={{__html:this.props.content}} style={sectionStyle} />
-		);
-	}
+				return (
+					<section dangerouslySetInnerHTML={{__html:this.props.content}} id={this.props.id} />
+				);
+		}
 
 }
 
