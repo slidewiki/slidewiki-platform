@@ -1,4 +1,5 @@
 let webpack = require('webpack');
+
 let path = require('path');
 
 let webpackConfig = {
@@ -35,9 +36,13 @@ let webpackConfig = {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('production'),
-                BROWSER: JSON.stringify(true)
+                // Mainly used to require CSS files with webpack, which can happen only on browser
+                // Used as `if (process.env.BROWSER)...`
+                BROWSER: JSON.stringify(true),
+
             }
         }),
+
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
