@@ -63,13 +63,14 @@ export default {
         let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
 
         // const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
+        const content_kind = selector.stype;
         const content_id = selector.sid;
         switch (resource) {
             case 'activities.list':
 
                 // callback(null, {activities: initialActivities.concat(generateRandomActivities(30, 11)), selector: selector, hasMore: true});
 
-                rp.get({uri: Microservices.activities.uri + '/activities/' + content_id + '/more/0/30' }).then((res) => {
+                rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '/more/0/30' }).then((res) => {
                     let activities = JSON.parse(res);
 
                     activities.forEach((activity) => adjustIDs(activity));//TODO solve these ID issues
@@ -93,7 +94,7 @@ export default {
                 //     callback(null, {activities: newActivities, hasMore: hasMoreActivities});
                 // }, 500);
 
-                rp.get({uri: Microservices.activities.uri + '/activities/' + content_id + '/more/' + params.newActivities.start + '/' + params.newActivities.numNew }).then((res) => {
+                rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '/more/' + params.newActivities.start + '/' + params.newActivities.numNew }).then((res) => {
                     let activities = JSON.parse(res);
 
                     activities.forEach((activity) => adjustIDs(activity));//TODO solve these ID issues
