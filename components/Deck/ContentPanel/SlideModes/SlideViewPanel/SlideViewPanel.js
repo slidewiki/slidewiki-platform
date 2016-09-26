@@ -34,10 +34,10 @@ class SlideViewPanel extends React.Component {
         return (
           <div className="ui bottom attached segment">
               <div ref="slideViewPanel" className="ui" style={compStyle}>
+              <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
                   <div className="reveal">
                       <div className="slides" style={revealSlideStyle}>
-                          <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.title}} />
-                          <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+                          <div id="inlineContent" dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
                       </div>
                   </div>
               </div>
@@ -56,7 +56,18 @@ class SlideViewPanel extends React.Component {
             // require('../../../../../bower_components/reveal.js/css/theme/black.css');
             require('../../SetupReveal.css');
 
+            //Function toi fit contents in edit and view component
+            //$(".pptx2html").addClass('schaal');
+            //$(".pptx2html [style*='absolute']").addClass('schaal');
+            if ($('.pptx2html').length)
+            {
+                $(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+                //$("#signinModal").css({'zIndex': '99999', 'position': 'absolute'});
 
+            } else {
+                $(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+                //$("#signinModal").css({'zIndex': '99999', 'position': 'absolute'});
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
+//let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
@@ -52,7 +53,8 @@ let webpackConfig = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                 BROWSER: JSON.stringify(true)
             }
-        })
+        }),
+
     ],
     devtool: 'eval'
 };
