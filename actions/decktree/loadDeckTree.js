@@ -16,6 +16,7 @@ export default function loadDeckTree(context, payload, done) {
         });
         return;
     }
+    let pageTitle = shortTitle + ' | Deck Tree | ' + payload.params.id;
 
     let currentSelector = context.getStore(DeckTreeStore).getSelector();
 
@@ -25,10 +26,6 @@ export default function loadDeckTree(context, payload, done) {
     if (!payload.navigate.runFetchTree && currentSelector.id === payload.params.id) {
         runFetchTree = 0;
     }
-    let pageTitle = shortTitle + ' | Deck Tree | ' + payload.params.id;
-    context.dispatch('UPDATE_PAGE_TITLE', {
-        pageTitle: pageTitle
-    });
     if (runFetchTree) {
         //we need to load the whole tree for the first time
         context.service.read('decktree.nodes', payload, {}, (err, res) => {
@@ -39,12 +36,18 @@ export default function loadDeckTree(context, payload, done) {
                 return;
             } else {
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
+                context.dispatch('UPDATE_PAGE_TITLE', {
+                    pageTitle: pageTitle
+                });
             }
             done();
         });
     } else {
         //when we only select the node in tree, there is no need to call the external service
         context.dispatch('SELECT_TREE_NODE_SUCCESS', payload.params);
+        context.dispatch('UPDATE_PAGE_TITLE', {
+            pageTitle: pageTitle
+        });
         done();
     }
 }
