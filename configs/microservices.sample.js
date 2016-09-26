@@ -23,7 +23,7 @@ export default {
             port: 80
         },
         'search': {
-            uri: 'http://searchservice.manfredfris.ch/'
+            uri: 'http://searchservice.manfredfris.ch'
         }
     }
 };
