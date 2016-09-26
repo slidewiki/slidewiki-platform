@@ -36,7 +36,7 @@ class SlideContentEditor extends React.Component {
 
         //reset scaling of pptx2html element to get original size
         $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-        
+
         //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
         //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
         //let slide.content = 'test';
@@ -140,6 +140,7 @@ class SlideContentEditor extends React.Component {
         //KLAAS ADAPT once CKeditor for content is succesfully loaded -> apply drag and resize handlers.
         //CKEDITOR.on('instanceReady', function(){
         //CKEDITOR.on('loaded', function(){
+        /*
         CKEDITOR.instances.inlineContent.on("instanceReady", function() {
 
             //this.CKEditor_loaded = true; });
@@ -169,10 +170,10 @@ class SlideContentEditor extends React.Component {
                 //alert($('.pptx2html.div').css("position"));
                 //alert($('.pptx2html .block').css("position"));
                     //if ($('.pptx2html .block').css('position') === 'absolute')
-                    //{/*add border*/ $('.pptx2html .block')
+                    //{/*add border*/ /* $('.pptx2html .block')
                     //if ($('.pptx2html').css('position') === 'absolute')
                     //{/*add border*/
-                        $(".pptx2html [style*='absolute']")
+                    /*    $(".pptx2html [style*='absolute']")
                         .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
                     //}
 
@@ -235,6 +236,7 @@ class SlideContentEditor extends React.Component {
                 }*/
                 //}
 
+                /*
                 //set intitial resize:
                 //TODO: make function to prevent repetition! - shared function with slide view!
 
@@ -333,11 +335,13 @@ class SlideContentEditor extends React.Component {
                     }
 
             });
+            */
 
 
 
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
+                    /*
                 let containerwidth = document.getElementById('container').offsetWidth;
                 let containerheight = document.getElementById('container').offsetHeight;
                 //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
@@ -364,12 +368,15 @@ class SlideContentEditor extends React.Component {
                     //this.props.SlideEditStore.scaleratio = pptxwidth / containerwidth;
                     //let scaleratio = pptxwidth / containerwidth;
                 }
+                */
                 //Function to fit contents in edit and view component
                 //$(".pptx2html").addClass('schaal');
                 //$(".pptx2html [style*='absolute']").addClass('schaal');
                 //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                 //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                 if(process.env.BROWSER){
+                    this.resize();
+                    /*
                     if ($('.pptx2html').length)
                     {
                         //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
@@ -398,10 +405,12 @@ class SlideContentEditor extends React.Component {
 
                         //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                         //$(".pptx2html").css({'z-index': ''});
-                    }
+                    }*/
                 }
                 CKEDITOR.instances.inlineContent.on("instanceReady", function() {
                 if(process.env.BROWSER){
+                    this.resize();
+                    /*
                     if ($('.pptx2html').length)
                     {
                         //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
@@ -431,15 +440,71 @@ class SlideContentEditor extends React.Component {
                         //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                         //$(".pptx2html").css({'z-index': ''});
                     }
-                }
-            });
+                    */
+                    }
+                });
+
             });
         //setTimeout(this.forceUpdate(), 500);
         this.forceUpdate();
 
     }
     componentDidUpdate() {
+        this.resize();
     }
+    resize()
+    {
+        let containerwidth = document.getElementById('container').offsetWidth;
+        let containerheight = document.getElementById('container').offsetHeight;
+        //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
+
+        //reset scaling of pptx2html element to get original size
+        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+
+        //let pptxwidth = document.getElementByClassName('pptx2html').offsetWidth;
+        //let pptxheight = document.getElementByClassName('pptx2html').offsetHeight;
+        let pptxwidth = $('.pptx2html').width();
+        let pptxheight = $('.pptx2html').height();
+        //console.log('pptx2html Width =' + pptxwidth + 'height' + pptxheight);
+
+        //only calculate scaleration for width for now
+        if (containerwidth > pptxwidth)
+        {
+            this.scaleratio = pptxwidth / containerwidth;
+            //console.log(this.scaleratio);
+            //this.props.SlideEditStore.scaleratio = containerwidth / pptxwidth;
+            //let scaleratio = containerwidth / pptxwidth;
+        } else {
+            this.scaleratio = containerwidth / pptxwidth;
+            //console.log(this.scaleratio);
+            //this.props.SlideEditStore.scaleratio = pptxwidth / containerwidth;
+            //let scaleratio = pptxwidth / containerwidth;
+        }
+        //Function to fit contents in edit and view component
+        //$(".pptx2html").addClass('schaal');
+        //$(".pptx2html [style*='absolute']").addClass('schaal');
+        //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+        //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+            if ($('.pptx2html').length)
+            {
+                //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
+                //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+                //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
+                $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+                $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+                require('../../../../../custom_modules/simple-draggable/lib/index.js');
+
+                //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
+                //TODO: remove previous event listeners!
+                //, ratio: this.props.SlideEditStore.scaleratio
+                SimpleDraggable(".pptx2html [style*='absolute']", {
+                    onlyX: false
+                  , onlyY: false
+                  , ratio: this.scaleratio
+                });
+            }
+    }
+
     componentWillUnmount() {
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
