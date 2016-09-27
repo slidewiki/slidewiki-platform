@@ -18,7 +18,7 @@ import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
-import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loadContentDiscussion';
+import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
