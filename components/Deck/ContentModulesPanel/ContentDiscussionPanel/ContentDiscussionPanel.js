@@ -4,7 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import Comment from './Comment';
-import addComment from '../../../../actions/activityfeed/contentdiscussion/addComment';
+import addComment from '../../../../actions/contentdiscussion/addComment';
 
 class ContentDiscussionPanel extends React.Component {
     handleAddComment(e) {

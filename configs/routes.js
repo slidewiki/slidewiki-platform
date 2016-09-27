@@ -15,16 +15,18 @@ import loadActivities from '../actions/activityfeed/loadActivities';
 import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
-import loadContentHistory from '../actions/loadContentHistory';
+import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
-import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loadContentDiscussion';
+import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import async from 'async';
+import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -101,7 +103,18 @@ export default {
         title: 'SlideWiki -- Your profile',
         handler: require('../components/User/UserProfile/UserProfile'),
         action: (context, payload, done) => {
-            context.executeAction(fetchUser, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(fetchUser, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
+                }
+            ],
+          (err, result) => {
+              if(err) console.log(err);
+              done();
+          });
         }
     },
 //-----------------------------------Search routes------------------------------

@@ -3,6 +3,10 @@ import rp from 'request-promise';
 
 //extracts the id of the immediate parent deck from the path string
 function findImmediateParentId(selector) {
+    //no parent
+    if (!selector.sid || (selector.stype === 'deck' && selector.sid === selector.id)) {
+        return null;
+    }
     let arr = selector.spath.split(';');
     //root deck is parent
     if (arr.length <= 1) {
@@ -36,7 +40,7 @@ export default {
             }
             contentItemPromise = rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid.split('-')[0]}).promise().bind(this);
 
-            //do the requests in parallel
+            //callback to execute when both requests are successful
             Promise.all([parentPromise, contentItemPromise]).then((res) => {
                 let contentItem = JSON.parse(res[1]), revisions = contentItem.revisions, parentDeck;
                 let activeRevisionId;
@@ -52,34 +56,67 @@ export default {
                 if (activeRevision) {
                     activeRevision.active = true;
                 }
-                //mock-up usernames
-                let users = ['Valentina J.', 'Marko B.', 'SlideWiki FTW'];
-                //fill in every revision with dummy username
+                let userIdsHash = {};
                 revisions.forEach((revision) => {
-                    revision.username = users[(parseInt(revision.user) || 0) % users.length];
+                    if (revision.user != null) {
+                        userIdsHash[parseInt(revision.user)] = true;
+                    }
                 });
-                callback(null, {
-                    //reverse revisions array so that it is sorted by date descending
-                    history: revisions.reverse(),
-                    selector: selector
+                let userId, userPromises = [], userNames = {};
+                //todo use a single request if getMultipleUsers is added to user service
+                for (userId in userIdsHash) {
+                    userPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + userId}).then((userRes) => {
+                        let user = JSON.parse(userRes);
+                        userNames[user._id] = user.username;
+                    }));
+                }
+                //when all user data are fetched
+                Promise.all(userPromises).then().catch((err) => {
+                    console.log(err);
+                }).then(() => {
+                    // behaves like finally. called when all user requests are complete regardless of their success status
+                    //todo do this in the first then callback. just a temporary fix because of dummy user ids in database
+                    //enrich every revision with username
+                    revisions.forEach((revision) => {
+                        let userName = userNames[revision.user];
+                        if (userName == null || userName === '') {
+                            userName = 'Unknown user';
+                        }
+                        revision.username = userName;
+                    });
+                    callback(null, {
+                        //reverse revisions array so that it is sorted by date descending
+                        history: revisions.reverse(),
+                        selector: selector
+                    });
                 });
             }).catch((err) => {
                 console.log(err);
-                callback(null, {history: {}, selector: selector});
+                callback(err);
             });
         }
     },
-
-    // other methods
-    // create: (req, resource, params, body, config, callback) => {},
     update: (req, resource, params, body, config, callback) => {
         let args = params.params ? params.params : params;
         if (resource === 'history.revert') {
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            callback(null, {id: args.id});
+            let immediateParentId = findImmediateParentId(args.selector);
+            let requestBody = {
+                revision_id: String(args.revisionId)
+            };
+            if (immediateParentId != null) {
+                requestBody.root_deck = immediateParentId;
+            }
+            rp.post({
+                uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],
+                body: JSON.stringify(requestBody)
+            }).then((res) => {
+                callback(null, JSON.parse(res));
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {
+                    error: err
+                });
+            });
         }
     }
-    // delete: (req, resource, params, config, callback) => {}
 };

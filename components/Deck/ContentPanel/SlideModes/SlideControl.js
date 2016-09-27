@@ -88,13 +88,13 @@ class SlideControl extends React.Component {
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} ref="slideControl" style={compStyle}>
                 <div className="ui icon buttons large left floated">
-                    <div className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the first slide (shift + left arrow)"><i className="icon fast backward"></i></div>
-                    <div className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the previous slide (left arrow)"><i className="step backward icon"></i></div>
-                    <div className="ui grey large button">
+                    <button className="ui button" onClick={this.handleBackwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the first slide (shift + left arrow)"><i className="icon fast backward"></i></button>
+                    <button className="ui button" onClick={this.handlePreviousClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the previous slide (left arrow)"><i className="step backward icon"></i></button>
+                    <button className="ui grey large button">
                     {SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}
-                    </div>
-                    <div className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the next slide (right arrow)"><i className="icon step forward"></i></div>
-                    <div className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the firlastst slide (shift + right arrow)"><i className="icon fast forward"></i></div>
+                    </button>
+                    <button className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the next slide (right arrow)"><i className="icon step forward"></i></button>
+                    <button className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} title="go to the firlastst slide (shift + right arrow)"><i className="icon fast forward"></i></button>
                 </div>
             </HotKeys>
         );

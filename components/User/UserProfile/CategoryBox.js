@@ -11,9 +11,6 @@ class CategoryBox extends React.Component {
 
         return (
             <div className="ui vertical fluid buttons">
-                <NavLink className={ 'ui ' + ( this.props.toShow === 'decks' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/decks'}>
-                    <p><i className="icon folder"/> My Decks</p>
-                </NavLink>
                 <NavLink className={ 'ui ' + ( this.props.toShow === 'settings' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/settings'}>
                     <p><i className="icon setting"/> Settings</p>
                 </NavLink>

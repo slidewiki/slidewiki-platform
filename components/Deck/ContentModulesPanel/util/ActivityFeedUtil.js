@@ -67,14 +67,13 @@ class ActivityFeedUtil {
     static makeNodeRevisionURL(selector, revisionId) {
         let nodeURL;
         let sidWithRevision = selector.sid.split('-')[0] + '-' + revisionId;
-
-        if (selector.stype === 'deck' && selector.id === selector.sid) {
+        if (selector.stype === 'deck') {
             nodeURL = '/deck/' + sidWithRevision;
         } else {
             nodeURL = '/deck/' + selector.id + '/' + selector.stype + '/' + sidWithRevision;
-        }
-        if (selector.spath) {
-            nodeURL += '/' + selector.spath;
+            if (selector.spath) {
+                nodeURL += '/' + selector.spath;
+            }
         }
         return nodeURL;
     }
