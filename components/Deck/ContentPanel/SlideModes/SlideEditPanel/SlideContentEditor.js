@@ -64,7 +64,6 @@ class SlideContentEditor extends React.Component {
         this.context.executeAction(saveSlide,
           {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
         //console.log('saving slide');
-        this.resize();
         return false;
     }
     componentDidMount() {
@@ -75,9 +74,7 @@ class SlideContentEditor extends React.Component {
             // require('../../../../../bower_components/reveal.js/css/theme/black.css');
             // require('../../../../../bower_components/reveal.js/css/theme/black.css');
             //require('../../SetupReveal.css');
-            /*add border*/
-            $(".pptx2html [style*='absolute']")
-            .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
+
         }
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
@@ -181,7 +178,7 @@ class SlideContentEditor extends React.Component {
                     //}
 
                     //need to remove existing event listener functions!!!
-                    //                    , ratio: this.props.SlideEditStore.scaleratio
+//                    , ratio: this.props.SlideEditStore.scaleratio
                   SimpleDraggable(".pptx2html [style*='absolute']", {
                       onlyX: false
                     , onlyY: false
@@ -571,10 +568,6 @@ class SlideContentEditor extends React.Component {
 
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-            <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-             <i className="save icon"></i>
-             Save
-            </button>
             <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
             <hr />
                 <div className="reveal">
@@ -586,6 +579,10 @@ class SlideContentEditor extends React.Component {
                 <br />
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <button tabIndex="0" ref="submitbutton" className="ui animated button green" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                  <div className="visible content"><i className="save icon"></i>Save</div>
+                  <div tabIndex="0" className="hidden content" ><i className="save icon"></i>Save</div>
+                </button>
             </ResizeAware>
 
         );
