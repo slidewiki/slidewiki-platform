@@ -1,13 +1,13 @@
 import async from 'async';
 import { shortTitle } from '../configs/general';
-import loadContentQuestions from './loadContentQuestions';
-import loadDataSourceCount from './datasource/loadDataSourceCount';
-import loadQuestionsCount from './questions/loadQuestionsCount';
-import loadCommentsCount from './activityfeed/contentdiscussion/loadCommentsCount';
+import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
+//import loadDataSourceCount from './datasource/loadDataSourceCount';
+//import loadQuestionsCount from './questions/loadQuestionsCount';
+import loadCommentsCount from './contentdiscussion/loadCommentsCount';
 import { deckContentTypeError, slideIdTypeError } from './loadErrors';
 
 export default function loadContentModules(context, payload, done) {
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
+    if (!(['deck', 'slide'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
         return;
     }
@@ -20,14 +20,16 @@ export default function loadContentModules(context, payload, done) {
         //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(loadContentQuestions, payload, callback);
+            context.executeAction(loadContentDiscussion, payload, callback);
         },
+        /*
         (callback) => {
             context.executeAction(loadDataSourceCount, payload, callback);
         },
         (callback) => {
             context.executeAction(loadQuestionsCount, payload, callback);
         },
+        */
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
         }
