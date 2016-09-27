@@ -15,7 +15,6 @@ export default {
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
             rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id}).then((res) => {
-              console.log('disc', JSON.parse(res));
                 callback(null, {discussion: JSON.parse(res), selector: selector});
             }).catch((err) => {
                 // console.log(err);
