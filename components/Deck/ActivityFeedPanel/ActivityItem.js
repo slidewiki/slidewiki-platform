@@ -1,6 +1,10 @@
 import React from 'react';
 import likeActivity from '../../../actions/activityfeed/likeActivity';
 import {formatDate} from './util/ActivityFeedUtil';
+import {navigateAction} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
+import TreeUtil from '../../../components/Deck/TreePanel/util/TreeUtil';
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -8,6 +12,32 @@ class ActivityItem extends React.Component {
             id: this.props.activity.id
         });
     }
+
+    //return the position of the node in the deck
+    getPath(node){
+        const flatTree = this.props.DeckTreeStore.flatTree;
+        let path = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
+                path = flatTree.get(i).get('path');
+                let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
+                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', this.props.selector.mode);
+
+                return nodeURL;
+            }
+        }
+        return path;
+    }
+
+    handleRefClick(e) {
+        e.preventDefault();
+        
+        this.context.executeAction(navigateAction, {
+            url: this.getPath(this.props.activity)
+        });
+        // return false;
+    }
+
     render() {
         const node = this.props.activity;
 
@@ -23,8 +53,8 @@ class ActivityItem extends React.Component {
             fontWeight: 400
         };
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
-        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id === this.props.selector.sid) ? (<span> {'this ' + node.content_kind} </span>) :
-            (<span>{node.content_kind + ' '}<a href={viewPath}>{node.content_name}</a></span>);
+        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id === this.props.selector.sid) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={viewPath} onClick={this.handleRefClick.bind(this)}>{node.content_name}</a></span>);
+
         switch (node.activity_type) {
             case 'translate':
                 IconNode = (<i className="ui big translate icon"></i>);
@@ -190,5 +220,9 @@ class ActivityItem extends React.Component {
 ActivityItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+ActivityItem = connectToStores(ActivityItem, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 export default ActivityItem;
