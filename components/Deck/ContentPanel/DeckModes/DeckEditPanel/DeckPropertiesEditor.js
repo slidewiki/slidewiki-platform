@@ -102,7 +102,8 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.license != null
         });
-        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true"
+        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language"
+                                      aria-required="true"
                                       value={this.state.language}
                                       onChange={this.handleChange.bind(this, 'language')}>
             <option>
@@ -112,7 +113,8 @@ class DeckPropertiesEditor extends React.Component {
                 English
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme" selected={this.state.theme}
+        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"
+                                   selected={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
             <option value="DefaultTheme">Default</option>
         </select>;
@@ -124,8 +126,9 @@ class DeckPropertiesEditor extends React.Component {
             <option value="CC BY-SA">CC BY-SA</option>
         </select>;
 
-        let saveDeckButton = isUserEditor ? <div className='ui primary button' role="button" aria-describedby="saveDeck" tabIndex="0"
-                                                 onClick={this.handleSave.bind(this, false)}>Save</div> : '';
+        let saveDeckButton = isUserEditor ?
+        <div className='ui primary button' role="button" aria-describedby="saveDeck" tabIndex="0"
+             onClick={this.handleSave.bind(this, false)}>Save</div> : '';
 
         return (
         <div className="ui container">
@@ -172,7 +175,8 @@ class DeckPropertiesEditor extends React.Component {
                                    data-tooltip={this.state.validationErrors.tags}/>
                         </div>
                         {saveDeckButton}
-                        <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision" tabIndex="0"
+                        <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision"
+                             tabIndex="0"
                              onClick={this.handleSave.bind(this, true)}>
                             Save new revision
                         </div>
