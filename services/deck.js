@@ -153,11 +153,10 @@ export default {
         } else if (resource === 'deck.fork') {
             rp({
                 method: 'PUT',
-                uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                uri: Microservices.deck.uri + '/deck/' + params.deckId + '/fork',
                 json: true,
                 body: {
-                    user: params.userid.toString(),
-                    new_revision: true
+                    user: params.userid.toString()
                 }
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
