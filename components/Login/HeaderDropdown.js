@@ -38,9 +38,6 @@ class HeaderDropdown extends React.Component {
                     <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username }>
                         <i className="user icon link"/> My Profile
                     </NavLink>
-                    <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username + '/decks' }>
-                        <i className="block layout icon"/> My Decks
-                    </NavLink>
                     <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username + '/settings' }>
                         <i className="setting icon"/> My Settings
                     </NavLink>
