@@ -105,12 +105,14 @@ class DeckViewPanel extends React.Component {
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        <ThumbnailShow key={index}
+                                                        {/* <ThumbnailShow key={index}
                                                             slideId={slide.id}
                                                             slideTitle={slide.title}
                                                             slideContent={slide.content}
                                                             action="new"
                                                         />
+                                                        */}
+                                                        <img src={'http://' + host + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} />
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
