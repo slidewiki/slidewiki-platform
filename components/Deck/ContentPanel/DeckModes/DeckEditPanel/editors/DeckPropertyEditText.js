@@ -7,6 +7,7 @@ class DeckPropertyItemText extends React.Component {
             fieldname: this.props.fieldname,
             fieldcontent: event.value
         };
+        //console.log(this.props.onChange);
         this.props.onChange(update);
     }
     render() {
@@ -17,7 +18,7 @@ class DeckPropertyItemText extends React.Component {
                     <InlineEdit
                         text={this.props.fieldcontent}
                         paramName="value"
-                        change={this.handleChange}
+                        change={this.handleChange.bind(this)}
                     />
                 </span>
             </div>

@@ -68,7 +68,7 @@ export default {
                     json: true
                 })
                 .then((body) => {
-                    console.log(body);
+                    //console.log(body);
                     let converted = {
                         id: body._id,
                         uname: body.username,

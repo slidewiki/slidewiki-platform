@@ -147,14 +147,14 @@ class UserProfileStore extends BaseStore {
     }
 
     emailNotAllowed(payload) {
-        console.log('emailNotAllowed');
+        //console.log('emailNotAllowed');
         this.failures.emailNotAllowed = true;
         this.emitChange();
         this.failures.emailNotAllowed = false;
     }
 
     wrongPassword() {
-        console.log('wrongPassword');
+        //console.log('wrongPassword');
         this.failures.wrongPassword = true;
         this.emitChange();
         this.failures.wrongPassword = false;
