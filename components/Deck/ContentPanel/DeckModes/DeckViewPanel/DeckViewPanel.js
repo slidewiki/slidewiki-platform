@@ -53,6 +53,7 @@ class DeckViewPanel extends React.Component {
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData.children, 'children.length', undefined);
         const maxSlideThumbnails = 3;
         const host = this.props.DeckViewStore.deckData.host;
+        const fileserver = 'http://fileservice.manfredfris.ch';
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
 
@@ -112,7 +113,7 @@ class DeckViewPanel extends React.Component {
                                                             action="new"
                                                         />
                                                         */}
-                                                        <img src={'http://' + host + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} />
+                                                        <img src={fileserver + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} />
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
