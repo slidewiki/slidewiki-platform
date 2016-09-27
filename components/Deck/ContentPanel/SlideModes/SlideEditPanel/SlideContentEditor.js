@@ -12,6 +12,7 @@ import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
 
 let ReactDOM = require('react-dom');
 
@@ -30,41 +31,48 @@ class SlideContentEditor extends React.Component {
     }
     handleSaveButton(){
 
-        //remove editing borders:
-        $('.pptx2html [style*="absolute"]')
-        .css({'borderStyle': '', 'borderColor': ''});
+        if (this.props.UserProfileStore.username === '') {
+            alert('you need to login to save changes');
+        }
+        else
+        {
+            alert('saving changes');
+            //remove editing borders:
+            $('.pptx2html [style*="absolute"]')
+            .css({'borderStyle': '', 'borderColor': ''});
 
-        //reset scaling of pptx2html element to get original size
-        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            //reset scaling of pptx2html element to get original size
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
 
-        //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
-        //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
-        //let slide.content = 'test';
-        //this.context.executeAction(saveSlide, {slide});
-        //let slide = 'test';
-        let title = CKEDITOR.instances.inlineHeader.getData();
-        //let title = this.refs.inlineHeader.value;
-        //let title = this.refs.title.value;
-        let content = CKEDITOR.instances.inlineContent.getData();
-        let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
-        //these fields should not be empty:
-        if (title === ''){title = ' ';}
-        if (content === ''){content = ' ';}
-        if (speakernotes === ''){speakernotes = ' ';}
-        //update store
-        this.props.SlideEditStore.title = title;
-        this.props.SlideEditStore.content = content;
-        this.props.SlideEditStore.speakernotes = speakernotes;
-        let currentSelector = this.props.selector;
-        //console.log('currentSelector: ' + currentSelector.id);
-        let deckID = currentSelector.id;
-        //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
-        //TEST - create slide (before can be saved (=updated))
-        //console.log(speakernotes);
-        this.context.executeAction(saveSlide,
-          {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
-        //console.log('saving slide');
-        this.resize();
+            //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
+            //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
+            //let slide.content = 'test';
+            //this.context.executeAction(saveSlide, {slide});
+            //let slide = 'test';
+            let title = CKEDITOR.instances.inlineHeader.getData();
+            //let title = this.refs.inlineHeader.value;
+            //let title = this.refs.title.value;
+            let content = CKEDITOR.instances.inlineContent.getData();
+            let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
+            //these fields should not be empty:
+            if (title === ''){title = ' ';}
+            if (content === ''){content = ' ';}
+            if (speakernotes === ''){speakernotes = ' ';}
+            //update store
+            this.props.SlideEditStore.title = title;
+            this.props.SlideEditStore.content = content;
+            this.props.SlideEditStore.speakernotes = speakernotes;
+            let currentSelector = this.props.selector;
+            //console.log('currentSelector: ' + currentSelector.id);
+            let deckID = currentSelector.id;
+            //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
+            //TEST - create slide (before can be saved (=updated))
+            //console.log(speakernotes);
+            this.context.executeAction(saveSlide,
+              {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
+            //console.log('saving slide');
+            this.resize();
+        }
         return false;
     }
     componentDidMount() {
@@ -596,9 +604,10 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore], (context, props) => {
     return {
-        SlideEditStore: context.getStore(SlideEditStore).getState()
+        SlideEditStore: context.getStore(SlideEditStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default SlideContentEditor;
