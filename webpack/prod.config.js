@@ -22,6 +22,7 @@ let webpackConfig = {
         filename: '[name].js'
     },
     module: {
+        noParse: /\.md/,
         loaders: [
             {
                 test: /\.(js|jsx)$/,
