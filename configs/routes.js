@@ -15,7 +15,7 @@ import loadActivities from '../actions/activityfeed/loadActivities';
 import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
-import loadContentHistory from '../actions/loadContentHistory';
+import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
 import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loadContentDiscussion';

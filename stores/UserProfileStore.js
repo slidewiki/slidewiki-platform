@@ -31,7 +31,7 @@ class UserProfileStore extends BaseStore {
         this.errorMessage = '';
 
         let user = dispatcher.getContext().getUser();
-        console.log('UserProfileStore constructor:', user);
+        //console.log('UserProfileStore constructor:', user);
         try {
             this.jwt = user.jwt ? user.jwt : '';
             this.username = user.username ? user.username : '';
@@ -132,14 +132,14 @@ class UserProfileStore extends BaseStore {
     }
 
     emailNotAllowed(payload) {
-        console.log('emailNotAllowed');
+        //console.log('emailNotAllowed');
         this.failures.emailNotAllowed = true;
         this.emitChange();
         this.failures.emailNotAllowed = false;
     }
 
     wrongPassword() {
-        console.log('wrongPassword');
+        //console.log('wrongPassword');
         this.failures.wrongPassword = true;
         this.emitChange();
         this.failures.wrongPassword = false;
