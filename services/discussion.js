@@ -15,10 +15,11 @@ export default {
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
             rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id}).then((res) => {
+              console.log('disc', JSON.parse(res));
                 callback(null, {discussion: JSON.parse(res), selector: selector});
             }).catch((err) => {
-                console.log(err);
-                callback(null, {discussion: {}, selector: selector});
+                // console.log(err);
+                callback(err, {discussion: [], selector: selector});
             });
         } else if(resource === 'discussion.count'){
             rp.get({uri: Microservices.discussion.uri + '/discussion/count/' + content_kind + '/' + content_id}).then((res) => {
@@ -49,7 +50,7 @@ export default {
                 callback(null, {comment: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {comment: {}, selector: args.selector});
+                callback(err, {comment: {}, selector: args.selector});
             });
         }
 
@@ -68,7 +69,7 @@ export default {
                 callback(null, {comment: JSON.parse(res), selector: args.selector});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {comment: {}, selector: args.selector});
+                callback(err, {comment: {}, selector: args.selector});
             });
         }
     }

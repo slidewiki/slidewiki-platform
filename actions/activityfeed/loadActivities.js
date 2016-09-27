@@ -1,6 +1,5 @@
 import { shortTitle } from '../../configs/general';
 import { deckContentTypeError, slideIdTypeError } from '../loadErrors';
-import {serviceUnavailable} from '../loadErrors';
 
 export default function loadActivities(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
@@ -15,9 +14,7 @@ export default function loadActivities(context, payload, done) {
 
     context.service.read('activities.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.executeAction(serviceUnavailable, payload).catch((error) => {done(error);});
-            return;
-            // context.dispatch('LOAD_ACTIVITIES_FAILURE', err);
+            context.dispatch('LOAD_ACTIVITIES_FAILURE', err);
         } else {
             context.dispatch('LOAD_ACTIVITIES_SUCCESS', res);
             context.dispatch('UPDATE_ACTIVITY_TYPE_SUCCESS', {activityType: 'all'});
