@@ -27,8 +27,7 @@ class LoginModal extends React.Component {
         return classes.indexOf('hidden') === -1;
     }
 
-    handleLoginButton(){
-        console.log('handleLoginButton');
+    handleLoginButton() {
         $('.ui.login.modal').modal('toggle');
         setTimeout(() => {
             ReactDOM.findDOMNode(this.refs.email1).focus();
@@ -69,7 +68,6 @@ class LoginModal extends React.Component {
 
     handleSignupClick(e) {
         e.preventDefault();
-        console.log('handleSignupClick');
         $('.ui.login.modal').modal('toggle');
         this.context.executeAction(navigateAction, {
             url: '/signup'
