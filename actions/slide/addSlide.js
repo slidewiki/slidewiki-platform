@@ -1,7 +1,7 @@
 import {shortTitle} from '../../configs/general';
 
 export default function addSlide(context, payload, done) {
-    console.log(payload);
+    //console.log(payload);
 
     context.service.create('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
