@@ -1,5 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+import _ from 'lodash';
 
 export default {
     name: 'usage',
@@ -19,8 +20,30 @@ export default {
                 } else {
                     activeRevision = contentItem.revisions[0];
                 }
-                callback(null, {usage: activeRevision.usage, selector: selector});
+                let usage = activeRevision.usage;
+
+                let deckPromises = [];
+                _.uniqBy(usage.map((item) => item.id), 'id').forEach((deckId) => {
+                    deckPromises.push(rp.get({uri: Microservices.deck.uri + '/deck/' + deckId}).then((res) => {
+                        let deck = JSON.parse(res);
+                        usage.forEach((usageItem) => {
+                            if (usageItem.id === deckId) {
+                                usageItem.title = deck.revisions.find((revision) => {
+                                    return revision.id === usageItem.revision;
+                                }).title;
+                            }
+                        });
+                    }));
+                });
+                //when all deck data is fetched
+                Promise.all(deckPromises).then(() => {
+                    callback(null, {usage: usage, selector: selector});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(err);
+                });
             }).catch((err) => {
+                console.log(err);
                 callback(err);
             });
         }

@@ -6,7 +6,7 @@ class ContentUsageItem extends React.Component {
     render() {
         const usingDeckId = this.props.usageItem.id + '-' + this.props.usageItem.revision;
         const usingDeckLink = <NavLink
-        href={'/deck/' + usingDeckId}>Deck {usingDeckId} </NavLink>;
+        href={'/deck/' + usingDeckId}>{this.props.usageItem.title} </NavLink>;
         return (
         <div className="item">
             <div className="content">
