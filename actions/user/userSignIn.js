@@ -1,4 +1,5 @@
 import fetchUser from './userprofile/fetchUser.js';
+import async from 'async';
 
 export default function userSignIn(context, payload, done) {
     context.service.read('user.signin', payload, {timeout: 20 * 1000}, (err, res) => {
@@ -7,9 +8,24 @@ export default function userSignIn(context, payload, done) {
             done();
         } else {
             context.setUser(res); //save user as cookie via userStoragePlugin
-            context.dispatch('SIGNIN_SUCCESS', res);
-            context.executeAction(fetchUser, {params: {username: res.username}});
-            done();
+            async.series([
+                (callback) => {
+                    context.dispatch('SIGNIN_SUCCESS', res);
+                    callback();
+                },
+                (callback) => {
+                    context.dispatch('TOGGLE_LOGIN_MODAL', null);
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(fetchUser, {params: {username: res.username}});
+                    callback();
+                }
+            ],
+          (err, result) => {
+              if(err) console.log(err);
+              done();
+          });
         }
     });
 }
