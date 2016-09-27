@@ -59,50 +59,98 @@ export default {
     },
 
     read: (req, resource, params, config, callback) => {
-        if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
-            rp({
-                method: 'GET',
-                uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
-                headers: { '----jwt----': params.params.jwt },
-                json: true
-            })
-            .then((body) => {
-                console.log(body);
-                let converted = {
-                    uname: body.username,
-                    email: body.email,
-                    lname: !isEmpty(body.surname) ? body.surname : '',
-                    fname: !isEmpty(body.forename) ? body.forename : '',
-                    language: !isEmpty(body.language) ? body.language : '',
-                    country: !isEmpty(body.country) ? body.country : '',
-                    picture: !isEmpty(body.picture) ? body.picture : '',
-                    organization: !isEmpty(body.organization) ? body.organization : '',
-                    description: !isEmpty(body.description) ? body.description : ''
-                };
-                callback(null, converted);
-            })
-            .catch((err) => callback(err));
+        if(resource !== 'userProfile.fetchUserDecks') {
+            if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
+                rp({
+                    method: 'GET',
+                    uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
+                    headers: { '----jwt----': params.params.jwt },
+                    json: true
+                })
+                .then((body) => {
+                    //console.log(body);
+                    let converted = {
+                        id: body._id,
+                        uname: body.username,
+                        email: body.email,
+                        lname: !isEmpty(body.surname) ? body.surname : '',
+                        fname: !isEmpty(body.forename) ? body.forename : '',
+                        language: !isEmpty(body.language) ? body.language : '',
+                        country: !isEmpty(body.country) ? body.country : '',
+                        picture: !isEmpty(body.picture) ? body.picture : '',
+                        organization: !isEmpty(body.organization) ? body.organization : '',
+                        description: !isEmpty(body.description) ? body.description : ''
+                    };
+                    callback(null, converted);
+                })
+                .catch((err) => callback(err));
+            } else {
+                rp({
+                    method: 'GET',
+                    uri: Microservices.user.uri + '/user/' + params.params.username,
+                    json: true
+                })
+                .then((body) => {
+                    let converted = {
+                        id: body._id,
+                        uname: body.username,
+                        email: !isEmpty(body.email) ? body.email : '',
+                        lname: !isEmpty(body.surname) ? body.surname : '',
+                        fname: !isEmpty(body.forename) ? body.forename : '',
+                        language: !isEmpty(body.language) ? body.language : '',
+                        country: !isEmpty(body.country) ? body.country : '',
+                        picture: !isEmpty(body.picture) ? body.picture : '',
+                        organization: !isEmpty(body.organization) ? body.organization : '',
+                        description: !isEmpty(body.description) ? body.description : ''
+                    };
+                    callback(null, converted);
+                })
+                .catch((err) => callback(err));
+            }
         } else {
-            rp({
-                method: 'GET',
-                uri: Microservices.user.uri + '/user/' + params.params.username,
-                json: true
-            })
-            .then((body) => {
-                let converted = {
-                    uname: body.username,
-                    email: !isEmpty(body.email) ? body.email : '',
-                    lname: !isEmpty(body.surname) ? body.surname : '',
-                    fname: !isEmpty(body.forename) ? body.forename : '',
-                    language: !isEmpty(body.language) ? body.language : '',
-                    country: !isEmpty(body.country) ? body.country : '',
-                    picture: !isEmpty(body.picture) ? body.picture : '',
-                    organization: !isEmpty(body.organization) ? body.organization : '',
-                    description: !isEmpty(body.description) ? body.description : ''
-                };
-                callback(null, converted);
-            })
-            .catch((err) => callback(err));
+            //TODO get id of a user
+            if(!isEmpty(params.params.jwt) && params.params.loggedInUser === params.params.username){
+                rp({
+                    method: 'GET',
+                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id,
+                    json: true
+                })
+                .then((body) => {
+                    let converted = body.map((deck) => {
+                        return {
+                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+                            deckID: deck._id
+                        };
+                    }).sort((a,b) => a.creationDate < b.creationDate);
+                    callback(null, converted);
+                })
+                .catch((err) => callback(err));
+            } else if(params.params.loggedInUser !== params.params.username) {
+                //get id of username
+                rp({
+                    method: 'GET',
+                    uri: Microservices.deck.uri + '/alldecks/' + params.params.id2,
+                    json: true
+                })
+                .then((body) => {
+                    let converted = body.map((deck) => {
+                        return {
+                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+                            deckID: deck._id
+                        };
+                    }).sort((a,b) => a.creationDate < b.creationDate);
+                    callback(null, converted);
+                })
+                .catch((err) => callback(err));
+            }
         }
     }
 };

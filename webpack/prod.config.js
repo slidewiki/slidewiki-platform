@@ -7,7 +7,12 @@ let webpackConfig = {
         extensions: ['', '.js']
     },
     entry: {
-        'main': './client.js'
+        main: [
+            './client.js'
+        ],
+        vendor: [
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal'
+        ]
     },
     output: {
         path: path.resolve('./build/js'),
@@ -26,7 +31,7 @@ let webpackConfig = {
             { test: /\.json$/, loader: 'json-loader'},
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}            
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
         ]
     },
     node: {

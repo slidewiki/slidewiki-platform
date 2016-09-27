@@ -1,9 +1,9 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import invertReplyBoxFlag from '../../../../actions/activityfeed/contentdiscussion/invertReplyBoxFlag';
+import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
-import addReply from '../../../../actions/activityfeed/contentdiscussion/addReply';
+import addReply from '../../../../actions/contentdiscussion/addReply';
 
 class Comment extends React.Component {
     handleReply() {

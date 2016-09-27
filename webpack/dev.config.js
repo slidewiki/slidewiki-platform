@@ -6,11 +6,16 @@ let webpackConfig = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-    entry: [
-        'webpack-dev-server/client?http://localhost:3000',
-        'webpack/hot/only-dev-server',
-        './client.js'
-    ],
+    entry: {
+        main: [
+            'webpack-dev-server/client?http://localhost:3000',
+            'webpack/hot/only-dev-server',
+            './client.js'
+        ],
+        vendor: [
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal'
+        ]
+    },
     output: {
         path: path.resolve('./build/js'),
         publicPath: '/public/js/',

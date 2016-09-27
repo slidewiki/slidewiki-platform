@@ -1,5 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
+import { NavLink } from 'fluxible-router';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';

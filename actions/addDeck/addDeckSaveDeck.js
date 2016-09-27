@@ -8,7 +8,7 @@ export default function addDeckSaveDeck(context, payload, done) {
     //no pptx uploaded
     if (payload.deckId === null) {
         context.service.create('deck.create', payload, null, {timeout: 30 * 1000}, (err, res) => {
-            console.log('Action addDeckSaveDeck: got', err, res);
+            //console.log('Action addDeckSaveDeck: got', err, res);
             if (err) {
                 context.dispatch('CREATION_FAILURE', err);
             } else {
@@ -19,7 +19,7 @@ export default function addDeckSaveDeck(context, payload, done) {
     }
     else {
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
-            console.log('Action addDeckSaveDeck: got', err, res);
+            //console.log('Action addDeckSaveDeck: got', err, res);
             if (err) {
                 context.dispatch('CREATION_FAILURE', err);
             } else {
