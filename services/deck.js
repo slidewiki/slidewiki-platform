@@ -1,12 +1,12 @@
-import { Microservices } from '../configs/microservices';
+import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 
 export default {
     name: 'deck',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        let args = params.params? params.params : params;
-        if(resource === 'deck.content'){
+        let args = params.params ? params.params : params;
+        if (resource === 'deck.content') {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
@@ -43,18 +43,36 @@ export default {
             </div>
             `;
             callback(null, {content: sampleContent});
-        } else if(resource === 'deck.properties'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            let deckProps = {
-                'title': 'Sample Deck Title',
-                'language': 'EN',
-                'tags': ['RDF', 'Semantic Web', 'Linked Data']
-            };
-            callback(null, {deckProps: deckProps});
-        } else if(resource === 'deck.numberofslides'){
-            let args = params.params? params.params : params;
+        } else if (resource === 'deck.properties') {
+            let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
+            let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
+            Promise.all([deckPromise, editorsPromise]).then((res) => {
+                let deck = JSON.parse(res[0]), editors = JSON.parse(res[1]);
+                let revision;
+                //if deck's sid does not specify revision, find the active revision from the corresponding field
+                if (args.sid.split('-').length < 2) {
+                    revision = deck.revisions.find((rev) => {
+                        return rev.id === deck.active;
+                    });
+                } else {
+                    revision = deck.revisions[0];
+                }
+                let deckProps = {
+                    description: revision.description != null ? revision.description : deck.description,
+                    language: deck.language,
+                    tags: revision.tags != null ? revision.tags : deck.tags,
+                    title: revision.title != null ? revision.title : deck.title,
+                    license: revision.license != null ? revision.license : deck.license
+                };
+                callback(null, {
+                    deckProps: deckProps,
+                    editors: editors
+                });
+            }).catch((err) => {
+                callback(err);
+            });
+        } else if (resource === 'deck.numberofslides') {
+            let args = params.params ? params.params : params;
             rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'}).then((res) => {
                 callback(null, {noofslides: JSON.parse(res).children.length});
             }).catch((err) => {
@@ -66,7 +84,7 @@ export default {
     // other methods
     create: (req, resource, params, body, config, callback) => {
 
-        if(resource === 'deck.create') {
+        if (resource === 'deck.create') {
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
             let toSend = {
@@ -78,7 +96,7 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.licence
+                license: params.license
             };
             rp({
                 method: 'POST',
@@ -90,7 +108,7 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
-        if(resource === 'deck.update') {
+        if (resource === 'deck.update') {
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
             let toSend = {
@@ -99,8 +117,32 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.licence
+                license: params.license,
+                new_revision: false
             };
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                json: true,
+                body: toSend
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
+            //update a deck by creating a new revision and setting it as active
+        } else if (resource === 'deck.updateWithRevision') {
+            if (params.tags.length === 1 && params.tags[0].length === 0)
+                params.tags = undefined;
+            let toSend = {
+                description: params.description ? params.description : 'empty',
+                language: params.language,
+                tags: params.tags,
+                title: params.title,
+                user: params.userid.toString(),
+                license: params.license,
+                new_revision: true
+            };
+            if (params.root_deck != null) {
+                toSend.root_deck = params.root_deck;
+            }
             rp({
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,

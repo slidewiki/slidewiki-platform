@@ -1,5 +1,5 @@
-import { shortTitle } from '../../../configs/general';
-import { deckContentTypeError, slideIdTypeError } from '../../loadErrors';
+import { shortTitle } from '../../configs/general';
+import { deckContentTypeError, slideIdTypeError } from '../loadErrors';
 
 export default function loadContentDiscussion(context, payload, done) {
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){

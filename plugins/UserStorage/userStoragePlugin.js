@@ -35,7 +35,7 @@ module.exports = function userStoragePlugin(options) {
             if (user === undefined && cookies !== undefined && cookies[user_cookieName] !== undefined)
                 user = cookie.getJSON(user_cookieName);
 
-            console.log('UserStoragePlugin plugContext:', cookies, res ? 'result is defined - server-side' : 'res is undefined - client-side', user);
+            //console.log('UserStoragePlugin plugContext:', cookies, res ? 'result is defined - server-side' : 'res is undefined - client-side', user);
 
             // Returns a context plugin
             return {
@@ -45,7 +45,7 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugActionContext: function plugActionContext(actionContext) {
                     actionContext.getUser = function () {
-                        console.log('userStoragePlugin actionContext getUser()');
+                        //console.log('userStoragePlugin actionContext getUser()');
 
                         let result = user;
 
@@ -57,7 +57,7 @@ module.exports = function userStoragePlugin(options) {
                                 else {
                                     result = cookie.getJSON(user_cookieName);
                                 }
-                                console.log('userStoragePlugin actionContext getUser: got user from cookies');
+                                //console.log('userStoragePlugin actionContext getUser: got user from cookies');
                             }
                         } catch (e) {
 
@@ -128,7 +128,7 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugStoreContext: function plugStoreContext(storeContext) {
                     storeContext.getUser = function () {
-                        console.log('userStoragePlugin storeContext getUser()');
+                        //console.log('userStoragePlugin storeContext getUser()');
 
                         let result = user;
 
@@ -140,7 +140,7 @@ module.exports = function userStoragePlugin(options) {
                                 else {
                                     result = cookie.getJSON(user_cookieName);
                                 }
-                                console.log('userStoragePlugin storeContext getUser: got user from cookies');
+                                //console.log('userStoragePlugin storeContext getUser: got user from cookies');
                             }
                         } catch (e) {
 

@@ -12,9 +12,6 @@ export default function loadDeckEdit(context, payload, done) {
             context.dispatch('LOAD_DECK_PROPS_FAILURE', err);
         } else {
             context.dispatch('LOAD_DECK_PROPS_SUCCESS', res);
-
-            //TODO: do not allow editing title when on the edit slide mode
-            //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
         let pageTitle = shortTitle + ' | Deck Edit | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {
