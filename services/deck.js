@@ -150,6 +150,17 @@ export default {
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
+        } else if (resource === 'deck.fork') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId,
+                json: true,
+                body: {
+                    user: params.userid.toString(),
+                    new_revision: true
+                }
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
         }
     }
     // delete: (req, resource, params, config, callback) => {}
