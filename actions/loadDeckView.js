@@ -1,4 +1,4 @@
-import {shortTitle} from '../configs/general';
+import { shortTitle } from '../configs/general';
 import { slideIdTypeError, serviceUnavailable } from './loadErrors';
 
 export default function loadDeckView(context, payload, done) {
@@ -21,4 +21,3 @@ export default function loadDeckView(context, payload, done) {
         done();
     });
 }
-

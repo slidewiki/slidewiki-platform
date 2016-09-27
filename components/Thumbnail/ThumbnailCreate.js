@@ -22,7 +22,8 @@ class ThumbnailCreate extends React.Component {
                     </div>
                 );
                 webshot(thumbnailHTML, thumbnailFilepath, Options, (err) => {
-                    console.log('Error while creating thumbnail:', err);
+                    if (err)
+                        console.log('Error while creating thumbnail:', err);
                 });
             }
         });
