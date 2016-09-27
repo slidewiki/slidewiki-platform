@@ -67,7 +67,7 @@ export default {
                 json: true
             })
             .then((body) => {
-                console.log(body);
+                //console.log(body);
                 let converted = {
                     uname: body.username,
                     email: body.email,
