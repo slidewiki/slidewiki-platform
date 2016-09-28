@@ -50,7 +50,7 @@ class DeckViewPanel extends React.Component {
         // TODO when flag code is available, remove the hard coded flag
         const countryFlag = 'gb';
 
-        const totalSlides = lodash.get(this.props.DeckViewStore.slidesData.children, 'children.length', undefined);
+        const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
         const host = this.props.DeckViewStore.deckData.host;
