@@ -250,7 +250,7 @@ class SlideContentEditor extends React.Component {
         const contentStyle = {
             minWidth: '100%',
             // maxHeight: 450,
-            // minHeight: 450,
+            minHeight: 450,
             overflowY: 'auto',
             borderStyle: 'dashed',
             borderColor: '#e7e7e7',
@@ -265,12 +265,11 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
 
-        //TODO: We need to be able to change the colour based on the particular theme we're using
-        // Reveal sets the background for body, here we need to specify it for just the slides.
-        let revealSlideStyle = {
-            // #222 is the colour for the 'black' theme
-            //backgroundColor: '#222',
-
+        const compStyle = {
+            // maxHeight: 450,
+            minHeight: 450,
+            overflowY: 'auto',
+            position: 'relative'
         };
 
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
@@ -287,22 +286,26 @@ class SlideContentEditor extends React.Component {
                     */
 
         return (
+
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-            <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-             <i className="save icon"></i>
-             Save
-            </button>
-            <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-             <i className="square outline icon"></i>
-             Add input box
-            </button>
-            <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
-            <hr />
-                <div className="reveal">
-                    <div className="slides" style={revealSlideStyle}>
-                            <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                 <i className="save icon"></i>
+                 Save
+                </button>
+                <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+                 <i className="square outline icon"></i>
+                 Add input box
+                </button>
+                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                <hr />
+                <div class="ui" style={compStyle}>
+                    <div className="reveal">
+                        <div className="slides">
+                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                        </div>
                     </div>
                 </div>
+                <br />
                 <hr />
                 <br />
                 <b>Speaker notes:</b><br />
