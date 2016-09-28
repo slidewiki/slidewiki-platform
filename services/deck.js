@@ -5,7 +5,7 @@ export default {
     name: 'deck',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        let args = params.params? params.params : params;
+        let args = params.params ? params.params : params;
         if (resource === 'deck.content') {
             /* Create promise for deck data success */
             let deckRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid});
