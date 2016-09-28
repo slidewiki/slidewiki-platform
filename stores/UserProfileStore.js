@@ -41,6 +41,9 @@ class UserProfileStore extends BaseStore {
         } catch (e) {
             //empty user object
         }
+
+        //LoginModal
+        this.showLoginModal = false;
     }
 
     destructor() {
@@ -64,6 +67,9 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+
+        //LoginModal
+        this.showLoginModal = false;
     }
 
     getState() {
@@ -78,6 +84,7 @@ class UserProfileStore extends BaseStore {
             jwt: this.jwt,
             userpicture: this.userpicture,
             errorMessage: this.errorMessage,
+            showLoginModal: this.showLoginModal,
             lastUser: this.lastUser
         };
     }
@@ -97,6 +104,7 @@ class UserProfileStore extends BaseStore {
         this.jwt = state.jwt;
         this.userpicture = state.userpicture;
         this.errorMessage = state.errorMessage;
+        this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
     }
 
@@ -194,6 +202,12 @@ class UserProfileStore extends BaseStore {
         }
         return message2;
     }
+
+    toggleLoginModal(data) {
+        console.log('userProfileStore toggleLoginModal', data);
+        this.showLoginModal = !this.showLoginModal;
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -211,7 +225,8 @@ UserProfileStore.handlers = {
     'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
-    'USER_SIGNOUT': 'handleSignOut'
+    'USER_SIGNOUT': 'handleSignOut',
+    'TOGGLE_LOGIN_MODAL': 'toggleLoginModal'
 };
 
 export default UserProfileStore;
