@@ -1,5 +1,6 @@
 import { shortTitle } from '../../configs/general';
-import { deckContentTypeError, slideIdTypeError } from '../loadErrors';
+import deckContentTypeError from '../error/deckContentTypeError';
+import slideIdTypeError from '../error/slideIdTypeError';
 
 export default function loadDataSources(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
