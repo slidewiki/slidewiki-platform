@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
-import ThumbnailShow from '../../../../Thumbnail/ThumbnailShow';
+import Thumbnail from '../../../../Thumbnail/Thumbnail';
 import CustomDate from '../../../util/CustomDate';
 import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
@@ -107,7 +107,7 @@ class DeckViewPanel extends React.Component {
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        <ThumbnailShow key={index} url={fileserver + '/' + slide.id + '.png'} slideId={slide.id} />
+                                                        <Thumbnail key={index} url={fileserver + '/' + slide.id + '.png'} slideId={slide.id} />
                                                         {/*<img src={fileserver + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} /> */}
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
