@@ -286,42 +286,31 @@ class SlideContentEditor extends React.Component {
                     */
 
         return (
-<<<<<<< HEAD
-                <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-                    <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                     <i className="save icon"></i>
-                     Save
-                    </button>
-                    <div class="ui" style={compStyle}>
-                        <div className="reveal">
-                            <div className="slides">
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
-                            </div>
-                        </div>
-=======
-            <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-            <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-             <i className="save icon"></i>
-             Save
-            </button>
-            <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-             <i className="square outline icon"></i>
-             Add input box
-            </button>
-            <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
-            <hr />
-                <div className="reveal">
-                    <div className="slides" style={revealSlideStyle}>
-                            <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
->>>>>>> master
-                    </div>
-                    <br />
-                    <hr />
-                    <br />
 
-                    <b>Speaker notes:</b><br />
-                    <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
-                </ResizeAware>
+            <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                 <i className="save icon"></i>
+                 Save
+                </button>
+                <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+                 <i className="square outline icon"></i>
+                 Add input box
+                </button>
+                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                <hr />
+                <div class="ui" style={compStyle}>
+                    <div className="reveal">
+                        <div className="slides">
+                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <br />
+                <b>Speaker notes:</b><br />
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+            </ResizeAware>
 
         );
     }
