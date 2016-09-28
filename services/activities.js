@@ -72,13 +72,13 @@ export default {
 
                 rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '/more/0/30' }).then((res) => {
                     let activities = JSON.parse(res);
-
+                    
                     activities.forEach((activity) => adjustIDs(activity));//TODO solve these ID issues
 
                     callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
                 }).catch((err) => {
                     console.log(err);
-                    callback(null, {activities: {}, selector: selector, hasMore: false});
+                    callback(null, {activities: [], selector: selector, hasMore: false});
                 });
 
                 break;
@@ -102,7 +102,7 @@ export default {
                     callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
                 }).catch((err) => {
                     console.log(err);
-                    callback(null, {activities: {}, selector: selector, hasMore: false});
+                    callback(null, {activities: [], selector: selector, hasMore: false});
                 });
 
                 break;
