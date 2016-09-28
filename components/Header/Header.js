@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from './SearchBox';
 import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
-import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
+//import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
 import AddDeckPanel from '../AddDeck/AddDeckPanel.js';
 
@@ -19,13 +19,11 @@ class Header extends React.Component {
                     <div className="item">
                         <SearchBox className="item"/>
                     </div>
-                    <NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
-
                     <div className="right menu">
                         <NavLink className="ui item" routeName="addDeck" activeClass="active">
                             <AddDeckPanel />
                         </NavLink>
-                        <UserNotificationsBadge className="ui item"/>
+                        {/*<UserNotificationsBadge className="ui item"/>*/}
                         <LoginModal className="ui item"/>
                     </div>
                 </div>

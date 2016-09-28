@@ -1,5 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
+import { NavLink } from 'fluxible-router';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
@@ -42,7 +43,10 @@ class SearchResultsPanel extends React.Component {
 
             <div ref="searchResultsPanel">
 
-                <h2 className="ui header">Search Results</h2>
+                <h2 className="ui header">
+                    Search Results |
+                    &nbsp;<NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
+                </h2>
 
                 <div className="ui grid">
                     <div className="five wide column">

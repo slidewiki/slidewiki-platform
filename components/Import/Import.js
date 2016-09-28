@@ -24,7 +24,7 @@ class Import extends React.Component {
             $('#import_file_chooser').val('');
     }
     handleFileSelect(evt){
-        console.log('handleFileSelect()');
+        //console.log('handleFileSelect()');
 
         this.context.executeAction(importFinished, null);
 

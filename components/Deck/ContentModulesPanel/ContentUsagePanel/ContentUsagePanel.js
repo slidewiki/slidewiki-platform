@@ -1,16 +1,18 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentUsageStore from '../../../../stores/ContentUsageStore';
+import ContentUsageList from './ContentUsageList';
 
 class ContentUsagePanel extends React.Component {
+
     render() {
         return (
-            <div ref="contentUsagePanel" className="ui">
-                Usage related to {this.props.ContentUsageStore.selector.stype} #{this.props.ContentUsageStore.selector.sid}.
-                <br/>
-                <NavLink href={'/usage/' + this.props.ContentUsageStore.selector.stype + '/' + this.props.ContentUsageStore.selector.sid}>{'/usage/' + this.props.ContentUsageStore.selector.stype + '/' + this.props.ContentUsageStore.selector.sid}</NavLink>
+        <div ref="contentUsagePanel" className="ui">
+            <div>
+                <ContentUsageList usage={this.props.ContentUsageStore.usage}
+                                  selector={this.props.ContentUsageStore.selector}/>
             </div>
+        </div>
         );
     }
 }
