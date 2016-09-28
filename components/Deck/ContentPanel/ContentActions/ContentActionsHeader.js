@@ -45,8 +45,8 @@ class ContentActionsHeader extends React.Component {
                     <i className="ui large blue edit icon "></i> Edit
                 </NavLink>
                 <div className="right menu">
-                    <button className={addSlideClass}>
-                        <a className="" title="Add Slide" onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})}>
+                    <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})}>
+                        <a className="" title="Add Slide">
                         <i className="icons">
                           <i className="grey file large text icon"></i>
                           <i className="inverted corner plus icon"></i>

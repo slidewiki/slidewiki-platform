@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
+import toggleLoginModal from '../../actions/user/toggleLoginModal';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
@@ -22,13 +23,12 @@ const customStyles = {
 class LoginModal extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {openModal: false};
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.handleExitButton = this.handleExitButton.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState) {//Workaround to set focus
-        if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
+        if (this.props.UserProfileStore.showLoginModal && prevProps.UserProfileStore.showLoginModal === false) {
             setTimeout(() => {
                 ReactDOM.findDOMNode(this.refs.email1).focus();
             }, 0);
@@ -36,7 +36,7 @@ class LoginModal extends React.Component {
     }
 
     handleLoginButton(){
-        this.setState({openModal: true});
+        this.context.executeAction(toggleLoginModal, 'handleLoginButton');
     }
 
     signin(e) {
@@ -58,14 +58,12 @@ class LoginModal extends React.Component {
     }
 
     handleExitButton(){
-        this.setState({openModal: false});
+        this.context.executeAction(toggleLoginModal, 'handleExitButton');
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
-        } else if (nextProps.UserProfileStore.userid !== ''){
-            this.handleExitButton();
         }
     }
 
@@ -77,7 +75,7 @@ class LoginModal extends React.Component {
 
     handleSignupClick(e) {
         e.preventDefault();
-        this.setState({openModal: false});
+        this.context.executeAction(toggleLoginModal, 'handleSignupClick');
         this.context.executeAction(navigateAction, {
             url: '/signup'
         });
@@ -98,7 +96,7 @@ class LoginModal extends React.Component {
         return(
           <div className="item right" >
             {loginButton}
-            <Modal id='signinModal' isOpen={this.state.openModal} onRequestClose={this.handleExitButton} shouldCloseOnOverlayClick={false} style={customStyles}>
+            <Modal id='signinModal' isOpen={this.props.UserProfileStore.showLoginModal} shouldCloseOnOverlayClick={false} style={customStyles}>
               <div className="ui container">
                   <div className="ui right floated">
                     <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>

@@ -7,7 +7,7 @@ class DeckPropertyItemText extends React.Component {
             fieldname: this.props.fieldname,
             fieldcontent: event.value
         };
-        console.log(this.props.onChange);
+        //console.log(this.props.onChange);
         this.props.onChange(update);
     }
     render() {

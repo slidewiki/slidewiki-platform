@@ -27,11 +27,11 @@ class AddDeck extends React.Component {
         let that = this;
         $('.ui.small.modal').modal({
             onDeny: function(){
-                console.log('modal cancelled');
+                //console.log('modal cancelled');
                 $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
             },
             onApprove : function(data) {
-                console.log('modal clicked on upload', data);
+                //console.log('modal clicked on upload', data);
                 that.handleFileSubmit();
                 $('.ui.small.modal').modal('hide');
             }
@@ -46,12 +46,12 @@ class AddDeck extends React.Component {
     }
 
     handleUploadModal(x) {
-        console.log('handleUploadModal: ', x);
+        //console.log('handleUploadModal: ', x);
 
         $('.ui.small.modal').modal('show');
     }
     handleAddDeck(x) {
-        console.log('handleAddDeck');
+        //console.log('handleAddDeck');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -63,7 +63,7 @@ class AddDeck extends React.Component {
         const license = this.refs.select_licenses.value;
         const tags = this.refs.input_tags.value.split(', ');
         const acceptedConditions = this.refs.checkbox_conditions.checked;
-        console.log(title, language, description, theme, license, tags, acceptedConditions);
+        //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
         let everythingIsFine = true;
@@ -118,7 +118,7 @@ class AddDeck extends React.Component {
         });
     }
     handleCancel(x) {
-        console.log('handleCancel: ', x);
+        //console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
 
         this.context.executeAction(addDeckDeleteError, null);
@@ -128,14 +128,14 @@ class AddDeck extends React.Component {
         });
     }
     handleRedirect(){
-        console.log('AddDeck: handleRedirect()');
+        //console.log('AddDeck: handleRedirect()');
         this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
     updateProgressBar() {
-        console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
+        //console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = this.props.ImportStore.noOfSlides;
         let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
@@ -163,7 +163,7 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set error');
     }
     handleFileSubmit(){
-        console.log('handleFileSubmit()');
+        //console.log('handleFileSubmit()');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -225,7 +225,7 @@ class AddDeck extends React.Component {
             'primary': true,
             'disabled': (this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100) || this.props.ImportStore.isUploaded,
             'button': true
-                                                                                                            
+
         });
 
         let filename = this.props.ImportStore.filename;
@@ -245,9 +245,9 @@ class AddDeck extends React.Component {
           <option value="DefaultTheme" >Default</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
-          <option value="CC0" >CC0</option>
-          <option value="CC BY" >CC BY</option>
-          <option value="CC BY-SA" >CC BY-SA</option>
+          <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+          <option value="CC BY" >Creative Commons Attribution</option>
+            <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
         let errorView = '';
@@ -269,11 +269,11 @@ class AddDeck extends React.Component {
                     this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
                 }, 100);
         }
-        
+
         return (
           <div className="ui container">
-          <h3>Create a deck </h3>
-              
+          <h3>Add a deck to SlideWiki</h3>
+
           <div className="ui grid">
               <div className="sixteen wide column">
                   <form className="ui form upload">
@@ -283,7 +283,7 @@ class AddDeck extends React.Component {
                               </label>
                               <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
                           </div>
-                          
+
                       <div className="field">
                           <label htmlFor="deck-description">Description</label>
                           <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
@@ -304,9 +304,9 @@ class AddDeck extends React.Component {
                               {languageOptions}
                           </div>
                       </div>
-                    
+
                         <div className="ui message" id="uploadDesc">
-                          <p>Select exisiting slides to your new deck. Currently only PowerPoint files are supported.</p>
+                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx files are supported.</p>
                           </div>
                      <div className="ui grid">
                          <div className="two column row">
@@ -327,17 +327,6 @@ class AddDeck extends React.Component {
                       </div>
                       <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
-                      <div className="field">
-                          <label htmlFor="tags">Add tags</label>
-                          <div className="ui left icon input">
-                              <i className="tags icon"></i>
-                          <input type="text" aria-labelledby="tags" id="tags" placeholder="Add tags" ref="input_tags" data-tooltip={hint_tags} />
-                          </div>
-                      </div>
-
-
-                <div className="two column row">
-                    <div className="column">
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
@@ -345,19 +334,14 @@ class AddDeck extends React.Component {
                                   I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
                               </label>
                           </div>
-                      </div>   
-                    </div>
-                  <div className="column">
-                      <div className="ui right floated buttons">
+                      </div>
+              
+                      <div className="ui buttons">
                       <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                           Create deck
-                        </div>            
-                      <div className="ui secondary button" aria-label="cancel" role="button" tabIndex="0" onClick={this.handleCancel.bind(this)} >
-                          Cancel
                         </div>
                       </div>
-               </div>                   
-              </div>
+     
                   </form>
               </div>
             </div>

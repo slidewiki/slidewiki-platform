@@ -258,7 +258,8 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.nodeSpec.title));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.nodeSpec.path));
-        //todo: update path
+        //update flat tree for slide control
+        this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
         this.emitChange();
     }
     renameTreeNode(selector) {
