@@ -143,6 +143,9 @@
                     //KLAAS ADAPT -> applies to dragdiv in top-left corner only
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
 
+                        //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
 
@@ -171,6 +174,9 @@
                     //KLAAS ADAPT -> apply to div in top-left corner only
                     cEl.dragdiv.addEventListener("mouseup", function (e) {
                         //alert('test');
+
+                        //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex - 90000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -221,6 +227,9 @@
                     //resize mousehandlers
                     cEl.resizediv.addEventListener("mousedown", function (e) {
 
+                        //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
 
@@ -255,6 +264,9 @@
                     //KLAAS ADAPT -> apply to div in top-left corner only
                     cEl.resizediv.addEventListener("mouseup", function (e) {
                         //alert('test');
+
+                        //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex - 90000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
