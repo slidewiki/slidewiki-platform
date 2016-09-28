@@ -1,7 +1,9 @@
 import {shortTitle} from '../../configs/general';
-import { searchSyntaxError, searchStringEmptyError } from '../loadErrors';
+import searchSyntaxError from '../error/searchSyntaxError';
+import searchStringEmptyError  from '../error/searchStringEmptyError';
 
 export default function loadSearchResults(context, payload, done) {
+
 
     // if query is given, call service to fetch results
     if(payload.params.queryparams){

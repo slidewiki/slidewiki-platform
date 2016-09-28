@@ -1,6 +1,8 @@
 import md5 from 'md5';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { notFoundError, methodNotAllowedError } from '../../loadErrors';
+//import notFoundError from '../../error/notFoundError';
+import methodNotAllowedError from '../../error/methodNotAllowedError';
+
 
 export default function changePassword(context, payload, done) {
     payload.params = {};
@@ -11,7 +13,7 @@ export default function changePassword(context, payload, done) {
             if (err.statusCode === 404) {
                 context.dispatch('WRONG_PASSWORD', err);
             } else if (err.statusCode === 401) {
-                context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
+                context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
                 context.dispatch('EDIT_USER_FAILED', err);
