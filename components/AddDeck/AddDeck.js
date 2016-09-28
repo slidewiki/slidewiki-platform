@@ -170,7 +170,7 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.file !== null) {
             //call action
             const payload = {
-                filename: this.props.ImportStore.file.name,
+                filename: this.props.ImportStore.filename,
                 user: this.props.UserProfileStore.userid,
                 base64: this.props.ImportStore.base64
             };
@@ -335,13 +335,13 @@ class AddDeck extends React.Component {
                               </label>
                           </div>
                       </div>
-              
+
                       <div className="ui buttons">
                       <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                           Create deck
                         </div>
                       </div>
-     
+
                   </form>
               </div>
             </div>
