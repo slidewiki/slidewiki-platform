@@ -24,6 +24,12 @@ export default {
         },
         'search': {
             uri: 'http://searchservice.manfredfris.ch'
+        },         
+        'image': {
+            uri: 'http://imageservice.manfredfris.ch'
+        },
+        'file': {
+            uri: 'http://fileservice.manfredfris.ch'
         }
     }
 };
