@@ -1,5 +1,6 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { notFoundError, methodNotAllowedError } from '../../loadErrors';
+import notFoundError from '../../error/notFoundError';
+import methodNotAllowedError from '../../error/methodNotAllowedError';
 import { isEmpty } from '../../../common.js';
 
 export default function fetchUser(context, payload, done) {
@@ -9,10 +10,10 @@ export default function fetchUser(context, payload, done) {
     context.service.read('userProfile.read', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             if (err.statusCode === 404) {
-                context.executeAction(notFoundError, {}).catch(() => { done(err); });
+                context.executeAction(notFoundError, {}, done);
                 return;
             } else if (err.statusCode === 401) {
-                context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
+                context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
                 context.dispatch('FETCH_USER_FAILED', err);
@@ -21,7 +22,7 @@ export default function fetchUser(context, payload, done) {
                 if(context.getStore(UserProfileStore).username === payload.params.username)
                     res.category = isEmpty(payload.params.category) ? '' : payload.params.category;
                 else{
-                    context.executeAction(notFoundError, {}).catch(() => { done(err); });
+                    context.executeAction(notFoundError, {}, done);
                     return;
                 }
             } else{

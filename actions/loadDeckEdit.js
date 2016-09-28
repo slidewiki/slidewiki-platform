@@ -1,9 +1,10 @@
 import { shortTitle } from '../configs/general';
-import { slideIdTypeError } from './loadErrors';
+import slideIdTypeError from './error/slideIdTypeError';
+
 
 export default function loadDeckEdit(context, payload, done) {
     if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
