@@ -14,9 +14,15 @@ class ContentDiscussionStore extends BaseStore {
         });
     }
     updateDiscussion(payload) {
-        payload.discussion.map((comment) => {
-            ContentDiscussionStore.clearReplyFlags(comment);
-        });
+        try {
+            payload.discussion.map((comment) => {
+                ContentDiscussionStore.clearReplyFlags(comment);
+            });
+        }
+        catch (e) { //no data there
+            console.log('ContentDiscussionStore updateDiscussion', e);
+            this.discussion = [];
+        }
         this.commentWithReplyBox = null;
         this.discussion = payload.discussion;
         this.selector = payload.selector;

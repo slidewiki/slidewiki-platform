@@ -109,4 +109,4 @@ function tooManyRequestsError(context, payload) {
 
 export { deckIdTypeError, deckContentTypeError, deckContentPathError, deckModeError,
          slideIdTypeError, notFoundError, searchSyntaxError, searchStringEmptyError,
-         methodNotAllowedError, tooManyRequestsError };
+         methodNotAllowedError, tooManyRequestsError, serviceUnavailable };
