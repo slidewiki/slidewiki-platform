@@ -26,6 +26,7 @@ class Header extends React.Component {
                         {/*<UserNotificationsBadge className="ui item"/>*/}
                         <LoginModal className="ui item"/>
                     </div>
+
                 </div>
             </div>
         );

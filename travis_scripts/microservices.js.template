@@ -21,6 +21,9 @@ export default {
             host: '${SERVICE_VAR_IMPORT_HOST}',
             path: '/importPPTX',
             port: 80
-        }
+        },
+        'search': {
+           uri: '${SERVICE_URL_SEARCH}'
+       }
     }
 };
