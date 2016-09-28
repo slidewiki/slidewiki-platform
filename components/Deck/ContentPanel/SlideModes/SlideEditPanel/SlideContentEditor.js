@@ -292,7 +292,7 @@ class SlideContentEditor extends React.Component {
              <i className="save icon"></i>
              Save
             </button>
-            <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+            <button tabIndex="0" ref="submitbutton" className="ui button green" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
              <i className="square outline icon"></i>
              Add input box
             </button>
