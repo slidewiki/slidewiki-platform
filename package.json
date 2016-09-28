@@ -47,6 +47,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "body-parser": "^1.15.2",
+    "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "cookie": "^0.3.1",
