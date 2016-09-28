@@ -52,6 +52,7 @@ class DeckViewPanel extends React.Component {
 
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData.children, 'children.length', undefined);
         const maxSlideThumbnails = 3;
+
         const host = this.props.DeckViewStore.deckData.host;
         const fileserver = 'http://fileservice.manfredfris.ch';
         const deckId = this.props.DeckViewStore.deckData._id;
@@ -106,14 +107,8 @@ class DeckViewPanel extends React.Component {
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        {/* <ThumbnailShow key={index}
-                                                            slideId={slide.id}
-                                                            slideTitle={slide.title}
-                                                            slideContent={slide.content}
-                                                            action="new"
-                                                        />
-                                                        */}
-                                                        <img src={fileserver + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} />
+                                                        <ThumbnailShow key={index} url={fileserver + '/' + slide.id + '.png'} slideId={slide.id} />
+                                                        {/*<img src={fileserver + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} /> */}
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
