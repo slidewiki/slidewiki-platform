@@ -9,7 +9,7 @@ export default function loadAddDeck(context, payload, done) {
         context.executeAction(navigateAction, {
             url: '/'
         });
-        context.dispatch('TOGGLE_LOGIN_MODAL', null);
+        $('.ui.login.modal').modal('toggle');
     }
     done();
 }

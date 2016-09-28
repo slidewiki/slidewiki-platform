@@ -14,10 +14,6 @@ export default function userSignIn(context, payload, done) {
                     callback();
                 },
                 (callback) => {
-                    context.dispatch('TOGGLE_LOGIN_MODAL', null);
-                    callback();
-                },
-                (callback) => {
                     context.executeAction(fetchUser, {params: {username: res.username}});
                     callback();
                 }
