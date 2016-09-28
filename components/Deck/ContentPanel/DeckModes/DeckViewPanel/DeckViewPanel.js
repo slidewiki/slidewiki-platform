@@ -7,6 +7,7 @@ import CustomDate from '../../../util/CustomDate';
 import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
+import { Microservices } from '../../../../../configs/microservices';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -55,7 +56,9 @@ class DeckViewPanel extends React.Component {
         const maxSlideThumbnails = 3;
 
         const host = this.props.DeckViewStore.deckData.host;
-        const thumbnailURL = 'http://fileservice.manfredfris.ch/' + deckUserId + '/thumbnails/';
+        //console.log(Microservices.files);
+        const thumbnailURL = Microservices.files.uri + '/' + deckUserId + '/thumbnails/';
+        //console.log(thumbnailURL);
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
 
