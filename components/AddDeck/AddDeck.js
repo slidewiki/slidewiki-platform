@@ -61,7 +61,8 @@ class AddDeck extends React.Component {
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
         const license = this.refs.select_licenses.value;
-        const tags = this.refs.input_tags.value.split(', ');
+        //const tags = this.refs.input_tags.value.split(', ');
+        const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
 

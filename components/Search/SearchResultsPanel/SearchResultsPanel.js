@@ -8,23 +8,19 @@ import loadSearchResults from '../../../actions/search/loadSearchResults';
 import updateUserResultsVisibility from '../../../actions/search/updateUserResultsVisibility';
 
 class SearchResultsPanel extends React.Component {
-
-    handleChangeToggle(field, value) {
-        this.context.executeAction(updateUserResultsVisibility, {
-            field: field,
-            value: value
-        });
+    changePage(){
+        context.executeAction(loadSearchResults, {page: 'next'});
     }
-
     render() {
-        const results = this.props.SearchResultsStore.results;
-        const entities = this.props.SearchResultsStore.entities;
-        const languages = this.props.SearchResultsStore.languages;
+        const results = this.props.results;  //this.props.SearchResultsStore.results;
+        const numFound = this.props.numFound;
+        const entities = this.props.entities;
+        const languages = this.props.languages;
 
         const entityList = entities.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} onChange={this.handleChangeToggle.bind(this, 'type', s.description)} />
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'type', s.description)}*/ />
                     <label>{s.description}</label>
                 </div>
             );
@@ -33,49 +29,34 @@ class SearchResultsPanel extends React.Component {
         const languageList = languages.map((s, index) => {
             return (
                 <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} onChange={this.handleChangeToggle.bind(this, 'lang', s.description)} />
+                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'lang', s.description)}*/ />
                     <label>{s.description}</label>
                 </div>
             );
         });
 
-        return (
-
-            <div ref="searchResultsPanel">
-
-                <h2 className="ui header">
-                    Search Results |
-                    &nbsp;<NavLink className="item" href={'/search/advsearch'} activeClass="active">Advanced search</NavLink>
-                </h2>
-
-                <div className="ui grid">
-                    <div className="five wide column">
-                        <div className="ui basic segment">
-                            <h4 className="ui header">Facets:</h4>
-                            <label>Entities:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {entityList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Languages:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {languageList}
-                                    </div>
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="ten wide column">
-                        <div className="ui basic segment">
-                            <SearchResultsList items={results} ></SearchResultsList>
-                        </div>
+        let resultsDiv = <div ref="resultsDiv">
+            <h2 className="ui header">Search Results</h2>
+            <div className="ui grid centered">
+                <div className="twelve wide column">
+                    <div className="ui basic segment">
+                        <SearchResultsList items={results} ></SearchResultsList>
                     </div>
                 </div>
+            </div>
+        </div>;
+
+        let noResultsDiv = <div ref="noResiltsDiv">
+            <div className="ui grid centered">
+                <h3>No results found for the specified input parameters.</h3>
+            </div>
+        </div>;
+
+        let resultsPanel = (numFound == 0) ? noResultsDiv : resultsDiv;
+
+        return (
+            <div ref="searchResultsPanel">
+                {resultsPanel}
             </div>
 		);
     }
@@ -85,10 +66,10 @@ class SearchResultsPanel extends React.Component {
 SearchResultsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
-    return {
-        SearchResultsStore: context.getStore(SearchResultsStore).getState()
-    };
-});
+// SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
+//     return {
+//         SearchResultsStore: context.getStore(SearchResultsStore).getState()
+//     };
+// });
 
 export default SearchResultsPanel;

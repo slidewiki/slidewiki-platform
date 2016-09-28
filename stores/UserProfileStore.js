@@ -202,12 +202,6 @@ class UserProfileStore extends BaseStore {
         }
         return message2;
     }
-
-    toggleLoginModal(data) {
-        console.log('userProfileStore toggleLoginModal', data);
-        this.showLoginModal = !this.showLoginModal;
-        this.emitChange();
-    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -225,8 +219,7 @@ UserProfileStore.handlers = {
     'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
-    'USER_SIGNOUT': 'handleSignOut',
-    'TOGGLE_LOGIN_MODAL': 'toggleLoginModal'
+    'USER_SIGNOUT': 'handleSignOut'
 };
 
 export default UserProfileStore;
