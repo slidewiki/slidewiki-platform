@@ -52,6 +52,7 @@ class LoginModal extends React.Component {
         return false;
     }
 
+/*
     componentWillReceiveProps(nextProps) {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
@@ -60,6 +61,7 @@ class LoginModal extends React.Component {
             $('.ui.login.modal').modal('toggle');
         }
     }
+    */
 
     componentDidMount(){
         if(typeof window !== 'undefined') {
