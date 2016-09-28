@@ -25,7 +25,7 @@ export default {
         'images': {
             uri: 'http://imageservice.manfredfris.ch'
         },
-        'files': {
+        'file': {
             uri: 'http://fileservice.manfredfris.ch'
         }
     }

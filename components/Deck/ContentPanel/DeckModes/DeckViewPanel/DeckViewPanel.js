@@ -56,8 +56,8 @@ class DeckViewPanel extends React.Component {
         const maxSlideThumbnails = 3;
 
         const host = this.props.DeckViewStore.deckData.host;
-        //console.log(Microservices.files);
-        const thumbnailURL = Microservices.files.uri + '/' + deckUserId + '/thumbnails/';
+        //console.log(Microservices.file);
+        const thumbnailURL = Microservices.file.uri + '/' + deckUserId + '/thumbnails/';
         //console.log(thumbnailURL);
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
