@@ -1,9 +1,6 @@
 import React from 'react';
 
 class BadRequest extends React.Component {
-    handleCloseClick() {
-        console.log('Hello');
-    }
     render() {
         return (
             <div className="ui error message text container left">
