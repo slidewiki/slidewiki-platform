@@ -113,7 +113,7 @@
 
                     let imgdrag = document.createElement("IMG");
                     imgdrag.style.position = "absolute";
-                    imgdrag.style.zIndex = "90000";
+                    imgdrag.style.zIndex = "200000";
                     imgdrag.src = '../../../../../assets/images/cursor_drag_arrow.png';
                     imgdrag.disabled = true;
                     imgdrag.draggable = false;
@@ -144,7 +144,7 @@
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+                        cEl.style.zIndex = cEl.style.zIndex + 50000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -176,7 +176,7 @@
                         //alert('test');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+                        cEl.style.zIndex = cEl.style.zIndex - 50000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -206,7 +206,7 @@
                     cEl.resizediv.style.position = "absolute";
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
-                    imgresize.style.zIndex = "90000";
+                    imgresize.style.zIndex = "200000";
                     imgresize.src = '../../../../../assets/images/cursor_resize_arrow.png';
                     imgresize.disabled = true;
                     imgresize.draggable = false;
@@ -228,7 +228,7 @@
                     cEl.resizediv.addEventListener("mousedown", function (e) {
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+                        cEl.style.zIndex = cEl.style.zIndex + 50000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -266,7 +266,7 @@
                         //alert('test');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+                        cEl.style.zIndex = cEl.style.zIndex - 50000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
