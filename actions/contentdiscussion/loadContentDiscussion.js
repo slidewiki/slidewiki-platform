@@ -1,6 +1,7 @@
 import { shortTitle } from '../../configs/general';
 import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError from '../error/slideIdTypeError';
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function loadContentDiscussion(context, payload, done) {
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
@@ -15,7 +16,9 @@ export default function loadContentDiscussion(context, payload, done) {
 
     context.service.read('discussion.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
+            context.executeAction(serviceUnavailable, payload, done);
+            return;
+          // context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_DISCUSSION_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'discussion'});

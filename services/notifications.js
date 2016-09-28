@@ -58,13 +58,12 @@ export default {
 
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
                 let notifications = JSON.parse(res);
-
                 notifications.forEach((notification) => adjustIDs(notification));//TODO solve these ID issues
 
                 callback(null, {notifications: notifications, subscriptions: mockupSubscriptions});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {notifications: {}, subscriptions: mockupSubscriptions});
+                callback(null, {notifications: [], subscriptions: mockupSubscriptions});
             });
         } else if (resource === 'notifications.listnew'){
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).then((res) => {
@@ -77,7 +76,7 @@ export default {
                 callback(null, {newNotifications: newNotifications});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {newNotifications: {}});
+                callback(null, {newNotifications: []});
             });
         }
     },
@@ -98,7 +97,7 @@ export default {
                 callback(null, params);
             }).catch((err) => {
                 console.log(err);
-                callback(null, params);
+                callback(err, params);
             });
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
@@ -115,7 +114,7 @@ export default {
                 callback(null, params);
             }).catch((err) => {
                 console.log(err);
-                callback(null, params);
+                callback(err, params);
             });
         }
     }
