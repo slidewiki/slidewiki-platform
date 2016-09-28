@@ -5,21 +5,23 @@ import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './slide/loadSlideView';
 import loadSlideEdit from './slide/loadSlideEdit';
 import ContentStore from '../stores/ContentStore';
-import { deckContentTypeError, deckModeError, slideIdTypeError } from './loadErrors';
+import deckContentTypeError from './error/deckContentTypeError';
+import slideIdTypeError from './error/slideIdTypeError';
+import deckModeError from './error/deckModeError';
 
 export default function loadContent(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(deckContentTypeError, payload, done);
         return;
     }
 
     if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
     if(!(['view', 'edit', 'questions', 'datasources'].indexOf(payload.params.mode) > -1 || payload.params.mode === undefined)) {
-        context.executeAction(deckModeError, payload).catch((err) => {done(err);});
+        context.executeAction(deckModeError, payload, done);
         return;
     }
 

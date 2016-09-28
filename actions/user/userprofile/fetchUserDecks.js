@@ -1,5 +1,7 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { notFoundError, methodNotAllowedError } from '../../loadErrors';
+//import notFoundError from '../../error/notFoundError';
+import methodNotAllowedError  from '../../error/methodNotAllowedError';
+
 import { isEmpty } from '../../../common.js';
 
 export function fetchUserDecks(context, payload, done) {
@@ -12,7 +14,7 @@ export function fetchUserDecks(context, payload, done) {
             if (err.statusCode === 404) {
                 context.dispatch('NEW_USER_DECKS', []);
             } else if (err.statusCode === 401) {
-                context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
+                context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
                 context.dispatch('FETCH_USER_FAILED', err);

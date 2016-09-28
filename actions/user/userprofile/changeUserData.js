@@ -1,6 +1,7 @@
 import md5 from 'md5';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { notFoundError, methodNotAllowedError } from '../../loadErrors';
+import notFoundError from '../../error/notFoundError';
+import methodNotAllowedError  from '../../error/methodNotAllowedError';
 
 export default function changeUserData(context, payload, done) {
     payload.params = {};
@@ -13,10 +14,10 @@ export default function changeUserData(context, payload, done) {
             if (err.statusCode === 409)
                 context.dispatch('EMAIL_NOT_ALLOWED', err);
             else if (err.statusCode === 404) {
-                context.executeAction(notFoundError, {}).catch(() => { done(err); });
+                context.executeAction(notFoundError, {}, done);
                 return;
             } else if (err.statusCode === 401) {
-                context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
+                context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
                 context.dispatch('EDIT_USER_FAILED', err);
