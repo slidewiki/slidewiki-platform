@@ -81,7 +81,7 @@ server.use((req, res, next) => {
         url: req.url
     }, (err) => {
         if (err) {
-            console.log(err);
+            console.log(req.url, err);//, err);
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
