@@ -14,10 +14,10 @@ export default function loadContentDiscussion(context, payload, done) {
 
     context.service.read('discussion.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-          context.executeAction(serviceUnavailable, payload).catch((error) => {
-              done(error);
-          });
-          return;
+            context.executeAction(serviceUnavailable, payload).catch((error) => {
+                done(error);
+            });
+            return;
           // context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_DISCUSSION_SUCCESS', res);
