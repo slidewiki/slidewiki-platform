@@ -40,6 +40,7 @@ class DeckViewPanel extends React.Component {
         const deckDate = CustomDate.format(this.props.DeckViewStore.deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = lodash.get(this.props.DeckViewStore.deckData, 'description', '');
         const deckCreator = lodash.get(this.props.DeckViewStore.userData, 'username', undefined);
+        const deckUserId = this.props.DeckViewStore.userData._id;
         const deckLanguageCode = lodash.get(this.props.DeckViewStore.deckData, 'language', undefined);
 
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
@@ -54,7 +55,7 @@ class DeckViewPanel extends React.Component {
         const maxSlideThumbnails = 3;
 
         const host = this.props.DeckViewStore.deckData.host;
-        const fileserver = 'http://fileservice.manfredfris.ch';
+        const thumbnailURL = 'http://fileservice.manfredfris.ch/' + deckUserId + '/thumbnails/';
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
 
@@ -107,7 +108,7 @@ class DeckViewPanel extends React.Component {
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        <Thumbnail key={index} url={fileserver + '/' + slide.id + '.png'} slideId={slide.id} />
+                                                        <Thumbnail key={index} url={thumbnailURL + slide.id + '.png'} slideId={slide.id} />
                                                         {/*<img src={fileserver + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} /> */}
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
