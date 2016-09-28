@@ -22,7 +22,6 @@ let webpackConfig = {
         filename: '[name].js'
     },
     module: {
-        noParse: /\.md/,
         loaders: [
             {
                 test: /\.(js|jsx)$/,
@@ -70,11 +69,9 @@ let webpackConfig = {
                 return JSON.stringify(data, null, 2);
             }
         }),
-        new Visualizer(),
-        new webpack.IgnorePlugin(/vertx/)
+        new Visualizer()
     ],
-    devtool: 'source-map',
-    target: 'node'
+    devtool: 'source-map'
 };
 
 module.exports = webpackConfig;
