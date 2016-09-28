@@ -1,4 +1,4 @@
-import {serviceUnavailable} from '../error/serviceUnavailable';
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function loadMoreActivities(context, payload, done) {
     context.service.read('activities.more', payload, {timeout: 20 * 1000}, (err, res) => {

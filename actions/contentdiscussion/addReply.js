@@ -1,4 +1,4 @@
-import {serviceUnavailable} from '../error/serviceUnavailable';
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addReply(context, payload, done) {
     context.service.create('discussion.reply', payload, {timeout: 20 * 1000}, (err, res) => {

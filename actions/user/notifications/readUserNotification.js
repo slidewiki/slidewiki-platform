@@ -1,4 +1,4 @@
-import {serviceUnavailable} from '../../error/serviceUnavailable';
+import serviceUnavailable from '../../error/serviceUnavailable';
 
 export default function readUserNotification(context, payload, done) {
     context.service.delete('notifications.item', payload, {timeout: 20 * 1000}, (err, res) => {

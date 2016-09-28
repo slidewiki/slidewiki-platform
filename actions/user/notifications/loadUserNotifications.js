@@ -1,5 +1,5 @@
 import {shortTitle} from '../../../configs/general';
-import {serviceUnavailable} from '../../error/serviceUnavailable';
+import serviceUnavailable from '../../error/serviceUnavailable';
 
 export default function loadUserNotifications(context, payload, done) {
     context.service.read('notifications.list', payload, {timeout: 20 * 1000}, (err, res) => {
