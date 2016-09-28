@@ -11,35 +11,49 @@ import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNode from '../../../actions/decktree/addTreeNode';
+import forkDeck from '../../../actions/decktree/forkDeck';
 
 class TreePanel extends React.Component {
     handleFocus() {
 
     }
+
     handleBlur() {
 
     }
+
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);
     }
+
     handleSwitchOnAction(selector) {
         this.context.executeAction(switchOnActionTreeNode, selector);
     }
+
     handleRenameNode(selector) {
         this.context.executeAction(renameTreeNode, selector);
     }
+
     handleUndoRenameNode(selector) {
         this.context.executeAction(undoRenameTreeNode, selector);
     }
+
     handleSaveNode(selector, oldValue, newValue) {
         this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
+
     handleAddNode(selector, nodeSpec) {
         this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
     }
+
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
     }
+
+    handleFork() {
+        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+    }
+
     render() {
         const rootNodeStyles = {
             fontSize: '1.06em'
@@ -58,30 +72,39 @@ class TreePanel extends React.Component {
         let rootNodeTitle = <strong> {rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
-            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
-                <div className="ui segments">
-                    <div className="3 fluid ui icon large buttons">
-                        <div className="ui basic disabled attached button" title="Theme">
-                            <i className="theme black icon"></i>
-                        </div>
-                        <div className="ui basic attached button" title="Fork">
-                            <i className="fork black icon"></i>
-                        </div>
-                        <div className="ui basic disabled attached button" title="Translate">
-                            <i className="translate black icon"></i>
-                        </div>
+        <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+            <div className="ui segments">
+                <div className="3 fluid ui icon large buttons">
+                    <div className="ui basic disabled attached button" title="Theme">
+                        <i className="theme black icon"></i>
                     </div>
-                    <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
+                    <div className="ui basic attached button" title="Fork" onClick={this.handleFork.bind(this)}>
+                        <i className="fork black icon"></i>
                     </div>
-                    <div className="ui segment" style={treeDIVStyles}>
-
-                        {decktreeError ? <div className="ui error message" style={{'wordBreak': 'break-all', 'wordWrap': 'break-word'}}> {decktreeError} </div> : ''}
-
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector} prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page} mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onSwitchOnAction= {this.handleSwitchOnAction.bind(this)} onRename={this.handleRenameNode.bind(this)} onUndoRename={this.handleUndoRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)} onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                    <div className="ui basic disabled attached button" title="Translate">
+                        <i className="translate black icon"></i>
                     </div>
                 </div>
-             </div>
+                <div className="ui secondary segment">
+                    <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
+                </div>
+                <div className="ui segment" style={treeDIVStyles}>
+
+                    {decktreeError ? <div className="ui error message" style={{
+                        'wordBreak': 'break-all',
+                        'wordWrap': 'break-word'
+                    }}> {decktreeError} </div> : ''}
+
+                    <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
+                          prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page}
+                          mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
+                          onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
+                          onRename={this.handleRenameNode.bind(this)}
+                          onUndoRename={this.handleUndoRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)}
+                          onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}/>
+                </div>
+            </div>
+        </div>
         );
     }
 }

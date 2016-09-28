@@ -4,152 +4,147 @@ class SearchResultsStore extends BaseStore {
 
     constructor(dispatcher) {
         super(dispatcher);
-        this.searchstring = '';
-        this.searchlang='';
-        this.entity = '';
-        this.deckid = '';
-        this.userid = '';
-        this.searchstatus='';
 
-        this.results = [];
-        this.entities = [];
-        this.languages = [];
+        // solr results
+        this.numFound= '' ;
+        this.docs = [];
 
-        this.error = '';
+        this.error = false;
+        this.loading = false;
     }
-    updateResults(payload) {
+    showLoading(payload){
+        this.loading = true;
+        this.emitChange();
+    }
+    updateResults(payload){
+        this.numFound = payload.numFound;
+        this.docs = payload.docs;
+        this.error = payload.error;
 
-        this.searchstring = payload.searchstring;
-        this.searchlang = payload.searchlang;
-        this.deckid = payload.deckid;
-        this.userid = payload.userid;
-        this.entity = payload.entity;
-        this.searchstatus= payload.searchstatus;
-
-        this.results = payload.results;
-
-        //Filter by deckid
-        if(payload.deckid.substring(payload.deckid.indexOf('=')+1)!==''){
-            this.results = this.filterByField(this.results, 'did', payload.deckid.substring(payload.deckid.indexOf('=')+1));
-        }
-        //Filter by userid
-        if(payload.userid.substring(payload.userid.indexOf('=')+1)!==''){
-            this.results = this.filterByField(this.results, 'uid', payload.userid.substring(payload.userid.indexOf('=')+1));
-        }
-        //Filter by language
-        if(payload.searchlang.substring(payload.searchlang.indexOf('=')+1)!==''){
-            this.results = this.filterByField(this.results, 'lang', payload.searchlang.substring(payload.searchlang.indexOf('=')+1));
-        }
-        //Filter by entity
-        if(payload.entity.substring(payload.entity.indexOf('=')+1)!==''){
-            this.results = this.filterByStringField(this.results, 'entity', payload.entity.substring(payload.entity.indexOf('=')+1));
-        }
-
-
-        this.entities = payload.entities;
-        this.languages = payload.languages;
+        // hide loading
+        this.loading = false;
 
         this.emitChange();
     }
+    resetParams(payload){
+        // solr results
+        this.numFound= '' ;
+        this.docs = [];
+        this.loading = false;
+        this.error = false;
 
-    filterByStringField(resultsAll, fieldName, fieldValue){
-        let filteredResults = [];
-        if(fieldName==='entity'){
-            resultsAll.forEach((result) => {
-                console.log('type: '+result.type);
-                console.log('fieldValue: '+fieldValue);
-                if(result.type.indexOf(fieldValue) > -1){
-                    filteredResults.push(result);
-                }
-            });
-        }
-
-        return filteredResults;
+        this.emitChange();
+    }
+    displayError(){
+        this.loading = false;
+        this.error = true;
+        this.emitChange();
     }
 
-    filterByField(resultsAll, fieldName, fieldValue){
-        let filteredResults = [];
-        if(fieldName==='did'){
-            resultsAll.forEach((result) => {
-                if(result.did === fieldValue){
-                    filteredResults.push(result);
-                }
-            });
-        }
-        else if (fieldName==='uid') {
-            resultsAll.forEach((result) => {
-                if(result.uid === fieldValue){
-                    filteredResults.push(result);
-                }
-            });
-        }
-        else if (fieldName==='lang') {
-            resultsAll.forEach((result) => {
-                if(result.lang === fieldValue){
-                    filteredResults.push(result);
-                }
-            });
-        }
-
-        return filteredResults;
-    }
-
+    // filterByStringField(resultsAll, fieldName, fieldValue){
+    //     let filteredResults = [];
+    //     if(fieldName==='entity'){
+    //         resultsAll.forEach((result) => {
+    //             console.log('type: '+result.type);
+    //             console.log('fieldValue: '+fieldValue);
+    //             if(result.type.indexOf(fieldValue) > -1){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //
+    //     return filteredResults;
+    // }
+    //
+    // filterByField(resultsAll, fieldName, fieldValue){
+    //     let filteredResults = [];
+    //     if(fieldName==='did'){
+    //         resultsAll.forEach((result) => {
+    //             if(result.did === fieldValue){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //     else if (fieldName==='uid') {
+    //         resultsAll.forEach((result) => {
+    //             if(result.uid === fieldValue){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //     else if (fieldName==='lang') {
+    //         resultsAll.forEach((result) => {
+    //             if(result.lang === fieldValue){
+    //                 filteredResults.push(result);
+    //             }
+    //         });
+    //     }
+    //
+    //     return filteredResults;
+    // }
 
     updateResultsVisibility(payload) {
+        // console.log(JSON.stringify(this.docs));\
 
-        console.log('FACETS!!!!');
-
-        this.results.find((s) => {console.log('type: '+s.type);});
+        // this.updateFilters(payload.field, payload.value);
+        console.log('FACETS');
+        // console.log("edw " + this.filters.contains(payload));
+        // filteredDocs = this.filterByStringField();
+        // this.results.find((s) => {console.log('type: '+s.type);});
 
         // console.log('field: '+payload.field);
         // console.log('value: '+payload.value);
 
         this.emitChange();
     }
-
     getState() {
         return {
-            results: this.results,
+            queryparams: this.queryparams,
+            searchstring: this.searchstring,
+            entity: this.entity,
+            lang: this.lang,
+            // group: this.group,
+            fields: this.fields,
+            user: this.user,
+            tags: this.tags,
+            revisions: this.revisions,
+            numFound: this.numFound,
+            docs: this.docs,
             entities: this.entities,
             languages: this.languages,
-
-            searchstring: this.searchstring,
-            searchlang: this.searchlang,
-            entity: this.entity,
-            deckid: this.deckid,
-            userid: this.userid,
-            searchstatus: this.searchstatus,
-            error: this.error,
+            loading: this.loading,
+            error: this.error
         };
     }
     dehydrate() {
         return this.getState();
     }
     rehydrate(state) {
-        this.results = state.results;
+        this.queryparams = state.queryparams;
+        this.searchstring = state.searchstring;
+        this.entity = state.entity;
+        this.lang = state.lang;
+        // this.group = state.group;
+        this.fields = state.fields;
+        this.user = state.user;
+        this.tags = state.tags;
+        this.revisions = state.revisions;
+        this.numFound = state.numFound;
+        this.docs = state.docs;
         this.entities = state.entities;
         this.languages = state.languages;
-
-        this.searchstring = state.searchstring;
-        this.searchlang = state.searchlang,
-        this.entity = state.entity;
-        this.deckid = state.deckid;
-        this.userid = state.userid;
-        this.searchstatus = state.searchstatus;
+        this.loading = state.loading;
         this.error = state.error;
-    }
-
-    handleSearchErrors(err) {
-        this.error = err;
-        this.emitChange();
     }
 }
 
 SearchResultsStore.storeName = 'SearchResultsStore';
 SearchResultsStore.handlers = {
     'LOAD_RESULTS_SUCCESS': 'updateResults',
+    'LOAD_RESULTS_FAILURE': 'displayError',
     'UPDATE_RESULTS_VISIBILITY': 'updateResultsVisibility',
-    'SEARCH_ERROR': 'handleSearchErrors',
+    'RESET_PARAMS': 'resetParams',
+    'SHOW_LOADING': 'showLoading'
 };
 
 export default SearchResultsStore;
