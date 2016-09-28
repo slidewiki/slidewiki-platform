@@ -23,7 +23,7 @@ export default function uploadFile(context, payload, done) {
     // timer();
 
     context.service.create('import', payload, {timeout: timeout * 1000}, {timeout: timeout * 1000}, (err, res) => {
-        console.log('action got response from server', err);
+        //console.log('action got response from server', err);
 
         // context.myStuff.uploadFinished = true;
         if (err) {

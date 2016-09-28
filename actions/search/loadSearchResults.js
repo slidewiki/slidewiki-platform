@@ -1,15 +1,16 @@
 import {shortTitle} from '../../configs/general';
-import { searchSyntaxError, searchStringEmptyError } from '../loadErrors';
+import searchSyntaxError from '../error/searchSyntaxError';
+import searchStringEmptyError  from '../error/searchStringEmptyError';
 
 export default function loadSearchResults(context, payload, done) {
     if (!(payload.params.searchstring.startsWith('searchstring='))) {
-        context.executeAction(searchSyntaxError, payload).catch((err) => {done(err);});
+        context.executeAction(searchSyntaxError, payload, done);
         return;
     }
 
     // searchstring parameter contains 'searchstring=' as prefix.
     if (!payload.params.searchstring.substr(13)) {
-        context.executeAction(searchStringEmptyError, payload).catch((err) => {done(err);});
+        context.executeAction(searchStringEmptyError, payload, done);
         return;
     }
 

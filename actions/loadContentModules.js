@@ -1,33 +1,36 @@
 import async from 'async';
 import { shortTitle } from '../configs/general';
-import loadContentQuestions from './loadContentQuestions';
-import loadDataSourceCount from './datasource/loadDataSourceCount';
-import loadQuestionsCount from './questions/loadQuestionsCount';
-import loadCommentsCount from './activityfeed/contentdiscussion/loadCommentsCount';
-import { deckContentTypeError, slideIdTypeError } from './loadErrors';
+import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
+//import loadDataSourceCount from './datasource/loadDataSourceCount';
+//import loadQuestionsCount from './questions/loadQuestionsCount';
+import loadCommentsCount from './contentdiscussion/loadCommentsCount';
+import deckContentTypeError from './error/deckContentTypeError';
+import slideIdTypeError from './error/slideIdTypeError';
 
 export default function loadContentModules(context, payload, done) {
-    if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
-        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+    if (!(['deck', 'slide'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
+        context.executeAction(deckContentTypeError, payload, done);
         return;
     }
 
     if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
         //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(loadContentQuestions, payload, callback);
+            context.executeAction(loadContentDiscussion, payload, callback);
         },
+        /*
         (callback) => {
             context.executeAction(loadDataSourceCount, payload, callback);
         },
         (callback) => {
             context.executeAction(loadQuestionsCount, payload, callback);
         },
+        */
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
         }

@@ -1,10 +1,9 @@
 import {shortTitle} from '../../configs/general';
-import { slideIdTypeError, serviceUnavailable } from '../loadErrors';
+import slideIdTypeError from '../error/slideIdTypeError';
 
 export default function loadSlideView(context, payload, done) {
-    console.log('load slide view called');
     if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
