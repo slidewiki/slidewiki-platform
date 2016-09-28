@@ -25,3 +25,7 @@
 .translation-div{
 	display: inline-block;
 }
+
+.kurtstestmodal {
+  z-index: 9000 !important;
+}
