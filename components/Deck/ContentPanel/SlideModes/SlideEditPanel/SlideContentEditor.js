@@ -582,7 +582,7 @@ class SlideContentEditor extends React.Component {
                      <i className="save icon"></i>
                      Save
                     </button>
-                    <div class="ui" style={compStyle}>
+                    <div className="ui" style={compStyle}>
                         <div className="reveal">
                             <div className="slides">
                                     <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
