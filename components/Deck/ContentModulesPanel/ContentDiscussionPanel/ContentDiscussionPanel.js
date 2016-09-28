@@ -49,9 +49,14 @@ class ContentDiscussionPanel extends React.Component {
             <div className="ui comments" style={{maxWidth: 'none'}}>
                 { (String(this.props.UserProfileStore.userid) !== '') ? addComment : ''}
                 <h3 className="ui dividing header">Comments</h3>
-                <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
-                    {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} userid={this.props.UserProfileStore.userid} />); })}
-                </div>
+                {(this.props.ContentDiscussionStore.discussion.length === 0)
+                    ?
+                    <div>There are currently no comments for this {this.props.ContentDiscussionStore.selector.stype}.</div>
+                    :
+                    <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
+                        {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} userid={this.props.UserProfileStore.userid} />); })}
+                    </div>
+                }
             </div>
         );
     }
