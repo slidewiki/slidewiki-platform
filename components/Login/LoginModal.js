@@ -56,7 +56,7 @@ class LoginModal extends React.Component {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
         }
-        if (nextProps.UserProfileStore.userid !== null && nextProps.UserProfileStore.userid !== '')
+        if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== '')
             $('.ui.login.modal').modal('toggle');
     }
 
