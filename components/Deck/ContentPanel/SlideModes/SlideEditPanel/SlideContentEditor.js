@@ -292,8 +292,8 @@ class SlideContentEditor extends React.Component {
              <i className="save icon"></i>
              Save
             </button>
-            <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-             <i className="square outline icon"></i>
+            <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+             <i className="plus square outline icon"></i>
              Add input box
             </button>
             <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
