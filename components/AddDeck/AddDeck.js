@@ -245,9 +245,9 @@ class AddDeck extends React.Component {
           <option value="DefaultTheme" >Default</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
-          <option value="CC0" >CC0</option>
-          <option value="CC BY" >CC BY</option>
-          <option value="CC BY-SA" >CC BY-SA</option>
+          <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+          <option value="CC BY" >Creative Commons Attribution</option>
+            <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
         let errorView = '';
@@ -272,7 +272,7 @@ class AddDeck extends React.Component {
 
         return (
           <div className="ui container">
-          <h3>Create a deck </h3>
+          <h3>Add a deck to SlideWiki</h3>
 
           <div className="ui grid">
               <div className="sixteen wide column">
@@ -306,7 +306,7 @@ class AddDeck extends React.Component {
                       </div>
 
                         <div className="ui message" id="uploadDesc">
-                          <p>Select exisiting slides to your new deck. Currently only PowerPoint files are supported.</p>
+                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx files are supported.</p>
                           </div>
                      <div className="ui grid">
                          <div className="two column row">
@@ -327,17 +327,6 @@ class AddDeck extends React.Component {
                       </div>
                       <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
-                      <div className="field">
-                          <label htmlFor="tags">Add tags</label>
-                          <div className="ui left icon input">
-                              <i className="tags icon"></i>
-                          <input type="text" aria-labelledby="tags" id="tags" placeholder="Add tags" ref="input_tags" data-tooltip={hint_tags} />
-                          </div>
-                      </div>
-
-
-                <div className="two column row">
-                    <div className="column">
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
@@ -346,18 +335,13 @@ class AddDeck extends React.Component {
                               </label>
                           </div>
                       </div>
-                    </div>
-                  <div className="column">
-                      <div className="ui right floated buttons">
+              
+                      <div className="ui buttons">
                       <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                           Create deck
                         </div>
-                      <div className="ui secondary button" aria-label="cancel" role="button" tabIndex="0" onClick={this.handleCancel.bind(this)} >
-                          Cancel
-                        </div>
                       </div>
-               </div>
-              </div>
+     
                   </form>
               </div>
             </div>
