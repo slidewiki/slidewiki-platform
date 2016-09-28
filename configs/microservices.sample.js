@@ -22,7 +22,10 @@ export default {
             path: '/importPPTX',
             port: 80
         },
-        'images': {
+        'search': {
+            uri: 'http://searchservice.manfredfris.ch'
+        },         
+        'image': {
             uri: 'http://imageservice.manfredfris.ch'
         },
         'file': {
