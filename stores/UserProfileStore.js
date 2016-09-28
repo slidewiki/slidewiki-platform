@@ -41,6 +41,9 @@ class UserProfileStore extends BaseStore {
         } catch (e) {
             //empty user object
         }
+
+        //LoginModal
+        this.showLoginModal = false;
     }
 
     destructor() {
@@ -64,6 +67,9 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+
+        //LoginModal
+        this.showLoginModal = false;
     }
 
     getState() {
@@ -78,6 +84,7 @@ class UserProfileStore extends BaseStore {
             jwt: this.jwt,
             userpicture: this.userpicture,
             errorMessage: this.errorMessage,
+            showLoginModal: this.showLoginModal,
             lastUser: this.lastUser
         };
     }
@@ -97,6 +104,7 @@ class UserProfileStore extends BaseStore {
         this.jwt = state.jwt;
         this.userpicture = state.userpicture;
         this.errorMessage = state.errorMessage;
+        this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
     }
 

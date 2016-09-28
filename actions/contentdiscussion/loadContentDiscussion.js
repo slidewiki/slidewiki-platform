@@ -1,20 +1,24 @@
 import { shortTitle } from '../../configs/general';
-import { deckContentTypeError, slideIdTypeError } from '../loadErrors';
+import deckContentTypeError from '../error/deckContentTypeError';
+import slideIdTypeError from '../error/slideIdTypeError';
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function loadContentDiscussion(context, payload, done) {
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
-        context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(deckContentTypeError, payload, done);
         return;
     }
 
     if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
     context.service.read('discussion.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
+            context.executeAction(serviceUnavailable, payload, done);
+            return;
+          // context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_DISCUSSION_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'discussion'});
