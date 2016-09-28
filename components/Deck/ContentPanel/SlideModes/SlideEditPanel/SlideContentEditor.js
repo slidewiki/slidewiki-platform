@@ -18,6 +18,7 @@ let ReactDOM = require('react-dom');
 
 //let simpledraggable = require('simple-draggable'); //remove window dependency
 //let SimpleDraggable = require('../../../../../assets/simpledraggable');
+const absolutediv = '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: 80000;"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
 
 
 class SlideContentEditor extends React.Component {
@@ -31,7 +32,9 @@ class SlideContentEditor extends React.Component {
     }
     handleSaveButton(){
 
-        if (this.props.UserProfileStore.username === '') {
+        if (this.props.UserProfileStore.username === '')
+        {
+            //TODO: show login modal via context action
             alert('you need to login to save changes');
         }
         else
@@ -74,6 +77,14 @@ class SlideContentEditor extends React.Component {
             this.resize();
         }
         return false;
+    }
+    addAbsoluteDiv() {
+        //absolutediv
+        //this.props.SlideEditStore.content = CKEDITOR.instances.inlineContent.getData();
+        $('.pptx2html').append(absolutediv);
+        $(".pptx2html [style*='absolute']")
+        .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
+        this.forceUpdate();
     }
     componentDidMount() {
         if(process.env.BROWSER){
@@ -134,324 +145,22 @@ class SlideContentEditor extends React.Component {
             uiColor: '#4183C4',
             removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
         });}
-        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
-        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../custom_modules/ckeditor/config.js'});}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent');}
-        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent');}
-        //if (typeof(CKEDITOR.instances.nonInline) === 'undefined'){CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});}
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
+        {
+            CKEDITOR.inline('inlineContent');
+        }
         this.currentcontent = this.props.content;
-        //ReactDOM.findDOMNode(this.refs.inlineHeader).focus();
-        //ReactDOM.findDOMNode(this.refs.title).focus();
-
-        //let simpledraggable = require('simple-draggable');
-        //require('../../../../../assets/simpledraggable');
-        //alert('test' + document.querySelectorAll("div.draggable"));
-        //alert('test' + document.querySelectorAll("draggable"));
-
-        //KLAAS ADAPT once CKeditor for content is succesfully loaded -> apply drag and resize handlers.
-        //CKEDITOR.on('instanceReady', function(){
-        //CKEDITOR.on('loaded', function(){
-        /*
-        CKEDITOR.instances.inlineContent.on("instanceReady", function() {
-
-            //this.CKEditor_loaded = true; });
-
-            //alert('test' + this.refresh);
-            //execute only once
-            //if (this.CKEDitor_loaded === true)
-            //if (this.refresh === 'false')
-            //{
-            //    refresh = 'true';
-                //alert('test1');
-                //console.log('componentDidUpdate');
-                //let simpledraggable = require('simple-draggable');
-                //let simpledraggable =
-                //../../../../../../assets/ckeditor_config.js
-                //require('../../../../../assets/simple-draggable.js');
-
-                require('../../../../../custom_modules/simple-draggable/lib/index.js');
-
-                if(process.env.BROWSER){
-
-                //require('../../../../../custom_modules/simple-draggable/lib/index.js');
-                //SimpleDraggable('div.draggable', {
-                //test on: http://localhost:3000/deck/344-2/slide/1397-1/1397-1:10/edit
-                //SimpleDraggable('.pptx2html.div.draggable', {
-                //SimpleDraggable('.div.draggable', {
-                //alert($('.pptx2html.div').css("position"));
-                //alert($('.pptx2html .block').css("position"));
-                    //if ($('.pptx2html .block').css('position') === 'absolute')
-                    //{/*add border*/ /* $('.pptx2html .block')
-                    //if ($('.pptx2html').css('position') === 'absolute')
-                    //{/*add border*/
-                    /*    $(".pptx2html [style*='absolute']")
-                        .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
-                    //}
-
-                    //need to remove existing event listener functions!!!
-                    //                    , ratio: this.props.SlideEditStore.scaleratio
-                  SimpleDraggable(".pptx2html [style*='absolute']", {
-                      onlyX: false
-                    , onlyY: false
-                    , ratio: this.scaleratio
-                  });
-                }
-                /*
-                //SimpleDraggable('.block', {
-                SimpleDraggable('.pptx2html .block', {
-                    onlyX: false
-                  , onlyY: false
-                  , onStart: function (event, element) {
-                      // Do something on drag start
-                      //console.log('dragging start');
-                  }
-                  , onStop: function (event, element) {
-                      // Do something on drag stop
-                     // console.log('dragging stop');
-                  }
-                  , onDrag: function (event, element) {
-                      // Do something on drag drag
-                     // console.log('dragging element');
-                  }
-                });*/
-                //based on querySelectorAll (selects based on class of elements - get all children + apply draggable x & y positioning)
-                //TODO: remove surrounding DIVS of some PPTX2HTML output elements
-                //########Works well with following PPTX2HTML output:
-                // (TODO: Add class='draggable' to output! as well as style="resize: both; overflow: auto;)
-                /*<div _id="4" _idx="1" _name="Text Placeholder 3" _type="body" class="draggable block content v-down" draggable="true" id="4" style="resize: both; overflow: auto; position: absolute; top: 245px; left: 52px; width: 612px; height: 122px; border: 1pt none rgb(0, 0, 0);">
-                <div class="h-left">&nbsp;<span class="text-block" style="color: #000; font-size: 28pt; font-family: Calibri; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">What can</span><br>
-                <br>
-                <span class="text-block" style="color: #000; font-size: 28pt; font-family: Calibri; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">we learn from </span></div>
-
-                <div class="h-left"><span class="text-block" style="color: #000; font-size: 28pt; font-family: Calibri; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">the technology market?</span></div>
-                </div>*/
-
-                //TODO change style elements of PPTX2HTML divs based on loading Firefox (+IE?) or Chrome (+Safari) (or other browsers?)
-
-
-                //if (typeof(CKEDITOR.instances.nonInline) !== 'undefined' && this.currentcontent !== this.props.content)
-                //{
-                /*If an instance of CKeditor exists,
-                    **and
-                    **the content of the slide has changed because of navigating to different slide (not because of WYSIWYG edit = is handleEditorChange() instead )
-                    ** TODO - probably a more fluent solution would be to use a CKeditor function for updating.
-                    */
-                    /*
-                    CKEDITOR.instances.nonInline.destroy();
-                    CKEDITOR.replace('nonInline', {customConfig: '../../../../../../assets/ckeditor_config.js'});
-                    //if (typeof(CKEDITOR.instances.inlineHeader) !== 'undefined'){CKEDITOR.instances.inlineHeader.destroy();CKEDITOR.inline('inlineHeader');}
-                    //if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined'){CKEDITOR.instances.inlineContent.destroy();CKEDITOR.inline('inlineContent');}
-                    //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) !== 'undefined'){CKEDITOR.instances.inlineSpeakerNotes.destroy();CKEDITOR.inline('inlineSpeakerNotes');}
-                    this.currentcontent = this.props.content;
-                    //alert('CKEDITOR destroyed, and content updated');
-                }*/
-                //}
-
-                /*
-                //set intitial resize:
-                //TODO: make function to prevent repetition! - shared function with slide view!
-
-                    let containerwidth = document.getElementById('container').offsetWidth;
-                    let containerheight = document.getElementById('container').offsetHeight;
-                    //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
-
-                    //reset scaling of pptx2html element to get original size
-                    $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-
-                    //let pptxwidth = document.getElementByClassName('pptx2html').offsetWidth;
-                    //let pptxheight = document.getElementByClassName('pptx2html').offsetHeight;
-                    let pptxwidth = $('.pptx2html').width();
-                    let pptxheight = $('.pptx2html').height();
-                    //console.log('pptx2html Width =' + pptxwidth + 'height' + pptxheight);
-
-                    //only calculate scaleration for width for now
-                    if (containerwidth > pptxwidth)
-                    {
-                        this.scaleratio = pptxwidth / containerwidth;
-                        //console.log(this.scaleratio);
-                        //this.props.SlideEditStore.scaleratio = containerwidth / pptxwidth;
-                        //let scaleratio = containerwidth / pptxwidth;
-                    } else {
-                        this.scaleratio = containerwidth / pptxwidth;
-                        //console.log(this.scaleratio);
-                        //this.props.SlideEditStore.scaleratio = pptxwidth / containerwidth;
-                        //let scaleratio = pptxwidth / containerwidth;
-                    }
-                    //Function to fit contents in edit and view component
-                    //$(".pptx2html").addClass('schaal');
-                    //$(".pptx2html [style*='absolute']").addClass('schaal');
-                    //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                    //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                    if(process.env.BROWSER){
-                        if ($('.pptx2html').length)
-                        {
-                            //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                            //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                            //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
-                            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-                            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-
-                            require('../../../../../custom_modules/simple-draggable/lib/index.js');
-
-                            //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
-                            //TODO: remove previous event listeners!
-                            //, ratio: this.props.SlideEditStore.scaleratio
-                            SimpleDraggable(".pptx2html [style*='absolute']", {
-                                onlyX: false
-                              , onlyY: false
-                              , ratio: this.scaleratio
-                            });
-
-                            //make z-index of pptx2html output negative for preventing overlap over CKeditor and login modal
-                            //use algorithm for selecting all elements in simple-draggable!!
-                            //z-index = z-index -999999
-                            //$(".pptx2html [style*='absolute']").css({'z-index': '-1'});
-                        } else {
-                            //Do nothing for slideview - is relative content - will be scaled automatically?!
-
-                            //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                            //$(".pptx2html").css({'z-index': ''});
-                        }
-                    }
-                    if(process.env.BROWSER){
-                        if ($('.pptx2html').length)
-                        {
-                            //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                            //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                            //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
-                            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-                            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-
-                            require('../../../../../custom_modules/simple-draggable/lib/index.js');
-
-                            //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
-                            //TODO: remove previous event listeners!
-                            //, ratio: this.props.SlideEditStore.scaleratio
-                            SimpleDraggable(".pptx2html [style*='absolute']", {
-                                onlyX: false
-                              , onlyY: false
-                              , ratio: this.scaleratio
-                            });
-
-                            //make z-index of pptx2html output negative for preventing overlap over CKeditor and login modal
-                            //use algorithm for selecting all elements in simple-draggable!!
-                            //z-index = z-index -999999
-                            //$(".pptx2html [style*='absolute']").css({'z-index': '-1'});
-                        } else {
-                            //Do nothing for slideview - is relative content - will be scaled automatically?!
-
-                            //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                            //$(".pptx2html").css({'z-index': ''});
-                        }
-                    }
-
-            });
-            */
-
-
 
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
-                    /*
-                let containerwidth = document.getElementById('container').offsetWidth;
-                let containerheight = document.getElementById('container').offsetHeight;
-                //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
-
-                //reset scaling of pptx2html element to get original size
-                $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-
-                //let pptxwidth = document.getElementByClassName('pptx2html').offsetWidth;
-                //let pptxheight = document.getElementByClassName('pptx2html').offsetHeight;
-                let pptxwidth = $('.pptx2html').width();
-                let pptxheight = $('.pptx2html').height();
-                //console.log('pptx2html Width =' + pptxwidth + 'height' + pptxheight);
-
-                //only calculate scaleration for width for now
-                if (containerwidth > pptxwidth)
-                {
-                    this.scaleratio = pptxwidth / containerwidth;
-                    //console.log(this.scaleratio);
-                    //this.props.SlideEditStore.scaleratio = containerwidth / pptxwidth;
-                    //let scaleratio = containerwidth / pptxwidth;
-                } else {
-                    this.scaleratio = containerwidth / pptxwidth;
-                    //console.log(this.scaleratio);
-                    //this.props.SlideEditStore.scaleratio = pptxwidth / containerwidth;
-                    //let scaleratio = pptxwidth / containerwidth;
-                }
-                */
-                //Function to fit contents in edit and view component
-                //$(".pptx2html").addClass('schaal');
-                //$(".pptx2html [style*='absolute']").addClass('schaal');
-                //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                 if(process.env.BROWSER){
                     this.resize();
-                    /*
-                    if ($('.pptx2html').length)
-                    {
-                        //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                        //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                        //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
-                        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-                        $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
-                        require('../../../../../custom_modules/simple-draggable/lib/index.js');
-
-                        //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
-                        //TODO: remove previous event listeners!
-                        //, ratio: this.props.SlideEditStore.scaleratio
-                        SimpleDraggable(".pptx2html [style*='absolute']", {
-                            onlyX: false
-                          , onlyY: false
-                          , ratio: this.scaleratio
-                        });
-
-                        //make z-index of pptx2html output negative for preventing overlap over CKeditor and login modal
-                        //use algorithm for selecting all elements in simple-draggable!!
-                        //z-index = z-index -999999
-                        //$(".pptx2html [style*='absolute']").css({'z-index': '-1'});
-                    } else {
-                        //Do nothing for slideview - is relative content - will be scaled automatically?!
-
-                        //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                        //$(".pptx2html").css({'z-index': ''});
-                    }*/
                 }
                 CKEDITOR.instances.inlineContent.on("instanceReady", function() {
                 if(process.env.BROWSER){
                     this.resize();
-                    /*
-                    if ($('.pptx2html').length)
-                    {
-                        //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                        //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                        //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
-                        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-                        $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
-                        require('../../../../../custom_modules/simple-draggable/lib/index.js');
-
-                        //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
-                        //TODO: remove previous event listeners!
-                        //, ratio: this.props.SlideEditStore.scaleratio
-                        SimpleDraggable(".pptx2html [style*='absolute']", {
-                            onlyX: false
-                          , onlyY: false
-                          , ratio: this.scaleratio
-                        });
-
-                        //make z-index of pptx2html output negative for preventing overlap over CKeditor and login modal
-                        //use algorithm for selecting all elements in simple-draggable!!
-                        //z-index = z-index -999999
-                        //$(".pptx2html [style*='absolute']").css({'z-index': '-1'});
-                    } else {
-                        //Do nothing for slideview - is relative content - will be scaled automatically?!
-
-                        //$(".slides").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                        //$(".pptx2html").css({'z-index': ''});
-                    }
-                    */
                     }
                 });
 
@@ -577,6 +286,7 @@ class SlideContentEditor extends React.Component {
                     */
 
         return (
+<<<<<<< HEAD
                 <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
                     <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
                      <i className="save icon"></i>
@@ -588,6 +298,22 @@ class SlideContentEditor extends React.Component {
                                     <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                             </div>
                         </div>
+=======
+            <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+            <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+             <i className="save icon"></i>
+             Save
+            </button>
+            <button tabIndex="0" ref="submitbutton" className="ui button red" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+             <i className="square outline icon"></i>
+             Add input box
+            </button>
+            <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+            <hr />
+                <div className="reveal">
+                    <div className="slides" style={revealSlideStyle}>
+                            <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+>>>>>>> master
                     </div>
                     <br />
                     <hr />

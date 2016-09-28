@@ -7,11 +7,22 @@ let ReactDOM = require('react-dom');
 class SearchBox extends React.Component {
 
     handleRedirect(searchstring){
+
+        let searchstr = 'q=';
+        if(this.refs.searchstring.value.trim() === ''){
+            // searchstr += encodeURIComponent('*:*');
+            return;
+        }
+        else{
+            searchstr += encodeURIComponent(this.refs.searchstring.value);
+        }
+        searchstr += '&revisions=false';
+
         this.context.executeAction(navigateAction, {
-            // url: '/searchresults/searchstring=' + this.refs.searchstring.value
-            url: '/search/results/searchstring=' + this.refs.searchstring.value
+            url: '/search/' + searchstr
         });
-        this.refs.searchstring.value='';
+
+        this.refs.searchstring.value = '';
         return false;
     }
     handleKeyPress(event){
@@ -31,10 +42,5 @@ class SearchBox extends React.Component {
 SearchBox.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-SearchBox = connectToStores(SearchBox, [SearchResultsStore], (context, props) => {
-    return {
-        SearchResultsStore: context.getStore(SearchResultsStore).getState()
-    };
-});
 
 export default SearchBox;

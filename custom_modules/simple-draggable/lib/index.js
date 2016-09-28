@@ -99,6 +99,7 @@
                     //let div = document.createElement("div");
                     cEl.dragdiv = document.createElement("div");
                     cEl.dragdiv.style.position = "absolute";
+                    cEl.dragdiv.style.zIndex = "90000";
                     //div.style.top = cEl.style.top - 20 ;
                     //div.style.top = "-20" ;
                     //div.style.left = cEl.style.left - 20 ;
@@ -112,6 +113,7 @@
 
                     let imgdrag = document.createElement("IMG");
                     imgdrag.style.position = "absolute";
+                    imgdrag.style.zIndex = "90000";
                     imgdrag.src = '../../../../../assets/images/cursor_drag_arrow.png';
                     imgdrag.disabled = true;
                     imgdrag.draggable = false;
@@ -198,6 +200,7 @@
                     cEl.resizediv.style.position = "absolute";
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
+                    imgresize.style.zIndex = "90000";
                     imgresize.src = '../../../../../assets/images/cursor_resize_arrow.png';
                     imgresize.disabled = true;
                     imgresize.draggable = false;
