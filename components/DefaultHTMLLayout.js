@@ -14,6 +14,7 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/bower_components/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
+                <link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />              
                 <link href="/assets/css/PresentationDefaults.css" rel="stylesheet" type="text/css" />
             </head>
             <body>
