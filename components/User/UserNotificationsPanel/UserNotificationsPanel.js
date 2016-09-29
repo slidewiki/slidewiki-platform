@@ -8,7 +8,17 @@ import markAsReadUserNotifications from '../../../actions/user/notifications/mar
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
+    componentWillMount() {
+      console.log('asdf');
+        if ((String(this.props.UserProfileStore.userid) !== '')) {//the user is loggedin
+            this.context.executeAction(navigateAction, {
+                url: '/'
+            });
+        }
+    }
+
     componentDidMount() {
+      console.log('asdf2');
         this.context.executeAction(loadUserNotifications, {
             uid: this.props.UserProfileStore.userid
         });
