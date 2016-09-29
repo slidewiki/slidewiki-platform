@@ -1,105 +1,206 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
-import AdvancedSearchStore from '../../../stores/AdvancedSearchStore';
-import loadAdvancedSearchResults from '../../../actions/search/loadAdvancedSearchResults';
+// import AdvancedSearchStore from '../../../stores/AdvancedSearchStore';
 import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
-
+import SearchParamsStore from '../../../stores/SearchParamsStore';
+import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 class AdvancedSearch extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            searchstring: this.props.paramsStore.searchstring,
+            entity: this.props.paramsStore.entity,
+            lang: this.props.paramsStore.lang,
+            fields: this.props.paramsStore.fields,
+            user: this.props.paramsStore.user,
+            tags: this.props.paramsStore.tags,
+            revisions: this.props.paramsStore.revisions,
+            license: this.props.paramsStore.license
+        };
+    }
+    componentWillReceiveProps(nextProps){
+        // TODO: check a more elegant way to do this!
+        if(!this.props.paramsStore.fetch) return;
+        this.setState(this.props.paramsStore);
+    }
+    onChange(event) {
+        let curstate = {};
+        curstate[event.target.name] = event.target.value;
+        this.setState(curstate);
+    }
+    clearInput(){
+        this.setState({searchstring: ''});
+        this.refs.searchstring.focus();
+    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return (nextProps.searchstring != this.state.searchstring);
+    // }
+    handleKeyPress(event){
+        if(event.key == 'Enter'){
+            this.handleRedirect();
+        }
+    }
+    getEncodedParams(){
+        let queryparams = {};
 
-    handleRedirect(searchstring, deckid, userid){
+        // determine given params
+        if(this.refs.searchstring && this.refs.searchstring.value.trim()){
+            queryparams.q = this.refs.searchstring.value.trim();
+        }
+        else{
+            queryparams.q = encodeURIComponent('*:*');
+        }
+
+        if(this.refs.entity && this.refs.entity.value){
+            queryparams.entity = this.refs.entity.value;
+        }
+
+        if(this.refs.language && this.refs.language.value){
+            queryparams.language = this.refs.language.value;
+        }
+
+        // if(this.refs.group && this.refs.group.value){
+        //     queryparams.group = this.refs.group.value;
+        // }
+
+        if(this.refs.fields && this.refs.fields.value){
+            queryparams.fields = this.refs.fields.value;
+        }
+
+        if(this.refs.user && this.refs.user.value){
+            queryparams.user = this.refs.user.value.trim();
+        }
+
+        if(this.refs.tags && this.refs.tags.value){
+            queryparams.tags = this.refs.tags.value.trim();
+        }
+
+        if(this.refs.license && this.refs.license.value){
+            queryparams.license = this.refs.license.value.trim();
+        }
+
+        if(this.refs.revisions && this.refs.revisions.value){
+            queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
+        }
+
+        return this.encodeParams(queryparams);
+    }
+    encodeParams(queryparams){
+        let encodedParams = '';
+        for (var key in queryparams) {
+            if(encodedParams){
+                encodedParams += '&';
+            }
+            encodedParams += encodeURIComponent(key) + '=' + encodeURIComponent(queryparams[key]);
+        }
+
+        return encodedParams;
+    }
+    handleRedirect(){
+        if(this.refs.searchstring.value.trim() === ''){
+            return;
+        }
         this.context.executeAction(navigateAction, {
-            url:  '/search/advsearchresults/searchstring=' + this.refs.searchstring.value +
-                  '/entity=' + this.refs.entity.value +
-                  '/searchlang=' + this.refs.searchlang.value 
-                  // '/deckid=' + this.refs.deckid.value +
-                  // '/userid=' + this.refs.userid.value
+            url:  '/search/' + this.getEncodedParams()
         });
+
         return false;
     }
-
     render() {
 
+        // facet lists initialization
+        const languageList = this.props.paramsStore.languages.map((item, index) => {
+            return (
+                <option key={item.id} value={item.value}>{item.description}</option>
+            );
+        });
+
+        const entityList = this.props.paramsStore.entities.map((item, index) => {
+            return (
+                <option key={item.id} value={item.value}>{item.description}</option>
+            );
+        });
+        let searchstring = decodeURIComponent(this.state.searchstring);
+        let defaultSearchstring = (searchstring == '*:*') ? '' : searchstring;
+        let clearInputIcon = '';
+        if(defaultSearchstring){
+            clearInputIcon = <i className="remove link icon" onClick={this.clearInput.bind(this)} ></i>;
+        }
         return (
-
                 <div className="ui content">
-                    <h2 className="ui header" style={{marginTop: '1em'}}>Advanced Search</h2>
-
+                    <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
                     <form className="ui form success">
                         <div className="field">
-                            <input name='searchstring' placeholder='Text search' type='text' ref='searchstring'></input>
+                            <div className="ui icon input">
+                                <input name='searchstring' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' type='text' ref='searchstring'></input>
+                                {clearInputIcon}
+                            </div>
                         </div>
-
                         <div className="four fields">
                             <div className="field">
+                                <label>Search field</label>
+                                <select name='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
+                                  <option value=''>Select Search field</option>
+                                  <option value='title'>Title</option>
+                                  <option value='content'>Content</option>
+                                  <option value='speakernotes'>Speakernotes</option>
+                                  <option value='description'>Description</option>
+                                </select>
+                            </div>
+
+                            <div className="field">
                                 <label>Entity</label>
-                                <select name='entity' multiple='' className='ui fluid search dropdown' ref='entity'>
+                                <select name='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
                                   <option value=''>Select Entity</option>
-                                  <option value='slide'>Slide</option>
-                                  <option value='deck'>Deck</option>
-                                  <option value='answer'>Answer</option>
-                                  <option value='question'>Question</option>
-                                  <option value='comment'>Comment</option>
+                                  {entityList}
                                 </select>
                             </div>
 
                             <div className="field">
                                 <label>Language</label>
-                                <select name='lang' multiple='' className='ui fluid search dropdown' ref='searchlang'>
+                                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' className='ui fluid search dropdown' ref='language'>
                                   <option value=''>Select Language</option>
-                                  <option value='EN'>English</option>
-                                  <option value='ES'>Spanish</option>
-                                  <option value='GR'>Greek</option>
+                                  {languageList}
                                 </select>
                             </div>
 
                             <div className="field">
-                                <label>User groups</label>
-                                <select name='usergroup' multiple='' className='ui fluid search dropdown' ref='usergroup'>
-                                  <option value=''>Select User group</option>
-                                  <option value='UNI'>Universities</option>
-                                  <option value='RC'>Research Centers</option>
-                                  <option value='OTHER'>Other</option>
-                                </select>
-                            </div>
-
-                            <div className="field">
-                                <label>Search fields</label>
-                                <select name='searchfields' multiple='' className='ui fluid search dropdown' ref='searchfields'>
+                                <label>License</label>
+                                <select name='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
                                   <option value=''>Select Search field</option>
-                                  <option value='ALL'>All</option>
-                                  <option value='TITL'>Title</option>
-                                  <option value='CONT'>Content</option>
+                                  <option value='CC0'>CC0</option>
+                                  <option value='CC BY'>CC BY</option>
+                                  <option value='CC BY-SA'>CC BY-SA</option>
                                 </select>
                             </div>
-
 
                         </div>
 
                         <div className="two fields">
                             <div className="field">
                                 <label>User</label>
-                                <input name="user" placeholder="User" type="text"></input>
+                                <input name='user' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.user} placeholder="User" type="text" ref='user'></input>
                             </div>
 
                             <div className="field">
                                 <label>Tags</label>
-                                <input name="tags" placeholder="Tags" type="text"></input>
+                                <input name='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
                             </div>
 
                         </div>
 
                         <div className="field">
-                            <div className="ui checkbox" style={{marginTop: '1em', marginBottom: '1em'}}>
-                                <input name="revisions" type="checkbox"></input>
+                            <div className="ui checkbox revisions" style={{marginTop: '1em', marginBottom: '1em'}}>
+                                <input name='revisions' onChange={this.onChange.bind(this)} type="checkbox" ref='revisions'></input>
                                 <label>Include revisions</label>
                             </div>
                         </div>
 
 
-                        <div className="ui primary submit labeled icon button" onClick={this.handleRedirect.bind(this)}>
-                            <i className="icon edit"></i> Submit
+                        <div className="ui primary submit button" onClick={this.handleRedirect.bind(this)}>
+                             Submit
                         </div>
 
                     </form>
@@ -107,17 +208,18 @@ class AdvancedSearch extends React.Component {
                 </div>
 
         );
+
     }
 }
 
 AdvancedSearch.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-AdvancedSearch = connectToStores(AdvancedSearch, [AdvancedSearchStore], (context, props) => {
+
+AdvancedSearch = connectToStores(AdvancedSearch, [SearchParamsStore], (context, props) => {
     return {
-        AdvancedSearchStore: context.getStore(AdvancedSearchStore).getState()
+        paramsStore: context.getStore(SearchParamsStore).getState()
     };
 });
-
 
 export default AdvancedSearch;

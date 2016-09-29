@@ -1,8 +1,17 @@
 slidewikiplatform:
   image: slidewiki/platform
-  restart: always
+  restart: on-failure:5
   expose:
     - "80"
   environment:
     - PORT=80
-    - VIRTUAL_HOST=platform.manfredfris.ch
+    - VIRTUAL_HOST=platform.experimental.slidewiki.org
+    - SERVICE_URL_DECK=http://deckservice.experimental.slidewiki.org
+    - SERVICE_URL_DISCUSSION=http://discussionservice.experimental.slidewiki.org
+    - SERVICE_URL_ACTIVITIES=http://activitiesservice.experimental.slidewiki.org
+    - SERVICE_URL_NOTIFICATION=http://notificationservice.experimental.slidewiki.org
+    - SERVICE_URL_USER=http://userservice.experimental.slidewiki.org
+    - SERVICE_URL_IMPORT=http://importservice.experimental.slidewiki.org
+    - SERVICE_URL_FILE=http://fileservice.experimental.slidewiki.org
+    - SERVICE_URL_SEARCH=http://searchservice.experimental.slidewiki.org
+    - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org

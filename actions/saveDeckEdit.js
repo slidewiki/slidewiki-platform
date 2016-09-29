@@ -18,7 +18,14 @@ export default function saveDeckEdit(context, payload, done) {
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
             } else {
                 context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);
-                context.dispatch('UPDATE_TREE_NODE_SUCCESS', {selector: payload.selector, nodeSpec: {title: striptags(payload.title)}});
+                console.log(payload.selector);
+                context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
+                    selector: payload.selector,
+                    nodeSpec: {
+                        title: striptags(payload.title), id: payload.selector.sid,
+                        path: payload.selector.spath
+                    }
+                });
                 //update the URL: redirect to view after edit
                 let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + payload.selector.sid + '/' + payload.selector.spath;
                 context.executeAction(navigateAction, {
