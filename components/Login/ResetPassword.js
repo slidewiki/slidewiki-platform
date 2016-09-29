@@ -117,17 +117,18 @@ class ResetPassword extends React.Component {
 
     goHome() {
         this.context.executeAction(resetPasswordResetStore, { });
-        this.context.executeAction(navigateAction, {//go to home page after registration
+        this.context.executeAction(navigateAction, {//go to home page after password reset
             url: '/'
         });
+        $('.ui.login.modal').modal('show');
+        return true;
     }
 
     closeErrorDimmer() {
         this.refs.recaptcha.reset();// Reset recaptcha
         this.state.grecaptcharesponse = undefined;
         this.context.executeAction(resetPasswordResetStore, { });
-        $('.dimmer.error') //Hide error message
-            .dimmer('toggle');
+        return true;
     }
 
     handleClick(e) {
