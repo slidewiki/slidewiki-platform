@@ -81,6 +81,22 @@ export default {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
             });
+        } else if (resource === 'deck.needsNewRevision') {
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/needsNewRevision?user=' + args.userID}).then((res) => {
+                callback(null, {result: JSON.parse(res)});
+            }).catch((err) => {
+                console.log('serviceErr', err);
+                callback(null, {result: {}});
+            });
+        } else if (resource === 'deck.handleRevisionChanges') {
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/handleChange?user=' + args.userID + '&root_deck=' + args.rootDeckID}).then((res) => {
+                callback(null, {result: JSON.parse(res)});
+            }).catch((err) => {
+                console.log('serviceErr', err);
+                callback(null, {result: {}});
+            });
         }
     },
     // other methods
