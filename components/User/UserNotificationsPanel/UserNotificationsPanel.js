@@ -1,5 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsList from './UserNotificationsList';
