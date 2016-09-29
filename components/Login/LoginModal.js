@@ -52,16 +52,14 @@ class LoginModal extends React.Component {
         return false;
     }
 
-/*
     componentWillReceiveProps(nextProps) {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
         }
         if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
-            $('.ui.login.modal').modal('toggle');
+            $('.ui.login.modal').modal('hide');
         }
     }
-    */
 
     componentDidMount(){
         if(typeof window !== 'undefined') {

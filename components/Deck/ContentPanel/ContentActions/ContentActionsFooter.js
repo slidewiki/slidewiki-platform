@@ -36,6 +36,17 @@ class ContentActionsFooter extends React.Component {
             window.open(this.getPresentationHref());
         }
     }
+    getPrintHref(){
+        return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
+    }
+
+    handlePrintClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getPrintHref());
+        }
+
+    }
     render() {
         return (
             <div className="ui">
@@ -52,10 +63,11 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
-
-                            <button className="ui button">
-                                <i className="print large icon"></i>
-                            </button>
+                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getPrintHref()} target="_blank">
+                                <button className="ui button">
+                                    <i className="print large icon"></i>
+                                </button>
+                            </NavLink>
                             <button className="ui button">
                                 <i className="download large icon"></i>
                             </button>

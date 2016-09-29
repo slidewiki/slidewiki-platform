@@ -24,6 +24,12 @@ export default {
         },
         'search': {
            uri: '${SERVICE_URL_SEARCH}'
+       },
+       'image': {
+           uri: '${SERVICE_URL_IMAGE}'
+       },
+       'file': {
+           uri: '${SERVICE_URL_FILE}'
        }
     }
 };
