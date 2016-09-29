@@ -23,7 +23,7 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        const uid = args.uid;
+        let uid = args.uid;
         if (uid === undefined) {
             uid = 0;
         }
