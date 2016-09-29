@@ -5,6 +5,7 @@ import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import Comment from './Comment';
 import addComment from '../../../../actions/contentdiscussion/addComment';
+import invertCommentBoxFlag from '../../../../actions/contentdiscussion/invertCommentBoxFlag';
 
 class ContentDiscussionPanel extends React.Component {
     handleAddComment(e) {
@@ -35,7 +36,7 @@ class ContentDiscussionPanel extends React.Component {
                 <NavLink href={'/discussion/' + this.props.ContentDiscussionStore.selector.stype + '/' + this.props.ContentDiscussionStore.selector.sid}>{'/discussion/' + this.props.ContentDiscussionStore.selector.stype + '/' + this.props.ContentDiscussionStore.selector.sid}</NavLink>
             </div>
         );
-        let addComment = (this.props.DiscussionStore.showCommentBox) ?
+        let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
             (<form className="ui comment form">
                 <div className="ui input">
                     <input type="text" ref="title" placeholder="Title" required/>
