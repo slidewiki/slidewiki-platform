@@ -13,6 +13,7 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
+                <link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />              
                 <link href="/assets/css/PresentationDefaults.css" rel="stylesheet" type="text/css" />
             </head>
             <body>
