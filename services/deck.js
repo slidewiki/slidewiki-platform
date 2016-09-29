@@ -84,10 +84,10 @@ export default {
         } else if (resource === 'deck.needsNewRevision') {
             let args = params.params ? params.params : params;
             rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/needsNewRevision?user=' + args.userID}).then((res) => {
-                callback(null, {result: JSON.parse(res)});
+                callback(null, {status: JSON.parse(res)});
             }).catch((err) => {
                 console.log('serviceErr', err);
-                callback(null, {result: {}});
+                callback(null, {status: {}});
             });
         } else if (resource === 'deck.handleRevisionChanges') {
             let args = params.params ? params.params : params;
