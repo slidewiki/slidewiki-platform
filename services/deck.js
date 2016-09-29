@@ -61,7 +61,7 @@ export default {
                 }
                 let deckProps = {
                     description: revision.description != null ? revision.description : deck.description,
-                    language: deck.language,
+                    language: revision.language,
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license
