@@ -290,6 +290,16 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    presentationPrint: {
+        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
+        path: '/presentation/:id/Print',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadPresentation, payload, done);
+        }
+    },
     presentationSlide: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/*/:sid?/',
@@ -311,6 +321,7 @@ export default {
             //context.executeAction(loadDeck, payload, done);
         }
     },
+    /* This should be the last route in routes.js */
     notfound: {
         path: '*',
         method: 'get',
@@ -319,4 +330,5 @@ export default {
             context.executeAction(loadNotFound, payload, done);
         }
     }
+    /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/
 };

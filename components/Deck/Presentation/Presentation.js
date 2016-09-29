@@ -9,10 +9,10 @@ import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
 
 let playerCss = {
-    display: 'none',
     height: '100%',
     position: 'absolute',
     top: '0',
+    fontSize: '100%'
 };
 
 let clearStyle = {
@@ -33,8 +33,6 @@ class Presentation extends React.Component{
     componentDidMount(){
         if(process.env.BROWSER){
              //loading reveal style
-            require('../../../bower_components/reveal.js/css/reveal.css');
-
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
@@ -42,22 +40,19 @@ class Presentation extends React.Component{
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
             $('.ui.horizontal.segments.footer').css({'display': 'none'});
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
+
             let styleName = this.props.PresentationStore.theme;
 
-            if(!styleName){
-                styleName = 'black';
-            }
-
-            //loading selected style for presentation
-            require('../../../bower_components/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';
 
 
             Reveal.initialize({
+                transition: 'none',
+                backgroundTransition: 'none',
                 history: true,
                 dependencies: [
-                    { src: '/bower_components/reveal.js/plugin/notes/notes.js', async: true }
+                    { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true }
                 ]
             });
 
@@ -72,7 +67,7 @@ class Presentation extends React.Component{
         this.slides = this.getSlides();
         return(
             <div>
-                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} >
+                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                     <div className="slides">
         			     	{this.slides}
         			      </div>
@@ -93,7 +88,7 @@ class Presentation extends React.Component{
                 if(slide.speakernotes){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
-                let content = slide.title + slide.content + notes;
+                let content = slide.content + notes;
                 returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
             }
             return returnList;
