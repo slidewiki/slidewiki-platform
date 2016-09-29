@@ -57,7 +57,7 @@ class DeckViewPanel extends React.Component {
 
         const host = this.props.DeckViewStore.deckData.host;
         //console.log(Microservices.file);
-        const thumbnailURL = Microservices.file.uri + '/' + deckUserId + '/thumbnails/';
+        const thumbnailURL = Microservices.file.uri + '/';
         //console.log(thumbnailURL);
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
@@ -111,8 +111,7 @@ class DeckViewPanel extends React.Component {
                                             <div className="ui fluid card">
                                                 <div className="content" tabIndex="0">
                                                     <a href={deckURL + '/slide/' + slide.id} className="ui medium image" tabIndex="-1">
-                                                        <Thumbnail key={index} url={thumbnailURL + slide.id + '.png'} slideId={slide.id} />
-                                                        {/*<img src={fileserver + '/' + slide.id + '.png'} alt={'thumbnail of slide ' + slide.id} /> */}
+                                                        <Thumbnail key={index} url={thumbnailURL + slide.user + '/thumbnails/' + slide.id + '.png'} slideId={slide.id} />
                                                     </a>
                                                     <a href={deckURL + '/slide/' + slide.id} className='header'>{this.getTextFromHtml(slide.title)}</a>
                                                     <div className="description">Slide {index + 1} of {totalSlides}</div>
