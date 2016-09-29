@@ -7,3 +7,6 @@
 [submodule "custom_modules/simple-draggable"]
 	path = custom_modules/simple-draggable
     url = https://github.com/slidewiki/simple-draggable.git
+[submodule "custom_modules/reveal.js"]
+	path = custom_modules/reveal.js
+	url = https://github.com/slidewiki/reveal.js
