@@ -10,7 +10,7 @@ class ContributorItem extends React.Component {
             <div className="image">
                 <UserPicture picture={ this.props.data.picture }
                              username={ this.props.data.username } link={ false }
-                             private={ true } height={30} width={ 30 } centered={ true } size={ 'mini' }/>
+                             private={ false } width={ 30 } size={ 'mini' }/>
             </div>
             <div className="content inline-div">
                 <div className="header">

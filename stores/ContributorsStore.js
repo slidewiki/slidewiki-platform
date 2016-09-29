@@ -8,12 +8,14 @@ class ContributorsStore extends BaseStore {
         this.creator = [];
         this.translators = [];
         this.listName = '';
+        this.selector = {};
     }
     updateContributors(payload) {
         this.contributors = this.getContributors(payload.contributors);
         this.creator = this.getCreator(payload.contributors);
         this.translators = this.getTranslators(payload.contributors);
         this.listName = payload.listName;
+        this.selector = payload.selector;
         this.emitChange();
     }
 
@@ -22,6 +24,7 @@ class ContributorsStore extends BaseStore {
             contributors: this.contributors,
             creator: this.creator,
             translators: this.translators,
+            selector: this.selector
         };
     }
     dehydrate() {
@@ -31,6 +34,7 @@ class ContributorsStore extends BaseStore {
         this.contributors = state.contributors;
         this.creator = state.creator;
         this.translators = state.translators;
+        this.selector = state.selector;
     }
 
     getBasedonRole(role, list) {
