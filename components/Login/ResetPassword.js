@@ -70,7 +70,7 @@ class ResetPassword extends React.Component {
             });
         } else if (this.props.ResetPasswordStore.componentStatus === 'error') {
             swal({
-                title: 'Error! Please try again later.',
+                title: 'Error',
                 text: this.props.UserRegistrationStore.errorMessage,
                 type: 'error',
                 confirmButtonText: 'Close',
@@ -81,6 +81,36 @@ class ResetPassword extends React.Component {
             })
             .then(() => {
                 return this.closeErrorDimmer();
+            });
+        } else if (this.props.ResetPasswordStore.componentStatus === 'apikey') {
+            swal({
+                title: 'Error',
+                text: 'There was a special error. The page will now be reloaded.',
+                type: 'error',
+                confirmButtonText: 'Reload page',
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+            .then(() => {
+                location.reload();
+                return true;
+            });
+        } else if (this.props.ResetPasswordStore.componentStatus === 'email') {
+            swal({
+                title: 'Information',
+                text: 'This email address is unknown. Please check the spelling.',
+                type: 'warning',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'ui orange button',
+                allowEscapeKey: true,
+                allowOutsideClick: true,
+                buttonsStyling: false
+            })
+            .then(() => {
+                location.reload();
+                return true;
             });
         }
     }

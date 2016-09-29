@@ -39,6 +39,18 @@ class ResetPasswordStore extends BaseStore {
         return message2;
     }
 
+    wrongAPIKeyUsed() {
+        this.errorMessage = '';
+        this.componentStatus = 'apikey';
+        this.emitChange();
+    }
+
+    unknownEMail(err) {
+        this.errorMessage = '';
+        this.componentStatus = 'email';
+        this.emitChange();
+    }
+
     getState() {
         return {
             componentStatus: this.componentStatus,
@@ -61,7 +73,9 @@ ResetPasswordStore.handlers = {
     'RESET_PASSWORD_SUCCESS': 'handleSuccess',
     'RESET_RESET_PASSWORD': 'reset',
     //error handling
-    'RESET_PASSWORD_FAILURE': 'handleError'
+    'RESET_PASSWORD_FAILURE': 'handleError',
+    'RESET_PASSWORD_WRONG_APIKEY': 'wrongAPIKeyUsed',
+    'RESET_PASSWORD_UNKNOWN_EMAIL': 'unknownEMail'
 };
 
 export default ResetPasswordStore;
