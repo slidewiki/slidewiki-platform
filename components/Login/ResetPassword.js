@@ -55,17 +55,33 @@ class ResetPassword extends React.Component {
 
     componentDidUpdate() {
         if (this.props.ResetPasswordStore.componentStatus === 'pending') {
-            $('.dimmer.success').dimmer({//Show signup success message
-                closable: false
+            swal({
+                title: 'Success!',
+                text: 'Your password is now an automated created one. Please check your inbox.',
+                type: 'success',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'positive ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
             })
-                .dimmer('toggle');
-            ReactDOM.findDOMNode(this.refs.successCloseButton).focus();
+            .then(() => {
+                return this.goHome();
+            });
         } else if (this.props.ResetPasswordStore.componentStatus === 'error') {
-            $('.dimmer.error').dimmer({//Show error message
-                closable: false
+            swal({
+                title: 'Error! Please try again later.',
+                text: this.props.UserRegistrationStore.errorMessage,
+                type: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
             })
-                .dimmer('toggle');
-            ReactDOM.findDOMNode(this.refs.errorCloseButton).focus();
+            .then(() => {
+                return this.closeErrorDimmer();
+            });
         }
     }
 
@@ -103,49 +119,6 @@ class ResetPassword extends React.Component {
     }
 
     render() {
-        const successMessage1 = 'Your password is now an automated created one.';
-        const successMessage2 = 'Please check your inbox.';
-
-        let dimmerMessageSuccess = (// Success message
-            <div className="ui page dimmer success">
-                <div className="content">
-                    <div className="center">
-                        <h2 className="ui inverted icon header">
-                            <i className="icon circular inverted blue mail outline"></i>
-                            Success!
-                        </h2>
-                        <br/>
-                        {successMessage1}
-                        <br/>
-                        {successMessage2}
-                        <br/><br/>
-                        <button type="button" className="ui blue button" onClick={this.goHome.bind(this)} ref="successCloseButton" >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-
-        let dimmerMessageError = (// Error message
-          <div className="ui page dimmer error">
-              <div className="content">
-                  <div className="center">
-                      <h2 className="ui inverted icon header">
-                          <i className="icon warning circle inverted red"></i>
-                          Error! Please try again later.
-                      </h2>
-                      <br/>
-                      {this.props.ResetPasswordStore.errorMessage}
-                      <br/><br/>
-                      <button type="button" className="ui blue button" onClick={this.closeErrorDimmer.bind(this)} ref="errorCloseButton" >
-                          Close
-                      </button>
-                  </div>
-              </div>
-          </div>
-        );
-
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
         const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'; // Public reCAPTCHA key
