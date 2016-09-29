@@ -1,6 +1,6 @@
 slidewikiplatform:
   image: slidewiki/platform
-  restart: restart: on-failure:5
+  restart: on-failure:5
   expose:
     - "80"
   environment:
@@ -14,4 +14,5 @@ slidewikiplatform:
     - SERVICE_URL_IMPORT=http://importservice.experimental.slidewiki.org
     - SERVICE_URL_FILE=http://fileservice.experimental.slidewiki.org
     - SERVICE_URL_SEARCH=http://searchservice.experimental.slidewiki.org
+    - SERVICE_URL_IMAGE=http://imageservice.experimental.slidewiki.org
     - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org
