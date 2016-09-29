@@ -1,6 +1,6 @@
 slidewikiplatform:
   image: slidewiki/platform
-  restart: restart: on-failure:5
+  restart: on-failure:5
   expose:
     - "80"
   environment:
