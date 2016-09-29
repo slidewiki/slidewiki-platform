@@ -39,25 +39,30 @@ export default {
             // let notifications = mockupNotifications;
             let subscriptionsString = '';
             // callback(null, {notifications: notifications, subscriptions: subscriptions});
-            mockupSubscriptions.forEach((subscription) => {
-                // const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
-                const id = subscription.id;
-                switch (subscription.type) {
-                    case 'user':
-                        subscriptionsString += '/u' + id;
-                        break;
-                    case 'slide':
-                        subscriptionsString += '/s' + id;
-                        break;
-                    case 'deck':
-                        subscriptionsString += '/d' + id;
-                        break;
-                    default:
-                }
-            });
+            // mockupSubscriptions.forEach((subscription) => {
+            //     // const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
+            //     const id = subscription.id;
+            //     switch (subscription.type) {
+            //         case 'user':
+            //             subscriptionsString += '/u' + id;
+            //             break;
+            //         case 'slide':
+            //             subscriptionsString += '/s' + id;
+            //             break;
+            //         case 'deck':
+            //             subscriptionsString += '/d' + id;
+            //             break;
+            //         default:
+            //     }
+            // });
+
+            subscriptionsString += '/o' + uid;
+
+              console.log(Microservices.activities.uri + '/activities/subscribed' + subscriptionsString);
 
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
                 let notifications = JSON.parse(res);
+                console.log(notifications);
                 notifications.forEach((notification) => adjustIDs(notification));//TODO solve these ID issues
 
                 callback(null, {notifications: notifications, subscriptions: mockupSubscriptions});

@@ -85,6 +85,45 @@ class UserNotificationsPanel extends React.Component {
             );
         };
         // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
+        const filters = (
+            <div className="five wide column">
+                <div className="ui basic segment">
+                    <h4 className="ui header">Show notifications for:</h4>
+                    <label>Users:</label>
+                    <div className="subscriptions">
+                        <div ref="subscriptionslist">
+                            <div className="ui relaxed list">
+                                {userSubscriptionList}
+                            </div>
+                         </div>
+                    </div>
+                    <label>Slides:</label>
+                    <div className="subscriptions">
+                        <div ref="subscriptionslist">
+                            <div className="ui relaxed list">
+                                {slideSubscriptionList}
+                            </div>
+                         </div>
+                    </div>
+                    <label>Decks:</label>
+                    <div className="subscriptions">
+                        <div ref="subscriptionslist">
+                            <div className="ui relaxed list">
+                                {deckSubscriptionList}
+                            </div>
+                         </div>
+                    </div>
+                    <h4 className="ui header">Show activity types:</h4>
+                    <div className="activityTypes">
+                        <div ref="activityTypeList">
+                            <div className="ui relaxed list">
+                                {activityTypeList}
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        );
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui top attached secondary pointing menu">
@@ -100,46 +139,15 @@ class UserNotificationsPanel extends React.Component {
                 </div>
 
                 <div className="ui grid">
-                    <div className="five wide column">
-                        <div className="ui basic segment">
-                            <h4 className="ui header">Show notifications for:</h4>
-                            <label>Users:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {userSubscriptionList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Slides:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {slideSubscriptionList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Decks:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {deckSubscriptionList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <h4 className="ui header">Show activity types:</h4>
-                            <div className="activityTypes">
-                                <div ref="activityTypeList">
-                                    <div className="ui relaxed list">
-                                        {activityTypeList}
-                                    </div>
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*filters*/}
                     <div className="ten wide column">
                         <div className="ui basic segment">
-                            <UserNotificationsList items={notifications} selector={selector} />
+                            {(notifications.length === 0)
+                                ?
+                                <div>There are currently no notifications.</div>
+                                :
+                                <UserNotificationsList items={notifications} selector={selector} />
+                            }
                         </div>
                     </div>
                 </div>
