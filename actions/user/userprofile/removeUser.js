@@ -1,7 +1,8 @@
 import { userSignOut } from '../userSignOut.js';
 import { navigateAction } from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import { notFoundError, methodNotAllowedError } from '../../loadErrors';
+//import notFoundError from '../../error/notFoundError';
+import methodNotAllowedError from '../../error/methodNotAllowedError';
 
 export default function removeUser(context, payload, done) {
     payload.params = {};
@@ -12,7 +13,7 @@ export default function removeUser(context, payload, done) {
             if (err.statusCode === 404) {
                 context.dispatch('DELETE_USER_FAILURE', err);
             } else if (err.statusCode === 401) {
-                context.executeAction(methodNotAllowedError, {}).catch(() => { done(err); });
+                context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
                 context.dispatch('DELETE_USER_FAILURE', err);

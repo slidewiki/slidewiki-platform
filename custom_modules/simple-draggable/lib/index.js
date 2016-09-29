@@ -99,6 +99,7 @@
                     //let div = document.createElement("div");
                     cEl.dragdiv = document.createElement("div");
                     cEl.dragdiv.style.position = "absolute";
+                    cEl.dragdiv.style.zIndex = "90000";
                     //div.style.top = cEl.style.top - 20 ;
                     //div.style.top = "-20" ;
                     //div.style.left = cEl.style.left - 20 ;
@@ -112,6 +113,7 @@
 
                     let imgdrag = document.createElement("IMG");
                     imgdrag.style.position = "absolute";
+                    imgdrag.style.zIndex = "90000";
                     imgdrag.src = '../../../../../assets/images/cursor_drag_arrow.png';
                     imgdrag.disabled = true;
                     imgdrag.draggable = false;
@@ -140,6 +142,9 @@
                     //drag mousehandlers
                     //KLAAS ADAPT -> applies to dragdiv in top-left corner only
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
+
+                        //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex + 90000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -170,6 +175,9 @@
                     cEl.dragdiv.addEventListener("mouseup", function (e) {
                         //alert('test');
 
+                        //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
 
@@ -198,6 +206,7 @@
                     cEl.resizediv.style.position = "absolute";
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
+                    imgresize.style.zIndex = "90000";
                     imgresize.src = '../../../../../assets/images/cursor_resize_arrow.png';
                     imgresize.disabled = true;
                     imgresize.draggable = false;
@@ -217,6 +226,9 @@
 
                     //resize mousehandlers
                     cEl.resizediv.addEventListener("mousedown", function (e) {
+
+                        //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex + 90000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -252,6 +264,9 @@
                     //KLAAS ADAPT -> apply to div in top-left corner only
                     cEl.resizediv.addEventListener("mouseup", function (e) {
                         //alert('test');
+
+                        //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
+                        cEl.style.zIndex = cEl.style.zIndex - 90000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
