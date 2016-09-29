@@ -5,13 +5,13 @@ import {connectToStores} from 'fluxible-addons-react';
 import ContentUtil from '../util/ContentUtil';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
-import RevisioningStore from '../../../../stores/RevisioningStore';
-import needsNewRevisionCheck from '../../../../actions/revisioning/needsNewRevisionCheck';
-import handleRevisionChanges from '../../../../actions/revisioning/handleRevisionChanges';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
 
 class ContentActionsHeader extends React.Component {
+    componentDidUpdate(){
+
+    }
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "slide", id: 0}
@@ -26,32 +26,9 @@ class ContentActionsHeader extends React.Component {
         if (this.props.UserProfileStore.username === '') {
             $('.ui.login.modal').modal('toggle');
         }else{
-            //user is logged in, check the conditions
-            if(selector.stype === 'deck'){
-                //deck revisioning is handled in deck edit
-                this.context.executeAction(navigateAction, {
-                    url: nodeURL
-                });
-            }else{
-                //we need to check the revisioning conditions
-                const spath = selector.spath;
-                let tmp = spath.split(';');
-                let targetDeckID;
-                if(tmp.length > 1){
-                    targetDeckID = tmp[tmp.length - 1];
-                    tmp = targetDeckID.split(':');
-                    targetDeckID = tmp[0];
-                }else{
-                    //target is root deck
-                    targetDeckID = selector.id;
-                }
-                const userID =  this.props.UserProfileStore.userid;
-                //check the revisioning condition
-                this.context.executeAction(needsNewRevisionCheck, {
-                    deckID: targetDeckID,
-                    userID: userID
-                });
-            }
+            this.context.executeAction(navigateAction, {
+                url: nodeURL
+            });
         }
     }
     render() {
@@ -122,11 +99,10 @@ ContentActionsHeader.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, RevisioningStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState(),
-        RevisioningStore: context.getStore(RevisioningStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default ContentActionsHeader;

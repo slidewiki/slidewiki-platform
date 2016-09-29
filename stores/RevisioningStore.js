@@ -3,7 +3,7 @@ import {BaseStore} from 'fluxible/addons';
 class RevisioningStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.status = {};
+        this.status = {needs_revision: false, target_deck: 0, user: 0};
         this.result = {};
     }
     updateStatus(payload) {
