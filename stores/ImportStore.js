@@ -65,7 +65,7 @@ class ImportStore extends BaseStore {
         console.log('ImportStore: storeFile()', payload);
         this.file = payload.file;
         this.base64 = payload.base64;
-        this.filename = encodeURI(this.file.name);
+        this.filename = encodeURIComponent(this.file.name).replace(/%20/g, ' ');
         this.fileReadyForUpload = true;
         this.emitChange();
     }
