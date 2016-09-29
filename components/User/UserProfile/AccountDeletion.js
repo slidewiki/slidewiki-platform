@@ -8,12 +8,11 @@ class AccountDeletion extends React.Component {
 
     handleAccountDelete(e) {
         this.context.executeAction(removeUser, {});
-        $('.ui.modal').modal('hide');
+        $('.ui.modal').not('.login').modal('hide');
     }
 
     showConfirmDialog(e) {
-        $('.ui.modal').modal('show');
-        //this.refs.modal1.modal('show'); // - not working!
+        $('.ui.modal').not('.login').modal('show');
     }
 
     render() {
