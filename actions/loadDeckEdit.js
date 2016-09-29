@@ -1,9 +1,10 @@
 import { shortTitle } from '../configs/general';
-import { slideIdTypeError } from './loadErrors';
+import slideIdTypeError from './error/slideIdTypeError';
+
 
 export default function loadDeckEdit(context, payload, done) {
     if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
@@ -12,9 +13,6 @@ export default function loadDeckEdit(context, payload, done) {
             context.dispatch('LOAD_DECK_PROPS_FAILURE', err);
         } else {
             context.dispatch('LOAD_DECK_PROPS_SUCCESS', res);
-
-            //TODO: do not allow editing title when on the edit slide mode
-            //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
         let pageTitle = shortTitle + ' | Deck Edit | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {

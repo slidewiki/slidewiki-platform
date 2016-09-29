@@ -7,36 +7,31 @@ import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
+let classNames = require('classnames');
 
-const customStyles = {
-    content : {
-        top                   : '15%',
-        left                  : '25%',
-        right                 : '25%',
-        bottom                : 'auto'
-        // marginRight           : '-50%'
-
-    }
+const headerStyle = {
+    'textAlign': 'center'
+};
+const modalStyle = {
+    top: '15%'
 };
 
 class LoginModal extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {openModal: false};
         this.handleLoginButton = this.handleLoginButton.bind(this);
-        this.handleExitButton = this.handleExitButton.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState) {//Workaround to set focus
-        if (prevState.openModal !== this.state.openModal && this.state.openModal === true) {
-            setTimeout(() => {
-                ReactDOM.findDOMNode(this.refs.email1).focus();
-            }, 0);
-        }
+    isModalShown() {
+        const classes = $('.ui.login.modal').attr('class');
+        return classes.indexOf('hidden') === -1;
     }
 
-    handleLoginButton(){
-        this.setState({openModal: true});
+    handleLoginButton() {
+        $('.ui.login.modal').modal('toggle');
+        setTimeout(() => {
+            ReactDOM.findDOMNode(this.refs.email1).focus();
+        }, 0);
     }
 
     signin(e) {
@@ -57,17 +52,16 @@ class LoginModal extends React.Component {
         return false;
     }
 
-    handleExitButton(){
-        this.setState({openModal: false});
-    }
-
+/*
     componentWillReceiveProps(nextProps) {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
-        } else if (nextProps.UserProfileStore.userid !== ''){
-            this.handleExitButton();
+        }
+        if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
+            $('.ui.login.modal').modal('toggle');
         }
     }
+    */
 
     componentDidMount(){
         if(typeof window !== 'undefined') {
@@ -77,19 +71,11 @@ class LoginModal extends React.Component {
 
     handleSignupClick(e) {
         e.preventDefault();
-        this.setState({openModal: false});
+        $('.ui.login.modal').modal('toggle');
         this.context.executeAction(navigateAction, {
             url: '/signup'
         });
         // return false;
-    }
-
-    handleCannotAccessAccountClick(e) {
-        e.preventDefault();
-        this.setState({openModal: false});
-        this.context.executeAction(navigateAction, {
-            url: '/resetpassword'
-        });
     }
 
     render() {
@@ -104,41 +90,49 @@ class LoginModal extends React.Component {
         }
 
         return(
-          <div className="item right" >
-            {loginButton}
-            <Modal id='signinModal' isOpen={this.state.openModal}  style={customStyles}>
-              <div className="ui container">
-                  <div className="ui right floated">
-                    <button type="cancel" className="ui basic button" onClick={this.handleExitButton}>
-                      <i className="remove icon"/>Close
-                    </button>
-                  </div>
-                  <div className="ui blue padded center aligned segment">
-                    <h1 className="ui dividing header">Sign In</h1>
-                    <form className="ui form signin" onSubmit={this.signin.bind(this)}>
-                      <div className="ui five wide icon input field">
-                        <div><label htmlFor="username" hidden>E-Mail</label></div>
-                        <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
-
-                      </div>
-                        <br/>
-                      <div className="ui five wide icon input field">
-                        <div><label htmlFor="password1" hidden>Password</label></div>
-                        <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0" aria-required="true" required/><i className="lock icon"/>
-                      </div>
-                      <br/>
-                      <div className="ui error message"/>
-                      <button type="submit" className="ui blue labeled submit icon button"><i className="icon sign in"/> Sign In</button>
-                    </form>
-                    <br/>
-                    <div className="ui floated right">
-                        <a href="#" onClick={this.handleCannotAccessAccountClick.bind(this)}>I can not access my account</a>
-                        <br/><br/>
-                        <a href="#" onClick={this.handleSignupClick.bind(this)}>Don't have an account? Sign up here.</a>
-                    </div>
-                  </div>
+          <div>
+            <div className="item right" >
+              {loginButton}
+            </div>
+            <div className="ui login modal" id='signinModal' style={modalStyle}>
+              <div className="header">
+                  <h1 style={headerStyle}>Sign In</h1>
               </div>
-            </Modal>
+              <div className="content">
+                <div className="ui container">
+
+                    <div className="ui blue padded center aligned segment">
+                      <form className="ui form signin">
+                        <div className="ui five wide icon input field">
+                          <div><label htmlFor="username" hidden>E-Mail</label></div>
+                          <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+
+                        </div>
+                          <br/>
+                        <div className="ui five wide icon input field">
+                          <div><label htmlFor="password1" hidden>Password</label></div>
+                          <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0" aria-required="true" required/><i className="lock icon"/>
+                        </div>
+                        <br/>
+                        <div className="ui error message"/>
+
+                      </form>
+                      <br/>
+                      <div className="ui floated right">
+                          <a href="">I can not access my account</a>
+                          <br/><br/>
+                          <a href="#" onClick={this.handleSignupClick.bind(this)}>Don&apos;t have an account? Sign up here.</a>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div className="actions">
+                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin.bind(this)}><i className="icon sign in"/> Sign In</button>
+                <button type="cancel" className="ui cancel button">
+                  <i className="remove icon"/>Close
+                </button>
+              </div>
+            </div>
           </div>
       );
     }

@@ -1,4 +1,5 @@
 let webpack = require('webpack');
+
 let path = require('path');
 let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 let Visualizer = require('webpack-visualizer-plugin');
@@ -12,7 +13,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal'
         ]
     },
     output: {
@@ -32,7 +33,7 @@ let webpackConfig = {
             { test: /\.json$/, loader: 'json-loader'},
             { test: /\.css$/, loader: 'style-loader!css-loader'},
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}            
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
         ]
     },
     node: {
@@ -42,9 +43,13 @@ let webpackConfig = {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('production'),
-                BROWSER: JSON.stringify(true)
+                // Mainly used to require CSS files with webpack, which can happen only on browser
+                // Used as `if (process.env.BROWSER)...`
+                BROWSER: JSON.stringify(true),
+
             }
         }),
+
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
             compress: {

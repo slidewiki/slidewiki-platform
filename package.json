@@ -47,6 +47,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "body-parser": "^1.15.2",
+    "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "cookie": "^0.3.1",
@@ -67,6 +68,7 @@
     "identicons-react": "^0.1.0",
     "immutable": "^3.8.1",
     "install": "^0.8.1",
+    "iso-639-1": "^1.2.1",
     "js-cookie": "^2.1.2",
     "js-sha512": "^0.2.2",
     "lodash": "^4.15.0",
@@ -81,6 +83,7 @@
     "react-hotkeys": "^0.9.0",
     "react-list": "^0.8.0",
     "react-modal": "^1.4.0",
+    "react-resize-aware": "^1.0.11",
     "request": "^2.74.0",
     "request-promise": "^4.1.1",
     "reveal": "0.0.4",

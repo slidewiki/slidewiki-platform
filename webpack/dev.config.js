@@ -1,5 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
+//let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
@@ -12,7 +13,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router'
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal'
         ]
     },
     output: {
@@ -52,7 +53,8 @@ let webpackConfig = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                 BROWSER: JSON.stringify(true)
             }
-        })
+        }),
+
     ],
     devtool: 'eval'
 };

@@ -4,7 +4,7 @@ import { shortTitle, fullTitle } from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
-import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
+// import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -15,16 +15,18 @@ import loadActivities from '../actions/activityfeed/loadActivities';
 import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
-import loadContentHistory from '../actions/loadContentHistory';
+import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';
-import loadContentDiscussion from '../actions/activityfeed/contentdiscussion/loadContentDiscussion';
+import loadContentDiscussion from '../actions/contentdiscussion/loadContentDiscussion';
 import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import async from 'async';
+import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -101,16 +103,28 @@ export default {
         title: 'SlideWiki -- Your profile',
         handler: require('../components/User/UserProfile/UserProfile'),
         action: (context, payload, done) => {
-            context.executeAction(fetchUser, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(fetchUser, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
+                }
+            ],
+          (err, result) => {
+              if(err) console.log(err);
+              done();
+          });
         }
     },
 //-----------------------------------Search routes------------------------------
-    searchresults: {
-        path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?',
+    search: {
+        // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
+        path: '/search/:queryparams?',
         method: 'get',
         page: 'search',
         title: 'SlideWiki -- Search',
-        handler: require('../components/Search/SearchResultsPanel/SearchPanel'),
+        handler: require('../components/Search/SearchPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadSearchResults, payload, done);
         }
@@ -267,14 +281,33 @@ export default {
         }
     },
     presentation: {
+        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeckTree, payload, done);
-            //context.executeAction(loadPresentation, payload, done);
-            context.executeAction(loadDeck, payload, done);
+            context.executeAction(loadPresentation, payload, done);
+        }
+    },
+    presentationPrint: {
+        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
+        path: '/presentation/:id/Print',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadPresentation, payload, done);
+        }
+    },
+    presentationSlide: {
+        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
+        path: '/presentation/:id/*/:sid?/',
+        method: 'get',
+        page: 'presentation',
+        handler: require('../components/Deck/Presentation/Presentation'),
+        action: (context, payload, done) => {
+            context.executeAction(loadPresentation, payload, done);
         }
     },
     importfile: {
@@ -301,6 +334,7 @@ export default {
             context.executeAction(loadAddDeck, null, done);
         }
     },
+    /* This should be the last route in routes.js */
     notfound: {
         path: '*',
         method: 'get',
@@ -309,4 +343,5 @@ export default {
             context.executeAction(loadNotFound, payload, done);
         }
     }
+    /***** DO NOT ADD ROUTES BELOW THIS LINE. *****/
 };

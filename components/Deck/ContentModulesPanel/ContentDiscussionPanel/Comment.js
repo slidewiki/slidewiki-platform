@@ -1,9 +1,9 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import invertReplyBoxFlag from '../../../../actions/activityfeed/contentdiscussion/invertReplyBoxFlag';
+import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
-import addReply from '../../../../actions/activityfeed/contentdiscussion/addReply';
+import addReply from '../../../../actions/contentdiscussion/addReply';
 
 class Comment extends React.Component {
     handleReply() {
@@ -30,10 +30,11 @@ class Comment extends React.Component {
                 <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
             </div>
         );
+        const replyTitle = ((comment.title.startsWith('re: ')) ? '' :  're: ') + comment.title;
         const replyBox = (
             <form className="ui reply form">
                 <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title" required/>
+                    <input type="text" ref="title" placeholder="Title" value={replyTitle} required/>
                 </div>
                 <div className="field">
                     <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>

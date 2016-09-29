@@ -120,38 +120,58 @@ class UserRegistration extends React.Component {
 
     componentDidUpdate() {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
-            $('.dimmer.success').dimmer({//Show signup success message
-                closable: false
+            swal({
+                title: 'Thanks for signing up!',
+                text: 'Thank you. You have successfully registered. Please sign in with your new credentials.',
+                type: 'success',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'positive ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
             })
-                .dimmer('toggle');
-            ReactDOM.findDOMNode(this.refs.successCloseButton).focus();
+            .then(() => {
+                return this.goHome();
+            });
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
-            $('.dimmer.error').dimmer({//Show error message
-                closable: false
+            swal({
+                title: 'Error!',
+                text: this.props.UserRegistrationStore.errorMessage,
+                type: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
             })
-                .dimmer('toggle');
-            ReactDOM.findDOMNode(this.refs.errorCloseButton).focus();
+            .then(() => {
+                return this.closeErrorDimmer();
+            });
         }
     }
 
     goHome() {
+        console.log('goHome called', this.context);
         this.context.executeAction(resetUserRegistrationStatus, { });
         this.context.executeAction(navigateAction, {//go to home page after registration
             url: '/'
         });
+        return true;
     }
 
     closeErrorDimmer() {
         this.refs.recaptcha.reset();// Reset recaptcha
         this.state.grecaptcharesponse = undefined;
         this.context.executeAction(resetUserRegistrationStatus, { });
-        $('.dimmer.error') //Hide error message
-            .dimmer('toggle');
+        return true;
     }
 
     handleSignUp(e) {
         e.preventDefault();
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
         this.context.executeAction(userSignUp, {
@@ -193,46 +213,6 @@ class UserRegistration extends React.Component {
         const successMessage1 = 'Thank you. You have successfully registered.';
         const successMessage2 = 'Please sign in with your new credentials.';
 
-        let dimmerMessageSuccess = (// Success message
-            <div className="ui page dimmer success">
-                <div className="content">
-                    <div className="center">
-                        <h2 className="ui inverted icon header">
-                            <i className="icon circular inverted blue mail outline"></i>
-                            Thanks for signing up!
-                        </h2>
-                        <br/>
-                        {successMessage1}
-                        <br/>
-                        {successMessage2}
-                        <br/><br/>
-                        <button type="button" className="ui blue button" onClick={this.goHome.bind(this)} ref="successCloseButton" >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-
-        let dimmerMessageError = (// Error message
-          <div className="ui page dimmer error">
-              <div className="content">
-                  <div className="center">
-                      <h2 className="ui inverted icon header">
-                          <i className="icon warning circle inverted red"></i>
-                          Error!
-                      </h2>
-                      <br/>
-                      {this.props.UserRegistrationStore.errorMessage}
-                      <br/><br/>
-                      <button type="button" className="ui blue button" onClick={this.closeErrorDimmer.bind(this)} ref="errorCloseButton" >
-                          Close
-                      </button>
-                  </div>
-              </div>
-          </div>
-        );
-
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
         const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'; // Public reCAPTCHA key
@@ -269,9 +249,6 @@ class UserRegistration extends React.Component {
         }
         return (
             <div className="ui page centered grid" >
-                {dimmerMessageSuccess}
-                {dimmerMessageError}
-
                 <div className="eight wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>

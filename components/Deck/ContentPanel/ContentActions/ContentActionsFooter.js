@@ -6,6 +6,7 @@ import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
+
 class ContentActionsFooter extends React.Component {
     constructor(props) {
         super(props);
@@ -21,6 +22,20 @@ class ContentActionsFooter extends React.Component {
         this.state.expanded = 0;
         return false;
     }
+    getPresentationHref(){
+        let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
+        if(this.props.ContentStore.selector.stype === 'slide'){
+            // presLocation += this.props.ContentStore.selector.sid + '/';
+            presLocation += '#/slide-' + this.props.ContentStore.selector.sid
+        }
+        return presLocation;
+    }
+    handlePresentationClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getPresentationHref());
+        }
+    }
     render() {
         return (
             <div className="ui">
@@ -31,9 +46,13 @@ class ContentActionsFooter extends React.Component {
                     {this.props.ContentStore.selector.stype === 'slide' ? <SlideControl mode={this.props.ContentStore.mode}/> : ''}
                     <div className="right menu">
                         <div className="ui icon buttons large right floated">
-                            <button className="ui button">
-                                <i className="circle play large icon"></i>
-                            </button>
+
+                            <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
+                                <button className="ui button">
+                                    <i className="circle play large icon"></i>
+                                </button>
+                            </NavLink>
+
                             <button className="ui button">
                                 <i className="print large icon"></i>
                             </button>

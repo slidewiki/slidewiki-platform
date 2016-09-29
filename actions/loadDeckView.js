@@ -1,15 +1,17 @@
 import {shortTitle} from '../configs/general';
-import { slideIdTypeError } from './loadErrors';
+import slideIdTypeError from './error/slideIdTypeError';
+import serviceUnavailable from './error/serviceUnavailable';
 
 export default function loadDeckView(context, payload, done) {
     if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload).catch((err) => {done(err);});
+        context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('LOAD_DECK_CONTENT_FAILURE', err);
+            context.executeAction(serviceUnavailable, payload, done);
+            return;
         } else {
             context.dispatch('LOAD_DECK_CONTENT_SUCCESS', res);
         }

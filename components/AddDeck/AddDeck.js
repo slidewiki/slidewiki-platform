@@ -27,11 +27,11 @@ class AddDeck extends React.Component {
         let that = this;
         $('.ui.small.modal').modal({
             onDeny: function(){
-                console.log('modal cancelled');
+                //console.log('modal cancelled');
                 $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
             },
             onApprove : function(data) {
-                console.log('modal clicked on upload', data);
+                //console.log('modal clicked on upload', data);
                 that.handleFileSubmit();
                 $('.ui.small.modal').modal('hide');
             }
@@ -46,12 +46,12 @@ class AddDeck extends React.Component {
     }
 
     handleUploadModal(x) {
-        console.log('handleUploadModal: ', x);
+        //console.log('handleUploadModal: ', x);
 
         $('.ui.small.modal').modal('show');
     }
     handleAddDeck(x) {
-        console.log('handleAddDeck');
+        //console.log('handleAddDeck');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -60,10 +60,11 @@ class AddDeck extends React.Component {
         const language = this.refs.select_languages.value;
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
-        const licence = this.refs.select_licences.value;
-        const tags = this.refs.input_tags.value.split(', ');
+        const license = this.refs.select_licenses.value;
+        //const tags = this.refs.input_tags.value.split(', ');
+        const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
-        console.log(title, language, description, theme, licence, tags, acceptedConditions);
+        //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
         let everythingIsFine = true;
@@ -82,12 +83,12 @@ class AddDeck extends React.Component {
         else {
             wrongFields.language = false;
         }
-        if (licence === null || licence === undefined || licence.length < 2) {
-            wrongFields.licence = true;
+        if (license === null || license === undefined || license.length < 2) {
+            wrongFields.license = true;
             everythingIsFine = false;
         }
         else {
-            wrongFields.licence = false;
+            wrongFields.license = false;
         }
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
@@ -102,23 +103,23 @@ class AddDeck extends React.Component {
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
-            this.correctMetadata(title, language, description, theme, licence, tags, acceptedConditions);
+            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
         }
     }
-    correctMetadata(title, language, description, theme, licence, tags, acceptedConditions) {
+    correctMetadata(title, language, description, theme, license, tags, acceptedConditions) {
         this.context.executeAction(addDeckSaveDeck, {
             title: title,
             language: language,
             description: description,
             theme: theme,
-            licence: licence,
+            license: license,
             tags: tags,
             userid: this.props.UserProfileStore.userid,
             deckId: this.props.ImportStore.deckId
         });
     }
     handleCancel(x) {
-        console.log('handleCancel: ', x);
+        //console.log('handleCancel: ', x);
         //TODO: check if there already inputs which should be stored?
 
         this.context.executeAction(addDeckDeleteError, null);
@@ -128,14 +129,14 @@ class AddDeck extends React.Component {
         });
     }
     handleRedirect(){
-        console.log('AddDeck: handleRedirect()');
+        //console.log('AddDeck: handleRedirect()');
         this.context.executeAction(importFinished, {});  // destroy import components state
         this.context.executeAction(navigateAction, {
             url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
     updateProgressBar() {
-        console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
+        //console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = this.props.ImportStore.noOfSlides;
         let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
@@ -163,7 +164,7 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set error');
     }
     handleFileSubmit(){
-        console.log('handleFileSubmit()');
+        //console.log('handleFileSubmit()');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -203,10 +204,10 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.language
         });
-        let fieldClass_licence = classNames({
+        let fieldClass_license = classNames({
             'required': true,
             'field': true,
-            'error': this.props.AddDeckStore.wrongFields.licence
+            'error': this.props.AddDeckStore.wrongFields.license
         });
         let fieldClass_conditions = classNames({
             'required': true,
@@ -225,7 +226,7 @@ class AddDeck extends React.Component {
             'primary': true,
             'disabled': (this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100) || this.props.ImportStore.isUploaded,
             'button': true
-                                                                                                            
+
         });
 
         let filename = this.props.ImportStore.filename;
@@ -244,10 +245,10 @@ class AddDeck extends React.Component {
           <option value="DefaultTheme" >Default</option>
           <option value="DefaultTheme" >Default</option>
         </select>;
-        let licenceOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licences">
-          <option value="CC0" >CC0</option>
-          <option value="CC BY" >CC BY</option>
-          <option value="CC BY-SA" >CC BY-SA</option>
+        let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
+          <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+          <option value="CC BY" >Creative Commons Attribution</option>
+            <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
         let errorView = '';
@@ -258,7 +259,7 @@ class AddDeck extends React.Component {
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
-        let hint_licence = this.props.AddDeckStore.wrongFields.licence ? 'Please select a licence.' : undefined;
+        let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
@@ -269,11 +270,11 @@ class AddDeck extends React.Component {
                     this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
                 }, 100);
         }
-        
+
         return (
           <div className="ui container">
-          <h3>Create a deck </h3>
-              
+          <h3>Add a deck to SlideWiki</h3>
+
           <div className="ui grid">
               <div className="sixteen wide column">
                   <form className="ui form upload">
@@ -283,7 +284,7 @@ class AddDeck extends React.Component {
                               </label>
                               <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
                           </div>
-                          
+
                       <div className="field">
                           <label htmlFor="deck-description">Description</label>
                           <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
@@ -293,9 +294,9 @@ class AddDeck extends React.Component {
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
-                          <div className={fieldClass_licence} data-tooltip={hint_licence} ref="div_licences" >
+                          <div className={fieldClass_license} data-tooltip={hint_license} ref="div_licenses" >
                               <label htmlFor="license">License</label>
-                                  {licenceOptions}
+                                  {licenseOptions}
                           </div>
                           <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
                               <label htmlFor="language">
@@ -304,9 +305,9 @@ class AddDeck extends React.Component {
                               {languageOptions}
                           </div>
                       </div>
-                    
+
                         <div className="ui message" id="uploadDesc">
-                          <p>Select exisiting slides to your new deck. Currently only PowerPoint files are supported.</p>
+                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx files are supported.</p>
                           </div>
                      <div className="ui grid">
                          <div className="two column row">
@@ -327,17 +328,6 @@ class AddDeck extends React.Component {
                       </div>
                       <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
-                      <div className="field">
-                          <label htmlFor="tags">Add tags</label>
-                          <div className="ui left icon input">
-                              <i className="tags icon"></i>
-                          <input type="text" aria-labelledby="tags" id="tags" placeholder="Add tags" ref="input_tags" data-tooltip={hint_tags} />
-                          </div>
-                      </div>
-
-
-                <div className="two column row">
-                    <div className="column">
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
@@ -345,19 +335,14 @@ class AddDeck extends React.Component {
                                   I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
                               </label>
                           </div>
-                      </div>   
-                    </div>
-                  <div className="column">
-                      <div className="ui right floated buttons">
+                      </div>
+
+                      <div className="ui buttons">
                       <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                           Create deck
-                        </div>            
-                      <div className="ui secondary button" aria-label="cancel" role="button" tabIndex="0" onClick={this.handleCancel.bind(this)} >
-                          Cancel
                         </div>
                       </div>
-               </div>                   
-              </div>
+
                   </form>
               </div>
             </div>
