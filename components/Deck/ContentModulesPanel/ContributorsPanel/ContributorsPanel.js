@@ -41,13 +41,6 @@ class ContributorsPanel extends React.Component {
 	                    <div className="content">
 	                    	<ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>
 	                    </div>
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Translators
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList>
-	                    </div>
                     </div>
                 </div>
 

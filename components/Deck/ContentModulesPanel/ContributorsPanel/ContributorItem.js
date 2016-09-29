@@ -7,9 +7,9 @@ class ContributorItem extends React.Component {
     render() {
         return (
         	<div className="item">
-        		<a className="avatar inline-div padding15">
+        		{/*<a className="avatar inline-div padding15">
         			{(this.props.data.username !== '') ? <img src={avatarPath(this.props.data.avatar)}   height={30} width={30}></img> : <i className="ui icon user" />}
-        	    </a>
+        	    </a>*/}
 
         	    <div className="content inline-div">
         	        <div className="header">
