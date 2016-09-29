@@ -23,7 +23,10 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        const uid = args.uid;//TODO use uid when calling the service
+        const uid = args.uid;
+        if (uid === undefined) {
+            uid = 0;
+        }
         // let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
 
         // if (resource === 'notifications.count'){
