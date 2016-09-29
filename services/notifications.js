@@ -58,11 +58,8 @@ export default {
 
             subscriptionsString += '/o' + uid;
 
-              console.log(Microservices.activities.uri + '/activities/subscribed' + subscriptionsString);
-
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
                 let notifications = JSON.parse(res);
-                console.log(notifications);
                 notifications.forEach((notification) => adjustIDs(notification));//TODO solve these ID issues
 
                 callback(null, {notifications: notifications, subscriptions: mockupSubscriptions});

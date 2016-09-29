@@ -9,7 +9,7 @@ import loadNewUserNotifications from '../../../actions/user/notifications/loadNe
 class UserNotificationsBadge extends React.Component {
     componentDidMount() {
         this.context.executeAction(loadNewUserNotifications, {
-            uid: 1//TODO get real user_id
+            uid: this.props.UserProfileStore.userid
         });
         this.enablePopup();
     }
@@ -75,7 +75,7 @@ class UserNotificationsBadge extends React.Component {
             return (
               <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
                   <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
-                      <NavLink className="item right" routeName="notifications" navParams={{uid:1}} activeClass="active">
+                      <NavLink className="item right" routeName="notifications" navParams={{uid:this.props.UserProfileStore.userid}} activeClass="active">
                             <i className="large icons">
                             <i className="newspaper icon"></i>
                             {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}

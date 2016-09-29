@@ -1,6 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
+import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
@@ -9,7 +10,7 @@ import loadUserNotifications from '../../../actions/user/notifications/loadUserN
 class UserNotificationsPanel extends React.Component {
     componentDidMount() {
         this.context.executeAction(loadUserNotifications, {
-            uid: 1//TODO get real user_id
+            uid: this.props.UserProfileStore.userid
         });
     }
 
@@ -26,7 +27,7 @@ class UserNotificationsPanel extends React.Component {
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {
-            uid: 1,
+            uid: this.props.UserProfileStore.userid
         });
     }
 
@@ -159,9 +160,10 @@ class UserNotificationsPanel extends React.Component {
 UserNotificationsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-UserNotificationsPanel = connectToStores(UserNotificationsPanel, [UserNotificationsStore], (context, props) => {
+UserNotificationsPanel = connectToStores(UserNotificationsPanel, [UserNotificationsStore, UserProfileStore], (context, props) => {
     return {
-        UserNotificationsStore: context.getStore(UserNotificationsStore).getState()
+        UserNotificationsStore: context.getStore(UserNotificationsStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default UserNotificationsPanel;
