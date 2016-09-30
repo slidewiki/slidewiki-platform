@@ -85,11 +85,13 @@ class ContentActionsHeader extends React.Component {
                             <i className="red large trash icon"></i>
                         </a>
                     </button>
+                    {/*
                     <button className="item ui small basic right attached disabled button">
                         <a className="" title="Settings">
                             <i className="black large setting icon"></i>
                         </a>
                     </button>
+                    */}
                 </div>
             </div>
         );

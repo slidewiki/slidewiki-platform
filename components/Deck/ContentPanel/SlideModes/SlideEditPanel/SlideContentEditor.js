@@ -39,7 +39,16 @@ class SlideContentEditor extends React.Component {
         }
         else
         {
-            alert('saving changes');
+            swal({
+                title: 'Saving Content...',
+                text: '',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            });
             //remove editing borders:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
