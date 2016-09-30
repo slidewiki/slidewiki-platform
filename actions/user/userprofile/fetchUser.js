@@ -12,8 +12,10 @@ export default function fetchUser(context, payload, done) {
             if (err.statusCode === 404) {
                 if(payload.params.username === payload.params.loggedInUser)
                     context.deleteUser();
-                context.executeAction(notFoundError, {}, done);
-                return;
+                else {
+                    context.executeAction(notFoundError, {}, done);
+                    return;
+                }
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
