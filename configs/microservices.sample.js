@@ -33,6 +33,9 @@ export default {
         },
         'file': {
             uri: (!co.isEmpty(process.env.SERVICE_URL_FILE)) ? process.env.SERVICE_URL_FILE : 'http://fileservice.experimental.slidewiki.org'
+        },
+        'pdf': {
+            uri : (!co.isEmpty(process.env.SERVICE_URL_PDF)) ? process.env.SERVICE_URL_PDF : 'http://pdfservice.experimental.slidewiki.org'
         }
     }
 };
