@@ -99,7 +99,13 @@
                     //let div = document.createElement("div");
                     cEl.dragdiv = document.createElement("div");
                     cEl.dragdiv.style.position = "absolute";
-                    cEl.dragdiv.style.zIndex = "90000";
+                    cEl.dragdiv.style.zIndex = "9000000";
+                    cEl.dragdiv.id = "dragdiv";
+                    //cEl.dragdiv.class = "content";
+                    //cEl.dragdiv.style.width = "50px";
+                    //cEl.dragdiv.style.height = "50px";
+                    cEl.dragdiv.style.width = "50px";
+                    cEl.dragdiv.style.height = "50px";
                     //div.style.top = cEl.style.top - 20 ;
                     //div.style.top = "-20" ;
                     //div.style.left = cEl.style.left - 20 ;
@@ -112,12 +118,15 @@
                     */
 
                     let imgdrag = document.createElement("IMG");
-                    imgdrag.style.position = "absolute";
-                    imgdrag.style.zIndex = "90000";
+                    //imgdrag.style.position = "absolute";
+                    imgdrag.style.zIndex = "9000000";
                     imgdrag.src = '../../../../../assets/images/cursor_drag_arrow.png';
+                    imgdrag.id = "imgdrag";
+                    //imgdrag.style.width = "50px";
+                    //imgdrag.style.height = "50px";
                     imgdrag.disabled = true;
                     imgdrag.draggable = false;
-                    imgdrag.contentEditable = false;
+                    //imgdrag.contentEditable = false;
                     cEl.dragdiv.appendChild(imgdrag);
                     cEl.dragdiv.contentEditable = false;
 
@@ -144,7 +153,7 @@
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+                        cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -176,7 +185,7 @@
                         //alert('test');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+                        cEl.style.zIndex = cEl.style.zIndex - 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -204,20 +213,27 @@
                     //KLAAS -> for resize button
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
+                    cEl.resizediv.id = "resizediv";
+                    cEl.resizediv.style.width = "50px";
+                    cEl.resizediv.style.height = "50px";
+                    cEl.resizediv.style.zIndex = "9000000";
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
-                    imgresize.style.zIndex = "90000";
+                    imgresize.style.zIndex = "9000000";
                     imgresize.src = '../../../../../assets/images/cursor_resize_arrow.png';
                     imgresize.disabled = true;
                     imgresize.draggable = false;
                     imgresize.contentEditable = false;
+                    imgresize.id = "imgresize";
+                    //imgresize.style.width = "50px";
+                    //imgresize.style.height = "50px";
                     cEl.resizediv.appendChild(imgresize);
                     cEl.resizediv.contentEditable = false;
                     //cEl.insertAfter( cEl.resizediv, cEl.lastChild );
                     //position resize icon to bottom right of parent element
                     cEl.appendChild(cEl.resizediv);
                     //cEl.resizediv.style.left = parseInt(cEl.style.left) + parseInt(cEl.style.width) + "px";
-                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
                     //alert(cEl.resizediv.style);
                     //cEl.resizediv.style.right = (cEl.style.right) + "px";
@@ -228,7 +244,7 @@
                     cEl.resizediv.addEventListener("mousedown", function (e) {
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+                        cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -266,7 +282,7 @@
                         //alert('test');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+                        cEl.style.zIndex = cEl.style.zIndex - 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -336,7 +352,7 @@
                             }
                             //cEl.style.transform = 'scale(0.5)';
                             //move resize button with resized borders of element
-                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                             cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
                         }
                         else
