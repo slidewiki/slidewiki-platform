@@ -6,6 +6,7 @@ class ContentDiscussionStore extends BaseStore {
         this.discussion = [];
         this.selector = {};
         this.commentWithReplyBox = null;
+        this.showCommentBox = false;
     }
     static clearReplyFlags(comment) {
         comment.replyBoxOpened = false;
@@ -24,6 +25,7 @@ class ContentDiscussionStore extends BaseStore {
     }
     addComment(payload) {
         this.discussion.unshift(payload.comment);//add to the beginning
+        this.showCommentBox = false;
         this.emitChange();
     }
 
@@ -71,11 +73,16 @@ class ContentDiscussionStore extends BaseStore {
         }
         this.emitChange();
     }
+    invertCommentBoxFlag() {
+        this.showCommentBox = !this.showCommentBox;
+        this.emitChange();
+    }
     getState() {
         return {
             discussion: this.discussion,
             selector: this.selector,
-            commentWithReplyBox: this.commentWithReplyBox
+            commentWithReplyBox: this.commentWithReplyBox,
+            showCommentBox: this.showCommentBox
         };
     }
     dehydrate() {
@@ -85,6 +92,7 @@ class ContentDiscussionStore extends BaseStore {
         this.discussion = state.discussion;
         this.selector = state.selector;
         this.commentWithReplyBox = state.commentWithReplyBox;
+        this.showCommentBox = state.showCommentBox;
     }
 }
 
@@ -92,6 +100,7 @@ ContentDiscussionStore.storeName = 'ContentDiscussionStore';
 ContentDiscussionStore.handlers = {
     'LOAD_CONTENT_DISCUSSION_SUCCESS': 'updateDiscussion',
     'INVERT_REPLY_BOX_FLAG': 'invertReplyBoxFlag',
+    'INVERT_COMMENT_BOX_FLAG': 'invertCommentBoxFlag',
     'ADD_COMMENT_SUCCESS': 'addComment',
     'ADD_REPLY_SUCCESS': 'addReply'
 };
