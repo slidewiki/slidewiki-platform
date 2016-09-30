@@ -30,8 +30,9 @@ class Home extends React.Component {
                             <div>
                                 Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
                                 <div className="ui divided list animated ">
-                                    <a className="item" href="/deck/478">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
-                                    <a className="item" href="/deck/372">See documentation deck&raquo;</a>
+                                    <a className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
+                                    <a className="item" href="/deck/5">Deck created from scratch &raquo;</a>
+                                    <a className="item" href="/deck/372">TODO:See documentation deck&raquo;</a>
                                 </div>
                             </div>
                         </div>

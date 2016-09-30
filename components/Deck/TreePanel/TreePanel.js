@@ -51,6 +51,38 @@ class TreePanel extends React.Component {
     }
 
     handleFork() {
+        swal({
+            title: 'New Revision',
+            text: 'We are creating a new revision of the deck...',
+            type: 'success',
+            timer: 2000,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+            showConfirmButton: false
+        });
+        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+    }
+    handleTheme() {
+        swal({
+            title: 'Themes',
+            text: 'This feature is still under construction...',
+            type: 'info',
+            confirmButtonText: 'Confirmed',
+            confirmButtonClass: 'positive ui button',
+            buttonsStyling: false
+        });
+        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+    }
+    handleTranslation() {
+        swal({
+            title: 'Translation',
+            text: 'This feature is still under construction...',
+            type: 'info',
+            confirmButtonText: 'Confirmed',
+            confirmButtonClass: 'positive ui button',
+            buttonsStyling: false
+        });
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
 
@@ -75,13 +107,13 @@ class TreePanel extends React.Component {
         <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
             <div className="ui segments">
                 <div className="3 fluid ui icon large buttons">
-                    <div className="ui basic disabled attached button" title="Theme">
+                    <div className="ui basic disabled attached button" title="Theme" onClick={this.handleTheme.bind(this)}>
                         <i className="theme black icon"></i>
                     </div>
                     <div className="ui basic attached button" title="Fork" onClick={this.handleFork.bind(this)}>
                         <i className="fork black icon"></i>
                     </div>
-                    <div className="ui basic disabled attached button" title="Translate">
+                    <div className="ui basic disabled attached button" title="Translate" onClick={this.handleTranslation.bind(this)}>
                         <i className="translate black icon"></i>
                     </div>
                 </div>

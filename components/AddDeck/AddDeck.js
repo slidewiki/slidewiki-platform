@@ -138,12 +138,12 @@ class AddDeck extends React.Component {
     updateProgressBar() {
         //console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
-        let noOfSlides = this.props.ImportStore.noOfSlides;
-        let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
-        let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
-          (noOfSlides === 1) ? 'Converting file' :
-          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides :
-          (String(noOfSlides) === String(totalNoOfSlides)) ? 'Slides uploaded!' :
+        let noOfSlides = String(this.props.ImportStore.noOfSlides);
+        let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
+        let progressLabel = (totalNoOfSlides === '0') ? 'Uploading file' :
+          (noOfSlides === '1' && totalNoOfSlides !== '1') ? 'Converting file' :
+          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
+          (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
           'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(progressLabel);
     }
