@@ -10,9 +10,9 @@ class ContributorItem extends React.Component {
             <div className="image">
                 <UserPicture picture={ this.props.data.picture }
                              username={ this.props.data.username } link={ false }
-                             private={ false } width={ 30 } size={ 'mini' }/>
+                             private={ false } width={ 30 } size={ 'mini' } bordered={ false }/>
             </div>
-            <div className="content inline-div">
+            <div className="middle aligned content">
                 <div className="header">
                     <a href={'/user/' + this.props.data.id}>{this.props.data.username}</a>
                 </div>
