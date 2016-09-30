@@ -36,6 +36,7 @@ class ContentActionsFooter extends React.Component {
             window.open(this.getPresentationHref());
         }
     }
+    /*
     getPrintHref(){
         return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
     }
@@ -47,6 +48,7 @@ class ContentActionsFooter extends React.Component {
         }
 
     }
+    */
     render() {
         return (
             <div className="ui">
@@ -63,11 +65,9 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
-                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getPrintHref()} target="_blank">
-                                <button className="ui button">
-                                    <i className="print large icon"></i>
-                                </button>
-                            </NavLink>
+                            <button className="ui button">
+                                <i className="print large icon"></i>
+                            </button>
                             <button className="ui disabled button">
                                 <i className="download large icon"></i>
                             </button>
@@ -82,6 +82,12 @@ class ContentActionsFooter extends React.Component {
         );
     }
 }
+/*                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getPrintHref()} target="_blank">
+                                <button className="ui button">
+                                    <i className="print large icon"></i>
+                                </button>
+                            </NavLink>
+                            */
 
 ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
