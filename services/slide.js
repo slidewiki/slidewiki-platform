@@ -124,6 +124,7 @@ export default {
                     //TODO: speaker notes + in object model database in deck microservice
                     user: args.userid.toString(),
                     root_deck: args.root_deck,
+                    top_root_deck: selector.id,
                     parent_slide: {
                         id: content_id,
                         revision: content_id

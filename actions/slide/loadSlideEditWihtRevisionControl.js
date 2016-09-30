@@ -24,7 +24,7 @@ export default function loadSlideEditWihtRevisionControl(context, payload, done)
                 let tmp = spath.split(';');
                 let targetDeckID;
                 if(tmp.length > 1){
-                    targetDeckID = tmp[tmp.length - 1];
+                    targetDeckID = tmp[tmp.length - 2];
                     tmp = targetDeckID.split(':');
                     targetDeckID = tmp[0];
                 }else{
