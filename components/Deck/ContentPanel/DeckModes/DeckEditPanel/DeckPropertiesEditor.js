@@ -40,6 +40,16 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     handleSave(withNewRevision) {
+        swal({
+            title: 'Saving Deck Properties...',
+            text: '',
+            type: 'success',
+            timer: 1000,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+            showConfirmButton: false
+        });
         const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 

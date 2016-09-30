@@ -68,10 +68,10 @@ class ContentActionsFooter extends React.Component {
                                     <i className="print large icon"></i>
                                 </button>
                             </NavLink>
-                            <button className="ui button">
+                            <button className="ui disabled button">
                                 <i className="download large icon"></i>
                             </button>
-                            <button className="ui button">
+                            <button className="ui disabled button">
                                 <i className="share alternate large icon"></i>
                             </button>
                             {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>}
