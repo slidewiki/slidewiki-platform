@@ -10,6 +10,8 @@ export default function fetchUser(context, payload, done) {
     context.service.read('userProfile.read', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             if (err.statusCode === 404) {
+                if(payload.params.username === payload.params.loggedInUser)
+                    context.deleteUser();
                 context.executeAction(notFoundError, {}, done);
                 return;
             } else if (err.statusCode === 401) {
