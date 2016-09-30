@@ -8,15 +8,18 @@ class ContributorsPanel extends React.Component {
     componentDidMount() {
         this.enableAccordion();
     }
-    componentDidUpdate(){
+
+    componentDidUpdate() {
         this.refreshAccordion();
     }
+
     enableAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;
         $(accordionDIV).find('.ui.accordion').accordion({
             exclusive: false
         });
     }
+
     refreshAccordion(status) {
         let accordionDIV = this.refs.contributorsPanel;
         $(accordionDIV).find('.ui.accordion').accordion('refresh');
@@ -24,34 +27,28 @@ class ContributorsPanel extends React.Component {
 
     render() {
         return (
-            <div className="sw-contributors-panel" ref="contributorsPanel">
-                <div className="ui">
-                    <div className="ui styled accordion">
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Creator
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
-	                    </div>
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Contributors
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>
-	                    </div>
-	                    <div className="title" style={{color: '#4183C4'}}>
-	                      <i className="dropdown icon"></i>
-	                      Translators
-	                    </div>
-	                    <div className="content">
-	                    	<ContributorsList items={this.props.ContributorsStore.translators}></ContributorsList>
-	                    </div>
+        <div className="sw-contributors-panel" ref="contributorsPanel">
+            <div className="ui">
+                <div className="ui styled fluid accordion">
+                    <div className="title" style={{color: '#4183C4'}}>
+                        <i className="dropdown icon"></i>
+                        Creator
+                    </div>
+                    <div className="content">
+                        <ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
+                    </div>
+                    <div className="title" style={{color: '#4183C4'}}>
+                        <i className="dropdown icon"></i>
+                        Contributors
+                    </div>
+                    <div className="content">
+                        {this.props.ContributorsStore.contributors.length === 0 ?
+                        <div>There are no contributors for this {this.props.ContributorsStore.selector.stype}.</div> :
+                        <ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>}
                     </div>
                 </div>
-
-             </div>
+            </div>
+        </div>
         );
     }
 }

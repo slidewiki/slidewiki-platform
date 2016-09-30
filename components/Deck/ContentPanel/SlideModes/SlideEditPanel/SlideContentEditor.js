@@ -96,17 +96,7 @@ class SlideContentEditor extends React.Component {
         this.forceUpdate();
     }
     componentDidMount() {
-        if(process.env.BROWSER){
-            //require('../../../../../bower_components/reveal.js/css/reveal.css');
-            // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
-            // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
-            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
-            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
-            //require('../../SetupReveal.css');
-            /*add border*/
-            $(".pptx2html [style*='absolute']")
-            .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
-        }
+
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
@@ -160,29 +150,81 @@ class SlideContentEditor extends React.Component {
         }
         this.currentcontent = this.props.content;
 
-            ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
-                {
+        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
+        {
                 if(process.env.BROWSER){
-                    this.resize();
-
+                    //this.resize();
+                    //alert('resize');
+                    this.forceUpdate();
                 }
-                CKEDITOR.instances.inlineContent.on("instanceReady", function() {
-                if(process.env.BROWSER){
-                    this.resize();
+        });
 
-                    }
-                });
+        CKEDITOR.instances.inlineContent.on("instanceReady", function() {
+        //needs copy of resize function == cannot find this.something in this context.
+        //tried ReactDOM.findDOMNode(this.refs.inlineContent).addEventListener('instanceReady', (evt) =>
+        //but did not work
+        //if(process.env.BROWSER){
+            //this.resize();
+            //alert('ckeditor load');
+            //this.forceUpdate();
+            //this.resize();
+        //    }
+            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            {
+                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            }
+            let containerwidth = document.getElementById('container').offsetWidth;
+            let containerheight = document.getElementById('container').offsetHeight;
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            let pptxwidth = $('.pptx2html').width();
+            let pptxheight = $('.pptx2html').height();
+            if (containerwidth > pptxwidth)
+            {
+                this.scaleratio = pptxwidth / containerwidth;
+            } else {
+                this.scaleratio = containerwidth / pptxwidth;
+            }
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            require('../../../../../custom_modules/simple-draggable/lib/index.js');
 
+            SimpleDraggable(".pptx2html [style*='absolute']", {
+                onlyX: false
+              , onlyY: false
+              , ratio: this.scaleratio
             });
+        });
+
+
+
         //setTimeout(this.forceUpdate(), 500);
-        this.forceUpdate();
+        //alert('componentdidmount');
+        //this.forceUpdate();
 
     }
     componentDidUpdate() {
-        this.resize();
+        //alert('update');
+        if(process.env.BROWSER){
+            this.resize();
+        }
     }
     resize()
     {
+        //if(process.env.BROWSER){
+            //require('../../../../../bower_components/reveal.js/css/reveal.css');
+            // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
+            // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
+            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
+            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
+            //require('../../SetupReveal.css');
+            /*add border*/
+            //alert($(".pptx2html [style*='absolute']").css('borderStyle'));
+            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            {
+                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            }
+        //}
+
         let containerwidth = document.getElementById('container').offsetWidth;
         let containerheight = document.getElementById('container').offsetHeight;
         //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
@@ -214,8 +256,8 @@ class SlideContentEditor extends React.Component {
         //$(".pptx2html [style*='absolute']").addClass('schaal');
         //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
         //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-            if ($('.pptx2html').length)
-            {
+            //if ($('.pptx2html').length)
+            //{
                 //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                 //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
                 //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
@@ -226,12 +268,14 @@ class SlideContentEditor extends React.Component {
                 //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
                 //TODO: remove previous event listeners!
                 //, ratio: this.props.SlideEditStore.scaleratio
+                //alert('resized');
                 SimpleDraggable(".pptx2html [style*='absolute']", {
                     onlyX: false
                   , onlyY: false
                   , ratio: this.scaleratio
                 });
-            }
+                //alert('draggable');
+            //}
     }
 
     componentWillUnmount() {
@@ -250,10 +294,11 @@ class SlideContentEditor extends React.Component {
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
         const headerStyle = {
-            minWidth: '100%',
+            //minWidth: '100%',
+            height: '0px',
             overflowY: 'auto',
-            borderStyle: 'dashed dashed none dashed',
-            borderColor: '#e7e7e7',
+            //borderStyle: 'dashed dashed none dashed',
+            //borderColor: '#e7e7e7',
             position: 'relative'
         };
         const contentStyle = {

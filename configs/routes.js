@@ -292,6 +292,7 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    /*
     presentationPrint: {
         path: '/presentationprint/:id/*',
         method: 'get',
@@ -301,6 +302,7 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    */
     presentationSlide: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/*/:sid?/',
