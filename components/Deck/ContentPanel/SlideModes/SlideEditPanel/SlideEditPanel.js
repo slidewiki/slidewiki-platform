@@ -13,10 +13,13 @@ const ReactDOM = require('react-dom');
 
 class SlideEditPanel extends React.Component {
     render() {
-
         //------------------we need to check the revisioning conditions
-        //handle the notifications
+        //handle the notifications --> in process.env.BROWSER
+        let self = this;
+        let newRevDIV = '';
         if(this.props.RevisioningStore.status.needs_revision){
+            newRevDIV = <div className="ui info message"> <i className="ui info yellow circular icon"></i>Editing this slide will create a new revision of the container deck.</div>;
+            /*
             swal({
                 title: 'New Revision Alert',
                 text: 'This action will create new revisions for slide deck(s). Do you agree with creating the new revisions?',
@@ -30,11 +33,12 @@ class SlideEditPanel extends React.Component {
                 buttonsStyling: false
             }).then((accepted) => {
                 //create the revision
-                //this.context.dispatch('UPDATE_REVISIONING_STATUS', {status: {needs_revision: false}});
+                self.context.dispatch('UPDATE_REVISIONING_STATUS', {status: {needs_revision: false}});
             }, (reason) => {
                 //go back to view tab
-                //this.context.dispatch('UPDATE_REVISIONING_STATUS', {status: {needs_revision: false}});
+                self.context.dispatch('UPDATE_REVISIONING_STATUS', {status: {needs_revision: false}});
             });
+            */
         }
         //-------------------------------------------------------
         let editorcontent = '';
@@ -48,6 +52,7 @@ class SlideEditPanel extends React.Component {
         }
         return (
             <div ref="slideEditPanel" className="ui bottom attached segment">
+                {newRevDIV}
                 {editorcontent}
             </div>
         );

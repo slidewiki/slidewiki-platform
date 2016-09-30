@@ -1,4 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import RevisioningStore from '../../stores/RevisioningStore';
 import {shortTitle} from '../../configs/general';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
@@ -18,6 +19,13 @@ function findImmediateParentId(selector) {
 export default function saveSlide(context, payload, done) {
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
+    const revStoreStatus = context.getStore(RevisioningStore).getState();
+    //TODO: extend this
+    //for now it always refreshes the page when a new deck rev needs to be created
+    if(revStoreStatus.needs_revision){
+        //call hand change action and
+        //refresh the page
+    }
     //enrich with root deck id if deck to be revised is not uppermost deck
     let immediateParent = findImmediateParentId(payload.selector);
     payload.root_deck = immediateParent;
