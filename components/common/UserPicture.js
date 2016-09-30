@@ -14,9 +14,11 @@ import classNames from 'classnames';
  */
 
 class UserPicture extends React.Component {
-    componentDidMount() {}
+    componentDidMount() {
+    }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+    }
 
     render() {
         let classes = classNames({
@@ -32,13 +34,14 @@ class UserPicture extends React.Component {
             'centered': this.props.centered,
             'avatar': this.props.avatar,
             'rounded': true,
-            'bordered': true,
+            'bordered': this.props.bordered != null ? this.props.bordered : true, //bordered by default
             'image': true,
         });
         let picture = '';
-        if (this.props.picture === '')
-            picture = <div className={ classes }><Identicons id={ this.props.username } width={ this.props.width } size={ 5 }/></div>;
-        else if (this.props.picture.includes('gravatar')) {
+        if (this.props.picture === '') {
+            let styles = {width: this.props.width, height: this.props.width};
+            picture = <div className={ classes } style={ styles } height={ this.props.width }><Identicons id={ this.props.username } width={ this.props.width } size={ 5 }/></div>;
+        } else if (this.props.picture.includes('gravatar')) {
             if (this.props.private)
                 picture = <div data-tooltip="Not your picture? Please use your gravatar email." data-position="top center" data-inverted=""><img src={ this.props.picture } className={ classes }/></div>;
             else
@@ -46,7 +49,7 @@ class UserPicture extends React.Component {
         } else
             picture = <img src={ this.props.picture } className={ classes }/>;
         return (
-            <div > { this.props.link ? <a href={ '/user/' + username }>picture</a> : picture}</div>
+        <div > { this.props.link ? <a href={ '/user/' + username }>picture</a> : picture}</div>
         );
     }
 }
