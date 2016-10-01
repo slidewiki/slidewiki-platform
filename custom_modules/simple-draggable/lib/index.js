@@ -243,7 +243,18 @@
                         //cEl.parentNode.replaceChild(new_element, cEl);
                         if (confirm('Are you sure you want to delete this element?'))
                         {
-                            cEl.parentNode.removeChild(cEl);
+                            //alert(cEl.parentNode.className);
+                            if (cEl.parentNode.childNodes.length === 1)
+                            {
+                                //add a div element to prevent empty PPTX element which gets removed by CKeditor
+                                let emptydiv = document.createElement("div");
+                                //emptydiv.innerHTML = "";
+                                cEl.parentNode.appendChild(emptydiv);
+                            }
+                            //else{
+                                cEl.parentNode.removeChild(cEl);
+                            //}
+                            //cEl.remove();
                         }
                     });
 
