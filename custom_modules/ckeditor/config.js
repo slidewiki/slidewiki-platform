@@ -59,7 +59,9 @@ CKEDITOR.editorConfig = function( config ) {
     //config.floatSpacePinnedOffsetX = 1000;
     ///config.toolbarLocation = 'bottom';
 
-
+    //Klaas edit -> remove red magicline overlay for enter by mouse
+    config.removePlugins = 'magicline';
+    CKEDITOR.config.magicline_color = '#0000FF';    
 
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
