@@ -227,7 +227,7 @@
                     cEl.removediv.appendChild(imgremove);
                     cEl.removediv.contentEditable = false;
                     //assign to top right of parent div
-                    cEl.removediv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                    cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
                     //cEl.removediv.style.top = parseInt(cEl.style.height) - 50 + "px";
 
                     cEl.insertBefore( cEl.removediv, cEl.firstChild );
@@ -403,6 +403,8 @@
                             //move resize button with resized borders of element
                             cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                             cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+                            //move remove button with resized borders of absolute element
+                            cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
                         }
                         else
                         { return; }
