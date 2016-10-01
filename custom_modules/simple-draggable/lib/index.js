@@ -101,6 +101,7 @@
                     cEl.dragdiv.style.position = "absolute";
                     cEl.dragdiv.style.zIndex = "9000000";
                     cEl.dragdiv.id = "dragdiv";
+                    cEl.dragdiv.className = "dragdiv";
                     //cEl.dragdiv.class = "content";
                     //cEl.dragdiv.style.width = "50px";
                     //cEl.dragdiv.style.height = "50px";
@@ -210,10 +211,59 @@
                     });
                     */
 
+                    //KLAAS -> for remove button
+                    cEl.removediv = document.createElement("div");
+                    cEl.removediv.style.position = "absolute";
+                    cEl.removediv.style.zIndex = "9000000";
+                    cEl.removediv.id = "removediv";
+                    cEl.removediv.className = "removediv";
+                    cEl.removediv.style.width = "50px";
+                    cEl.removediv.style.height = "50px";
+
+                    let imgremove = document.createElement("IMG");
+                    imgremove.style.zIndex = "9000000";
+                    imgremove.src = '../../../../../assets/images/cursor_remove.png';
+                    imgremove.id = "imgremove";
+                    imgremove.disabled = true;
+                    imgremove.draggable = false;
+                    cEl.removediv.appendChild(imgremove);
+                    cEl.removediv.contentEditable = false;
+                    //assign to top right of parent div
+                    cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                    //cEl.removediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+
+                    cEl.insertBefore( cEl.removediv, cEl.firstChild );
+                    //cEl.appendChild(cEl.removediv);
+
+                    cEl.removediv.addEventListener("mousedown", function (e) {
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+                        //KLAAS NEW -> remove entire div
+                        //cEl.parentNode.replaceChild(new_element, cEl);
+                        if (confirm('Are you sure you want to delete this element?'))
+                        {
+                            //alert(cEl.parentNode.className);
+                            if (cEl.parentNode.childNodes.length === 1)
+                            {
+                                //add a div element to prevent empty PPTX element which gets removed by CKeditor
+                                let emptydiv = document.createElement("div");
+                                //emptydiv.innerHTML = "";
+                                cEl.parentNode.appendChild(emptydiv);
+                            }
+                            //else{
+                                cEl.parentNode.removeChild(cEl);
+                            //}
+                            //cEl.remove();
+                        }
+                    });
+
+
                     //KLAAS -> for resize button
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
                     cEl.resizediv.id = "resizediv";
+                    cEl.resizediv.className = "resizediv";
                     cEl.resizediv.style.width = "50px";
                     cEl.resizediv.style.height = "50px";
                     cEl.resizediv.style.zIndex = "9000000";
@@ -233,6 +283,7 @@
                     //position resize icon to bottom right of parent element
                     cEl.appendChild(cEl.resizediv);
                     //cEl.resizediv.style.left = parseInt(cEl.style.left) + parseInt(cEl.style.width) + "px";
+                    //assign to bottom right of parent div
                     cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
                     //alert(cEl.resizediv.style);
@@ -312,14 +363,22 @@
                             if (!options.onlyY) {
                                 // use variable scale factor calculated from slide edit component size
                                 //cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )  + "px";
-                                cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )  + "px";
+                                //TODO: also prevent drag outside right side of pptx2html window
+                                if ((cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio ) > 0)
+                                {
+                                    cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )  + "px";
+                                }
                                 //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                             }
 
                             // move only on x axis
                             if (!options.onlyX) {
                                 // use variable scale factor calculated from slide edit component size
-                                cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio )  + "px";
+                                //TODO: also prevent drag outside bottom of of pptx2html window
+                                if ((cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio ) > 0)
+                                {
+                                    cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio )  + "px";
+                                }
                             }
                         } else if (cEl._simpleDraggable.resize === true)
                         {
@@ -336,6 +395,8 @@
                                 //calculate width as well
                                 //cEl.style.left = (cEl._simpleDraggable.elPos.x) + "px";
                                 // use variable scale factor calculated from slide edit component size
+                                //TODO: prevent resize outside left and right of pptx2html window
+                                // compare mouse position?
                                 cEl.style.width = (cEl._simpleDraggable.elDim.w  + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )   + "px";
                             }
 
@@ -346,6 +407,8 @@
                                 //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                                 //console.log(cEl.style.height);
                                 // use variable scale factor calculated from slide edit component size
+                                //TODO: prevent resize outside top and bottom of pptx2html window
+                                // compare mouse position?
                                 cEl.style.height = ((cEl._simpleDraggable.elDim.h + (e.clientY - cEl._simpleDraggable.mousePos.y) / options.ratio )  ) + "px";
                                 //console.log(((cEl._simpleDraggable.elDim.w + e.clientY - cEl._simpleDraggable.mousePos.y) * 2) + "px");
                                 //console.log(cEl.style.height);
@@ -354,6 +417,8 @@
                             //move resize button with resized borders of element
                             cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                             cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+                            //move remove button with resized borders of absolute element
+                            cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
                         }
                         else
                         { return; }
@@ -368,8 +433,12 @@
                     //alert('test');
                     //remove div for drag
                     //cEl.insertBefore( div, cEl.firstChild ); //inverse of this
-            		cEl.removeChild(cEl.dragdiv);
-                    cEl.removeChild(cEl.resizediv);
+            		//cEl.removeChild(cEl.dragdiv);
+                    //cEl.removeChild(cEl.removediv);
+                    //cEl.removeChild(cEl.resizediv);
+                    $('.dragdiv').remove();
+                    $('.removediv').remove();
+                    $('.resizediv').remove();
                 });
 
             })(allElms[i])
