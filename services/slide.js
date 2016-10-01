@@ -147,7 +147,31 @@ export default {
                 }else{
                     pathArr=[];
                 }
-                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
+                let changeset = null;
+                //console.log(resParse);
+                if(resParse.hasOwnProperty('changeset')){
+                    changeset = resParse.changeset;
+                    //changeset.new_revisions.reverse();
+                    //console.log('new rev', changeset.new_revisions);
+                    let j = 0;
+                    if(changeset.new_revisions[0].hasOwnProperty('root_changed')){
+                        j = 1;
+                        selector.id = changeset.new_revisions[0].root_changed;
+                    }
+                    //console.log('old path array', pathArr);
+                    for(let i = 0; i < pathArr.length; i++){
+                        if(j < changeset.new_revisions.length && pathArr[i].split(':')[0].split('-')[0] === changeset.new_revisions[j].split('-')[0]){
+                            pathArr[i] = pathArr[i].split(':')[0].split('-')[0]+'-'+changeset.new_revisions[j].split('-')[1]+':'+pathArr[i].split(':')[1];
+                            j++;
+                        }
+
+                    }
+                    //console.log('new path array', pathArr);
+                    selector.spath = pathArr;
+
+                }
+
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector, changeset: changeset});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
