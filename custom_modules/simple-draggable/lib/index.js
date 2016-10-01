@@ -101,6 +101,7 @@
                     cEl.dragdiv.style.position = "absolute";
                     cEl.dragdiv.style.zIndex = "9000000";
                     cEl.dragdiv.id = "dragdiv";
+                    cEl.dragdiv.className = "dragdiv";
                     //cEl.dragdiv.class = "content";
                     //cEl.dragdiv.style.width = "50px";
                     //cEl.dragdiv.style.height = "50px";
@@ -215,6 +216,7 @@
                     cEl.removediv.style.position = "absolute";
                     cEl.removediv.style.zIndex = "9000000";
                     cEl.removediv.id = "removediv";
+                    cEl.removediv.className = "removediv";
                     cEl.removediv.style.width = "50px";
                     cEl.removediv.style.height = "50px";
 
@@ -250,6 +252,7 @@
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
                     cEl.resizediv.id = "resizediv";
+                    cEl.resizediv.className = "resizediv";
                     cEl.resizediv.style.width = "50px";
                     cEl.resizediv.style.height = "50px";
                     cEl.resizediv.style.zIndex = "9000000";
@@ -422,9 +425,9 @@
             		//cEl.removeChild(cEl.dragdiv);
                     //cEl.removeChild(cEl.removediv);
                     //cEl.removeChild(cEl.resizediv);
-                    $('#dragdiv').remove();
-                    $('#removediv').remove();
-                    $('#resizediv').remove();
+                    $('.dragdiv').remove();
+                    $('.removediv').remove();
+                    $('.resizediv').remove();
                 });
 
             })(allElms[i])
