@@ -332,7 +332,7 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
-                                  I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
+                                  I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
                               </label>
                           </div>
                       </div>
