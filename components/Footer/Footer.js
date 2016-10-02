@@ -15,7 +15,7 @@ class Footer extends React.Component {
                          &nbsp;&middot;&nbsp;
                         <NavLink className="item" routeName="imprint">Imprint</NavLink>
                          &nbsp;&middot;&nbsp;
-                        <NavLink className="item" routeName="dataprotection">Data Proection Policy</NavLink>
+                        <NavLink className="item" routeName="dataprotection">Data Proection Conditions</NavLink>
                     </div>
             </div>
         );

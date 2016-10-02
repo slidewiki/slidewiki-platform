@@ -5,7 +5,7 @@ class Imprint extends React.Component {
         return (
             <div className="ui container grid" ref="imprint">
                 <div className="ui row">
-                    <div className="column">
+                    <div className="twelve wide centered column">
                         <div className="ui content">
                             <h2 className="ui header">Imprint</h2>
                             <p>
