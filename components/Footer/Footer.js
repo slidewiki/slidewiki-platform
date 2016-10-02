@@ -12,6 +12,10 @@ class Footer extends React.Component {
                     </div>
                     <div className="ui left aligned segment">
                         <NavLink className="item" routeName="about">About</NavLink>
+                         &nbsp;&middot;&nbsp;
+                        <NavLink className="item" routeName="imprint">Imprint</NavLink>
+                         &nbsp;&middot;&nbsp;
+                        <NavLink className="item" routeName="dataprotection">Data Proection Policy</NavLink>
                     </div>
             </div>
         );
