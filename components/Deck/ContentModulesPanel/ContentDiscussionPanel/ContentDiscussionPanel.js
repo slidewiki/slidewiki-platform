@@ -10,11 +10,19 @@ import invertCommentBoxFlag from '../../../../actions/contentdiscussion/invertCo
 class ContentDiscussionPanel extends React.Component {
     handleAddComment(e) {
         e.preventDefault();
-        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
+        if (this.refs.title.value === '') {
+            if (this.refs.commenttext.value === '') {
+                $('.ui.form').form('add errors', ['Please enter comment title and text']);
+            } else {
+                $('.ui.form').form('add errors', ['Please enter comment title']);
+            }
+        } else if (this.refs.commenttext.value === '') {
+            $('.ui.form').form('add errors', ['Please enter comment text']);
+        } else {
             this.context.executeAction(addComment, {
                 selector: this.props.ContentDiscussionStore.selector,
                 title: this.refs.title.value,
-                text: this.refs.text.value,
+                text: this.refs.commenttext.value,
                 userid: this.props.UserProfileStore.userid
             });
 
@@ -24,8 +32,10 @@ class ContentDiscussionPanel extends React.Component {
         return false;
     }
 
-    handleInvertCommentBox() {
+    handleInvertCommentBox(e) {
+        e.preventDefault();
         this.context.executeAction(invertCommentBoxFlag, {});
+        return false;
     }
 
     render() {
@@ -39,12 +49,13 @@ class ContentDiscussionPanel extends React.Component {
         let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
             (<form className="ui comment form">
                 <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title" required/>
+                    <input type="text" ref="title" id="title" name="title" placeholder="Title" aria-required="true"/>
                 </div>
                 <div className="field">
-                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
+                    <textarea ref="commenttext" id="commenttext" name="commenttext" style={{minHeight: '6em', height: '6em'}} placeholder="Text" aria-required="true"></textarea>
                 </div>
-                <button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
+                <div className="ui error message"></div>
+                <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
                     <i className="icon edit"></i> Submit
                 </button>
                 <button tabIndex="0" className="ui blue labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
@@ -52,7 +63,7 @@ class ContentDiscussionPanel extends React.Component {
                 </button>
             </form>)
             :
-            (<button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleInvertCommentBox.bind(this)}>
+            (<button tabIndex="0" className="ui blue labeled icon button" onClick={this.handleInvertCommentBox.bind(this)}>
                 <i className="icon edit"></i> Add comment
             </button>);
 
