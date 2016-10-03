@@ -30,6 +30,13 @@ class UserRegistration extends React.Component {
                         prompt: 'Please enter your last name'
                     }]
                 },
+                organisation: {
+                    identifier: 'organisation',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your organisation'
+                    }]
+                },
                 username: {
                     identifier: 'username',
                     rules: [{
@@ -177,6 +184,7 @@ class UserRegistration extends React.Component {
         this.context.executeAction(userSignUp, {
             firstname: this.refs.firstname.value,
             lastname: this.refs.lastname.value,
+            organisation: this.refs.organisation.value,
             username: this.refs.username.value,
             language: language,
             email: this.refs.email.value,
@@ -264,11 +272,15 @@ class UserRegistration extends React.Component {
                         <form className="ui form" >
                             <div className="ui inline required field">
                                 <label htmlFor="firstname" style={signUpLabelStyle} >First name</label>
-                                <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name"   autofocus aria-required="true" autoFocus aria-describedby="signupwelcome"/></div>
+                                <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" aria-required="true" autoFocus aria-describedby="signupwelcome"/></div>
                             </div>
                             <div className="ui inline required field">
                                 <label style={signUpLabelStyle} htmlFor="lastname">Last name</label>
                                 <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                            </div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} htmlFor="organisation">Organisation</label>
+                                <div className="ui icon input"><input type="text" id="organisation" name="organisation" ref="organisation" placeholder="Organisation" aria-required="true"/></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
                                 <label style={signUpLabelStyle}>Username </label>
