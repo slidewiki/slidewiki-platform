@@ -27,6 +27,7 @@ import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
 import async from 'async';
 import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
+import loadFeatured from '../actions/loadFeatured';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -40,9 +41,30 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: fullTitle
             });
-            done();
+            context.executeAction(loadFeatured, null, done);
         }
     },
+
+    featuredDecks: {
+        path: '/featured/:limit?/:offset?',
+        method: 'get',
+        page: 'featuredDecks',
+        title: 'Slidewiki -- featured decks',
+        handler: require('../components/Home/Featured'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    console.log(payload);
+                    context.executeAction(loadFeatured, {params: {limit: payload.params.limit, offset: payload.params.offset}}, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
+
     about: {
         path: '/about',
         method: 'get',
