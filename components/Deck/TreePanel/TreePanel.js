@@ -8,7 +8,7 @@ import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
-import saveTreeNode from '../../../actions/decktree/saveTreeNode';
+import checkRevisionAndSaveTreeNode from '../../../actions/decktree/checkRevisionAndSaveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNode from '../../../actions/decktree/addTreeNode';
 import forkDeck from '../../../actions/decktree/forkDeck';
@@ -39,7 +39,7 @@ class TreePanel extends React.Component {
     }
 
     handleSaveNode(selector, oldValue, newValue) {
-        this.context.executeAction(saveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
+        this.context.executeAction(checkRevisionAndSaveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
 
     handleAddNode(selector, nodeSpec) {

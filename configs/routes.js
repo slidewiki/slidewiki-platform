@@ -8,7 +8,7 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 //import loadSlideEdit from '../actions/slide/loadSlideEdit';
-import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWihtRevisionControl';
+import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
