@@ -25,16 +25,14 @@ let webpackConfig = {
         loaders: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
+                exclude: /node_modules\/(react-google-recaptcha|react-custom-scrollbars)/,
                 loaders: [
                     require.resolve('react-hot-loader'),
                     require.resolve('babel-loader')
                 ]
             },
             { test: /\.json$/, loader: 'json-loader'},
-            { test: /\.css$/, loader: 'style-loader!css-loader'},
-            // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
+
         ]
     },
     node: {
