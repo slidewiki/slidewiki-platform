@@ -1,4 +1,5 @@
 import React from 'react';
+import Featured from './Featured';
 
 class Home extends React.Component {
     render() {
@@ -20,25 +21,21 @@ class Home extends React.Component {
                 </div>
                 <div className="ui hidden divider"></div>
                 <div className="ui container grid stackable">
-                    <div className="three column row">
-                        <div className="column">
-                          <h2 className="ui header">Features</h2>
+                    <div className="two column row">
+                        <div className="column six wide">
+                          <h2 className="ui header">Welcome</h2>
                           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
                         </div>
-                        <div className="column">
-                            <h2 className="ui header">Presentations</h2>
+                        <div className="column ten wide">
+                            <h2 className="ui header">Featured decks:</h2>
                             <div>
-                                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+                                <Featured />
                                 <div className="ui divided list animated ">
                                     <a className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
                                     <a className="item" href="/deck/5">Deck created from scratch &raquo;</a>
                                     <a className="item" href="/deck/372">TODO:See documentation deck&raquo;</a>
                                 </div>
                             </div>
-                        </div>
-                        <div className="column">
-                          <h2 className="ui header">User Activities</h2>
-                          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p>
                         </div>
                     </div>
                 </div>
