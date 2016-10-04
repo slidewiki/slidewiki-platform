@@ -20,7 +20,6 @@ export default {
         'import': {
             uri: (!co.isEmpty(process.env.SERVICE_URL_IMPORT)) ? process.env.SERVICE_URL_IMPORT : 'http://importservice.experimental.slidewiki.org',
             protocol: 'http:',
-            host: 'importservice.manfredfris.ch',
             host: (!co.isEmpty(process.env.SERVICE_VAR_IMPORT_HOST)) ? process.env.SERVICE_VAR_IMPORT_HOST : 'importservice.experimental.slidewiki.org',
             path: '/importPPTX',
             port: 80

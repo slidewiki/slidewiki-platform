@@ -20,7 +20,6 @@ CKEDITOR.editorConfig = function( config ) {
     config.line_height=";0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;";
 
     config.toolbar = [
-            { name: 'document', items: ['Templates' ] },
             { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
@@ -35,10 +34,11 @@ CKEDITOR.editorConfig = function( config ) {
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'paragraph', items: ['CreateDiv']},
             { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
+    //{ name: 'document', items: ['Templates' ] },
+    //{ name: 'paragraph', items: ['CreateDiv']},
     //{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
     //'HorizontalRule',
     //, 'Anchor'
@@ -59,11 +59,13 @@ CKEDITOR.editorConfig = function( config ) {
     //config.floatSpacePinnedOffsetX = 1000;
     ///config.toolbarLocation = 'bottom';
 
-
+    //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
+    config.removePlugins = 'magicline';
+    CKEDITOR.config.magicline_color = '#0000FF';
 
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
-    config.basicEntities = true;
+    config.basicEntities = true; //Klaas -> do we need this?
     config.entities = true;
     config.entities_latin = false;
     config.entities_greek = false;
@@ -71,6 +73,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.allowedContent = true; // don't filter my data
 
 
+    //'div,' +
     config.plugins =
 		'about,' +
 		'a11yhelp,' +
@@ -82,7 +85,6 @@ CKEDITOR.editorConfig = function( config ) {
 		'colordialog,' +
 		'contextmenu,' +
 		'dialogadvtab,' +
-		'div,' +
 		'elementspath,' +
 		'enterkey,' +
 		'entities,' +

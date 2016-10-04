@@ -58,41 +58,43 @@ class ContentActionsHeader extends React.Component {
                 <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)}>
                     <i className="ui large blue edit icon "></i> Edit
                 </div>
-                <div className="right menu">
-                    <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})}>
-                        <a className="" title="Add Slide">
-                        <i className="icons">
-                          <i className="grey file large text icon"></i>
-                          <i className="inverted corner plus icon"></i>
-                        </i>
-                        </a>
-                    </button>
-                    <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}>
-                        <a className="" title="Add Deck">
-                        <i className="medium icons">
-                          <i className="yellow large folder icon"></i>
-                          <i className="inverted corner plus icon"></i>
-                        </i>
-                        </a>
-                    </button>
-                    <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}>
-                        <a className="" title="Duplicate">
-                            <i className="grey large copy icon"></i>
-                        </a>
-                    </button>
-                    <button className={dueleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}>
-                        <a className="" title="Delete">
-                            <i className="red large trash icon"></i>
-                        </a>
-                    </button>
-                    {/*
-                    <button className="item ui small basic right attached disabled button">
-                        <a className="" title="Settings">
-                            <i className="black large setting icon"></i>
-                        </a>
-                    </button>
-                    */}
-                </div>
+                {this.props.UserProfileStore.username === '' ? '' :
+                    <div className="right menu">
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})}>
+                            <a className="" title="Add Slide">
+                            <i className="icons">
+                              <i className="grey file large text icon"></i>
+                              <i className="inverted corner plus icon"></i>
+                            </i>
+                            </a>
+                        </button>
+                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}>
+                            <a className="" title="Add Deck">
+                            <i className="medium icons">
+                              <i className="yellow large folder icon"></i>
+                              <i className="inverted corner plus icon"></i>
+                            </i>
+                            </a>
+                        </button>
+                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}>
+                            <a className="" title="Duplicate">
+                                <i className="grey large copy icon"></i>
+                            </a>
+                        </button>
+                        <button className={dueleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}>
+                            <a className="" title="Delete">
+                                <i className="red large trash icon"></i>
+                            </a>
+                        </button>
+                        {/*
+                        <button className="item ui small basic right attached disabled button">
+                            <a className="" title="Settings">
+                                <i className="black large setting icon"></i>
+                            </a>
+                        </button>
+                        */}
+                    </div>
+                }
             </div>
         );
     }

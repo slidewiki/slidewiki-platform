@@ -75,8 +75,8 @@ class UserRegistration extends React.Component {
                         type: 'empty',
                         prompt: 'Please enter a password'
                     }, {
-                        type: 'regExp[/((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,})/]',
-                        prompt: 'Your password should be 8 characters or more long, have at least one lowercase character, one uppercase character and one number'
+                        type: 'minLength[8]',
+                        prompt: 'Your password should contain 8 characters or more'
                     }]
                 },
                 reenterpassword: {
