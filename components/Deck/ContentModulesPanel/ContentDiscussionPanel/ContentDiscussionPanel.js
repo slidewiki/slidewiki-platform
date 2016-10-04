@@ -5,6 +5,7 @@ import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import Comment from './Comment';
 import addComment from '../../../../actions/contentdiscussion/addComment';
+import invertCommentBoxFlag from '../../../../actions/contentdiscussion/invertCommentBoxFlag';
 
 class ContentDiscussionPanel extends React.Component {
     handleAddComment(e) {
@@ -23,6 +24,10 @@ class ContentDiscussionPanel extends React.Component {
         return false;
     }
 
+    handleInvertCommentBox() {
+        this.context.executeAction(invertCommentBoxFlag, {});
+    }
+
     render() {
         let oldWay = (
             <div ref="contentDiscussionPanel" className="ui segment">
@@ -31,8 +36,8 @@ class ContentDiscussionPanel extends React.Component {
                 <NavLink href={'/discussion/' + this.props.ContentDiscussionStore.selector.stype + '/' + this.props.ContentDiscussionStore.selector.sid}>{'/discussion/' + this.props.ContentDiscussionStore.selector.stype + '/' + this.props.ContentDiscussionStore.selector.sid}</NavLink>
             </div>
         );
-        let addComment =  (
-            <form className="ui comment form">
+        let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
+            (<form className="ui comment form">
                 <div className="ui input">
                     <input type="text" ref="title" placeholder="Title" required/>
                 </div>
@@ -40,10 +45,16 @@ class ContentDiscussionPanel extends React.Component {
                     <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
                 </div>
                 <button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
-                    <i className="icon edit"></i> Add Comment
+                    <i className="icon edit"></i> Submit
                 </button>
-            </form>
-        );
+                <button tabIndex="0" className="ui blue labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
+                    <i className="icon close"></i> Cancel
+                </button>
+            </form>)
+            :
+            (<button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleInvertCommentBox.bind(this)}>
+                <i className="icon edit"></i> Add comment
+            </button>);
 
         return (
             <div className="ui comments" style={{maxWidth: 'none'}}>

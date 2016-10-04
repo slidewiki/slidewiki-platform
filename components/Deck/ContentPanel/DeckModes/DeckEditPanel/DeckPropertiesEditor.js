@@ -22,8 +22,7 @@ class DeckPropertiesEditor extends React.Component {
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            license: props.deckProps.license || '',
-            tags: props.deckProps.tags != null ? props.deckProps.tags.join() : ''
+            license: props.deckProps.license || ''
         };
     }
 
@@ -61,6 +60,16 @@ class DeckPropertiesEditor extends React.Component {
 
         this.setState({validationErrors: validationErrors});
         if (isValid) {
+            swal({
+                title: 'Saving Deck Properties...',
+                text: '',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            });
             this.context.executeAction(saveAction, {
                 deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
                 title: this.state.title,
@@ -68,7 +77,7 @@ class DeckPropertiesEditor extends React.Component {
                 description: this.state.description,
                 theme: this.state.theme,
                 license: this.state.license,
-                tags: this.state.tags.split(','),
+                tags: [],
                 selector: this.props.selector
             });
         }
@@ -168,17 +177,11 @@ class DeckPropertiesEditor extends React.Component {
                                 {licenseOptions}
                             </div>
                         </div>
-                        <div className="fluid inline field" data-tooltip={this.state.validationErrors.tags}>
-                            <i className="ui tags large icon" aria-label="Add tags"></i>
-                            <input type="text" name="tags" placeholder="Add Tags" value={this.state.tags}
-                                   onChange={this.handleChange.bind(this, 'tags')}
-                                   data-tooltip={this.state.validationErrors.tags}/>
-                        </div>
                         {saveDeckButton}
                         <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision"
                              tabIndex="0"
                              onClick={this.handleSave.bind(this, true)}>
-                            Save new revision
+                            Save as new revision
                         </div>
                         <div className="ui secondary button" role="button" aria-describedby="cancel" tabIndex="0"
                              onClick={this.handleCancel.bind(this)}>

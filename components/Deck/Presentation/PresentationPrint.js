@@ -9,7 +9,7 @@ import loadPresentation from '../../../actions/loadPresentation';
 
 let playerCss = {
     height: '100%',
-    position: 'absolute',
+    // position: 'absolute',
     top: '0',
     fontSize: '100%'
 };
@@ -17,6 +17,11 @@ let playerCss = {
 let clearStyle = {
     clear: 'both'
 };
+
+let pdf;
+if(process.env.BROWSER){
+        pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
+}
 
 
 class Presentation extends React.Component{
@@ -27,7 +32,6 @@ class Presentation extends React.Component{
         this.startingSlide = this.props.PresentationStore.selector.sid;
         this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
-
     }
 
     componentDidMount(){
@@ -55,6 +59,9 @@ class Presentation extends React.Component{
                     { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true }
                 ]
             });
+            if(pdf){
+                window.print();
+            }
 
         }
     }
@@ -65,7 +72,7 @@ class Presentation extends React.Component{
     render(){
         this.slides = this.getSlides();
         return(
-            <div>
+            <div id="presentationPrint">
                 <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
                     <div className="slides">
         			     	{this.slides}

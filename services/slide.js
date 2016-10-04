@@ -1,6 +1,38 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 
+const slidetemplate = 'div class="pptx2html" style="position: relative; width: 960px; height: 720px; background-color: rgb(255, 255, 255); transform: scale(0.84375, 0.84375); transform-origin: left top 0px;">' +
+'<div _id="2" _idx="undefined" _name="Titel 1" _type="title" class="block content v-up" style="position: absolute; top: 40.1667px; left: 48.3333px; width: 863.333px; height: 45.3333px; border: 1pt dashed rgb(51, 204, 51); z-index: 193181;">' +
+'<div class="h-mid"><span class="text-block" style="color: #000; font-size: 24pt; font-family: Frutiger LT Com 45 Light; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">O1: Implementation of real-world, large-scale pilots that leverage the power of large-scale collaboration for the creation of inclusive and engaging open content for learning and teaching</span></div>' +
+'</div>' +
+'<div _id="3" _idx="1" _name="Inhaltsplatzhalter 2" _type="body" class="block content v-up" style="position: absolute; top: 186.167px; left: 48.3333px; width: 863.333px; height: 429.667px; border: 1pt dashed rgb(51, 204, 51); z-index: 193306;">' +
+'<div contenteditable="false" id="dragdiv" style="position: absolute; z-index: 9000000; width: 50px; height: 50px;"><img draggable="false" id="imgdrag" src="../../../../../assets/images/cursor_drag_arrow.png" style="z-index: 9000000;" /></div>' +
+'' +
+'<div class="h-left">&nbsp;</div>' +
+'' +
+'<ul>' +
+'   <li>' +
+'   <div class="h-left"><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">four complementary large-scale pilots, which will test </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">SlideWiki and </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">associated tools, solutions and services in different geographic regions, organizational units and institutions in different teaching and learning scenarios</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">.</span></div>' +
+'   </li>' +
+'   <li>' +
+'   <div class="h-left"><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">Professional &amp; vocational training pilot</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">(Greece, Germany, Spain and others)</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">. </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">In this trial we will target professional and vocational training audiences in particular continuing education and part-time training for people in employment. We will engage with trainers and educators in this crucial </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">education domain. Particular emphasis in this pilot will be on training for learners with physical, sensory and cognitive disabilities and impairments.</span></div>' +
+'   </li>' +
+'   <li>' +
+'   <div class="h-left"><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">Higher-Education pilot</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">(UK, Germany, Netherlands, Switzerland, Spain, Greece and others)</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">. </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">The higher-education trial </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">will be </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">performed at the partnering and associated academic institutions. In the spirit of the proverb &ldquo;practice what you preach&rdquo;, each academic partner institution will employ the developed tools, services and solutions based on the SlideWiki platform for several courses at their respective institution.</span></div>' +
+'   </li>' +
+'   <li>' +
+'   <div class="h-left"><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">Secondary Education Schools pilot</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">(Italy, Germany, Spain and others)</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">. </span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">In this trial we focus on the creation and use of learning material for science, technology, engineering and mathematics (STEM) education in secondary schools. Emp</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">hasis will be on learning material for the Roberta learning with robots initiative and citizen science education.</span></div>' +
+'   </li>' +
+'   <li>' +
+'   <div class="h-left"><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: bold; font-style: normal; text-decoration: initial; vertical-align: ;">MOOC and Open Community Education pilot</span><span class="text-block" style="color: #000; font-size: inherit; font-family: Frutiger LT Com 55 Roman; font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">(Europe and worldwide). In this pilot we aim to attain the widest possible reach, by engaging with learners from all over Europe participating in MOOC and open education projects by our partners FutureLearn, OpenCast and Open Knowledge Foundation.</span></div>' +
+'   </li>' +
+'</ul>' +
+'' +
+'<div contenteditable="false" id="resizediv" style="position: absolute; width: 50px; height: 50px; z-index: 9000000; left: 793px; top: 379px;"><img contenteditable="false" draggable="false" id="imgresize" src="../../../../../assets/images/cursor_resize_arrow.png" style="position: absolute; z-index: 9000000;" /></div>' +
+'</div>' +
+'</div>';
+
+
 export default {
     name: 'slide',
     // At least one of the CRUD methods is Required
@@ -32,6 +64,9 @@ export default {
             });
         }
     },
+    /*
+        For now hardcoded slide template - powerpoint basic slide
+    */
     create: (req, resource, params, body, config, callback) => {
         //TODO get real content name
         let args = params.params? params.params : params;
@@ -49,7 +84,8 @@ export default {
                     //id: args.id,
                     title: args.title,
                     //args.title
-                    content: args.content,
+                    //content: args.content,
+                    content: slidetemplate,
                     //TODO
                     speakernotes: args.speakernotes,
                     //args.content

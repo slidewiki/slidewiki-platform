@@ -290,16 +290,17 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    /*
     presentationPrint: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/Print',
+        path: '/presentationprint/:id/*',
         method: 'get',
-        page: 'presentation',
-        handler: require('../components/Deck/Presentation/Presentation'),
+        page: 'presentationprint',
+        handler: require('../components/Deck/Presentation/PresentationPrint'),
         action: (context, payload, done) => {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    */
     presentationSlide: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/*/:sid?/',
