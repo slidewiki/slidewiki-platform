@@ -2,18 +2,21 @@ import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import deleteTreeNode from './deleteTreeNode';
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNodeWithRevisionCheck(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;
+    let args = payload.params ? payload.params : payload;
+    let selector = {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
     if (userid != null && userid !== '') {
         //enrich with user id
         payload.userid = userid;
         context.executeAction(checkNewRevisionNeeded, {
-            selector: payload.selector,
+            selector: selector,
             userid: userid
         }, (err, res) => {
             if (err) {
-
+                context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {
                     swal({
@@ -30,6 +33,7 @@ export default function deleteTreeNodeWithRevisionCheck(context, payload, done) 
                     }).then((accepted) => {
                         context.executeAction(deleteTreeNode, payload, done);
                     }, (reason) => {
+                        done(reason);
                     });
                 } else {
                     context.executeAction(deleteTreeNode, payload, done);

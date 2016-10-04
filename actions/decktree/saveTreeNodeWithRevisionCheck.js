@@ -2,6 +2,9 @@ import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import saveTreeNode from './saveTreeNode';
+import serviceUnavailable from '../error/serviceUnavailable';
+import undoRenameTreeNode from './undoRenameTreeNode';
+
 
 export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;
@@ -13,7 +16,7 @@ export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
             userid: userid
         }, (err, res) => {
             if (err) {
-
+                context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {
                     swal({
@@ -30,7 +33,7 @@ export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
                     }).then((accepted) => {
                         context.executeAction(saveTreeNode, payload, done);
                     }, (reason) => {
-                        context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.selector);
+                        context.executeAction(undoRenameTreeNode, payload.selector, done);
                     });
                 } else {
                     context.executeAction(saveTreeNode, payload, done);
