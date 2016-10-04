@@ -23,12 +23,6 @@ class DeckCard extends React.Component {
                         {this.props.cardContent.description}
                     </div>
                 </div>
-                <div className="extra content">
-                    <NavLink href={'/deck/' + this.props.cardContent.deckID}><i className="thumbs up icon"/>X</NavLink>
-                    <NavLink href={'/deck/' + this.props.cardContent.deckID} className="right floated"><i className="fork icon"/>X</NavLink><br/>
-                    <NavLink href={'/deck/' + this.props.cardContent.deckID}><i className="comment icon"/>X</NavLink>
-                    <NavLink href={'/deck/' + this.props.cardContent.deckID} className="right floated"><i className="download icon"/>X</NavLink>
-                </div>
             </div>
         );
     }
