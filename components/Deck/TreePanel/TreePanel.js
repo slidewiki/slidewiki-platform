@@ -8,9 +8,9 @@ import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
-import checkRevisionAndSaveTreeNode from '../../../actions/decktree/checkRevisionAndSaveTreeNode';
+import saveTreeNodeWithRevisionCheck from '../../../actions/decktree/saveTreeNodeWithRevisionCheck';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
-import addTreeNode from '../../../actions/decktree/addTreeNode';
+import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
 
 class TreePanel extends React.Component {
@@ -39,11 +39,11 @@ class TreePanel extends React.Component {
     }
 
     handleSaveNode(selector, oldValue, newValue) {
-        this.context.executeAction(checkRevisionAndSaveTreeNode, {selector: selector, oldValue: oldValue, newValue: newValue});
+        this.context.executeAction(saveTreeNodeWithRevisionCheck, {selector: selector, oldValue: oldValue, newValue: newValue});
     }
 
     handleAddNode(selector, nodeSpec) {
-        this.context.executeAction(addTreeNode, {selector: selector, nodeSpec: nodeSpec});
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
     }
 
     handleDeleteNode(selector) {

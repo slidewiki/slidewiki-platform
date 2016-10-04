@@ -3,18 +3,7 @@ import RevisioningStore from '../../stores/RevisioningStore';
 import {shortTitle} from '../../configs/general';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
-
-//extracts the id of the slide's immediate parent deck from the path string
-function findImmediateParentId(selector) {
-    let arr = selector.spath.split(';');
-    //root deck is parent
-    if (arr.length <= 1) {
-        return selector.id;
-    } else {
-        arr.splice(-1, 1);
-        return arr[arr.length - 1].split(':')[0];
-    }
-}
+import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 
 export default function saveSlide(context, payload, done) {
     //enrich with user id
@@ -27,8 +16,8 @@ export default function saveSlide(context, payload, done) {
         //refresh the page
     }
     //enrich with root deck id if deck to be revised is not uppermost deck
-    let immediateParent = findImmediateParentId(payload.selector);
-    payload.root_deck = immediateParent;
+    let parent = TreeUtil.getParentId(payload.selector);
+    payload.root_deck = parent;
 
     if (userid != null && userid !== '') {
         //enrich with user id

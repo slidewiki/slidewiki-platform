@@ -1,14 +1,14 @@
 import async from 'async';
 import {navigateAction} from 'fluxible-router';
 import DeckTreeStore from '../../stores/DeckTreeStore';
-import addTreeNode from './addTreeNode';
+import addTreeNodeWithRevisionCheck from './addTreeNodeWithRevisionCheck';
 import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 
 export default function addTreeNodeAndNavigate(context, payload, done) {
     //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(addTreeNode, payload, callback);
+            context.executeAction(addTreeNodeWithRevisionCheck, payload, callback);
         }
     ],
     // final callback

@@ -1,9 +1,9 @@
 import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
-import saveTreeNode from './saveTreeNode';
+import addTreeNode from './addTreeNode';
 
-export default function checkRevisionAndSaveTreeNode(context, payload, done) {
+export default function addTreeNodeWithRevisionCheck(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         //enrich with user id
@@ -28,12 +28,11 @@ export default function checkRevisionAndSaveTreeNode(context, payload, done) {
                         cancelButtonClass: 'ui red button',
                         buttonsStyling: false
                     }).then((accepted) => {
-                        context.executeAction(saveTreeNode, payload, done);
+                        context.executeAction(addTreeNode, payload, done);
                     }, (reason) => {
-                        context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.selector);
                     });
                 } else {
-                    context.executeAction(saveTreeNode, payload, done);
+                    context.executeAction(addTreeNode, payload, done);
                 }
             }
         });

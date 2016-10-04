@@ -1,14 +1,14 @@
 import async from 'async';
 import {navigateAction} from 'fluxible-router';
 import DeckTreeStore from '../../stores/DeckTreeStore';
-import deleteTreeNode from './deleteTreeNode';
+import deleteTreeNodeWithRevisionCheck from './deleteTreeNodeWithRevisionCheck';
 import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 
 export default function deleteTreeNodeAndNavigate(context, payload, done) {
     //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(deleteTreeNode, payload, callback);
+            context.executeAction(deleteTreeNodeWithRevisionCheck, payload, callback);
         }
     ],
     // final callback
