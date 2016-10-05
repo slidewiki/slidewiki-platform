@@ -1,7 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
+import Thumbnail from '../../Thumbnail/Thumbnail';
 import { NavLink } from 'fluxible-router';
 import { timeSince } from '../../../common';
+import { Microservices } from '../../../configs/microservices';
 
 class DeckCard extends React.Component {
     componentDidMount() {}
@@ -9,10 +11,18 @@ class DeckCard extends React.Component {
     componentDidUpdate() {}
 
     render() {
+        let thumbnailURL = Microservices.file.uri + '/' + this.props.userid + '/thumbnails/';
+        if (this.props.cardContent.firstSlide) {
+            thumbnailURL += this.props.cardContent.firstSlide + '.png';
+        }
+        else {
+            thumbnailURL = this.props.cardContent.picture;
+        }
         return (
             <div className='card'>
                 <NavLink className="ui medium centered image" href={'/deck/' + this.props.cardContent.deckID}>
-                    <img src={ this.props.cardContent.picture }/>
+                    <Thumbnail url={thumbnailURL}
+                        slideId={this.props.cardContent.firstSlide} />
                 </NavLink>
                 <div className="content">
                     <div className="header"><NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}}</NavLink></div>
