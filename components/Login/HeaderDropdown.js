@@ -33,7 +33,7 @@ class HeaderDropdown extends React.Component {
                 <i className="ui big left floated aligned dropdown icon"></i>
                 <div className="menu">
                     <div className="header">
-                        <h4>{this.props.UserProfileStore.username}</h4>
+                        {this.props.UserProfileStore.username}
                     </div>
                     <div className="divider"></div>
                     <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username }>
