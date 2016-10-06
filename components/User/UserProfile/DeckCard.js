@@ -25,7 +25,7 @@ class DeckCard extends React.Component {
                         slideId={this.props.cardContent.deckID} />
                 </NavLink>
                 <div className="content">
-                    <div className="header"><NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}}</NavLink></div>
+                    <div className="header"><NavLink href={'/deck/' + this.props.cardContent.deckID} >{this.props.cardContent.title}</NavLink></div>
                     <div className="meta">
                         <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
                     </div>
