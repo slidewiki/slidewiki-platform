@@ -12,10 +12,10 @@ class Header extends React.Component {
         return (
             <div className="ui inverted blue menu" ref="header">
                 <div className="ui container">
-                    <NavLink className="item" routeName="home">
+                    <a className="item" href='/'>
                         <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" />
                         &nbsp; SlideWiki
-                    </NavLink>
+                    </a>
                     <div className="item">
                         <SearchBox className="item"/>
                     </div>
