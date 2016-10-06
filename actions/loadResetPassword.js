@@ -8,7 +8,6 @@ export default function loadResetPassword(context, payload, done) {
       && (store.jwt !== undefined && store.jwt !== null && store.jwt !== '')) {
         context.executeAction(navigateAction, {
             url: '/user/'+store.username+'/settings'
-        });
+        }, done);
     }
-    done();
 }

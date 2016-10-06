@@ -25,6 +25,7 @@ import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
 
@@ -118,7 +119,7 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Reset password'
             });
-            done();
+            context.executeAction(loadResetPassword, payload, done);
         }
     },
 //-----------------------------------User routes------------------------------
