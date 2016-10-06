@@ -22,7 +22,6 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
                 sid: currentState.selector.get('sid'),
                 spath: currentState.selector.get('spath')
             };
-            console.log(results, selector);
             context.executeAction(handleRevisionChangesAndNavigate, {
                 selector: selector,
                 changeset: results[0].changeset
