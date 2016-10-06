@@ -9,5 +9,7 @@ export default function loadResetPassword(context, payload, done) {
         context.executeAction(navigateAction, {
             url: '/user/'+store.username+'/settings'
         }, done);
+        return;
     }
+    done();
 }
