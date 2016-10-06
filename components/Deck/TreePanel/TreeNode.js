@@ -41,8 +41,11 @@ class TreeNode extends React.Component {
         e.stopPropagation();
     }
     handleRenameClick(selector, e){
-        this.props.onRename(selector);
-        e.stopPropagation();
+        //only if user is logged in
+        if(this.props.username !==''){
+            this.props.onRename(selector);
+            e.stopPropagation();
+        }
     }
     handleUndoRenameClick(selector, e){
         this.props.onDoRename(selector);
@@ -85,7 +88,7 @@ class TreeNode extends React.Component {
         if(this.props.item.get('type') === 'deck'){
             childNodes = this.props.item.get('children').map((node, index) => {
                 return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onUndoRename={self.props.onUndoRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode}/>
+                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onUndoRename={self.props.onUndoRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode} username={self.props.username} />
                 );
             });
             //show/hide sub nodes based on the expanded state
@@ -128,9 +131,11 @@ class TreeNode extends React.Component {
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
                         <i className="red trash circle icon"></i>
                     </button>
+                    {/*
                     <button className="ui disabled button" title="Settings">
                         <i className="black setting icon"></i>
                     </button>
+                    */}
                 </div>
             </div>
         );
@@ -163,7 +168,7 @@ class TreeNode extends React.Component {
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                     {nodeDIV}
-                    {actionSignifier}
+                    {this.props.username === '' ? '' : actionSignifier}
                 </div>
                 {actionBtns}
                 {childNodesDIV}

@@ -35,7 +35,6 @@ class ActivityFeedStore extends BaseStore {
     }
     addCommentActivity(payload) {
         const comment = payload.comment;
-        console.log(comment);
         const activityType = (comment.parent_comment === undefined) ? 'comment' : 'reply';
         const newActivity = {
             activity_type: activityType,

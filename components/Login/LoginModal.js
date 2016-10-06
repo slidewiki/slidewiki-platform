@@ -1,5 +1,4 @@
 import React from 'react';
-import Modal from 'react-modal';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
@@ -20,6 +19,8 @@ class LoginModal extends React.Component {
     constructor(props) {
         super(props);
         this.handleLoginButton = this.handleLoginButton.bind(this);
+        this.handleSignupClick = this.handleSignupClick.bind(this);
+        this.signin = this.signin.bind(this);
     }
 
     isModalShown() {
@@ -61,11 +62,6 @@ class LoginModal extends React.Component {
         }
     }
 
-    componentDidMount(){
-        if(typeof window !== 'undefined') {
-            Modal.setAppElement('#app');
-        }
-    }
 
     handleSignupClick(e) {
         e.preventDefault();
@@ -119,13 +115,13 @@ class LoginModal extends React.Component {
                       <div className="ui floated right">
                           <a href="">I can not access my account</a>
                           <br/><br/>
-                          <a href="#" onClick={this.handleSignupClick.bind(this)}>Don&apos;t have an account? Sign up here.</a>
+                          <a href="#" onClick={this.handleSignupClick}>Don&apos;t have an account? Sign up here.</a>
                       </div>
                     </div>
                 </div>
               </div>
               <div className="actions">
-                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin.bind(this)}><i className="icon sign in"/> Sign In</button>
+                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In</button>
                 <button type="cancel" className="ui cancel button">
                   <i className="remove icon"/>Close
                 </button>

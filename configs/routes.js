@@ -56,6 +56,32 @@ export default {
             done();
         }
     },
+    imprint: {
+        path: '/imprint',
+        method: 'get',
+        page: 'imprint',
+        title: 'SlideWiki -- Imprint',
+        handler: require('../components/Home/Imprint'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Imprint'
+            });
+            done();
+        }
+    },
+    dataprotection: {
+        path: '/dataprotection',
+        method: 'get',
+        page: 'dataprotection',
+        title: 'SlideWiki -- Data Protection Policy',
+        handler: require('../components/Home/DataProtection'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Data Protection Policy'
+            });
+            done();
+        }
+    },
     notifications: {
         path: '/notifications',
         method: 'get',
@@ -290,6 +316,7 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    /*
     presentationPrint: {
         path: '/presentationprint/:id/*',
         method: 'get',
@@ -299,6 +326,7 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    */
     presentationSlide: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/*/:sid?/',

@@ -99,7 +99,14 @@
                     //let div = document.createElement("div");
                     cEl.dragdiv = document.createElement("div");
                     cEl.dragdiv.style.position = "absolute";
-                    cEl.dragdiv.style.zIndex = "90000";
+                    cEl.dragdiv.style.zIndex = "9000000";
+                    cEl.dragdiv.id = "dragdiv";
+                    cEl.dragdiv.className = "dragdiv";
+                    //cEl.dragdiv.class = "content";
+                    //cEl.dragdiv.style.width = "50px";
+                    //cEl.dragdiv.style.height = "50px";
+                    cEl.dragdiv.style.width = "50px";
+                    cEl.dragdiv.style.height = "50px";
                     //div.style.top = cEl.style.top - 20 ;
                     //div.style.top = "-20" ;
                     //div.style.left = cEl.style.left - 20 ;
@@ -112,12 +119,15 @@
                     */
 
                     let imgdrag = document.createElement("IMG");
-                    imgdrag.style.position = "absolute";
-                    imgdrag.style.zIndex = "90000";
+                    //imgdrag.style.position = "absolute";
+                    imgdrag.style.zIndex = "9000000";
                     imgdrag.src = '../../../../../assets/images/cursor_drag_arrow.png';
+                    imgdrag.id = "imgdrag";
+                    //imgdrag.style.width = "50px";
+                    //imgdrag.style.height = "50px";
                     imgdrag.disabled = true;
                     imgdrag.draggable = false;
-                    imgdrag.contentEditable = false;
+                    //imgdrag.contentEditable = false;
                     cEl.dragdiv.appendChild(imgdrag);
                     cEl.dragdiv.contentEditable = false;
 
@@ -144,7 +154,7 @@
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+                        cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -176,7 +186,7 @@
                         //alert('test');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+                        cEl.style.zIndex = cEl.style.zIndex - 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -201,23 +211,80 @@
                     });
                     */
 
+                    //KLAAS -> for remove button
+                    cEl.removediv = document.createElement("div");
+                    cEl.removediv.style.position = "absolute";
+                    cEl.removediv.style.zIndex = "9000000";
+                    cEl.removediv.id = "removediv";
+                    cEl.removediv.className = "removediv";
+                    cEl.removediv.style.width = "50px";
+                    cEl.removediv.style.height = "50px";
+
+                    let imgremove = document.createElement("IMG");
+                    imgremove.style.zIndex = "9000000";
+                    imgremove.src = '../../../../../assets/images/cursor_remove.png';
+                    imgremove.id = "imgremove";
+                    imgremove.disabled = true;
+                    imgremove.draggable = false;
+                    cEl.removediv.appendChild(imgremove);
+                    cEl.removediv.contentEditable = false;
+                    //assign to top right of parent div
+                    cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                    //cEl.removediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+
+                    cEl.insertBefore( cEl.removediv, cEl.firstChild );
+                    //cEl.appendChild(cEl.removediv);
+
+                    cEl.removediv.addEventListener("mousedown", function (e) {
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+                        //KLAAS NEW -> remove entire div
+                        //cEl.parentNode.replaceChild(new_element, cEl);
+                        if (confirm('Are you sure you want to delete this element?'))
+                        {
+                            //alert(cEl.parentNode.className);
+                            if (cEl.parentNode.childNodes.length === 1)
+                            {
+                                //add a div element to prevent empty PPTX element which gets removed by CKeditor
+                                let emptydiv = document.createElement("div");
+                                //emptydiv.innerHTML = "";
+                                cEl.parentNode.appendChild(emptydiv);
+                            }
+                            //else{
+                                cEl.parentNode.removeChild(cEl);
+                            //}
+                            //cEl.remove();
+                        }
+                    });
+
+
                     //KLAAS -> for resize button
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
+                    cEl.resizediv.id = "resizediv";
+                    cEl.resizediv.className = "resizediv";
+                    cEl.resizediv.style.width = "50px";
+                    cEl.resizediv.style.height = "50px";
+                    cEl.resizediv.style.zIndex = "9000000";
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
-                    imgresize.style.zIndex = "90000";
+                    imgresize.style.zIndex = "9000000";
                     imgresize.src = '../../../../../assets/images/cursor_resize_arrow.png';
                     imgresize.disabled = true;
                     imgresize.draggable = false;
                     imgresize.contentEditable = false;
+                    imgresize.id = "imgresize";
+                    //imgresize.style.width = "50px";
+                    //imgresize.style.height = "50px";
                     cEl.resizediv.appendChild(imgresize);
                     cEl.resizediv.contentEditable = false;
                     //cEl.insertAfter( cEl.resizediv, cEl.lastChild );
                     //position resize icon to bottom right of parent element
                     cEl.appendChild(cEl.resizediv);
                     //cEl.resizediv.style.left = parseInt(cEl.style.left) + parseInt(cEl.style.width) + "px";
-                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                    //assign to bottom right of parent div
+                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
                     //alert(cEl.resizediv.style);
                     //cEl.resizediv.style.right = (cEl.style.right) + "px";
@@ -228,7 +295,7 @@
                     cEl.resizediv.addEventListener("mousedown", function (e) {
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex + 90000;
+                        cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -266,7 +333,7 @@
                         //alert('test');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
-                        cEl.style.zIndex = cEl.style.zIndex - 90000;
+                        cEl.style.zIndex = cEl.style.zIndex - 9000000;
 
                         //KLAAS ADAPT -> prevent default drag and drop.
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
@@ -296,14 +363,22 @@
                             if (!options.onlyY) {
                                 // use variable scale factor calculated from slide edit component size
                                 //cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / 0.5 )  + "px";
-                                cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )  + "px";
+                                //TODO: also prevent drag outside right side of pptx2html window
+                                if ((cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio ) > 0)
+                                {
+                                    cEl.style.left = (cEl._simpleDraggable.elPos.x + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )  + "px";
+                                }
                                 //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                             }
 
                             // move only on x axis
                             if (!options.onlyX) {
                                 // use variable scale factor calculated from slide edit component size
-                                cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio )  + "px";
+                                //TODO: also prevent drag outside bottom of of pptx2html window
+                                if ((cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio ) > 0)
+                                {
+                                    cEl.style.top = (cEl._simpleDraggable.elPos.y +  ( e.clientY - cEl._simpleDraggable.mousePos.y)  / options.ratio )  + "px";
+                                }
                             }
                         } else if (cEl._simpleDraggable.resize === true)
                         {
@@ -320,6 +395,8 @@
                                 //calculate width as well
                                 //cEl.style.left = (cEl._simpleDraggable.elPos.x) + "px";
                                 // use variable scale factor calculated from slide edit component size
+                                //TODO: prevent resize outside left and right of pptx2html window
+                                // compare mouse position?
                                 cEl.style.width = (cEl._simpleDraggable.elDim.w  + ( e.clientX - cEl._simpleDraggable.mousePos.x)  / options.ratio )   + "px";
                             }
 
@@ -330,14 +407,18 @@
                                 //console.log(e.clientY - cEl._simpleDraggable.mousePos.y);
                                 //console.log(cEl.style.height);
                                 // use variable scale factor calculated from slide edit component size
+                                //TODO: prevent resize outside top and bottom of pptx2html window
+                                // compare mouse position?
                                 cEl.style.height = ((cEl._simpleDraggable.elDim.h + (e.clientY - cEl._simpleDraggable.mousePos.y) / options.ratio )  ) + "px";
                                 //console.log(((cEl._simpleDraggable.elDim.w + e.clientY - cEl._simpleDraggable.mousePos.y) * 2) + "px");
                                 //console.log(cEl.style.height);
                             }
                             //cEl.style.transform = 'scale(0.5)';
                             //move resize button with resized borders of element
-                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                             cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+                            //move remove button with resized borders of absolute element
+                            cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
                         }
                         else
                         { return; }
@@ -352,8 +433,12 @@
                     //alert('test');
                     //remove div for drag
                     //cEl.insertBefore( div, cEl.firstChild ); //inverse of this
-            		cEl.removeChild(cEl.dragdiv);
-                    cEl.removeChild(cEl.resizediv);
+            		//cEl.removeChild(cEl.dragdiv);
+                    //cEl.removeChild(cEl.removediv);
+                    //cEl.removeChild(cEl.resizediv);
+                    $('.dragdiv').remove();
+                    $('.removediv').remove();
+                    $('.resizediv').remove();
                 });
 
             })(allElms[i])

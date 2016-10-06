@@ -10,7 +10,7 @@ import slideIdTypeError from './error/slideIdTypeError';
 import deckContentPathError from './error/deckContentPathError';
 import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
-
+import serviceUnavailable from './error/serviceUnavailable';
 
 export default function loadDeck(context, payload, done) {
     if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
@@ -101,7 +101,8 @@ export default function loadDeck(context, payload, done) {
 
     (err, results) => {
         if (err){
-            console.log('Error thrown:', err);
+            context.executeAction(serviceUnavailable, payload, done);
+            return;
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle

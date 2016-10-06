@@ -28,16 +28,16 @@ class HeaderDropdown extends React.Component {
         return(
             <div className="ui top right pointing dropdown" ref="userDropDown">
                 <div className="text">
-                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 50 }/>
+                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 }/>
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>
                 <div className="menu">
                     <div className="header">
-                        <h4>{this.props.UserProfileStore.username}</h4>
+                        {this.props.UserProfileStore.username}
                     </div>
                     <div className="divider"></div>
                     <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username }>
-                        <i className="user icon link"/> My Profile
+                        <i className="user icon link"/> My Decks
                     </NavLink>
                     <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username + '/settings' }>
                         <i className="setting icon"/> My Settings
