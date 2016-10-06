@@ -27,7 +27,7 @@ class ContentActionsFooter extends React.Component {
         let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
         if(this.props.ContentStore.selector.stype === 'slide'){
             // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += '#/slide-' + this.props.ContentStore.selector.sid
+            presLocation += '#/slide-' + this.props.ContentStore.selector.sid;
         }
         return presLocation;
     }
@@ -48,16 +48,24 @@ class ContentActionsFooter extends React.Component {
         }
     }*/
     getPDFHref(){
-      let pdfHref = Microservices.pdf.uri + '/exportPDF/' + this.props.ContentStore.selector.id;
-      console.log('pdfHref: ' + pdfHref);
-      return pdfHref;
+        let pdfHref;
+        if(this.props.ContentStore.selector.stype === 'slide'){
+            let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and slideId
+            pdfHref = Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+
+        } else{
+            pdfHref = Microservices.pdf.uri + '/exportPDF/' + this.props.ContentStore.selector.id;
+
+        }
+        return pdfHref;
     }
+
     handleDownloadClick(e){
-      console.log('handleDownloadClick');
-      if(process.env.BROWSER){
-        e.preventDefault();
-        window.open(this.getPDFHref());
-      }
+
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getPDFHref());
+        }
 
     }
 
@@ -77,10 +85,12 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
+
+                           <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
                             <button className="ui button">
                                 <i className="print large icon"></i>
                             </button>
-
+                            </NavLink>
                             <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
                                 <button className="ui button">
                                     <i className="download large icon"></i>
