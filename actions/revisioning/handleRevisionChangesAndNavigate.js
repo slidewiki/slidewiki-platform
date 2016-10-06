@@ -7,7 +7,7 @@ export default function handleRevisionChangesAndNavigate(context, payload) {
         sid: payload.selector.sid,
         spath: payload.selector.spath
     };
-    let newURL, changeset = payload.changeset;
+    let changeset = payload.changeset;
 
     if (changeset != null) {
         let j = 0;
@@ -28,12 +28,10 @@ export default function handleRevisionChangesAndNavigate(context, payload) {
             selector.spath = pathArr.join(';');
             //make sure sid refers to the same revision as it may have changed
             selector.sid = pathArr[pathArr.length - 1].split(':')[0];
-            newURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath;
-        } else {
-            newURL = '/deck/' + selector.id;
         }
     }
 
+    let newURL = selector.spath !== '' ? '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath : '/deck/' + selector.id;
     if (payload.mode != null) {
         newURL += '/' + payload.mode;
     }
