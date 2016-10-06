@@ -1,5 +1,5 @@
 import { Microservices } from '../configs/microservices';
-import { hashSalt } from '../configs/general';
+import { hashSalt, resetPasswordAPIKey } from '../configs/general';
 import rp from 'request-promise';
 import sha512 from 'js-sha512';
 
@@ -138,11 +138,12 @@ export default {
                 uri: Microservices.user.uri + '/resetPassword',
                 body: JSON.stringify({
                     email: params.email,
-                    language: params.language
+                    language: params.language,
+                    APIKey: resetPasswordAPIKey
                 }),
                 resolveWithFullResponse: true
             }).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, res);  //no JSON
             }).catch((err) => {
                 callback(err, {});
             });

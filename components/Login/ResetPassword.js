@@ -109,7 +109,6 @@ class ResetPassword extends React.Component {
                 buttonsStyling: false
             })
             .then(() => {
-                location.reload();
                 return true;
             });
         }
@@ -165,12 +164,9 @@ class ResetPassword extends React.Component {
 
         return (
             <div className="ui page centered grid" >
-                {dimmerMessageSuccess}
-                {dimmerMessageError}
-
                 <div className="eight wide column">
                     <div className="ui blue padded center aligned segment">
-                        <h2 className="ui dividing header">Reset Password {this.props.ResetPasswordStore.componentStatus} </h2>
+                        <h2 className="ui dividing header">Reset Password</h2>
                         <form className="ui form" >
                             <div className={emailClasses} data-position="top center" data-inverted="">
                                 <label style={signUpLabelStyle}>Email * </label>
