@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
+import {Microservices} from '../../../../configs/microservices';
 
 
 class ContentActionsFooter extends React.Component {
@@ -40,15 +41,26 @@ class ContentActionsFooter extends React.Component {
     getPrintHref(){
         return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
     }
-
     handlePrintClick(e){
         if(process.env.BROWSER){
             e.preventDefault();
             window.open(this.getPrintHref());
         }
+    }*/
+    getPDFHref(){
+      let pdfHref = Microservices.pdf.uri + '/exportPDF/' + this.props.ContentStore.selector.id;
+      console.log('pdfHref: ' + pdfHref);
+      return pdfHref;
+    }
+    handleDownloadClick(e){
+      console.log('handleDownloadClick');
+      if(process.env.BROWSER){
+        e.preventDefault();
+        window.open(this.getPDFHref());
+      }
 
     }
-    */
+
     render() {
         return (
             <div className="ui">
@@ -68,9 +80,12 @@ class ContentActionsFooter extends React.Component {
                             <button className="ui button">
                                 <i className="print large icon"></i>
                             </button>
-                            <button className="ui disabled button">
-                                <i className="download large icon"></i>
-                            </button>
+
+                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
+                                <button className="ui button">
+                                    <i className="download large icon"></i>
+                                </button>
+                            </NavLink>
                             <button className="ui disabled button">
                                 <i className="share alternate large icon"></i>
                             </button>

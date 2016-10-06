@@ -57,6 +57,32 @@ export default {
             done();
         }
     },
+    imprint: {
+        path: '/imprint',
+        method: 'get',
+        page: 'imprint',
+        title: 'SlideWiki -- Imprint',
+        handler: require('../components/Home/Imprint'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Imprint'
+            });
+            done();
+        }
+    },
+    dataprotection: {
+        path: '/dataprotection',
+        method: 'get',
+        page: 'dataprotection',
+        title: 'SlideWiki -- Data Protection Policy',
+        handler: require('../components/Home/DataProtection'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Data Protection Policy'
+            });
+            done();
+        }
+    },
     addDeck: {
         path: '/addDeck',
         method: 'get',
