@@ -7,26 +7,33 @@ export default function handleRevisionChangesAndNavigate(context, payload) {
         sid: payload.selector.sid,
         spath: payload.selector.spath
     };
-    let changeset = payload.changeset;
+    let newURL, changeset = payload.changeset;
+
     if (changeset != null) {
-        let pathArr = selector.spath.split(';');
         let j = 0;
         if (changeset.new_revisions[0].root_changed != null) {
             j = 1;
             selector.id = changeset.new_revisions[0].root_changed;
         }
-        for (let i = 0; i < pathArr.length; i++) {
-            let pathNodeId = pathArr[i].split(':')[0].split('-')[0];
-            if (j < changeset.new_revisions.length && pathNodeId === changeset.new_revisions[j].split('-')[0]) {
-                pathArr[i] = pathNodeId + '-' + changeset.new_revisions[j].split('-')[1] + ':' + pathArr[i].split(':')[1];
-                j++;
+
+        if (selector.spath !== '') {
+            let pathArr = selector.spath.split(';');
+            for (let i = 0; i < pathArr.length; i++) {
+                let pathNodeId = pathArr[i].split(':')[0].split('-')[0];
+                if (j < changeset.new_revisions.length && pathNodeId === changeset.new_revisions[j].split('-')[0]) {
+                    pathArr[i] = pathNodeId + '-' + changeset.new_revisions[j].split('-')[1] + ':' + pathArr[i].split(':')[1];
+                    j++;
+                }
             }
+            selector.spath = pathArr.join(';');
+            //make sure sid refers to the same revision as it may have changed
+            selector.sid = pathArr[pathArr.length - 1].split(':')[0];
+            newURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath;
+        } else {
+            newURL = '/deck/' + selector.id;
         }
-        selector.spath = pathArr.join(';');
     }
 
-    //update the URL
-    let newURL = '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath;
     if (payload.mode != null) {
         newURL += '/' + payload.mode;
     }
