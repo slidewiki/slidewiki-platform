@@ -55,12 +55,11 @@ class DeckViewPanel extends React.Component {
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
-        const host = this.props.DeckViewStore.deckData.host;
-        //console.log(Microservices.file);
         const thumbnailURL = Microservices.file.uri + '/';
-        //console.log(thumbnailURL);
+        const host = this.props.DeckViewStore.deckData.host;
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
+        const userProfileURL = host === undefined ? '' : 'http://' + host + '/user/' + deckCreator;
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
@@ -69,7 +68,9 @@ class DeckViewPanel extends React.Component {
                         <div className="column">
                             <div className="content">
                                 <h3 className="ui header">{deckTitle}</h3>
-                                <div className="meta">Creator: {deckCreator}</div>
+                                <div className="meta">Creator:&nbsp;
+                                    <a href={userProfileURL}>{deckCreator}</a>
+                                </div>
                                 <div className="meta">Date: {deckDate}</div>
                                 <div className="description">
                                     <p></p>
