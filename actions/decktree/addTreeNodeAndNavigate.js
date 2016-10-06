@@ -1,8 +1,7 @@
 import async from 'async';
-import {navigateAction} from 'fluxible-router';
+import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import addTreeNodeWithRevisionCheck from './addTreeNodeWithRevisionCheck';
-import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 
 export default function addTreeNodeAndNavigate(context, payload, done) {
     //load all required actions in parallel
@@ -23,8 +22,10 @@ export default function addTreeNodeAndNavigate(context, payload, done) {
                 sid: currentState.selector.get('sid'),
                 spath: currentState.selector.get('spath')
             };
-            context.executeAction(navigateAction, {
-                url: TreeUtil.makeNodeURL(selector, 'deck', 'edit')
+            context.executeAction(handleRevisionChangesAndNavigate, {
+                selector: selector,
+                changeset: results[0].node.changeset,
+                mode: 'edit'
             });
         }
         done();

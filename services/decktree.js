@@ -77,7 +77,7 @@ export default {
                 })
             };
             rp(options).then((res) => {
-                callback(null, params);
+                callback(null, JSON.parse(res));
             }).catch((err) => {
                 console.log(err);
                 callback(null, params);

@@ -186,7 +186,7 @@ export default {
                 callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector, changeset: resParse.changeset});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
+                callback(err);
             });
         }
     },
@@ -200,9 +200,6 @@ export default {
             callback(null, {id: args.id});
         }
     }
-    // other methods
-    // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
 };
 /*
 getSlide: function(request, reply) {
