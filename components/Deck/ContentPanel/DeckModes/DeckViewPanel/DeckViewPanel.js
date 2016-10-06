@@ -29,9 +29,13 @@ class DeckViewPanel extends React.Component {
         const heightStyle = {
             height: '450px'
         };
-
-        if (!this.props.DeckViewStore.deckData.tags)
-            this.props.DeckViewStore.deckData.tags = [];
+        let slidesArr =[];
+        if(this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children){
+            slidesArr = this.props.DeckViewStore.slidesData.children;
+        }
+        let tags= [];
+        if (this.props.DeckViewStore.deckData && this.props.DeckViewStore.deckData.tags)
+            tags = this.props.DeckViewStore.deckData.tags;
 
         const activeVersion = lodash.get(this.props.DeckViewStore.deckData, 'active', undefined);
         const totalRevisions = lodash.get(this.props.DeckViewStore.deckData, 'revisions.length', undefined);
@@ -93,9 +97,9 @@ class DeckViewPanel extends React.Component {
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
                                 </div>
-                                {this.props.DeckViewStore.deckData.tags.length > 0 ? <div className="ui divider"></div>: ''}
+                                {tags.length > 0 ? <div className="ui divider"></div>: ''}
                                 <div className="ui tag labels large meta">
-                                    {this.props.DeckViewStore.deckData.tags.map((tag, index) => {
+                                    {tags.map((tag, index) => {
                                         return <a className="ui label" key={index} tabIndex="0" >{tag}</a>;
                                     })}
                                 </div>
@@ -106,7 +110,7 @@ class DeckViewPanel extends React.Component {
                     <div className="ui  divider"></div>
                     <div key={this.props.slideIndex} className="ui three column grid container">
                         {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
-                        {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
+                        {slidesArr.map((slide, index) => {
                             if (index < maxSlideThumbnails) {
                                 return (<div key={index} className="column">
                                             <div className="ui fluid card">
