@@ -212,7 +212,7 @@ class DeckTreeStore extends BaseStore {
         }else{
             arr.splice(-1,1);
             let parentPath = arr.join(';');
-            let parentPart = parentPath[parentPath.length-1];
+            let parentPart = arr[arr.length-1];
             return Immutable.fromJS({'id': this.deckTree.get('id'), 'spath': parentPath, 'sid': parentPart.split(':')[0], 'stype': 'deck'});
         }
     }
