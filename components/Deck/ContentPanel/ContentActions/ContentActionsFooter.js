@@ -48,15 +48,11 @@ class ContentActionsFooter extends React.Component {
         }
     }*/
     getPDFHref(){
-        let pdfHref;
-        if(this.props.ContentStore.selector.stype === 'slide'){
-            let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and slideId
-            pdfHref = Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
 
-        } else{
-            pdfHref = Microservices.pdf.uri + '/exportPDF/' + this.props.ContentStore.selector.id;
+        let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
 
-        }
+        let pdfHref = Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+
         return pdfHref;
     }
 
