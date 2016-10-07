@@ -1,7 +1,8 @@
 import UserProfileStore from '../stores/UserProfileStore';
-import {navigateAction} from 'fluxible-router';
+import handleRevisionChangesAndNavigate from './revisioning/handleRevisionChangesAndNavigate';
 import striptags from 'striptags';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
+import {navigateAction} from 'fluxible-router';
 
 
 export default function saveDeckRevision(context, payload, done) {
@@ -24,10 +25,12 @@ export default function saveDeckRevision(context, payload, done) {
             } else {
                 context.dispatch('SAVE_DECK_REVISION_SUCCESS', res);
                 let newSid = res._id + '-' + res.revisions[0].id;
-                let newPath = '', newURL;
+                let newPath = '';
                 //root deck case
                 if (payload.selector.id === payload.selector.sid) {
-                    newURL = '/deck/' + newSid;
+                    context.executeAction(navigateAction, {
+                        url: '/deck/' + newSid
+                    });
                 } else {
                     if (payload.selector.spath !== '') {
                         let pathArr = payload.selector.spath.split(';');
@@ -36,18 +39,23 @@ export default function saveDeckRevision(context, payload, done) {
                         pathArr[pathArr.length - 1] = newSid + ':' + lastPathPosition;
                         newPath = pathArr.join(';');
                     }
-                    newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + newSid + '/' + newPath;
-                    // if deck edited is subdeck update the corresponding tree node. Not necessary in the root deck case,
-                    // since with navigate action the deck tree will be refetched
-                    context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
-                        selector: payload.selector,
-                        nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
+                    // if deck edited is subdeck update the corresponding tree node
+                    if (payload.selector.id !== payload.selector.sid) {
+                        context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
+                            selector: payload.selector,
+                            nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
+                        });
+                    }
+                    context.executeAction(handleRevisionChangesAndNavigate, {
+                        selector: {
+                            id: payload.selector.id,
+                            stype: payload.selector.stype,
+                            sid: newSid,
+                            spath: newPath
+                        },
+                        changeset: res.changeset
                     });
                 }
-                //update the URL: redirect to view after edit
-                context.executeAction(navigateAction, {
-                    url: newURL
-                });
             }
             done();
         });
