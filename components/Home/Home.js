@@ -59,8 +59,8 @@ class Home extends React.Component {
                     <div>
                     <h2 className="ui header">Recent decks</h2>
                         <DeckList scope="recent"/>
-                        <button className="ui right floated right labeled icon button">
-                            <i className="right arrow icon"></i>
+                        <button className="ui right floated button">
+
                             <NavLink href={'/recent'}>View All</NavLink>
                         </button>
                         {/*<div className="ui divided list animated ">
