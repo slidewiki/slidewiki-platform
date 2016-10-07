@@ -21,10 +21,16 @@ class Home extends React.Component {
                 </div>
                 <div className="ui hidden divider"></div>
                 <div className="ui container grid stackable">
-                    <div className="one column row">
-                        <div className="column centered six wide">
+                    <div className="two column row">
+                        <div className="column six wide">
                           <h2 className="ui header">Welcome</h2>
-                          <p>
+                          Create, edit and share slide decks and other open educational materials.
+                          The latest version of SlideWiki includes:
+                          <ul>
+                          <li>upload and edit existing PowerPoint or create new decks</li>
+                          <li>version control for slide edits and decks</li>
+                          <li>add comments to slides and decks</li>
+                          </ul>
                               Many people in the world lack access to educational material.
                               Help us to create great educational material covering as many domains and as many languages as possible:
                               <ul>
@@ -35,17 +41,16 @@ class Home extends React.Component {
                                   <li>Translate decks covering topics you know well into your mother tongue (in development)</li>
                                   <li>Look for existing presentations and e-learning material, which could be imported into SlideWiki</li>
                               </ul>
-                          </p>
                         </div>
                         <div className="column ten wide">
-                            <h2 className="ui header">Featured decks:</h2>
+                            <h2 className="ui header">Featured decks</h2>
                             <div>
-                                {/*<Featured /> */}
-                                <div className="ui divided list animated ">
-                                    <a className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
-                                    <a className="item" href="/deck/5">Deck created from scratch &raquo;</a>
-                                    <a className="item" href="/deck/372">TODO:See documentation deck&raquo;</a>
-                                </div>
+                                <Featured />
+                                {/*<div className="ui divided list animated ">
+                                     <a className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
+                                     <a className="item" href="/deck/5">Deck created from scratch &raquo;</a>
+                                     <a className="item" href="/deck/372">TODO:See documentation deck&raquo;</a>
+                                 </div> */}
                             </div>
                         </div>
                     </div>

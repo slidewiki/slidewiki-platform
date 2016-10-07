@@ -64,7 +64,6 @@ fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/userProfile'));
-fetchrPlugin.registerService(require('./services/home'));
 
 server.use((req, res, next) => {
 
