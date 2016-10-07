@@ -129,7 +129,7 @@ class UserRegistration extends React.Component {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
             swal({
                 title: 'Thanks for signing up!',
-                text: 'Thank you. You have successfully registered. Please sign in with your new credentials.',
+                text: 'We will verify your affiliation with the SlideWiki trial partner you indicated. You will receive a mail when your account has been activated.',
                 type: 'success',
                 confirmButtonText: 'Close',
                 confirmButtonClass: 'positive ui button',
