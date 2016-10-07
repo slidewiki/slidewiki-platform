@@ -13,8 +13,7 @@ class Featured extends React.Component {
 
     render() {
         return (
-
-            <div ref="featuredDeckspanel" className="ui segment">
+            <div ref="featuredDeckspanel" className="ui segment" key = "featuredDeckspanel">
                 {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                 {this.props.HomePageStore.featured.map((deck, index) => {
                     let deckCreatorid = deck.user;
@@ -30,7 +29,7 @@ class Featured extends React.Component {
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
 
                     return (
-                        <div className="ui vertical segment ">
+                        <div className="ui vertical segment " key={'deck_meta' + deck._id}>
                             <div className="ui two column stackable grid">
                                 <div className="column">
                                     <h3 className="ui header"><a href={'./deck/' + deck._id}>{deck.title}</a></h3>
@@ -47,10 +46,9 @@ class Featured extends React.Component {
                                 </div>
                             </div>
                         </div>
-
                     );
-
                 })}
+
             </div>
 
 

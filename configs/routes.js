@@ -46,7 +46,7 @@ export default {
                     callback();
                 },
                 (callback) => {
-                    context.executeAction(loadFeatured, {params: {limit: payload.params.limit, offset: payload.params.offset}}, callback);
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
                 }
             ],
             (err, result) => {
@@ -65,8 +65,14 @@ export default {
         action: (context, payload, done) => {
             async.series([
                 (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Featured Decks'
+                    });
+                    callback();
+                },
+                (callback) => {
                     console.log(payload);
-                    context.executeAction(loadFeatured, {params: {limit: payload.params.limit, offset: payload.params.offset}}, callback);
+                    context.executeAction(loadFeatured, {params: {limit: 5, offset: 0}}, callback);
                 }
             ],
             (err, result) => {

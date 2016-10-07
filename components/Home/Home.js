@@ -1,9 +1,7 @@
 import React from 'react';
-
-import { NavLink } from 'fluxible-router';
 import Featured from './Featured';
+import {NavLink} from 'fluxible-router';
 class Home extends React.Component {
-
     render() {
         const heightStyle = {
             height: '100px'

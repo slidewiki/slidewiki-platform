@@ -6,11 +6,12 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
-        let limit = '3'; //TODO
-        let offset = '3'; //TODO
+
         if(resource === 'deck.featured'){
             /*********connect to microservices*************/
-
+            let limit, offset = null;
+            if (args.limit) limit = args.limit;
+            if (args.offset) offset = args.offset;
             rp.get({uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset}).then((res) => {
                 callback(null, {featured: JSON.parse(res)});
             }).catch((err) => {
