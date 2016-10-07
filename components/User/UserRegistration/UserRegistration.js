@@ -30,6 +30,13 @@ class UserRegistration extends React.Component {
                         prompt: 'Please enter your last name'
                     }]
                 },
+                organisation: {
+                    identifier: 'organisation',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your organisation'
+                    }]
+                },
                 username: {
                     identifier: 'username',
                     rules: [{
@@ -177,6 +184,7 @@ class UserRegistration extends React.Component {
         this.context.executeAction(userSignUp, {
             firstname: this.refs.firstname.value,
             lastname: this.refs.lastname.value,
+            organisation: this.refs.organisation.value,
             username: this.refs.username.value,
             language: language,
             email: this.refs.email.value,
@@ -210,8 +218,8 @@ class UserRegistration extends React.Component {
         //TODO email confirmation
         // const successMessage1 = 'To complete the registration process you have to confirm your account. An email has been sent to your address.';
         // const successMessage2 = 'To confirm and activate your account please check your inbox and click on the link inside the email we just sent you.';
-        const successMessage1 = 'Thank you. You have successfully registered.';
-        const successMessage2 = 'Please sign in with your new credentials.';
+        const successMessage1 = 'Thank youfor signing up to the SlideWiki beta.';
+        const successMessage2 = 'If your account is authorised, you will receive an email to confirm you sign in details.';
 
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
@@ -221,6 +229,7 @@ class UserRegistration extends React.Component {
         let emailClasses = classNames({
             'ui': true,
             'field': true,
+            'required': true,
             'inline': true,
             'error': (emailNotAllowed !== undefined) ? emailNotAllowed : false
         });
@@ -235,6 +244,7 @@ class UserRegistration extends React.Component {
         let usernameClasses = classNames({
             'ui': true,
             'field': true,
+            'required': true,
             'inline': true,
             'error': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false
         });
@@ -250,49 +260,60 @@ class UserRegistration extends React.Component {
         return (
             <div className="ui page centered grid" >
                 <div className="eight wide column">
-                    <div className="ui blue padded center aligned segment">
-                        <h2 className="ui dividing header">Sign Up</h2>
-                        <form className="ui form" >
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>First name * </label>
-                                <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
+                    <div className="ui blue padded segment">
+                        <h2 className="ui dividing header" >Sign Up</h2>
+                        <div className="left aligned eight wide column">
+                            <div className="ui message"  id="signupwelcome">
+                                <div className="header"  >Welcome to SlideWiki beta.</div>
+                                <p>This is the beta site for organisations involved with trialling SlideWiki. If you wish to add or edit decks on SlideWiki, use this form to sign up for an account. You will receive an email if your account is authorised.</p>
                             </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Last name * </label>
+                        </div>
+                        <div className="ui hidden divider"></div>
+                        <form className="ui form" >
+                            <div className="ui inline required field">
+                                <label htmlFor="firstname" style={signUpLabelStyle} >First name</label>
+                                <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" aria-required="true" autoFocus aria-describedby="signupwelcome"/></div>
+                            </div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} htmlFor="lastname">Last name</label>
                                 <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
                             </div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} htmlFor="organisation">Organisation</label>
+                                <div className="ui icon input"><input type="text" id="organisation" name="organisation" ref="organisation" placeholder="Organisation" aria-required="true"/></div>
+                            </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                                <label style={signUpLabelStyle}>Username * </label>
+                                <label style={signUpLabelStyle}>Username </label>
                                 <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                             </div>
                             <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                                <label style={signUpLabelStyle}>Email * </label>
+                                <label htmlFor="email" style={signUpLabelStyle}>Email</label>
                                 <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                             </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Re-enter email * </label>
+                            <div className="ui inline required field">
+                                <label htmlFor="reenteremail" style={signUpLabelStyle}>Re-enter email</label>
                                 <div className="ui icon input"><input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
                             </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Password * </label>
+                            <div className="ui inline required field">
+                                <label htmlFor="password" style={signUpLabelStyle}>Password (must have 8 or more characters)</label>
                                 <div className="ui icon input"><input type="password" id="password" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
                             </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Re-enter password * </label>
+                            <div className="ui inline required field">
+                                <label htmlFor="reenterpassword" style={signUpLabelStyle}>Re-enter password</label>
                                 <div className="ui icon input"><input type="password" id="reenterpassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
                             </div>
-                            <div >
+                            <div>
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
                                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={PUBLIC_KEY} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
-                            <button type="submit" className="ui blue labeled submit icon button" >
+                            <button type="submit" className="ui blue labeled submit icon button" aria-describedby="signupagree">
                                 <i className="icon add user"/> Sign Up
                             </button>
                         </form>
                         <br/>
-                        <div >
-                            By clicking Sign Up, you agree to our <a href="">Terms</a>.
+                        <div className="ui message" id="signupagree">
+                            <p>By clicking Sign Up, you agree to our <a href="">Terms</a>.</p>
                         </div>
                     </div>
                 </div>
