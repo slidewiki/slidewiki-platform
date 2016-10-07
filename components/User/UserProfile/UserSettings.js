@@ -102,7 +102,7 @@ class UserSettings extends React.Component {
 
                     <div className="title">
                         <i className="dropdown icon"/> <i className="ban icon"/>
-                        Delete my account
+                        Deactivate my account
                     </div>
                     <div className="content">
                         <AccountDeletion />
