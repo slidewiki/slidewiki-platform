@@ -38,10 +38,21 @@ export default {
         title: 'SlideWiki -- Home',
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: fullTitle
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: fullTitle
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: payload.params.limit, offset: payload.params.offset}}, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
             });
-            context.executeAction(loadFeatured, null, done);
         }
     },
 
