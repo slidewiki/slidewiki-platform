@@ -128,6 +128,7 @@ export default {
                     //TODO: speaker notes + in object model database in deck microservice
                     user: args.userid.toString(),
                     root_deck: args.root_deck,
+                    top_root_deck: selector.id,
                     parent_slide: {
                         id: content_id,
                         revision: content_id
@@ -150,10 +151,10 @@ export default {
                 }else{
                     pathArr=[];
                 }
-                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
+                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector, changeset: resParse.changeset});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {slide: {id: newSlideID, path: pathArr.join(';')}, selector: selector});
+                callback(err);
             });
         }
     },
@@ -167,9 +168,6 @@ export default {
             callback(null, {id: args.id});
         }
     }
-    // other methods
-    // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
 };
 /*
 getSlide: function(request, reply) {

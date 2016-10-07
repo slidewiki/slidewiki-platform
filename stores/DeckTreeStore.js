@@ -212,7 +212,7 @@ class DeckTreeStore extends BaseStore {
         }else{
             arr.splice(-1,1);
             let parentPath = arr.join(';');
-            let parentPart = parentPath[parentPath.length-1];
+            let parentPart = arr[arr.length-1];
             return Immutable.fromJS({'id': this.deckTree.get('id'), 'spath': parentPath, 'sid': parentPart.split(':')[0], 'stype': 'deck'});
         }
     }
@@ -405,11 +405,12 @@ class DeckTreeStore extends BaseStore {
         if(newNode.get('type') === 'slide'){
             newNode = newNode.set('path', newNodePathString);
             newNode = newNode.set('selected', true);
-            newNode = newNode.set('editable', true);
+            //for now do not set the tree node added as editable, since handling revisioning changes of parent decks is now done with deck tree refetching
+            //newNode = newNode.set('editable', true);
         }else{
             newNode = newNode.set('selected', true);
             newNode = newNode.set('expanded', true);
-            newNode = newNode.set('editable', true);
+            //newNode = newNode.set('editable', true);
             newNode = this.updatePathForImmTree(newNode, this.makePathArrFromString(newNodePathString));
         }
         //add node to the child list

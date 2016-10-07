@@ -3,7 +3,8 @@ import {shortTitle} from '../configs/general';
 import loadDeckView from './loadDeckView';
 import loadDeckEdit from './loadDeckEdit';
 import loadSlideView from './slide/loadSlideView';
-import loadSlideEdit from './slide/loadSlideEdit';
+//import loadSlideEdit from './slide/loadSlideEdit';
+import loadSlideEditWithRevisionControl from './slide/loadSlideEditWithRevisionControl';
 import ContentStore from '../stores/ContentStore';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
@@ -60,7 +61,7 @@ export default function loadContent(context, payload, done) {
                     targetAction = loadSlideView;
                     break;
                 case 'edit':
-                    targetAction = loadSlideEdit;
+                    targetAction = loadSlideEditWithRevisionControl;
                     break;
                 default:
                     targetAction = loadSlideView;

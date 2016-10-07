@@ -7,7 +7,8 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 // import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
-import loadSlideEdit from '../actions/slide/loadSlideEdit';
+//import loadSlideEdit from '../actions/slide/loadSlideEdit';
+import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
@@ -213,7 +214,8 @@ export default {
         page: 'slideedit',
         handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadSlideEdit, payload, done);
+            //context.executeAction(loadSlideEdit, payload, done);
+            context.executeAction(loadSlideEditWihtRevisionControl, payload, done);
         }
     },
     deckview: {

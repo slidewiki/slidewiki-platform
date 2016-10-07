@@ -11,7 +11,7 @@ export default function addTreeNode(context, payload, done) {
             } else {
                 context.dispatch('ADD_TREE_NODE_SUCCESS', res);
             }
-            done();
+            done(null, res);
         });
     }
 }
