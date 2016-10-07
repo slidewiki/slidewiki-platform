@@ -29,6 +29,7 @@ class SlideContentEditor extends React.Component {
         this.CKEDitor_loaded = false;
         //this.props.scaleratio = 1;
         this.scaleratio = 1;
+        this.addBoxButtonHTML = '';
     }
     handleSaveButton(){
 
@@ -339,6 +340,15 @@ class SlideContentEditor extends React.Component {
             <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
                     */
 
+        //Check if addboxbutton should be included
+        if(this.props.content.indexOf('pptx2html') !== -1)
+        { // if pptx2html element with absolute content is in slide content (underlying HTML)
+            this.addBoxButtonHTML = <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+                             <i className="plus square outline icon"></i>
+                             Add input box
+                             </button>
+        } else {this.addBoxButtonHTML = '';}
+
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
@@ -346,10 +356,7 @@ class SlideContentEditor extends React.Component {
                  <i className="save icon"></i>
                  Save
                 </button>
-                <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-                 <i className="plus square outline icon"></i>
-                 Add input box
-                </button>
+                {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <hr />
                 <div className="ui" style={compStyle}>
