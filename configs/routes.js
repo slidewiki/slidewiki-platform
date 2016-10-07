@@ -28,6 +28,7 @@ import loadNotFound from '../actions/loadNotFound';
 import async from 'async';
 import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
 import loadFeatured from '../actions/loadFeatured';
+import loadRecent from '../actions/loadRecent';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -47,6 +48,9 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}}, callback);
                 }
             ],
             (err, result) => {
@@ -56,23 +60,22 @@ export default {
         }
     },
 
-    featuredDecks: {
-        path: '/featured/:limit?/:offset?',
+    recentDecks: {
+        path: '/recent/:limit?/:offset?',
         method: 'get',
         page: 'featuredDecks',
-        title: 'Slidewiki -- featured decks',
-        handler: require('../components/Home/Featured'),
+        title: 'Slidewiki -- recent decks',
+        handler: require('../components/Home/Recent'),
         action: (context, payload, done) => {
             async.series([
                 (callback) => {
                     context.dispatch('UPDATE_PAGE_TITLE', {
-                        pageTitle: shortTitle + ' | Featured Decks'
+                        pageTitle: shortTitle + ' | Recent Decks'
                     });
                     callback();
                 },
                 (callback) => {
-                    console.log(payload);
-                    context.executeAction(loadFeatured, {params: {limit: 5, offset: 0}}, callback);
+                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
                 }
             ],
             (err, result) => {

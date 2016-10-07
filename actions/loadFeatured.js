@@ -4,7 +4,7 @@ export default function loadFeatured(context, payload, done) {
         if (err) {
             context.dispatch('LOAD_HOME_PAGE_FAILURE', err);
         } else {
-            context.dispatch('LOAD_HOME_PAGE_SUCCESS', res);
+            context.dispatch('LOAD_FEATURED_SUCCESS', res);
         }
         done();
     });

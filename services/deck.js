@@ -18,6 +18,17 @@ export default {
                 callback(err, {featured: []});
             });
         }
+        if(resource === 'deck.recent'){
+            /*********connect to microservices*************/
+            let limit, offset = null;
+            if (args.limit) limit = args.limit;
+            if (args.offset) offset = args.offset;
+            rp.get({uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset}).then((res) => {
+                callback(null, {recent: JSON.parse(res)});
+            }).catch((err) => {
+                callback(err, {featured: []});
+            });
+        }
         if (resource === 'deck.content') {
             /* Create promise for deck data success */
             let deckRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid});

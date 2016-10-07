@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
-import HomePageStore from '../../stores/HomePageStore';
+import DeckListStore from '../../stores/DeckListStore';
 import DeckViewPanel from '../Deck/ContentPanel/DeckModes/DeckViewPanel/DeckViewPanel';
 import CustomDate from '../Deck/util/CustomDate';
 import ISO6391 from 'iso-639-1';
@@ -9,16 +9,20 @@ import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';
 
-class Featured extends React.Component {
+class DeckList extends React.Component {
 
     render() {
+
+        let decks_to_show = this.props.scope === 'featured' ? this.props.DeckListStore.featured : this.props.DeckListStore.recent;
+
         return (
-            <div ref="featuredDeckspanel" className="ui segment" key = "featuredDeckspanel">
+            <div ref="DeckListpanel" className="ui segment" key = "Deckspanel">
                 {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
-                {this.props.HomePageStore.featured.map((deck, index) => {
+                {decks_to_show.map((deck, index) => {
                     let deckCreatorid = deck.user;
                     let deckCreator = deck.username;
-                    let deckIdAndrevision = deck._id + '-' + deck.featured_revision;
+                    let deckIdAndrevision = deck._id; //not used for now
+                    if (deck.revision_to_show) deckIdAndrevision+= '-' + deck.revision_to_show; //not used for now
                     let deckDate = CustomDate.format(deck.timestamp, 'Do MMMM YYYY');
                     let deckLanguageCode = deck.language === undefined ? 'gb' : deck.language;
                     let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
@@ -58,9 +62,9 @@ class Featured extends React.Component {
     }
 }
 
-Featured = connectToStores(Featured, [HomePageStore], (context, props) => {
+DeckList = connectToStores(DeckList, [DeckListStore], (context, props) => {
     return {
-        HomePageStore: context.getStore(HomePageStore).getState()
+        DeckListStore: context.getStore(DeckListStore).getState()
     };
 });
-export default Featured;
+export default DeckList;

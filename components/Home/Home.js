@@ -1,5 +1,5 @@
 import React from 'react';
-import Featured from './Featured';
+import DeckList from './DeckList';
 import {NavLink} from 'fluxible-router';
 class Home extends React.Component {
     render() {
@@ -53,10 +53,15 @@ class Home extends React.Component {
                 <div className="column ten wide">
                     <h2 className="ui header">Featured decks</h2>
                     <div>
-                        <Featured />
+                        <DeckList scope="featured"/>
+                    </div>
+                    <div className="ui hidden divider"></div>
+                    <div>
+                    <h2 className="ui header">Recent decks</h2>
+                        <DeckList scope="recent"/>
                         <button className="ui right floated right labeled icon button">
                             <i className="right arrow icon"></i>
-                            <NavLink href={'/featured'}>View All</NavLink>
+                            <NavLink href={'/recent'}>View All</NavLink>
                         </button>
                         {/*<div className="ui divided list animated ">
                              <a className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
