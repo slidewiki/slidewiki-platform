@@ -22,12 +22,11 @@ class DeckList extends React.Component {
                     let deckIdAndrevision = deck._id; //not used for now
                     if (deck.revision_to_show) deckIdAndrevision+= '-' + deck.revision_to_show; //not used for now
                     let deckDate = CustomDate.format(deck.timestamp, 'Do MMMM YYYY');
-                    let deckLanguageCode = deck.language === undefined ? 'gb' : deck.language;
+                    let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
                     let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
                     // default English
                     deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-                    let countryFlag = deckLanguageCode;
-                    //let totalSlides = '1000'; //TODO
+                    let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
 
                     return (
