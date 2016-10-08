@@ -12,13 +12,11 @@ import { Microservices } from '../../configs/microservices';
 class DeckList extends React.Component {
 
     render() {
-
+        let result = '';
         let decks_to_show = this.props.scope === 'featured' ? this.props.DeckListStore.featured : this.props.DeckListStore.recent;
-
-        return (
-            <div ref="DeckListpanel" className="ui segment" key = "Deckspanel">
-                {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
-                {decks_to_show.map((deck, index) => {
+        if (decks_to_show){
+            result =
+                decks_to_show.map((deck, index) => {
                     let deckCreatorid = deck.user;
                     let deckCreator = deck.username;
                     let deckIdAndrevision = deck._id; //not used for now
@@ -51,14 +49,14 @@ class DeckList extends React.Component {
                             </div>
                         </div>
                     );
-                })}
+                });
+        }
 
+        return (
+            <div ref="DeckListpanel" className="ui segment" key = "Deckspanel">
+                {result}
             </div>
-
-
         );
-
-
     }
 }
 
