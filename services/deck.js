@@ -6,6 +6,29 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
+
+        if(resource === 'deck.featured'){
+            /*********connect to microservices*************/
+            let limit, offset = null;
+            if (args.limit) limit = args.limit;
+            if (args.offset) offset = args.offset;
+            rp.get({uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset}).then((res) => {
+                callback(null, {featured: JSON.parse(res)});
+            }).catch((err) => {
+                callback(err, {featured: []});
+            });
+        }
+        if(resource === 'deck.recent'){
+            /*********connect to microservices*************/
+            let limit, offset = null;
+            if (args.limit) limit = args.limit;
+            if (args.offset) offset = args.offset;
+            rp.get({uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset}).then((res) => {
+                callback(null, {recent: JSON.parse(res)});
+            }).catch((err) => {
+                callback(err, {featured: []});
+            });
+        }
         if (resource === 'deck.content') {
             /* Create promise for deck data success */
             let deckRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid});
