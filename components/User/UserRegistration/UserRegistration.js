@@ -313,7 +313,7 @@ class UserRegistration extends React.Component {
                         </form>
                         <br/>
                         <div className="ui message" id="signupagree">
-                            <p>By clicking Sign Up, you agree to our <a href="">Terms</a>.</p>
+                            <p>By clicking Sign Up, you agree to our <a href="/imprint">Terms</a>.</p>
                         </div>
                     </div>
                 </div>
