@@ -12,7 +12,7 @@ import { Microservices } from '../../configs/microservices';
 class DeckList extends React.Component {
 
     render() {
-        let result = '';
+        let result = this.props.scope === 'featured' ? 'No featured decks are currently on Slidewiki' : 'No decks are currently on SlideWiki';
         let decks_to_show = this.props.scope === 'featured' ? this.props.DeckListStore.featured : this.props.DeckListStore.recent;
         if (decks_to_show){
             result =
