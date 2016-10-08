@@ -11,9 +11,10 @@ import deckContentPathError from './error/deckContentPathError';
 import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
+import { AllowedPattern } from './error/util/allowedPattern';
 
 export default function loadDeck(context, payload, done) {
-    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+    if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
     }
@@ -23,12 +24,12 @@ export default function loadDeck(context, payload, done) {
         return;
     }
 
-    if (!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+    if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
     }
 
-    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined)) {
+    if (!(payload.params.spath && (AllowedPattern.DECK_CONTENT_PATH.test(payload.params.spath)) || payload.params.spath === undefined)) {
         context.executeAction(deckContentPathError, payload, done);
         return;
     }
