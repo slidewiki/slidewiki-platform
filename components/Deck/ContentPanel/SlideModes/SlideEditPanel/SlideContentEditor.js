@@ -13,6 +13,7 @@ import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import {Microservices} from '../../../../../configs/microservices';
 
 let ReactDOM = require('react-dom');
 
@@ -145,9 +146,17 @@ class SlideContentEditor extends React.Component {
             uiColor: '#4183C4',
             removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
         });}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
-        {
-            CKEDITOR.inline('inlineContent');
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
+            alert('test');
+            const userId = this.props.UserProfileStore.userid;
+            //console.log(userId);
+            // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+
+            //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri +  + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
+            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+
         }
         this.currentcontent = this.props.content;
 
