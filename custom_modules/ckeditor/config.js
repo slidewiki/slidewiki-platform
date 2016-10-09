@@ -140,43 +140,46 @@ CKEDITOR.editorConfig = function( config ) {
 	// Set the most common block elements.
     config.format_tags = 'p;h1;h2;h3;pre';
 
+    //#####Image upload via CKeditor - TODO//
+
+    config.extraPlugins = 'uploadimage';
+    config.extraPlugins = 'uploadwidget';
+    //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
+    /*
+    //config.uploadUrl = '../';
+    //config.uploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //config.filebrowserBrowseUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //config.filebrowserUploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //config.filebrowserUploadUrl = './../upload';
+    //http://docs.ckeditor.com/#!/guide/dev_file_browse_upload
+    //config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
+    //config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
+    //config.filebrowserUploadUrl = 'http://localhost:8880/importPPTX';
+    config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
+    //config.imageUploadUrl = 'http://localhost:8880/importPPTX';
+    //config.uploadUrl = 'http://localhost:8880/importImage?type=Images';
+    //config.imageUploadUrl = 'http://localhost:8880/importImage?type=Images';
+    //config.uploadUrl = 'http://platform.manfredfris.ch/importfile';
+    */
+    //TODO - create platform page, or importservice URL,
+    //       or media-service-url (copy import docker) for uploading?!
+    //       reuse superagent work??
+    //TODO - return JSON -> http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-fileUploadResponse
+    //       and see http://stackoverflow.com/questions/30087440/ckeditor-4-5-0-beta-fileupload-api-issue
+    //       !!and http://docs.ckeditor.com/#!/guide/dev_file_upload
+
+    //http://ckeditor.com/addon/uploadimage -->This plugin enables support for uploading images that were dropped or pasted into the editor.
+    //depends on http://ckeditor.com/addon/uploadwidget
+    // needs configuration: http://sdk.ckeditor.com/samples/fileupload.html +
+    // http://sdk.ckeditor.com/samples/fileupload.html#uploading-dropped-and-pasted-images
+    // Show toolbar on startup (optional).
+    //config.startupFocus = true
+
 	// Simplify the dialog windows.
 	//config.removeDialogTabs = 'image:advanced;link:advanced';
 };
 CKEDITOR.disableAutoInline = true;
-/*
-//#####Image upload via CKeditor - tried/researched, not chosen//
 
-config.extraPlugins = 'uploadimage',
-config.extraPlugins = 'uploadwidget',
-//config.uploadUrl = '../';
-//config.uploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
-//config.filebrowserBrowseUrl = 'http://kdi-student.de/webauftritt/kurt/';
-//config.filebrowserUploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
-//config.filebrowserUploadUrl = './../upload';
-//http://docs.ckeditor.com/#!/guide/dev_file_browse_upload
-//config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
-//config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
-//config.filebrowserUploadUrl = 'http://localhost:8880/importPPTX';
-config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
-//config.imageUploadUrl = 'http://localhost:8880/importPPTX';
-//config.uploadUrl = 'http://localhost:8880/importImage?type=Images';
-//config.imageUploadUrl = 'http://localhost:8880/importImage?type=Images';
-//config.uploadUrl = 'http://platform.manfredfris.ch/importfile';
-*/
-//TODO - create platform page, or importservice URL,
-//       or media-service-url (copy import docker) for uploading?!
-//       reuse superagent work??
-//TODO - return JSON -> http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-fileUploadResponse
-//       and see http://stackoverflow.com/questions/30087440/ckeditor-4-5-0-beta-fileupload-api-issue
-//       !!and http://docs.ckeditor.com/#!/guide/dev_file_upload
-
-//http://ckeditor.com/addon/uploadimage -->This plugin enables support for uploading images that were dropped or pasted into the editor.
-//depends on http://ckeditor.com/addon/uploadwidget
-// needs configuration: http://sdk.ckeditor.com/samples/fileupload.html +
-// http://sdk.ckeditor.com/samples/fileupload.html#uploading-dropped-and-pasted-images
-// Show toolbar on startup (optional).
-//config.startupFocus = true
 
 //######in import-service/application/controllers/handler.js:
 /*
