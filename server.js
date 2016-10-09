@@ -20,6 +20,8 @@ import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 
+import { Microservices } from './configs/microservices';
+
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
 //otherwise it will try and transpile CSS into JavaScript.
@@ -142,6 +144,7 @@ server.use((req, res, next) => {
     });
 });
 
+console.log(Microservices);
 
 const port = process.env.PORT || 3000;
 server.listen(port);
