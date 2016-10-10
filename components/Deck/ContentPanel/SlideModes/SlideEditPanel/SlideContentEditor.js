@@ -292,7 +292,7 @@ class SlideContentEditor extends React.Component {
     componentWillUnmount() {
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
-        //CKEDITOR.instances.inlineHeader.destroy();
+        CKEDITOR.instances.inlineHeader.destroy();
         CKEDITOR.instances.inlineContent.destroy();
         CKEDITOR.instances.inlineSpeakerNotes.destroy();
     }

@@ -28,8 +28,12 @@ class SearchParamsStore extends BaseStore {
         ];
         this.languages = [
             {'id': '1', 'description':'English', 'value':'en'},
-            {'id': '2', 'description':'Spanish', 'value':'es'},
+            {'id': '2', 'description':'German', 'value':'de'},
             {'id': '3', 'description':'Greek', 'value':'gr'},
+            {'id': '4', 'description':'Italian', 'value':'it'},
+            {'id': '5', 'description':'Portugese', 'value':'pt'},
+            {'id': '6', 'description':'Serbian', 'value':'sr'},
+            {'id': '7', 'description':'Spanish', 'value':'es'},
         ];
     }
     getUriParams(qstr){
