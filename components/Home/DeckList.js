@@ -26,7 +26,7 @@ class DeckList extends React.Component {
                     let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
                     // default English
                     deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-                    let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
+                    //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
 
                     return (
@@ -39,7 +39,7 @@ class DeckList extends React.Component {
                                 </div>
                                 <div className="column right aligned">
                                         <div className="ui large label" >
-                                            <i className={countryFlag + ' flag'} aria-label="Language"></i>{deckLanguage}</div>
+                                            {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                         {/*<div className="ui large label" tabIndex="0" >
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>*/}
                                        <div className="ui large label" tabIndex="0" >

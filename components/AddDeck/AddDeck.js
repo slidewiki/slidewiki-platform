@@ -233,12 +233,30 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let languageOptions = <select className="ui search dropdown"  id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
+        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
                 Select Language
             </option>
-            <option value="en_EN" >
+            <option value="en_GB" >
                 English
+            </option>
+            <option value="de_DE" >
+                German
+            </option>
+            <option value="el_GR" >
+                Greek
+            </option>
+            <option value="it_IT" >
+                Italian
+            </option>
+            <option value="pt_PT" >
+                Portugese
+            </option>
+            <option value="sr_RS" >
+                Serbian
+            </option>
+            <option value="es_ES" >
+                Spanish
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >

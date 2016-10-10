@@ -118,8 +118,26 @@ class DeckPropertiesEditor extends React.Component {
             <option>
                 Select Language
             </option>
-            <option value="en_EN">
+            <option value="en_GB" >
                 English
+            </option>
+            <option value="de_DE" >
+                German
+            </option>
+            <option value="el_GR" >
+                Greek
+            </option>
+            <option value="it_IT" >
+                Italian
+            </option>
+            <option value="pt_PT" >
+                Portugese
+            </option>
+            <option value="sr_RS" >
+                Serbian
+            </option>
+            <option value="es_ES" >
+                Spanish
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"
