@@ -101,6 +101,20 @@ class AddDeck extends React.Component {
         //call action to update view
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
+
+        if (this.props.ImportStore.totalNoOfSlides !== 0)
+        {
+            swal({
+                title: 'Your deck has been uploaded. Go to "my decks" (in your top-right user menu) to see it. We have a last-minute development issue with redirecting from here.',
+                text: '',
+                type: 'success',
+                timer: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: true
+            });
+        }
         //if everything is fine then create the deck
         if (everythingIsFine) {
             this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
