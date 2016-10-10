@@ -87,7 +87,7 @@ class LoginModal extends React.Component {
 
         if (this.props.UserProfileStore.username === '') {
             loginButton = (
-                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
+                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>
             );
         }
 
@@ -121,15 +121,15 @@ class LoginModal extends React.Component {
                       </form>
                       <br/>
                       <div className="ui floated right">
-                          <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
+                          <a href="#" onClick={this.handleNoAccessClick.bind(this)}>I can not access my account</a>
                           <br/><br/>
-                          <a href="#" onClick={this.handleSignupClick}>Don&apos;t have an account? Sign up here.</a>
+                          <a href="#" onClick={this.handleSignupClick.bind(this)}>Don&apos;t have an account? Sign up here.</a>
                       </div>
                     </div>
                 </div>
               </div>
               <div className="actions">
-                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In</button>
+                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin.bind(this)}><i className="icon sign in"/> Sign In</button>
                 <button type="cancel" className="ui cancel button">
                   <i className="remove icon"/>Close
                 </button>
