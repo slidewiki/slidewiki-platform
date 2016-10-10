@@ -11,11 +11,22 @@ export default function saveTreeNode(context, payload, done) {
                 context.dispatch('SAVE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('SAVE_TREE_NODE_SUCCESS', payload);
+                let newSid = payload.selector.sid, newPath = payload.selector.spath;
+                if (payload.selector.stype === 'slide') {
+                    newSid = res._id + '-' + res.revisions[0].id;
+                    if (payload.selector.spath !== '') {
+                        let pathArr = payload.selector.spath.split(';');
+                        let lastPath = pathArr[pathArr.length - 1];
+                        let lastPathPosition = lastPath.split(':')[1];
+                        pathArr[pathArr.length - 1] = newSid + ':' + lastPathPosition;
+                        newPath = pathArr.join(';');
+                    }
+                }
                 let selector = {
                     id: payload.selector.id,
                     stype: payload.selector.stype,
-                    sid: payload.selector.stype === 'slide' ? res._id + '-' + res.revisions[0].id : payload.selector.sid,
-                    spath: payload.selector.spath
+                    sid: newSid,
+                    spath: newPath
                 };
                 context.executeAction(handleRevisionChangesAndNavigate, {
                     selector: selector,
