@@ -7,7 +7,8 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 // import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
-import loadSlideEdit from '../actions/slide/loadSlideEdit';
+//import loadSlideEdit from '../actions/slide/loadSlideEdit';
+import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
@@ -28,6 +29,8 @@ import loadNotFound from '../actions/loadNotFound';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
+import loadFeatured from '../actions/loadFeatured';
+import loadRecent from '../actions/loadRecent';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -38,12 +41,52 @@ export default {
         title: 'SlideWiki -- Home',
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: fullTitle
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: fullTitle
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}}, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
             });
-            done();
         }
     },
+
+    recentDecks: {
+        path: '/recent/:limit?/:offset?',
+        method: 'get',
+        page: 'featuredDecks',
+        title: 'Slidewiki -- recent decks',
+        handler: require('../components/Home/Recent'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Recent Decks'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
+
     about: {
         path: '/about',
         method: 'get',
@@ -214,7 +257,8 @@ export default {
         page: 'slideedit',
         handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadSlideEdit, payload, done);
+            //context.executeAction(loadSlideEdit, payload, done);
+            context.executeAction(loadSlideEditWihtRevisionControl, payload, done);
         }
     },
     deckview: {

@@ -1,5 +1,5 @@
-import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../stores/UserProfileStore';
+import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 
 export default function saveTreeNode(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;
@@ -11,10 +11,15 @@ export default function saveTreeNode(context, payload, done) {
                 context.dispatch('SAVE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('SAVE_TREE_NODE_SUCCESS', payload);
-                //update the URL
-                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + payload.selector.sid + '/' + payload.selector.spath;
-                context.executeAction(navigateAction, {
-                    url: newURL
+                let selector = {
+                    id: payload.selector.id,
+                    stype: payload.selector.stype,
+                    sid: payload.selector.stype === 'slide' ? res._id + '-' + res.revisions[0].id : payload.selector.sid,
+                    spath: payload.selector.spath
+                };
+                context.executeAction(handleRevisionChangesAndNavigate, {
+                    selector: selector,
+                    changeset: res.changeset
                 });
             }
             done();

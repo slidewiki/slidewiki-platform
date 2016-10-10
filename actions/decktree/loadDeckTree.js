@@ -3,14 +3,15 @@ import DeckTreeStore from '../../stores/DeckTreeStore';
 import serviceUnavailable from '../error/serviceUnavailable';
 import deckIdTypeError from '../error/deckIdTypeError';
 import deckContentPathError from '../error/deckContentPathError';
+import { AllowedPattern } from '../error/util/allowedPattern';
 
 export default function loadDeckTree(context, payload, done) {
-    if (!(/^[0-9-]+$/.test(payload.params.id) && Number.parseInt(payload.params.id) >= 0)) {
+    if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
     }
 
-    if (!(payload.params.spath && (/^[0-9a-z:;-]+$/.test(payload.params.spath)) || payload.params.spath === undefined || payload.params.spath === '')) {
+    if (!(payload.params.spath && (AllowedPattern.DECK_CONTENT_PATH.test(payload.params.spath)) || payload.params.spath === undefined || payload.params.spath === '')) {
         context.executeAction(deckContentPathError, payload, done);
         return;
     }

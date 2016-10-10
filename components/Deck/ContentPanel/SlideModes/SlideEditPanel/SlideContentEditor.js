@@ -13,6 +13,7 @@ import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import {Microservices} from '../../../../../configs/microservices';
 
 let ReactDOM = require('react-dom');
 
@@ -29,6 +30,7 @@ class SlideContentEditor extends React.Component {
         this.CKEDitor_loaded = false;
         //this.props.scaleratio = 1;
         this.scaleratio = 1;
+        this.addBoxButtonHTML = '';
     }
     handleSaveButton(){
 
@@ -144,9 +146,17 @@ class SlideContentEditor extends React.Component {
             uiColor: '#4183C4',
             removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
         });}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
-        {
-            CKEDITOR.inline('inlineContent');
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
+            //alert('test');
+            const userId = this.props.UserProfileStore.userid;
+            //console.log(userId);
+            // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+
+            //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri +  + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
+            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+
         }
         this.currentcontent = this.props.content;
 
@@ -339,6 +349,15 @@ class SlideContentEditor extends React.Component {
             <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
                     */
 
+        //Check if addboxbutton should be included
+        if(this.props.content.indexOf('pptx2html') !== -1)
+        { // if pptx2html element with absolute content is in slide content (underlying HTML)
+            this.addBoxButtonHTML = <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+                             <i className="plus square outline icon"></i>
+                             Add input box
+                             </button>
+        } else {this.addBoxButtonHTML = '';}
+
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
@@ -346,10 +365,7 @@ class SlideContentEditor extends React.Component {
                  <i className="save icon"></i>
                  Save
                 </button>
-                <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-                 <i className="plus square outline icon"></i>
-                 Add input box
-                </button>
+                {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <hr />
                 <div className="ui" style={compStyle}>
