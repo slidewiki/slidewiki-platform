@@ -26,6 +26,7 @@ import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
 import loadFeatured from '../actions/loadFeatured';
@@ -125,19 +126,6 @@ export default {
             done();
         }
     },
-    addDeck: {
-        path: '/addDeck',
-        method: 'get',
-        page: 'addDeck',
-        title: 'SlideWiki -- Add Deck',
-        handler: require('../components/AddDeck/AddDeck'),
-        action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Add Deck'
-            });
-            context.executeAction(loadAddDeck, null, done);
-        }
-    },
     notifications: {
         path: '/notifications',
         method: 'get',
@@ -162,6 +150,19 @@ export default {
                 pageTitle: shortTitle + ' | Sign up'
             });
             done();
+        }
+    },
+    resetPassword: {
+        path: '/resetpassword',
+        method: 'get',
+        page: 'resetPassword',
+        title: 'SlideWiki -- Reset your password',
+        handler: require('../components/Login/ResetPassword'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Reset password'
+            });
+            context.executeAction(loadResetPassword, payload, done);
         }
     },
 //-----------------------------------User routes------------------------------
@@ -390,6 +391,19 @@ export default {
             context.executeAction(loadImportFile, payload, done);
             //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
+        }
+    },
+    addDeck: {
+        path: '/addDeck',
+        method: 'get',
+        page: 'addDeck',
+        title: 'SlideWiki -- Add Deck',
+        handler: require('../components/AddDeck/AddDeck'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Add Deck'
+            });
+            context.executeAction(loadAddDeck, null, done);
         }
     },
     /* This should be the last route in routes.js */
