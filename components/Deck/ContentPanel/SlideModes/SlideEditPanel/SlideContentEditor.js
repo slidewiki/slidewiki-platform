@@ -203,6 +203,7 @@ class SlideContentEditor extends React.Component {
               , onlyY: false
               , ratio: this.scaleratio
             });
+            document.domain = 'slidewiki.org';
         });
 
 
