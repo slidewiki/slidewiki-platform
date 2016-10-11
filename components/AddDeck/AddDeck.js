@@ -101,6 +101,20 @@ class AddDeck extends React.Component {
         //call action to update view
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
+
+        if (this.props.ImportStore.totalNoOfSlides !== 0)
+        {
+            swal({
+                title: 'Your deck has been uploaded. Go to "my decks" (in your top-right user menu) to see it. We have a last-minute development issue with redirecting from here.',
+                text: '',
+                type: 'success',
+                timer: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: true
+            });
+        }
         //if everything is fine then create the deck
         if (everythingIsFine) {
             this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
@@ -233,12 +247,30 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let languageOptions = <select className="ui search dropdown"  id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
+        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
                 Select Language
             </option>
-            <option value="en_EN" >
+            <option value="en_GB" >
                 English
+            </option>
+            <option value="de_DE" >
+                German
+            </option>
+            <option value="el_GR" >
+                Greek
+            </option>
+            <option value="it_IT" >
+                Italian
+            </option>
+            <option value="pt_PT" >
+                Portugese
+            </option>
+            <option value="sr_RS" >
+                Serbian
+            </option>
+            <option value="es_ES" >
+                Spanish
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
@@ -332,7 +364,7 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
-                                  I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
+                                  I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
                               </label>
                           </div>
                       </div>

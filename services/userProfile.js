@@ -123,7 +123,8 @@ export default {
                             description: !isEmpty(deck.description) ? deck.description : 'No Description',
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id
+                            deckID: deck._id,
+                            firstSlide: deck.firstSlide
                         };
                     }).sort((a,b) => a.creationDate < b.creationDate);
                     callback(null, converted);
@@ -144,7 +145,8 @@ export default {
                             description: !isEmpty(deck.description) ? deck.description : 'No Description',
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id
+                            deckID: deck._id,
+                            firstSlide: deck.firstSlide
                         };
                     }).sort((a,b) => a.creationDate < b.creationDate);
                     callback(null, converted);

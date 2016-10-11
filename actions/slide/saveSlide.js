@@ -1,26 +1,23 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import RevisioningStore from '../../stores/RevisioningStore';
 import {shortTitle} from '../../configs/general';
-import {navigateAction} from 'fluxible-router';
+import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import striptags from 'striptags';
-
-//extracts the id of the slide's immediate parent deck from the path string
-function findImmediateParentId(selector) {
-    let arr = selector.spath.split(';');
-    //root deck is parent
-    if (arr.length <= 1) {
-        return selector.id;
-    } else {
-        arr.splice(-1, 1);
-        return arr[arr.length - 1].split(':')[0];
-    }
-}
+import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 
 export default function saveSlide(context, payload, done) {
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
+    const revStoreStatus = context.getStore(RevisioningStore).getState();
+    //TODO: extend this
+    //for now it always refreshes the page when a new deck rev needs to be created
+    if (revStoreStatus.needs_revision) {
+        //call hand change action and
+        //refresh the page
+    }
     //enrich with root deck id if deck to be revised is not uppermost deck
-    let immediateParent = findImmediateParentId(payload.selector);
-    payload.root_deck = immediateParent;
+    let parent = TreeUtil.getParentId(payload.selector);
+    payload.root_deck = parent;
 
     if (userid != null && userid !== '') {
         //enrich with user id
@@ -30,16 +27,22 @@ export default function saveSlide(context, payload, done) {
                 context.dispatch('SAVE_SLIDE_EDIT_FAILURE', err);
             } else {
                 context.dispatch('SAVE_SLIDE_EDIT_SUCCESS', res);
-                //TODO: retrieve the new revision number from deck-service and send it to decktree
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
                     selector: payload.selector,
                     nodeSpec: {title: striptags(payload.title), id: res.slide.id, path: res.slide.path}
                 });
-                //update the URL: redirect to view after edit
-                let newURL = '/deck/' + res.selector.id + '/' + res.selector.stype + '/' + res.slide.id + '/' + res.slide.path;
-                context.executeAction(navigateAction, {
-                    url: newURL
+                //handle possible parent revisioning changes and redirect to view after edit
+                context.executeAction(handleRevisionChangesAndNavigate, {
+                    selector: {
+                        id: payload.selector.id,
+                        sid: res.slide.id,
+                        stype: payload.selector.stype,
+                        spath: res.slide.path
+                    },
+                    changeset: res.changeset
                 });
+
+
             }
             //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
             let pageTitle = shortTitle + ' | Slide Edit | ';

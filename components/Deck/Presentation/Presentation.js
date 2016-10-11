@@ -11,7 +11,6 @@ let playerCss = {
     height: '100%',
     position: 'absolute',
     top: '0',
-    fontSize: '100%'
 };
 
 let clearStyle = {

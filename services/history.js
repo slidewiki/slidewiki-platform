@@ -1,21 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-
-//extracts the id of the immediate parent deck from the path string
-function findImmediateParentId(selector) {
-    //no parent
-    if (!selector.sid || (selector.stype === 'deck' && selector.sid === selector.id)) {
-        return null;
-    }
-    let arr = selector.spath.split(';');
-    //root deck is parent
-    if (arr.length <= 1) {
-        return selector.id;
-    } else {
-        arr.splice(-1, 1);
-        return arr[arr.length - 1].split(':')[0];
-    }
-}
+import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 
 //extracts the position from path string
 function getRelPositionFromPath(spath) {
@@ -33,10 +18,10 @@ export default {
         let isRootDeck = selector.stype === 'deck' && selector.id === selector.sid;
         if (resource === 'history.list') {
             let history, contentItemPromise, parentPromise;
-            let immediateParentId = findImmediateParentId(selector);
+            let parentId = TreeUtil.getParentId(selector);
             if (!isRootDeck) {
                 //if the specified node is not the root deck, we need to request for its immediate parent in order to find the active revision
-                parentPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + immediateParentId}).promise().bind(this);
+                parentPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + parentId}).promise().bind(this);
             }
             contentItemPromise = rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid.split('-')[0]}).promise().bind(this);
 
@@ -99,12 +84,12 @@ export default {
     update: (req, resource, params, body, config, callback) => {
         let args = params.params ? params.params : params;
         if (resource === 'history.revert') {
-            let immediateParentId = findImmediateParentId(args.selector);
+            let parentId = TreeUtil.getParentId(args.selector);
             let requestBody = {
                 revision_id: String(args.revisionId)
             };
-            if (immediateParentId != null) {
-                requestBody.root_deck = immediateParentId;
+            if (parentId != null) {
+                requestBody.root_deck = parentId;
             }
             rp.post({
                 uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],

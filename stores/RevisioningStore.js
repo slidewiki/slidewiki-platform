@@ -10,6 +10,11 @@ class RevisioningStore extends BaseStore {
         this.status = payload.status;
         this.emitChange();
     }
+    resetResult(payload) {
+        this.status = {needs_revision: false, target_deck: 0, user: 0};
+        this.result = {};
+        this.emitChange();
+    }
     updateResult(payload) {
         this.result = payload.result;
         this.emitChange();
@@ -32,7 +37,8 @@ class RevisioningStore extends BaseStore {
 RevisioningStore.storeName = 'RevisioningStore';
 RevisioningStore.handlers = {
     'UPDATE_REVISIONING_STATUS': 'updateStatus',
-    'UPDATE_REVISIONING_RESULT': 'updateResult'
+    'UPDATE_REVISIONING_RESULT': 'updateResult',
+    'RESET_REVISIONING_STATUS': 'resetResult'
 };
 
 export default RevisioningStore;

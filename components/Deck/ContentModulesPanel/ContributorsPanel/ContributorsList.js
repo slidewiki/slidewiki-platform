@@ -9,7 +9,7 @@ class ContributorsList extends React.Component {
             );
         });
         return (
-            <div ref="contributorsList" className="ui compact divided list">
+            <div ref="contributorsList" className="ui relaxed list">
                 {list}
              </div>
         );

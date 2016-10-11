@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
+import {Microservices} from '../../../../configs/microservices';
 
 
 class ContentActionsFooter extends React.Component {
@@ -26,7 +27,7 @@ class ContentActionsFooter extends React.Component {
         let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
         if(this.props.ContentStore.selector.stype === 'slide'){
             // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += '#/slide-' + this.props.ContentStore.selector.sid
+            presLocation += '#/slide-' + this.props.ContentStore.selector.sid;
         }
         return presLocation;
     }
@@ -40,15 +41,37 @@ class ContentActionsFooter extends React.Component {
     getPrintHref(){
         return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
     }
-
     handlePrintClick(e){
         if(process.env.BROWSER){
             e.preventDefault();
             window.open(this.getPrintHref());
         }
+    }*/
+    getPDFHref(){
+
+        if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0)
+        {
+            //console.log(this.props.ContentStore.selector.id);
+            let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
+            let pdfHref = Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+            return pdfHref;
+        }
+        else
+        {
+            // in adddeck this.props.ContentStore.selector.id is 0
+            return Microservices.pdf.uri + '/exportPDF/';
+        }
+    }
+
+    handleDownloadClick(e){
+
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getPDFHref());
+        }
 
     }
-    */
+
     render() {
         return (
             <div className="ui">
@@ -65,12 +88,17 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
+
+                           <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
                             <button className="ui button">
                                 <i className="print large icon"></i>
                             </button>
-                            <button className="ui disabled button">
-                                <i className="download large icon"></i>
-                            </button>
+                            </NavLink>
+                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
+                                <button className="ui button">
+                                    <i className="download large icon"></i>
+                                </button>
+                            </NavLink>
                             <button className="ui disabled button">
                                 <i className="share alternate large icon"></i>
                             </button>
