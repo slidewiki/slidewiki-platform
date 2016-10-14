@@ -169,10 +169,20 @@ class AddDeck extends React.Component {
         this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
+            let language = this.refs.select_languages.value;
+            let license = this.refs.select_licenses.value;
+            if (language === null || language === undefined) {//set default
+                language = 'en_GB';
+            }
+            if (license === null || license === undefined) {//set default
+                license = 'CC0';
+            }
             //call action
             const payload = {
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
+                language: language,
+                licence: licence,
                 base64: this.props.ImportStore.base64
             };
             this.initializeProgressBar();
