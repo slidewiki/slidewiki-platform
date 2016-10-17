@@ -182,7 +182,7 @@ class AddDeck extends React.Component {
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
                 language: language,
-                licence: licence,
+                license: license,
                 base64: this.props.ImportStore.base64
             };
             this.initializeProgressBar();
