@@ -171,7 +171,7 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.file !== null) {
             let language = this.refs.select_languages.value;
             let license = this.refs.select_licenses.value;
-            if (language === null || language === undefined) {//set default
+            if (language === null || language === undefined || language === 'Select Language') {//set default
                 language = 'en_GB';
             }
             if (license === null || license === undefined) {//set default
