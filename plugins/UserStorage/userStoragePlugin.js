@@ -35,7 +35,7 @@ module.exports = function userStoragePlugin(options) {
             if (user === undefined && cookies !== undefined && cookies[user_cookieName] !== undefined)
                 user = cookie.getJSON(user_cookieName);
 
-            //console.log('UserStoragePlugin plugContext:', cookies, res ? 'result is defined - server-side' : 'res is undefined - client-side', user);
+            // console.log('UserStoragePlugin plugContext:', cookies, res ? 'result is defined - server-side' : 'res is undefined - client-side', user);
 
             // Returns a context plugin
             return {
@@ -45,7 +45,7 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugActionContext: function plugActionContext(actionContext) {
                     actionContext.getUser = function () {
-                        //console.log('userStoragePlugin actionContext getUser()');
+                        // console.log('userStoragePlugin actionContext getUser()');
 
                         let result = user;
 
@@ -57,7 +57,7 @@ module.exports = function userStoragePlugin(options) {
                                 else {
                                     result = cookie.getJSON(user_cookieName);
                                 }
-                                //console.log('userStoragePlugin actionContext getUser: got user from cookies');
+                                // console.log('userStoragePlugin actionContext getUser: got user from cookies');
                             }
                         } catch (e) {
 
@@ -69,32 +69,47 @@ module.exports = function userStoragePlugin(options) {
                         if (typeof newUser !== 'object')
                             return;
 
+                        // console.log('userStoragePlugin actionContext setUser:', newUser);
+
                         user = newUser;
 
                         if (res) {
-                            res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, newUser, {
+                            let servercookie = cookieParser.serialize(user_cookieName, newUser, {
                                 expires: createExpire(),
-                                maxAge: secondsCookieShouldBeValid
-                            }));
+                                maxAge: secondsCookieShouldBeValid,
+                                sameSite: true,
+                                domain: location.hostname
+                            });
+                            res.setHeader('Set-Cookie', servercookie);
+                            // console.log('userStoragePlugin actionContext setUser() on server', servercookie);
                         }
                         else {
                             cookie.set(user_cookieName, newUser,{
                                 expires: createExpire(),
-                                maxAge: secondsCookieShouldBeValid
+                                maxAge: secondsCookieShouldBeValid,
+                                domain: location.hostname,
+                                samesite: true
                             });
+                            // console.log('userStoragePlugin actionContext setUser() on client');
                         }
+
+                        // console.log('userStoragePlugin actionContext setUser() now with the cookies:', req ? req.cookies : cookie.get());
                     };
                     actionContext.deleteUser = function() {
                         user = {};
 
                         if (res) {
                             res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, user, {
-                                expires: new Date(),
-                                maxAge: 1
+                                expires: -1,
+                                maxAge: 1,
+                                sameSite: true,
+                                domain: location.hostname
                             }));
                         }
                         else {
-                            cookie.remove(user_cookieName);
+                            cookie.remove(user_cookieName, {
+                                domain: location.hostname
+                            });
                         }
 
                         //SWIK-493 refresh page
@@ -104,14 +119,6 @@ module.exports = function userStoragePlugin(options) {
                             //nothing - server side
                         }
                     };
-                    // actionContext.setCookie = function (name, value, options) {
-                    //     console.log('userStoragePlugin actionContext setCookie:', name, value, options);
-                    //     const cookieStr = cookie.set(name, value, options);
-                    //     cookies[name] = value;
-                    // };
-                    // actionContext.getCookie = function (name) {
-                    //     return cookies[name] ? cookies[name] : cookie.get(name);
-                    // };
                 },
                 /**
                  * Provides access to user
@@ -128,7 +135,7 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugStoreContext: function plugStoreContext(storeContext) {
                     storeContext.getUser = function () {
-                        //console.log('userStoragePlugin storeContext getUser()');
+                        // console.log('userStoragePlugin storeContext getUser()');
 
                         let result = user;
 
@@ -140,7 +147,7 @@ module.exports = function userStoragePlugin(options) {
                                 else {
                                     result = cookie.getJSON(user_cookieName);
                                 }
-                                //console.log('userStoragePlugin storeContext getUser: got user from cookies');
+                                // console.log('userStoragePlugin storeContext getUser: got user from cookies');
                             }
                         } catch (e) {
 
