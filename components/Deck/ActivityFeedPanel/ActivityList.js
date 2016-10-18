@@ -28,7 +28,7 @@ class ActivityList extends React.Component {
     }
     componentDidMount() {
         this.loading = false;
-        //this.refs.activityList.addEventListener('scroll', this.onScroll.bind(this));
+        this.refs.activityList.addEventListener('scroll', this.onScroll.bind(this));
     }
     componentWillReceiveProps(nextProps) {
         // TODO: same as in the ActivityFeedStore; check if there is more elegant way to tell the component that action loadMoreActivities (in the onScroll function) was executed
@@ -72,23 +72,22 @@ class ActivityList extends React.Component {
         //    );
         //});
 
-        if (this.props.ActivityFeedStore.activities.length === 0) {
-            return (
-                <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
-            )
-        }
-
         const listStyles = {
             maxHeight: '400px',
             overflowY: 'auto'
         };
         return (
             <div ref="activityList" style={listStyles}>
+                {(this.props.ActivityFeedStore.activities.length === 0)
+                ?
+                <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
+                :
                 <ReactList ref="infiniteList" className="ui list"
                     itemRenderer={this.renderItem.bind(this)}
                     length={this.props.ActivityFeedStore.activities.length}
                     type={'variable'}>
                 </ReactList>
+              }
             </div>
         );
     }
