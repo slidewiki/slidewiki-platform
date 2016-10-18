@@ -135,7 +135,7 @@ export default {
     // other methods
     update: (req, resource, params, body, config, callback) => {
         if (resource === 'user.resetPassword') {
-            rp.post({
+            rp.put({
                 uri: Microservices.user.uri + '/resetPassword',
                 body: JSON.stringify({
                     email: params.email,
