@@ -8,19 +8,19 @@ import fetchUser from '../../actions/user/userprofile/fetchUser';
 
 class HeaderDropdown extends React.Component {
     componentDidMount(){
-        $(this.refs.userDropDown).dropdown({action: 'select'});//{on: 'hover', action: 'nothing'}
+        $(this.refs.userDropDown).dropdown({action: 'select'});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
 
     componentDidUpdate() {
-        $(this.refs.userDropDown).dropdown({action: 'select'});//{on: 'hover', action: 'nothing'}
+        $(this.refs.userDropDown).dropdown({action: 'select'});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
 
     handleSignout() {
-        this.context.executeAction(userSignOut, {});
+        this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
     }
 
     render() {
