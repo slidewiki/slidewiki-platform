@@ -74,11 +74,16 @@ module.exports = function userStoragePlugin(options) {
                         user = newUser;
 
                         if (res) {
+                            let host = req.headers.host;
+                            let dpIndex = host.indexOf(':');
+                            if (dpIndex !== -1) {
+                                host = host.substring(0, dpIndex);
+                            }
                             let servercookie = cookieParser.serialize(user_cookieName, newUser, {
                                 expires: createExpire(),
                                 maxAge: secondsCookieShouldBeValid,
                                 sameSite: true,
-                                domain: location.hostname
+                                domain: host
                             });
                             res.setHeader('Set-Cookie', servercookie);
                             // console.log('userStoragePlugin actionContext setUser() on server', servercookie);
@@ -99,11 +104,16 @@ module.exports = function userStoragePlugin(options) {
                         user = {};
 
                         if (res) {
+                            let host = req.headers.host;
+                            let dpIndex = host.indexOf(':');
+                            if (dpIndex !== -1) {
+                                host = host.substring(0, dpIndex);
+                            }
                             res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, user, {
                                 expires: -1,
                                 maxAge: 1,
                                 sameSite: true,
-                                domain: location.hostname
+                                domain: host
                             }));
                         }
                         else {
