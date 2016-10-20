@@ -152,12 +152,6 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
-        let selector = {
-            'id': String(params.selector.id),
-            'spath': params.selector.spath,
-            'sid': String(params.selector.sid),
-            'stype': params.selector.stype
-        };
         if (resource === 'deck.update') {
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
@@ -179,6 +173,13 @@ export default {
             .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
         } else if (resource === 'deck.updateWithRevision') {
+            let selector = {
+                'id': String(params.selector.id),
+                'spath': params.selector.spath,
+                'sid': String(params.selector.sid),
+                'stype': params.selector.stype
+            };
+
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
             let toSend = {

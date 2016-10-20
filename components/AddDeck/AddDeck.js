@@ -101,20 +101,6 @@ class AddDeck extends React.Component {
         //call action to update view
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
-
-        if (this.props.ImportStore.totalNoOfSlides !== 0)
-        {
-            swal({
-                title: 'Your deck has been uploaded. Go to "my decks" (in your top-right user menu) to see it. We have a last-minute development issue with redirecting from here.',
-                text: '',
-                type: 'success',
-                timer: false,
-                showCloseButton: true,
-                showCancelButton: false,
-                allowEscapeKey: false,
-                showConfirmButton: true
-            });
-        }
         //if everything is fine then create the deck
         if (everythingIsFine) {
             this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
@@ -183,10 +169,20 @@ class AddDeck extends React.Component {
         this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
+            let language = this.refs.select_languages.value;
+            let license = this.refs.select_licenses.value;
+            if (language === null || language === undefined || language === 'Select Language') {//set default
+                language = 'en_GB';
+            }
+            if (license === null || license === undefined) {//set default
+                license = 'CC0';
+            }
             //call action
             const payload = {
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
+                language: language,
+                license: license,
                 base64: this.props.ImportStore.base64
             };
             this.initializeProgressBar();

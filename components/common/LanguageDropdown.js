@@ -8,9 +8,13 @@ import classNames from 'classnames';
  */
 
 class LanguageDropdown extends React.Component {
-    componentDidMount() {}
+    componentDidMount() {
+        $(this.refs.languageDropdown).dropdown();
+    }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        $(this.refs.languageDropdown).dropdown();
+    }
 
     getSelected() {
         return this.refs.language.value;
@@ -26,7 +30,7 @@ class LanguageDropdown extends React.Component {
             'required': this.props.required,
         });
         return (
-            <div className={classes} data-tooltip="There will be more in the future" data-position="top center" data-inverted="">
+            <div className={classes} data-tooltip="There will be more in the future" data-position="top center" data-inverted="" ref="languageDropdown">
                 {this.props.required ? <input type="hidden" name="language" ref="language" defaultValue={this.props.language} required/> : <input type="hidden" name="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
                 <div className="default text">Select your language</div>

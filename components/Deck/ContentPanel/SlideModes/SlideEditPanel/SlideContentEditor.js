@@ -98,6 +98,7 @@ class SlideContentEditor extends React.Component {
         this.forceUpdate();
     }
     componentDidMount() {
+        //alert('remount');
 
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
@@ -203,7 +204,10 @@ class SlideContentEditor extends React.Component {
               , onlyY: false
               , ratio: this.scaleratio
             });
-            document.domain = 'slidewiki.org';
+            if(document.domain != "localhost")
+            {
+                document.domain = 'slidewiki.org';
+            }
         });
 
 
