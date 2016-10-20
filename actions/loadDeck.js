@@ -14,7 +14,6 @@ import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
 
 export default function loadDeck(context, payload, done) {
-    console.log(payload.params);
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
