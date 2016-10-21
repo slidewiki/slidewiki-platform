@@ -13,7 +13,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal'
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal', 'identicons-react'
         ]
     },
     output: {
@@ -25,7 +25,9 @@ let webpackConfig = {
         loaders: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
+                //
+                exclude: /node_modules\/(?!identicons)/ ,
+                //exclude: /node_modules\/(?!(module1|module2)\/).*/
                 loaders: [
                     require.resolve('babel-loader')
                 ]
