@@ -1,4 +1,4 @@
-import { Microservices } from '../configs/microservices';
+import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 
 export default {
@@ -6,6 +6,29 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
+
+        if(resource === 'deck.featured'){
+            /*********connect to microservices*************/
+            let limit, offset = null;
+            if (args.limit) limit = args.limit;
+            if (args.offset) offset = args.offset;
+            rp.get({uri: Microservices.deck.uri + '/allfeatured/' + limit + '/' + offset}).then((res) => {
+                callback(null, {featured: JSON.parse(res)});
+            }).catch((err) => {
+                callback(err, {featured: []});
+            });
+        }
+        if(resource === 'deck.recent'){
+            /*********connect to microservices*************/
+            let limit, offset = null;
+            if (args.limit) limit = args.limit;
+            if (args.offset) offset = args.offset;
+            rp.get({uri: Microservices.deck.uri + '/allrecent/' + limit + '/' + offset}).then((res) => {
+                callback(null, {recent: JSON.parse(res)});
+            }).catch((err) => {
+                callback(err, {featured: []});
+            });
+        }
         if (resource === 'deck.content') {
             /* Create promise for deck data success */
             let deckRes = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid});
@@ -17,7 +40,10 @@ export default {
             });
             /* Catch erros from slides data response */
             let slidesPromise = slidesRes.catch((err) => {
-                callback({msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...', content: err}, {});
+                callback({
+                    msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...',
+                    content: err
+                }, {});
             });
             /* Create user data promise which is dependent on deck data promise */
             let userRes = deckPromise.then((deckData) => {
@@ -81,6 +107,22 @@ export default {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
             });
+        } else if (resource === 'deck.needsNewRevision') {
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/needsNewRevision?user=' + args.userID}).then((res) => {
+                callback(null, {status: JSON.parse(res)});
+            }).catch((err) => {
+                console.log('serviceErr', err);
+                callback(null, {status: {}});
+            });
+        } else if (resource === 'deck.handleRevisionChanges') {
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/handleChange?user=' + args.userID + '&root_deck=' + args.rootDeckID}).then((res) => {
+                callback(null, {result: JSON.parse(res)});
+            }).catch((err) => {
+                console.log('serviceErr', err);
+                callback(null, {result: {}});
+            });
         }
     },
     // other methods
@@ -131,6 +173,13 @@ export default {
             .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
         } else if (resource === 'deck.updateWithRevision') {
+            let selector = {
+                'id': String(params.selector.id),
+                'spath': params.selector.spath,
+                'sid': String(params.selector.sid),
+                'stype': params.selector.stype
+            };
+
             if (params.tags.length === 1 && params.tags[0].length === 0)
                 params.tags = undefined;
             let toSend = {
@@ -140,7 +189,9 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
-                new_revision: true
+                new_revision: true,
+                top_root_deck: selector.id
+
             };
             if (params.root_deck != null) {
                 toSend.root_deck = params.root_deck;

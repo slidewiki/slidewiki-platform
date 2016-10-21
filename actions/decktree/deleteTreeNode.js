@@ -11,7 +11,7 @@ export default function deleteTreeNode(context, payload, done) {
             } else {
                 context.dispatch('DELETE_TREE_NODE_SUCCESS', payload);
             }
-            done();
+            done(null, res);
         });
     }
 }

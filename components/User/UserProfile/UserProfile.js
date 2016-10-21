@@ -11,18 +11,11 @@ import { fetchUserDecks } from '../../../actions/user/userprofile/fetchUserDecks
 
 class UserProfile extends React.Component {
     componentDidMount() {
-        $('.menu .item').tab();
+        //$('.menu .item').tab();
     }
 
     componentDidUpdate() {
-        $('.menu .item').tab();
-        if(this.props.UserProfileStore.jwt === '' && this.props.UserProfileStore.toShow !== '')
-            context.executeAction(navigateAction, { url: '/' }); //TODO Als Kondition in die route verschieben
-        // if (this.initializing === false && (this.lastUser === '' || this.lastUser !== this.props.UserProfileStore.user.uname )) {
-        //     this.initializing = true;
-        //     this.lastUser = this.props.UserProfileStore.user.uname;
-        //     context.executeAction(fetchUserDecks, {params: {username: this.props.UserProfileStore.user.uname}}, (() => this.initializing = false));
-        // }
+        //$('.menu .item').tab();
     }
 
     publicOrPrivateProfile() {
@@ -47,38 +40,19 @@ class UserProfile extends React.Component {
                         <PublicUserData user={ this.props.UserProfileStore.user }/>
                     </div>
                     <div className = "twelve wide column" >
-                        <div className="ui three item stackable pointing secondary demo tabular menu">
-                            <div className="active link item" data-tab="popular">Overview</div>
-                            <div className="link item" data-tab="userdecks">Decks</div>
-                            <div className="link item" data-tab="activity">Public activity</div>
-                        </div>
-                        <div className="ui active tab" data-tab="popular">
                         <div className="ui segments">
                             {(this.props.UserProfileStore.userDecks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                             <div className="ui secondary segment">
-                                <strong>Popular Decks</strong>
-                            </div>
-                            <div className="ui segment">
-                                <PopularDecks size={3}/>
-                            </div>
-                        </div>
-                            <div className="ui divider"/>
-                        </div>
-                        <div className="ui tab" data-tab="userdecks">
-                        <div className="ui segments">
-                            {(this.props.UserProfileStore.userDecks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-                            <div className="ui secondary segment">
-                                <strong>All Decks</strong>
+                                <h2>My Decks</h2>
                             </div>
                             <div className="ui segment">
                                 <PopularDecks size={0}/>
                             </div>
                         </div>
-                        </div>
-                        <div className="ui tab" data-tab="activity">
-                        </div>
                     </div>
+                    <div className="ui tab" data-tab="activity">
                 </div>
+            </div>
             );
         }
     }

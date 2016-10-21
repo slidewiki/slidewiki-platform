@@ -14,8 +14,10 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/bower_components/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
-                <link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />              
-                <link href="/assets/css/PresentationDefaults.css" rel="stylesheet" type="text/css" />
+                {/* Vendors css bundle */
+                    this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
+                }
+                {/*<link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />*/}
             </head>
             <body>
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
@@ -38,8 +40,9 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/modal.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/form.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/tab.min.js"></script>
-                {/* All external vendors bundle*/}
-                <script src="/public/js/vendor.bundle.js"></script>
+                {/* All external vendors bundle*/
+                    this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'}></script> : ''
+                }
                 <script src="/custom_modules/ckeditor/ckeditor.js"></script>
                 <script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script type="javascript">

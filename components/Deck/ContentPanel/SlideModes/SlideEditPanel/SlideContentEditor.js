@@ -13,6 +13,7 @@ import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import {Microservices} from '../../../../../configs/microservices';
 
 let ReactDOM = require('react-dom');
 
@@ -29,6 +30,7 @@ class SlideContentEditor extends React.Component {
         this.CKEDitor_loaded = false;
         //this.props.scaleratio = 1;
         this.scaleratio = 1;
+        this.addBoxButtonHTML = '';
     }
     handleSaveButton(){
 
@@ -39,7 +41,16 @@ class SlideContentEditor extends React.Component {
         }
         else
         {
-            alert('saving changes');
+            swal({
+                title: 'Saving Content...',
+                text: '',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            });
             //remove editing borders:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
@@ -87,17 +98,8 @@ class SlideContentEditor extends React.Component {
         this.forceUpdate();
     }
     componentDidMount() {
-        if(process.env.BROWSER){
-            //require('../../../../../bower_components/reveal.js/css/reveal.css');
-            // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
-            // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
-            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
-            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
-            //require('../../SetupReveal.css');
-            /*add border*/
-            $(".pptx2html [style*='absolute']")
-            .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
-        }
+        //alert('remount');
+
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
@@ -145,35 +147,99 @@ class SlideContentEditor extends React.Component {
             uiColor: '#4183C4',
             removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
         });}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
-        {
-            CKEDITOR.inline('inlineContent');
+        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
+            //alert('test');
+            const userId = this.props.UserProfileStore.userid;
+            //console.log(userId);
+            // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+
+            //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri +  + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
+            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+
         }
         this.currentcontent = this.props.content;
 
-            ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
-                {
+        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
+        {
                 if(process.env.BROWSER){
-                    this.resize();
-
+                    //this.resize();
+                    //alert('resize');
+                    this.forceUpdate();
                 }
-                CKEDITOR.instances.inlineContent.on("instanceReady", function() {
-                if(process.env.BROWSER){
-                    this.resize();
+        });
 
-                    }
-                });
+        CKEDITOR.instances.inlineContent.on("instanceReady", function() {
+        //needs copy of resize function == cannot find this.something in this context.
+        //tried ReactDOM.findDOMNode(this.refs.inlineContent).addEventListener('instanceReady', (evt) =>
+        //but did not work
+        //if(process.env.BROWSER){
+            //this.resize();
+            //alert('ckeditor load');
+            //this.forceUpdate();
+            //this.resize();
+        //    }
+            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            {
+                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            }
+            let containerwidth = document.getElementById('container').offsetWidth;
+            let containerheight = document.getElementById('container').offsetHeight;
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            let pptxwidth = $('.pptx2html').width();
+            let pptxheight = $('.pptx2html').height();
+            if (containerwidth > pptxwidth)
+            {
+                this.scaleratio = pptxwidth / containerwidth;
+            } else {
+                this.scaleratio = containerwidth / pptxwidth;
+            }
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            require('../../../../../custom_modules/simple-draggable/lib/index.js');
 
+            SimpleDraggable(".pptx2html [style*='absolute']", {
+                onlyX: false
+              , onlyY: false
+              , ratio: this.scaleratio
             });
+            if(document.domain != "localhost")
+            {
+                document.domain = 'slidewiki.org';
+            }
+        });
+
+
+
         //setTimeout(this.forceUpdate(), 500);
-        this.forceUpdate();
+        //alert('componentdidmount');
+        //this.forceUpdate();
 
     }
     componentDidUpdate() {
-        this.resize();
+        //alert('update');
+        if(process.env.BROWSER){
+            this.resize();
+        }
     }
     resize()
     {
+        //if(process.env.BROWSER){
+            //require('../../../../../bower_components/reveal.js/css/reveal.css');
+            // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
+            // Possible values: ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white']
+            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
+            // require('../../../../../bower_components/reveal.js/css/theme/black.css');
+            //require('../../SetupReveal.css');
+            /*add border*/
+            //alert($(".pptx2html [style*='absolute']").css('borderStyle'));
+            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            {
+                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            }
+        //}
+
         let containerwidth = document.getElementById('container').offsetWidth;
         let containerheight = document.getElementById('container').offsetHeight;
         //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
@@ -205,8 +271,8 @@ class SlideContentEditor extends React.Component {
         //$(".pptx2html [style*='absolute']").addClass('schaal');
         //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
         //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-            if ($('.pptx2html').length)
-            {
+            //if ($('.pptx2html').length)
+            //{
                 //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
                 //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
                 //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
@@ -217,18 +283,20 @@ class SlideContentEditor extends React.Component {
                 //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
                 //TODO: remove previous event listeners!
                 //, ratio: this.props.SlideEditStore.scaleratio
+                //alert('resized');
                 SimpleDraggable(".pptx2html [style*='absolute']", {
                     onlyX: false
                   , onlyY: false
                   , ratio: this.scaleratio
                 });
-            }
+                //alert('draggable');
+            //}
     }
 
     componentWillUnmount() {
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
-        //CKEDITOR.instances.inlineHeader.destroy();
+        CKEDITOR.instances.inlineHeader.destroy();
         CKEDITOR.instances.inlineContent.destroy();
         CKEDITOR.instances.inlineSpeakerNotes.destroy();
     }
@@ -241,10 +309,11 @@ class SlideContentEditor extends React.Component {
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
         const headerStyle = {
-            minWidth: '100%',
+            //minWidth: '100%',
+            height: '0px',
             overflowY: 'auto',
-            borderStyle: 'dashed dashed none dashed',
-            borderColor: '#e7e7e7',
+            //borderStyle: 'dashed dashed none dashed',
+            //borderColor: '#e7e7e7',
             position: 'relative'
         };
         const contentStyle = {
@@ -285,6 +354,15 @@ class SlideContentEditor extends React.Component {
             <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
                     */
 
+        //Check if addboxbutton should be included
+        if(this.props.content.indexOf('pptx2html') !== -1)
+        { // if pptx2html element with absolute content is in slide content (underlying HTML)
+            this.addBoxButtonHTML = <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+                             <i className="plus square outline icon"></i>
+                             Add input box
+                             </button>
+        } else {this.addBoxButtonHTML = '';}
+
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
@@ -292,10 +370,7 @@ class SlideContentEditor extends React.Component {
                  <i className="save icon"></i>
                  Save
                 </button>
-                <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-                 <i className="plus square outline icon"></i>
-                 Add input box
-                </button>
+                {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <hr />
                 <div className="ui" style={compStyle}>

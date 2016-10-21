@@ -24,7 +24,7 @@ class PublicUserDecks extends React.Component {
         let divs = '';
         if(size > 0) {
             divs = (<div className="ui three doubling cards">
-                {[...Array(size).keys()].map( (i) => <DeckCard key={i} cardContent={content[i]}/>)}
+                {[...Array(size).keys()].map( (i) => <DeckCard userid={this.props.UserProfileStore.userid} key={i} cardContent={content[i]}/>)}
             </div>);
         } else {
             divs = <h3>No decks available</h3>;

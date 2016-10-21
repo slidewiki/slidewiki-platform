@@ -89,7 +89,8 @@ server.use((req, res, next) => {
                 const markup = ReactDOM.renderToString(createElementWithContext(context));
                 //todo: for future, we can choose to not include specific scripts in some predefined layouts
                 const htmlElement = React.createElement(HTMLComponent, {
-                    clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+                    clientFile: 'main.js',
+                    addAssets: (env === 'production'),
                     context: context.getComponentContext(),
                     state: exposed,
                     markup: markup
@@ -106,7 +107,8 @@ server.use((req, res, next) => {
                 const markup = ReactDOM.renderToString(createElementWithContext(context));
                 //todo: for future, we can choose to not include specific scripts in some predefined layouts
                 const htmlElement = React.createElement(HTMLComponent, {
-                    clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+                    clientFile: 'main.js',
+                    addAssets: (env === 'production'),
                     context: context.getComponentContext(),
                     state: exposed,
                     markup: markup
@@ -129,6 +131,7 @@ server.use((req, res, next) => {
         const htmlElement = React.createElement(HTMLComponent, {
             //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
             clientFile: 'main.js',
+            addAssets: (env === 'production'),
             context: context.getComponentContext(),
             state: exposed,
             markup: markup

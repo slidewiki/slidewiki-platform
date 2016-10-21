@@ -138,12 +138,12 @@ class AddDeck extends React.Component {
     updateProgressBar() {
         //console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
-        let noOfSlides = this.props.ImportStore.noOfSlides;
-        let totalNoOfSlides = this.props.ImportStore.totalNoOfSlides;
-        let progressLabel = (totalNoOfSlides === 0) ? 'Uploading file' :
-          (noOfSlides === 1) ? 'Converting file' :
-          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides  + ' of ' + totalNoOfSlides :
-          (String(noOfSlides) === String(totalNoOfSlides)) ? 'Slides uploaded!' :
+        let noOfSlides = String(this.props.ImportStore.noOfSlides);
+        let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
+        let progressLabel = (totalNoOfSlides === '0') ? 'Uploading file' :
+          (noOfSlides === '1' && totalNoOfSlides !== '1') ? 'Converting file' :
+          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
+          (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
           'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(progressLabel);
     }
@@ -169,10 +169,20 @@ class AddDeck extends React.Component {
         this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
+            let language = this.refs.select_languages.value;
+            let license = this.refs.select_licenses.value;
+            if (language === null || language === undefined || language === 'Select Language') {//set default
+                language = 'en_GB';
+            }
+            if (license === null || license === undefined) {//set default
+                license = 'CC0';
+            }
             //call action
             const payload = {
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
+                language: language,
+                license: license,
                 base64: this.props.ImportStore.base64
             };
             this.initializeProgressBar();
@@ -233,12 +243,30 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let languageOptions = <select className="ui search dropdown"  id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
+        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
             <option>
                 Select Language
             </option>
-            <option value="en_EN" >
+            <option value="en_GB" >
                 English
+            </option>
+            <option value="de_DE" >
+                German
+            </option>
+            <option value="el_GR" >
+                Greek
+            </option>
+            <option value="it_IT" >
+                Italian
+            </option>
+            <option value="pt_PT" >
+                Portugese
+            </option>
+            <option value="sr_RS" >
+                Serbian
+            </option>
+            <option value="es_ES" >
+                Spanish
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
@@ -332,7 +360,7 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
-                                  I agree to the <a href="//platform.manfredfris.ch/termsOfUse">terms and conditions</a>
+                                  I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
                               </label>
                           </div>
                       </div>

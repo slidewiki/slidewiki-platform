@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'fluxible-router';
 import UserPicture from '../../common/UserPicture';
 import { isEmpty } from '../../../common.js';
 
@@ -12,7 +13,13 @@ class PublicUserData extends React.Component {
             <div>
                 <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ false } width={ 150 } centered={ false } size={ 'small' }/>
                 <h2>{ this.props.user.fname } { this.props.user.lname }</h2>
-                <h3>{ this.props.user.uname }</h3>
+                <h3>
+                    { this.props.user.uname }
+                    <strong>     </strong>
+                    <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings' }>
+                        <i className="setting icon"/>
+                    </NavLink>
+                </h3>
                 { !isEmpty(this.props.user.description) ? <p>{ this.props.user.description }</p> : '' }
                 <div className = "ui divider" />
                 { !isEmpty(this.props.user.organization) ? <div><i className="ui users icon"/> { this.props.user.organization }<br/><br/></div> : '' }

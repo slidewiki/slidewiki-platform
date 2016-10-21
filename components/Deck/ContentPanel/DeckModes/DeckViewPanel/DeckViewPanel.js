@@ -29,9 +29,13 @@ class DeckViewPanel extends React.Component {
         const heightStyle = {
             height: '450px'
         };
-
-        if (!this.props.DeckViewStore.deckData.tags)
-            this.props.DeckViewStore.deckData.tags = [];
+        let slidesArr =[];
+        if(this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children){
+            slidesArr = this.props.DeckViewStore.slidesData.children;
+        }
+        let tags= [];
+        if (this.props.DeckViewStore.deckData && this.props.DeckViewStore.deckData.tags)
+            tags = this.props.DeckViewStore.deckData.tags;
 
         const activeVersion = lodash.get(this.props.DeckViewStore.deckData, 'active', undefined);
         const totalRevisions = lodash.get(this.props.DeckViewStore.deckData, 'revisions.length', undefined);
@@ -46,21 +50,23 @@ class DeckViewPanel extends React.Component {
 
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
         // If deckLanguageCode is not as per ISO-639-1 (e.g. en_EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
-        deckLanguage = (deckLanguage === '' && deckLanguageCode && deckLanguageCode.substr(0, 2) === 'en') ? 'English': deckLanguage;
+        // KLAAS commented line below to make consistent with decklist (which works)
+        // deckLanguage = (deckLanguage === '' && deckLanguageCode && deckLanguageCode.substr(0, 2) === 'en') ? 'English': deckLanguage;
         // default English
-        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+        //KLAAS commented line below - TODO fix correct langauge - deckLanguageCode is not correctly retrieved - see decklist for working example
+        //deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
         // TODO when flag code is available, remove the hard coded flag
-        const countryFlag = 'gb';
+        //const countryFlag = 'gb';
 
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
-        const host = this.props.DeckViewStore.deckData.host;
-        //console.log(Microservices.file);
         const thumbnailURL = Microservices.file.uri + '/';
-        //console.log(thumbnailURL);
+        const host = this.props.DeckViewStore.deckData.host;
         const deckId = this.props.DeckViewStore.deckData._id;
         const deckURL = host === undefined ? '' : 'http://' + host + '/deck/' + deckId + '-' + activeVersion;
+        const userProfileURL = host === undefined ? '' : 'http://' + host + '/user/' + deckCreator;
+
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
@@ -69,7 +75,9 @@ class DeckViewPanel extends React.Component {
                         <div className="column">
                             <div className="content">
                                 <h3 className="ui header">{deckTitle}</h3>
-                                <div className="meta">Creator: {deckCreator}</div>
+                                <div className="meta">Creator:&nbsp;
+                                    <a href={userProfileURL}>{deckCreator}</a>
+                                </div>
                                 <div className="meta">Date: {deckDate}</div>
                                 <div className="description">
                                     <p></p>
@@ -84,7 +92,7 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui hidden divider"></div>
                                 <div className="meta">
                                     <div className="ui large label" >
-                                        <i className={countryFlag + ' flag'} aria-label="Language"></i>{deckLanguage}</div>
+                                        {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>
                                     <div className="ui large label" tabIndex="0" >
@@ -92,9 +100,9 @@ class DeckViewPanel extends React.Component {
                                     <div className="ui large label" tabIndex="0" >
                                         <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
                                 </div>
-                                {this.props.DeckViewStore.deckData.tags.length > 0 ? <div className="ui divider"></div>: ''}
+                                {tags.length > 0 ? <div className="ui divider"></div>: ''}
                                 <div className="ui tag labels large meta">
-                                    {this.props.DeckViewStore.deckData.tags.map((tag, index) => {
+                                    {tags.map((tag, index) => {
                                         return <a className="ui label" key={index} tabIndex="0" >{tag}</a>;
                                     })}
                                 </div>
@@ -105,7 +113,7 @@ class DeckViewPanel extends React.Component {
                     <div className="ui  divider"></div>
                     <div key={this.props.slideIndex} className="ui three column grid container">
                         {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
-                        {this.props.DeckViewStore.slidesData.children.map((slide, index) => {
+                        {slidesArr.map((slide, index) => {
                             if (index < maxSlideThumbnails) {
                                 return (<div key={index} className="column">
                                             <div className="ui fluid card">

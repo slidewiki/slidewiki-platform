@@ -6,6 +6,7 @@ import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
 import loadCommentsCount from './contentdiscussion/loadCommentsCount';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
+import { AllowedPattern } from './error/util/allowedPattern';
 
 export default function loadContentModules(context, payload, done) {
     if (!(['deck', 'slide'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
@@ -13,7 +14,7 @@ export default function loadContentModules(context, payload, done) {
         return;
     }
 
-    if(!(/^[0-9a-zA-Z-]+$/.test(payload.params.sid) || payload.params.sid === undefined)) {
+    if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
     }

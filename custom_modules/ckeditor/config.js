@@ -20,7 +20,6 @@ CKEDITOR.editorConfig = function( config ) {
     config.line_height=";0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;";
 
     config.toolbar = [
-            { name: 'document', items: ['Templates' ] },
             { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
@@ -35,10 +34,11 @@ CKEDITOR.editorConfig = function( config ) {
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'paragraph', items: ['CreateDiv']},
             { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
+    //{ name: 'document', items: ['Templates' ] },
+    //{ name: 'paragraph', items: ['CreateDiv']},
     //{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
     //'HorizontalRule',
     //, 'Anchor'
@@ -59,11 +59,13 @@ CKEDITOR.editorConfig = function( config ) {
     //config.floatSpacePinnedOffsetX = 1000;
     ///config.toolbarLocation = 'bottom';
 
-
+    //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
+    config.removePlugins = 'magicline';
+    CKEDITOR.config.magicline_color = '#0000FF';
 
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
-    config.basicEntities = true;
+    config.basicEntities = true; //Klaas -> do we need this?
     config.entities = true;
     config.entities_latin = false;
     config.entities_greek = false;
@@ -71,6 +73,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.allowedContent = true; // don't filter my data
 
 
+    //'div,' +
     config.plugins =
 		'about,' +
 		'a11yhelp,' +
@@ -82,7 +85,6 @@ CKEDITOR.editorConfig = function( config ) {
 		'colordialog,' +
 		'contextmenu,' +
 		'dialogadvtab,' +
-		'div,' +
 		'elementspath,' +
 		'enterkey,' +
 		'entities,' +
@@ -133,48 +135,54 @@ CKEDITOR.editorConfig = function( config ) {
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
 
+    //klaas adapt: extra right-click menu options
+    //config.extraPlugins = 'dialogadvtab';
+
 	//config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elements.
     config.format_tags = 'p;h1;h2;h3;pre';
 
+    //#####Image upload via CKeditor - TODO//
+
+    config.extraPlugins = 'uploadimage';
+    config.extraPlugins = 'uploadwidget';
+    //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
+    /*
+    //config.uploadUrl = '../';
+    //config.uploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //config.filebrowserBrowseUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //config.filebrowserUploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
+    //config.filebrowserUploadUrl = './../upload';
+    //http://docs.ckeditor.com/#!/guide/dev_file_browse_upload
+    //config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
+    //config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
+    //config.filebrowserUploadUrl = 'http://localhost:8880/importPPTX';
+    config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
+    //config.imageUploadUrl = 'http://localhost:8880/importPPTX';
+    //config.uploadUrl = 'http://localhost:8880/importImage?type=Images';
+    //config.imageUploadUrl = 'http://localhost:8880/importImage?type=Images';
+    //config.uploadUrl = 'http://platform.manfredfris.ch/importfile';
+    */
+    //TODO - create platform page, or importservice URL,
+    //       or media-service-url (copy import docker) for uploading?!
+    //       reuse superagent work??
+    //TODO - return JSON -> http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-fileUploadResponse
+    //       and see http://stackoverflow.com/questions/30087440/ckeditor-4-5-0-beta-fileupload-api-issue
+    //       !!and http://docs.ckeditor.com/#!/guide/dev_file_upload
+
+    //http://ckeditor.com/addon/uploadimage -->This plugin enables support for uploading images that were dropped or pasted into the editor.
+    //depends on http://ckeditor.com/addon/uploadwidget
+    // needs configuration: http://sdk.ckeditor.com/samples/fileupload.html +
+    // http://sdk.ckeditor.com/samples/fileupload.html#uploading-dropped-and-pasted-images
+    // Show toolbar on startup (optional).
+    //config.startupFocus = true
+
 	// Simplify the dialog windows.
 	//config.removeDialogTabs = 'image:advanced;link:advanced';
 };
 CKEDITOR.disableAutoInline = true;
-/*
-//#####Image upload via CKeditor - tried/researched, not chosen//
 
-config.extraPlugins = 'uploadimage',
-config.extraPlugins = 'uploadwidget',
-//config.uploadUrl = '../';
-//config.uploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
-//config.filebrowserBrowseUrl = 'http://kdi-student.de/webauftritt/kurt/';
-//config.filebrowserUploadUrl = 'http://kdi-student.de/webauftritt/kurt/';
-//config.filebrowserUploadUrl = './../upload';
-//http://docs.ckeditor.com/#!/guide/dev_file_browse_upload
-//config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
-//config.filebrowserUploadUrl = 'http://platform.manfredfris.ch/importfile';
-//config.filebrowserUploadUrl = 'http://localhost:8880/importPPTX';
-config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
-//config.imageUploadUrl = 'http://localhost:8880/importPPTX';
-//config.uploadUrl = 'http://localhost:8880/importImage?type=Images';
-//config.imageUploadUrl = 'http://localhost:8880/importImage?type=Images';
-//config.uploadUrl = 'http://platform.manfredfris.ch/importfile';
-*/
-//TODO - create platform page, or importservice URL,
-//       or media-service-url (copy import docker) for uploading?!
-//       reuse superagent work??
-//TODO - return JSON -> http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-fileUploadResponse
-//       and see http://stackoverflow.com/questions/30087440/ckeditor-4-5-0-beta-fileupload-api-issue
-//       !!and http://docs.ckeditor.com/#!/guide/dev_file_upload
-
-//http://ckeditor.com/addon/uploadimage -->This plugin enables support for uploading images that were dropped or pasted into the editor.
-//depends on http://ckeditor.com/addon/uploadwidget
-// needs configuration: http://sdk.ckeditor.com/samples/fileupload.html +
-// http://sdk.ckeditor.com/samples/fileupload.html#uploading-dropped-and-pasted-images
-// Show toolbar on startup (optional).
-//config.startupFocus = true
 
 //######in import-service/application/controllers/handler.js:
 /*

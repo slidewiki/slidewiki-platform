@@ -60,6 +60,16 @@ class DeckPropertiesEditor extends React.Component {
 
         this.setState({validationErrors: validationErrors});
         if (isValid) {
+            swal({
+                title: 'Saving Deck Properties...',
+                text: '',
+                type: 'success',
+                timer: 1000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            });
             this.context.executeAction(saveAction, {
                 deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
                 title: this.state.title,
@@ -108,8 +118,26 @@ class DeckPropertiesEditor extends React.Component {
             <option>
                 Select Language
             </option>
-            <option value="en_EN">
+            <option value="en_GB" >
                 English
+            </option>
+            <option value="de_DE" >
+                German
+            </option>
+            <option value="el_GR" >
+                Greek
+            </option>
+            <option value="it_IT" >
+                Italian
+            </option>
+            <option value="pt_PT" >
+                Portugese
+            </option>
+            <option value="sr_RS" >
+                Serbian
+            </option>
+            <option value="es_ES" >
+                Spanish
             </option>
         </select>;
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"
@@ -171,7 +199,7 @@ class DeckPropertiesEditor extends React.Component {
                         <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision"
                              tabIndex="0"
                              onClick={this.handleSave.bind(this, true)}>
-                            Save new revision
+                            Save as new revision
                         </div>
                         <div className="ui secondary button" role="button" aria-describedby="cancel" tabIndex="0"
                              onClick={this.handleCancel.bind(this)}>

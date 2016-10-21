@@ -7,7 +7,8 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 // import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
-import loadSlideEdit from '../actions/slide/loadSlideEdit';
+//import loadSlideEdit from '../actions/slide/loadSlideEdit';
+import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
@@ -25,8 +26,11 @@ import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
 import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
+import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
 import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
+import loadFeatured from '../actions/loadFeatured';
+import loadRecent from '../actions/loadRecent';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -37,12 +41,52 @@ export default {
         title: 'SlideWiki -- Home',
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: fullTitle
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: fullTitle
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}}, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
             });
-            done();
         }
     },
+
+    recentDecks: {
+        path: '/recent/:limit?/:offset?',
+        method: 'get',
+        page: 'featuredDecks',
+        title: 'Slidewiki -- recent decks',
+        handler: require('../components/Home/Recent'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Recent Decks'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
+
     about: {
         path: '/about',
         method: 'get',
@@ -56,17 +100,30 @@ export default {
             done();
         }
     },
-    addDeck: {
-        path: '/addDeck',
+    imprint: {
+        path: '/imprint',
         method: 'get',
-        page: 'addDeck',
-        title: 'SlideWiki -- Add Deck',
-        handler: require('../components/AddDeck/AddDeck'),
+        page: 'imprint',
+        title: 'SlideWiki -- Imprint',
+        handler: require('../components/Home/Imprint'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Add Deck'
+                pageTitle: shortTitle + ' | Imprint'
             });
-            context.executeAction(loadAddDeck, null, done);
+            done();
+        }
+    },
+    dataprotection: {
+        path: '/dataprotection',
+        method: 'get',
+        page: 'dataprotection',
+        title: 'SlideWiki -- Data Protection Policy',
+        handler: require('../components/Home/DataProtection'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Data Protection Policy'
+            });
+            done();
         }
     },
     notifications: {
@@ -93,6 +150,19 @@ export default {
                 pageTitle: shortTitle + ' | Sign up'
             });
             done();
+        }
+    },
+    resetPassword: {
+        path: '/resetpassword',
+        method: 'get',
+        page: 'resetPassword',
+        title: 'SlideWiki -- Reset your password',
+        handler: require('../components/Login/ResetPassword'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Reset password'
+            });
+            context.executeAction(loadResetPassword, payload, done);
         }
     },
 //-----------------------------------User routes------------------------------
@@ -187,7 +257,8 @@ export default {
         page: 'slideedit',
         handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadSlideEdit, payload, done);
+            //context.executeAction(loadSlideEdit, payload, done);
+            context.executeAction(loadSlideEditWihtRevisionControl, payload, done);
         }
     },
     deckview: {
@@ -290,6 +361,7 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    /*
     presentationPrint: {
         path: '/presentationprint/:id/*',
         method: 'get',
@@ -299,6 +371,7 @@ export default {
             context.executeAction(loadPresentation, payload, done);
         }
     },
+    */
     presentationSlide: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/*/:sid?/',
@@ -318,6 +391,19 @@ export default {
             context.executeAction(loadImportFile, payload, done);
             //context.executeAction(loadPresentation, payload, done);
             //context.executeAction(loadDeck, payload, done);
+        }
+    },
+    addDeck: {
+        path: '/addDeck',
+        method: 'get',
+        page: 'addDeck',
+        title: 'SlideWiki -- Add Deck',
+        handler: require('../components/AddDeck/AddDeck'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Add Deck'
+            });
+            context.executeAction(loadAddDeck, null, done);
         }
     },
     /* This should be the last route in routes.js */

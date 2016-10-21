@@ -18,8 +18,10 @@ export default function removeUser(context, payload, done) {
             } else
                 context.dispatch('DELETE_USER_FAILURE', err);
         } else {
-            //TODO logout user - context.executeAction(userSignOut, {}); throws an error
+            context.deleteUser();
+            context.dispatch('DELETE_USER_SUCCESS', null);
             context.executeAction(navigateAction, { url: '/' });
+            location.reload();
         }
         done();
     });

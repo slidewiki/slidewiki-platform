@@ -1,5 +1,4 @@
 import React from 'react';
-import Modal from 'react-modal';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
@@ -20,6 +19,8 @@ class LoginModal extends React.Component {
     constructor(props) {
         super(props);
         this.handleLoginButton = this.handleLoginButton.bind(this);
+        this.handleSignupClick = this.handleSignupClick.bind(this);
+        this.signin = this.signin.bind(this);
     }
 
     isModalShown() {
@@ -61,11 +62,6 @@ class LoginModal extends React.Component {
         }
     }
 
-    componentDidMount(){
-        if(typeof window !== 'undefined') {
-            Modal.setAppElement('#app');
-        }
-    }
 
     handleSignupClick(e) {
         e.preventDefault();
@@ -76,6 +72,14 @@ class LoginModal extends React.Component {
         // return false;
     }
 
+    handleNoAccessClick(e) {
+        e.preventDefault();
+        $('.ui.login.modal').modal('toggle');
+        this.context.executeAction(navigateAction, {
+            url: '/resetpassword'
+        });
+    }
+
     render() {
         let loginButton = (
             <HeaderDropdown/>
@@ -83,7 +87,7 @@ class LoginModal extends React.Component {
 
         if (this.props.UserProfileStore.username === '') {
             loginButton = (
-                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
+                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>
             );
         }
 
@@ -117,7 +121,7 @@ class LoginModal extends React.Component {
                       </form>
                       <br/>
                       <div className="ui floated right">
-                          <a href="">I can not access my account</a>
+                          <a href="#" onClick={this.handleNoAccessClick.bind(this)}>I can not access my account</a>
                           <br/><br/>
                           <a href="#" onClick={this.handleSignupClick.bind(this)}>Don&apos;t have an account? Sign up here.</a>
                       </div>
