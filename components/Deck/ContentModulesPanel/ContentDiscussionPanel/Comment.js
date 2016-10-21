@@ -34,7 +34,7 @@ class Comment extends React.Component {
         const replyBox = (
             <form className="ui reply form">
                 <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title" value={replyTitle} required/>
+                    <input type="text" ref="title" placeholder="Title" defaultValue={replyTitle} required/>
                 </div>
                 <div className="field">
                     <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
