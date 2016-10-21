@@ -129,6 +129,7 @@ server.use((req, res, next) => {
         const htmlElement = React.createElement(HTMLComponent, {
             //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
             clientFile: 'main.js',
+            addAssets: (env === 'production'),
             context: context.getComponentContext(),
             state: exposed,
             markup: markup

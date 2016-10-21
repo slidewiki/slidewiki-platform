@@ -116,6 +116,7 @@
     "eslint": "~3.4.0",
     "eslint-plugin-babel": "3.3.0",
     "eslint-plugin-react": "5.2.2",
+    "extract-text-webpack-plugin": "^1.0.1",
     "istanbul": "0.4.4",
     "jsdom": "9.4.1",
     "json-loader": "0.5.4",
