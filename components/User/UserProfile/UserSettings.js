@@ -22,7 +22,7 @@ class UserSettings extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             })
-            .then(() => {});
+            .then(() => {}).catch(swal.noop);
         if (this.props.dimmer.userdeleted === true)
             swal({
                 type: 'success',
@@ -34,7 +34,7 @@ class UserSettings extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             })
-            .then(() => {});
+            .then(() => {}).catch(swal.noop);
         if (this.props.dimmer.failure === true)
             swal({
                 title: 'Error',
@@ -46,7 +46,7 @@ class UserSettings extends React.Component {
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             })
-            .then(() => {});
+            .then(() => {}).catch(swal.noop);
     }
 
     enableAccordion(status) {
