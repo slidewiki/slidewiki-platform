@@ -6,6 +6,9 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
+if(process.env.BROWSER){
+    require('../../../assets/css/PresentationDefaults.css');
+}
 
 let playerCss = {
     height: '100%',

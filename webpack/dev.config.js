@@ -1,6 +1,7 @@
 let webpack = require('webpack');
 let path = require('path');
-//let ExtractTextPlugin = require('extract-text-webpack-plugin');
+const host = process.env.HOST || '0.0.0.0';
+const port = (process.env.PORT + 1) || 3001;
 
 let webpackConfig = {
     resolve: {
@@ -8,12 +9,10 @@ let webpackConfig = {
     },
     entry: {
         main: [
-            'webpack-dev-server/client?http://localhost:3000',
+            //todo: solve the issue with same-origin policy when loading fonts
+            'webpack-dev-server/client?http://' + host + ':3000',
             'webpack/hot/only-dev-server',
             './client.js'
-        ],
-        vendor: [
-            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'react-modal'
         ]
     },
     output: {
@@ -32,9 +31,9 @@ let webpackConfig = {
                 ]
             },
             { test: /\.json$/, loader: 'json-loader'},
-            { test: /\.css$/, loader: 'style-loader!css-loader'},
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'},
+            { test: /\.css$/, loader: 'style-loader!css-loader'}
         ]
     },
     node: {
@@ -42,15 +41,10 @@ let webpackConfig = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: Infinity,
-            filename: '[name].bundle.js'
-        }),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+                NODE_ENV: JSON.stringify('dev'),
                 BROWSER: JSON.stringify(true)
             }
         }),
