@@ -6,6 +6,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
+import {hashPassword} from '../../configs/general';
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -44,7 +45,7 @@ class LoginModal extends React.Component {
         } else {
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: this.refs.password1.value
+                password: hashPassword(this.refs.password1.value)
             });
 
             this.refs.email1.value = '';
@@ -62,6 +63,16 @@ class LoginModal extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if (this.props.UserProfileStore.userid !== '') {
+            //redirect if on a specific page
+            if (location.pathname === '/signup' || location.pathname === '/resetpassword') {
+                this.context.executeAction(navigateAction, {
+                    url: '/user/' + this.props.UserProfileStore.username + '/settings'
+                });
+            }
+        }
+    }
 
     handleSignupClick(e) {
         e.preventDefault();

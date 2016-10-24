@@ -1,7 +1,6 @@
 import { Microservices } from '../configs/microservices';
-import { hashSalt, resetPasswordAPIKey } from '../configs/general';
+import { resetPasswordAPIKey } from '../configs/general';
 import rp from 'request-promise';
-import sha512 from 'js-sha512';
 
 export default {
     name: 'user',
@@ -23,7 +22,7 @@ export default {
             });
 
         } else if (resource === 'user.signin') {
-            const hashedPassword = sha512.sha512(args.password + hashSalt);
+            const hashedPassword = args.password;
             rp.post({
                 uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
@@ -75,7 +74,7 @@ export default {
     create: (req, resource, params, body, config, callback) => {
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
-            const hashedPassword = sha512.sha512(args.password + hashSalt);
+            const hashedPassword = args.password;
             const PRIVATE_KEY = '6LdNLyYTAAAAAFMC0J_zuVI1b9lXWZjPH6WLe-vJ';
             rp.post({
                 uri: 'https://www.google.com/recaptcha/api/siteverify',
@@ -134,7 +133,7 @@ export default {
     // other methods
     update: (req, resource, params, body, config, callback) => {
         if (resource === 'user.resetPassword') {
-            rp.post({
+            rp.put({
                 uri: Microservices.user.uri + '/resetPassword',
                 body: JSON.stringify({
                     email: params.email,
