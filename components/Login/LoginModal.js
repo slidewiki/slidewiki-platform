@@ -62,6 +62,16 @@ class LoginModal extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if (this.props.UserProfileStore.userid !== '') {
+            //redirect if on a specific page
+            if (location.pathname === '/signup' || location.pathname === '/resetpassword') {
+                this.context.executeAction(navigateAction, {
+                    url: '/user/' + this.props.UserProfileStore.username + '/settings'
+                });
+            }
+        }
+    }
 
     handleSignupClick(e) {
         e.preventDefault();
