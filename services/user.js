@@ -23,7 +23,6 @@ export default {
 
         } else if (resource === 'user.signin') {
             const hashedPassword = args.password;
-            console.log(hashedPassword);
             rp.post({
                 uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
@@ -76,7 +75,6 @@ export default {
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
             const hashedPassword = args.password;
-            console.log(hashedPassword);
             const PRIVATE_KEY = '6LdNLyYTAAAAAFMC0J_zuVI1b9lXWZjPH6WLe-vJ';
             rp.post({
                 uri: 'https://www.google.com/recaptcha/api/siteverify',
