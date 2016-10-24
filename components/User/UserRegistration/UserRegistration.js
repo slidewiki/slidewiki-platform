@@ -11,6 +11,7 @@ import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import ReCAPTCHA from 'react-google-recaptcha';
+import {hashPassword} from '../../../configs/general';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -181,7 +182,7 @@ class UserRegistration extends React.Component {
             username: this.refs.username.value,
             language: language,
             email: this.refs.email.value,
-            password: this.refs.password.value,
+            password: hashPassword(this.refs.password.value),
             grecaptcharesponse: this.state.grecaptcharesponse
         });
         return false;
