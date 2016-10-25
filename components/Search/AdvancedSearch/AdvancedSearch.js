@@ -5,6 +5,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
 import SearchParamsStore from '../../../stores/SearchParamsStore';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
+import UsersInput from '../AutocompleteComponents/UsersInput';
 
 class AdvancedSearch extends React.Component {
     constructor(props){
@@ -69,9 +70,9 @@ class AdvancedSearch extends React.Component {
             queryparams.fields = this.refs.fields.value;
         }
 
-        if(this.refs.user && this.refs.user.value){
-            queryparams.user = this.refs.user.value.trim();
-        }
+        // if(this.refs.user && this.refs.user.value){
+        queryparams.user = this.refs.users.getSelected();
+        // }
 
         if(this.refs.tags && this.refs.tags.value){
             queryparams.tags = this.refs.tags.value.trim();
@@ -181,7 +182,7 @@ class AdvancedSearch extends React.Component {
                         <div className="two fields">
                             <div className="field">
                                 <label>User</label>
-                                <input name='user' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.user} placeholder="User" type="text" ref='user'></input>
+                                <UsersInput ref='users' />
                             </div>
 
                             <div className="field">
