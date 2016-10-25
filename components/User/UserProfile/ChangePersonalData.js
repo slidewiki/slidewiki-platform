@@ -34,8 +34,6 @@ class ChangePersonalData extends React.Component {
         return (
             <div>
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
-                    <h2>About me</h2>
-                    <div className="ui hidden divider"/>
                     <div className="two fields">
                         <div className="ui field">
                             <label>Firstname</label>

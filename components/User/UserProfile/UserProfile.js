@@ -1,6 +1,8 @@
 import React from 'react';
 import CategoryBox from './CategoryBox';
-import UserSettings from './UserSettings';
+import ProfileSettings from './ProfileSettings';
+import AccountDeletion from './AccountDeletion';
+import ChangePassword from './ChangePassword';
 import PopularDecks from './PopularDecks';
 import PublicUserData from './PublicUserData';
 import { connectToStores } from 'fluxible-addons-react';
@@ -9,7 +11,44 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 class UserProfile extends React.Component {
     componentDidMount() {}
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        if (this.props.UserProfileStore.dimmer.success === true)
+            swal({
+                type: 'success',
+                text: '',
+                title: 'Changes have been applied',
+                timer: 2600,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            })
+            .then(() => {}).catch(swal.noop);
+        if (this.props.UserProfileStore.dimmer.userdeleted === true)
+            swal({
+                type: 'success',
+                text: '',
+                title: 'Your Account has been deleted',
+                timer: 4000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            })
+            .then(() => {}).catch(swal.noop);
+        if (this.props.UserProfileStore.dimmer.failure === true)
+            swal({
+                title: 'Error',
+                text: 'Something went wrong',
+                type: 'error',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            })
+            .then(() => {}).catch(swal.noop);
+    }
 
     chooseView() {
         switch(this.props.UserProfileStore.category){
@@ -18,12 +57,17 @@ class UserProfile extends React.Component {
                     case 'profile':
                         return this.displayUserSettings();
                         break;
-                    case 'groups':
-                        return this.displayUserGroups();
+                    case 'account':
+                        return this.displayAccounts();
+                        break;
+                    case 'integrations':
+                        return this.displayAccountIntegrations();
                         break;
                     default:
                         return '';
                 }});
+            case 'groups':
+                return this.addScaffold(() => {return '';});
             default:
                 return this.displayUserProfile();
         };
@@ -44,11 +88,34 @@ class UserProfile extends React.Component {
     }
 
     displayUserSettings() {
-        return (<UserSettings user = { this.props.UserProfileStore.user } dimmer =  {this.props.UserProfileStore.dimmer} failures = { this.props.UserProfileStore.failures }/>);
+        return (<ProfileSettings user = { this.props.UserProfileStore.user } failures = { this.props.UserProfileStore.failures }/>);
     }
 
-    displayUserGroups() {
+    displayAccountIntegrations() {
         return (<h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>);
+    }
+
+    displayAccounts() {
+        return (<div>
+            <div className="ui segments">
+            <div className="ui secondary segment">
+              <h3>Change password</h3>
+            </div>
+
+            <div className="ui segment">
+              <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+            </div>
+            </div>
+            <div className="ui segments">
+            <div className="ui red inverted segment">
+              <h3>Deactivate account</h3>
+            </div>
+
+            <div className="ui segment">
+              <AccountDeletion />
+            </div>
+            </div>
+        </div>);
     }
 
     displayUserProfile() {

@@ -14,6 +14,10 @@ export default function chooseAction(context, payload, done) {
                     context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
                     callback();
                     break;
+                case 'groups':
+                    context.dispatch('USER_CATEGORY', {category: payload.params.category, item: payload.params.item});
+                    callback();
+                    break;
                 case undefined:
                     context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
                     break;

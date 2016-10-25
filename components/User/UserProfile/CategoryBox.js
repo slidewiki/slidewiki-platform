@@ -15,12 +15,21 @@ class CategoryBox extends React.Component {
         return (
           <div>
               <div className="ui segments">
-                  <div className="ui secondary segment"><div className="ui header">Personal Settings</div></div>
+                  <div className="ui secondary segment"><h3>Personal settings</h3></div>
                   <div className={'ui segment link'+ (this.props.highlight === 'profile' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/profile')}>
-                      <p><i className="icon user"/> My Profile</p>
+                      <p><i className="icon user"/> Profile</p>
                   </div>
-                  <div className={'ui segment link'+ (this.props.highlight === 'groups' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/groups')}>
-                      <p><i className="icon users"/> My Groups</p>
+                  <div className={'ui segment link'+ (this.props.highlight === 'account' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/account')}>
+                      <p><i className="icon user"/> Account</p>
+                  </div>
+                  <div className={'ui segment link'+ (this.props.highlight === 'integrations' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/integrations')}>
+                      <p><i className="icon user"/>Authorized Accounts</p>
+                  </div>
+              </div>
+              <div className="ui segments">
+                  <div className="ui secondary segment"><h3>Groups</h3></div>
+                  <div className={'ui segment link'+ (this.props.highlight === 'overview' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/groups/overview')}>
+                      <p><i className="icon user"/>My Groups</p>
                   </div>
               </div>
           </div>
