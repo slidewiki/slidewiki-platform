@@ -1,23 +1,29 @@
 import React from 'react';
-import { NavLink } from 'fluxible-router';
+import { navigateAction } from 'fluxible-router';
 
 class CategoryBox extends React.Component {
     componentDidMount() {}
 
     componentDidUpdate() {}
 
-    render() {
-        let active = 'selected active blue';
+    changeTo(link) {
+        this.context.executeAction(navigateAction, {url: link});
+        return false;
+    }
 
+    render() {
         return (
-            <div className="ui vertical fluid buttons">
-                <NavLink className={ 'ui ' + ( this.props.toShow === 'settings' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/settings'}>
-                    <p><i className="icon setting"/> Settings</p>
-                </NavLink>
-                <NavLink className={ 'ui ' + ( this.props.toShow === 'stats' ? active : '' ) + ' button' } href={ '/user/' + this.props.username + '/stats'}>
-                    <p><i className="icon bar chart"/> My Stats</p>
-                </NavLink>
-            </div>
+          <div>
+              <div className="ui segments">
+                  <div className="ui secondary segment"><div className="ui header">Personal Settings</div></div>
+                  <div className={'ui segment link'+ (this.props.highlight === 'profile' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/profile')}>
+                      <p><i className="icon user"/> My Profile</p>
+                  </div>
+                  <div className={'ui segment link'+ (this.props.highlight === 'groups' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/groups')}>
+                      <p><i className="icon users"/> My Groups</p>
+                  </div>
+              </div>
+          </div>
         );
     }
 }
