@@ -63,8 +63,6 @@ class UserProfile extends React.Component {
                         return this.displayAccounts();
                         break;
                     case categories.settings[2]:
-                        return this.displayAccountIntegrations();
-                        break;
                     default:
                         return this.notImplemented();
                 }});
@@ -117,10 +115,6 @@ class UserProfile extends React.Component {
 
               </div>
           </div>);
-    }
-
-    displayAccountIntegrations() {
-        return (<h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>);
     }
 
     displayAccounts() {
