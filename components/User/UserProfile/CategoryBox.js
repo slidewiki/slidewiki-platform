@@ -14,21 +14,21 @@ class CategoryBox extends React.Component {
     render() {
         return (
           <div>
-              <div className="ui segments">
-                  <div className="ui secondary segment"><h3>Personal settings</h3></div>
-                  <div className={'ui segment link'+ (this.props.highlight === 'profile' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/profile')}>
+              <div className="ui vertical pointing menu">
+                  <div className="item"><h3>Personal settings</h3></div>
+                  <div className={'ui link item'+ (this.props.highlight === 'profile' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/profile')}>
                       <p><i className="icon user"/> Profile</p>
                   </div>
-                  <div className={'ui segment link'+ (this.props.highlight === 'account' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/account')}>
+                  <div className={'ui link item'+ (this.props.highlight === 'account' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/account')}>
                       <p><i className="icon user"/> Account</p>
                   </div>
-                  <div className={'ui segment link'+ (this.props.highlight === 'integrations' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/integrations')}>
+                  <div className={'ui link item'+ (this.props.highlight === 'integrations' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/integrations')}>
                       <p><i className="icon user"/>Authorized Accounts</p>
                   </div>
               </div>
-              <div className="ui segments">
-                  <div className="ui secondary segment"><h3>Groups</h3></div>
-                  <div className={'ui segment link'+ (this.props.highlight === 'overview' ? ' blue inverted' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/groups/overview')}>
+              <div className="ui vertical pointing menu">
+                  <div className="ui item"><h3>Groups</h3></div>
+                  <div className={'ui link item'+ (this.props.highlight === 'overview' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/groups/overview')}>
                       <p><i className="icon user"/>My Groups</p>
                   </div>
               </div>
