@@ -13,6 +13,7 @@ import importFinished from '../../actions/import/importFinished';
 import uploadFile from '../../actions/import/uploadFile';
 import Import from '../Import/Import';
 import Error from '../Error/Error';
+import LanguageDropdown from '../common/LanguageDropdown';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
@@ -57,7 +58,7 @@ class AddDeck extends React.Component {
 
         //validate input
         const title = this.refs.input_title.value;
-        const language = this.refs.select_languages.value;
+        const language = this.refs.div_languages.getSelected();
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
         const license = this.refs.select_licenses.value;
@@ -169,7 +170,7 @@ class AddDeck extends React.Component {
         this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
-            let language = this.refs.select_languages.value;
+            let language = this.refs.div_languages.getSelected();
             let license = this.refs.select_licenses.value;
             if (language === null || language === undefined || language === 'Select Language') {//set default
                 language = 'en_GB';
@@ -209,11 +210,6 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.title
         });
-        let fieldClass_language = classNames({
-            'required': true,
-            'field': true,
-            'error': this.props.AddDeckStore.wrongFields.language
-        });
         let fieldClass_license = classNames({
             'required': true,
             'field': true,
@@ -238,37 +234,17 @@ class AddDeck extends React.Component {
             'button': true
 
         });
+        let fieldClass_language = classNames({
+            'required': true,
+            'field': true,
+            'error': this.props.AddDeckStore.wrongFields.language
+        });
+
 
         let filename = this.props.ImportStore.filename;
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language" aria-required="true" ref="select_languages">
-            <option>
-                Select Language
-            </option>
-            <option value="en_GB" >
-                English
-            </option>
-            <option value="de_DE" >
-                German
-            </option>
-            <option value="el_GR" >
-                Greek
-            </option>
-            <option value="it_IT" >
-                Italian
-            </option>
-            <option value="pt_PT" >
-                Portugese
-            </option>
-            <option value="sr_RS" >
-                Serbian
-            </option>
-            <option value="es_ES" >
-                Spanish
-            </option>
-        </select>;
         let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
           <option value="DefaultTheme" >Default</option>
           <option value="DefaultTheme" >Default</option>
@@ -326,11 +302,9 @@ class AddDeck extends React.Component {
                               <label htmlFor="license">License</label>
                                   {licenseOptions}
                           </div>
-                          <div className={fieldClass_language} data-tooltip={hint_language} ref="div_languages" >
-                              <label htmlFor="language">
-                                  Language
-                              </label>
-                              {languageOptions}
+                          <div className={fieldClass_language}>
+                              <label>Language</label>
+                              <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
                           </div>
                       </div>
 

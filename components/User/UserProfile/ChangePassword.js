@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import changePassword from '../../../actions/user/userprofile/changePassword';
+import {hashPassword} from '../../../configs/general';
 
 class ChangePassword extends React.Component {
     componentDidMount() {
@@ -28,8 +29,8 @@ class ChangePassword extends React.Component {
     handleChangePassword(e) {
         e.preventDefault();
         let payload = {
-            oldpw: this.refs.oldPassword.value,
-            newpw: this.refs.newPassword.value
+            oldpw: hashPassword(this.refs.oldPassword.value),
+            newpw: hashPassword(this.refs.newPassword.value)
         };
         this.refs.oldPassword.value = '';
         this.refs.newPassword.value = '';
@@ -47,8 +48,6 @@ class ChangePassword extends React.Component {
         let passwordToolTipp = this.props.failures.wrongPassword ? 'This is not the password you entered before - Please try again' : undefined;
         return (
             <div>
-                <h2>Password</h2>
-                <div className="ui hidden divider"/>
                 <form className="ui form changePassword">
                     <div className="two fields">
                         <div className={ passwordClasses } data-tooltip={ passwordToolTipp } data-position="top center" data-inverted="">

@@ -44,7 +44,7 @@ class HeaderDropdown extends React.Component {
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username}>
                         <i className="user icon link"/> My Decks
                     </div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings'}>
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}>
                         <i className="setting icon"/> My Settings
                     </div>
                     <div className="item" data-value={'logout'}>
