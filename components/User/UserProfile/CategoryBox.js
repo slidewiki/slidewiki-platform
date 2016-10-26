@@ -1,37 +1,37 @@
 import React from 'react';
-import { navigateAction } from 'fluxible-router';
+import { NavLink } from 'fluxible-router';
 
 class CategoryBox extends React.Component {
-    componentDidMount() {}
-
-    componentDidUpdate() {}
-
-    changeTo(link) {
-        this.context.executeAction(navigateAction, {url: link});
-        return false;
+    constructor(props){
+        super(props);
+        this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+        this.headerStyle = {'backgroundColor': 'rgb(243, 244, 245)', 'color': 'rgba(0,0,0,.6)'};
     }
 
     render() {
         return (
-          <div>
-              <div className="ui vertical pointing menu">
-                  <div className="item"><h3>Personal settings</h3></div>
-                  <div className={'ui link item'+ (this.props.highlight === 'profile' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/profile')}>
+          <div ref="menus">
+
+              <div className="ui vertical menu">
+                  <div className="item" style={ this.headerStyle }><h3>Personal settings</h3></div>
+                  <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                       <p><i className="icon user"/> Profile</p>
-                  </div>
-                  <div className={'ui link item'+ (this.props.highlight === 'account' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/account')}>
+                  </NavLink>
+                  <NavLink className="item" href={'/user/' + this.props.username + '/settings/account'} activeStyle={this.styles}>
                       <p><i className="icon user"/> Account</p>
-                  </div>
-                  <div className={'ui link item'+ (this.props.highlight === 'integrations' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/settings/integrations')}>
+                  </NavLink>
+                  <NavLink className="item" href={'/user/' + this.props.username + '/settings/integrations'} activeStyle={this.styles}>
                       <p><i className="icon user"/>Authorized Accounts</p>
-                  </div>
+                  </NavLink>
               </div>
+
               <div className="ui vertical pointing menu">
-                  <div className="ui item"><h3>Groups</h3></div>
-                  <div className={'ui link item'+ (this.props.highlight === 'overview' ? ' active' : '')} onClick={this.changeTo.bind(this, '/user/' + this.props.username + '/groups/overview')}>
+                  <div className="item" style={ this.headerStyle }><h3>Groups</h3></div>
+                  <NavLink className="item" href={'/user/' + this.props.username + '/groups/overview'} activeStyle={this.styles}>
                       <p><i className="icon user"/>My Groups</p>
-                  </div>
+                  </NavLink>
               </div>
+              
           </div>
         );
     }
