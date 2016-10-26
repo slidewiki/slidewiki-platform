@@ -44,6 +44,16 @@ export default {
             /*********received data from microservices*************/
             callback(null, args);
         }
+    },
+
+    create: (req, resource, params, body, config, callback) => {
+        let args = params.params? params.params : params;
+        if(resource === 'datasource.new'){
+            /*********connect to microservices*************/
+            //todo
+            /*********received data from microservices*************/
+            callback(null, args);
+        }
     }
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
@@ -100,7 +110,7 @@ function getMockupDataSourcesForID(sid) {
             dataSources = mockupDataSources.slice(9,15);
             break;
         default:
-            dataSources = [];
+            dataSources = mockupDataSources;
     }
 
     return dataSources;

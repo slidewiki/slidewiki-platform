@@ -4,13 +4,13 @@ class DataSourceStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.datasources = [];
-        this.datasource = null;
+        this.datasource = undefined;
         this.selector = {};
     }
     loadDataSources(payload) {
         this.datasources = payload.datasources;
         this.selector = payload.selector;
-        this.datasource = null;
+        this.datasource = undefined;
         this.emitChange();
     }
     loadDataSource(payload) {
@@ -20,11 +20,20 @@ class DataSourceStore extends BaseStore {
     saveDataSource(payload) {
         const index = this.datasources.findIndex((ds) => ds.id === payload.datasource.id);
         this.datasources[index] = payload.datasource;
+        this.datasource = undefined;
+        this.emitChange();
+    }
+    newDataSource(payload) {
         this.datasource = null;
         this.emitChange();
     }
+    addDataSource(payload) {
+        this.datasources.push(payload.datasource);
+        this.datasource = undefined;
+        this.emitChange();
+    }
     cancelEditDataSource(payload) {
-        this.datasource = null;
+        this.datasource = undefined;
         this.emitChange();
     }
     getState() {
@@ -48,6 +57,8 @@ DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
+    'NEW_DATASOURCE': 'newDataSource',
+    'ADD_DATASOURCE_SUCCESS': 'addDataSource',
     'SAVE_DATASOURCE_SUCCESS': 'saveDataSource',
     'CANCEL_EDIT_DATASOURCE': 'cancelEditDataSource'
 };

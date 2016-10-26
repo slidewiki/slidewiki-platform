@@ -27,7 +27,7 @@ class DataSourceItem extends React.Component {
     }
 
     addComment(comment) {
-        if (comment !== '') {
+        if (comment !== undefined && comment !== '') {
             return '(' + comment + ')';
         } else {
             return '';
@@ -35,7 +35,7 @@ class DataSourceItem extends React.Component {
     }
 
     addAuthors(authors) {
-        if (authors !== '') {
+        if (authors !== undefined && authors !== '') {
             return ',' + authors;
         } else {
             return '';
@@ -43,7 +43,7 @@ class DataSourceItem extends React.Component {
     }
 
     addYear(year) {
-        if (year !== '') {
+        if (year !== undefined && year !== '') {
             return ',' + year;
         } else {
             return '';
@@ -63,15 +63,15 @@ class DataSourceItem extends React.Component {
             return '###' + url + '###';
         });
         const titleSegments = titleURLed.split('###');
-        let y = [];
+        let enrichedTitleSegments = [];
 
         titleSegments.forEach((titleSegment, index) => {
             //create a link if it's a url or display as is
-            y.push(this.isTextURL(titleSegment) ? <a href={this.addProtocolIfMissing(titleSegment)} key={index}>{this.shortenText(titleSegment)}</a> : titleSegment);
+            enrichedTitleSegments.push(this.isTextURL(titleSegment) ? <a href={this.addProtocolIfMissing(titleSegment)} key={index}>{this.shortenText(titleSegment)}</a> : titleSegment);
         });
 
         return (
-            y
+            enrichedTitleSegments
         );
     }
 
@@ -121,27 +121,7 @@ class DataSourceItem extends React.Component {
                 );
                 break;
             case 'webpage':
-                if (node.url !== '') {
-                    SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
-                    );
-                } else {
-                    SummaryNode = (
-                        <span>{node.title} {this.addComment(node.comment)}</span>
-                    );
-                }
-                break;
             case 'webdocument':
-                if (node.url !== '') {
-                    SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
-                    );
-                } else {
-                    SummaryNode = (
-                        <span>{node.title} {this.addComment(node.comment)}</span>
-                    );
-                }
-                break;
             case 'publication':
                 if (node.url !== '') {
                     SummaryNode = (
