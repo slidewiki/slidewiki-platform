@@ -1,4 +1,5 @@
 import sha512 from 'js-sha512';
+const co = require('../common');
 
 export default {
     //full page title
