@@ -13,7 +13,7 @@ class PublicUserData extends React.Component {
                 <h3>
                     { this.props.user.uname }
                     <strong>     </strong>
-                    <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings' }>
+                    <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' }>
                         <i className="setting icon"/>
                     </NavLink>
                 </h3>
