@@ -48,8 +48,6 @@ class ChangePassword extends React.Component {
         let passwordToolTipp = this.props.failures.wrongPassword ? 'This is not the password you entered before - Please try again' : undefined;
         return (
             <div>
-                <h2>Password</h2>
-                <div className="ui hidden divider"/>
                 <form className="ui form changePassword">
                     <div className="two fields">
                         <div className={ passwordClasses } data-tooltip={ passwordToolTipp } data-position="top center" data-inverted="">
