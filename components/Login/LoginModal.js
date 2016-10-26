@@ -116,20 +116,23 @@ class LoginModal extends React.Component {
                 <div className="ui container">
 
                     <div className="ui blue padded center aligned segment">
-                      <form className="ui form signin" onSubmit={this.signin}>
+                      <form className="ui form signin">
                         <div className="ui five wide icon input field">
                           <div><label htmlFor="email1" hidden>E-Mail</label></div>
                           <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
-
                         </div>
-                          <br/>
+                        <br/>
                         <div className="ui five wide icon input field">
                           <div><label htmlFor="password1" hidden>Password</label></div>
                           <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0" aria-required="true" required/><i className="lock icon"/>
                         </div>
                         <br/>
-                        <div className="ui error message"/>
+                        <div className="ui center aligned">
+                            <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In</button>
+                        </div>
+                        <br/>
 
+                        <div className="ui error message"/>
                       </form>
                       <br/>
                       <div className="ui floated right">
@@ -141,7 +144,6 @@ class LoginModal extends React.Component {
                 </div>
               </div>
               <div className="actions">
-                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In</button>
                 <button type="cancel" className="ui cancel button">
                   <i className="remove icon"/>Close
                 </button>
