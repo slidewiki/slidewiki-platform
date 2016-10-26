@@ -8,9 +8,13 @@ import classNames from 'classnames';
  */
 
 class CountryDropdown extends React.Component {
-    componentDidMount() {}
+    componentDidMount() {
+        $(this.refs.countryDropdown).dropdown();
+    }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        $(this.refs.countryDropdown).dropdown();
+    }
 
     getSelected() {
         return this.refs.country.value;
@@ -26,7 +30,7 @@ class CountryDropdown extends React.Component {
             'required': this.props.required,
         });
         return (
-            <div className={classes} >
+            <div className={classes} ref="countryDropdown">
                 {this.props.required ? <input type="hidden" name="country" ref="country" defaultValue={this.props.country} required/> : <input type="hidden" name="country" ref="country" defaultValue={this.props.country}/>}
                 <i className="dropdown icon"/>
                 <div className="default text">Select your country</div>
