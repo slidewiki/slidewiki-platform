@@ -5,9 +5,6 @@ import LanguageDropdown from '../../common/LanguageDropdown.js';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
 class ChangePersonalData extends React.Component {
-    componentDidMount() {}
-
-    componentDidUpdate() {}
 
     handleChangeUserdata(e) {
         e.preventDefault();

@@ -3,14 +3,7 @@ import DeckCard from './DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 
-
 class PublicUserDecks extends React.Component {
-
-    componentDidMount() {
-    }
-
-    componentDidUpdate() {
-    }
 
     render() {
         let content = this.props.UserProfileStore.userDecks;

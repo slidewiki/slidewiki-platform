@@ -1,12 +1,14 @@
 import React from 'react';
 import CategoryBox from './CategoryBox';
-import ProfileSettings from './ProfileSettings';
-import AccountDeletion from './AccountDeletion';
-import ChangePassword from './ChangePassword';
 import PopularDecks from './PopularDecks';
+import ChangePicture from './ChangePicture';
+import ChangePassword from './ChangePassword';
 import PublicUserData from './PublicUserData';
+import DeactivateAccount from './DeactivateAccount';
+import ChangePersonalData from './ChangePersonalData';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import { categories } from '../../../actions/user/userprofile/chooseAction';
 
 class UserProfile extends React.Component {
     componentDidMount() {}
@@ -52,22 +54,26 @@ class UserProfile extends React.Component {
 
     chooseView() {
         switch(this.props.UserProfileStore.category){
-            case 'settings':
+            case categories.categories[0]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
-                    case 'profile':
+                    case categories.settings[0]:
                         return this.displayUserSettings();
                         break;
-                    case 'account':
+                    case categories.settings[1]:
                         return this.displayAccounts();
                         break;
-                    case 'integrations':
+                    case categories.settings[2]:
                         return this.displayAccountIntegrations();
                         break;
                     default:
-                        return '';
+                        return this.notImplemented();
                 }});
-            case 'groups':
-                return this.addScaffold(() => {return '';});
+            case categories.categories[1]:
+                return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
+                    case categories.groups[0]:
+                    default:
+                        return this.notImplemented();
+                }});
             default:
                 return this.displayUserProfile();
         };
@@ -88,7 +94,29 @@ class UserProfile extends React.Component {
     }
 
     displayUserSettings() {
-        return (<ProfileSettings user = { this.props.UserProfileStore.user } failures = { this.props.UserProfileStore.failures }/>);
+        return (
+          <div>
+              <div className="ui segments">
+
+                  <div className="ui secondary segment">
+                      <h3>Exchange picture</h3>
+                  </div>
+                  <div className="ui segment">
+                      <ChangePicture user={ this.props.UserProfileStore.user }/>
+                  </div>
+
+              </div>
+              <div className="ui segments">
+
+                  <div className="ui secondary segment">
+                      <h3>Alter my personal data</h3>
+                  </div>
+                  <div className="ui segment">
+                      <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures }/>
+                  </div>
+
+              </div>
+          </div>);
     }
 
     displayAccountIntegrations() {
@@ -108,11 +136,11 @@ class UserProfile extends React.Component {
             </div>
             <div className="ui segments">
             <div className="ui red inverted segment">
-              <h3>Deactivate account</h3>
+              <h3>Deactivate Account</h3>
             </div>
 
             <div className="ui segment">
-              <AccountDeletion />
+              <DeactivateAccount />
             </div>
             </div>
         </div>);
@@ -141,9 +169,15 @@ class UserProfile extends React.Component {
         );
     }
 
+    notImplemented() {
+        return (<h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>);
+    }
+
     render() {
         return (this.chooseView());
     }
+
+
 }
 
 UserProfile.contextTypes = {

@@ -1,10 +1,7 @@
 import React from 'react';
 import removeUser from '../../../actions/user/userprofile/removeUser';
 
-class AccountDeletion extends React.Component {
-    componentDidMount() {}
-
-    componentDidUpdate() {}
+class DeactivateAccount extends React.Component {
 
     handleAccountDelete(e) {
         this.context.executeAction(removeUser, {});
@@ -48,8 +45,8 @@ class AccountDeletion extends React.Component {
     }
 }
 
-AccountDeletion.contextTypes = {
+DeactivateAccount.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-export default AccountDeletion;
+export default DeactivateAccount;

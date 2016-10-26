@@ -4,9 +4,6 @@ import UserPicture from '../../common/UserPicture';
 import { isEmpty } from '../../../common.js';
 
 class PublicUserData extends React.Component {
-    componentDidMount() {}
-
-    componentDidUpdate() {}
 
     render() {
         return (

@@ -27,7 +27,7 @@ import loadAddDeck from '../actions/loadAddDeck';
 import loadNotFound from '../actions/loadNotFound';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
-import chooseAction from '../actions/user/userprofile/chooseAction';
+import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 
@@ -164,7 +164,6 @@ export default {
             context.executeAction(loadResetPassword, payload, done);
         }
     },
-//-----------------------------------User routes------------------------------
     userprofile: {
         path: '/user/:username/:category?/:item?',
         method: 'get',
@@ -175,7 +174,6 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
-//-----------------------------------Search routes------------------------------
     search: {
         // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
         path: '/search/:queryparams?',
