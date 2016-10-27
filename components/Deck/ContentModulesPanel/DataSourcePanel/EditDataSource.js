@@ -20,6 +20,7 @@ class EditDataSource extends React.Component {
     }
 
     handleCancelClick() {
+      console.log('cancel');
         this.context.executeAction(cancelEditDataSource);
     }
 
@@ -34,8 +35,10 @@ class EditDataSource extends React.Component {
                 url: this.refs.url.value,
                 comment: this.refs.comment.value,
                 authors: this.refs.authors.value,
-                year: this.refs.year.value
+                year: this.refs.year.value,
+                sid: this.props.DataSourceStore.selector.sid
             };
+            console.log(newDataSource);
             this.context.executeAction(addDataSource, {
                 datasource: newDataSource
             });
