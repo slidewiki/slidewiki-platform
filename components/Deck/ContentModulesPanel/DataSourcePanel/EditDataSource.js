@@ -20,7 +20,6 @@ class EditDataSource extends React.Component {
     }
 
     handleCancelClick() {
-      console.log('cancel');
         this.context.executeAction(cancelEditDataSource);
     }
 
@@ -35,12 +34,11 @@ class EditDataSource extends React.Component {
                 url: this.refs.url.value,
                 comment: this.refs.comment.value,
                 authors: this.refs.authors.value,
-                year: this.refs.year.value,
-                sid: this.props.DataSourceStore.selector.sid
+                year: this.refs.year.value
             };
-            console.log(newDataSource);
             this.context.executeAction(addDataSource, {
-                datasource: newDataSource
+                datasource: newDataSource,
+                sid: this.props.DataSourceStore.selector.sid
             });
         } else {
             dataSource.type = this.refs.select_types.value;
@@ -97,11 +95,11 @@ class EditDataSource extends React.Component {
                     </div>
 
                     <div className="ui hidden divider"></div>
-                    <button tabIndex="0" onClick={this.handleCancelClick.bind(this)} className="ui blue labeled icon button">
-                        <i className="icon close"></i> Cancel
-                    </button>
                     <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
                         <i className="icon edit"></i> Submit
+                    </button>
+                    <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui blue labeled icon button">
+                        <i className="icon close"></i> Cancel
                     </button>
                     <div className="ui error message"/>
                 </form>
