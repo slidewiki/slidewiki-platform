@@ -2,10 +2,7 @@ import React from 'react';
 import UserPicture from '../../common/UserPicture';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
-class Picture extends React.Component {
-    componentDidMount() {}
-
-    componentDidUpdate() {}
+class ChangePicture extends React.Component {
 
     uploadNewPicture(e) {}
 
@@ -53,8 +50,8 @@ class Picture extends React.Component {
     }
 }
 
-Picture.contextTypes = {
+ChangePicture.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-export default Picture;
+export default ChangePicture;
