@@ -6,8 +6,18 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 class PublicUserDecks extends React.Component {
 
     render() {
-        let content = this.props.UserProfileStore.userDecks;
-        console.log(content);
+        let content = this.props.decks;
+        switch(this.props.sort){
+            case '1':
+                content = content.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+                break;
+            case '2':
+                content = content.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+                break;
+            case '0':
+            default:
+                content = content.sort((a,b) => (b.title.toUpperCase() < a.title.toUpperCase()) ? 1 : -1 );
+        }
         let size = 0;
         if (content !== undefined && content.length !== 0 && this.props.size === 0)
             size = content.length;
