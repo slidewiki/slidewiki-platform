@@ -57,7 +57,7 @@ class AddComment extends React.Component {
               <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
                   <i className="icon edit"></i> Submit
               </button>
-              <button tabIndex="0" className="ui blue labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
+              <button tabIndex="0" type="button" className="ui blue labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
                   <i className="icon close"></i> Cancel
               </button>
               <div className="ui error message"/>
