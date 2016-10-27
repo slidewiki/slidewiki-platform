@@ -1,4 +1,5 @@
 import sha512 from 'js-sha512';
+const co = require('../common');
 
 export default {
     //full page title
@@ -10,7 +11,7 @@ export default {
         return sha512.sha512(password + hashSalt);
     },
     //API Key
-    resetPasswordAPIKey: '2cbc621f86e97189239ee8c4c80b10b3a935b8a9f5db3def7b6a3ae7c4b75cb5',
+    resetPasswordAPIKey: (!co.isEmpty(process.env.SERVICE_USER_APIKEY)) ? process.env.SERVICE_USER_APIKEY : '2cbc621f86e97189239ee8c4c80b10b3a935b8a9f5db3def7b6a3ae7c4b75cb5',
     //Public reCAPTCHA key
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'
 };
