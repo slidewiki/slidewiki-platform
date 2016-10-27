@@ -15,7 +15,7 @@ class AdvancedSearch extends React.Component {
             entity: this.props.paramsStore.entity,
             lang: this.props.paramsStore.lang,
             fields: this.props.paramsStore.fields,
-            user: this.props.paramsStore.user,
+            users: this.props.paramsStore.users,
             tags: this.props.paramsStore.tags,
             revisions: this.props.paramsStore.revisions,
             license: this.props.paramsStore.license
@@ -39,7 +39,7 @@ class AdvancedSearch extends React.Component {
     //     return (nextProps.searchstring != this.state.searchstring);
     // }
     handleKeyPress(event){
-        if(event.key == 'Enter'){
+        if(event.key === 'Enter'){
             this.handleRedirect();
         }
     }
@@ -70,9 +70,9 @@ class AdvancedSearch extends React.Component {
             queryparams.fields = this.refs.fields.value;
         }
 
-        // if(this.refs.user && this.refs.user.value){
-        queryparams.user = this.refs.users.getSelected();
-        // }
+        if(this.refs.users && this.refs.users.getSelected()){
+            queryparams.users = this.refs.users.getSelected();
+        }
 
         if(this.refs.tags && this.refs.tags.value){
             queryparams.tags = this.refs.tags.value.trim();
@@ -90,7 +90,7 @@ class AdvancedSearch extends React.Component {
     }
     encodeParams(queryparams){
         let encodedParams = '';
-        for (var key in queryparams) {
+        for (let key in queryparams) {
             if(encodedParams){
                 encodedParams += '&';
             }
@@ -110,7 +110,6 @@ class AdvancedSearch extends React.Component {
         return false;
     }
     render() {
-
         // facet lists initialization
         const languageList = this.props.paramsStore.languages.map((item, index) => {
             return (
@@ -124,7 +123,7 @@ class AdvancedSearch extends React.Component {
             );
         });
         let searchstring = decodeURIComponent(this.state.searchstring);
-        let defaultSearchstring = (searchstring == '*:*') ? '' : searchstring;
+        let defaultSearchstring = (searchstring === '*:*') ? '' : searchstring;
         let clearInputIcon = '';
         if(defaultSearchstring){
             clearInputIcon = <i className="remove link icon" onClick={this.clearInput.bind(this)} ></i>;
@@ -182,7 +181,7 @@ class AdvancedSearch extends React.Component {
                         <div className="two fields">
                             <div className="field">
                                 <label>User</label>
-                                <UsersInput ref='users' />
+                                <UsersInput ref='users' placeholder='Select Users' defaultValue={this.state.users}/>
                             </div>
 
                             <div className="field">
