@@ -1,3 +1,6 @@
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
+
 export default {
     name: 'datasource',
     // At least one of the CRUD methods is Required
@@ -6,33 +9,46 @@ export default {
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
 
         //not used - data is already in the store
-        if (resource === 'datasource.item'){
-            let dataSource = {};
-
-            dataSource = mockupDataSources.find((ds) => {return ds.dsid === args.dsid;});
-
-            //mockupdatasources.forEach((item) => {
-            //    if (item.id === parseInt(args.dsid)) {
-            //        datasource = item;
-            //        break;
-            //    }
-            //});
-
-            callback(null, {datasource: dataSource});
-        }
+        // if (resource === 'datasource.item'){
+        //     let dataSource = {};
+        //
+        //     dataSource = mockupDataSources.find((ds) => {return ds.dsid === args.dsid;});
+        //
+        //     //mockupdatasources.forEach((item) => {
+        //     //    if (item.id === parseInt(args.dsid)) {
+        //     //        datasource = item;
+        //     //        break;
+        //     //    }
+        //     //});
+        //
+        //     callback(null, {datasource: dataSource});
+        // }
         if (resource === 'datasource.count'){
-            // let randomNumber = Math.round(Math.random() * 20);
-            let dataSources = getMockupDataSourcesForID(args.sid);
-            callback(null, {'count' : dataSources.length, 'selector': selector, 'mode': args.mode});
+            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
+                let parsedRes = JSON.parse(res);
+                let dataSourcesCount = (parsedRes.dataSources !== undefined) ? parsedRes.dataSources.length : 0;
+                callback(null, {'count' : dataSourcesCount, 'selector': selector, 'mode': args.mode});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {'count' : 0, 'selector': selector, 'mode': args.mode});
+            });
+            // let dataSources = getMockupDataSourcesForID(args.sid);
+            // callback(null, {'count' : dataSources.length, 'selector': selector, 'mode': args.mode});
         }
 
         if (resource === 'datasource.list'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
+            //request specific content item from deck service
+            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
+                let parsedRes = JSON.parse(res);
+                let dataSources = (parsedRes.dataSources !== undefined) ? parsedRes.dataSources : [];
+                callback(null, {datasources: dataSources, selector: selector});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {datasources: [], selector: selector});
+            });
 
-            let dataSources = getMockupDataSourcesForID(args.sid);
-            callback(null, {datasources: dataSources, selector: selector});
+            // let dataSources = getMockupDataSourcesForID(args.sid);
+            // callback(null, {datasources: dataSources, selector: selector});
         }
     },
 
