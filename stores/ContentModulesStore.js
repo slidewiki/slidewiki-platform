@@ -32,6 +32,10 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount.comments++;
         this.emitChange();
     }
+    addDataSourceSuccess() {
+        this.moduleCount.datasource++;
+        this.emitChange();
+    }
     getState() {
         return {
             moduleType: this.moduleType,
@@ -57,7 +61,8 @@ ContentModulesStore.handlers = {
     'LOAD_AMOUNT_OF_QUESTIONS_SUCCESS': 'updateQuestionsCount',
     'LOAD_AMOUNT_OF_COMMENTS_SUCCESS': 'updateCommentsCount',
     'ADD_REPLY_SUCCESS': 'addCommentSuccess',
-    'ADD_COMMENT_SUCCESS': 'addCommentSuccess'
+    'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
+    'ADD_DATASOURCE_SUCCESS': 'addDataSourceSuccess'
 };
 
 export default ContentModulesStore;
