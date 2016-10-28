@@ -3,48 +3,42 @@ import {BaseStore} from 'fluxible/addons';
 class DataSourceStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.datasources = [];
-        this.datasource = undefined;
+        this.dataSources = [];
+        this.dataSource = undefined;
         this.selectedIndex = -1;
         this.selector = {};
     }
     loadDataSources(payload) {
-        this.datasources = payload.datasources;
+        this.dataSources = payload.datasources;
         this.selector = payload.selector;
-        this.datasource = undefined;
+        this.dataSource = undefined;
         this.selectedIndex = -1;
         this.emitChange();
     }
     loadDataSource(payload) {
-        this.datasource = this.datasources[payload.dsindex];
+        this.dataSource = this.dataSources[payload.dsindex];
         this.selectedIndex = payload.dsindex;
         this.emitChange();
     }
-    saveDataSource(payload) {
-        this.datasources[this.selectedIndex] = payload.datasource;
-        this.datasource = undefined;
+    saveDataSources(payload) {
+        this.dataSources = payload.datasources;
+        this.dataSource = undefined;
         this.selectedIndex = -1;
         this.emitChange();
     }
     newDataSource(payload) {
-        this.datasource = null;
-        this.emitChange();
-    }
-    addDataSource(payload) {
-        this.datasources.push(payload.datasource);
-        this.datasource = undefined;
-        this.selectedIndex = -1;
+        this.dataSource = null;
         this.emitChange();
     }
     cancelEditDataSource(payload) {
-        this.datasource = undefined;
+        this.dataSource = undefined;
         this.selectedIndex = -1;
         this.emitChange();
     }
     getState() {
         return {
-            datasources: this.datasources,
-            datasource: this.datasource,
+            dataSources: this.dataSources,
+            dataSource: this.dataSource,
             selectedIndex: this.selectedIndex,
             selector: this.selector,
         };
@@ -53,8 +47,8 @@ class DataSourceStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.datasources = state.datasources;
-        this.datasource = state.datasource;
+        this.dataSources = state.dataSources;
+        this.dataSource = state.dataSource;
         this.selectedIndex = state.selectedIndex;
         this.selector = state.selector;
     }
@@ -65,8 +59,7 @@ DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
     'NEW_DATASOURCE': 'newDataSource',
-    'ADD_DATASOURCE_SUCCESS': 'addDataSource',
-    'SAVE_DATASOURCE_SUCCESS': 'saveDataSource',
+    'SAVE_DATASOURCES_SUCCESS': 'saveDataSources',
     'CANCEL_EDIT_DATASOURCE': 'cancelEditDataSource'
 };
 

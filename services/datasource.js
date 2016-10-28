@@ -8,7 +8,7 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
 
-        //not used - data is already in the store
+        //not used - the data is already in the store
         // if (resource === 'datasource.item'){
         //     let dataSource = {};
         //
@@ -23,11 +23,10 @@ export default {
         //
         //     callback(null, {datasource: dataSource});
         // }
-        if (resource === 'datasource.count'){
+        if (resource === 'datasource.count') {
             rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let parsedRes = JSON.parse(res);
-                let dataSourcesCount = (parsedRes.dataSources !== undefined) ? parsedRes.dataSources.length : 0;
-                callback(null, {'count' : dataSourcesCount, 'selector': selector, 'mode': args.mode});
+                let dataSources = getDataSourcesFromDeckOrSlide(selector.sid, JSON.parse(res));
+                callback(null, {'count' : dataSources.length, 'selector': selector, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {'count' : 0, 'selector': selector, 'mode': args.mode});
@@ -36,11 +35,10 @@ export default {
             // callback(null, {'count' : dataSources.length, 'selector': selector, 'mode': args.mode});
         }
 
-        if (resource === 'datasource.list'){
+        if (resource === 'datasource.list') {
             //request specific content item from deck service
             rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let parsedRes = JSON.parse(res);
-                let dataSources = (parsedRes.dataSources !== undefined) ? parsedRes.dataSources : [];
+                let dataSources = getDataSourcesFromDeckOrSlide(selector.sid, JSON.parse(res));
                 callback(null, {datasources: dataSources, selector: selector});
             }).catch((err) => {
                 console.log(err);
@@ -54,28 +52,51 @@ export default {
 
     update: (req, resource, params, body, config, callback) => {
         let args = params.params? params.params : params;
-        if(resource === 'datasource.item'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            callback(null, args);
+        if(resource === 'datasource.array') {
+            rp.put({
+                uri: Microservices.deck.uri + '/slide/datasources/' + selector.sid,
+                body:JSON.stringify({
+                    datasources: args.datasources
+                })
+            }).then((res) => {
+                callback(null, args);
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {datasources: []});
+            });
         }
     },
 
-    create: (req, resource, params, body, config, callback) => {
-        let args = params.params? params.params : params;
-        if(resource === 'datasource.new'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            callback(null, args);
-        }
-    }
+    // create: (req, resource, params, body, config, callback) => {
+    //     let args = params.params? params.params : params;
+    //     if(resource === 'datasource.new') {
+    //         /*********connect to microservices*************/
+    //         //todo
+    //         /*********received data from microservices*************/
+    //         callback(null, args);
+    //     }
+    // }
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
     // update: (req, resource, params, body, config, callback) => {}
     // delete: (req, resource, params, config, callback) => {}
 };
+
+function getDataSourcesFromDeckOrSlide(id, deckOrSlide) {
+    let dataSources = [];
+
+    let contentIdParts = id.split('-');
+    let contentRevisionId = (contentIdParts.length > 0) ? contentIdParts[contentIdParts.length - 1] : deckOrSlide.active;
+
+    if (deckOrSlide.revisions !== undefined && deckOrSlide.revisions.length > 0 && deckOrSlide.revisions[0] !== null) {
+        let contentRevision = (contentRevisionId !== undefined) ? deckOrSlide.revisions.find((revision) => revision.id === contentRevisionId) : undefined;
+
+        if (contentRevision !== undefined) {
+            dataSources = contentRevision.dataSources;
+        }
+    }
+    return dataSources;
+}
 
 //Mockup data
 let mockupDataSources = [

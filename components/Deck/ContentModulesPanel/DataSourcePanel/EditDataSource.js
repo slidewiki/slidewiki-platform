@@ -2,7 +2,6 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
 import saveDataSource from '../../../../actions/datasource/saveDataSource';
-import addDataSource from '../../../../actions/datasource/addDataSource';
 import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataSource';
 
 class EditDataSource extends React.Component {
@@ -26,6 +25,7 @@ class EditDataSource extends React.Component {
     handleSave(e) {
         e.preventDefault();
         let dataSource = this.props.dataSource;
+        let dataSources = this.props.DataSourceStore.dataSources;
 
         if (dataSource === null) {
             let newDataSource = {
@@ -36,10 +36,7 @@ class EditDataSource extends React.Component {
                 authors: this.refs.authors.value,
                 year: this.refs.year.value
             };
-            this.context.executeAction(addDataSource, {
-                datasource: newDataSource,
-                sid: this.props.DataSourceStore.selector.sid
-            });
+            dataSources.push(newDataSource);
         } else {
             dataSource.type = this.refs.select_types.value;
             dataSource.title = this.refs.title.value;
@@ -47,10 +44,12 @@ class EditDataSource extends React.Component {
             dataSource.comment = this.refs.comment.value;
             dataSource.authors = this.refs.authors.value;
             dataSource.year = this.refs.authors.year;
-            this.context.executeAction(saveDataSource, {
-                datasource: dataSource
-            });
+            console.log(dataSources);
         }
+        this.context.executeAction(saveDataSource, {
+            datasources: dataSources,
+            sid: this.props.DataSourceStore.selector.sid
+        });
         return false;
     }
 

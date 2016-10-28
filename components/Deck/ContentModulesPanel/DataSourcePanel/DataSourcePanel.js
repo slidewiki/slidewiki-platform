@@ -14,11 +14,11 @@ class DataSourcePanel extends React.Component {
     }
 
     render() {
-        const dataSources = this.props.DataSourceStore.datasources;
-        const dataSource = this.props.DataSourceStore.datasource;
+        const dataSources = this.props.DataSourceStore.dataSources;
+        const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
 
-        let newDataSourceButton = (String(this.props.UserProfileStore.userid) !== '')
+        let newDataSourceButton = (String(this.props.UserProfileStore.userid) !== '' && selector.stype === 'slide')
             ?
             <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
                 <i className="icon edit"></i> Add Data Source
