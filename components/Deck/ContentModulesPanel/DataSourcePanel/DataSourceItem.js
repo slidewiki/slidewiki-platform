@@ -6,7 +6,7 @@ import loadDataSource from '../../../../actions/datasource/loadDataSource';
 class DataSourceItem extends React.Component {
     handleEdit() {
         this.context.executeAction(loadDataSource, {
-            dsid: this.props.node.id
+            dsindex: this.props.index
         });
     }
 

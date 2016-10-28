@@ -7,7 +7,7 @@ class DataSourceList extends React.Component {
 
         const list = this.props.items.map((node, index) => {
             return (
-                <DataSourceItem node={node} key={index} selector={selector}/>
+                <DataSourceItem node={node} key={index} index={index} selector={selector}/>
             );
         });
 

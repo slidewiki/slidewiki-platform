@@ -5,22 +5,25 @@ class DataSourceStore extends BaseStore {
         super(dispatcher);
         this.datasources = [];
         this.datasource = undefined;
+        this.selectedIndex = -1;
         this.selector = {};
     }
     loadDataSources(payload) {
         this.datasources = payload.datasources;
         this.selector = payload.selector;
         this.datasource = undefined;
+        this.selectedIndex = -1;
         this.emitChange();
     }
     loadDataSource(payload) {
-        this.datasource = this.datasources.find((ds) => ds.id === payload.dsid);
+        this.datasource = this.datasources[payload.dsindex];
+        this.selectedIndex = payload.dsindex;
         this.emitChange();
     }
     saveDataSource(payload) {
-        const index = this.datasources.findIndex((ds) => ds.id === payload.datasource.id);
-        this.datasources[index] = payload.datasource;
+        this.datasources[this.selectedIndex] = payload.datasource;
         this.datasource = undefined;
+        this.selectedIndex = -1;
         this.emitChange();
     }
     newDataSource(payload) {
@@ -30,16 +33,19 @@ class DataSourceStore extends BaseStore {
     addDataSource(payload) {
         this.datasources.push(payload.datasource);
         this.datasource = undefined;
+        this.selectedIndex = -1;
         this.emitChange();
     }
     cancelEditDataSource(payload) {
         this.datasource = undefined;
+        this.selectedIndex = -1;
         this.emitChange();
     }
     getState() {
         return {
             datasources: this.datasources,
             datasource: this.datasource,
+            selectedIndex: this.selectedIndex,
             selector: this.selector,
         };
     }
@@ -49,6 +55,7 @@ class DataSourceStore extends BaseStore {
     rehydrate(state) {
         this.datasources = state.datasources;
         this.datasource = state.datasource;
+        this.selectedIndex = state.selectedIndex;
         this.selector = state.selector;
     }
 }
