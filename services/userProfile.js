@@ -146,7 +146,7 @@ export default {
                             deckID: deck._id,
                             firstSlide: deck.firstSlide
                         };
-                    }).sort((a,b) => a.creationDate < b.creationDate);
+                    });
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));

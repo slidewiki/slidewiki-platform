@@ -1,13 +1,12 @@
 import React from 'react';
 import CategoryBox from './CategoryBox';
-import PopularDecks from './PopularDecks';
 import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
-import PublicUserData from './PublicUserData';
 import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import PrivatePublicUserProfile from './PrivatePublicUserProfile';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
 class UserProfile extends React.Component {
@@ -141,26 +140,7 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (
-            <div className = "ui stackable grid page" >
-                <div className = "four wide column" >
-                    <PublicUserData user={ this.props.UserProfileStore.user }/>
-                </div>
-                <div className = "twelve wide column" >
-                    <div className="ui segments">
-                        {(this.props.UserProfileStore.userDecks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-                        <div className="ui secondary segment">
-                            <h2>My Decks</h2>
-                        </div>
-                        <div className="ui segment">
-                            <PopularDecks size={0}/>
-                        </div>
-                    </div>
-                </div>
-                <div className="ui tab" data-tab="activity">
-            </div>
-        </div>
-        );
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks}/>);
     }
 
     notImplemented() {
@@ -170,8 +150,6 @@ class UserProfile extends React.Component {
     render() {
         return (this.chooseView());
     }
-
-
 }
 
 UserProfile.contextTypes = {
