@@ -3,15 +3,18 @@ import classNames from 'classnames';
 import suggestUsers from '../../../actions/search/suggestUsers';
 /**
  * Properties:
- *   placeholder: placeholder text
+ *  placeholder: placeholder text
+ *  returnType: username if specified else user _id
  */
 
 class UsersInput extends React.Component {
     initDropdown(){
+        let returnType = (this.props.returnType === 'username') ? 'username' : '_id';
+
         $('#users_input_div').dropdown({
             fields: {
                 name: 'username',
-                value: 'username'
+                value: returnType
             },
             minCharacters: 1,
             allowAdditions: false,
@@ -35,6 +38,7 @@ class UsersInput extends React.Component {
         this.initDropdown();
     }
     getSelected(){
+        console.log(this.refs.users_input.value);
         return this.refs.users_input.value;
     }
     render(){
