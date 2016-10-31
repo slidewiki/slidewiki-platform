@@ -38,7 +38,6 @@ class UsersInput extends React.Component {
         this.initDropdown();
     }
     getSelected(){
-        console.log(this.refs.users_input.value);
         return this.refs.users_input.value;
     }
     render(){
