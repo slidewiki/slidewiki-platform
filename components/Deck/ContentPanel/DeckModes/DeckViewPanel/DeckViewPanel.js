@@ -47,17 +47,9 @@ class DeckViewPanel extends React.Component {
         const deckCreator = lodash.get(this.props.DeckViewStore.userData, 'username', undefined);
         const deckUserId = this.props.DeckViewStore.userData._id;
         const deckLanguageCode = lodash.get(this.props.DeckViewStore.deckData, 'language', undefined);
-
-        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
-        // If deckLanguageCode is not as per ISO-639-1 (e.g. en_EN is incorrect but I found it in deckservice data) and first two letters are 'en' then use English
-        // KLAAS commented line below to make consistent with decklist (which works)
-        // deckLanguage = (deckLanguage === '' && deckLanguageCode && deckLanguageCode.substr(0, 2) === 'en') ? 'English': deckLanguage;
-        // default English
-        //KLAAS commented line below - TODO fix correct langauge - deckLanguageCode is not correctly retrieved - see decklist for working example
-        //deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-        // TODO when flag code is available, remove the hard coded flag
+        const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
+        // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
         //const countryFlag = 'gb';
-
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
