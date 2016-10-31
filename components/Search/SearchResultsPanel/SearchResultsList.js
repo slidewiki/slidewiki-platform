@@ -9,11 +9,10 @@ class SearchResultsList extends React.Component {
             );
         });
         return (
-            <div className="ui item" style={{ margin: '1em 0'}}>
-                <div className="ui relaxed divided list">
+                <div className="ui relaxed list">
                     {list}
                 </div>
-             </div>
+
         );
     }
 }

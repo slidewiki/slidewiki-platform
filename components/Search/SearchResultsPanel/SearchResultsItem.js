@@ -7,24 +7,12 @@ class SearchResultsItem extends React.Component {
 
     render() {
         const result = this.props.data;
-        const imgpath = '/assets/images/search/';
-
-        // console.log('RESULT: '+JSON.stringify(result));
 
         let IconNode = '';
-        let ResultNode = '';
-
-        const contentStyles = {
-            fontStyle: 'italic',
-            fontWeight: 400
-        };
-        const infoStyles = {
-            fontWeight: 600
-        };
+        let ContentNode = '';
 
         // results are sorted by relevance
         let item = result.revisions.docs[0];
-        IconNode = (<img src={imgpath + result.kind + '.png'}   height={25} width={25}></img> );
         let resultLink = '';
         let resultContent = '';
 
@@ -38,56 +26,27 @@ class SearchResultsItem extends React.Component {
                 }
 
                 resultContent = (item.content) ? item.content.substring(0, 100) + '...' : '';
+                IconNode = <i className="big square outline middle aligned icon"></i>;
                 break;
             case 'deck':
                 resultLink = '/deck/' + item.parent_id + '-' + item.id;
                 resultContent = (result.description) ? result.description.substring(0 ,100) + '...' : '';
+                IconNode = <i className="big block layout middle aligned icon"></i>;
                 break;
         }
-        ResultNode = (
-            <div className="info">
-                <span style={infoStyles}>{result.kind} <a href={resultLink}>{item.title}</a></span>
-                <br/>
-                <span style={contentStyles}>{resultContent}</span>
+
+        ContentNode = (
+            <div className="content">
+                <span className="left floated header">{result.kind} <a href={resultLink} >{item.title}</a></span><br />
+                <div className="left floated description">{resultContent}</div>
             </div>
         );
-        // switch (result.kind) {
-        //     case 'slide':
-        //
-        //         ResultNode = (
-        //             <div className="info">
-        //                 <span style={infoStyles}>Slide <a href={'/slideview/' + result.id}>{result.revisions.docs[result.revisions.docs.length-1].title}</a></span>
-        //                 <br/>
-        //                 // <span style={contentStyles}>{result.content[0].substring(0,100)+'...'}</span>
-        //             </div>
-        //         );
-        //
-        //         break;
-        //
-        //     case 'deck':
-        //         IconNode = (<img src={imgpath + 'deck.png'}   height={25} width={25}></img> );
-        //         ResultNode = (
-        //             <div className="info">
-        //                 <span style={infoStyles}>Deck <a href={'/deck/' + result._id}>{result.revisions.docs[result.revisions.docs.length-1].title}</a></span>
-        //                 <br/>
-        //             </div>
-        //         );
-        //         break;
-        // }
-
 
         return (
-          <div className="ui feed">
-              <div className="event">
-                  <div className="result-icon" style={{marginLeft: '1em'}}>
-                      {IconNode}
-                  </div>
-                  <div className="content" style={{marginLeft: '1em'}}>
-                      {ResultNode}
-                  </div>
-              </div>
-          </div>
-
+            <div className="item">
+                {IconNode}
+                {ContentNode}
+            </div>
         );
     }
 }
