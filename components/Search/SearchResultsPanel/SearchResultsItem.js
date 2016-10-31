@@ -22,14 +22,21 @@ class SearchResultsItem extends React.Component {
             fontWeight: 600
         };
 
-        let item = result.revisions.docs[result.revisions.docs.length-1];
+        // results are sorted by relevance
+        let item = result.revisions.docs[0];
         IconNode = (<img src={imgpath + result.kind + '.png'}   height={25} width={25}></img> );
         let resultLink = '';
         let resultContent = '';
 
         switch (result.kind) {
             case 'slide':
-                resultLink = '/deck/' + item.parent_deck + '/slide/' + item.parent_id + '-' + item.id;
+                if(item.parent_deck && item.parent_deck !== 'undefined'){
+                    resultLink = '/deck/' + item.parent_deck + '/slide/' + item.parent_id + '-' + item.id;
+                }
+                else{
+                    resultLink = '/slideview/' + item.parent_id + '-' + item.id;
+                }
+
                 resultContent = (item.content) ? item.content.substring(0, 100) + '...' : '';
                 break;
             case 'deck':
