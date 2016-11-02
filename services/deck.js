@@ -61,11 +61,6 @@ export default {
                 const deckData = JSON.parse(data[0]);
                 const slidesData = JSON.parse(data[1]);
                 const userData = JSON.parse(data[2]);
-                deckData.host = req.headers.host;
-                deckData.url = req.url;
-                //console.log('deck data:', deckData);
-                //console.log('slides data:', slidesData);
-                //console.log('user data:', userData);
                 callback(null, {deckData: deckData, slidesData: slidesData, userData: userData});
             }).catch((err) => {
                 //console.log(err);
