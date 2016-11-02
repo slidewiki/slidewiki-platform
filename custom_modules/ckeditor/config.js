@@ -16,7 +16,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
-    config.extraPlugins = 'sourcedialog';
+    //config.extraPlugins = 'sourcedialog';
     config.line_height=";0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;";
 
     config.toolbar = [
@@ -33,8 +33,8 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
+            { name: 'document', items: [ 'Sourcedialog'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
     //{ name: 'document', items: ['Templates' ] },
@@ -123,7 +123,8 @@ CKEDITOR.editorConfig = function( config ) {
 		'showborders,' +
 		'smiley,' +
 		'sourcearea,' +
-		'specialchar,' +
+		'sourcedialog,' +
+        'specialchar,' +
 		'stylescombo,' +
 		'tab,' +
 		'table,' +
