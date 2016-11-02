@@ -5,7 +5,6 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
-import SocialModal from './SocialModal.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
 let classNames = require('classnames');
@@ -24,10 +23,6 @@ class LoginModal extends React.Component {
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
-        this.data = {
-            socialURL: 'http://authorizationservice.manfredfris.ch:3000/connect/github',
-            socialProvider: 'Github'
-        };
     }
 
     isModalShown() {
@@ -103,10 +98,22 @@ class LoginModal extends React.Component {
 
         $('.ui.login.modal').modal('toggle');
 
-        //create iframe modal
-        this.data.socialProvider = provider;
-        this.data.socialURL = 'http://authorizationservice.manfredfris.ch:3000/connect/'+provider;
-        $('.ui.sociallogin.modal').modal('toggle');
+        //prepare localStorage
+        localStorage.setItem('sociallogin_modi', 'login');
+        localStorage.setItem('sociallogin_data', '');
+
+        //observe storage
+        $(window).bind('storage', (e) => {
+            console.log('storage event', e.key, localStorage.getItem(e.key)); //TODO is get getItem correct ot do I get the old value?
+            //this is available
+
+        });
+
+        //create new tab
+        let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
+        let win = window.open(url, '_blank');
+        win.focus();
+        //TODO show hint before open tab
     }
 
     clickedFacebook(e) {
@@ -184,7 +191,6 @@ class LoginModal extends React.Component {
                 </button>
               </div>
             </div>
-            <SocialModal provider={this.data.socialProvider} url={this.data.socialURL} />
           </div>
       );
     }
