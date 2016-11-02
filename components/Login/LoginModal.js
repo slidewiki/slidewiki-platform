@@ -5,6 +5,7 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
+import SocialModal from './SocialModal.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
 let classNames = require('classnames');
@@ -23,6 +24,10 @@ class LoginModal extends React.Component {
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
+        this.data = {
+            socialURL: 'http://authorizationservice.manfredfris.ch:3000/connect/github',
+            socialProvider: 'Github'
+        };
     }
 
     isModalShown() {
@@ -92,6 +97,30 @@ class LoginModal extends React.Component {
         });
     }
 
+    socialLogin(e, provider) {
+        e.preventDefault();
+        console.log('Hit on social login icon', provider);
+
+        $('.ui.login.modal').modal('toggle');
+
+        //create iframe modal
+        this.data.socialProvider = provider;
+        this.data.socialURL = 'http://authorizationservice.manfredfris.ch:3000/connect/'+provider;
+        $('.ui.sociallogin.modal').modal('toggle');
+    }
+
+    clickedFacebook(e) {
+        this.socialLogin(e, 'facebook');
+    }
+
+    clickedGoogle(e) {
+        this.socialLogin(e, 'google');
+    }
+
+    clickedGithub(e) {
+        this.socialLogin(e, 'github');
+    }
+
     render() {
         let loginButton = (
             <HeaderDropdown/>
@@ -135,6 +164,12 @@ class LoginModal extends React.Component {
                         <div className="ui error message"/>
                       </form>
                       <br/>
+                      <div className="container">
+                        <i className="big circular facebook square link icon" onClick={this.clickedFacebook.bind(this)} ></i>
+                        <i className="big circular google plus link icon" onClick={this.clickedGoogle.bind(this)} ></i>
+                        <i className="big circular github link icon" onClick={this.clickedGithub.bind(this)} ></i>
+                      </div>
+                      <br/>
                       <div className="ui floated right">
                           <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                           <br/><br/>
@@ -149,6 +184,7 @@ class LoginModal extends React.Component {
                 </button>
               </div>
             </div>
+            <SocialModal provider={this.data.socialProvider} url={this.data.socialURL} />
           </div>
       );
     }
