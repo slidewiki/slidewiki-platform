@@ -17,8 +17,11 @@ class DataSourcePanel extends React.Component {
         const dataSources = this.props.DataSourceStore.dataSources;
         const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
+        const userId = this.props.UserProfileStore.userid;
+        const contentOwnerId = this.props.DataSourceStore.contentOwner;
+        const editable = String(userId) === String(contentOwnerId);
 
-        let newDataSourceButton = (String(this.props.UserProfileStore.userid) !== '' && selector.stype === 'slide')
+        let newDataSourceButton = (editable && selector.stype === 'slide')
             ?
             <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
                 <i className="icon edit"></i> Add Data Source
@@ -32,7 +35,7 @@ class DataSourcePanel extends React.Component {
             <div>There are currently no sources for this {this.props.DataSourceStore.selector.stype}.</div>
             :
             <ShadowScrollbars style={{height:300}} >
-                <DataSourceList items={dataSources} selector={selector}/>
+                <DataSourceList items={dataSources} editable ={editable} selector={selector}/>
             </ShadowScrollbars>;
 
         let editForm = <EditDataSource dataSource={dataSource}/>;

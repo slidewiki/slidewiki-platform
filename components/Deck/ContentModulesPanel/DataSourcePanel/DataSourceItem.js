@@ -107,11 +107,11 @@ class DataSourceItem extends React.Component {
         const selector = this.props.selector;
         const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
 
-        const appendEdit = (
+        const appendEdit = (this.props.editable) ? (
             <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
-        );
+        ) : '';
 
         let SummaryNode = '';
         switch (node.type) {

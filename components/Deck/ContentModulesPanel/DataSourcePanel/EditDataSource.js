@@ -44,10 +44,9 @@ class EditDataSource extends React.Component {
             dataSource.comment = this.refs.comment.value;
             dataSource.authors = this.refs.authors.value;
             dataSource.year = this.refs.authors.year;
-            console.log(dataSources);
         }
         this.context.executeAction(saveDataSource, {
-            datasources: dataSources,
+            dataSources: dataSources,
             sid: this.props.DataSourceStore.selector.sid
         });
         return false;

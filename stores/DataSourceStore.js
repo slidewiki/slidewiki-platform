@@ -6,13 +6,15 @@ class DataSourceStore extends BaseStore {
         this.dataSources = [];
         this.dataSource = undefined;
         this.selectedIndex = -1;
+        this.contentOwner = 0;
         this.selector = {};
     }
     loadDataSources(payload) {
-        this.dataSources = payload.datasources;
+        this.dataSources = payload.dataSources;
         this.selector = payload.selector;
         this.dataSource = undefined;
         this.selectedIndex = -1;
+        this.contentOwner = payload.owner;
         this.emitChange();
     }
     loadDataSource(payload) {
@@ -21,7 +23,7 @@ class DataSourceStore extends BaseStore {
         this.emitChange();
     }
     saveDataSources(payload) {
-        this.dataSources = payload.datasources;
+        this.dataSources = payload.dataSources;
         this.dataSource = undefined;
         this.selectedIndex = -1;
         this.emitChange();
@@ -40,6 +42,7 @@ class DataSourceStore extends BaseStore {
             dataSources: this.dataSources,
             dataSource: this.dataSource,
             selectedIndex: this.selectedIndex,
+            contentOwner: this.contentOwner,
             selector: this.selector,
         };
     }
@@ -50,6 +53,7 @@ class DataSourceStore extends BaseStore {
         this.dataSources = state.dataSources;
         this.dataSource = state.dataSource;
         this.selectedIndex = state.selectedIndex;
+        this.contentOwner = state.contentOwner;
         this.selector = state.selector;
     }
 }
