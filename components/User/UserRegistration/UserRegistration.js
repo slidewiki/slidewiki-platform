@@ -5,14 +5,21 @@ import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import {Microservices} from '../../../configs/microservices';
 import userSignUp from '../../../actions/user/registration/userSignUp';
-import socialSignUp from '../../../actions/user/registration/socialSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
+import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
+import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
 
+const headerStyle = {
+    'textAlign': 'center'
+};
+const modalStyle = {
+    top: '15%'
+};
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
 
@@ -178,6 +185,7 @@ class UserRegistration extends React.Component {
 
     handleSignUp(e) {
         e.preventDefault();
+
         let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
         if (language.length === 2) {
             language += '-' + language.toUpperCase();
@@ -296,26 +304,36 @@ class UserRegistration extends React.Component {
             //Failure
             return;
 
-        if ( (data.username.length < 1)
-          || (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
+        if  (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) {
             //show hint
             const provider = this.getProviderName();
             swal({
                 title: 'Error',
-                text: 'The data from ' + provider + ' was incomplete. At least your email and username should be available for us.',
+                text: 'The data from ' + provider + ' was incomplete. At least your email should be available for us.',
                 type: 'error',
                 confirmButtonText: 'Confirm',
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             }).then().catch();
-            //TODO show validate view
             return;
         }
 
-        this.context.executeAction(socialSignUp, data);
+        this.context.executeAction(newSocialData, data);
+
+        $('.ui.socialregistration.modal')
+        .modal({
+            closable  : false,
+            onDeny    : function(){
+                //nothing
+                return true;
+            }
+        })
+        .modal('show');
     }
 
     getProviderName() {
+        if (this.provider.length < 1)
+            return '';
         return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
@@ -361,6 +379,7 @@ class UserRegistration extends React.Component {
             usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
         }
         return (
+          <div>
             <div className="ui page centered grid" >
                 <div className="eight wide column">
                     <div className="ui blue padded center aligned segment">
@@ -418,6 +437,10 @@ class UserRegistration extends React.Component {
                     </div>
                 </div>
             </div>
+
+            <UserRegistrationSocial />
+
+          </div>
         );
     }
 }

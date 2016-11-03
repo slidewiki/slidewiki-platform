@@ -10,6 +10,7 @@ class UserRegistrationStore extends BaseStore {
         this.suggestedUsernames = [];
         this.socialError = false;
         this.socialCredentialsTaken = false;
+        this.socialuserdata = {};
     }
 
     handleCreateUserSuccess(res) {
@@ -27,7 +28,7 @@ class UserRegistrationStore extends BaseStore {
     }
 
     handleSocialCreateUserSuccess(res) {
-        //this.socialError = true;
+        this.socialError = false;
         this.emitChange();
     }
 
@@ -95,6 +96,15 @@ class UserRegistrationStore extends BaseStore {
         return newUsernames;
     }
 
+    newSocialData(data) {
+        console.log('UserRegistrationStore newSocialData', data);
+
+        this.socialuserdata = data || {};
+        this.socialError = false;
+        this.socialCredentialsTaken = false;
+        this.emitChange();
+    }
+
     getState() {
         return {
             registrationStatus: this.registrationStatus,
@@ -102,7 +112,8 @@ class UserRegistrationStore extends BaseStore {
             suggestedUsernames: this.suggestedUsernames,
             errorMessage: this.errorMessage,
             socialError: this.socialError,
-            socialCredentialsTaken: this.socialCredentialsTaken
+            socialCredentialsTaken: this.socialCredentialsTaken,
+            socialuserdata: this.socialuserdata
         };
     }
 
@@ -117,6 +128,7 @@ class UserRegistrationStore extends BaseStore {
         this.errorMessage = state.errorMessage;
         this.socialError = state.socialError;
         this.socialCredentialsTaken = state.socialCredentialsTaken;
+        this.socialuserdata = state.socialuserdata;
     }
 }
 
@@ -130,6 +142,8 @@ UserRegistrationStore.handlers = {
     //error handling
     'CREATE_USER_FAILURE': 'handleUserRegistrationError',
     'SOCIAL_CREATE_USER_FAILURE': 'handleSocialUserRegistrationError',
+
+    'NEW_SOCIAL_DATA': 'newSocialData'
 };
 
 export default UserRegistrationStore;

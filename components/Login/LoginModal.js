@@ -230,6 +230,8 @@ class LoginModal extends React.Component {
     }
 
     getProviderName() {
+        if (this.provider.length < 1)
+            return '';
         return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
