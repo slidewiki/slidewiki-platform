@@ -278,6 +278,9 @@ class UserRegistration extends React.Component {
             console.log('Error while parsing data', err);
             return;
         }
+        finally {
+            localStorage.setItem(NAME, '');
+        }
 
         //add language before send to service
         let language = navigator.browserLanguage || navigator.language;

@@ -8,20 +8,8 @@ export default function userSocialSignIn(context, payload, done) {
             done();
         } else {
             context.setUser(res); //save user as cookie via userStoragePlugin
-            async.series([
-                (callback) => {
-                    context.dispatch('SIGNIN_SUCCESS', res);
-                    callback();
-                },
-                (callback) => {
-                    context.executeAction(fetchUser, {params: {username: res.username}});
-                    callback();
-                }
-            ],
-          (err, result) => {
-              if(err) console.log(err);
-              done();
-          });
+            context.dispatch('SOCIAL_SIGNIN_SUCCESS', res);
+            done();
         }
     });
 }

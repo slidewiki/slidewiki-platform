@@ -154,18 +154,18 @@ export default {
                 });
         }
         else if (resource === 'user.socialregistration') {
-            console.log('Sending data to social/register', {
-                id: args.id.toString(),
-                provider: args.provider,
-                token: args.token,
-                scope: args.scope,
-                token_creation: args.token_creation,
-                email: args.email,
-                language: args.language,
-                username: args.username,
-                forename: args.forename,
-                surname: args.surname
-            });
+            // console.log('Sending data to social/register', {
+            //     id: args.id.toString(),
+            //     provider: args.provider,
+            //     token: args.token,
+            //     scope: args.scope,
+            //     token_creation: args.token_creation,
+            //     email: args.email,
+            //     language: args.language,
+            //     username: args.username,
+            //     forename: args.forename,
+            //     surname: args.surname
+            // });
             rp.post({
                 uri: Microservices.user.uri + '/social/register',
                 body: JSON.stringify({
@@ -183,7 +183,7 @@ export default {
                 resolveWithFullResponse: true
             })
               .then((res) => {
-                  console.log('And we got', res.body);
+                  // console.log('And we got', res.body);
                   callback(null, {
                       username: JSON.parse(res.body).username,
                       userid: JSON.parse(res.body).userid,
