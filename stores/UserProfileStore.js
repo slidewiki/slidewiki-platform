@@ -221,6 +221,12 @@ class UserProfileStore extends BaseStore {
         this.socialLoginError = false;
         this.emitChange();
     }
+
+    socialRegister(res) {
+        this.userpicture = res.picture;
+
+        this.handleSignInSuccess(res);
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -240,7 +246,9 @@ UserProfileStore.handlers = {
     'SIGNIN_FAILURE': 'handleSignInError',
     'SOCIAL_SIGNIN_FAILURE': 'handleSocialSignInError',
     'USER_SIGNOUT': 'handleSignOut',
-    'DELETE_SOCIAL_DATA': 'deleteSocialData'
+    'DELETE_SOCIAL_DATA': 'deleteSocialData',
+    //social
+    'SOCIAL_SIGNIN_SUCCESS': 'socialRegister'
 };
 
 export default UserProfileStore;

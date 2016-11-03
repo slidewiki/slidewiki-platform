@@ -9,6 +9,7 @@ class UserRegistrationStore extends BaseStore {
         };
         this.suggestedUsernames = [];
         this.socialError = false;
+        this.socialCredentialsTaken = false;
     }
 
     handleCreateUserSuccess(res) {
@@ -48,6 +49,10 @@ class UserRegistrationStore extends BaseStore {
 
     handleSocialUserRegistrationError(err) {
         this.socialError = true;
+        console.log('UserRegistrationStore handleSocialUserRegistrationError()', err);
+        if (err.message.indexOf('422') !== -1) {
+            this.socialCredentialsTaken = true;
+        }
         this.emitChange();
     }
 
@@ -96,7 +101,8 @@ class UserRegistrationStore extends BaseStore {
             failures: this.failures,
             suggestedUsernames: this.suggestedUsernames,
             errorMessage: this.errorMessage,
-            socialError: this.socialError
+            socialError: this.socialError,
+            socialCredentialsTaken: this.socialCredentialsTaken
         };
     }
 
@@ -110,6 +116,7 @@ class UserRegistrationStore extends BaseStore {
         this.suggestedUsernames = state.suggestedUsernames;
         this.errorMessage = state.errorMessage;
         this.socialError = state.socialError;
+        this.socialCredentialsTaken = state.socialCredentialsTaken;
     }
 }
 

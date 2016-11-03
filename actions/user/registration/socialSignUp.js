@@ -4,10 +4,9 @@ export default function socialSignUp(context, payload, done) {
             context.dispatch('SOCIAL_CREATE_USER_FAILURE', err);
             done();
         } else {
-            //context.dispatch('SOCIAL_CREATE_USER_SUCCESS', res);
-
+            res.picture = payload.picture || '';
             context.setUser(res); //save user as cookie via userStoragePlugin
-            context.dispatch('SIGNIN_SUCCESS', res);
+            context.dispatch('SOCIAL_SIGNIN_SUCCESS', res);
             done();
         }
     });

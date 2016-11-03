@@ -15,7 +15,7 @@ class Social extends React.Component {
 
         //save it
         if (data !== null && data !== undefined && data !== '') {
-            localStorage.setItem(NAME, data);
+            localStorage.setItem(NAME, decodeURIComponent(data));
 
             //close the tab
             window.close();
