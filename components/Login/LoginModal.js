@@ -3,6 +3,8 @@ import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
+import userSocialSignIn from '../../actions/user/userSocialSignIn';
+import deleteSocialData from '../../actions/user/deleteSocialData';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
@@ -15,6 +17,8 @@ const headerStyle = {
 const modalStyle = {
     top: '15%'
 };
+const MODI = 'sociallogin_modi';
+const NAME = 'sociallogin_data';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -23,6 +27,7 @@ class LoginModal extends React.Component {
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
+        this.provider = '';
     }
 
     isModalShown() {
@@ -62,6 +67,37 @@ class LoginModal extends React.Component {
         if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
             $('.ui.login.modal').modal('hide');
         }
+        if (!this.props.UserProfileStore.socialLoginError && nextProps.UserProfileStore.socialLoginError){
+            swal({
+                title: 'Information',
+                text: 'Login with another provider failed. Perhaps you have to register first?',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Register',
+                confirmButtonClass: 'positive ui button',
+                cancelButtonText: 'Cancel',
+                cancelButtonClass: 'ui orange button',
+                buttonsStyling: false
+            })
+            .then(() => {
+                return this.handleRegisterFirst();
+            })
+            .catch((error) => {
+                //nothing
+            });
+        }
+    }
+
+    handleRegisterFirst(dismiss) {
+        if (dismiss === 'cancel')
+            return true;
+
+        this.context.executeAction(deleteSocialData, { });
+        this.context.executeAction(navigateAction, {
+            url: '/signup'
+        });
+        return true;
     }
 
     componentDidUpdate() {
@@ -95,19 +131,16 @@ class LoginModal extends React.Component {
     socialLogin(e, provider) {
         e.preventDefault();
         console.log('Hit on social login icon', provider);
+        this.provider = provider;
 
         $('.ui.login.modal').modal('toggle');
 
         //prepare localStorage
-        localStorage.setItem('sociallogin_modi', 'login');
-        localStorage.setItem('sociallogin_data', '');
+        localStorage.setItem(MODI, 'login');
+        localStorage.setItem(NAME, '');
 
         //observe storage
-        $(window).bind('storage', (e) => {
-            console.log('storage event', e.key, localStorage.getItem(e.key)); //TODO is get getItem correct ot do I get the old value?
-            //this is available
-
-        });
+        $(window).bind('storage', this.handleStorageEvent.bind(this));
 
         //create new tab
         let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
@@ -126,6 +159,58 @@ class LoginModal extends React.Component {
 
     clickedGithub(e) {
         this.socialLogin(e, 'github');
+    }
+
+    handleStorageEvent(e) {
+        console.log('storage event', e.key, localStorage.getItem(e.key));
+        //this is available
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
+            return;
+
+        let data = {};
+        try {
+            data = JSON.parse(localStorage.getItem(e.key));
+        } catch (err) {
+            console.log('Error while parsing data', err);
+            return;
+        }
+
+        //add language before send to service
+        let language = navigator.browserLanguage || navigator.language;
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
+        data.language = language;
+
+        //check data - valid and not empty
+        if ( (data.token.length < 1)
+          || (data.provider.length < 3)
+          || (data.token_creation.length < 22) )
+            //Failure
+            return;
+
+        if ( (data.username.length < 1)
+          || (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
+            //show hint
+            const provider = this.getProviderName();
+            swal({
+                title: 'Error',
+                text: 'The data from ' + provider + ' was incomplete. At least your email and username should be available for us.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+
+            return;
+        }
+
+        this.context.executeAction(userSocialSignIn, data);
+    }
+
+    getProviderName() {
+        return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
     render() {

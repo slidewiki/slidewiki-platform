@@ -4,6 +4,8 @@ import {navigateAction} from 'fluxible-router';
 import ReactDOM from 'react-dom';
 let classNames = require('classnames');
 
+const NAME = 'sociallogin_data';
+
 class Social extends React.Component {
     componentDidMount() {
         console.log('Social Login was called');
@@ -12,10 +14,12 @@ class Social extends React.Component {
         let data = this.findGetParameter('data');
 
         //save it
-        localStorage.setItem('sociallogin_data', data);
+        if (data !== null && data !== undefined && data !== '') {
+            localStorage.setItem(NAME, data);
 
-        //close the tab
-        window.close();
+            //close the tab
+            window.close();
+        }
     }
 
     findGetParameter(parameterName) {
@@ -34,7 +38,7 @@ class Social extends React.Component {
     render() {
         return (
             <div>
-                <b>Work in progress</b>
+                <b>We acquire your data. This should take just a few seconds.<br/>This tab will be closed automatically.</b>
             </div>
       );
     }

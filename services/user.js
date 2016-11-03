@@ -44,6 +44,31 @@ export default {
                         error: err
                     });
                 });
+        } else if (resource === 'user.socialsignin') {
+            rp.post({
+                uri: Microservices.user.uri + '/social/login',
+                body: JSON.stringify({
+                    id: args.id.toString(),
+                    provider: args.provider,
+                    token: args.token,
+                    scope: args.scope,
+                    token_creation: args.token_creation,
+                    email: args.email,
+                    language: args.language
+                }),
+                resolveWithFullResponse: true
+            })
+                .then((res) => {
+                    callback(null, {
+                        username: JSON.parse(res.body).username,
+                        userid: JSON.parse(res.body).userid,
+                        jwt: res.headers['----jwt----']
+                    });
+                })
+                .catch((err) => {
+                    // console.log('Error', err);
+                    callback(err, null);
+                });
         } else if (resource === 'user.checkemail') {
             let regExp = /\S+@\S+\.\S+/;
             if (args.email === '' || !regExp.test(args.email)) {//Do not call microservice with invalid email

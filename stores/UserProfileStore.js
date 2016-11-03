@@ -32,6 +32,7 @@ class UserProfileStore extends BaseStore {
         this.jwt = '';
         this.userpicture = undefined;
         this.errorMessage = '';
+        this.socialLoginError = false;
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -69,6 +70,7 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+        this.socialLoginError = false;
 
         //LoginModal
         this.showLoginModal = false;
@@ -88,7 +90,8 @@ class UserProfileStore extends BaseStore {
             userpicture: this.userpicture,
             errorMessage: this.errorMessage,
             showLoginModal: this.showLoginModal,
-            lastUser: this.lastUser
+            lastUser: this.lastUser,
+            socialLoginError: this.socialLoginError
         };
     }
 
@@ -110,6 +113,7 @@ class UserProfileStore extends BaseStore {
         this.errorMessage = state.errorMessage;
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
+        this.socialLoginError = state.socialLoginError;
     }
 
     changeTo(payload) {
@@ -198,6 +202,11 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    handleSocialSignInError(err) {
+        this.socialLoginError = true;
+        this.emitChange();
+    }
+
     extractMessage(raw) {
         const message = raw.substring(7, raw.length - 1);// There is an error code at the beginning (e.g. 422 - "{\"statusCode\":422,\"error\":\"Unprocessable Entity\",\"message\":\"The username is already taken\"}")
         const message1 = message.replace(/\\\"/g, '"');// replace \" with "
@@ -206,6 +215,11 @@ class UserProfileStore extends BaseStore {
             message2 = JSON.parse(message1).error;
         }
         return message2;
+    }
+
+    deleteSocialData() {
+        this.socialLoginError = false;
+        this.emitChange();
     }
 }
 
@@ -224,7 +238,9 @@ UserProfileStore.handlers = {
     'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
-    'USER_SIGNOUT': 'handleSignOut'
+    'SOCIAL_SIGNIN_FAILURE': 'handleSocialSignInError',
+    'USER_SIGNOUT': 'handleSignOut',
+    'DELETE_SOCIAL_DATA': 'deleteSocialData'
 };
 
 export default UserProfileStore;
