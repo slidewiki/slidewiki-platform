@@ -8,6 +8,7 @@ class UserRegistrationStore extends BaseStore {
         this.failures = {
         };
         this.suggestedUsernames = [];
+        this.socialError = false;
     }
 
     handleCreateUserSuccess(res) {
@@ -24,6 +25,11 @@ class UserRegistrationStore extends BaseStore {
         this.emitChange();
     }
 
+    handleSocialCreateUserSuccess(res) {
+        //this.socialError = true;
+        this.emitChange();
+    }
+
     handleResetUserRegistrationStatus() {
         this.registrationStatus = 'guest';
         this.errorMessage = '';
@@ -37,6 +43,11 @@ class UserRegistrationStore extends BaseStore {
         }
         this.errorMessage = this.extractMessage(rawMessage);
         this.registrationStatus = 'error';
+        this.emitChange();
+    }
+
+    handleSocialUserRegistrationError(err) {
+        this.socialError = true;
         this.emitChange();
     }
 
@@ -84,7 +95,8 @@ class UserRegistrationStore extends BaseStore {
             registrationStatus: this.registrationStatus,
             failures: this.failures,
             suggestedUsernames: this.suggestedUsernames,
-            errorMessage: this.errorMessage
+            errorMessage: this.errorMessage,
+            socialError: this.socialError
         };
     }
 
@@ -97,6 +109,7 @@ class UserRegistrationStore extends BaseStore {
         this.failures = state.failures;
         this.suggestedUsernames = state.suggestedUsernames;
         this.errorMessage = state.errorMessage;
+        this.socialError = state.socialError;
     }
 }
 
@@ -106,8 +119,10 @@ UserRegistrationStore.handlers = {
     'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
     'CHECK_EMAIL_SUCCESS': 'handleEmailChecked',
     'CHECK_USERNAME_SUCCESS': 'handleUsernameChecked',
+    'SOCIAL_CREATE_USER_SUCCESS': 'handleSocialCreateUserSuccess',
     //error handling
-    'CREATE_USER_FAILURE': 'handleUserRegistrationError'
+    'CREATE_USER_FAILURE': 'handleUserRegistrationError',
+    'SOCIAL_CREATE_USER_FAILURE': 'handleSocialUserRegistrationError',
 };
 
 export default UserRegistrationStore;

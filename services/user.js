@@ -153,6 +153,35 @@ export default {
                     });
                 });
         }
+        else if (resource === 'user.socialregistration') {
+            rp.post({
+                uri: Microservices.user.uri + '/social/register',
+                body: JSON.stringify({
+                    id: args.id.toString(),
+                    provider: args.provider,
+                    token: args.token,
+                    scope: args.scope,
+                    token_creation: args.token_creation,
+                    email: args.email,
+                    language: args.language,
+                    username: args.username,
+                    forename: args.forename,
+                    surname: args.surname
+                }),
+                resolveWithFullResponse: true
+            })
+              .then((res) => {
+                  callback(null, {
+                      username: JSON.parse(res.body).username,
+                      userid: JSON.parse(res.body).userid,
+                      jwt: res.headers['----jwt----']
+                  });
+              })
+              .catch((err) => {
+                  // console.log('Error', err);
+                  callback(err, null);
+              });
+        }
     },
 
     // other methods

@@ -140,13 +140,13 @@ class LoginModal extends React.Component {
         localStorage.setItem(NAME, '');
 
         //observe storage
-        $(window).bind('storage', this.handleStorageEvent.bind(this));
-
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
         //show hint before open tab
+        const Provider = this.getProviderName();
         swal({
             title: 'Information',
-            text: 'A new tab of your browser will be opened where you could do a login in ' + provider + '. Please do so.',
+            text: 'A new tab of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
             type: 'info',
             confirmButtonText: 'Confirm',
             confirmButtonClass: 'positive ui button',

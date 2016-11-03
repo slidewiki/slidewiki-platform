@@ -5,6 +5,7 @@ import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import {Microservices} from '../../../configs/microservices';
 import userSignUp from '../../../actions/user/registration/userSignUp';
+import socialSignUp from '../../../actions/user/registration/socialSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
@@ -12,7 +13,15 @@ import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
 
+const MODI = 'sociallogin_modi';
+const NAME = 'sociallogin_data';
+
 class UserRegistration extends React.Component {
+    constructor(props) {
+        super(props);
+        this.provider = '';
+    }
+
     componentDidMount() {
         //Form validation
         const validationRules = {
@@ -207,6 +216,106 @@ class UserRegistration extends React.Component {
         }
     }
 
+    socialRegister(e, provider) {
+        e.preventDefault();
+        console.log('Hit on social register icon', provider);
+        this.provider = provider;
+
+        //prepare localStorage
+        localStorage.setItem(MODI, 'register');
+        localStorage.setItem(NAME, '');
+
+        //observe storage
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+        //show hint before open tab
+        const Provider = this.getProviderName();
+        swal({
+            title: 'Information',
+            text: 'A new tab of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
+            type: 'info',
+            confirmButtonText: 'Confirm',
+            confirmButtonClass: 'positive ui button',
+            buttonsStyling: false,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+        })
+        .then(() => {
+            //create new tab
+            let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
+            let win = window.open(url, '_blank');
+            win.focus();
+
+            return true;
+        })
+        .catch();
+    }
+
+    clickedFacebook(e) {
+        this.socialRegister(e, 'facebook');
+    }
+
+    clickedGoogle(e) {
+        this.socialRegister(e, 'google');
+    }
+
+    clickedGithub(e) {
+        this.socialRegister(e, 'github');
+    }
+
+    handleStorageEvent(e) {
+        console.log('storage event', e.key, localStorage.getItem(e.key));
+        //this is available
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'register')
+            return;
+
+        let data = {};
+        try {
+            data = JSON.parse(localStorage.getItem(e.key));
+        } catch (err) {
+            console.log('Error while parsing data', err);
+            return;
+        }
+
+        //add language before send to service
+        let language = navigator.browserLanguage || navigator.language;
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
+        data.language = language;
+
+        //check data - valid and not empty
+        if ( (data.token.length < 1)
+          || (data.provider.length < 3)
+          || (data.token_creation.length < 22) )
+            //Failure
+            return;
+
+        if ( (data.username.length < 1)
+          || (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
+            //show hint
+            const provider = this.getProviderName();
+            swal({
+                title: 'Error',
+                text: 'The data from ' + provider + ' was incomplete. At least your email and username should be available for us.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+            //TODO show validate view
+            return;
+        }
+
+        this.context.executeAction(socialSignUp, data);
+    }
+
+    getProviderName() {
+        return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
+    }
+
     render() {
         //TODO email confirmation
         // const successMessage1 = 'To complete the registration process you have to confirm your account. An email has been sent to your address.';
@@ -294,6 +403,14 @@ class UserRegistration extends React.Component {
                         <br/>
                         <div >
                             By clicking Sign Up, you agree to our <a href="">Terms</a>.
+                        </div>
+                        <div className="ui dividing header" ></div>
+                        <div className="container">
+                            Register with another platform:
+                            <br/>
+                            <i className="big circular facebook square link icon" onClick={this.clickedFacebook.bind(this)} ></i>
+                            <i className="big circular google plus link icon" onClick={this.clickedGoogle.bind(this)} ></i>
+                            <i className="big circular github link icon" onClick={this.clickedGithub.bind(this)} ></i>
                         </div>
                     </div>
                 </div>
