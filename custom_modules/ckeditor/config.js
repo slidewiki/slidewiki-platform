@@ -33,7 +33,7 @@ CKEDITOR.editorConfig = function( config ) {
             //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
             { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
             //{ name: 'formula', items: [ 'Mathjax'] },
-            { name: 'Source', items: [ 'texzilla'] },
+            { name: 'source', items: [ 'texzilla'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
             { name: 'document', items: [ 'Sourcedialog'] },
@@ -150,13 +150,17 @@ CKEDITOR.editorConfig = function( config ) {
 
     //#####Image upload via CKeditor - TODO//
 
+    //config.codeSnippet_theme = 'github';
+    config.codeSnippet_theme = 'pojoaque';
+    config.extraPlugins = 'codesnippet,uploadimage,uploadwidget,texzilla,youtube';
+    config.codeSnippet_theme = 'pojoaque';
+    //config.extraPlugins = 'uploadimage';
+    //config.extraPlugins = 'uploadwidget';
+    //config.extraPlugins = 'codesnippet,texzilla,youtube';
+    //config.extraPlugins = 'codesnippet';
+    //config.extraPlugins = 'texzilla';
+    //config.extraPlugins = 'youtube';
 
-    config.extraPlugins = 'uploadimage';
-    config.extraPlugins = 'uploadwidget';
-    config.extraPlugins = 'codesnippet';
-    config.codeSnippet_theme = 'github';
-    config.extraPlugins = 'texzilla';
-    config.extraPlugins = 'youtube';
 
     // does not work and conflicts with codesnippet
     //config.extraPlugins = 'mathjax';
