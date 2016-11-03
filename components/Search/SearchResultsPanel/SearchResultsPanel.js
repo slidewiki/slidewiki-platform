@@ -52,7 +52,7 @@ class SearchResultsPanel extends React.Component {
             </div>
         </div>;
 
-        let resultsPanel = (numFound == 0) ? noResultsDiv : resultsDiv;
+        let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
 
         return (
             <div ref="searchResultsPanel">

@@ -6,6 +6,7 @@ import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
 import SearchParamsStore from '../../../stores/SearchParamsStore';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 import UsersInput from '../AutocompleteComponents/UsersInput';
+import KeywordsInput from '../AutocompleteComponents/KeywordsInput';
 
 class AdvancedSearch extends React.Component {
     constructor(props){
@@ -33,7 +34,7 @@ class AdvancedSearch extends React.Component {
     }
     clearInput(){
         this.setState({searchstring: ''});
-        this.refs.searchstring.focus();
+        this.refs.keywords.focus();
     }
     // shouldComponentUpdate(nextProps, nextState) {
     //     return (nextProps.searchstring != this.state.searchstring);
@@ -47,8 +48,8 @@ class AdvancedSearch extends React.Component {
         let queryparams = {};
 
         // determine given params
-        if(this.refs.searchstring && this.refs.searchstring.value.trim()){
-            queryparams.q = this.refs.searchstring.value.trim();
+        if(this.refs.keywords && this.refs.keywords.getSelected().trim()){
+            queryparams.q = this.refs.keywords.getSelected().trim();
         }
         else{
             queryparams.q = encodeURIComponent('*:*');
@@ -100,7 +101,7 @@ class AdvancedSearch extends React.Component {
         return encodedParams;
     }
     handleRedirect(){
-        if(this.refs.searchstring.value.trim() === ''){
+        if(this.refs.keywords.getSelected().trim() === ''){
             return;
         }
         this.context.executeAction(navigateAction, {
@@ -125,18 +126,13 @@ class AdvancedSearch extends React.Component {
         let searchstring = decodeURIComponent(this.state.searchstring);
         let defaultSearchstring = (searchstring === '*:*') ? '' : searchstring;
         let clearInputIcon = '';
-        if(defaultSearchstring){
-            clearInputIcon = <i className="remove link icon" onClick={this.clearInput.bind(this)} ></i>;
-        }
+
         return (
                 <div className="ui content">
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
                     <form className="ui form success">
                         <div className="field">
-                            <div className="ui icon input">
-                                <input name='searchstring' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' type='text' ref='searchstring'></input>
-                                {clearInputIcon}
-                            </div>
+                            <KeywordsInput ref='keywords' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                         </div>
                         <div className="four fields">
                             <div className="field">
