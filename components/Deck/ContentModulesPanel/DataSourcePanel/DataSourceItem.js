@@ -1,6 +1,9 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import TreeUtil from '../../../../components/Deck/TreePanel/util/TreeUtil';
 import loadDataSource from '../../../../actions/datasource/loadDataSource';
 
 class DataSourceItem extends React.Component {
@@ -100,12 +103,36 @@ class DataSourceItem extends React.Component {
         });
     }
 
+    //return the position of the node in the deck
+    getPath(node) {
+        const flatTree = this.props.DeckTreeStore.flatTree;
+        let path = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('type') === 'slide' && flatTree.get(i).get('id') === node.sid) {
+                path = flatTree.get(i).get('path');
+                let nodeSelector = {id: this.props.selector.id, stype: 'slide', sid: node.sid, spath: path};
+                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+
+                return nodeURL;
+            }
+        }
+        return path;
+    }
+
+    handleRefClick(e) {
+        e.preventDefault();
+
+        this.context.executeAction(navigateAction, {
+            url: this.getPath(this.props.node)
+        });
+        // return false;
+    }
+
     render() {
         const node = this.props.node;
-
         //append origin of the datasource
         const selector = this.props.selector;
-        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
+        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{node.stitle}</a>)</i> </span> : '';
 
         const appendEdit = (this.props.editable) ? (
             <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
@@ -164,5 +191,9 @@ class DataSourceItem extends React.Component {
 DataSourceItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+DataSourceItem = connectToStores(DataSourceItem, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 export default DataSourceItem;
