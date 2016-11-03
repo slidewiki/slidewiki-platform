@@ -34,6 +34,7 @@ CKEDITOR.editorConfig = function( config ) {
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
             { name: 'document', items: [ 'Sourcedialog'] },
+            { name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
         '/',
     ];
@@ -148,6 +149,9 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.extraPlugins = 'uploadimage';
     config.extraPlugins = 'uploadwidget';
+    config.extraPlugins = 'codesnippet';
+    config.codeSnippet_theme = 'github';
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
