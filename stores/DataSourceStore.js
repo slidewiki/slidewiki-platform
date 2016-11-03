@@ -22,7 +22,7 @@ class DataSourceStore extends BaseStore {
         this.selectedIndex = payload.dsindex;
         this.emitChange();
     }
-    saveDataSources(payload) {
+    updateDataSources(payload) {
         this.dataSources = payload.dataSources;
         this.dataSource = undefined;
         this.selectedIndex = -1;
@@ -63,7 +63,7 @@ DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
     'NEW_DATASOURCE': 'newDataSource',
-    'SAVE_DATASOURCES_SUCCESS': 'saveDataSources',
+    'UPDATE_DATASOURCES_SUCCESS': 'updateDataSources',
     'CANCEL_EDIT_DATASOURCE': 'cancelEditDataSource'
 };
 

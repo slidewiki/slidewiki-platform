@@ -90,7 +90,7 @@ function getDataSourcesFromDeckOrSlide(id, deckOrSlide) {
     let revisionOwner = 0;
 
     let contentIdParts = id.split('-');
-    let contentRevisionId = (contentIdParts.length > 0) ? contentIdParts[contentIdParts.length - 1] : deckOrSlide.active;
+    let contentRevisionId = (contentIdParts.length > 1) ? contentIdParts[contentIdParts.length - 1] : deckOrSlide.active;
 
     if (deckOrSlide.revisions !== undefined && deckOrSlide.revisions.length > 0 && deckOrSlide.revisions[0] !== null) {
         let contentRevision = (contentRevisionId !== undefined) ? deckOrSlide.revisions.find((revision) => String(revision.id) === String(contentRevisionId)) : undefined;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
-import saveDataSource from '../../../../actions/datasource/saveDataSource';
+import updateDataSources from '../../../../actions/datasource/updateDataSources';
 import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataSource';
 
 class EditDataSource extends React.Component {
@@ -20,6 +20,16 @@ class EditDataSource extends React.Component {
 
     handleCancelClick() {
         this.context.executeAction(cancelEditDataSource);
+    }
+
+    handleDeleteClick() {
+        let dataSources = this.props.DataSourceStore.dataSources;
+        const selectedIndex = this.props.DataSourceStore.selectedIndex;
+        dataSources.splice(selectedIndex, 1);
+        this.context.executeAction(updateDataSources, {
+            dataSources: dataSources,
+            sid: this.props.DataSourceStore.selector.sid
+        });
     }
 
     handleSave(e) {
@@ -45,7 +55,7 @@ class EditDataSource extends React.Component {
             dataSource.authors = this.refs.authors.value;
             dataSource.year = this.refs.authors.year;
         }
-        this.context.executeAction(saveDataSource, {
+        this.context.executeAction(updateDataSources, {
             dataSources: dataSources,
             sid: this.props.DataSourceStore.selector.sid
         });
@@ -53,8 +63,18 @@ class EditDataSource extends React.Component {
     }
 
     render() {
-        const dataSource = (this.props.dataSource !== null) ? this.props.dataSource : {title: '', url: '', comment: ''};
-
+        let header = 'Edit Data Source';
+        let dataSource = this.props.dataSource;
+        let deleteButton = (
+            <button tabIndex="0" type="button" onClick={this.handleDeleteClick.bind(this)} className="ui red labeled icon button">
+                <i className="icon close"></i> Delete
+            </button>
+        );
+        if (dataSource === null) {
+            header = 'Add Data Source';
+            dataSource = {title: '', url: '', comment: ''};
+            deleteButton = '';
+        }
         let dataSourceTypeOptions = <select className="ui search dropdown" aria-labelledby="type" id="type" ref="select_types">
             <option value="webpage" >Web page</option>publication
             <option value="webdocument" >Web document</option>
@@ -65,7 +85,7 @@ class EditDataSource extends React.Component {
 
         return (
             <div className="ui blue segment" >
-                <h3 className="ui dividing header">Edit Data Source</h3>
+                <h3 className="ui dividing header">{header}</h3>
                 <form className="ui form edit">
                     <div className="ui seven wide required field" ref="div_types" >
                         <label>Type</label>
@@ -99,6 +119,7 @@ class EditDataSource extends React.Component {
                     <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui blue labeled icon button">
                         <i className="icon close"></i> Cancel
                     </button>
+                    {deleteButton}
                     <div className="ui error message"/>
                 </form>
             </div>
