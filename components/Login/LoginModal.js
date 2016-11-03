@@ -142,11 +142,28 @@ class LoginModal extends React.Component {
         //observe storage
         $(window).bind('storage', this.handleStorageEvent.bind(this));
 
-        //create new tab
-        let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
-        let win = window.open(url, '_blank');
-        win.focus();
-        //TODO show hint before open tab
+
+        //show hint before open tab
+        swal({
+            title: 'Information',
+            text: 'A new tab of your browser will be opened where you could do a login in ' + provider + '. Please do so.',
+            type: 'info',
+            confirmButtonText: 'Confirm',
+            confirmButtonClass: 'positive ui button',
+            buttonsStyling: false,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+        })
+        .then(() => {
+            //create new tab
+            let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
+            let win = window.open(url, '_blank');
+            win.focus();
+
+            return true;
+        })
+        .catch();
     }
 
     clickedFacebook(e) {
