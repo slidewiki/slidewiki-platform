@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Format'] },
         '/',
             //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
-            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar'] },
+            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
             //{ name: 'formula', items: [ 'Mathjax'] },
             { name: 'Source', items: [ 'texzilla'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
@@ -156,7 +156,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.extraPlugins = 'codesnippet';
     config.codeSnippet_theme = 'github';
     config.extraPlugins = 'texzilla';
-
+    config.extraPlugins = 'youtube';
 
     // does not work and conflicts with codesnippet
     //config.extraPlugins = 'mathjax';
