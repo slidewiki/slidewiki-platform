@@ -15,11 +15,15 @@ class SlideViewPanel extends React.Component {
             position: 'relative'
         };
         const compStyle = {
+            //minWidth: '100%',
             // maxHeight: 450,
             minHeight: 450,
+            //minHeight: '100%',
             overflowY: 'auto',
-            position: 'relative',
-            overflow: 'hidden'
+            overflowX: 'hidden',
+            //overflowY: 'visible',
+            //overflow: 'hidden,'
+            position: 'relative'
         };
         const compSpeakerStyle = {
             maxHeight: 50,
@@ -92,38 +96,22 @@ class SlideViewPanel extends React.Component {
         //reset scaling of pptx2html element to get original size
         $(".pptx2html").css({'transform': '', 'transform-origin': ''});
 
-        //let pptxwidth = document.getElementByClassName('pptx2html').offsetWidth;
-        //let pptxheight = document.getElementByClassName('pptx2html').offsetHeight;
+        //Function to fit contents in edit and view component
         let pptxwidth = $('.pptx2html').width();
         let pptxheight = $('.pptx2html').height();
-        //console.log('pptx2html Width =' + pptxwidth + 'height' + pptxheight);
 
         //only calculate scaleration for width for now
-        if (containerwidth > pptxwidth)
+        this.scaleratio = containerwidth / pptxwidth;
+
+        if ($('.pptx2html').length)
         {
-            this.scaleratio = pptxwidth / containerwidth;
-            //console.log(this.scaleratio);
-            //this.props.SlideEditStore.scaleratio = containerwidth / pptxwidth;
-            //let scaleratio = containerwidth / pptxwidth;
-        } else {
-            this.scaleratio = containerwidth / pptxwidth;
-            //console.log(this.scaleratio);
-            //this.props.SlideEditStore.scaleratio = pptxwidth / containerwidth;
-            //let scaleratio = pptxwidth / containerwidth;
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+
+            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
+            this.refs.slideViewPanel.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            $(".pptx2html").css({'borderStyle': 'none none double none ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }
-        //Function to fit contents in edit and view component
-        //$(".pptx2html").addClass('schaal');
-        //$(".pptx2html [style*='absolute']").addClass('schaal');
-        //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-        //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-            if ($('.pptx2html').length)
-            {
-                //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
-                $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-                $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-            }
     }
 }
 
