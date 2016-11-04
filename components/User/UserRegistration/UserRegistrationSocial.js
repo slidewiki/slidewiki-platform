@@ -85,7 +85,7 @@ class UserRegistrationSocial extends React.Component {
             return (usernameNotAllowed !== undefined) ? !usernameNotAllowed : true;
         });
 
-        $('.ui.form').form(validationRules);
+        $('.ui.registrationmodalform.form').form(validationRules);
 
     }
 
@@ -101,7 +101,7 @@ class UserRegistrationSocial extends React.Component {
         e.preventDefault();
 
         $('.ui.socialregistration.modal').modal('hide');
-        this.context.executeAction(socialSignUp, this.props.UserRegistrationStore.userdata);
+        this.context.executeAction(socialSignUp, this.props.UserRegistrationStore.socialuserdata);  //TODO get changed data
         return false;
     }
 
@@ -182,7 +182,7 @@ class UserRegistrationSocial extends React.Component {
                   <h1 style={headerStyle}>Validate user information</h1>
               </div>
               <div className="content">
-                  <form className="ui form" >
+                  <form className="ui registrationmodalform form" >
                       <div className="ui inline field">
                           <label style={signUpLabelStyle}>First name * </label>
                           <div className="ui icon input"><input type="text" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>

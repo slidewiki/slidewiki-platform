@@ -155,7 +155,7 @@ export default {
         }
         else if (resource === 'user.socialregistration') {
             // console.log('Sending data to social/register', {
-            //     id: args.id.toString(),
+            //     id: args.id,
             //     provider: args.provider,
             //     token: args.token,
             //     scope: args.scope,

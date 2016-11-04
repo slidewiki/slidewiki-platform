@@ -131,7 +131,7 @@ class UserRegistration extends React.Component {
             return (usernameNotAllowed !== undefined) ? !usernameNotAllowed : true;
         });
 
-        $('.ui.form').form(validationRules);
+        $('.ui.form').not('.registrationmodalform').form(validationRules);
 
     }
 
