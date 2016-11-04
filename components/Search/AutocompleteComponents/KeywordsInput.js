@@ -22,7 +22,7 @@ class KeywordsInput extends React.Component {
                     const query = settings.urlData.query;
 
                     context.executeAction(suggestKeywords, {
-                        query: query
+                        query: encodeURIComponent(query)
                     }).then( (response) => {
                         callback(response);
                     });

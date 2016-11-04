@@ -25,7 +25,7 @@ export default {
                 results: JSON.parse(res).docs
             });
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
             callback(null, {success: false, results: {}});
         });
     }

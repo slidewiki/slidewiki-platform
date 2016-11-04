@@ -23,7 +23,7 @@ class UsersInput extends React.Component {
                     const query = settings.urlData.query;
 
                     context.executeAction(suggestUsers, {
-                        query: query,
+                        query: encodeURIComponent(query),
                     }).then( (response) => {
                         callback(response);
                     });
