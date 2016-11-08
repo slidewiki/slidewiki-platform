@@ -77,7 +77,9 @@ export default {
                         country: !isEmpty(body.country) ? body.country : '',
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : ''
+                        description: !isEmpty(body.description) ? body.description : '',
+                        hasPassword: body.hasPassword || false,
+                        providers: body.providers || []
                     };
                     callback(null, converted);
                 })

@@ -7,6 +7,7 @@ import ChangePersonalData from './ChangePersonalData';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile';
+import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
 class UserProfile extends React.Component {
@@ -62,6 +63,8 @@ class UserProfile extends React.Component {
                         return this.displayAccounts();
                         break;
                     case categories.settings[2]:
+                        return this.displayIntegrations();
+                        break;
                     default:
                         return this.notImplemented();
                 }});
@@ -80,7 +83,7 @@ class UserProfile extends React.Component {
         return (
             <div className = "ui stackable grid page" >
                 <div className = "four wide column" >
-                    <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username }/>
+                    <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } hasPassword={this.props.UserProfileStore.user.hasPassword} />
                     <div className = "ui hidden divider" />
                 </div>
                 <div className = "twelve wide column" >
@@ -141,6 +144,12 @@ class UserProfile extends React.Component {
 
     displayUserProfile() {
         return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks}/>);
+    }
+
+    displayIntegrations() {
+        return (
+            <Integrations providers={ this.props.UserProfileStore.user.providers } hasPassword={ this.props.UserProfileStore.user.hasPassword } />
+        );
     }
 
     notImplemented() {
