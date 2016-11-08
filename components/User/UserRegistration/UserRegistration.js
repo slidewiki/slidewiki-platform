@@ -135,6 +135,18 @@ class UserRegistration extends React.Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        // console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
+        if (nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
+            this.setUserdata({}, false);
+            return;
+        }
+        if (nextProps.UserRegistrationStore.socialuserdata) {
+            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
+                this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
+        }
+    }
+
     componentDidUpdate() {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
             swal({
@@ -227,11 +239,15 @@ class UserRegistration extends React.Component {
     socialRegister(e, provider) {
         e.preventDefault();
         console.log('Hit on social register icon', provider);
-        this.provider = provider;
+
+        //delete old data
+        this.context.executeAction(newSocialData, {});
 
         //prepare localStorage
         localStorage.setItem(MODI, 'register');
         localStorage.setItem(NAME, '');
+
+        this.provider = provider;
 
         //observe storage
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
@@ -277,16 +293,17 @@ class UserRegistration extends React.Component {
         //this is available
 
         if (e.key !== NAME || localStorage.getItem(MODI) !== 'register')
-            return;
+            return false;
 
         let data = {};
         try {
             data = JSON.parse(localStorage.getItem(e.key));
         } catch (err) {
             console.log('Error while parsing data', err);
-            return;
+            return false;
         }
         finally {
+            //delete data
             localStorage.setItem(NAME, '');
         }
 
@@ -302,7 +319,7 @@ class UserRegistration extends React.Component {
           || (data.provider.length < 3)
           || (data.token_creation.length < 22) )
             //Failure
-            return;
+            return false;
 
         if  (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) {
             //show hint
@@ -315,7 +332,7 @@ class UserRegistration extends React.Component {
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             }).then().catch();
-            return;
+            return false;
         }
 
         this.context.executeAction(newSocialData, data);
@@ -329,6 +346,27 @@ class UserRegistration extends React.Component {
             }
         })
         .modal('show');
+
+        return true;
+    }
+
+    setUserdata(data, check = true) {
+        // console.log('UserRegistration setUserdata()', data);
+
+        this.provider = data.provider;
+
+        this.refs.username.value = data.username || '';
+        this.refs.email.value = data.email || '';
+        let name = data.name || '';
+        if (name.indexOf(' ') !== -1) {
+            this.refs.firstname.value = data.forename || name.split(' ')[0];
+            this.refs.lastname.value = data.surname || name.substring(name.indexOf(' '));
+        }
+
+        if (check) {
+            this.checkUsername();
+            this.checkEmail();
+        }
     }
 
     getProviderName() {

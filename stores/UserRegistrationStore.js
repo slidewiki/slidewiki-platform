@@ -97,7 +97,7 @@ class UserRegistrationStore extends BaseStore {
     }
 
     newSocialData(data) {
-        console.log('UserRegistrationStore newSocialData', data);
+        // console.log('UserRegistrationStore newSocialData', data);
 
         this.socialuserdata = data || {};
         this.socialError = false;

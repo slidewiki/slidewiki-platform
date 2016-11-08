@@ -32,13 +32,19 @@ class Social extends React.Component {
                 index = item.indexOf('=');
                 if (item.substring(0, index) === parameterName) result = decodeURIComponent(item.substring(index+1));
             });
+
+        //handle #
+        index = result.lastIndexOf('}#');
+        if (index > result.length - 12)
+            result = result.substring(0, result.lastIndexOf('}#') + 1);
+
         return result;
     }
 
     render() {
         return (
             <div>
-                <b>We acquire your data. This should take just a few seconds.<br/>This tab will be closed automatically.</b>
+                <b>We acquire your data. This should take just a few seconds.<br/>The tab will be closed automatically.</b>
             </div>
       );
     }

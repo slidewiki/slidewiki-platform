@@ -90,9 +90,13 @@ class UserRegistrationSocial extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('UserRegistrationSocial componentWillReceiveProps()', nextProps);
-        if (nextProps.UserRegistrationStore.socialuserdata && nextProps.UserRegistrationStore.socialuserdata.email) {
-            if (nextProps.UserRegistrationStore.socialuserdata.email !== this.props.UserRegistrationStore.socialuserdata.email)
+        // console.log('UserRegistrationSocial componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
+        if (nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
+            this.setUserdata({}, false);
+            return;
+        }
+        if (nextProps.UserRegistrationStore.socialuserdata) {
+            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
     }
@@ -101,7 +105,13 @@ class UserRegistrationSocial extends React.Component {
         e.preventDefault();
 
         $('.ui.socialregistration.modal').modal('hide');
-        this.context.executeAction(socialSignUp, this.props.UserRegistrationStore.socialuserdata);  //TODO get changed data
+        let user = this.props.UserRegistrationStore.socialuserdata;
+        user.email = this.refs.email.value;
+        user.username = this.refs.username.value;
+        user.forename = this.refs.firstname.value;
+        user.surename = this.refs.lastname.value;
+
+        this.context.executeAction(socialSignUp, user);
         return false;
     }
 
@@ -125,21 +135,23 @@ class UserRegistrationSocial extends React.Component {
         return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
-    setUserdata(data) {
-        console.log('UserRegistrationSocial setUserdata()', data);
+    setUserdata(data, check = true) {
+        // console.log('UserRegistrationSocial setUserdata()', data);
 
         this.provider = data.provider;
 
-        this.refs.username.value = data.username;
-        this.refs.email.value = data.email;
-        let name = data.name;
+        this.refs.username.value = data.username || '';
+        this.refs.email.value = data.email || '';
+        let name = data.name || '';
         if (name.indexOf(' ') !== -1) {
-            this.refs.firstname.value = name.split(' ')[0];
-            this.refs.lastname.value = name.substring(name.indexOf(' '));
+            this.refs.firstname.value = data.forename || name.split(' ')[0];
+            this.refs.lastname.value = data.surname || name.substring(name.indexOf(' '));
         }
 
-        this.checkUsername();
-        this.checkEmail();
+        if (check) {
+            this.checkUsername();
+            this.checkEmail();
+        }
     }
 
     render() {

@@ -5,6 +5,7 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import deleteSocialData from '../../actions/user/deleteSocialData';
+import newSocialData from '../../actions/user/registration/newSocialData';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
@@ -70,7 +71,7 @@ class LoginModal extends React.Component {
         if (!this.props.UserProfileStore.socialLoginError && nextProps.UserProfileStore.socialLoginError){
             swal({
                 title: 'Information',
-                text: 'Login with another provider failed. Perhaps you have to register first?',
+                text: 'Login with the choosen provider failed. Either you choosed a not yet added provider or you have to register for a new account first.',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -81,10 +82,13 @@ class LoginModal extends React.Component {
                 buttonsStyling: false
             })
             .then(() => {
-                return this.handleRegisterFirst();
+                return this.handleRegisterFirst();  //TODO should the loginModal be hidden?
             })
-            .catch((error) => {
-                //nothing
+            .catch(() => {
+                //delete old data
+                this.context.executeAction(newSocialData, {});
+
+                return true;
             });
         }
     }
@@ -153,7 +157,7 @@ class LoginModal extends React.Component {
             buttonsStyling: false,
             showCloseButton: false,
             showCancelButton: false,
-            allowEscapeKey: false,
+            allowEscapeKey: false
         })
         .then(() => {
             //create new tab
@@ -193,6 +197,7 @@ class LoginModal extends React.Component {
             return;
         }
         finally {
+            //delete data
             localStorage.setItem(NAME, '');
         }
 
@@ -203,6 +208,8 @@ class LoginModal extends React.Component {
         }
         data.language = language;
 
+        // console.log('LoginModal got social data', data);
+
         //check data - valid and not empty
         if ( (data.token.length < 1)
           || (data.provider.length < 3)
@@ -210,13 +217,12 @@ class LoginModal extends React.Component {
             //Failure
             return;
 
-        if ( (data.username.length < 1)
-          || (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
+        if ( (data.email === undefined || data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
             //show hint
             const provider = this.getProviderName();
             swal({
                 title: 'Error',
-                text: 'The data from ' + provider + ' was incomplete. At least your email and username should be available for us.',
+                text: 'The data from ' + provider + ' was incomplete. At least your email should be available for us.',
                 type: 'error',
                 confirmButtonText: 'Confirm',
                 confirmButtonClass: 'negative ui button',
@@ -226,6 +232,7 @@ class LoginModal extends React.Component {
             return;
         }
 
+        this.context.executeAction(newSocialData, data);
         this.context.executeAction(userSocialSignIn, data);
     }
 
