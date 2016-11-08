@@ -75,7 +75,7 @@ class EditDataSource extends React.Component {
             dataSource = {title: '', url: '', comment: ''};
             deleteButton = '';
         }
-        let dataSourceTypeOptions = <select className="ui search dropdown" aria-labelledby="type" id="type" ref="select_types">
+        let dataSourceTypeOptions = <select className="ui search dropdown" defaultValue={dataSource.type} aria-labelledby="type" id="type" ref="select_types">
             <option value="webpage" >Web page</option>publication
             <option value="webdocument" >Web document</option>
             <option value="publication" >Publication</option>
