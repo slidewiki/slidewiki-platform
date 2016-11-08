@@ -27,6 +27,8 @@ class UserRegistration extends React.Component {
     constructor(props) {
         super(props);
         this.provider = '';
+
+        this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
     }
 
     componentDidMount() {
@@ -375,6 +377,13 @@ class UserRegistration extends React.Component {
         return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
+    handleNoAccessClick(e) {
+        e.preventDefault();
+        this.context.executeAction(navigateAction, {
+            url: '/resetpassword'
+        });
+    }
+
     render() {
         //TODO email confirmation
         // const successMessage1 = 'To complete the registration process you have to confirm your account. An email has been sent to your address.';
@@ -472,6 +481,8 @@ class UserRegistration extends React.Component {
                             <i className="big circular google plus link icon" onClick={this.clickedGoogle.bind(this)} ></i>
                             <i className="big circular github link icon" onClick={this.clickedGithub.bind(this)} ></i>
                         </div>
+                        <div className="ui dividing header" ></div>
+                        <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                     </div>
                 </div>
             </div>

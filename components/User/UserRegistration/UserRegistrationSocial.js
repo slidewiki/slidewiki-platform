@@ -23,6 +23,7 @@ class UserRegistrationSocial extends React.Component {
         this.provider = '';
 
         this.setUserdata = this.setUserdata.bind(this);
+        this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
     }
 
     componentDidMount() {
@@ -154,6 +155,14 @@ class UserRegistrationSocial extends React.Component {
         }
     }
 
+    handleNoAccessClick(e) {
+        e.preventDefault();
+        $('.ui.socialregistration.modal').modal('hide');
+        this.context.executeAction(navigateAction, {
+            url: '/resetpassword'
+        });
+    }
+
     render() {
         const signUpLabelStyle = {width: '150px'};
 
@@ -216,6 +225,8 @@ class UserRegistrationSocial extends React.Component {
                           <i className="icon add user"/> Sign Up
                       </button>
                   </form>
+                  <div className="ui dividing header" ></div>
+                  <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
               </div>
               <div className="actions">
                   <div className="ui cancel button">Cancel</div>
