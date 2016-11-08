@@ -30,8 +30,6 @@ class DeckViewPanel extends React.Component {
         if (deckData && deckData.tags)
             tags = deckData.tags;
 
-        const activeVersion = lodash.get(deckData, 'active', undefined);
-
         const currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
             return rev.id === deckData.active;
         });
@@ -41,8 +39,8 @@ class DeckViewPanel extends React.Component {
         const deckTitle = currentRevision.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
-        const deckCreator = lodash.get(this.props.DeckViewStore.userData, 'username', undefined);
-        const deckUserId = this.props.DeckViewStore.userData._id;
+        const deckCreator = this.props.DeckViewStore.creatorData.username;
+        const deckOwner = this.props.DeckViewStore.ownerData.username;
         const deckLanguageCode = lodash.get(deckData, 'language', undefined);
         const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
@@ -51,9 +49,10 @@ class DeckViewPanel extends React.Component {
         const maxSlideThumbnails = 3;
 
         const thumbnailURL = Microservices.file.uri + '/';
-        const deckId = deckData._id;
         const deckURL = '/deck/' + this.props.selector.id;
-        const userProfileURL = '/user/' + deckCreator;
+        const creatorProfileURL = '/user/' + deckCreator;
+        const ownerProfileURL = '/user/' + deckOwner;
+
 
 
         return (
@@ -64,7 +63,10 @@ class DeckViewPanel extends React.Component {
                         <div className="content">
                             <h3 className="ui header">{deckTitle}</h3>
                             <div className="meta">Creator:&nbsp;
-                                <a href={userProfileURL}>{deckCreator}</a>
+                                <a href={creatorProfileURL}>{deckCreator}</a>
+                            </div>
+                            <div className="meta">Revision Owner:&nbsp;
+                                <a href={ownerProfileURL}>{deckOwner}</a>
                             </div>
                             <div className="meta">Date: {deckDate}</div>
                             <div className="description">

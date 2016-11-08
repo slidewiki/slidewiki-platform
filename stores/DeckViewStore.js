@@ -5,19 +5,23 @@ class DeckViewStore extends BaseStore {
         super(dispatcher);
         this.deckData = {};
         this.slidesData = {};
-        this.userData = {};
+        this.creatorData = {};
+        this.ownerData = {};
+
     }
     updateContent(payload) {
         this.deckData = payload.deckData;
         this.slidesData = payload.slidesData;
-        this.userData = payload.userData;
+        this.creatorData = payload.creatorData;
+        this.ownerData = payload.ownerData;
         this.emitChange();
     }
     getState() {
         return {
             deckData: this.deckData,
             slidesData: this.slidesData,
-            userData: this.userData,
+            creatorData: this.creatorData,
+            ownerData: this.ownerData
         };
     }
     dehydrate() {
@@ -26,7 +30,8 @@ class DeckViewStore extends BaseStore {
     rehydrate(state) {
         this.deckData = state.deckData;
         this.slidesData = state.slidesData;
-        this.userData = state.userData;
+        this.creatorData = state.creatorData;
+        this.ownerData = state.ownerData;
     }
 }
 
