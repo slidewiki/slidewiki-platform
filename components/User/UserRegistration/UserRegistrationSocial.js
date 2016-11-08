@@ -96,7 +96,7 @@ class UserRegistrationSocial extends React.Component {
             this.setUserdata({}, false);
             return;
         }
-        if (nextProps.UserRegistrationStore.socialuserdata) {
+        if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'register') {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
@@ -110,7 +110,7 @@ class UserRegistrationSocial extends React.Component {
         user.email = this.refs.email.value;
         user.username = this.refs.username.value;
         user.forename = this.refs.firstname.value;
-        user.surename = this.refs.lastname.value;
+        user.surname = this.refs.lastname.value;
 
         this.context.executeAction(socialSignUp, user);
         return false;

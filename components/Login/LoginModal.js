@@ -66,6 +66,7 @@ class LoginModal extends React.Component {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
         }
         if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
+            localStorage.setItem(MODI, 'login_success');
             $('.ui.login.modal').modal('hide');
         }
         if (!this.props.UserProfileStore.socialLoginError && nextProps.UserProfileStore.socialLoginError){
@@ -85,6 +86,8 @@ class LoginModal extends React.Component {
                 return this.handleRegisterFirst();  //TODO should the loginModal be hidden?
             })
             .catch(() => {
+                localStorage.setItem(MODI, 'login_failed');
+
                 //delete old data
                 this.context.executeAction(newSocialData, {});
 
@@ -96,6 +99,8 @@ class LoginModal extends React.Component {
     handleRegisterFirst(dismiss) {
         if (dismiss === 'cancel')
             return true;
+
+        localStorage.setItem(MODI, 'login_failed_register_now');
 
         this.context.executeAction(deleteSocialData, { });
         this.context.executeAction(navigateAction, {

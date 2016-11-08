@@ -138,12 +138,12 @@ class UserRegistration extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
-        if (nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
+        console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
+        if (localStorage.getItem(MODI) === 'login_failed' && nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
             this.setUserdata({}, false);
             return;
         }
-        if (nextProps.UserRegistrationStore.socialuserdata) {
+        if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'login_failed_register_now') {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
@@ -205,6 +205,8 @@ class UserRegistration extends React.Component {
             language += '-' + language.toUpperCase();
         }
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
+
+        localStorage.setItem(MODI, '');
 
         this.context.executeAction(userSignUp, {
             firstname: this.refs.firstname.value,
