@@ -33,7 +33,7 @@ class DeckViewPanel extends React.Component {
         const currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
             return rev.id === deckData.active;
         });
-        const totalRevisions = lodash.get(deckData, 'revisions.length', undefined);
+        const totalRevisions = deckData.revisionCount;
         // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
         const deckTheme = lodash.get(deckData, 'theme', 'Simple');
         const deckTitle = currentRevision.title;
@@ -52,8 +52,6 @@ class DeckViewPanel extends React.Component {
         const deckURL = '/deck/' + this.props.selector.id;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
-
-
 
         return (
         <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>

@@ -7,7 +7,7 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
 
-        if(resource === 'deck.featured'){
+        if (resource === 'deck.featured') {
             /*********connect to microservices*************/
             let limit, offset = null;
             if (args.limit) limit = args.limit;
@@ -18,7 +18,7 @@ export default {
                 callback(err, {featured: []});
             });
         }
-        if(resource === 'deck.recent'){
+        if (resource === 'deck.recent') {
             /*********connect to microservices*************/
             let limit, offset = null;
             if (args.limit) limit = args.limit;
@@ -45,6 +45,14 @@ export default {
                     content: err
                 }, {});
             });
+            console.log(args);
+            let revisionCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/revisionCount'}).catch((err) => {
+                callback({
+                    msg: 'Error in retrieving revisions count',
+                    content: err
+                }, {});
+            });
+
             /* Create user data promise which is dependent on deck data promise */
             let usersPromise = deckPromise.then((deckData) => {
                 // This should be done when deckservice and userservice data is in sync;
@@ -60,11 +68,18 @@ export default {
             });
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, usersPromise]).then((data) => {
-                callback(null, {deckData: JSON.parse(data[0]), slidesData: JSON.parse(data[1]), creatorData: JSON.parse(data[2][0]), ownerData: JSON.parse(data[2][1])});
+            Promise.all([deckPromise, slidesPromise, revisionCountPromise, usersPromise]).then((data) => {
+                let deckData = JSON.parse(data[0]);
+                deckData.revisionCount = JSON.parse(data[2]);
+                callback(null, {
+                    deckData: deckData,
+                    slidesData: JSON.parse(data[1]),
+                    creatorData: JSON.parse(data[3][0]),
+                    ownerData: JSON.parse(data[3][1])
+                });
             }).catch((err) => {
                 //console.log(err);
-                callback({msg: 'Error in resolving promiese', content: err}, {});
+                callback({msg: 'Error in resolving promises', content: err}, {});
             });
         } else if (resource === 'deck.properties') {
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
