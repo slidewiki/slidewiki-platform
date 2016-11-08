@@ -119,22 +119,22 @@ class UserProfile extends React.Component {
     displayAccounts() {
         return (<div>
             <div className="ui segments">
-            <div className="ui secondary segment">
-              <h3>Change password</h3>
-            </div>
+              <div className="ui secondary segment">
+                <h3>Change password</h3>
+              </div>
 
-            <div className="ui segment">
-              <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+              <div className="ui segment">
+                <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+              </div>
             </div>
-            </div>
-            <div className="ui segments">
-            <div className="ui red inverted segment">
-              <h3>Deactivate Account</h3>
-            </div>
+              <div className="ui segments">
+              <div className="ui red inverted segment">
+                <h3>Deactivate Account</h3>
+              </div>
 
-            <div className="ui segment">
-              <DeactivateAccount />
-            </div>
+              <div className="ui segment">
+                <DeactivateAccount />
+              </div>
             </div>
         </div>);
     }
@@ -144,7 +144,7 @@ class UserProfile extends React.Component {
     }
 
     notImplemented() {
-        return (<h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>);
+        return (<h3>This feature is curently not implemented. Please wait for future releases of SlideWiki</h3>);
     }
 
     render() {
