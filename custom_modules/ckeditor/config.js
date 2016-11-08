@@ -30,10 +30,14 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar'] },
+            //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
+            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
+            //{ name: 'formula', items: [ 'Mathjax'] },
+            { name: 'source', items: [ 'texzilla'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
             { name: 'document', items: [ 'Sourcedialog'] },
+            { name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
         '/',
     ];
@@ -146,8 +150,22 @@ CKEDITOR.editorConfig = function( config ) {
 
     //#####Image upload via CKeditor - TODO//
 
-    config.extraPlugins = 'uploadimage';
-    config.extraPlugins = 'uploadwidget';
+    //config.codeSnippet_theme = 'github';
+    config.codeSnippet_theme = 'pojoaque';
+    config.extraPlugins = 'codesnippet,uploadimage,uploadwidget,texzilla,youtube';
+    config.codeSnippet_theme = 'pojoaque';
+    //config.extraPlugins = 'uploadimage';
+    //config.extraPlugins = 'uploadwidget';
+    //config.extraPlugins = 'codesnippet,texzilla,youtube';
+    //config.extraPlugins = 'codesnippet';
+    //config.extraPlugins = 'texzilla';
+    //config.extraPlugins = 'youtube';
+
+
+    // does not work and conflicts with codesnippet
+    //config.extraPlugins = 'mathjax';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
@@ -181,6 +199,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	//config.removeDialogTabs = 'image:advanced;link:advanced';
+
 };
 CKEDITOR.disableAutoInline = true;
 
