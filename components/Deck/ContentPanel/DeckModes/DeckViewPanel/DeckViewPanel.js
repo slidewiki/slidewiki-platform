@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../../stores/DeckViewStore';
-import Thumbnail from '../../../../Thumbnail/Thumbnail';
+import Thumbnail from '../../../../common/Thumbnail';
 import CustomDate from '../../../util/CustomDate';
 import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
