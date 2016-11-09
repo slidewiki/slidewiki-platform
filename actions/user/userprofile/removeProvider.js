@@ -7,7 +7,7 @@ export default function removeProvider(context, payload, done) {
     };
     context.service.update('userProfile.removeProvider', data, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-
+            context.dispatch('REMOVE_PROVIDER_FAILURE', payload);
         } else {
             context.dispatch('REMOVE_PROVIDER_SUCCESS', payload);
         }

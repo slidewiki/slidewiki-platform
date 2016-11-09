@@ -1,33 +1,98 @@
 import React from 'react';
+import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import addProvider from '../../../actions/user/userprofile/addProvider';
 import removeProvider from '../../../actions/user/userprofile/removeProvider';
+import resetProviderStuff from '../../../actions/user/userprofile/resetProviderStuff';
+import newSocialData from '../../../actions/user/registration/newSocialData';
+import updateProviderAction from '../../../actions/user/userprofile/updateProviderAction';
+import UserProfileStore from '../../../stores/UserProfileStore';
+
+const MODI = 'sociallogin_modi';
+const NAME = 'sociallogin_data';
 
 class Integrations extends React.Component {
     constructor(props){
         super(props);
 
-        this.action = '';
+        this.provider = '';
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // console.log('Integrations componentWillReceiveProps()', nextProps.UserProfileStore.user.providers, this.props.UserProfileStore.user.providers);
+        if (this.props.UserProfileStore.removeProviderError === false && nextProps.UserProfileStore.removeProviderError) {
+            swal({
+                title: 'Error',
+                text: 'The provider couldn&apos;t be disabled. Unknown error.',
+                type: 'error',
+                confirmButtonText: 'Confirmed',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then(() => {
+                this.context.executeAction(resetProviderStuff, {});
+                return true;
+            }).catch();
+        }
+        else if (this.props.UserProfileStore.addProviderError === false && nextProps.UserProfileStore.addProviderError) {
+            swal({
+                title: 'Error',
+                text: 'The provider couldn&apos;t be added. Unknown error.',
+                type: 'error',
+                confirmButtonText: 'Confirmed',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then(() => {
+                this.context.executeAction(resetProviderStuff, {});
+                return true;
+            }).catch();
+        }
+    }
+
+    componentDidUpdate() {
+        // console.log('Integrations componentDidUpdate()', this.providers, this.props.UserProfileStore.user.providers);
+
     }
 
     handleEnable(e) {
-        console.log('handleEnable', e.target);
+        console.log('handleEnable', e.target.attributes[1].nodeValue);
+        e.preventDefault();
+
+        if (this.props.UserProfileStore.providerAction !== '') {
+            //do nothing
+            return;
+        }
+
+        this.provider = e.target.attributes[1].nodeValue;
+
+        this.context.executeAction(updateProviderAction, 'enable_' + this.provider);
+
+        //prepare localStorage
+        localStorage.setItem(MODI, 'addProvider');
+        localStorage.setItem(NAME, '');
+
+        //observe storage
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+        //create new tab
+        let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + this.provider;
+        let win = window.open(url, '_blank');
+        win.focus();
     }
 
     handleDisable(e) {
         console.log('handleDisable', e.target.attributes[1].nodeValue);
         e.preventDefault();
 
-        if (this.action !== '') {
+        if (this.props.UserProfileStore.providerAction !== '') {
             //do nothing
             return;
         }
 
-        let provider = e.target.attributes[1].nodeValue;
+        this.provider = e.target.attributes[1].nodeValue;
 
-        this.action = 'disable_' + provider;
+        this.context.executeAction(updateProviderAction, 'disable_' + this.provider);
 
-        if (this.props.providers.length === 1 && this.props.hasPassword === false) {
+        if (this.props.UserProfileStore.user.providers.length === 1 && this.props.UserProfileStore.user.hasPassword === false) {
             swal({
                 title: 'Error',
                 text: 'You are not allowed to disable all providers.',
@@ -38,17 +103,88 @@ class Integrations extends React.Component {
             }).then().catch();
 
             //just stop here
-            this.action = '';
+            this.context.executeAction(updateProviderAction, '');
             return;
         }
 
-        this.context.executeAction(removeProvider, provider);
+        //TODO show spinner
+
+
+        this.context.executeAction(removeProvider, this.provider);
+    }
+
+    handleStorageEvent(e) {
+        console.log('storage event', e.key, localStorage.getItem(e.key));
+        //this is available
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'addProvider')
+            return false;
+
+        let data = {};
+        try {
+            data = JSON.parse(localStorage.getItem(e.key));
+        } catch (err) {
+            console.log('Error while parsing data', err);
+            this.context.executeAction(updateProviderAction, '');
+            return false;
+        }
+        finally {
+            //delete data
+            localStorage.setItem(NAME, '');
+        }
+
+        //add language before send to service
+        let language = navigator.browserLanguage || navigator.language;
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
+        data.language = language;
+
+        //check data - valid and not empty
+        if ( (data.token.length < 1)
+          || (data.provider.length < 3)
+          || (data.token_creation.length < 22) )
+            //Failure
+        {
+            this.context.executeAction(updateProviderAction, '');
+            return false;
+        }
+
+        if  (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) {
+            //show hint
+            const provider = this.getProviderName();
+            swal({
+                title: 'Error',
+                text: 'The data from ' + provider + ' was incomplete. At least your email should be available for us.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+            this.context.executeAction(updateProviderAction, '');
+            return false;
+        }
+
+        this.context.executeAction(newSocialData, data);
+
+        //TODO show spinner
+
+
+        this.context.executeAction(addProvider, data);
+
+        return true;
+    }
+
+    getProviderName() {
+        if (this.provider.length < 1)
+            return '';
+        return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
     render() {
         let facebook = false, google = false, github = false;
-        if (this.props.providers)
-            this.props.providers.forEach((provider) => {
+        if (this.props.UserProfileStore.user.providers)
+            this.props.UserProfileStore.user.providers.forEach((provider) => {
                 switch (provider) {
                     case 'facebook':
                         facebook = true;
@@ -61,7 +197,7 @@ class Integrations extends React.Component {
                         break;
                 }
             });
-        console.log('Integrations render()', this.props.providers);
+        // console.log('Integrations render()', this.props.UserProfileStore.user.providers);
 
         let facebook_enable_classes = classNames({
             'ui': true,
@@ -127,9 +263,9 @@ class Integrations extends React.Component {
                         <i className="big facebook square link icon" ></i>
                         &nbsp;&nbsp;&nbsp;
                         <div className="ui buttons">
-                          <button className={facebook_enable_classes} onClick={this.handleEnable.bind(this)} >Enable</button>
+                          <button className={facebook_enable_classes} name="facebook" onClick={this.handleEnable.bind(this)} >Enable</button>
                           <div className="or"></div>
-                          <button className={facebook_disable_classes} onClick={this.handleDisable.bind(this)} >Disable</button>
+                          <button className={facebook_disable_classes} name="facebook" onClick={this.handleDisable.bind(this)} >Disable</button>
                         </div>
                       </div>
                       <br/>
@@ -137,7 +273,7 @@ class Integrations extends React.Component {
                         <i className="big google plus link icon" ></i>
                         &nbsp;&nbsp;&nbsp;
                         <div className="ui buttons">
-                          <button className={google_enable_classes} onClick={this.handleEnable.bind(this)} >Enable</button>
+                          <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} >Enable</button>
                           <div className="or"></div>
                           <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} >Disable</button>
                         </div>
@@ -147,11 +283,12 @@ class Integrations extends React.Component {
                         <i className="big github link icon" ></i>
                         &nbsp;&nbsp;&nbsp;
                         <div className="ui buttons">
-                          <button className={github_enable_classes} onClick={this.handleEnable.bind(this)} >Enable</button>
+                          <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} >Enable</button>
                           <div className="or"></div>
-                          <button className={github_disable_classes} onClick={this.handleDisable.bind(this)} >Disable</button>
+                          <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} >Disable</button>
                         </div>
                       </div>
+                      {(this.props.UserProfileStore.providerAction !== '') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                   </div>
 
               </div>
@@ -163,5 +300,11 @@ class Integrations extends React.Component {
 Integrations.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+Integrations = connectToStores(Integrations, [UserProfileStore], (context, props) => {
+    return {
+        UserProfileStore: context.getStore(UserProfileStore).getState()
+    };
+});
 
 export default Integrations;

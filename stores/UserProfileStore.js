@@ -33,6 +33,9 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.errorMessage = '';
         this.socialLoginError = false;
+        this.removeProviderError = false;
+        this.addProviderError = false;
+        this.providerAction = '';
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -71,6 +74,9 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.userDecks = [];
         this.socialLoginError = false;
+        this.removeProviderError = false;
+        this.addProviderError = false;
+        this.providerAction = '';
 
         //LoginModal
         this.showLoginModal = false;
@@ -91,7 +97,10 @@ class UserProfileStore extends BaseStore {
             errorMessage: this.errorMessage,
             showLoginModal: this.showLoginModal,
             lastUser: this.lastUser,
-            socialLoginError: this.socialLoginError
+            socialLoginError: this.socialLoginError,
+            removeProviderError: this.removeProviderError,
+            addProviderError: this.addProviderError,
+            providerAction: this.providerAction
         };
     }
 
@@ -114,6 +123,9 @@ class UserProfileStore extends BaseStore {
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
         this.socialLoginError = state.socialLoginError;
+        this.removeProviderError = state.removeProviderError;
+        this.addProviderError = state.addProviderError;
+        this.providerAction = state.providerAction;
     }
 
     changeTo(payload) {
@@ -227,6 +239,53 @@ class UserProfileStore extends BaseStore {
 
         this.handleSignInSuccess(res);
     }
+
+    removeProviderSuccess(provider) {
+        console.log('UserProfileStore removeProviderSuccess()', provider, this.user.providers);
+        if (this.user.providers !== undefined && this.user.providers !== null && this.user.providers.length > 0)
+            this.user.providers = this.user.providers.reduce((prev, cur) => {
+                if (cur !== provider)
+                    prev.push(cur);
+                return prev;
+            }, []);
+        this.removeProviderError = false;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    removeProviderFailure() {
+        this.removeProviderError = true;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    resetProviderStuff() {
+        this.removeProviderError = false;
+        this.addProviderError = false;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    addProviderSucess(providerData) {
+        console.log('UserProfileStore addProviderSucess()', providerData.provider, this.user.providers);
+        this.addProviderError = false;
+        if (this.user.providers === undefined || this.user.providers === null)
+            this.user.providers = [];
+        this.user.providers.push(providerData.provider);
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    addProviderFailure() {
+        this.addProviderError = true;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    updateProviderAction(action) {
+        this.providerAction = action;
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -248,7 +307,13 @@ UserProfileStore.handlers = {
     'USER_SIGNOUT': 'handleSignOut',
     'DELETE_SOCIAL_DATA': 'deleteSocialData',
     //social
-    'SOCIAL_SIGNIN_SUCCESS': 'socialRegister'
+    'SOCIAL_SIGNIN_SUCCESS': 'socialRegister',
+    'REMOVE_PROVIDER_SUCCESS': 'removeProviderSuccess',
+    'REMOVE_PROVIDER_FAILURE': 'removeProviderFailure',
+    'ADD_PROVIDER_SUCCESS': 'addProviderSucess',
+    'ADD_PROVIDER_FAILURE': 'addProviderFailure',
+    'RESET_PROVIDER_STUFF': 'resetProviderStuff',
+    'UPDATE_PROVIDER_ACTION': 'updateProviderAction'
 };
 
 export default UserProfileStore;

@@ -148,7 +148,7 @@ class UserProfile extends React.Component {
 
     displayIntegrations() {
         return (
-            <Integrations providers={ this.props.UserProfileStore.user.providers } hasPassword={ this.props.UserProfileStore.user.hasPassword } />
+            <Integrations />
         );
     }
 
