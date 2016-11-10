@@ -80,6 +80,7 @@ class DeckViewPanel extends React.Component {
                             <div className="ui hidden divider"></div>
                             <div className="meta">
                                 <div className="ui large label">
+                                <i className="ui comments outline icon"></i>
                                     {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
