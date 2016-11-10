@@ -5,14 +5,17 @@ class DeckViewStore extends BaseStore {
         super(dispatcher);
         this.deckData = {};
         this.slidesData = {};
-        this.userData = {};
-        this.deckViewPanelHeight = 450;
+        this.creatorData = {};
+        this.ownerData = {};
+	this.deckViewPanelHeight = 450;
+
     }
     updateContent(payload) {
         this.deckData = payload.deckData;
         this.slidesData = payload.slidesData;
-        this.userData = payload.userData;
-        this.deckViewPanelHeight = this.deckViewPanelHeight;
+        this.creatorData = payload.creatorData;
+        this.ownerData = payload.ownerData;
+	this.deckViewPanelHeight = this.deckViewPanelHeight;
         this.emitChange();
     }
     updateDeckViewPanelHeight(expand) {
@@ -24,12 +27,14 @@ class DeckViewStore extends BaseStore {
         }
         this.emitChange();
     }
+    
     getState() {
         return {
             deckData: this.deckData,
             slidesData: this.slidesData,
-            userData: this.userData,
-            deckViewPanelHeight: this.deckViewPanelHeight,
+            creatorData: this.creatorData,
+            ownerData: this.ownerData,
+	    deckViewPanelHeight: this.deckViewPanelHeight
         };
     }
     dehydrate() {
@@ -38,7 +43,9 @@ class DeckViewStore extends BaseStore {
     rehydrate(state) {
         this.deckData = state.deckData;
         this.slidesData = state.slidesData;
-        this.userData = state.userData;
+        this.creatorData = state.creatorData;
+        this.ownerData = state.ownerData;
+	this.deckViewPanelHeight: state.deckViewPanelHeight;
     }
 }
 

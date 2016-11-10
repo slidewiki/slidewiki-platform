@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import {Microservices} from '../../../configs/microservices';
+import {publicRecaptchaKey} from '../../../configs/general';
 import userSignUp from '../../../actions/user/registration/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
 import checkEmail from '../../../actions/user/registration/checkEmail';
@@ -284,7 +285,7 @@ class UserRegistration extends React.Component {
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={PUBLIC_KEY} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
                             <button type="submit" className="ui blue labeled submit icon button" >
