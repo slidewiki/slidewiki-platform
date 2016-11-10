@@ -6,6 +6,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import ContentUtil from '../../components/Deck/ContentPanel/util/ContentUtil';
 
 export default function loadSlideEditWihtRevisionControl(context, payload, done) {
+    console.log('--------------------------------------> here');
     let currentUserState = context.getStore(UserProfileStore).getState();
     let args = payload.params? payload.params : payload;
     let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
