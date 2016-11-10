@@ -39,6 +39,7 @@ class DeckList extends React.Component {
                                 </div>
                                 <div className="column right aligned">
                                         <div className="ui large label" >
+                                        <i className="ui comments outline icon"></i>
                                             {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                         {/*<div className="ui large label" tabIndex="0" >
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>*/}
