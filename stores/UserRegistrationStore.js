@@ -49,11 +49,12 @@ class UserRegistrationStore extends BaseStore {
     }
 
     handleSocialUserRegistrationError(err) {
-        this.socialError = true;
         console.log('UserRegistrationStore handleSocialUserRegistrationError()', err);
-        if (err.message.indexOf('422') !== -1) {
+        if (err.message.startsWith('409')) {
             this.socialCredentialsTaken = true;
         }
+        else
+            this.socialError = true;
         this.emitChange();
     }
 

@@ -68,7 +68,7 @@ export default {
                 json: true,
                 body: {
                     provider: params.provider,
-                    id: params.id.toString(),
+                    identifier: params.identifier,
                     token: params.token,
                     token_creation: params.token_creation,
                     email: params.email,

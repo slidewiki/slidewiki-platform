@@ -143,7 +143,40 @@ class UserRegistration extends React.Component {
             this.setUserdata({}, false);
             return;
         }
-        if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'login_failed_register_now') {
+        if (nextProps.UserRegistrationStore.socialCredentialsTaken && !this.props.UserRegistrationStore.socialCredentialsTaken) {
+            $('.ui.socialregistration.modal').modal('hide');
+
+            swal({
+                title: 'Information',
+                text: 'Sign up with a provider failed, because the user of this provider is already assigned a a SLideWiki user. Either you do a login with that or you register with other credentials.',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                confirmButtonClass: 'positive ui button',
+                cancelButtonText: 'Register',
+                cancelButtonClass: 'ui orange button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                if (dismiss === 'cancel')
+                    return true;
+
+                this.context.executeAction(navigateAction, {
+                    url: '/'
+                });
+
+                $('.ui.login.modal').modal('show');
+
+                return true;
+            })
+            .catch(() => {
+                $('.ui.socialregistration.modal').modal('hide');
+
+                return true;
+            });
+        }
+        else if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'login_failed_register_now') {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
@@ -208,15 +241,23 @@ class UserRegistration extends React.Component {
 
         localStorage.setItem(MODI, '');
 
-        this.context.executeAction(userSignUp, {
-            firstname: this.refs.firstname.value,
-            lastname: this.refs.lastname.value,
-            username: this.refs.username.value,
-            language: language,
-            email: this.refs.email.value,
-            password: hashPassword(this.refs.password.value),
-            grecaptcharesponse: this.state.grecaptcharesponse
-        });
+        let data = {};
+        try {
+            data = {
+                firstname: this.refs.firstname.value,
+                lastname: this.refs.lastname.value,
+                username: this.refs.username.value,
+                language: language,
+                email: this.refs.email.value,
+                password: hashPassword(this.refs.password.value),
+                grecaptcharesponse: this.state.grecaptcharesponse
+            };
+        } catch (e) {
+            //somehow this is sometimes called when doing login
+            return false;
+        }
+
+        this.context.executeAction(userSignUp, data);
         return false;
     }
 

@@ -42,9 +42,22 @@ class Integrations extends React.Component {
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             }).then(() => {
-                this.context.executeAction(resetProviderStuff, {});
                 return true;
             }).catch();
+            this.context.executeAction(resetProviderStuff, {});
+        }
+        else if (this.props.UserProfileStore.addProviderAlreadyUsedError === false && nextProps.UserProfileStore.addProviderAlreadyUsedError) {
+            swal({
+                title: 'Duplication',
+                text: 'The user of this provider is already assigned to another user.',
+                type: 'warning',
+                confirmButtonText: 'Confirmed',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then(() => {
+                return true;
+            }).catch();
+            this.context.executeAction(resetProviderStuff, {});
         }
     }
 

@@ -35,6 +35,7 @@ class UserProfileStore extends BaseStore {
         this.socialLoginError = false;
         this.removeProviderError = false;
         this.addProviderError = false;
+        this.addProviderAlreadyUsedError = false;
         this.providerAction = '';
 
         let user = dispatcher.getContext().getUser();
@@ -76,6 +77,7 @@ class UserProfileStore extends BaseStore {
         this.socialLoginError = false;
         this.removeProviderError = false;
         this.addProviderError = false;
+        this.addProviderAlreadyUsedError = false;
         this.providerAction = '';
 
         //LoginModal
@@ -100,7 +102,8 @@ class UserProfileStore extends BaseStore {
             socialLoginError: this.socialLoginError,
             removeProviderError: this.removeProviderError,
             addProviderError: this.addProviderError,
-            providerAction: this.providerAction
+            providerAction: this.providerAction,
+            addProviderAlreadyUsedError: this.addProviderAlreadyUsedError
         };
     }
 
@@ -126,6 +129,7 @@ class UserProfileStore extends BaseStore {
         this.removeProviderError = state.removeProviderError;
         this.addProviderError = state.addProviderError;
         this.providerAction = state.providerAction;
+        this.addProviderAlreadyUsedError = state.addProviderAlreadyUsedError;
     }
 
     changeTo(payload) {
@@ -262,6 +266,7 @@ class UserProfileStore extends BaseStore {
     resetProviderStuff() {
         this.removeProviderError = false;
         this.addProviderError = false;
+        this.addProviderAlreadyUsedError = false;
         this.providerAction = '';
         this.emitChange();
     }
@@ -276,8 +281,11 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
-    addProviderFailure() {
-        this.addProviderError = true;
+    addProviderFailure(error) {
+        if (error.message.startsWith('409'))
+            this.addProviderAlreadyUsedError = true;
+        else
+            this.addProviderError = true;
         this.providerAction = '';
         this.emitChange();
     }
