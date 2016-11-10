@@ -82,14 +82,15 @@ class LoginModal extends React.Component {
                 cancelButtonClass: 'ui orange button',
                 buttonsStyling: false
             })
-            .then(() => {
-                return this.handleRegisterFirst();  //TODO should the loginModal be hidden?
+            .then((dismiss) => {
+                return this.handleRegisterFirst(dismiss);  //TODO should the loginModal be hidden?
             })
             .catch(() => {
                 localStorage.setItem(MODI, 'login_failed');
 
                 //delete old data
                 this.context.executeAction(newSocialData, {});
+                this.context.executeAction(deleteSocialData, { });
 
                 return true;
             });
