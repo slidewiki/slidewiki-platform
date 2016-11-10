@@ -24,11 +24,10 @@ import loadSimilarContents from '../actions/loadSimilarContents';
 import loadImportFile from '../actions/loadImportFile';
 import loadPresentation from '../actions/loadPresentation';
 import loadAddDeck from '../actions/loadAddDeck';
-import fetchUser from '../actions/user/userprofile/fetchUser';
 import loadNotFound from '../actions/loadNotFound';
 import loadResetPassword from '../actions/loadResetPassword';
 import async from 'async';
-import { fetchUserDecks } from '../actions/user/userprofile/fetchUserDecks';
+import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 
@@ -165,29 +164,16 @@ export default {
             context.executeAction(loadResetPassword, payload, done);
         }
     },
-//-----------------------------------User routes------------------------------
     userprofile: {
-        path: '/user/:username/:category?',
+        path: '/user/:username/:category?/:item?',
         method: 'get',
         page: 'userprofile',
         title: 'SlideWiki -- Your profile',
         handler: require('../components/User/UserProfile/UserProfile'),
         action: (context, payload, done) => {
-            async.series([
-                (callback) => {
-                    context.executeAction(fetchUser, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(fetchUserDecks, {params: {username: payload.params.username}}, callback);
-                }
-            ],
-          (err, result) => {
-              if(err) console.log(err);
-              done();
-          });
+            context.executeAction(chooseAction, payload, done);
         }
     },
-//-----------------------------------Search routes------------------------------
     search: {
         // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
         path: '/search/:queryparams?',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'fluxible-router';
+import { NavLink, navigateAction } from 'fluxible-router';
 import UserPicture from '../common/UserPicture';
 import { connectToStores } from 'fluxible-addons-react';
 import userSignOut from '../../actions/user/userSignOut';
@@ -8,19 +8,24 @@ import fetchUser from '../../actions/user/userprofile/fetchUser';
 
 class HeaderDropdown extends React.Component {
     componentDidMount(){
-        $(this.refs.userDropDown).dropdown({action: 'select'});
+        $(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
 
     componentDidUpdate() {
-        $(this.refs.userDropDown).dropdown({action: 'select'});
+        $(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
     }
 
-    handleSignout() {
-        this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
+    onEnterAndClick(text, value) {
+        if(value === 'logout')
+            this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
+        else
+            this.context.executeAction(navigateAction, {url: value});
+        $(this.refs.userDropDown).dropdown('hide');
+        return false;
     }
 
     render() {
@@ -36,14 +41,14 @@ class HeaderDropdown extends React.Component {
                         {this.props.UserProfileStore.username}
                     </div>
                     <div className="divider"></div>
-                    <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username }>
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username}>
                         <i className="user icon link"/> My Decks
-                    </NavLink>
-                    <NavLink className="item" href={ '/user/' + this.props.UserProfileStore.username + '/settings' }>
+                    </div>
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}>
                         <i className="setting icon"/> My Settings
-                    </NavLink>
-                    <div className="item">
-                        <div onClick={ this.handleSignout.bind(this) }><i className="sign out icon"/> Sign Out</div>
+                    </div>
+                    <div className="item" data-value={'logout'}>
+                        <i className="sign out icon"/> Sign Out
                     </div>
                 </div>
             </div>
