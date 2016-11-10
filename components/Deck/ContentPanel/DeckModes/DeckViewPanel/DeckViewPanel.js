@@ -27,7 +27,7 @@ class DeckViewPanel extends React.Component {
 
     render() {
         const heightStyle = {
-            height: '450px'
+            height: this.props.DeckViewStore.deckViewPanelHeight + 'px'
         };
         let slidesArr =[];
         if(this.props.DeckViewStore.slidesData && this.props.DeckViewStore.slidesData.children){
@@ -62,7 +62,7 @@ class DeckViewPanel extends React.Component {
 
         return (
             <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
-                <div className="ui segment" style={heightStyle}>
+                <div className="ui segment">
                     <div className="ui two column grid container">
                         <div className="column">
                             <div className="content">
