@@ -1,5 +1,5 @@
 import React from 'react';
-import Thumbnail from '../../Thumbnail/Thumbnail';
+import Thumbnail from '../../common/Thumbnail';
 import { NavLink } from 'fluxible-router';
 import { timeSince } from '../../../common';
 import { Microservices } from '../../../configs/microservices';

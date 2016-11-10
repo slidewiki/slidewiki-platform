@@ -79,6 +79,13 @@ export default {
                 console.log(err);
                 callback(err);
             });
+        } else if (resource === 'history.count'){
+            rp.get({uri: Microservices.deck.uri + '/deck/' + selector.sid + '/revisionCount/'}).then((res) => {
+                callback(null, {count: JSON.parse(res), selector: selector});
+            }).catch((err) => {
+                //console.log(err);
+                callback({msg: 'Error in retrieving revisions count', content: err}, {});
+            });
         }
     },
     update: (req, resource, params, body, config, callback) => {
