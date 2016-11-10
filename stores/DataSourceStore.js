@@ -4,6 +4,7 @@ class DataSourceStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.dataSources = [];
+        this.showAllDataSources = false;
         this.dataSource = undefined;
         this.selectedIndex = -1;
         this.contentOwner = 0;
@@ -28,18 +29,23 @@ class DataSourceStore extends BaseStore {
         this.selectedIndex = -1;
         this.emitChange();
     }
-    newDataSource(payload) {
+    newDataSource() {
         this.dataSource = null;
         this.emitChange();
     }
-    cancelEditDataSource(payload) {
+    cancelEditDataSource() {
         this.dataSource = undefined;
         this.selectedIndex = -1;
+        this.emitChange();
+    }
+    handleShowAllDataSources() {
+        this.showAllDataSources = true;
         this.emitChange();
     }
     getState() {
         return {
             dataSources: this.dataSources,
+            showAllDataSources: this.showAllDataSources,
             dataSource: this.dataSource,
             selectedIndex: this.selectedIndex,
             contentOwner: this.contentOwner,
@@ -51,6 +57,7 @@ class DataSourceStore extends BaseStore {
     }
     rehydrate(state) {
         this.dataSources = state.dataSources;
+        this.showAllDataSources = state.showAllDataSources;
         this.dataSource = state.dataSource;
         this.selectedIndex = state.selectedIndex;
         this.contentOwner = state.contentOwner;
@@ -63,6 +70,7 @@ DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
     'NEW_DATASOURCE': 'newDataSource',
+    'SHOW_ALL_DATASOURCES': 'handleShowAllDataSources',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSources',
     'CANCEL_EDIT_DATASOURCE': 'cancelEditDataSource'
 };

@@ -1,3 +1,5 @@
+// CURRENTLY NOT USED
+
 import React, { PropTypes } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
