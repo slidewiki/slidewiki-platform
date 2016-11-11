@@ -21,7 +21,7 @@ class SearchPanel extends React.Component {
         // }
         // console.log("open : " + this.props.SearchResultsStore.searchstatus + " - " + openExtraFields);
         // if(this.props.SearchResultsStore.searchstatus === 'results'){
-            advSearchDiv = <AdvancedSearch />;
+        advSearchDiv = <AdvancedSearch />;
         // }
         // else{
         //     advSearchDiv = <AdvancedSearch title={searchPanelTitle} openExtraFields={openExtraFields}/>;
