@@ -13,7 +13,7 @@ class Header extends React.Component {
             <div className="ui inverted blue menu" ref="header">
                 <div className="ui container">
                     <a className="item" href='/'>
-                        <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" />
+                        <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
                         &nbsp; SlideWiki
                     </a>
                     <div className="item">
