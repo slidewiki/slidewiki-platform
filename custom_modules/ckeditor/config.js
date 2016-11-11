@@ -151,9 +151,10 @@ CKEDITOR.editorConfig = function( config ) {
     //#####Image upload via CKeditor - TODO//
 
     //config.codeSnippet_theme = 'github';
-    config.codeSnippet_theme = 'pojoaque';
+    //config.codeSnippet_theme = 'pojoaque';
     config.extraPlugins = 'codesnippet,uploadimage,uploadwidget,texzilla,youtube';
-    config.codeSnippet_theme = 'pojoaque';
+    //config.codeSnippet_theme = 'pojoaque';
+    //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
     //config.extraPlugins = 'uploadwidget';
     //config.extraPlugins = 'codesnippet,texzilla,youtube';
