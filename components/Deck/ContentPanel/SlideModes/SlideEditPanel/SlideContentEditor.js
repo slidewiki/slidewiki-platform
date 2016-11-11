@@ -7,6 +7,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
+import DataSourceStore from '../../../../../stores/DataSourceStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -83,8 +84,9 @@ class SlideContentEditor extends React.Component {
             //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
             //TEST - create slide (before can be saved (=updated))
             //console.log(speakernotes);
+            let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             this.context.executeAction(saveSlide,
-              {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
+              {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, dataSources: dataSources, selector: currentSelector});
             //console.log('saving slide');
             this.resize();
         }
@@ -391,10 +393,11 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore], (context, props) => {
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        DataSourceStore: context.getStore(DataSourceStore).getState()
     };
 });
 export default SlideContentEditor;

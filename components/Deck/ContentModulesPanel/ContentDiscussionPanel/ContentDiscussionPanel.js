@@ -25,7 +25,7 @@ class ContentDiscussionPanel extends React.Component {
             (<AddComment/>)
             :
             (<button tabIndex="0" className="ui blue labeled icon button" onClick={this.handleInvertCommentBox.bind(this)}>
-                <i className="icon edit"></i> Add comment
+                <i className="icon plus"></i> Add comment
             </button>);
 
         return (
