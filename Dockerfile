@@ -8,8 +8,6 @@ WORKDIR /nodeApp
 # ---------------- #
 
 ADD . /nodeApp
-RUN bower install --allow-root
-# Install only production dependencies? todo: handle webpack issue
 RUN npm install
 
 # -------------------------------------- #
