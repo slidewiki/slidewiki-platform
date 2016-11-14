@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
-import SearchBox  from './SearchBox';
-import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
+import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
 import AddDeckPanel from '../AddDeck/AddDeckPanel.js';
