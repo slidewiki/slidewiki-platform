@@ -51,7 +51,7 @@ class KeywordsInput extends React.Component {
 
         return (
             <div className={classes} id="keywords_search_div">
-                <input name='searchstring' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={this.props.value} placeholder={this.props.placeholder} type='text' className="prompt" ref='searchstring'></input>
+                <input name='searchstring' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={this.props.value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref='searchstring'></input>
                 <div className="results"></div>
             </div>
         );
