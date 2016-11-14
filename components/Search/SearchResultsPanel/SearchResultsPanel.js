@@ -37,11 +37,9 @@ class SearchResultsPanel extends React.Component {
 
         let resultsDiv = <div ref="resultsDiv">
             <h2 className="ui header">Search Results</h2>
-            <div className="ui grid centered">
+            <div className="ui centered grid">
                 <div className="twelve wide column">
-                    <div className="ui basic segment">
-                        <SearchResultsList items={results} ></SearchResultsList>
-                    </div>
+                    <SearchResultsList items={results} ></SearchResultsList>
                 </div>
             </div>
         </div>;
