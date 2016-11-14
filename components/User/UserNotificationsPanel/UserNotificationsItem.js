@@ -31,7 +31,7 @@ class UserNotificationsItem extends React.Component {
         });
         let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
         if (notification.content_kind === 'group')
-            viewPath = '/user/'+notification.creator+'/profile/groups'; //TODO the username is neede here instead of the userid
+            viewPath = '/user/'+notification.user_id+'/profile/groups'; //TODO the username is neede here instead of the userid
         switch (notification.activity_type) {
             case 'translate':
                 const translateIconClass = allIconClass.concat(' translate');
