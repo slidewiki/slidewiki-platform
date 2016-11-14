@@ -29,7 +29,9 @@ class UserNotificationsItem extends React.Component {
             'ui icon': true,
             'big': this.props.iconSize === 'big'
         });
-        const viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
+        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
+        if (notification.content_kind === 'group')
+            viewPath = '/user/'+notification.creator+'/profile/groups'; //TODO the username is neede here instead of the userid
         switch (notification.activity_type) {
             case 'translate':
                 const translateIconClass = allIconClass.concat(' translate');
@@ -175,6 +177,34 @@ class UserNotificationsItem extends React.Component {
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'downloaded ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{notification.content_name}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'joined':
+                const joinedIconClass = allIconClass.concat(' add user');
+                iconNotification = (<i className={joinedIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + notification.user_id}>
+                            {notification.author.username}
+                        </a> {'Changes in ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{notification.content_name}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'left':
+                const leftIconClass = allIconClass.concat(' remove user');
+                iconNotification = (<i className={leftIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + notification.user_id}>
+                            {notification.author.username}
+                        </a> {'Changes in ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
                         {DateDiv}
