@@ -135,7 +135,7 @@ export default {
                     },
                     position: content_id,
                     language: 'EN',
-                    position: content_id,
+                    dataSources: args.dataSources,
                     license: 'CC BY-SA'
                 })
             }).then((res) => {

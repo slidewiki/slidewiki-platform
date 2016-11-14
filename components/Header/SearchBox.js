@@ -26,14 +26,15 @@ class SearchBox extends React.Component {
         return false;
     }
     handleKeyPress(event){
-        if(event.key == 'Enter'){
+        if(event.key === 'Enter'){
             this.handleRedirect();
         }
     }
     render() {
         return (
             <div className="ui small icon input" ref="searchBox">
-                <input type="text" placeholder="Search..." ref="searchstring" onKeyPress={this.handleKeyPress.bind(this)} />
+                <label htmlFor="searchString" hidden>Search</label>
+                <input type="text" placeholder="Search..." id="searchString" ref="searchstring" onKeyPress={this.handleKeyPress.bind(this)} />
                 <i className="search link icon" onClick={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
             </div>
         );

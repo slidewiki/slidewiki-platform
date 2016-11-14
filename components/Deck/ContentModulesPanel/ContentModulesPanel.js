@@ -7,13 +7,13 @@ import loadContentDiscussion from '../../../actions/contentdiscussion/loadConten
 import loadContentHistory from '../../../actions/history/loadContentHistory';
 import loadContentUsage from '../../../actions/loadContentUsage';
 //import loadContentQuestions from '../../../actions/loadContentQuestions';
-//import loadDataSources from '../../../actions/datasource/loadDataSources';
+import loadDataSources from '../../../actions/datasource/loadDataSources';
 import loadContributors from '../../../actions/loadContributors';
 import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
 import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
 import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
 //import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
-//import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
+import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
 
@@ -24,10 +24,10 @@ class ContentModulesPanel extends React.Component {
             case 'questions':
                 this.context.executeAction(loadContentQuestions, {params: this.props.ContentModulesStore.selector});
                 break;
+            */
             case 'datasource':
                 this.context.executeAction(loadDataSources, {params: this.props.ContentModulesStore.selector});
                 break;
-            */
             case 'history':
                 this.context.executeAction(loadContentHistory, {params: this.props.ContentModulesStore.selector});
                 break;
@@ -65,10 +65,10 @@ class ContentModulesPanel extends React.Component {
             case 'questions':
                 activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} />;
                 break;
+            */
             case 'datasource':
                 activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} />;
                 break;
-            */
             default:
                 activityDIV = <ContentDiscussionPanel selector={this.props.ContentModulesStore.selector} />;
         }
@@ -90,11 +90,11 @@ class ContentModulesPanel extends React.Component {
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'questions')
         });
+        */
         let datasourceTabClass = classNames({
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'datasource')
         });
-        */
         let contributorsTabClass = classNames({
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'contributors')
@@ -107,8 +107,8 @@ class ContentModulesPanel extends React.Component {
             <div className="ui top attached pointing menu">
                 {/*
                 <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
-                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 */}
+                <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')}>Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
                 <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
                 <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
