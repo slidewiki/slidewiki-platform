@@ -132,12 +132,13 @@ class AdvancedSearch extends React.Component {
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
                     <form className="ui form success">
                         <div className="field">
+                            <label htmlFor="SearchTerm">Search Term</label>
                             <KeywordsInput ref='keywords' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                         </div>
                         <div className="four fields">
                             <div className="field">
-                                <label>Search field</label>
-                                <select name='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
+                                <label htmlFor="fields">Search field</label>
+                                <select name='fields' id='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
                                   <option value=''>Select Search field</option>
                                   <option value='title'>Title</option>
                                   <option value='content'>Content</option>
@@ -147,24 +148,24 @@ class AdvancedSearch extends React.Component {
                             </div>
 
                             <div className="field">
-                                <label>Entity</label>
-                                <select name='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
+                                <label htmlFor="entity">Entity</label>
+                                <select name='entity' id='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
                                   <option value=''>Select Entity</option>
                                   {entityList}
                                 </select>
                             </div>
 
                             <div className="field">
-                                <label>Language</label>
-                                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' className='ui fluid search dropdown' ref='language'>
+                                <label htmlFor="language">Language</label>
+                                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                   <option value=''>Select Language</option>
                                   {languageList}
                                 </select>
                             </div>
 
                             <div className="field">
-                                <label>License</label>
-                                <select name='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
+                                <label htmlFor="license">License</label>
+                                <select name='license' id='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
                                   <option value=''>Select Search field</option>
                                   <option value='CC0'>CC0</option>
                                   <option value='CC BY'>CC BY</option>
@@ -176,26 +177,25 @@ class AdvancedSearch extends React.Component {
 
                         <div className="two fields">
                             <div className="field">
-                                <label>User</label>
+                                <label htmlFor="search_id">User</label>
                                 <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
                             <div className="field">
-                                <label>Tags</label>
-                                <input name='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
+                                <label htmlFor="tags">Tags</label>
+                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
                             </div>
 
                         </div>
 
-                        <div className="field">
+                        <div className="field">                           
                             <div className="ui checkbox revisions" style={{marginTop: '1em', marginBottom: '1em'}}>
-                                <input name='revisions' onChange={this.onChange.bind(this)} type="checkbox" ref='revisions'></input>
-                                <label>Include revisions</label>
+                                <input name='revisions' id='revisions' onChange={this.onChange.bind(this)} tabIndex="0" type="checkbox" ref='revisions'></input>
+                            <label htmlFor="revisions">Include revisions</label>
                             </div>
                         </div>
 
-
-                        <div className="ui primary submit button" onClick={this.handleRedirect.bind(this)}>
+                        <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
                              Submit
                         </div>
 
