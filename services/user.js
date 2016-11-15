@@ -91,6 +91,7 @@ export default {
                             body: JSON.stringify({
                                 forename: args.firstname,
                                 surname: args.lastname,
+                                organization: args.organisation,
                                 username: args.username,
                                 email: args.email,
                                 password: hashedPassword,
