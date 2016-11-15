@@ -6,6 +6,7 @@ import userSignOut from '../../actions/user/userSignOut';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
+import {hashPassword} from '../../configs/general';
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -20,6 +21,7 @@ class LoginModal extends React.Component {
         super(props);
         this.handleLoginButton = this.handleLoginButton.bind(this);
         this.handleSignupClick = this.handleSignupClick.bind(this);
+        this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
     }
 
@@ -44,7 +46,7 @@ class LoginModal extends React.Component {
         } else {
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: this.refs.password1.value
+                password: hashPassword(this.refs.password1.value)
             });
 
             this.refs.email1.value = '';
@@ -62,6 +64,16 @@ class LoginModal extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if (this.props.UserProfileStore.userid !== '') {
+            //redirect if on a specific page
+            if (location.pathname === '/signup' || location.pathname === '/resetpassword') {
+                this.context.executeAction(navigateAction, {
+                    url: '/user/' + this.props.UserProfileStore.username + '/settings'
+                });
+            }
+        }
+    }
 
     handleSignupClick(e) {
         e.preventDefault();
@@ -87,7 +99,7 @@ class LoginModal extends React.Component {
 
         if (this.props.UserProfileStore.username === '') {
             loginButton = (
-                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>
+                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
             );
         }
 
@@ -106,30 +118,32 @@ class LoginModal extends React.Component {
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
                         <div className="ui five wide icon input field">
-                          <div><label htmlFor="username" hidden>E-Mail</label></div>
+                          <div><label htmlFor="email1" hidden>E-Mail</label></div>
                           <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
-
                         </div>
-                          <br/>
+                        <br/>
                         <div className="ui five wide icon input field">
                           <div><label htmlFor="password1" hidden>Password</label></div>
                           <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0" aria-required="true" required/><i className="lock icon"/>
                         </div>
                         <br/>
-                        <div className="ui error message"/>
+                        <div className="ui center aligned">
+                            <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In</button>
+                        </div>
+                        <br/>
 
+                        <div className="ui error message"/>
                       </form>
                       <br/>
                       <div className="ui floated right">
-                          <a href="#" onClick={this.handleNoAccessClick.bind(this)}>I can not access my account</a>
+                          <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                           <br/><br/>
-                          <a href="#" onClick={this.handleSignupClick.bind(this)}>Don&apos;t have an account? Sign up here.</a>
+                          <a href="#" onClick={this.handleSignupClick}>Don&apos;t have an account? Sign up here.</a>
                       </div>
                     </div>
                 </div>
               </div>
               <div className="actions">
-                <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin.bind(this)}><i className="icon sign in"/> Sign In</button>
                 <button type="cancel" className="ui cancel button">
                   <i className="remove icon"/>Close
                 </button>

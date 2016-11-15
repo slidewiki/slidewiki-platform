@@ -1,7 +1,5 @@
-import sha512 from 'js-sha512';
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
-import { hashSalt } from '../configs/general';
 import { Microservices } from '../configs/microservices';
 
 export default {
@@ -20,8 +18,8 @@ export default {
     update: (req, resource, params, body, config, callback) => {
         if (resource === 'userProfile.updatePassword') {
             let tosend = {
-                oldPassword: sha512.sha512(params.oldpw + hashSalt),
-                newPassword: sha512.sha512(params.newpw + hashSalt)
+                oldPassword: params.oldpw,
+                newPassword: params.newpw
             };
             rp({
                 method: 'PUT',
@@ -148,7 +146,7 @@ export default {
                             deckID: deck._id,
                             firstSlide: deck.firstSlide
                         };
-                    }).sort((a,b) => a.creationDate < b.creationDate);
+                    });
                     callback(null, converted);
                 })
                 .catch((err) => callback(err));

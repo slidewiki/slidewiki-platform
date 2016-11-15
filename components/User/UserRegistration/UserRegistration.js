@@ -4,12 +4,14 @@ import classNames from 'classnames';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import {Microservices} from '../../../configs/microservices';
+import {publicRecaptchaKey} from '../../../configs/general';
 import userSignUp from '../../../actions/user/registration/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import ReCAPTCHA from 'react-google-recaptcha';
+import {hashPassword} from '../../../configs/general';
 
 class UserRegistration extends React.Component {
     componentDidMount() {
@@ -188,7 +190,7 @@ class UserRegistration extends React.Component {
             username: this.refs.username.value,
             language: language,
             email: this.refs.email.value,
-            password: this.refs.password.value,
+            password: hashPassword(this.refs.password.value),
             grecaptcharesponse: this.state.grecaptcharesponse
         });
         return false;
@@ -304,7 +306,7 @@ class UserRegistration extends React.Component {
                             </div>
                             <div>
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={PUBLIC_KEY} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
                             <button type="submit" className="ui blue labeled submit icon button" aria-describedby="signupagree">

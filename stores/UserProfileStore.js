@@ -3,7 +3,8 @@ import { BaseStore } from 'fluxible/addons';
 class UserProfileStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.toShow = '';
+        this.category = undefined;
+        this.categoryItem = undefined;
         this.failures = {
             emailNotAllowed: false,
             wrongPassword: false
@@ -47,7 +48,8 @@ class UserProfileStore extends BaseStore {
     }
 
     destructor() {
-        this.toShow = 'decks';
+        this.category = undefined;
+        this.categoryItem = undefined;
         this.dimmer = {
             success: false,
             failure: false,
@@ -74,7 +76,8 @@ class UserProfileStore extends BaseStore {
 
     getState() {
         return {
-            toShow: this.toShow,
+            category: this.category,
+            categoryItem: this.categoryItem,
             failures: this.failures,
             user: this.user,
             userDecks: this.userDecks,
@@ -94,7 +97,8 @@ class UserProfileStore extends BaseStore {
     }
 
     rehydrate(state) {
-        this.toShow = state.toShow;
+        this.category = state.category;
+        this.categoryItem = state.categoryItem;
         this.failures = state.failures;
         this.user = state.user;
         this.userDecks = state.userDecks;
@@ -109,7 +113,8 @@ class UserProfileStore extends BaseStore {
     }
 
     changeTo(payload) {
-        this.toShow = payload.dest;
+        this.category = payload.category;
+        this.categoryItem = payload.item;
         this.emitChange();
     }
 
@@ -129,7 +134,7 @@ class UserProfileStore extends BaseStore {
             this.userpicture = payload.picture;
         if(!payload.onlyPicture){
             Object.assign(this.user, payload);
-            this.toShow = payload.category;
+            this.category = payload.category;
         }
         this.emitChange();
     }
@@ -206,7 +211,7 @@ class UserProfileStore extends BaseStore {
 
 UserProfileStore.storeName = 'UserProfileStore';
 UserProfileStore.handlers = {
-    'CHANGE_TO': 'changeTo',
+    'USER_CATEGORY': 'changeTo',
     'DELETE_USER_SUCCESS': 'userDeleted',
     'DELETE_USER_FAILURE': 'actionFailed',
     'NEW_USER_DATA': 'fillInUser',

@@ -10,12 +10,11 @@
 
 ## Installation ##
 
-You should have installed [NodeJS](https://nodejs.org/), [npm](https://github.com/npm/npm), [bower](http://bower.io/) and [Webpack](https://webpack.github.io/) on your system as prerequisite, then:
+You should have installed [NodeJS](https://nodejs.org/), [npm](https://github.com/npm/npm) and [Webpack](https://webpack.github.io/) on your system as prerequisite, then:
 
 Clone the repository recursively to make sure you clone the submodules as well: `git clone  --recursive https://github.com/slidewiki/slidewiki-platform.git`
 Run:
 
-`bower install`
 
 `npm install`
 

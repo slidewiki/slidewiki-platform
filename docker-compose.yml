@@ -16,3 +16,4 @@ slidewikiplatform:
     - SERVICE_URL_SEARCH=http://searchservice.experimental.slidewiki.org
     - SERVICE_URL_IMAGE=http://imageservice.experimental.slidewiki.org
     - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org
+#    - SERVICE_USER_APIKEY=

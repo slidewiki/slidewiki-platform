@@ -7,7 +7,7 @@ export default {
     read: (req, resource, params, config, callback) => {
         let args = params.params ? params.params : params;
 
-        if(resource === 'deck.featured'){
+        if (resource === 'deck.featured') {
             /*********connect to microservices*************/
             let limit, offset = null;
             if (args.limit) limit = args.limit;
@@ -18,7 +18,7 @@ export default {
                 callback(err, {featured: []});
             });
         }
-        if(resource === 'deck.recent'){
+        if (resource === 'deck.recent') {
             /*********connect to microservices*************/
             let limit, offset = null;
             if (args.limit) limit = args.limit;
@@ -45,31 +45,41 @@ export default {
                     content: err
                 }, {});
             });
-            /* Create user data promise which is dependent on deck data promise */
-            let userRes = deckPromise.then((deckData) => {
-                // TODO Replace hard coded user id '15' with the commented JSON data;
-                // This should be done when deckservice and userservice data is in sync;
-                return rp.get({uri: Microservices.user.uri + '/user/' + (JSON.parse(deckData).user).toString()}); //'15'});
+            console.log(args);
+            let revisionCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/revisionCount'}).catch((err) => {
+                callback({
+                    msg: 'Error in retrieving revisions count',
+                    content: err
+                }, {});
             });
-            /* Catch errors from the user data response */
-            let userPromise = userRes.catch((err) => {
+
+            /* Create user data promise which is dependent on deck data promise */
+            let usersPromise = deckPromise.then((deckData) => {
+                // This should be done when deckservice and userservice data is in sync;
+                let deck = JSON.parse(deckData);
+                let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
+                    return rev.id === deck.active;
+                });
+                let creatorRes = rp.get({uri: Microservices.user.uri + '/user/' + deck.user.toString()});
+                let ownerRes = deck.user === currentRevision.user ? creatorRes : rp.get({uri: Microservices.user.uri + '/user/' + currentRevision.user.toString()});
+                return Promise.all([creatorRes, ownerRes]);
+            }).catch((err) => {
                 callback({msg: 'Error in retrieving user data from ' + Microservices.user.uri, content: err}, {});
             });
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, userPromise]).then((data) => {
-                const deckData = JSON.parse(data[0]);
-                const slidesData = JSON.parse(data[1]);
-                const userData = JSON.parse(data[2]);
-                deckData.host = req.headers.host;
-                deckData.url = req.url;
-                //console.log('deck data:', deckData);
-                //console.log('slides data:', slidesData);
-                //console.log('user data:', userData);
-                callback(null, {deckData: deckData, slidesData: slidesData, userData: userData});
+            Promise.all([deckPromise, slidesPromise, revisionCountPromise, usersPromise]).then((data) => {
+                let deckData = JSON.parse(data[0]);
+                deckData.revisionCount = JSON.parse(data[2]);
+                callback(null, {
+                    deckData: deckData,
+                    slidesData: JSON.parse(data[1]),
+                    creatorData: JSON.parse(data[3][0]),
+                    ownerData: JSON.parse(data[3][1])
+                });
             }).catch((err) => {
                 //console.log(err);
-                callback({msg: 'Error in resolving promiese', content: err}, {});
+                callback({msg: 'Error in resolving promises', content: err}, {});
             });
         } else if (resource === 'deck.properties') {
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);

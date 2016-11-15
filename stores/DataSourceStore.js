@@ -3,34 +3,52 @@ import {BaseStore} from 'fluxible/addons';
 class DataSourceStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.datasources = [];
-        this.datasource = null;
+        this.dataSources = [];
+        this.showAllDataSources = false;
+        this.dataSource = undefined;
+        this.selectedIndex = -1;
+        this.contentOwner = 0;
         this.selector = {};
     }
     loadDataSources(payload) {
-        this.datasources = payload.datasources;
+        this.dataSources = payload.dataSources;
         this.selector = payload.selector;
-        this.datasource = null;
+        this.dataSource = undefined;
+        this.selectedIndex = -1;
+        this.contentOwner = payload.owner;
         this.emitChange();
     }
     loadDataSource(payload) {
-        this.datasource = this.datasources.find((ds) => ds.id === payload.dsid);
+        this.dataSource = this.dataSources[payload.dsindex];
+        this.selectedIndex = payload.dsindex;
         this.emitChange();
     }
-    saveDataSource(payload) {
-        const index = this.datasources.findIndex((ds) => ds.id === payload.datasource.id);
-        this.datasources[index] = payload.datasource;
-        this.datasource = null;
+    updateDataSources(payload) {
+        this.dataSources = payload.dataSources;
+        this.dataSource = undefined;
+        this.selectedIndex = -1;
         this.emitChange();
     }
-    cancelEditDataSource(payload) {
-        this.datasource = null;
+    newDataSource() {
+        this.dataSource = null;
+        this.emitChange();
+    }
+    cancelEditDataSource() {
+        this.dataSource = undefined;
+        this.selectedIndex = -1;
+        this.emitChange();
+    }
+    handleShowAllDataSources() {
+        this.showAllDataSources = true;
         this.emitChange();
     }
     getState() {
         return {
-            datasources: this.datasources,
-            datasource: this.datasource,
+            dataSources: this.dataSources,
+            showAllDataSources: this.showAllDataSources,
+            dataSource: this.dataSource,
+            selectedIndex: this.selectedIndex,
+            contentOwner: this.contentOwner,
             selector: this.selector,
         };
     }
@@ -38,8 +56,11 @@ class DataSourceStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.datasources = state.datasources;
-        this.datasource = state.datasource;
+        this.dataSources = state.dataSources;
+        this.showAllDataSources = state.showAllDataSources;
+        this.dataSource = state.dataSource;
+        this.selectedIndex = state.selectedIndex;
+        this.contentOwner = state.contentOwner;
         this.selector = state.selector;
     }
 }
@@ -48,7 +69,9 @@ DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_DATASOURCE': 'loadDataSource',
-    'SAVE_DATASOURCE_SUCCESS': 'saveDataSource',
+    'NEW_DATASOURCE': 'newDataSource',
+    'SHOW_ALL_DATASOURCES': 'handleShowAllDataSources',
+    'UPDATE_DATASOURCES_SUCCESS': 'updateDataSources',
     'CANCEL_EDIT_DATASOURCE': 'cancelEditDataSource'
 };
 

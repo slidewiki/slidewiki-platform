@@ -4,25 +4,10 @@ import {connectToStores} from 'fluxible-addons-react';
 import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import Comment from './Comment';
-import addComment from '../../../../actions/contentdiscussion/addComment';
+import AddComment from './AddComment';
 import invertCommentBoxFlag from '../../../../actions/contentdiscussion/invertCommentBoxFlag';
 
 class ContentDiscussionPanel extends React.Component {
-    handleAddComment(e) {
-        e.preventDefault();
-        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
-            this.context.executeAction(addComment, {
-                selector: this.props.ContentDiscussionStore.selector,
-                title: this.refs.title.value,
-                text: this.refs.text.value,
-                userid: this.props.UserProfileStore.userid
-            });
-
-            this.refs.title.value = '';
-            this.refs.text.value = '';
-        }
-        return false;
-    }
 
     handleInvertCommentBox() {
         this.context.executeAction(invertCommentBoxFlag, {});
@@ -37,23 +22,10 @@ class ContentDiscussionPanel extends React.Component {
             </div>
         );
         let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
-            (<form className="ui comment form">
-                <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title" required/>
-                </div>
-                <div className="field">
-                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
-                </div>
-                <button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleAddComment.bind(this)}>
-                    <i className="icon edit"></i> Submit
-                </button>
-                <button tabIndex="0" className="ui blue labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
-                    <i className="icon close"></i> Cancel
-                </button>
-            </form>)
+            (<AddComment/>)
             :
-            (<button tabIndex="0" className="ui blue labeled submit icon button" onClick={this.handleInvertCommentBox.bind(this)}>
-                <i className="icon edit"></i> Add comment
+            (<button tabIndex="0" className="ui blue labeled icon button" onClick={this.handleInvertCommentBox.bind(this)}>
+                <i className="icon plus"></i> Add comment
             </button>);
 
         return (

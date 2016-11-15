@@ -6,11 +6,12 @@ class DeckPageStore extends BaseStore {
         this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': ''};
         this.page = 'deck';
         this.mode = 'view';
-        this.componentsStatus = {'NavigationPanel': {visible: 1, columnSize: 16},
-                                 'TreePanel': {visible: 1, columnSize: 4},
-                                 'ActivityFeedPanel': {visible: 1, columnSize: 4},
-                                 'ContentPanel': {visible: 1, columnSize: 12},
-                                 'ContentModulesPanel': {visible: 1, columnSize: 12}};
+        this.componentsStatus = {
+            'NavigationPanel': {visible: 1, columnSize: 16},
+            'TreePanel': {visible: 1, columnSize: 4},
+            'ActivityFeedPanel': {visible: 1, columnSize: 4},
+            'ContentPanel': {visible: 1, columnSize: 12},
+            'ContentModulesPanel': {visible: 1, columnSize: 12}};
     }
     updateContent(payload) {
         this.selector= {'id': payload.params.id, 'spath': payload.params.spath, 'sid': payload.params.sid, 'stype': payload.params.stype};

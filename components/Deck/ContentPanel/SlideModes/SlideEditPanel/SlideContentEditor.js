@@ -7,6 +7,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
+import DataSourceStore from '../../../../../stores/DataSourceStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -54,7 +55,8 @@ class SlideContentEditor extends React.Component {
             //remove editing borders:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
-
+            $(".pptx2html")
+            .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
             //reset scaling of pptx2html element to get original size
             $(".pptx2html").css({'transform': '', 'transform-origin': ''});
 
@@ -82,8 +84,9 @@ class SlideContentEditor extends React.Component {
             //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
             //TEST - create slide (before can be saved (=updated))
             //console.log(speakernotes);
+            let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             this.context.executeAction(saveSlide,
-              {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
+              {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, dataSources: dataSources, selector: currentSelector});
             //console.log('saving slide');
             this.resize();
         }
@@ -98,11 +101,13 @@ class SlideContentEditor extends React.Component {
         this.forceUpdate();
     }
     componentDidMount() {
+        //alert('remount');
+        const userId = this.props.UserProfileStore.userid;
 
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
-
+        
         if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
@@ -120,10 +125,10 @@ class SlideContentEditor extends React.Component {
             ],
             floatSpacePreferRight: true,
             uiColor: '#4183C4',
-            removeButtons: 'Undo, Clipboard, Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
+            removeButtons: 'Youtube,texzilla,Sourcedialog,CodeSnippet,Undo,Clipboard,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
 
-        CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
         //TODO - remove more buttons speakernotes
         if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
@@ -144,18 +149,21 @@ class SlideContentEditor extends React.Component {
             ],
             floatSpacePreferRight: true,
             uiColor: '#4183C4',
-            removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
+            removeButtons: 'Youtube,texzilla,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
         if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
             //alert('test');
-            const userId = this.props.UserProfileStore.userid;
             //console.log(userId);
             // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
 
             //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri +  + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
-            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
+            //alert('test: ' + Microservices.import.uri + '/importImage/' + userId);
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
 
         }
         this.currentcontent = this.props.content;
@@ -203,7 +211,11 @@ class SlideContentEditor extends React.Component {
               , onlyY: false
               , ratio: this.scaleratio
             });
-            document.domain = 'slidewiki.org';
+            if(document.domain != "localhost")
+            {
+                document.domain = 'slidewiki.org';
+            }
+            $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         });
 
 
@@ -243,50 +255,33 @@ class SlideContentEditor extends React.Component {
         //reset scaling of pptx2html element to get original size
         $(".pptx2html").css({'transform': '', 'transform-origin': ''});
 
+        //Function to fit contents in edit and view component
         //let pptxwidth = document.getElementByClassName('pptx2html').offsetWidth;
         //let pptxheight = document.getElementByClassName('pptx2html').offsetHeight;
         let pptxwidth = $('.pptx2html').width();
         let pptxheight = $('.pptx2html').height();
         //console.log('pptx2html Width =' + pptxwidth + 'height' + pptxheight);
 
-        //only calculate scaleration for width for now
-        if (containerwidth > pptxwidth)
-        {
-            this.scaleratio = pptxwidth / containerwidth;
-            //console.log(this.scaleratio);
-            //this.props.SlideEditStore.scaleratio = containerwidth / pptxwidth;
-            //let scaleratio = containerwidth / pptxwidth;
-        } else {
-            this.scaleratio = containerwidth / pptxwidth;
-            //console.log(this.scaleratio);
-            //this.props.SlideEditStore.scaleratio = pptxwidth / containerwidth;
-            //let scaleratio = pptxwidth / containerwidth;
-        }
-        //Function to fit contents in edit and view component
-        //$(".pptx2html").addClass('schaal');
-        //$(".pptx2html [style*='absolute']").addClass('schaal');
-        //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-        //$("#inlineContent").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-            //if ($('.pptx2html').length)
-            //{
-                //$(".pptx2html").css({'transform': 'scale(0.5,0.5)', 'transform-origin': 'top left'});
-                //$(".pptx2html").css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                //$(".pptx2html").css({'transform': 'scale('+this.props.SlideEditStore.scaleratio+','+this.props.SlideEditStore.scaleratio+')', 'transform-origin': 'top left'});
-                $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-                $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-                require('../../../../../custom_modules/simple-draggable/lib/index.js');
+        this.scaleratio = containerwidth / pptxwidth;
 
-                //TODO: give +this.props.SlideEditStore.scaleratio to ptx2html - DONE?
-                //TODO: remove previous event listeners!
-                //, ratio: this.props.SlideEditStore.scaleratio
-                //alert('resized');
-                SimpleDraggable(".pptx2html [style*='absolute']", {
-                    onlyX: false
-                  , onlyY: false
-                  , ratio: this.scaleratio
-                });
-                //alert('draggable');
-            //}
+        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+        $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+        require('../../../../../custom_modules/simple-draggable/lib/index.js');
+
+        //TODO: remove previous event listeners!
+        SimpleDraggable(".pptx2html [style*='absolute']", {
+            onlyX: false
+          , onlyY: false
+          , ratio: this.scaleratio
+        });
+
+        //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
+        this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
+        this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+
+        //show that content is outside of pptx2html box
+        $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+
     }
 
     componentWillUnmount() {
@@ -317,8 +312,9 @@ class SlideContentEditor extends React.Component {
             // maxHeight: 450,
             minHeight: 450,
             overflowY: 'auto',
-            borderStyle: 'dashed',
-            borderColor: '#e7e7e7',
+            overflowX: 'hidden',
+            //borderStyle: 'dashed',
+            //borderColor: '#e7e7e7',
         };
         const speakernotesStyle = {
             minWidth: '100%',
@@ -332,8 +328,18 @@ class SlideContentEditor extends React.Component {
 
         const compStyle = {
             // maxHeight: 450,
+            //minHeight: 450,
+            //overflowY: 'auto',
+            //position: 'relative'
+            //minWidth: '100%',
+            // maxHeight: 450,
             minHeight: 450,
+            //minHeight: '100%',
             overflowY: 'auto',
+            //overflowX: 'hidden',
+            overflowX: 'auto',
+            //overflowY: 'visible',
+            //overflow: 'hidden,'
             position: 'relative'
         };
 
@@ -369,7 +375,7 @@ class SlideContentEditor extends React.Component {
                 {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <hr />
-                <div className="ui" style={compStyle}>
+                <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
                         <div className="slides">
                                 <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
@@ -391,10 +397,11 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore], (context, props) => {
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        DataSourceStore: context.getStore(DataSourceStore).getState()
     };
 });
 export default SlideContentEditor;

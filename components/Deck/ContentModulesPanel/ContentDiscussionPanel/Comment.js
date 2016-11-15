@@ -2,25 +2,11 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
-import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
-import addReply from '../../../../actions/contentdiscussion/addReply';
+import AddReply from './AddReply';
 
 class Comment extends React.Component {
     handleReply() {
         this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
-    }
-
-    handleAddReply(e) {
-        e.preventDefault();
-        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
-            this.context.executeAction(addReply, {
-                comment: this.props.comment,
-                title: this.refs.title.value,
-                text: this.refs.text.value,
-                userid: this.props.userid
-            });
-        }
-        return false;
     }
 
     render() {
@@ -30,20 +16,7 @@ class Comment extends React.Component {
                 <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
             </div>
         );
-        const replyTitle = ((comment.title.startsWith('re: ')) ? '' :  're: ') + comment.title;
-        const replyBox = (
-            <form className="ui reply form">
-                <div className="ui input">
-                    <input type="text" ref="title" placeholder="Title" value={replyTitle} required/>
-                </div>
-                <div className="field">
-                    <textarea ref="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required></textarea>
-                </div>
-                <button tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleAddReply.bind(this)}>
-                    <i className="icon edit"></i> Add Reply
-                </button>
-            </form>
-        );
+
         return (
             <div className="comment">
                 <a className="avatar">
@@ -59,9 +32,9 @@ class Comment extends React.Component {
                         {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
                     { (String(this.props.userid) !== '') ? replyLink : ''}
-                    { comment.replyBoxOpened ? replyBox : '' }
+                    { comment.replyBoxOpened ? (<AddReply comment={comment}/>) : '' }
                 </div>
-                {comment.replies?<div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
+                {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
             </div>
         );
     }
@@ -71,9 +44,4 @@ Comment.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-Comment = connectToStores(Comment, [ContentDiscussionStore], (context, props) => {
-    return {
-        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState()
-    };
-});
 export default Comment;
