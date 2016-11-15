@@ -4,7 +4,6 @@ import suggestKeywords from '../../../actions/search/suggestKeywords';
 /**
  * Properties:
  *  placeholder: placeholder text
- *  returnType: username if specified else user _id
  */
 
 class KeywordsInput extends React.Component {
