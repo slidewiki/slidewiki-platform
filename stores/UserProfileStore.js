@@ -32,6 +32,7 @@ class UserProfileStore extends BaseStore {
         this.jwt = '';
         this.userpicture = undefined;
         this.errorMessage = '';
+        this.currentUsergroup = {};
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -69,6 +70,7 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+        this.currentUsergroup = {};
 
         //LoginModal
         this.showLoginModal = false;
@@ -88,7 +90,8 @@ class UserProfileStore extends BaseStore {
             userpicture: this.userpicture,
             errorMessage: this.errorMessage,
             showLoginModal: this.showLoginModal,
-            lastUser: this.lastUser
+            lastUser: this.lastUser,
+            currentUsergroup: this.currentUsergroup
         };
     }
 
@@ -110,6 +113,7 @@ class UserProfileStore extends BaseStore {
         this.errorMessage = state.errorMessage;
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
+        this.currentUsergroup = state.currentUsergroup;
     }
 
     changeTo(payload) {
@@ -207,6 +211,12 @@ class UserProfileStore extends BaseStore {
         }
         return message2;
     }
+
+    updateUsergroup(group) {
+        this.currentUsergroup = group;
+        console.log('UserProfileStore: updateUsergroup', group);
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -224,7 +234,8 @@ UserProfileStore.handlers = {
     'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
-    'USER_SIGNOUT': 'handleSignOut'
+    'USER_SIGNOUT': 'handleSignOut',
+    'UPDATE_USERGROUP': 'updateUsergroup'
 };
 
 export default UserProfileStore;
