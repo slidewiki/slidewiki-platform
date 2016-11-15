@@ -16,7 +16,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
-    config.extraPlugins = 'sourcedialog';
+    //config.extraPlugins = 'sourcedialog';
     config.line_height=";0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;";
 
     config.toolbar = [
@@ -30,11 +30,15 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar'] },
+            //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
+            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
+            //{ name: 'formula', items: [ 'Mathjax'] },
+            { name: 'source', items: [ 'texzilla'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
+            { name: 'document', items: [ 'Sourcedialog'] },
+            { name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
     //{ name: 'document', items: ['Templates' ] },
@@ -123,7 +127,8 @@ CKEDITOR.editorConfig = function( config ) {
 		'showborders,' +
 		'smiley,' +
 		'sourcearea,' +
-		'specialchar,' +
+		'sourcedialog,' +
+        'specialchar,' +
 		'stylescombo,' +
 		'tab,' +
 		'table,' +
@@ -144,9 +149,26 @@ CKEDITOR.editorConfig = function( config ) {
     config.format_tags = 'p;h1;h2;h3;pre';
 
     //#####Image upload via CKeditor - TODO//
+    //config.uploadUrl;
+    //config.uploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
+    //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
+    //config.codeSnippet_theme = 'github';
+    //config.codeSnippet_theme = 'pojoaque';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,texzilla,youtube';
+    //config.codeSnippet_theme = 'pojoaque';
+    //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
+    //config.extraPlugins = 'uploadimage';
+    //config.extraPlugins = 'uploadwidget';
+    //config.extraPlugins = 'codesnippet,texzilla,youtube';
+    //config.extraPlugins = 'codesnippet';
+    //config.extraPlugins = 'texzilla';
+    //config.extraPlugins = 'youtube';
 
-    config.extraPlugins = 'uploadimage';
-    config.extraPlugins = 'uploadwidget';
+
+    // does not work and conflicts with codesnippet
+    //config.extraPlugins = 'mathjax';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
@@ -180,6 +202,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	//config.removeDialogTabs = 'image:advanced;link:advanced';
+
 };
 CKEDITOR.disableAutoInline = true;
 

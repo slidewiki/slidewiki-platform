@@ -4,10 +4,11 @@ import DataSourceItem from './DataSourceItem';
 class DataSourceList extends React.Component {
     render() {
         const selector = this.props.selector;
+        const editable = this.props.editable;
 
         const list = this.props.items.map((node, index) => {
             return (
-                <DataSourceItem node={node} key={index} selector={selector}/>
+                <DataSourceItem node={node} key={index} index={index} editable={editable} selector={selector}/>
             );
         });
 

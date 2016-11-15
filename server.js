@@ -34,9 +34,16 @@ server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 server.use(compression());
 server.use(favicon(path.join(__dirname, '/favicon.ico')));
 server.use('/public', express.static (path.join(__dirname, '/build')));
-server.use('/bower_components', express.static (path.join(__dirname, '/bower_components')));
 server.use('/custom_modules', express.static (path.join(__dirname, '/custom_modules')));
 server.use('/assets', express.static (path.join(__dirname, '/assets')));
+//server.use('/bower_components', express.static (path.join(__dirname, '/bower_components')));
+//add external dependencies to be loaded on frontend here:
+server.use('/json3', express.static(path.join(__dirname, '/node_modules/json3')));
+server.use('/es5-shim', express.static(path.join(__dirname, '/node_modules/es5-shim')));
+server.use('/es6-shim', express.static(path.join(__dirname, '/node_modules/es6-shim')));
+server.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery')));
+server.use('/sweetalert2', express.static(path.join(__dirname, '/node_modules/sweetalert2')));
+server.use('/headjs', express.static(path.join(__dirname, '/node_modules/headjs')));
 
 //server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
@@ -64,6 +71,7 @@ fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/userProfile'));
+fetchrPlugin.registerService(require('./services/suggester'));
 
 server.use((req, res, next) => {
 

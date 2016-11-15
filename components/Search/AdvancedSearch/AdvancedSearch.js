@@ -5,6 +5,8 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
 import SearchParamsStore from '../../../stores/SearchParamsStore';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
+import UsersInput from '../AutocompleteComponents/UsersInput';
+import KeywordsInput from '../AutocompleteComponents/KeywordsInput';
 
 class AdvancedSearch extends React.Component {
     constructor(props){
@@ -14,7 +16,7 @@ class AdvancedSearch extends React.Component {
             entity: this.props.paramsStore.entity,
             lang: this.props.paramsStore.lang,
             fields: this.props.paramsStore.fields,
-            user: this.props.paramsStore.user,
+            users: this.props.paramsStore.users,
             tags: this.props.paramsStore.tags,
             revisions: this.props.paramsStore.revisions,
             license: this.props.paramsStore.license
@@ -32,13 +34,13 @@ class AdvancedSearch extends React.Component {
     }
     clearInput(){
         this.setState({searchstring: ''});
-        this.refs.searchstring.focus();
+        this.refs.keywords.focus();
     }
     // shouldComponentUpdate(nextProps, nextState) {
     //     return (nextProps.searchstring != this.state.searchstring);
     // }
     handleKeyPress(event){
-        if(event.key == 'Enter'){
+        if(event.key === 'Enter'){
             this.handleRedirect();
         }
     }
@@ -46,8 +48,8 @@ class AdvancedSearch extends React.Component {
         let queryparams = {};
 
         // determine given params
-        if(this.refs.searchstring && this.refs.searchstring.value.trim()){
-            queryparams.q = this.refs.searchstring.value.trim();
+        if(this.refs.keywords && this.refs.keywords.getSelected().trim()){
+            queryparams.q = this.refs.keywords.getSelected().trim();
         }
         else{
             queryparams.q = encodeURIComponent('*:*');
@@ -69,8 +71,8 @@ class AdvancedSearch extends React.Component {
             queryparams.fields = this.refs.fields.value;
         }
 
-        if(this.refs.user && this.refs.user.value){
-            queryparams.user = this.refs.user.value.trim();
+        if(this.refs.users && this.refs.users.getSelected()){
+            queryparams.users = this.refs.users.getSelected();
         }
 
         if(this.refs.tags && this.refs.tags.value){
@@ -89,7 +91,7 @@ class AdvancedSearch extends React.Component {
     }
     encodeParams(queryparams){
         let encodedParams = '';
-        for (var key in queryparams) {
+        for (let key in queryparams) {
             if(encodedParams){
                 encodedParams += '&';
             }
@@ -99,7 +101,7 @@ class AdvancedSearch extends React.Component {
         return encodedParams;
     }
     handleRedirect(){
-        if(this.refs.searchstring.value.trim() === ''){
+        if(this.refs.keywords.getSelected().trim() === ''){
             return;
         }
         this.context.executeAction(navigateAction, {
@@ -109,7 +111,6 @@ class AdvancedSearch extends React.Component {
         return false;
     }
     render() {
-
         // facet lists initialization
         const languageList = this.props.paramsStore.languages.map((item, index) => {
             return (
@@ -123,20 +124,15 @@ class AdvancedSearch extends React.Component {
             );
         });
         let searchstring = decodeURIComponent(this.state.searchstring);
-        let defaultSearchstring = (searchstring == '*:*') ? '' : searchstring;
+        let defaultSearchstring = (searchstring === '*:*') ? '' : searchstring;
         let clearInputIcon = '';
-        if(defaultSearchstring){
-            clearInputIcon = <i className="remove link icon" onClick={this.clearInput.bind(this)} ></i>;
-        }
+
         return (
                 <div className="ui content">
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
                     <form className="ui form success">
                         <div className="field">
-                            <div className="ui icon input">
-                                <input name='searchstring' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' type='text' ref='searchstring'></input>
-                                {clearInputIcon}
-                            </div>
+                            <KeywordsInput ref='keywords' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                         </div>
                         <div className="four fields">
                             <div className="field">
@@ -181,7 +177,7 @@ class AdvancedSearch extends React.Component {
                         <div className="two fields">
                             <div className="field">
                                 <label>User</label>
-                                <input name='user' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.user} placeholder="User" type="text" ref='user'></input>
+                                <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
                             <div className="field">
