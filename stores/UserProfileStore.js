@@ -33,6 +33,8 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.errorMessage = '';
         this.currentUsergroup = {};
+        this.saveUsergroupError = '';
+        this.saveUsergroupIsLoading = false;
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -71,6 +73,8 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.userDecks = [];
         this.currentUsergroup = {};
+        this.saveUsergroupError = '';
+        this.saveUsergroupIsLoading = false;
 
         //LoginModal
         this.showLoginModal = false;
@@ -91,7 +95,9 @@ class UserProfileStore extends BaseStore {
             errorMessage: this.errorMessage,
             showLoginModal: this.showLoginModal,
             lastUser: this.lastUser,
-            currentUsergroup: this.currentUsergroup
+            currentUsergroup: this.currentUsergroup,
+            saveUsergroupError: this.saveUsergroupError,
+            saveUsergroupIsLoading: this.saveUsergroupIsLoading
         };
     }
 
@@ -114,6 +120,8 @@ class UserProfileStore extends BaseStore {
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
         this.currentUsergroup = state.currentUsergroup;
+        this.saveUsergroupError = state.saveUsergroupError;
+        this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
     }
 
     changeTo(payload) {
@@ -215,6 +223,25 @@ class UserProfileStore extends BaseStore {
     updateUsergroup(group) {
         this.currentUsergroup = group;
         console.log('UserProfileStore: updateUsergroup', group);
+        this.saveUsergroupError = '';
+        this.emitChange();
+    }
+
+    saveUsergroupFailed(error) {
+        this.saveUsergroupIsLoading = false;
+        this.saveUsergroupError = error.message;
+        this.emitChange();
+    }
+
+    saveUsergroupSuccess() {
+        this.saveUsergroupIsLoading = false;
+        this.currentUsergroup = {};
+        this.saveUsergroupError = '';
+        this.emitChange();
+    }
+
+    saveUsergroupStart() {
+        this.saveUsergroupIsLoading = true;
         this.emitChange();
     }
 }
@@ -235,7 +262,10 @@ UserProfileStore.handlers = {
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
     'USER_SIGNOUT': 'handleSignOut',
-    'UPDATE_USERGROUP': 'updateUsergroup'
+    'UPDATE_USERGROUP': 'updateUsergroup',
+    'SAVE_USERGROUP_START': 'saveUsergroupStart',
+    'SAVE_USERGROUP_FAILED': 'saveUsergroupFailed',
+    'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess'
 };
 
 export default UserProfileStore;

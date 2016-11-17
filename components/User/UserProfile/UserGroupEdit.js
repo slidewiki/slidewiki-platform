@@ -4,12 +4,34 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { timeSince } from '../../../common';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
+import saveUsergroup from '../../../actions/user/userprofile/saveUsergroup';
 
 class UserGroupEdit extends React.Component {
     constructor(props){
         super(props);
 
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log('UserGroupEdit componentWillReceiveProps:', nextProps.UserProfileStore.saveUsergroupError, this.props.UserProfileStore.saveUsergroupError);
+        if (nextProps.UserProfileStore.saveUsergroupError !== '' && this.props.UserProfileStore.saveUsergroupError === '') {
+            swal({
+                title: 'Error',
+                text: 'Unknown error while saving.',
+                type: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: true,
+                allowOutsideClick: true,
+                buttonsStyling: false
+            })
+            .then(() => {
+                return true;
+            })
+            .catch();
+            return;
+        }
     }
 
     componentDidMount() {
@@ -34,7 +56,7 @@ class UserGroupEdit extends React.Component {
                     }) === -1) {
                         group.members.push({
                             username: name,
-                            userid: value,
+                            userid: parseInt(value),
                             joined: (new Date()).toISOString()
                         });
                     }
@@ -93,7 +115,7 @@ class UserGroupEdit extends React.Component {
             return;
         }
 
-        
+        this.context.executeAction(saveUsergroup, group);
     }
 
     handleClickRemoveMember(member) {
@@ -184,6 +206,7 @@ class UserGroupEdit extends React.Component {
                                 <i className="save icon"></i>Save group
                             </button>
                         </div>
+                        {(this.props.UserProfileStore.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
                         <div className="ui hidden divider">
                         </div>
