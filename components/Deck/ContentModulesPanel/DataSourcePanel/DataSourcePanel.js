@@ -1,81 +1,63 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
+import UserProfileStore from '../../../../stores/UserProfileStore';
 import DataSourceList from './DataSourceList';
+import EditDataSource from './EditDataSource';
 import ShadowScrollbars from './Scrollbars/ShadowScrollbars';
-import saveDataSource from '../../../../actions/datasource/saveDataSource';
-import cancelEditDataSource from '../../../../actions/datasource/cancelEditDataSource';
+import newDataSource from '../../../../actions/datasource/newDataSource';
+import showMoreDataSources from '../../../../actions/datasource/showMoreDataSources';
 
 class DataSourcePanel extends React.Component {
-    handleCancelClick() {
-        this.context.executeAction(cancelEditDataSource);
+    handleNewDataSource() {
+        this.context.executeAction(newDataSource);
     }
 
-    handleSave() {
-        let dataSource = this.props.DataSourceStore.datasource;
-        //read form data
-        dataSource.title = this.refs.title.value;
-        dataSource.url = this.refs.url.value;
-        dataSource.comment = this.refs.comment.value;
-        this.context.executeAction(saveDataSource, {
-            datasource: dataSource
-        });
+    handleShowMore(e) {
+        e.preventDefault();
+        this.context.executeAction(showMoreDataSources);
     }
+
     render() {
-        const dataSources = this.props.DataSourceStore.datasources;
-        const dataSource = this.props.DataSourceStore.datasource;
+        const dataSources = this.props.DataSourceStore.dataSources;
+        const arrayOfDataSourcesIsLarge = dataSources.length > 10;
+        const showAllDataSources = this.props.DataSourceStore.showAllDataSources;
+        const displayDataSources = (arrayOfDataSourcesIsLarge && !showAllDataSources) ? dataSources.slice(0, 9) : dataSources;
+        const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
+        const userId = this.props.UserProfileStore.userid;
+        const contentOwnerId = this.props.DataSourceStore.contentOwner;
+        const editable = (String(userId) === String(contentOwnerId)) && (selector.stype === 'slide');
 
-        let content = (
-              <div>
-                  <ShadowScrollbars style={{height:300}} >
-                      <DataSourceList items={dataSources} selector={selector}/>
-                  </ShadowScrollbars>
-              </div>
-        );
+        let newDataSourceButton = (editable) ?
+            <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
+                <i className="icon plus"></i> Add source
+            </button>
+            : '';
 
-        if (dataSource !== undefined && dataSource !== null) {//dataSource is selected -> show its data
-            content = (
-                <div>
-                    <div className="ui secondary segment">
-                        Edit Data Source
-                    </div>
-                    <div className="ui orange segment" >
-                        <form className="ui edit form">
-                            <div className="ui label" >
-                                Title
-                            </div>
-                            <div className="ui fluid input">
-                                <input type="text" ref="title" defaultValue={dataSource.title} />
-                            </div>
-                            <div className="ui label" >
-                                URL
-                            </div>
-                            <div className="ui fluid input">
-                                <input type="text" ref="url" defaultValue={dataSource.url}/>
-                            </div>
-                            <div className="ui label" >
-                                Comment
-                            </div>
-                            <div className="ui fluid input">
-                                <input type="text" ref="comment" defaultValue={dataSource.comment}/>
-                            </div>
-                            <div className="ui hidden divider"></div>
-                            <div tabIndex="0" onClick={this.handleCancelClick.bind(this)} className="ui labeled icon button">
-                                <i className="chevron left icon"></i> Cancel
-                            </div>
-                            <div tabIndex="0" className="ui primary submit labeled icon button" onClick={this.handleSave.bind(this)}>
-                                <i className="checkmark icon"></i> Save
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            );
-        }
+        let sourcesHeader = <h3 className="ui dividing header">Sources</h3>;
+
+        let showMoreLink = (!showAllDataSources && arrayOfDataSourcesIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div> : '';
+        let sourcesList = (dataSources.length === 0)
+            ?
+            <div>There are currently no sources for this {this.props.DataSourceStore.selector.stype}.</div>
+            :
+            <div>
+                <DataSourceList items={displayDataSources} editable ={editable} selector={selector}/>
+                {showMoreLink}
+            </div>
+            ;
+
+        let editForm = <EditDataSource dataSource={dataSource}/>;
+
         return (
             <div className="ui bottom attached" ref="dataSourcePanel">
-                {content}
+                {(dataSource === undefined) ?
+                    newDataSourceButton : ''}
+                {(dataSource === undefined) ?
+                    sourcesHeader : ''}
+                {(dataSource === undefined) ?
+                    sourcesList : editForm}
             </div>
         );
     }
@@ -85,9 +67,10 @@ DataSourcePanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore], (context, props) => {
+DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore, UserProfileStore], (context, props) => {
     return {
-        DataSourceStore: context.getStore(DataSourceStore).getState()
+        DataSourceStore: context.getStore(DataSourceStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 

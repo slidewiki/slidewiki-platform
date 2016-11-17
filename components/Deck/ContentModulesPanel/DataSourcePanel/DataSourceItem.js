@@ -1,12 +1,15 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import TreeUtil from '../../../../components/Deck/TreePanel/util/TreeUtil';
 import loadDataSource from '../../../../actions/datasource/loadDataSource';
 
 class DataSourceItem extends React.Component {
     handleEdit() {
         this.context.executeAction(loadDataSource, {
-            dsid: this.props.node.id
+            dsindex: this.props.index
         });
     }
 
@@ -27,7 +30,7 @@ class DataSourceItem extends React.Component {
     }
 
     addComment(comment) {
-        if (comment !== '') {
+        if (comment !== undefined && comment !== '') {
             return '(' + comment + ')';
         } else {
             return '';
@@ -35,7 +38,7 @@ class DataSourceItem extends React.Component {
     }
 
     addAuthors(authors) {
-        if (authors !== '') {
+        if (authors !== undefined && authors !== '') {
             return ',' + authors;
         } else {
             return '';
@@ -43,7 +46,7 @@ class DataSourceItem extends React.Component {
     }
 
     addYear(year) {
-        if (year !== '') {
+        if (year !== undefined && year !== '') {
             return ',' + year;
         } else {
             return '';
@@ -63,15 +66,15 @@ class DataSourceItem extends React.Component {
             return '###' + url + '###';
         });
         const titleSegments = titleURLed.split('###');
-        let y = [];
+        let enrichedTitleSegments = [];
 
         titleSegments.forEach((titleSegment, index) => {
             //create a link if it's a url or display as is
-            y.push(this.isTextURL(titleSegment) ? <a href={this.addProtocolIfMissing(titleSegment)} key={index}>{this.shortenText(titleSegment)}</a> : titleSegment);
+            enrichedTitleSegments.push(this.isTextURL(titleSegment) ? <a href={this.addProtocolIfMissing(titleSegment)} key={index}>{this.shortenText(titleSegment)}</a> : titleSegment);
         });
 
         return (
-            y
+            enrichedTitleSegments
         );
     }
 
@@ -100,18 +103,42 @@ class DataSourceItem extends React.Component {
         });
     }
 
+    //return the position of the node in the deck
+    getPath(node) {
+        const flatTree = this.props.DeckTreeStore.flatTree;
+        let path = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('type') === 'slide' && flatTree.get(i).get('id') === node.sid) {
+                path = flatTree.get(i).get('path');
+                let nodeSelector = {id: this.props.selector.id, stype: 'slide', sid: node.sid, spath: path};
+                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+
+                return nodeURL;
+            }
+        }
+        return path;
+    }
+
+    handleRefClick(e) {
+        e.preventDefault();
+
+        this.context.executeAction(navigateAction, {
+            url: this.getPath(this.props.node)
+        });
+        // return false;
+    }
+
     render() {
         const node = this.props.node;
-
         //append origin of the datasource
         const selector = this.props.selector;
-        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <NavLink href={'/deck/' + selector.sid + '/slide/' + node.sid}> {node.stitle}  </NavLink> )</i> </span> : '';
+        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{node.stitle}</a>)</i> </span> : '';
 
-        const appendEdit = (
+        const appendEdit = (this.props.editable) ? (
             <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
-        );
+        ) : '';
 
         let SummaryNode = '';
         switch (node.type) {
@@ -121,27 +148,7 @@ class DataSourceItem extends React.Component {
                 );
                 break;
             case 'webpage':
-                if (node.url !== '') {
-                    SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
-                    );
-                } else {
-                    SummaryNode = (
-                        <span>{node.title} {this.addComment(node.comment)}</span>
-                    );
-                }
-                break;
             case 'webdocument':
-                if (node.url !== '') {
-                    SummaryNode = (
-                        <span><a href={this.addProtocolIfMissing(node.url)}>{node.title}</a> {this.addComment(node.comment)}</span>
-                    );
-                } else {
-                    SummaryNode = (
-                        <span>{node.title} {this.addComment(node.comment)}</span>
-                    );
-                }
-                break;
             case 'publication':
                 if (node.url !== '') {
                     SummaryNode = (
@@ -184,5 +191,9 @@ class DataSourceItem extends React.Component {
 DataSourceItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+DataSourceItem = connectToStores(DataSourceItem, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 export default DataSourceItem;

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import {publicRecaptchaKey} from '../../configs/general';
 import resetPassword from '../../actions/user/resetPassword';
 import resetPasswordResetStore from '../../actions/user/resetPasswordResetStore';
 import ResetPasswordStore from '../../stores/ResetPasswordStore';
@@ -151,7 +152,6 @@ class ResetPassword extends React.Component {
     render() {
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
-        const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'; // Public reCAPTCHA key
 
         let emailClasses = classNames({
             'ui': true,
@@ -178,7 +178,7 @@ class ResetPassword extends React.Component {
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={PUBLIC_KEY} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
                             <button type="submit" className="ui blue labeled submit icon button" >
