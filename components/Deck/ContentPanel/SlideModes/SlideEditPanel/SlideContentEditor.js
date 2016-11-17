@@ -31,7 +31,19 @@ class SlideContentEditor extends React.Component {
         //this.props.scaleratio = 1;
         this.scaleratio = 1;
         this.addBoxButtonHTML = '';
+        this.contentHasChanged = true;
+        window.onbeforeunload = this.confirmExit;
     }
+
+    confirmExit() {
+
+      return 'If you don\'t save the slide the content won\'t be updated. ' +
+        'Are you sure you want to exit this page?';
+
+    }
+
+    contentHasChanged;
+
     handleSaveButton(){
 
         if (this.props.UserProfileStore.username === '')
@@ -85,6 +97,8 @@ class SlideContentEditor extends React.Component {
             //console.log(speakernotes);
             this.context.executeAction(saveSlide,
               {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, selector: currentSelector});
+            // Now that the slide is saved, the changes are too, so they are unchanged in the new version.
+            this.contentHasChanged = false;
             //console.log('saving slide');
             this.resize();
         }
