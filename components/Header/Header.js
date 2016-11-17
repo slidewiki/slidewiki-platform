@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
-import SearchBox  from './SearchBox';
-import SearchBoxBadge  from '../Search/SearchResultsPanel/SearchBoxBadge';
+import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
 import AddDeckPanel from '../AddDeck/AddDeckPanel.js';
@@ -13,7 +12,7 @@ class Header extends React.Component {
             <div className="ui inverted blue menu" ref="header">
                 <div className="ui container">
                     <a className="item" href='/'>
-                        <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" />
+                        <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
                         &nbsp; SlideWiki
                     </a>
                     <div className="item">

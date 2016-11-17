@@ -36,7 +36,22 @@ export default function deleteTreeNodeWithRevisionCheck(context, payload, done) 
                         done(reason);
                     });
                 } else {
-                    context.executeAction(deleteTreeNode, payload, done);
+                    swal({
+                        title: 'Confirmation',
+                        text: 'Do you want to delete this slide?',
+                        type: 'question',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        confirmButtonClass: 'ui olive button',
+                        cancelButtonText: 'No',
+                        cancelButtonClass: 'ui red button',
+                        buttonsStyling: false
+                    }).then((accepted) => {
+                        context.executeAction(deleteTreeNode, payload, done);
+                    }, (reason) => {
+                        done(reason);
+                    });
                 }
             }
         });

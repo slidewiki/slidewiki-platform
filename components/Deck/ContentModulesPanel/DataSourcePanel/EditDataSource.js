@@ -63,15 +63,15 @@ class EditDataSource extends React.Component {
     }
 
     render() {
-        let header = 'Edit Data Source';
+        let header = 'Edit source';
         let dataSource = this.props.dataSource;
         let deleteButton = (
             <button tabIndex="0" type="button" onClick={this.handleDeleteClick.bind(this)} className="ui red labeled icon button">
-                <i className="icon close"></i> Delete
+                <i className="icon minus circle"></i> Delete
             </button>
         );
         if (dataSource === null) {
-            header = 'Add Data Source';
+            header = 'Add source';
             dataSource = {title: '', url: '', comment: ''};
             deleteButton = '';
         }
@@ -114,9 +114,9 @@ class EditDataSource extends React.Component {
 
                     <div className="ui hidden divider"></div>
                     <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
-                        <i className="icon edit"></i> Submit
+                        <i className="icon check"></i> Submit
                     </button>
-                    <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui blue labeled icon button">
+                    <button tabIndex="0" type="button" onClick={this.handleCancelClick.bind(this)} className="ui secondary labeled icon button">
                         <i className="icon close"></i> Cancel
                     </button>
                     {deleteButton}

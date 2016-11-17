@@ -11,7 +11,7 @@ class SearchParamsStore extends BaseStore {
         this.language = '';
         // this.group = '';
         this.fields = '';
-        this.user = '';
+        this.users = '';
         this.tags = '';
         this.revisions = false;
         this.license = '';
@@ -65,7 +65,7 @@ class SearchParamsStore extends BaseStore {
         this.language = (params.language || '');
         // this.group = params.group;
         this.fields = (params.fields || '');
-        this.user = (params.user || '');
+        this.users = (params.users || '');
         this.tags = (params.tags || '');
         this.revisions = params.revisions;
         this.license = params.license;
@@ -80,7 +80,7 @@ class SearchParamsStore extends BaseStore {
         this.language = '';
         // this.group = '';
         this.fields = '';
-        this.user = '';
+        this.users = '';
         this.tags = '';
         this.revisions = false;
         this.license = '';
@@ -96,7 +96,7 @@ class SearchParamsStore extends BaseStore {
             lang: this.language,
             // group: this.group,
             fields: this.fields,
-            user: this.user,
+            users: this.users,
             tags: this.tags,
             revisions: this.revisions,
             entities: this.entities,
@@ -115,7 +115,7 @@ class SearchParamsStore extends BaseStore {
         this.language = state.language;
         // this.group = state.group;
         this.fields = state.fields;
-        this.user = state.user;
+        this.users = state.users;
         this.tags = state.tags;
         this.revisions = state.revisions;
         this.entities = state.entities;

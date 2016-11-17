@@ -95,7 +95,7 @@ function getDataSourcesFromDeckOrSlide(id, deckOrSlide) {
     if (deckOrSlide.revisions !== undefined && deckOrSlide.revisions.length > 0 && deckOrSlide.revisions[0] !== null) {
         let contentRevision = (contentRevisionId !== undefined) ? deckOrSlide.revisions.find((revision) => String(revision.id) === String(contentRevisionId)) : undefined;
         if (contentRevision !== undefined) {
-            dataSources = (contentRevision.dataSources !== undefined) ? contentRevision.dataSources : [];
+            dataSources = (contentRevision.dataSources !== undefined && contentRevision.dataSources !== null) ? contentRevision.dataSources : [];
             revisionOwner = contentRevision.user;
         }
     }
