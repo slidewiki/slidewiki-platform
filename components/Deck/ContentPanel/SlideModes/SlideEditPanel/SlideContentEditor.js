@@ -119,7 +119,7 @@ class SlideContentEditor extends React.Component {
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
-        
+
         if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
@@ -313,6 +313,8 @@ class SlideContentEditor extends React.Component {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
+
+        window.onbeforeunload = this.confirmExit;
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
