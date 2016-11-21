@@ -12,7 +12,7 @@ import NotFound from '../../components/Error/NotFound';
 import NotImplemented from '../../components/Error/NotImplemented';
 import PayloadTooLarge from '../../components/Error/PayloadTooLarge';
 import RequestHeaderTooLarge from '../../components/Error/RequestHeaderTooLarge';
-import ServiceUnavailable from '../../components/Error/ServiceUnavailable';
+//import ServiceUnavailable from '../../components/Error/ServiceUnavailable';
 import TooManyRequests from '../../components/Error/TooManyRequests';
 import Unauthorized from '../../components/Error/Unauthorized';
 import URITooLong from '../../components/Error/URITooLong';
@@ -94,11 +94,13 @@ class Error extends React.Component {
                     <BadGateway error={this.props.error} />
                 );
                 break;
+            /*
             case 503:
                 return (
                     <ServiceUnavailable error={this.props.error} />
                 );
                 break;
+            */
             case 504:
                 return (
                     <GatewayTimeout error={this.props.error} />
