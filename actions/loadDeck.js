@@ -101,7 +101,9 @@ export default function loadDeck(context, payload, done) {
     // final callback
 
     (err, results) => {
-        if (err){
+        if (err) {
+            //console.log('Payload:', payload, 'Error:', err);
+            //payload.err = err;
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }
