@@ -33,7 +33,6 @@ class SlideContentEditor extends React.Component {
         this.scaleratio = 1;
         this.addBoxButtonHTML = '';
         this.contentHasChanged = true;
-        window.onbeforeunload = this.confirmExit;
     }
 
     confirmExit() {
@@ -54,6 +53,8 @@ class SlideContentEditor extends React.Component {
         }
         else
         {
+
+            // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             swal({
                 title: 'Saving Content...',
                 text: '',
@@ -241,6 +242,7 @@ class SlideContentEditor extends React.Component {
     }
     componentDidUpdate() {
         //alert('update');
+        window.onbeforeunload = this.confirmExit;
         if(process.env.BROWSER){
             this.resize();
         }
@@ -299,6 +301,7 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        window.onbeforeunload = () => {};
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
         CKEDITOR.instances.inlineHeader.destroy();
@@ -314,7 +317,8 @@ class SlideContentEditor extends React.Component {
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
 
-        window.onbeforeunload = this.confirmExit;
+        // When the component is rendered the confirmation is configured.
+
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
