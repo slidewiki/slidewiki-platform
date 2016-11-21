@@ -59,6 +59,15 @@ export default {
             //     }
             // });
 
+            let mockupSubscriptions = [
+              {id:'2', type: 'user', name: 'Nikola T.', selected: true},
+              {id:'1', type: 'user', name: 'Dejan P.', selected: true},
+              {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
+              {id:'8', type: 'slide', name: 'Introduction', selected: true}
+            ];
+
+            mockupSubscriptions.push({id:String(uid), type: 'owner', name: 'My decks and slides', selected: true});
+
             subscriptionsString += '/o' + uid;
 
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
@@ -130,12 +139,7 @@ export default {
 
 };
 
-let mockupSubscriptions = [
-  {id:'2', type: 'user', name: 'Nikola T.', selected: true},
-  {id:'1', type: 'user', name: 'Dejan P.', selected: true},
-  {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
-  {id:'8', type: 'slide', name: 'Introduction', selected: true}
-];
+
 
 //Mockup data
 // let mockupNotifications = [

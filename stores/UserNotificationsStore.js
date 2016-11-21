@@ -99,7 +99,7 @@ class UserNotificationsStore extends BaseStore {
     //     }
     // }
     isVisible(notification) {
-        return (this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id)) && this.isActivityTypeSelected(notification.activity_type);
+        return (this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id) || this.isSubscribed('owner', notification.content_owner_id)) && this.isActivityTypeSelected(notification.activity_type);
     }
     isSubscribed(type, id) {
         let subscription = this.subscriptions.find((s) => {return ((s.type === type) && (s.id === id));});
