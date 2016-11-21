@@ -32,17 +32,8 @@ class SlideContentEditor extends React.Component {
         //this.props.scaleratio = 1;
         this.scaleratio = 1;
         this.addBoxButtonHTML = '';
-        this.contentHasChanged = true;
     }
 
-    confirmExit() {
-
-      return 'If you don\'t save the slide the content won\'t be updated. ' +
-        'Are you sure you want to exit this page?';
-
-    }
-
-    contentHasChanged;
 
     handleSaveButton(){
 
@@ -242,7 +233,7 @@ class SlideContentEditor extends React.Component {
     }
     componentDidUpdate() {
         //alert('update');
-        window.onbeforeunload = this.confirmExit;
+
         if(process.env.BROWSER){
             this.resize();
         }
@@ -301,6 +292,7 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        // Remove the warning window.
         window.onbeforeunload = () => {};
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
@@ -393,12 +385,12 @@ class SlideContentEditor extends React.Component {
                  Save
                 </button>
                 {this.addBoxButtonHTML}
-                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <hr />
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
                         <div className="slides">
-                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                         </div>
                     </div>
                 </div>
@@ -406,11 +398,37 @@ class SlideContentEditor extends React.Component {
                 <hr />
                 <br />
                 <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
 
         );
     }
+
+    // To detect changes in the editable content.
+/*
+    shouldComponentUpdate(nextProps) {
+        console.log(ReactDOM.findDOMNode(this));
+        console.log('shouldComponentUpdate');
+        return false;
+        // return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML;
+    }*/
+
+    emitChange() {
+
+      window.onbeforeunload = () => {
+        return 'If you don\'t save the slide the content won\'t be updated. ' +
+          'Are you sure you want to exit this page?';
+      };
+    }
+/*
+    confirmExit() {
+
+      return 'If you don\'t save the slide the content won\'t be updated. ' +
+        'Are you sure you want to exit this page?';
+
+    }
+*/
+
 }
 
 SlideContentEditor.contextTypes = {
