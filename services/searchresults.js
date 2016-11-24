@@ -1,71 +1,92 @@
 import {Microservices} from '../configs/microservices';
-const request = require('request');
-
-function getUriParams(qstr){
-    let query = {};
-    let a = qstr.split('&');
-    for (let i = 0; i < a.length; i++) {
-        let b = a[i].split('=');
-
-        // handle multiple key values
-        if(query.hasOwnProperty(decodeURIComponent(b[0]))){
-            let arr = [];
-            arr.push(query[decodeURIComponent(b[0])]);
-            arr.push(decodeURIComponent(b[1] || ''));
-            query[decodeURIComponent(b[0])] = arr;
-        }
-        else{
-            query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
-        }
-    }
-    return query;
-}
+import rp from 'request-promise';
 
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        let parameters = getUriParams(args.queryparams);
 
         if(resource === 'searchresults.list'){
+
             // fetch results from search-microservice
-            let searchServiceQuery = Microservices.search.uri + '/get/' + args.queryparams;
+            rp.get({uri: Microservices.search.uri + '/get/' + args.queryparams}).then((results) => {
+                let searchResults = JSON.parse(results);
+                let deckRevisionsPromises = [], deckTitlePromises = [];
+                let userPromises = [], usernames = {};
+                let returnData = [];
 
-            request({
-                uri: searchServiceQuery,
-                method: 'GET'
-            }, (err, response, body) => {
+                searchResults.docs.forEach( (res) => {
+                    // console.log(res);
+                    let firstRevision = res.revisions.docs[0];
+                    if(res.kind === 'deck'){
+                        // console.log(firstRevision);
+                        returnData.push({
+                            id: res._id + '-' + firstRevision.id,
+                            kind: 'deck',
+                            description: res.description,
+                            lastModified: firstRevision.timestamp,
+                            user: firstRevision.user
+                        });
+                    }
+                    else if(res.kind === 'slide'){
 
-                let numFound = 0;
-                let docs = {};
-                let solrResponse = {};
-                let error = false;
+                    }
+                    // console.log(revisionToShow);
+                    // resultsToShow.push(revisionToShow);
+                    userPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + firstRevision.user}).then((userRes) => {
+                        let user = JSON.parse(userRes);
+                        usernames[user._id] = user.username;
+                    }));
+                });
 
-                if(err || response.statusCode !== 200){
-                    error = true;
-                }
-                else{
-                    solrResponse = JSON.parse(body);
-                    // console.log(solrResponse);
-                    numFound = solrResponse.numFound;
-                    docs = solrResponse.docs;
-                }
+                Promise.all(userPromises).then(() => {
+                    console.log(usernames);
+                    returnData.forEach( (returnItem) => {
+                        returnItem.user = usernames[returnItem.user];
+                    });
+                    console.log(returnData);
+                }).catch( (err) => {
+                    console.log(err);
+                });
+
 
                 callback(null, {
-                    numFound: numFound,
-                    docs: docs,
-                    queryparams: (args.queryparams || ''),
-                    searchstring: (parameters.q || ''),
-                    entity: (parameters.entity || ''),
-                    lang: parameters.lang,
-                    group: parameters.group,
-                    fields: parameters.fields,
-                    users: parameters.users,
-                    tags: parameters.tags,
-                    error: error
+                    numFound: searchResults.numFound,
+                    docs: searchResults.docs
                 });
+
+            }).catch((error) => {
+                // console.log(error);
+                callback(error);
             });
+
+            // request({
+            //     uri: searchServiceQuery,
+            //     method: 'GET'
+            // }, (err, response, body) => {
+            //
+            //     let numFound = 0;
+            //     let docs = {};
+            //     let solrResponse = {};
+            //     let error = false;
+            //
+            //     if(err || response.statusCode !== 200){
+            //         error = true;
+            //     }
+            //     else{
+            //         solrResponse = JSON.parse(body);
+            //         // console.log(solrResponse);
+            //         numFound = solrResponse.numFound;
+            //         docs = solrResponse.docs;
+            //     }
+            //
+            //     callback(null, {
+            //         numFound: numFound,
+            //         docs: docs,
+            //         error: error
+            //     });
+            // });
         }
     }
 };
