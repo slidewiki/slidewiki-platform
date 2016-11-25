@@ -13,17 +13,25 @@ export default {
             rp.get({uri: Microservices.search.uri + '/get/' + args.queryparams}).then((results) => {
                 let searchResults = JSON.parse(results);
                 let deckRevisionsPromises = [], deckTitlePromises = [];
-                let userPromises = [], usernames = {};
+                let userPromises = [], usernames = {}, userIdHash = {};
                 let returnData = [];
 
                 searchResults.docs.forEach( (res) => {
                     // console.log(res);
                     let firstRevision = res.revisions.docs[0];
+
+                    // tag user found
+                    if(firstRevision.user !== null){
+                        userIdHash[parseInt(firstRevision.user)] = true;
+                    }
+
+                    //
                     if(res.kind === 'deck'){
                         // console.log(firstRevision);
                         returnData.push({
                             id: res._id + '-' + firstRevision.id,
                             kind: 'deck',
+                            title: firstRevision.title,
                             description: res.description,
                             lastModified: firstRevision.timestamp,
                             user: firstRevision.user
@@ -34,20 +42,32 @@ export default {
                     }
                     // console.log(revisionToShow);
                     // resultsToShow.push(revisionToShow);
-                    userPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + firstRevision.user}).then((userRes) => {
-                        let user = JSON.parse(userRes);
-                        usernames[user._id] = user.username;
-                    }));
+
+
+
                 });
 
-                Promise.all(userPromises).then(() => {
-                    console.log(usernames);
+                // get usernames from user ids found
+                for(let userId in userIdHash){
+                    console.log(userId);
+                    userPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + userId}).then((userRes) => {
+                        let user = JSON.parse(userRes);
+                        console.log(user._id + '->' + user.username);
+                        usernames[userId] = user.username;
+                    }).catch( (err) => {
+                        usernames[userId] = 'Unknown user';
+                    }));
+                }
+
+                Promise.all(userPromises).then().catch( (err) => {
+                    // console.log(err);
+                }).then( () => {
+
                     returnData.forEach( (returnItem) => {
                         returnItem.user = usernames[returnItem.user];
                     });
                     console.log(returnData);
-                }).catch( (err) => {
-                    console.log(err);
+                    // console.log(usernames);
                 });
 
 
