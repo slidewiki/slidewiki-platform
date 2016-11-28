@@ -1,6 +1,5 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -13,6 +12,7 @@ import saveTreeNodeWithRevisionCheck from '../../../actions/decktree/saveTreeNod
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
+import moveTreeNode from '../../../actions/decktree/moveTreeNode';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -87,6 +87,10 @@ class TreePanel extends React.Component {
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
 
+    handleMoveNode(sourceNode, targetNode, targetIndex) {
+        this.context.executeAction(moveTreeNode, {sourceNode, targetNode, targetIndex});
+    }
+
     render() {
         const rootNodeStyles = {
             fontSize: '1.06em'
@@ -131,12 +135,13 @@ class TreePanel extends React.Component {
                     }}> {decktreeError} </div> : ''}
 
                     <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
-                          prevSelector={prevSelector} items={deckTree.get('children')} page={this.props.page}
+                          prevSelector={prevSelector} page={this.props.page}
                           mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
                           onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
                           onRename={this.handleRenameNode.bind(this)}
                           onUndoRename={this.handleUndoRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)}
-                          onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)} username={this.props.UserProfileStore.username} />
+                          onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)} onMoveNode={this.handleMoveNode.bind(this)}
+                          username={this.props.UserProfileStore.username} />
                 </div>
             </div>
         </div>

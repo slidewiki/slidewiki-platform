@@ -1,72 +1,100 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
 import TreeUtil from './util/TreeUtil';
+import {DragSource, DropTarget} from 'react-dnd';
+import TreeNodeList from './TreeNodeList';
+
+const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
+
+const treeNodeSource = {
+    beginDrag(props) {
+        return {
+            item: props.item,
+            parentNode: props.parentNode,
+            nodeIndex: props.nodeIndex,
+            allDescendants: findAllDescendants(props.item)
+        };
+    }
+};
 
 class TreeNode extends React.Component {
     constructor(props) {
         super(props);
         this.state = {mouseover: 0};
     }
+
     //do not re-render in case of same props wihtout selector and if mode has not changed
     shouldComponentUpdate(nextProps, nextState) {
-        return ! (Immutable.is(nextProps.item, this.props.item) &&  nextProps === this.props.mode);
+        return !(Immutable.is(nextProps.item, this.props.item) && nextProps === this.props.mode);
     }
-    componentDidMount(){
+
+    componentDidMount() {
 
     }
-    componentDidUpdate(){
+
+    componentDidUpdate() {
 
     }
-    handleExpandIconClick(selector, e){
+
+    handleExpandIconClick(selector, e) {
         this.props.onToggleNode(selector);
         e.stopPropagation();
     }
-    handleAddClick(selector, nodeSpec, e){
+
+    handleAddClick(selector, nodeSpec, e) {
         this.props.onAddNode(selector, nodeSpec);
         e.stopPropagation();
     }
-    handleMouseOver(e){
+
+    handleMouseOver(e) {
         this.setState({mouseover: 1});
         e.stopPropagation();
     }
-    handleMouseOut(e){
+
+    handleMouseOut(e) {
         this.setState({mouseover: 0});
         e.stopPropagation();
     }
-    handleDeleteClick(selector, e){
+
+    handleDeleteClick(selector, e) {
         this.props.onDeleteNode(selector);
         e.stopPropagation();
     }
-    handleRenameClick(selector, e){
+
+    handleRenameClick(selector, e) {
         //only if user is logged in
-        if(this.props.username !==''){
+        if (this.props.username !== '') {
             this.props.onRename(selector);
             e.stopPropagation();
         }
     }
-    handleUndoRenameClick(selector, e){
+
+    handleUndoRenameClick(selector, e) {
         this.props.onDoRename(selector);
         e.stopPropagation();
     }
-    handleMenuClick(selector, e){
+
+    handleMenuClick(selector, e) {
         this.props.onSwitchOnAction(selector);
         e.stopPropagation();
     }
-    handleEditFocus(e){
+
+    handleEditFocus(e) {
         //select all content
         e.target.select();
     }
-    handleNameChange(e){
+
+    handleNameChange(e) {
         //console.log(e.target.value);
     }
+
     handleKeyDown(selector, e) {
         switch (e.keyCode) {
             //case 9: // Tab
             case 13: // Enter
-                if(e.target.value.trim()){
+                if (e.target.value.trim()) {
                     this.props.onSave(selector, this.props.item.get('title'), e.target.value.trim());
                 }
                 break;
@@ -75,33 +103,36 @@ class TreeNode extends React.Component {
                 break;
         }
     }
+
     render() {
         let self = this;
+        const {isDragging, connectDragSource} = this.props;
         //adapt URLs based on the current page
-        let nodeSelector = {id: this.props.rootNode.id, stype: this.props.item.get('type'), sid: this.props.item.get('id'), spath: this.props.item.get('path')};
+        let nodeSelector = {
+            id: this.props.rootNode.id,
+            stype: this.props.item.get('type'),
+            sid: this.props.item.get('id'),
+            spath: this.props.item.get('path')
+        };
         let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, this.props.mode);
-        let childNodes = '';
-        let  childNodesDIV = '';
-        let childNodesClass = '';
-        let actionSigClass = '';
-        let actionBtnsClass = '';
-        if(this.props.item.get('type') === 'deck'){
-            childNodes = this.props.item.get('children').map((node, index) => {
-                return (
-                    <TreeNode onToggleNode={self.props.onToggleNode} onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename} onUndoRename={self.props.onUndoRename} onSave={self.props.onSave} onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode} item={node} rootNode={self.props.rootNode} key={index} page={self.props.page} mode={self.props.mode} username={self.props.username} />
-                );
-            });
-            //show/hide sub nodes based on the expanded state
-            childNodesClass = classNames({
-                'list': true,
-                'hide-element': !self.props.item.get('expanded')
-            });
-            childNodesDIV = <div className={childNodesClass}> {childNodes} </div>;
+        let childNodesDIV = '';
+        let actionSigClass;
+        let actionBtnsClass;
+        if (this.props.item.get('type') === 'deck') {
+            childNodesDIV = <TreeNodeList parentNode={self.props.item} onToggleNode={self.props.onToggleNode}
+                                          onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
+                                          onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
+                                          onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
+                                          onMoveNode={self.props.onMoveNode} mode={self.props.mode}
+                                          page={self.props.page} rootNode={self.props.rootNode}
+                                          username={self.props.username}/>;
         }
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
         });
-        let actionSignifier = <span className={actionSigClass} onClick={this.handleMenuClick.bind(this, nodeSelector)}><i className="ui link ellipsis horizontal icon right floated"></i></span>;
+        let actionSignifier = <span className={actionSigClass}
+                                    onClick={this.handleMenuClick.bind(this, nodeSelector)}><i
+            className="ui link ellipsis horizontal icon right floated"></i></span>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
@@ -113,44 +144,55 @@ class TreeNode extends React.Component {
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})} title="add slide">
+                    <button className="ui button"
+                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})}
+                            title="add slide">
                         <i className="icons">
-                          <i className="file text icon"></i>
-                          <i className="inverted corner plus icon"></i>
+                            <i className="file text icon"></i>
+                            <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})} title="add deck">
+                    <button className="ui button"
+                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})}
+                            title="add deck">
                         <i className="medium icons">
-                          <i className="yellow folder icon"></i>
-                          <i className="inverted corner plus icon"></i>
+                            <i className="yellow folder icon"></i>
+                            <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className={duplicateItemClass} title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
+                    <button className={duplicateItemClass} title="Duplicate"
+                            onClick={this.handleAddClick.bind(this, nodeSelector, {
+                                type: this.props.item.get('type'),
+                                id: this.props.item.get('id')
+                            })}>
                         <i className="copy icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
+                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)}
+                            title="delete">
                         <i className="red trash circle icon"></i>
                     </button>
                     {/*
-                    <button className="ui disabled button" title="Settings">
-                        <i className="black setting icon"></i>
-                    </button>
-                    */}
+                     <button className="ui disabled button" title="Settings">
+                     <i className="black setting icon"></i>
+                     </button>
+                     */}
                 </div>
             </div>
         );
         //change the node title style if it is selected
         let nodeTitle = this.props.item.get('title');
         let nodeTitleDIV = nodeTitle;
-        if(this.props.item.get('selected')){
+        if (this.props.item.get('selected')) {
             nodeTitleDIV = <strong> {nodeTitle} </strong>;
         }
         let nodeDIV = '';
-        if(this.props.item.get('editable')){
-            nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle} onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
+        if (this.props.item.get('editable')) {
+            nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
+                             onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
             actionSignifier = '';
-        }else{
-            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink>;
+        } else {
+            nodeDIV = <NavLink href={nodeURL}
+                               onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
         let iconClass = classNames({
@@ -161,10 +203,12 @@ class TreeNode extends React.Component {
         });
         //hide focused outline
         let compStyle = {
-            outline: 'none'
+            outline: 'none',
+            opacity: isDragging ? '0.4' : '1'
         };
-        return (
-            <div className="item" ref={this.props.item.get('path')} style={compStyle}>
+
+        return connectDragSource(
+            <div className="item" style={compStyle}>
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                     {nodeDIV}
@@ -177,4 +221,9 @@ class TreeNode extends React.Component {
     }
 }
 
-export default TreeNode;
+let TreeNodeWrapped = DragSource('tree-node', treeNodeSource, (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+}))(TreeNode);
+
+export default TreeNodeWrapped;

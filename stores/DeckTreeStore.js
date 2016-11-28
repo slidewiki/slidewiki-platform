@@ -482,6 +482,9 @@ class DeckTreeStore extends BaseStore {
         this.error = err;
         this.emitChange();
     }
+    moveTreeNode(payload){
+
+    }
 }
 
 DeckTreeStore.storeName = 'DeckTreeStore';
@@ -496,6 +499,7 @@ DeckTreeStore.handlers = {
     'UPDATE_TREE_NODE_SUCCESS': 'updateTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
+    'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
     //error handling msges
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
 };
