@@ -48,13 +48,13 @@ class UsersInput extends React.Component {
             'search': true,
             'selection': true,
             'dropdown': true
+            
         });
         return (
             <div className={classes} id='users_input_div'>
               <input type="hidden" name="users_input" ref='users_input' id='users_input'></input>
-
               <div className="menu" ref="dropdown_menu"></div>
-              <div className="default text">{this.props.placeholder}</div>
+              <div className="default text" id='users_input_field'>{this.props.placeholder}</div>
           </div>
         );
     }
