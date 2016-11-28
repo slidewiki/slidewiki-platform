@@ -51,9 +51,10 @@ class UserGroupEdit extends React.Component {
                     if (group.members === undefined || group.members === null)
                         group.members = [];
 
+                    // console.log('trying to add', name, 'to', group.members);
                     if (group.members.findIndex((member) => {
-                        return member.username === name && member.userid === value;
-                    }) === -1) {
+                        return member.username === name && member.userid === parseInt(value);
+                    }) === -1 && name !== this.props.UserProfileStore.username) {
                         group.members.push({
                             username: name,
                             userid: parseInt(value),
