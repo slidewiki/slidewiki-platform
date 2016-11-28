@@ -36,6 +36,7 @@ class UserProfileStore extends BaseStore {
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
         this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -77,6 +78,7 @@ class UserProfileStore extends BaseStore {
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
         this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
 
         //LoginModal
         this.showLoginModal = false;
@@ -100,7 +102,8 @@ class UserProfileStore extends BaseStore {
             currentUsergroup: this.currentUsergroup,
             saveUsergroupError: this.saveUsergroupError,
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
-            deleteUsergroupError: this.deleteUsergroupError
+            deleteUsergroupError: this.deleteUsergroupError,
+            usergroupsViewStatus: this.usergroupsViewStatus
         };
     }
 
@@ -126,6 +129,7 @@ class UserProfileStore extends BaseStore {
         this.saveUsergroupError = state.saveUsergroupError;
         this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
+        this.usergroupsViewStatus = state.usergroupsViewStatus;
     }
 
     changeTo(payload) {
@@ -255,6 +259,7 @@ class UserProfileStore extends BaseStore {
             action: 'delete',
             message: error.message
         };
+        this.usergroupsViewStatus = '';
         this.emitChange();
     }
 
@@ -268,6 +273,12 @@ class UserProfileStore extends BaseStore {
         }, []);
         this.user.groups = groups;
         this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
+        this.emitChange();
+    }
+
+    updateUsergroupsStatus() {
+        this.usergroupsViewStatus = 'pending';
         this.emitChange();
     }
 }
@@ -293,7 +304,8 @@ UserProfileStore.handlers = {
     'SAVE_USERGROUP_FAILED': 'saveUsergroupFailed',
     'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess',
     'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
-    'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess'
+    'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
+    'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus'
 };
 
 export default UserProfileStore;

@@ -17,7 +17,7 @@ class UserGroups extends React.Component {
                 message = 'Error while leaving the group: ';
             swal({
                 title: 'Error',
-                text: message + error.message,
+                text: message + nextProps.error.message,
                 type: 'error',
                 confirmButtonText: 'Close',
                 confirmButtonClass: 'negative ui button',
@@ -135,6 +135,9 @@ class UserGroups extends React.Component {
                       <p>Create new group</p>
                   </div>
               </div>
+
+              {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+
               <div className="ui vertical segment">
                   {items}
               </div>
