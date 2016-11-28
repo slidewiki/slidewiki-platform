@@ -151,7 +151,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroups() {
-        return (<UserGroups groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
     }
 
     displayGroupedit() {

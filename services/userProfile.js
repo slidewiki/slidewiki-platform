@@ -70,6 +70,16 @@ export default {
             })
             .then((body) => callback(null, body))
             .catch((err) => callback(err));
+        } else if (resource === 'userProfile.deleteUsergroup') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.user.uri + '/usergroup/' + params.groupid,
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
         } else {
             callback('failure');
         }

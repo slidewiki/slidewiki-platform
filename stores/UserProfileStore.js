@@ -35,6 +35,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
+        this.deleteUsergroupError = '';
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -75,6 +76,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
+        this.deleteUsergroupError = '';
 
         //LoginModal
         this.showLoginModal = false;
@@ -97,7 +99,8 @@ class UserProfileStore extends BaseStore {
             lastUser: this.lastUser,
             currentUsergroup: this.currentUsergroup,
             saveUsergroupError: this.saveUsergroupError,
-            saveUsergroupIsLoading: this.saveUsergroupIsLoading
+            saveUsergroupIsLoading: this.saveUsergroupIsLoading,
+            deleteUsergroupError: this.deleteUsergroupError
         };
     }
 
@@ -122,6 +125,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = state.currentUsergroup;
         this.saveUsergroupError = state.saveUsergroupError;
         this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
+        this.deleteUsergroupError = state.deleteUsergroupError;
     }
 
     changeTo(payload) {
@@ -224,6 +228,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = group;
         console.log('UserProfileStore: updateUsergroup', group);
         this.saveUsergroupError = '';
+        this.deleteUsergroupError = '';
         this.emitChange();
     }
 
@@ -242,6 +247,27 @@ class UserProfileStore extends BaseStore {
 
     saveUsergroupStart() {
         this.saveUsergroupIsLoading = true;
+        this.emitChange();
+    }
+
+    deleteUsergroupFailed(error) {
+        this.deleteUsergroupError = {
+            action: 'delete',
+            message: error.message
+        };
+        this.emitChange();
+    }
+
+    deleteUsergroupSuccess(groupid) {
+        console.log('UserProfileStore deleteUsergroupSuccess: delete % from %', groupid, this.user.groups);
+        //remove group from user
+        let groups = this.user.groups.reduce((prev, curr) => {
+            if (curr._id.toString() !== groupid.toString())
+                prev.push(curr);
+            return prev;
+        }, []);
+        this.user.groups = groups;
+        this.deleteUsergroupError = '';
         this.emitChange();
     }
 }
@@ -265,7 +291,9 @@ UserProfileStore.handlers = {
     'UPDATE_USERGROUP': 'updateUsergroup',
     'SAVE_USERGROUP_START': 'saveUsergroupStart',
     'SAVE_USERGROUP_FAILED': 'saveUsergroupFailed',
-    'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess'
+    'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess',
+    'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
+    'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess'
 };
 
 export default UserProfileStore;
