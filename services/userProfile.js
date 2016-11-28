@@ -80,6 +80,16 @@ export default {
             })
             .then((body) => callback(null, body))
             .catch((err) => callback(err));
+        } else if (resource === 'userProfile.leaveUsergroup') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/usergroup/' + params.groupid + '/leave',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
         } else {
             callback('failure');
         }

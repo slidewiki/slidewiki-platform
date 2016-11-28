@@ -2,6 +2,7 @@ import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import deleteUsergroup from '../../../actions/user/userprofile/deleteUsergroup';
+import leaveUsergroup from '../../../actions/user/userprofile/leaveUsergroup';
 
 class UserGroups extends React.Component {
     constructor(props){
@@ -69,7 +70,10 @@ class UserGroups extends React.Component {
         e.preventDefault();
         console.log('handleClickOnLeaveGroup:', e.target.attributes.name.nodeValue);
 
+        const action = e.target.attributes.name.nodeValue;  //eg. changeGroup_2
+        const groupid = action.split('_')[1];
 
+        this.context.executeAction(leaveUsergroup, {groupid: groupid});
     }
 
     handleCLickNewGroup(e) {

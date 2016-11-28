@@ -305,7 +305,9 @@ UserProfileStore.handlers = {
     'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess',
     'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
-    'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus'
+    'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
+    'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
+    'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
 };
 
 export default UserProfileStore;
