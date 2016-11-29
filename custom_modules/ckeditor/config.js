@@ -149,11 +149,14 @@ CKEDITOR.editorConfig = function( config ) {
     config.format_tags = 'p;h1;h2;h3;pre';
 
     //#####Image upload via CKeditor - TODO//
-
+    //config.uploadUrl;
+    //config.uploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
+    //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
-    config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'codesnippet,uploadimage,uploadwidget,texzilla,youtube';
-    config.codeSnippet_theme = 'pojoaque';
+    //config.codeSnippet_theme = 'pojoaque';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,texzilla,youtube';
+    //config.codeSnippet_theme = 'pojoaque';
+    //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
     //config.extraPlugins = 'uploadwidget';
     //config.extraPlugins = 'codesnippet,texzilla,youtube';

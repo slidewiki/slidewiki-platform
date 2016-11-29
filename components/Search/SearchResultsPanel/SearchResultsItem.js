@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
+import SubList from './SearchResultsSubList';
 
 class SearchResultsItem extends React.Component {
 
@@ -7,80 +8,73 @@ class SearchResultsItem extends React.Component {
 
     render() {
         const result = this.props.data;
-        const imgpath = '/assets/images/search/';
 
-        // console.log('RESULT: '+JSON.stringify(result));
-
-        let IconNode = '';
-        let ResultNode = '';
-
-        const contentStyles = {
-            fontStyle: 'italic',
-            fontWeight: 400
-        };
-        const infoStyles = {
-            fontWeight: 600
-        };
-
-        let item = result.revisions.docs[result.revisions.docs.length-1];
-        IconNode = (<img src={imgpath + result.kind + '.png'}   height={25} width={25}></img> );
+        let iconNode = '';
+        let item = result.revisions.docs[0];
         let resultLink = '';
-        let resultContent = '';
+        let description = '';
 
+        // form icon, link, description according to result kind
         switch (result.kind) {
             case 'slide':
-                resultLink = '/deck/' + item.parent_deck + '/slide/' + item.parent_id + '-' + item.id;
-                resultContent = (item.content) ? item.content.substring(0, 100) + '...' : '';
+                if(item.parent_deck && item.parent_deck !== 'undefined'){
+                    resultLink = '/deck/' + item.parent_deck + '/slide/' + item.parent_id + '-' + item.id;
+                }
+                else{
+                    resultLink = '/slideview/' + item.parent_id + '-' + item.id;
+                }
+
+                description = (item.content) ? item.content.substring(0, 100) + '...' : '';
+                iconNode = <i className="big square outline middle aligned icon"></i>;
                 break;
             case 'deck':
                 resultLink = '/deck/' + item.parent_id + '-' + item.id;
-                resultContent = (result.description) ? result.description.substring(0 ,100) + '...' : '';
+                description = (result.description) ? result.description.substring(0 ,100) + '...' : '';
+                iconNode = <i className="big block layout middle aligned icon"></i>;
                 break;
         }
-        ResultNode = (
-            <div className="info">
-                <span style={infoStyles}>{result.kind} <a href={resultLink}>{item.title}</a></span>
-                <br/>
-                <span style={contentStyles}>{resultContent}</span>
+
+        // form accordion title node
+        let titleNode = (
+            <div className="ui grid">
+                <div className="sixteen wide left aligned column">
+                    <div className="row"><b>{result.kind} <a href={resultLink} >{item.title}</a></b></div>
+                    <div className="row">{description}</div>
+                </div>
             </div>
         );
-        // switch (result.kind) {
-        //     case 'slide':
-        //
-        //         ResultNode = (
-        //             <div className="info">
-        //                 <span style={infoStyles}>Slide <a href={'/slideview/' + result.id}>{result.revisions.docs[result.revisions.docs.length-1].title}</a></span>
-        //                 <br/>
-        //                 // <span style={contentStyles}>{result.content[0].substring(0,100)+'...'}</span>
-        //             </div>
-        //         );
-        //
-        //         break;
-        //
-        //     case 'deck':
-        //         IconNode = (<img src={imgpath + 'deck.png'}   height={25} width={25}></img> );
-        //         ResultNode = (
-        //             <div className="info">
-        //                 <span style={infoStyles}>Deck <a href={'/deck/' + result._id}>{result.revisions.docs[result.revisions.docs.length-1].title}</a></span>
-        //                 <br/>
-        //             </div>
-        //         );
-        //         break;
-        // }
+        contentNode = <SubList data={result.revisions.docs}/>;
 
+        let revisionsLength = result.revisions.docs.length - 1;
+
+        // form list of rest revisions
+        let contentNode = (revisionsLength > 0) ? <SubList data={result.revisions.docs}/> : '';
+
+        // form expand button
+        let expandButton = (revisionsLength > 0) ? <button className="ui button">{revisionsLength} more</button> : '';
 
         return (
-          <div className="ui feed">
-              <div className="event">
-                  <div className="result-icon" style={{marginLeft: '1em'}}>
-                      {IconNode}
-                  </div>
-                  <div className="content" style={{marginLeft: '1em'}}>
-                      {ResultNode}
-                  </div>
-              </div>
-          </div>
+            <div className="accordionItem">
+                <div className="title">
+                    <div className="ui middle aligned centered grid">
+                        <div className="row">
+                            <div className="one wide column">
+                                {iconNode}
+                            </div>
+                            <div className="eleven wide column">
+                                {titleNode}
+                            </div>
+                            <div className="four wide column">
+                                {expandButton}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div className="content">
+                    {contentNode}
+                </div>
+            </div>
         );
     }
 }

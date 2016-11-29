@@ -61,7 +61,7 @@ export default {
                     lang: parameters.lang,
                     group: parameters.group,
                     fields: parameters.fields,
-                    user: parameters.user,
+                    users: parameters.users,
                     tags: parameters.tags,
                     error: error
                 });
