@@ -33,6 +33,8 @@ class SlideContentEditor extends React.Component {
         this.scaleratio = 1;
         this.addBoxButtonHTML = '';
     }
+
+
     handleSaveButton(){
 
         if (this.props.UserProfileStore.username === '')
@@ -42,6 +44,8 @@ class SlideContentEditor extends React.Component {
         }
         else
         {
+
+            // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             swal({
                 title: 'Saving Content...',
                 text: '',
@@ -102,6 +106,7 @@ class SlideContentEditor extends React.Component {
     }
     componentDidMount() {
         //alert('remount');
+        const userId = this.props.UserProfileStore.userid;
 
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
@@ -124,7 +129,8 @@ class SlideContentEditor extends React.Component {
             ],
             floatSpacePreferRight: true,
             uiColor: '#4183C4',
-            removeButtons: 'Undo, Clipboard, Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
+            removeButtons: 'Youtube,texzilla,Sourcedialog,CodeSnippet,Undo,Clipboard,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
 
         CKEDITOR.disableAutoInline = true;
@@ -148,7 +154,8 @@ class SlideContentEditor extends React.Component {
             ],
             floatSpacePreferRight: true,
             uiColor: '#4183C4',
-            removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About'
+            removeButtons: 'Youtube,texzilla,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
         if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
             //alert('test');
@@ -159,7 +166,10 @@ class SlideContentEditor extends React.Component {
             //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri +  + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+            //alert('test: ' + Microservices.import.uri + '/importImage/' + userId);
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
 
         }
         this.currentcontent = this.props.content;
@@ -223,6 +233,7 @@ class SlideContentEditor extends React.Component {
     }
     componentDidUpdate() {
         //alert('update');
+
         if(process.env.BROWSER){
             this.resize();
         }
@@ -281,6 +292,8 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        // Remove the warning window.
+        window.onbeforeunload = () => {};
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
         CKEDITOR.instances.inlineHeader.destroy();
@@ -295,6 +308,9 @@ class SlideContentEditor extends React.Component {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
+
+        // When the component is rendered the confirmation is configured.
+
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
@@ -369,12 +385,12 @@ class SlideContentEditor extends React.Component {
                  Save
                 </button>
                 {this.addBoxButtonHTML}
-                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <hr />
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
                         <div className="slides">
-                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                         </div>
                     </div>
                 </div>
@@ -382,11 +398,37 @@ class SlideContentEditor extends React.Component {
                 <hr />
                 <br />
                 <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
 
         );
     }
+
+    // To detect changes in the editable content.
+/*
+    shouldComponentUpdate(nextProps) {
+        console.log(ReactDOM.findDOMNode(this));
+        console.log('shouldComponentUpdate');
+        return false;
+        // return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML;
+    }*/
+
+    emitChange() {
+
+      window.onbeforeunload = () => {
+        return 'If you don\'t save the slide the content won\'t be updated. ' +
+          'Are you sure you want to exit this page?';
+      };
+    }
+/*
+    confirmExit() {
+
+      return 'If you don\'t save the slide the content won\'t be updated. ' +
+        'Are you sure you want to exit this page?';
+
+    }
+*/
+
 }
 
 SlideContentEditor.contextTypes = {
