@@ -212,6 +212,13 @@ class Integrations extends React.Component {
             });
         // console.log('Integrations render()', this.props.UserProfileStore.user.providers);
 
+        let facebook_icon_classes = classNames({
+            'big': true,
+            'facebook': true,
+            'square': true,
+            'disabled': !facebook,
+            'icon': true,
+        });
         let facebook_enable_classes = classNames({
             'ui': true,
             'positive': !facebook,
@@ -224,6 +231,13 @@ class Integrations extends React.Component {
             'disabled': !facebook,
             'button': true,
         });
+        let google_icon_classes = classNames({
+            'big': true,
+            'google': true,
+            'plus': true,
+            'disabled': !google,
+            'icon': true,
+        });
         let google_enable_classes = classNames({
             'ui': true,
             'positive': !google,
@@ -235,6 +249,12 @@ class Integrations extends React.Component {
             'negative': google,
             'disabled': !google,
             'button': true,
+        });
+        let github_icon_classes = classNames({
+            'big': true,
+            'github': true,
+            'disabled': !github,
+            'icon': true,
         });
         let github_enable_classes = classNames({
             'ui': true,
@@ -273,7 +293,7 @@ class Integrations extends React.Component {
                   </div>
                   <div className="ui segment">
                       <div>
-                        <i className="big facebook square link icon" ></i>
+                        <i className={facebook_icon_classes} ></i>
                         &nbsp;&nbsp;&nbsp;
                         <div className="ui buttons">
                           <button className={facebook_enable_classes} name="facebook" onClick={this.handleEnable.bind(this)} >Enable</button>
@@ -283,7 +303,7 @@ class Integrations extends React.Component {
                       </div>
                       <br/>
                       <div>
-                        <i className="big google plus link icon" ></i>
+                        <i className={google_icon_classes} ></i>
                         &nbsp;&nbsp;&nbsp;
                         <div className="ui buttons">
                           <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} >Enable</button>
@@ -293,7 +313,7 @@ class Integrations extends React.Component {
                       </div>
                       <br/>
                       <div>
-                        <i className="big github link icon" ></i>
+                        <i className={github_icon_classes} ></i>
                         &nbsp;&nbsp;&nbsp;
                         <div className="ui buttons">
                           <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} >Enable</button>
