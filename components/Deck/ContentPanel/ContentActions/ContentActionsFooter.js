@@ -84,25 +84,26 @@ class ContentActionsFooter extends React.Component {
                         <div className="ui icon buttons large right floated">
 
                             <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
-                                <button className="ui button">
+                                <button className="ui button" type="button" aria-label="Presentation Mode" data-tooltip="Presentation Mode">
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
 
                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
-                            <button className="ui button">
+                            <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
                             <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
-                                <button className="ui button">
+                                <button className="ui button" type="button" aria-label="Download" data-tooltip="Download" >
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            <button className="ui disabled button">
+                            <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
                             </button>
-                            {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>}
+                            {/* {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>} */}
+                            {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)}  aria-label="Reset Layout" data-tooltip="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} aria-label="Expand Content" data-tooltip="Expand Content"><i className="large icon expand"></i></button>}
                         </div>
                     </div>
                 </div>
