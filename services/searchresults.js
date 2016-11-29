@@ -33,9 +33,9 @@ export default {
                             id: res._id,
                             revisionId: firstRevision.id,
                             link: '/deck/' + res._id + '-' + firstRevision.id,
-                            kind: 'deck',
+                            kind: 'Deck',
                             title: firstRevision.title,
-                            description: res.description,
+                            description: (res.description && res.description.length > 100) ? res.description.substring(0,100)+'...' : res.description,
                             lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
                             user: firstRevision.user
                         });
@@ -48,9 +48,9 @@ export default {
                             id: res._id,
                             revisionId: firstRevision.id,
                             link: '/deck/' + firstRevision.usage[0] + '/slide/' + res._id + '-' + firstRevision.id,
-                            kind: 'slide',
+                            kind: 'Slide',
                             title: firstRevision.title,
-                            description: firstRevision.content,
+                            description: (firstRevision.content && firstRevision.content.length > 100) ? firstRevision.content.substring(0,100)+'...' : firstRevision.content,
                             lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
                             user: firstRevision.user,
                             usage: firstRevision.usage
@@ -98,16 +98,16 @@ export default {
                     // console.log(deckRevisions);
                     returnData.forEach( (returnItem) => {
                         returnItem.user = usernames[returnItem.user];
-                        if(returnItem.kind === 'deck'){
+                        if(returnItem.kind === 'Deck'){
                             returnItem.subItems = decks[returnItem.id].revisions.map( (rev) => {
                                 return {
                                     id: rev.id,
                                     title: rev.title,
-                                    link: returnItem.id + '-' + rev.id
+                                    link: '/deck/' + returnItem.id + '-' + rev.id
                                 };
                             }).reverse();
                         }
-                        else if(returnItem.kind === 'slide'){
+                        else if(returnItem.kind === 'Slide'){
                             let deckUsage = [];
                             returnItem.usage.forEach( (usageItem) => {
                                 deckUsage.push({
@@ -117,19 +117,14 @@ export default {
                                 });
                             });
                             returnItem.subItems = deckUsage;
-                            // console.log(deckUsage);
                         }
 
                     });
-                    console.log(JSON.stringify(returnData, null, 2));
-                });
-
-
-
-
-                callback(null, {
-                    numFound: searchResults.numFound,
-                    docs: searchResults.docs
+                    console.log('lala ' + JSON.stringify(returnData.length, null, 2));
+                    callback(null, {
+                        numFound: returnData.length,
+                        docs: returnData
+                    });
                 });
 
             }).catch((error) => {
