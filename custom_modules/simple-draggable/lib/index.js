@@ -276,7 +276,7 @@
                     imgsendtoback.contentEditable = false;
                     cEl.sendtobackdiv.appendChild(imgsendtoback);
                     cEl.sendtobackdiv.contentEditable = false;
-                    //assign to top right of parent div
+                    //assign to bottom left of parent div
                     //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
 
