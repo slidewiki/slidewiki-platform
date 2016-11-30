@@ -7,6 +7,7 @@ class DeckViewStore extends BaseStore {
         this.slidesData = {};
         this.creatorData = {};
         this.ownerData = {};
+	    this.deckViewPanelHeight = 450;
 
     }
     updateContent(payload) {
@@ -14,14 +15,21 @@ class DeckViewStore extends BaseStore {
         this.slidesData = payload.slidesData;
         this.creatorData = payload.creatorData;
         this.ownerData = payload.ownerData;
+	    this.deckViewPanelHeight = this.deckViewPanelHeight;
         this.emitChange();
     }
+    updateDeckViewPanelHeight(expand) {
+        this.deckViewPanelHeight = expand === 1 ? this.deckViewPanelHeight * 1.3 : 450;
+        this.emitChange();
+    }
+
     getState() {
         return {
             deckData: this.deckData,
             slidesData: this.slidesData,
             creatorData: this.creatorData,
-            ownerData: this.ownerData
+            ownerData: this.ownerData,
+	        deckViewPanelHeight: this.deckViewPanelHeight
         };
     }
     dehydrate() {
@@ -32,12 +40,14 @@ class DeckViewStore extends BaseStore {
         this.slidesData = state.slidesData;
         this.creatorData = state.creatorData;
         this.ownerData = state.ownerData;
+	    this.deckViewPanelHeight = state.deckViewPanelHeight;
     }
 }
 
 DeckViewStore.storeName = 'DeckViewStore';
 DeckViewStore.handlers = {
-    'LOAD_DECK_CONTENT_SUCCESS': 'updateContent'
+    'LOAD_DECK_CONTENT_SUCCESS': 'updateContent',
+    'UPDATE_DECK_VIEW_PANEL_HEIGHT': 'updateDeckViewPanelHeight',
 };
 
 export default DeckViewStore;
