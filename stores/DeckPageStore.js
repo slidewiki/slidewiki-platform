@@ -12,11 +12,13 @@ class DeckPageStore extends BaseStore {
             'ActivityFeedPanel': {visible: 1, columnSize: 4},
             'ContentPanel': {visible: 1, columnSize: 12},
             'ContentModulesPanel': {visible: 1, columnSize: 12}};
+        this.error = {};
     }
     updateContent(payload) {
         this.selector= {'id': payload.params.id, 'spath': payload.params.spath, 'sid': payload.params.sid, 'stype': payload.params.stype};
         this.page = payload.page;
         this.mode = payload.params.mode;
+        //this.error = {};
         this.emitChange();
     }
     restoreAll() {
@@ -52,7 +54,8 @@ class DeckPageStore extends BaseStore {
             selector: this.selector,
             page: this.page,
             mode: this.mode,
-            componentsStatus: this.componentsStatus
+            componentsStatus: this.componentsStatus,
+            error: this.error,
         };
     }
     dehydrate() {
@@ -63,6 +66,12 @@ class DeckPageStore extends BaseStore {
         this.page = state.page;
         this.mode = state.mode;
         this.componentsStatus = state.componentsStatus;
+        this.error = state.error;
+    }
+    handleError(err) {
+        console.log('From DeckPageStore, err:', err);
+        this.error = err;
+        this.emitChange();
     }
 }
 
@@ -71,7 +80,8 @@ DeckPageStore.handlers = {
     'UPDATE_DECK_PAGE_CONTENT': 'updateContent',
     'EXPAND_CONTENET_PANEL': 'expandContentPanel',
     'HIDE_LEFT_COLUMN': 'hideLeftColumn',
-    'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll'
+    'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll',
+    'SERVICE_ERROR': 'handleError',
 };
 
 export default DeckPageStore;

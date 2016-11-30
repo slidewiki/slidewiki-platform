@@ -41,6 +41,7 @@ export default function loadDeck(context, payload, done) {
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
+    console.log('From loadDeck.js:', currentState);
     let runNonContentActions = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
@@ -102,8 +103,8 @@ export default function loadDeck(context, payload, done) {
 
     (err, results) => {
         if (err) {
-            //console.log('Payload:', payload, 'Error:', err);
-            //payload.err = err;
+            console.log('Payload:', payload, 'Error:', err);
+            payload.err = err;
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }
