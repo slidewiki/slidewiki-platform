@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames/bind';
-import SubList from './SearchResultsSubList';
 
 class SearchResultsItem extends React.Component {
 
@@ -13,22 +12,27 @@ class SearchResultsItem extends React.Component {
                 ?    <i className="big square outline middle aligned icon"></i>
                 :    <i className="big block layout middle aligned icon"></i>;
 
-        // form accordion title node
 
-        // contentNode = <SubList data={result.revisions.docs}/>;
-        //
-        // let revisionsLength = result.revisions.docs.length - 1;
-        //
-        // // form list of rest revisions
-        // let contentNode = (revisionsLength > 0) ? <SubList data={result.revisions.docs}/> : '';
-        //
-        // // form expand button
-        // let expandButton = (revisionsLength > 0) ? <button className="ui button">{revisionsLength} more</button> : '';
-        // console.log(result);
+        // form sublist items and expand button
         let expandButton = '';
+        let subList = '';
         if(result.subItems && result.subItems.length > 0){
-            expandButton = <button className="ui small button">Other revisions</button>;
+            expandButton = <button className="ui small button">Other versions</button>;
+
+            subList = result.subItems.map( (item) => {
+                if(result.kind === 'Deck'){
+                    return <div className="row" key={item.id}><a href={item.link}>Deck Revision {item.id}: {item.title}</a></div>;
+                }
+                else if(result.kind === 'Slide'){
+                    return <div className="row" key={item.id}><a href={item.link}>Deck: {item.title}</a></div>;
+                }
+            });
         }
+
+        let userLine = (result.kind === 'Slide')
+            ?   <em>in &#39;{result.deck}&#39; by user {result.user}</em>
+            :   <em>Owner: {result.user}</em>;
+
 
         return (
             <div className="accordionItem">
@@ -48,7 +52,7 @@ class SearchResultsItem extends React.Component {
                                             <em>{result.kind} last modified: {result.lastModified}</em>
                                         </div>
                                         <div className="row">
-                                            <em>Owner: {result.user}</em>
+                                            {userLine}
                                         </div>
                                     </div>
                                 </div>
@@ -56,6 +60,13 @@ class SearchResultsItem extends React.Component {
                             <div className="four wide column">
                                 {expandButton}
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="content">
+                    <div className="ui centered grid">
+                        <div className="fourteen wide left aligned column">
+                            {subList}
                         </div>
                     </div>
                 </div>
