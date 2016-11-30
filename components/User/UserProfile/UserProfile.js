@@ -83,7 +83,7 @@ class UserProfile extends React.Component {
         return (
             <div className = "ui stackable grid page" >
                 <div className = "four wide column" >
-                    <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } hasPassword={this.props.UserProfileStore.user.hasPassword} />
+                    <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
                 <div className = "twelve wide column" >
@@ -120,17 +120,24 @@ class UserProfile extends React.Component {
     }
 
     displayAccounts() {
-        return (<div>
-            <div className="ui segments">
-              <div className="ui secondary segment">
-                <h3>Change password</h3>
-              </div>
+        let changePassword = '';
+        if (this.props.UserProfileStore.user.hasPassword) {
+            changePassword = (
+                <div className="ui segments">
+                  <div className="ui secondary segment">
+                    <h3>Change password</h3>
+                  </div>
 
-              <div className="ui segment">
-                <ChangePassword failures={ this.props.UserProfileStore.failures }/>
-              </div>
-            </div>
-              <div className="ui segments">
+                  <div className="ui segment">
+                    <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+                  </div>
+                </div>
+            );
+        }
+        return (
+          <div>
+            {changePassword}
+            <div className="ui segments">
               <div className="ui red inverted segment">
                 <h3>Deactivate Account</h3>
               </div>

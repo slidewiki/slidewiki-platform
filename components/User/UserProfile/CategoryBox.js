@@ -9,14 +9,6 @@ class CategoryBox extends React.Component {
     }
 
     render() {
-        let account = '';
-        if (!(this.props.hasPassword === false))
-            account = (
-              <NavLink className="item" href={'/user/' + this.props.username + '/settings/account'} activeStyle={this.styles}>
-                  <p><i className="icon lock"/> Account</p>
-              </NavLink>
-            );
-
         return (
           <div ref="menus">
 
@@ -25,7 +17,9 @@ class CategoryBox extends React.Component {
                   <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                       <p><i className="icon user"/> Profile</p>
                   </NavLink>
-                  {account}
+                  <NavLink className="item" href={'/user/' + this.props.username + '/settings/account'} activeStyle={this.styles}>
+                      <p><i className="icon lock"/> Account</p>
+                  </NavLink>
                   <NavLink className="item" href={'/user/' + this.props.username + '/settings/integrations'} activeStyle={this.styles}>
                       <p><i className="icon cloud"/> Authorized Accounts</p>
                   </NavLink>
