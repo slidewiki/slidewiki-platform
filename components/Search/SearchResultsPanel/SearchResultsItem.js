@@ -11,8 +11,8 @@ class SearchResultsItem extends React.Component {
         // choose result icon
         let kindIcon =
             (result.kind === 'Slide')
-                ?    <i className="big square outline middle aligned icon"></i>
-                :    <i className="big block layout middle aligned icon"></i>;
+                ?    <i className="big black square outline middle aligned icon" aria-label="slide"></i>
+                :    <i className="big black block layout middle aligned icon" aria-label="deck"></i>;
 
 
         // form sublist items and expand button
@@ -26,15 +26,15 @@ class SearchResultsItem extends React.Component {
                     return <div className="row" key={item.id}><a href={item.link}>Deck Revision {item.id}: {item.title}</a></div>;
                 }
                 else if(result.kind === 'Slide'){
-                    return <div className="row" key={item.id}><a href={item.link}>Deck: {item.title}</a></div>;
+                    return <div className="row" key={item.id}><a href={item.link}>Also in deck: {item.title}</a></div>;
                 }
             });
         }
 
         // form last line of the result item containing user info
         let userLine = (result.kind === 'Slide')
-            ?   <em>in <a href={result.deck.link}>{result.deck.title}</a> by user <a href={result.user.link}>{result.user.username}</a></em>
-            :   <em>Owner: <a href={result.user.link}>{result.user.username}</a></em>;
+            ?   <span>in <a href={result.deck.link}>{result.deck.title}</a> by user <a href={result.user.link}>{result.user.username}</a></span>
+            :   <span>Owner: <a href={result.user.link}>{result.user.username}</a></span>;
 
 
         return (
@@ -46,13 +46,13 @@ class SearchResultsItem extends React.Component {
                                 <div className="ui grid">
                                     <div className="sixteen wide left aligned column">
                                         <div className="row">
-                                            <h3>{kindIcon}<a href={result.link}>{result.title}</a></h3>
+                                            <h3><a href={result.link}>{kindIcon}{result.title}</a></h3>
                                         </div>
                                         <div className="row">
                                             {result.description}
                                         </div>
                                         <div className="row">
-                                            <em>{result.kind} last modified: {result.lastModified}</em>
+                                            {result.kind} last modified: {result.lastModified}
                                         </div>
                                         <div className="row">
                                             {userLine}

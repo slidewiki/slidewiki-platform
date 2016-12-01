@@ -35,7 +35,7 @@ export default {
                             link: '/deck/' + res._id + '-' + firstRevision.id,
                             kind: 'Deck',
                             title: firstRevision.title,
-                            description: (res.description && res.description.length > 100) ? res.description.substring(0,100)+'...' : res.description,
+                            description: (res.description && res.description.length > 85) ? res.description.substring(0,85)+'...' : res.description,
                             lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
                             user: {
                                 id: firstRevision.user,
@@ -59,7 +59,7 @@ export default {
                             link: '/deck/' + firstRevision.usage[0] + '/slide/' + res._id + '-' + firstRevision.id,
                             kind: 'Slide',
                             title: firstRevision.title,
-                            description: (firstRevision.content && firstRevision.content.length > 100) ? firstRevision.content.substring(0,100)+'...' : firstRevision.content,
+                            description: (firstRevision.content && firstRevision.content.length > 85) ? firstRevision.content.substring(0,85)+'...' : firstRevision.content,
                             lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
                             user: {
                                 id: firstRevision.user,
@@ -143,7 +143,7 @@ export default {
                             returnItem.deck.link = '/deck/' + returnItem.deck.id;
                         }
                     });
-                    
+
                     // console.log(JSON.stringify(returnData, null, 2));
                     callback(null, {
                         numFound: returnData.length,
