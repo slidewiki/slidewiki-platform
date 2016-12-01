@@ -168,7 +168,15 @@ class LoginModal extends React.Component {
         .then(() => {
             //create new tab
             let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
-            let win = window.open(url, '_blank');
+
+            let width = screen.width*0.75, height = screen.height*0.75;
+            if (width < 600)
+                width = screen.width;
+            if (height < 500)
+                height = screen.height;
+            let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+            let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
             win.focus();
 
             return true;
