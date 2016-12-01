@@ -302,7 +302,7 @@ class UserRegistration extends React.Component {
         const Provider = this.getProviderName();
         swal({
             title: 'Information',
-            text: 'A new tab of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
+            text: 'A new window of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
             type: 'info',
             confirmButtonText: 'Confirm',
             confirmButtonClass: 'positive ui button',
@@ -314,7 +314,7 @@ class UserRegistration extends React.Component {
         .then(() => {
             //create new tab
             let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
-            
+
             let width = screen.width*0.75, height = screen.height*0.75;
             if (width < 600)
                 width = screen.width;

@@ -156,7 +156,7 @@ class LoginModal extends React.Component {
         const Provider = this.getProviderName();
         swal({
             title: 'Information',
-            text: 'A new tab of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
+            text: 'A new window of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
             type: 'info',
             confirmButtonText: 'Confirm',
             confirmButtonClass: 'positive ui button',

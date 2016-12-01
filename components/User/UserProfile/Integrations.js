@@ -88,7 +88,15 @@ class Integrations extends React.Component {
 
         //create new tab
         let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + this.provider;
-        let win = window.open(url, '_blank');
+        
+        let width = screen.width*0.75, height = screen.height*0.75;
+        if (width < 600)
+            width = screen.width;
+        if (height < 500)
+            height = screen.height;
+        let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+        let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
         win.focus();
     }
 
@@ -269,6 +277,9 @@ class Integrations extends React.Component {
             'button': true,
         });
 
+        let text_providerEnabled = 'This provider is enabled and could be used.';
+        let text_providerDisabled = 'If you want to sign in later with this provider, you have to click the Enable button.';
+
         return (
           <div>
               <div className="ui segments">
@@ -292,33 +303,69 @@ class Integrations extends React.Component {
                       <h3>Login Provider</h3>
                   </div>
                   <div className="ui segment">
-                      <div>
-                        <i className={facebook_icon_classes} ></i>
-                        &nbsp;&nbsp;&nbsp;
-                        <div className="ui buttons">
-                          <button className={facebook_enable_classes} name="facebook" onClick={this.handleEnable.bind(this)} >Enable</button>
-                          <div className="or"></div>
-                          <button className={facebook_disable_classes} name="facebook" onClick={this.handleDisable.bind(this)} >Disable</button>
+                      <div className="ui three column vertically divided grid">
+                        <div className="row">
+                          <div className="four wide column">
+                            <i className={facebook_icon_classes} ></i>
+                          </div>
+                          <div className="eight wide column">
+                            <div className="ui large label">
+                              {(facebook) ? text_providerEnabled : text_providerDisabled}
+                            </div>
+                          </div>
+                          <div className="four wide column">
+                            {
+                              (facebook) ? (
+                                <button className={facebook_disable_classes} name="facebook" onClick={this.handleDisable.bind(this)} >Disable</button>
+                              ) : (
+                                <button className={facebook_enable_classes} name="facebook" onClick={this.handleEnable.bind(this)} >Enable</button>
+                              )
+                            }
+                          </div>
                         </div>
                       </div>
-                      <br/>
-                      <div>
-                        <i className={google_icon_classes} ></i>
-                        &nbsp;&nbsp;&nbsp;
-                        <div className="ui buttons">
-                          <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} >Enable</button>
-                          <div className="or"></div>
-                          <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} >Disable</button>
+
+                      <div className="ui three column vertically divided grid">
+                        <div className="row">
+                          <div className="four wide column">
+                            <i className={google_icon_classes} ></i>
+                          </div>
+                          <div className="eight wide column">
+                            <div className="ui large label">
+                              {(google) ? text_providerEnabled : text_providerDisabled}
+                            </div>
+                          </div>
+                          <div className="four wide column">
+                            {
+                              (google) ? (
+                                <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} >Disable</button>
+                              ) : (
+                                <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} >Enable</button>
+                              )
+                            }
+                          </div>
                         </div>
                       </div>
-                      <br/>
-                      <div>
-                        <i className={github_icon_classes} ></i>
-                        &nbsp;&nbsp;&nbsp;
-                        <div className="ui buttons">
-                          <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} >Enable</button>
-                          <div className="or"></div>
-                          <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} >Disable</button>
+
+                      <div className="ui three column vertically divided grid">
+                        <div className="row">
+                          <div className="four wide column">
+                            <i className={github_icon_classes} ></i>
+                          </div>
+                          <div className="eight wide column">
+                            <div className="ui large label">
+                              {(github) ? text_providerEnabled : text_providerDisabled}
+                            </div>
+                          </div>
+                          <div className="four wide column">
+                            {
+                              (github) ? (
+                                <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} >Disable</button>
+                              ) : (
+                                <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} >Enable</button>
+                              )
+                            }
+                          </div>
                         </div>
                       </div>
                       {(this.props.UserProfileStore.providerAction !== '') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
