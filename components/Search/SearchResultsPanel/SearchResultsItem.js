@@ -7,6 +7,8 @@ class SearchResultsItem extends React.Component {
 
     render() {
         const result = this.props.data;
+
+        // choose result icon
         let kindIcon =
             (result.kind === 'Slide')
                 ?    <i className="big square outline middle aligned icon"></i>
@@ -29,9 +31,10 @@ class SearchResultsItem extends React.Component {
             });
         }
 
+        // form last line of the result item containing user info
         let userLine = (result.kind === 'Slide')
-            ?   <em>in &#39;{result.deck}&#39; by user {result.user}</em>
-            :   <em>Owner: {result.user}</em>;
+            ?   <em>in <a href={result.deck.link}>{result.deck.title}</a> by user <a href={result.user.link}>{result.user.username}</a></em>
+            :   <em>Owner: <a href={result.user.link}>{result.user.username}</a></em>;
 
 
         return (

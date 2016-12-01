@@ -18,17 +18,17 @@ export default {
                 let returnData = [];
 
                 searchResults.docs.forEach( (res) => {
-                    // console.log(res);
+
+                    // revision to show in result title
                     let firstRevision = res.revisions.docs[0];
 
-                    // mark users to request
+                    // keep user id to request later
                     if(firstRevision.user !== null){
                         userIdHash[parseInt(firstRevision.user)] = true;
                     }
 
-                    //
+                    // transform results to return to frontend
                     if(res.kind === 'deck'){
-                        // console.log(firstRevision);
                         returnData.push({
                             id: parseInt(res._id),
                             revisionId: parseInt(firstRevision.id),
@@ -37,27 +37,39 @@ export default {
                             title: firstRevision.title,
                             description: (res.description && res.description.length > 100) ? res.description.substring(0,100)+'...' : res.description,
                             lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
-                            user: firstRevision.user
+                            user: {
+                                id: firstRevision.user,
+                                username: '',
+                                link: ''
+                            }
                         });
 
-                        //mark decks to request
+                        //keep deck id to request later
                         decksIdHash[parseInt(res._id)] = true;
                     }
                     else if(res.kind === 'slide'){
                         returnData.push({
                             id: parseInt(res._id),
                             revisionId: parseInt(firstRevision.id),
-                            deck: firstRevision.usage[0],
+                            deck: {
+                                id: firstRevision.usage[0],
+                                title: '',
+                                link: ''
+                            },
                             link: '/deck/' + firstRevision.usage[0] + '/slide/' + res._id + '-' + firstRevision.id,
                             kind: 'Slide',
                             title: firstRevision.title,
                             description: (firstRevision.content && firstRevision.content.length > 100) ? firstRevision.content.substring(0,100)+'...' : firstRevision.content,
                             lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
-                            user: firstRevision.user,
+                            user: {
+                                id: firstRevision.user,
+                                username: '',
+                                link: '',
+                            },
                             usage: firstRevision.usage
                         });
 
-                        // mark more decks to request
+                        // keep more deck ids to request later
                         firstRevision.usage.forEach( (deckRev) => {
                             let deckId = deckRev.split('-')[0];
                             decksIdHash[parseInt(deckId)] = true;
@@ -66,9 +78,8 @@ export default {
 
                 });
 
-                // get usernames from user ids found
+                // request usernames of user ids found
                 for(let userId in userIdHash){
-                    // console.log(userId);
                     allPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + userId}).then((userRes) => {
                         usernames[userId] = JSON.parse(userRes).username;
                         return Promise.resolve(userRes);
@@ -78,7 +89,7 @@ export default {
                     }));
                 }
 
-                // get decks
+                // request decks of deck ids found
                 for(let deckId in decksIdHash){
                     allPromises.push(rp.get({uri: Microservices.deck.uri + '/deck/' + deckId}).then( (deckRes) => {
                         decks[deckId] = JSON.parse(deckRes);
@@ -88,20 +99,24 @@ export default {
 
                         return Promise.resolve(deckRes);
                     }).catch( (err) => {
-                        // console.log(res._id + ' error');
                         decks[deckId] = null;
                         return Promise.resolve(err);
                     }));
                 }
 
                 Promise.all(allPromises).then( () => {
-                    // console.log(decks);
-                    // console.log(deckRevisions);
+
                     returnData.forEach( (returnItem) => {
-                        returnItem.user = usernames[returnItem.user];
+
+                        // fill extra user info
+                        returnItem.user.username = usernames[returnItem.user.id];
+                        returnItem.user.link = '/user/' + returnItem.user.username;
+
                         if(returnItem.kind === 'Deck'){
+
+                            // fill deck subitems (revisions of the deck)
                             returnItem.subItems = decks[returnItem.id].revisions.filter( (rev) => {
-                                // do not contain first revision
+                                // do not contain revision presented in result title
                                 return (rev.id !== returnItem.revisionId);
                             }).map( (rev) => {
                                 return {
@@ -113,8 +128,8 @@ export default {
                         }
                         else if(returnItem.kind === 'Slide'){
                             returnItem.subItems = returnItem.usage.filter( (usageItem) => {
-                                // return (deck !== returnItem.id + '-' + returnItem.revisionId);
-                                return (returnItem.deck !== usageItem);
+                                // do not contain usage presented in result title
+                                return (returnItem.deck.id !== usageItem);
                             }).map( (usageItem) => {
                                 return {
                                     id: usageItem,
@@ -122,11 +137,14 @@ export default {
                                     link: '/deck/' + usageItem + '/slide/' + returnItem.id + '-' + returnItem.revisionId
                                 };
                             });
-                            returnItem.deck = deckRevisions[returnItem.deck].title;
-                        }
 
+                            // fill deck info
+                            returnItem.deck.title = deckRevisions[returnItem.deck.id].title;
+                            returnItem.deck.link = '/deck/' + returnItem.deck.id;
+                        }
                     });
-                    console.log('lala ' + JSON.stringify(returnData, null, 2));
+                    
+                    // console.log(JSON.stringify(returnData, null, 2));
                     callback(null, {
                         numFound: returnData.length,
                         docs: returnData
