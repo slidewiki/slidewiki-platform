@@ -18,16 +18,27 @@ class TreeNodeTarget extends React.Component {
     render() {
         const {connectDropTarget} = this.props;
         let compStyle = {
-            outline: 'none',
+            boxSizing: 'border-box',
+            width: '100%',
+            height: '1em',
+            position: 'absolute',
+            zIndex: 1,
+            display: this.props.canDrop ? 'flex' : 'none',
+        };
+
+        let dropMarker = {
+            boxSizing: 'border-box',
             width: '100%',
             height: '1px',
             borderRadius: '2px',
-            background: 'linear-gradient(90deg, gray, white)',
+            background: 'linear-gradient(90deg, light-gray, white)',
             alignSelf: 'center'
         };
 
         return connectDropTarget(
-            <div className="" style={this.props.isDropping? compStyle : {height: '1px'}}></div>
+            <div style={Object.assign(compStyle, this.props.isAfterNode ? {bottom: '-0.6em'} : {top: '-0.6em'})}>
+                <div style={ this.props.isDropping ? dropMarker : {} }/>
+            </div>
         );
     }
 }

@@ -72,10 +72,10 @@ export default {
                     targetIndex: targetIndex
                 })
             }).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null,{});
             }).catch((err) => {
                 console.log(err);
-                callback(null, params);
+                callback(err);
             });
         }
     },

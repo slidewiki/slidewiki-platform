@@ -13,9 +13,9 @@ class TreeNodeList extends React.Component {
         if (this.props.parentNode.get('type') === 'deck' && this.props.parentNode.get('children')) {
             childNodes = this.props.parentNode.get('children').map((node, index) => {
                 return (
-                    <div key={index}>
+                    <div key={index} style={{position: 'relative'}}>
                         {index === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={index}
-                                                       onMoveNode={self.props.onMoveNode}/> : null }
+                                                       onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                         <TreeNode onToggleNode={self.props.onToggleNode}
                                   onSwitchOnAction={self.props.onSwitchOnAction}
                                   onRename={self.props.onRename} onUndoRename={self.props.onUndoRename}
@@ -25,8 +25,8 @@ class TreeNodeList extends React.Component {
                                   rootNode={self.props.rootNode}
                                   page={self.props.page} mode={self.props.mode}
                                   username={self.props.username}/>
-                        <TreeNodeTarget parentNode={self.props.parentNode} onMoveNode={self.props.onMoveNode}
-                                        nodeIndex={index + 1}/>
+                        <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={index + 1}
+                                        onMoveNode={self.props.onMoveNode} isAfterNode={true}/>
                     </div>
                 );
             });
