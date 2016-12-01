@@ -8,6 +8,7 @@ import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
 let classNames = require('classnames');
+let MediaQuery = require ('react-responsive');
 
 const headerStyle = {
     'textAlign': 'center'
@@ -93,21 +94,9 @@ class LoginModal extends React.Component {
     }
 
     render() {
-        let loginButton = (
-            <HeaderDropdown/>
-        );
-
-        if (this.props.UserProfileStore.username === '') {
-            loginButton = (
-                <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton}>Sign In</button>
-            );
-        }
 
         return(
           <div>
-            <div className="item right" >
-              {loginButton}
-            </div>
             <div className="ui login modal" id='signinModal' style={modalStyle}>
               <div className="header">
                   <h1 style={headerStyle}>Sign In</h1>
@@ -150,7 +139,7 @@ class LoginModal extends React.Component {
               </div>
             </div>
           </div>
-      );
+        );
     }
 }
 
