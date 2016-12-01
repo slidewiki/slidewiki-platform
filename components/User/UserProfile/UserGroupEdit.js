@@ -1,4 +1,5 @@
 import React from 'react';
+import { Microservices } from '../../../configs/microservices';
 import { connectToStores } from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -38,7 +39,7 @@ class UserGroupEdit extends React.Component {
         $('#usergoup_edit_dropdown_usernames_remote')
             .dropdown({
                 apiSettings: {
-                    url: 'http://authorizationservice.manfredfris.ch:3000/information/username/search/{query}'
+                    url: Microservices.user.uri + '/information/username/search/{query}'
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
