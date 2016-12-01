@@ -217,6 +217,11 @@ class SlideContentEditor extends React.Component {
               , onlyY: false
               , ratio: this.scaleratio
             });
+            SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+                onlyX: false
+              , onlyY: false
+              , ratio: this.scaleratio
+            });
             if(document.domain != "localhost")
             {
                 document.domain = 'slidewiki.org';
@@ -281,7 +286,11 @@ class SlideContentEditor extends React.Component {
           , onlyY: false
           , ratio: this.scaleratio
         });
-
+        SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+            onlyX: false
+          , onlyY: false
+          , ratio: this.scaleratio
+        });
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
