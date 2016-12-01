@@ -49,7 +49,7 @@ class SlideViewPanel extends React.Component {
                       </div>
                   </div>
                   <div ref="slideViewPanelSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                      {this.props.SlideViewStore.speakernotes ? <b>Speaker Notes:</b> : ''}
+                      {this.props.SlideViewStore.speakernotes ? <b>Speaker notes:</b> : ''}
                       <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
                   </div>
               </ResizeAware>

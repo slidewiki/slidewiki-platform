@@ -51,6 +51,8 @@
                 var new_element = cEl.cloneNode(true);
                 cEl.parentNode.replaceChild(new_element, cEl);
                 var cEl = new_element;
+                if(cEl.style.width != '0px' && cEl.style.width != undefined && cEl.style.height != '0px' && cEl.style.height != undefined)
+                {
 
                 // create _simpleDraggable object for this dom element
                 // KLAAS -> added resize
@@ -81,6 +83,7 @@
                 //mouseenter / mouseleave
                 cEl.addEventListener("mouseenter", function (e) {
 
+                    //alert('test');
                     // TODO
                     // document.body.appendChild(cEl);
                     //KLAAS ADAPT
@@ -273,9 +276,10 @@
                     imgsendtoback.id = "imgremove";
                     imgsendtoback.disabled = true;
                     imgsendtoback.draggable = false;
+                    imgsendtoback.contentEditable = false;
                     cEl.sendtobackdiv.appendChild(imgsendtoback);
                     cEl.sendtobackdiv.contentEditable = false;
-                    //assign to top right of parent div
+                    //assign to bottom left of parent div
                     //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
 
@@ -285,7 +289,7 @@
                     cEl.sendtobackdiv.addEventListener("mousedown", function (e) {
 
                         //KLAAS ADAPT -> prevent default drag and drop.
-                        //e.preventDefault ? e.preventDefault() : e.returnValue = false
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
 
                         //alert('test');
                         //$(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
@@ -314,9 +318,10 @@
                     imgmovetofront.id = "imgremove";
                     imgmovetofront.disabled = true;
                     imgmovetofront.draggable = false;
+                    imgmovetofront.contentEditable = false;
                     cEl.movetofrontdiv.appendChild(imgmovetofront);
                     cEl.movetofrontdiv.contentEditable = false;
-                    //assign to top right of parent div
+                    //assign to bottom left of parent div
                     //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
 
@@ -326,7 +331,7 @@
                     cEl.movetofrontdiv.addEventListener("mousedown", function (e) {
 
                         //KLAAS ADAPT -> prevent default drag and drop.
-                        //e.preventDefault ? e.preventDefault() : e.returnValue = false
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
 
                         //alert('test');
                         //$(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
@@ -525,6 +530,7 @@
                     $('.movetofrontdiv').remove();
                     $('.sendtobackdiv').remove();
                 });
+            }
 
             })(allElms[i])
         }
