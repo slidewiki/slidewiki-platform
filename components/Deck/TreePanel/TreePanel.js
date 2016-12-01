@@ -40,7 +40,11 @@ class TreePanel extends React.Component {
     }
 
     handleSaveNode(selector, oldValue, newValue) {
-        this.context.executeAction(saveTreeNodeWithRevisionCheck, {selector: selector, oldValue: oldValue, newValue: newValue});
+        this.context.executeAction(saveTreeNodeWithRevisionCheck, {
+            selector: selector,
+            oldValue: oldValue,
+            newValue: newValue
+        });
     }
 
     handleAddNode(selector, nodeSpec) {
@@ -64,6 +68,7 @@ class TreePanel extends React.Component {
         });
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
+
     handleTheme() {
         swal({
             title: 'Themes',
@@ -75,6 +80,7 @@ class TreePanel extends React.Component {
         });
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
+
     handleTranslation() {
         swal({
             title: 'Translation',
@@ -88,7 +94,12 @@ class TreePanel extends React.Component {
     }
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
-        this.context.executeAction(moveTreeNode, {sourceNode, targetNode, targetIndex});
+        this.context.executeAction(moveTreeNode, {
+            selector: this.props.DeckTreeStore.selector.toJS(),
+            sourceNode: sourceNode,
+            targetNode: targetNode,
+            targetIndex: targetIndex
+        });
     }
 
     render() {
@@ -109,42 +120,46 @@ class TreePanel extends React.Component {
         let rootNodeTitle = <strong> {rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
-        <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
-            <div className="ui segments">
-                {this.props.UserProfileStore.username === '' ? '':
-                    <div className="3 fluid ui icon large buttons">
-                        <div className="ui basic disabled attached button" title="Theme" onClick={this.handleTheme.bind(this)}>
-                            <i className="theme black icon"></i>
+            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+                <div className="ui segments">
+                    {this.props.UserProfileStore.username === '' ? '' :
+                        <div className="3 fluid ui icon large buttons">
+                            <div className="ui basic disabled attached button" title="Theme"
+                                 onClick={this.handleTheme.bind(this)}>
+                                <i className="theme black icon"></i>
+                            </div>
+                            <div className="ui basic attached button" title="Fork" onClick={this.handleFork.bind(this)}>
+                                <i className="fork black icon"></i>
+                            </div>
+                            <div className="ui basic disabled attached button" title="Translate"
+                                 onClick={this.handleTranslation.bind(this)}>
+                                <i className="translate black icon"></i>
+                            </div>
                         </div>
-                        <div className="ui basic attached button" title="Fork" onClick={this.handleFork.bind(this)}>
-                            <i className="fork black icon"></i>
-                        </div>
-                        <div className="ui basic disabled attached button" title="Translate" onClick={this.handleTranslation.bind(this)}>
-                            <i className="translate black icon"></i>
-                        </div>
+                    }
+                    <div className="ui secondary segment">
+                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
                     </div>
-                }
-                <div className="ui secondary segment">
-                    <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
-                </div>
-                <div className="ui segment" style={treeDIVStyles}>
+                    <div className="ui segment" style={treeDIVStyles}>
 
-                    {decktreeError ? <div className="ui error message" style={{
-                        'wordBreak': 'break-all',
-                        'wordWrap': 'break-word'
-                    }}> {decktreeError} </div> : ''}
+                        {decktreeError ? <div className="ui error message" style={{
+                            'wordBreak': 'break-all',
+                            'wordWrap': 'break-word'
+                        }}> {decktreeError} </div> : ''}
 
-                    <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
-                          prevSelector={prevSelector} page={this.props.page}
-                          mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
-                          onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
-                          onRename={this.handleRenameNode.bind(this)}
-                          onUndoRename={this.handleUndoRenameNode.bind(this)} onSave={this.handleSaveNode.bind(this)}
-                          onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)} onMoveNode={this.handleMoveNode.bind(this)}
-                          username={this.props.UserProfileStore.username} />
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
+                              prevSelector={prevSelector} page={this.props.page}
+                              mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
+                              onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
+                              onRename={this.handleRenameNode.bind(this)}
+                              onUndoRename={this.handleUndoRenameNode.bind(this)}
+                              onSave={this.handleSaveNode.bind(this)}
+                              onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
+                              onMoveNode={this.handleMoveNode.bind(this)}
+                              username={this.props.UserProfileStore.username}/>
+                    </div>
                 </div>
             </div>
-        </div>
         );
     }
 }

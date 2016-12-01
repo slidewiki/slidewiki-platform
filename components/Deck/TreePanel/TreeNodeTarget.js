@@ -17,8 +17,17 @@ const dropTarget = {
 class TreeNodeTarget extends React.Component {
     render() {
         const {connectDropTarget} = this.props;
+        let compStyle = {
+            outline: 'none',
+            width: '100%',
+            height: '1px',
+            borderRadius: '2px',
+            background: 'linear-gradient(90deg, gray, white)',
+            alignSelf: 'center'
+        };
+
         return connectDropTarget(
-            <div className="ui fitted divider"></div>
+            <div className="" style={this.props.isDropping? compStyle : {height: '1px'}}></div>
         );
     }
 }
