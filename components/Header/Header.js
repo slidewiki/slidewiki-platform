@@ -93,6 +93,10 @@ class Header extends React.Component {
     }
 }
 
+Header.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
 Header = connectToStores(Header, [UserProfileStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState()
