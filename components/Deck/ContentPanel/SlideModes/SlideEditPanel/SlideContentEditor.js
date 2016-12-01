@@ -33,6 +33,8 @@ class SlideContentEditor extends React.Component {
         this.scaleratio = 1;
         this.addBoxButtonHTML = '';
     }
+
+
     handleSaveButton(){
 
         if (this.props.UserProfileStore.username === '')
@@ -42,6 +44,8 @@ class SlideContentEditor extends React.Component {
         }
         else
         {
+
+            // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             swal({
                 title: 'Saving Content...',
                 text: '',
@@ -107,7 +111,7 @@ class SlideContentEditor extends React.Component {
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
-        
+
         if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
@@ -129,6 +133,7 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
 
+        CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
         //TODO - remove more buttons speakernotes
         if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
@@ -154,6 +159,7 @@ class SlideContentEditor extends React.Component {
         });}
         if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
             //alert('test');
+            const userId = this.props.UserProfileStore.userid;
             //console.log(userId);
             // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
 
@@ -211,6 +217,11 @@ class SlideContentEditor extends React.Component {
               , onlyY: false
               , ratio: this.scaleratio
             });
+            SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+                onlyX: false
+              , onlyY: false
+              , ratio: this.scaleratio
+            });
             if(document.domain != "localhost")
             {
                 document.domain = 'slidewiki.org';
@@ -227,6 +238,7 @@ class SlideContentEditor extends React.Component {
     }
     componentDidUpdate() {
         //alert('update');
+
         if(process.env.BROWSER){
             this.resize();
         }
@@ -274,7 +286,11 @@ class SlideContentEditor extends React.Component {
           , onlyY: false
           , ratio: this.scaleratio
         });
-
+        SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+            onlyX: false
+          , onlyY: false
+          , ratio: this.scaleratio
+        });
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
@@ -285,6 +301,8 @@ class SlideContentEditor extends React.Component {
     }
 
     componentWillUnmount() {
+        // Remove the warning window.
+        window.onbeforeunload = () => {};
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
         CKEDITOR.instances.inlineHeader.destroy();
@@ -299,6 +317,9 @@ class SlideContentEditor extends React.Component {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
+
+        // When the component is rendered the confirmation is configured.
+
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
@@ -316,13 +337,19 @@ class SlideContentEditor extends React.Component {
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
-        const speakernotesStyle = {
+        /*const speakernotesStyle = {
             minWidth: '100%',
             maxHeight: 120,
             minHeight: 120,
             overflowY: 'auto',
             borderStyle: 'dashed',
             borderColor: '#e7e7e7',
+            position: 'relative'
+        };*/
+        const speakernotesStyle = {
+            maxHeight: 50,
+            minHeight: 50,
+            overflowY: 'auto',
             position: 'relative'
         };
 
@@ -368,29 +395,51 @@ class SlideContentEditor extends React.Component {
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+                <div className="ui" style={compStyle} ref='slideEditPanel'>
+                    <div className="reveal">
+                        <div className="slides">
+                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                        </div>
+                    </div>
+                </div>
+                <b>Speaker notes:</b><br />
+                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
                 <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
                  <i className="save icon"></i>
                  Save
                 </button>
                 {this.addBoxButtonHTML}
-                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:this.props.title}}></div>
-                <hr />
-                <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className="reveal">
-                        <div className="slides">
-                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.content}}></div>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <hr />
-                <br />
-                <b>Speaker notes:</b><br />
-                <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
 
         );
     }
+
+    // To detect changes in the editable content.
+/*
+    shouldComponentUpdate(nextProps) {
+        console.log(ReactDOM.findDOMNode(this));
+        console.log('shouldComponentUpdate');
+        return false;
+        // return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML;
+    }*/
+
+    emitChange() {
+
+      window.onbeforeunload = () => {
+        return 'If you don\'t save the slide the content won\'t be updated. ' +
+          'Are you sure you want to exit this page?';
+      };
+    }
+/*
+    confirmExit() {
+
+      return 'If you don\'t save the slide the content won\'t be updated. ' +
+        'Are you sure you want to exit this page?';
+
+    }
+*/
+
 }
 
 SlideContentEditor.contextTypes = {

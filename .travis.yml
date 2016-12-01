@@ -10,11 +10,8 @@ branches:
 cache:
   directories:
   - "./node_modules"
-  - "./bower_components"
 before_install:
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/install_compose.sh ; fi
-before_script:
-- bower install
 script:
 - npm run lint
 - npm run test

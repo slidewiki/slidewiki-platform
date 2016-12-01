@@ -88,27 +88,27 @@ class EditDataSource extends React.Component {
                 <h3 className="ui dividing header">{header}</h3>
                 <form className="ui form edit">
                     <div className="ui seven wide required field" ref="div_types" >
-                        <label>Type</label>
+                        <label htmlFor="type">Type</label>
                         {dataSourceTypeOptions}
                     </div>
                     <div className="ui required field">
-                        <label>Title</label>
+                        <label htmlFor="title">Title</label>
                         <input type="text" ref="title" id="title" name="title" placeholder="Title" defaultValue={dataSource.title} autoFocus required />
                     </div>
                     <div className="ui field">
-                        <label>URL</label>
+                        <label htmlFor="url">URL</label>
                         <input type="text" ref="url" id="url" name="url" placeholder="Url" defaultValue={dataSource.url} />
                     </div>
                     <div className="ui field">
-                        <label>Authors</label>
+                        <label htmlFor="authors">Authors</label>
                         <input type="text" ref="authors" id="authors" name="authors" placeholder="Authors" defaultValue={dataSource.authors} />
                     </div>
                     <div className="ui field">
-                        <label>Year</label>
+                        <label htmlFor="year">Year</label>
                         <input type="text" ref="year" id="year" name="year" placeholder="Year" defaultValue={dataSource.year} />
                     </div>
                     <div className="ui field">
-                        <label>Comment</label>
+                        <label htmlFor="comment">Comment</label>
                         <input type="text" ref="comment" id="comment" name="comment" placeholder="Comment" defaultValue={dataSource.comment} />
                     </div>
 
