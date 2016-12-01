@@ -60,31 +60,26 @@ class ContentActionsHeader extends React.Component {
                 </div>
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})}>
-                            <a className="" title="Add Slide">
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
                             <i className="icons">
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-                            </a>
+
                         </button>
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}>
-                            <a className="" title="Add Deck">
+                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
                             <i className="medium icons">
                               <i className="yellow large folder icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-                            </a>
+
                         </button>
-                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}>
-                            <a className="" title="Duplicate">
-                                <i className="grey large copy icon"></i>
-                            </a>
+                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
+                            <i className="grey large copy icon"></i>
+
                         </button>
-                        <button className={dueleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}>
-                            <a className="" title="Delete">
-                                <i className="red large trash icon"></i>
-                            </a>
+                        <button className={dueleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)} type="button" aria-label="Delete" data-tooltip="Delete">
+                            <i className="red large trash icon"></i>
                         </button>
                         {/*
                         <button className="item ui small basic right attached disabled button">
