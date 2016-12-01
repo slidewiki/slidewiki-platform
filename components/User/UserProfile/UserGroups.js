@@ -134,10 +134,10 @@ class UserGroups extends React.Component {
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
                   <h3 className="ui left floated header" >Groups</h3>
-                  <div className="ui right floated labeled icon button" onClick={this.handleCLickNewGroup.bind(this)}>
+                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewGroup.bind(this)}>
                       <i className="icon users"/>
                       <p>Create new group</p>
-                  </div>
+                  </button>
               </div>
 
               {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}

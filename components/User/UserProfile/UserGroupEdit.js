@@ -184,19 +184,19 @@ class UserGroupEdit extends React.Component {
                     <div className="ui container">
                         <form className="ui form">
                             <div className="field" data-tooltip="group name" >
-                                <label htmlFor="GroupName">
+                                <label htmlFor="usergroupedit_input_GroupName">
                                     Group Name
                                 </label>
-                                <input type="text" placeholder="Name" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={prefs.name}  />
+                                <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={prefs.name}  />
                             </div>
 
                             <div className="field">
-                                <label htmlFor="GroupDescription">Description</label>
-                                <textarea rows="4" aria-labelledby="GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={prefs.desc} ></textarea>
+                                <label htmlFor="usergroupedit_input_GroupDescription">Description</label>
+                                <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={prefs.desc} ></textarea>
                             </div>
                             <div className="field">
-                                <label htmlFor="AddUserGr">Add user</label>
-                                <select className="ui search dropdown" aria-labelledby="AddUserGr" name="AddUserGr" ref="AddUserGr" id="usergoup_edit_dropdown_usernames_remote">
+                                <label htmlFor="usergroupedit_input_AddUserGr">Add user</label>
+                                <select className="ui search dropdown" aria-labelledby="AddUserGr" id="usergroupedit_input_AddUserGr" name="AddUserGr" ref="AddUserGr" id="usergoup_edit_dropdown_usernames_remote">
                                 </select>
                             </div>
                         </form>
