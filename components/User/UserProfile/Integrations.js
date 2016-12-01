@@ -88,7 +88,7 @@ class Integrations extends React.Component {
 
         //create new tab
         let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + this.provider;
-        
+
         let width = screen.width*0.75, height = screen.height*0.75;
         if (width < 600)
             width = screen.width;
@@ -305,15 +305,15 @@ class Integrations extends React.Component {
                   <div className="ui segment">
                       <div className="ui three column vertically divided grid">
                         <div className="row">
-                          <div className="four wide column">
+                          <div className="one wide column">
                             <i className={facebook_icon_classes} ></i>
                           </div>
-                          <div className="eight wide column">
+                          <div className="ten wide column">
                             <div className="ui large label">
                               {(facebook) ? text_providerEnabled : text_providerDisabled}
                             </div>
                           </div>
-                          <div className="four wide column">
+                          <div className="two wide column">
                             {
                               (facebook) ? (
                                 <button className={facebook_disable_classes} name="facebook" onClick={this.handleDisable.bind(this)} >Disable</button>
@@ -327,15 +327,15 @@ class Integrations extends React.Component {
 
                       <div className="ui three column vertically divided grid">
                         <div className="row">
-                          <div className="four wide column">
+                          <div className="one wide column">
                             <i className={google_icon_classes} ></i>
                           </div>
-                          <div className="eight wide column">
+                          <div className="ten wide column">
                             <div className="ui large label">
                               {(google) ? text_providerEnabled : text_providerDisabled}
                             </div>
                           </div>
-                          <div className="four wide column">
+                          <div className="two wide column">
                             {
                               (google) ? (
                                 <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} >Disable</button>
@@ -349,15 +349,15 @@ class Integrations extends React.Component {
 
                       <div className="ui three column vertically divided grid">
                         <div className="row">
-                          <div className="four wide column">
+                          <div className="one wide column">
                             <i className={github_icon_classes} ></i>
                           </div>
-                          <div className="eight wide column">
+                          <div className="ten wide column">
                             <div className="ui large label">
                               {(github) ? text_providerEnabled : text_providerDisabled}
                             </div>
                           </div>
-                          <div className="four wide column">
+                          <div className="two wide column">
                             {
                               (github) ? (
                                 <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} >Disable</button>
