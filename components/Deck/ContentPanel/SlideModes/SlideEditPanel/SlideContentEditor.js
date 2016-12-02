@@ -395,6 +395,11 @@ class SlideContentEditor extends React.Component {
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                 <i className="save icon"></i>
+                 Save
+                </button>
+                {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
@@ -405,13 +410,7 @@ class SlideContentEditor extends React.Component {
                 </div>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
-                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon"></i>
-                 Save
-                </button>
-                {this.addBoxButtonHTML}
             </ResizeAware>
-
         );
     }
 
