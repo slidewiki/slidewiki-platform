@@ -113,22 +113,22 @@ class TreeNode extends React.Component {
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})} title="add slide">
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})} type="button" aria-label="Add Slide" data-tooltip="Add Slide" >
                         <i className="icons">
                           <i className="file text icon"></i>
                           <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})} title="add deck">
+                    <button className="ui button" onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})} type="button" aria-label="Add Deck" data-tooltip="Add Deck" >
                         <i className="medium icons">
                           <i className="yellow folder icon"></i>
                           <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className={duplicateItemClass} title="Duplicate" onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} title="duplicate">
+                    <button className={duplicateItemClass} onClick={this.handleAddClick.bind(this, nodeSelector, {type: this.props.item.get('type'), id: this.props.item.get('id')})} type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                         <i className="copy icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} title="delete">
+                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)} type="button" aria-label="Delete" data-tooltip="Delete" >
                         <i className="red trash circle icon"></i>
                     </button>
                     {/*
