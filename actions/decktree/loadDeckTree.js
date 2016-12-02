@@ -29,7 +29,6 @@ export default function loadDeckTree(context, payload, done) {
         //we need to load the whole tree for the first time
         context.service.read('decktree.nodes', payload, {}, (err, res) => {
             if (err) {
-                console.log('From loadDeckTree.js:', err);
                 context.executeAction(serviceUnavailable, payload, done);
                 return;
             } else {

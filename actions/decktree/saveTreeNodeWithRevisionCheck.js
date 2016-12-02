@@ -16,7 +16,6 @@ export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
             userid: userid
         }, (err, res) => {
             if (err) {
-                console.log('From saveTreeNodeWithRevisionCheck.js:', err);
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {
