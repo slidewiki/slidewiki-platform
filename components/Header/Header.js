@@ -4,7 +4,7 @@ import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
 import AddDeckPanel from '../AddDeck/AddDeckPanel.js';
-import {Input, Menu, Image, Container} from 'semantic-ui-react';
+import {Input, Menu, Image, Container, Button, Icon} from 'semantic-ui-react';
 
 class Header extends React.Component {
     render() {
@@ -49,6 +49,15 @@ class Header extends React.Component {
                     <Menu.Item>
 
                         <LoginModal />
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Button icon aria-label="Add Slide" data-tooltip="Add Slide" >
+                          <Icon.Group>
+                            <Icon name="grey file large text" />
+                            <Icon name="inverted corner plus" />
+                          </Icon.Group>
+                        </Button>
+
                     </Menu.Item>
                  </Menu.Menu>
               </Container>
