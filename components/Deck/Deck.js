@@ -72,6 +72,7 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui vertically padded stackable grid container" ref="deck">
+
                 <div className="row">
                     <div className={navigationPanelClass}>
                       <NavigationPanel />
