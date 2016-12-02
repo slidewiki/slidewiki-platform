@@ -151,7 +151,8 @@ class TreeNode extends React.Component {
                 <div className="ui small basic icon compact fluid buttons">
                     <button className="ui button"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})}
-                            title="add slide">
+                            aria-label="Add Slide"
+                            data-tooltip="Add Slide">
                         <i className="icons">
                             <i className="file text icon"></i>
                             <i className="inverted corner plus icon"></i>
@@ -159,7 +160,8 @@ class TreeNode extends React.Component {
                     </button>
                     <button className="ui button"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})}
-                            title="add deck">
+                            aria-label="Add deck"
+                            data-tooltip="Add deck">
                         <i className="medium icons">
                             <i className="yellow folder icon"></i>
                             <i className="inverted corner plus icon"></i>
@@ -169,15 +171,18 @@ class TreeNode extends React.Component {
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),
                                 id: this.props.item.get('id')
-                            })}>
+                            })}
+                            aria-label="Duplicate"
+                            data-tooltip="Duplicate">
                         <i className="copy icon"></i>
                     </button>
                     <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)}
-                            title="delete">
+                          aria-label="Delete"
+                          data-tooltip="Delete">
                         <i className="red trash circle icon"></i>
                     </button>
                     {/*
-                     <button className="ui disabled button" title="Settings">
+                     <button className="ui disabled button" aria-label="Settings" data-tooltip="Settings">
                      <i className="black setting icon"></i>
                      </button>
                      */}
@@ -197,7 +202,8 @@ class TreeNode extends React.Component {
             actionSignifier = '';
         } else {
             nodeDIV = <NavLink href={nodeURL}
-                               onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}>{nodeTitleDIV}</NavLink>;
+                               onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)}   aria-label="Double Click to Rename"
+                                 data-tooltip="Double Click to Rename" >{nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
         let iconClass = classNames({
