@@ -11,20 +11,29 @@ import userSignOut from '../../actions/user/userSignOut';
 let MediaQuery = require ('react-responsive');
 
 class Header extends React.Component {
+    componentDidMount() {
+        $(this.refs.menubar)
+            .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
+    }
 
     toggleSidebar() {
         $(this.refs.menubar)
-          .sidebar('setting', 'transition', 'overlay')
-          .sidebar('setting', 'mobileTransition', 'overlay')
-          .sidebar('toggle');
+            .sidebar('toggle');
+    }
+
+    closeSidebar(event) {
+        if(($(event.target).hasClass('item') && !$(event.target).hasClass('search')))
+            $(this.refs.menubar).sidebar('hide');
     }
 
     handleLoginButton() {
-        $('.ui.login.modal').modal('toggle');
+        $('.ui.login.modal')
+            .modal('toggle');
+        this.closeSidebar({target: '<a className="item"></a>'});
     }
 
-    logout(){
-        this.context.executeAction(userSignOut, {username: this.props.UserProfileStore.username});
+    logout() {
+        this.context.executeAction(userSignOut, { username: this.props.UserProfileStore.username });
     }
 
     render() {
@@ -73,7 +82,7 @@ class Header extends React.Component {
                     </NavLink>
                   </div>
                 </div>
-                <div className="ui inverted left dimmed sidebar vertical menu" ref="menubar">
+                <div className="ui inverted left dimmed sidebar vertical menu" ref="menubar" onClick={this.closeSidebar.bind(this)}>
                     <NavLink className="item" href='/'>
                         <i className="home icon"/> Homepage
                     </NavLink>
@@ -83,7 +92,7 @@ class Header extends React.Component {
                     {/*<UserNotificationsBadge className="ui item"/>*/}
                     {mobileLoginButton}
                     <LoginModal/>
-                    <div className="item">
+                    <div className="item search">
                         <SearchBox className="item"/>
                     </div>
                 </div>
