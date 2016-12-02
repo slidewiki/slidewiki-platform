@@ -217,6 +217,11 @@ class SlideContentEditor extends React.Component {
               , onlyY: false
               , ratio: this.scaleratio
             });
+            SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+                onlyX: false
+              , onlyY: false
+              , ratio: this.scaleratio
+            });
             if(document.domain != "localhost")
             {
                 document.domain = 'slidewiki.org';
@@ -281,7 +286,11 @@ class SlideContentEditor extends React.Component {
           , onlyY: false
           , ratio: this.scaleratio
         });
-
+        SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+            onlyX: false
+          , onlyY: false
+          , ratio: this.scaleratio
+        });
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
@@ -328,13 +337,19 @@ class SlideContentEditor extends React.Component {
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
-        const speakernotesStyle = {
+        /*const speakernotesStyle = {
             minWidth: '100%',
             maxHeight: 120,
             minHeight: 120,
             overflowY: 'auto',
             borderStyle: 'dashed',
             borderColor: '#e7e7e7',
+            position: 'relative'
+        };*/
+        const speakernotesStyle = {
+            maxHeight: 50,
+            minHeight: 50,
+            overflowY: 'auto',
             position: 'relative'
         };
 
@@ -380,13 +395,7 @@ class SlideContentEditor extends React.Component {
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon"></i>
-                 Save
-                </button>
-                {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
-                <hr />
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
                         <div className="slides">
@@ -394,11 +403,13 @@ class SlideContentEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <br />
-                <hr />
-                <br />
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
+                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                 <i className="save icon"></i>
+                 Save
+                </button>
+                {this.addBoxButtonHTML}
             </ResizeAware>
 
         );
