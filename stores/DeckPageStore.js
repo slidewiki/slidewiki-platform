@@ -18,7 +18,6 @@ class DeckPageStore extends BaseStore {
         this.selector= {'id': payload.params.id, 'spath': payload.params.spath, 'sid': payload.params.sid, 'stype': payload.params.stype};
         this.page = payload.page;
         this.mode = payload.params.mode;
-        //this.error = {};
         this.emitChange();
     }
     restoreAll() {
@@ -69,7 +68,6 @@ class DeckPageStore extends BaseStore {
         this.error = state.error;
     }
     handleError(err) {
-        console.log('From DeckPageStore, err:', err);
         this.error = err;
         this.emitChange();
     }
