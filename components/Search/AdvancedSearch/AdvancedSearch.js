@@ -180,7 +180,7 @@ class AdvancedSearch extends React.Component {
                                 <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
-                            <div className="field">
+                            <div className="field disabled">
                                 <label htmlFor="tags">Tags</label>
                                 <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
                             </div>
