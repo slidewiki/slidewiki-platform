@@ -11,6 +11,8 @@ export default function loadSlideView(context, payload, done) {
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
+            console.log('Payload:', payload, 'Error:', err);
+            payload.err = err;
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
