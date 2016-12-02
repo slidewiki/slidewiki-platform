@@ -72,25 +72,30 @@ class LoginModal extends React.Component {
         if (!this.props.UserProfileStore.socialLoginError && nextProps.UserProfileStore.socialLoginError){
             swal({
                 title: 'Information',
-                text: 'Login with the choosen provider failed. Either you choosed a not yet added provider or you have to register for a new account first.',
+                text: 'These credentials are new to us. Either you choosed a not yet added provider or you have to register for a new account first.',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Register',
+                confirmButtonText: 'Register now',
                 confirmButtonClass: 'positive ui button',
-                cancelButtonText: 'Cancel',
+                cancelButtonText: 'Try another provider',
                 cancelButtonClass: 'ui orange button',
                 buttonsStyling: false
             })
             .then((dismiss) => {
                 return this.handleRegisterFirst(dismiss);  //TODO should the loginModal be hidden?
             })
-            .catch(() => {
+            .catch((action) => {
                 localStorage.setItem(MODI, 'login_failed');
 
                 //delete old data
                 this.context.executeAction(newSocialData, {});
                 this.context.executeAction(deleteSocialData, { });
+
+                if (action === 'close')
+                    return true;
+
+                this.handleLoginButton();
 
                 return true;
             });
