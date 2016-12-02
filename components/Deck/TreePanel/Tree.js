@@ -180,7 +180,7 @@ class Tree extends React.Component {
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} className="sw-tree"
                      style={compStyle}>
-                <div className="ui divided list" ref="tree">
+                <div ref="tree">
                     <TreeNodeList parentNode={self.props.deckTree} onToggleNode={self.props.onToggleNode}
                                   onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
                                   onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}

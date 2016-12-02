@@ -72,7 +72,7 @@ export default {
                     targetIndex: targetIndex
                 })
             }).then((res) => {
-                callback(null,{});
+                callback(null);
             }).catch((err) => {
                 console.log(err);
                 callback(err);

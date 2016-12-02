@@ -5,6 +5,8 @@ import {NavLink} from 'fluxible-router';
 import TreeUtil from './util/TreeUtil';
 import {DragSource, DropTarget} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
+import TreeNodeTarget from './TreeNodeTarget';
+
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
 
@@ -106,7 +108,7 @@ class TreeNode extends React.Component {
 
     render() {
         let self = this;
-        const {isDragging, connectDragSource} = this.props;
+        const {isDragging, connectDragSource, nodeIndex} = this.props;
         //adapt URLs based on the current page
         let nodeSelector = {
             id: this.props.rootNode.id,
@@ -204,11 +206,14 @@ class TreeNode extends React.Component {
         //hide focused outline
         let compStyle = {
             outline: 'none',
-            opacity: isDragging ? '0.4' : '1'
+            opacity: isDragging ? '0.4' : '1',
+            position: 'relative'
         };
 
         return connectDragSource(
             <div className="item" style={compStyle}>
+                {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
+                                               onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
                     {nodeDIV}
@@ -216,6 +221,8 @@ class TreeNode extends React.Component {
                 </div>
                 {actionBtns}
                 {childNodesDIV}
+                <TreeNodeTarget parentNode={self.props.parentNode} onMoveNode={self.props.onMoveNode}
+                                nodeIndex={nodeIndex + 1} isAfterNode={true}/>
             </div>
         );
     }
