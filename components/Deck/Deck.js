@@ -20,7 +20,6 @@ class Deck extends React.Component {
         return false;
     }
     render() {
-        console.log('From Deck.js component:', this.props.DeckPageStore);
         let status = this.props.DeckPageStore.componentsStatus;
         let navigationPanelClass = classNames({
             'twelve': status.NavigationPanel.columnSize===12,
@@ -73,7 +72,6 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui vertically padded stackable grid container" ref="deck">
-                <div>{this.props.DeckPageStore.error !== '' ? this.props.DeckPageStore.error.additionalInfo : ''}</div>
                 <div className="row">
                     <div className={navigationPanelClass}>
                       <NavigationPanel />
