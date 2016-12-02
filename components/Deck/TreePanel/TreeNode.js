@@ -18,6 +18,9 @@ const treeNodeSource = {
             nodeIndex: props.nodeIndex,
             allDescendants: findAllDescendants(props.item)
         };
+    },
+    canDrag(props, monitor){
+        return props.parentNode.get('children').size > 1;
     }
 };
 
