@@ -176,7 +176,7 @@ class AdvancedSearch extends React.Component {
 
                         <div className="two fields">
                             <div className="field">
-                                <label htmlFor="users_input">User</label>
+                                <label htmlFor="users_input_field">User</label>
                                 <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
