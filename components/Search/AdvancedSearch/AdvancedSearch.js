@@ -176,13 +176,13 @@ class AdvancedSearch extends React.Component {
 
                         <div className="two fields">
                             <div className="field">
-                                <label htmlFor="search_id">User</label>
+                                <label htmlFor="users_input">User</label>
                                 <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
                             <div className="field disabled">
                                 <label htmlFor="tags">Tags</label>
-                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
+                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags' tabIndex="-1"></input>
                             </div>
 
                         </div>
