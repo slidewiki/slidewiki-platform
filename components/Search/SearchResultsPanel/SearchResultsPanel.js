@@ -8,32 +8,29 @@ import loadSearchResults from '../../../actions/search/loadSearchResults';
 import updateUserResultsVisibility from '../../../actions/search/updateUserResultsVisibility';
 
 class SearchResultsPanel extends React.Component {
-    changePage(){
-        context.executeAction(loadSearchResults, {page: 'next'});
-    }
     render() {
         const results = this.props.results;  //this.props.SearchResultsStore.results;
         const numFound = this.props.numFound;
-        const entities = this.props.entities;
-        const languages = this.props.languages;
-
-        const entityList = entities.map((s, index) => {
-            return (
-                <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'type', s.description)}*/ />
-                    <label>{s.description}</label>
-                </div>
-            );
-        });
-
-        const languageList = languages.map((s, index) => {
-            return (
-                <div className="ui item toggle checkbox" key={index} >
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'lang', s.description)}*/ />
-                    <label>{s.description}</label>
-                </div>
-            );
-        });
+        // const entities = this.props.entities;
+        // const languages = this.props.languages;
+        //
+        // const entityList = entities.map((s, index) => {
+        //     return (
+        //         <div className="ui item toggle checkbox" key={index} >
+        //             <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'type', s.description)}*/ />
+        //             <label>{s.description}</label>
+        //         </div>
+        //     );
+        // });
+        //
+        // const languageList = languages.map((s, index) => {
+        //     return (
+        //         <div className="ui item toggle checkbox" key={index} >
+        //             <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'lang', s.description)}*/ />
+        //             <label>{s.description}</label>
+        //         </div>
+        //     );
+        // });
 
         let resultsDiv = <div ref="resultsDiv">
             <h2 className="ui header">Search Results</h2>
@@ -56,9 +53,8 @@ class SearchResultsPanel extends React.Component {
             <div ref="searchResultsPanel">
                 {resultsPanel}
             </div>
-		);
+        );
     }
-
 }
 
 SearchResultsPanel.contextTypes = {
