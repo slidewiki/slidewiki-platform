@@ -47,6 +47,7 @@
   "dependencies": {
     "async": "^2.1.2",
     "body-parser": "^1.15.2",
+    "bunyan": "^1.8.5",
     "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
