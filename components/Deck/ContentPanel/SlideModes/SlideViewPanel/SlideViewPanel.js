@@ -57,6 +57,75 @@ class SlideViewPanel extends React.Component {
         );
     }
     componentDidMount(){
+      // Create the charts
+      $("div[id^=chart]").each(function(){
+         //console.log('////////////////////////////////////////////chartID');
+         //console.log(JSON.parse($(this).attr('datum')));
+         //console.log('////////////////////////////////////////////chartID');
+         // Extract the data of the chartID
+         let chart = JSON.parse($(this).attr('datum'));
+         let chartID = chart.data['this.chartID'];
+         let chartType =  chart.data.chartType;
+         let chartData = chart.data.chartData;
+         let data = null;
+         chart = null;
+        switch (chartType) {
+            case 'lineChart':
+                data = chartData;
+                chart = nv.models.lineChart()
+                  .useInteractiveGuideline(true);
+                chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
+                break;
+            case 'barChart':
+                data = chartData;
+                chart = nv.models.multiBarChart();
+                chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
+                break;
+            case 'pieChart':
+            case 'pie3DChart':
+                data = chartData[0].values;
+                chart = nv.models.pieChart();
+                break;
+            case 'areaChart':
+                data = chartData;
+                chart = nv.models.stackedAreaChart()
+                  .clipEdge(true)
+                  .useInteractiveGuideline(true);
+                chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
+                break;
+            case 'scatterChart':
+
+                for (let i=0; i<chartData.length; i++) {
+                    let arr = [];
+                    for (let j=0; j<chartData[i].length; j++) {
+                        arr.push({x: j, y: chartData[i][j]});
+                    }
+                    data.push({key: 'data' + (i + 1), values: arr});
+                }
+
+
+                chart = nv.models.scatterChart()
+                .showDistX(true)
+                .showDistY(true)
+                .color(d3.scale.category10().range());
+                    chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
+                    chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
+                    break;
+            default:
+        }
+
+        if (chart !== null) {
+
+          d3.select('#' + chartID)
+            .append('svg')
+            .datum(chartData)
+            .transition().duration(500)
+            .call(chart);
+
+          // nv.utils.windowResize(chart.update);
+        }
+      });
+
         if(process.env.BROWSER){
 
             //Function toi fit contents in edit and view component
