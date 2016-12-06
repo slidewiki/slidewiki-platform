@@ -7,20 +7,27 @@ import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
+import loadNewUserNotifications from '../../../actions/user/notifications/loadNewUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
+    constructor() {
+        super();
+        this.displayEmptyText = 'Loading notifications...';
+    }
+
     componentWillMount() {
-        if ((String(this.props.UserProfileStore.userid) === '')) {//the user is loggedin
+        if ((String(this.props.UserProfileStore.userid) === '')) {//the user is not loggedin
             this.context.executeAction(navigateAction, {
                 url: '/'
             });
+        } else {
+            this.context.executeAction(loadNewUserNotifications, { uid: this.props.UserProfileStore.userid });
+            this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
         }
     }
 
-    componentDidMount() {
-        this.context.executeAction(loadUserNotifications, {
-            uid: this.props.UserProfileStore.userid
-        });
+    componentWillUpdate() {
+        this.displayEmptyText = 'There are currently no notifications.';
     }
 
     handleSettingsClick() {
@@ -41,6 +48,9 @@ class UserNotificationsPanel extends React.Component {
     }
 
     render() {
+        if (String(this.props.UserProfileStore.userid) === '') {//user is not loggedin
+            return null;
+        }
         //Create subscription lists
         const subscriptions = this.props.UserNotificationsStore.subscriptions;
         const userSubscriptionList = subscriptions.map((s, index) => {
@@ -154,7 +164,7 @@ class UserNotificationsPanel extends React.Component {
                         <div className="ui basic segment">
                             {(notifications.length === 0)
                                 ?
-                                <div>There are currently no notifications.</div>
+                                <div>{this.displayEmptyText}</div>
                                 :
                                 <UserNotificationsList items={notifications} selector={selector} />
                             }
