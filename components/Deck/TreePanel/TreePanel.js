@@ -12,7 +12,7 @@ import saveTreeNodeWithRevisionCheck from '../../../actions/decktree/saveTreeNod
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
-import moveTreeNode from '../../../actions/decktree/moveTreeNode';
+import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -94,7 +94,7 @@ class TreePanel extends React.Component {
     }
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
-        this.context.executeAction(moveTreeNode, {
+        this.context.executeAction(moveTreeNodeAndNavigate, {
             selector: this.props.DeckTreeStore.selector.toJS(),
             sourceNode: sourceNode,
             targetNode: targetNode,
