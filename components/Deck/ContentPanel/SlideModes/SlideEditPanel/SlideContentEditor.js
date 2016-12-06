@@ -298,6 +298,8 @@ class SlideContentEditor extends React.Component {
         //show that content is outside of pptx2html box
         $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
 
+        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
+        $("#inlineSpeakerNotes [style*='absolute']").css({'position': 'relative', 'zIndex': '0'});
     }
 
     componentWillUnmount() {
