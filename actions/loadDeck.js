@@ -12,8 +12,10 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
+import logger from '../configs/log';
 
 export default function loadDeck(context, payload, done) {
+    logger.info('Hello world from loadDeck.js');
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;

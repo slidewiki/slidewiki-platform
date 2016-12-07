@@ -5,6 +5,14 @@ const port = (process.env.PORT + 1) || 3001;
 
 let webpackConfig = {
     resolve: {
+        alias: {
+            'winston': path.join(__dirname, '/empty_shim.js'),
+            fs: path.join(__dirname, '/empty_shim.js'),
+            //'winston-daily-rotate-file': path.join(__dirname, 'empty_shim.js')
+            //'safe-json-stringify': path.join(__dirname, 'empty_shim.js'),
+            //mv: path.join(__dirname, 'empty_shim.js'),
+            //'source-map-support': path.join(__dirname, 'empty_shim.js')
+        },
         extensions: ['', '.js', '.jsx']
     },
     entry: {
@@ -50,7 +58,10 @@ let webpackConfig = {
         }),
 
     ],
-    devtool: 'eval'
+    devtool: 'eval',
+    externals: {
+        'winston': 'require("winston")'
+    }
 };
 
 module.exports = webpackConfig;
