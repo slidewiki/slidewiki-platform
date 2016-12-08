@@ -8,10 +8,6 @@ let webpackConfig = {
         alias: {
             'winston': path.join(__dirname, '/empty_shim.js'),
             fs: path.join(__dirname, '/empty_shim.js'),
-            //'winston-daily-rotate-file': path.join(__dirname, 'empty_shim.js')
-            //'safe-json-stringify': path.join(__dirname, 'empty_shim.js'),
-            //mv: path.join(__dirname, 'empty_shim.js'),
-            //'source-map-support': path.join(__dirname, 'empty_shim.js')
         },
         extensions: ['', '.js', '.jsx']
     },
@@ -60,7 +56,8 @@ let webpackConfig = {
     ],
     devtool: 'eval',
     externals: {
-        'winston': 'require("winston")'
+        'winston': 'require("winston")',
+        'fs': 'require("fs")'
     }
 };
 

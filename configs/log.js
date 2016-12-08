@@ -7,8 +7,18 @@ if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }
 
-winston.setLevels( winston.config.npm.levels );
-winston.addColors( winston.config.npm.colors );
+winston.setLevels(winston.config.npm.levels);
+winston.addColors(winston.config.npm.colors);
+
+function breadcrumb(stack) {
+    let navStack = stack.slice(); // we don't want to modify original stack by mistake.
+    //navStack.shift();
+    let navString = '';
+    for (let i of navStack) {
+        navString += ' -> ' + i;
+    }
+    return navString.substr(4);
+}
 
 const logger = new (winston.Logger)({
     transports: [
@@ -22,10 +32,9 @@ const logger = new (winston.Logger)({
             json: false,
         }),
         // file transport
-        new (require('winston-daily-rotate-file'))({
-            filename: `${logDir}/-platform.log`,
+        new (winston.transports.File)({
+            filename: `${logDir}/platform.log`,
             timestamp: true,
-            datePattern: 'yyyy-MM-dd',
             prepend: true,
             level: 'debug',
             handleExceptions: true,
@@ -37,4 +46,4 @@ const logger = new (winston.Logger)({
     exitOnError: false
 });
 
-export default logger;
+export { logger, breadcrumb };
