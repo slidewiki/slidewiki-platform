@@ -109,13 +109,13 @@ class TreePanel extends React.Component {
             <div className="ui segments">
                 {this.props.UserProfileStore.username === '' ? '':
                     <div className="3 fluid ui icon large buttons">
-                        <div className="ui basic disabled attached button" title="Theme" onClick={this.handleTheme.bind(this)}>
+                        <div className="ui basic disabled attached button" aria-label="Theme" data-tooltip="Theme" onClick={this.handleTheme.bind(this)}>
                             <i className="theme black icon"></i>
                         </div>
-                        <div className="ui basic attached button" title="Fork" onClick={this.handleFork.bind(this)}>
+                        <div className="ui basic attached button" aria-label="Fork Deck" data-tooltip="Fork Deck" onClick={this.handleFork.bind(this)}>
                             <i className="fork black icon"></i>
                         </div>
-                        <div className="ui basic disabled attached button" title="Translate" onClick={this.handleTranslation.bind(this)}>
+                        <div className="ui basic disabled attached button"  aria-label="Translate" data-tooltip="Translate" onClick={this.handleTranslation.bind(this)}>
                             <i className="translate black icon"></i>
                         </div>
                     </div>
