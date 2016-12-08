@@ -62,6 +62,22 @@ export default {
                 console.log(err);
                 callback(null, params);
             });
+        } else if (resource === 'decktree.move'){
+            let {sourceSelector, targetSelector, targetIndex, userid} = args;
+            rp.put({
+                uri: Microservices.deck.uri + '/decktree/node/move',
+                body:JSON.stringify({
+                    user: userid.toString(),
+                    sourceSelector: sourceSelector,
+                    targetSelector: targetSelector,
+                    targetIndex: targetIndex
+                })
+            }).then((res) => {
+                callback(null, JSON.parse(res));
+            }).catch((err) => {
+                console.log(err);
+                callback(err);
+            });
         }
     },
     delete: (req, resource, params, config, callback) => {
