@@ -55,9 +55,9 @@ class ContentActionsHeader extends React.Component {
                 <NavLink className={'item' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     View
                 </NavLink>
-                <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
-                    <i className="ui large blue edit icon "></i> Edit
-                </div>
+                <button id='editbutton' className={'ui item button link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
+                    <p><i className="ui large blue edit icon outline "></i> Edit</p>
+                </button>
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
