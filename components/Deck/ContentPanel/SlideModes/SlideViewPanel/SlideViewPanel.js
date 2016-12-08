@@ -59,9 +59,7 @@ class SlideViewPanel extends React.Component {
     componentDidMount(){
       // Create the charts
       $("div[id^=chart]").each(function(){
-         //console.log('////////////////////////////////////////////chartID');
-         //console.log(JSON.parse($(this).attr('datum')));
-         //console.log('////////////////////////////////////////////chartID');
+
          // Extract the data of the chartID
          let chart = JSON.parse($(this).attr('datum'));
          let chartID = chart.data['this.chartID'];
@@ -105,11 +103,11 @@ class SlideViewPanel extends React.Component {
 
 
                 chart = nv.models.scatterChart()
-                .showDistX(true)
-                .showDistY(true)
-                .color(d3.scale.category10().range());
-                    chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
-                    chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
+                  .showDistX(true)
+                  .showDistY(true)
+                  .color(d3.scale.category10().range());
+                chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
+                chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
                     break;
             default:
         }

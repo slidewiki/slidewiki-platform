@@ -11,10 +11,10 @@ class DefaultHTMLLayout extends React.Component {
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/nv.d3.min.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css" rel="styleshee" type="text/css"/>
                 {/* Vendors css bundle */
                     this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
                 }
@@ -24,7 +24,7 @@ class DefaultHTMLLayout extends React.Component {
             <body>
                 {/*for Charts*/}
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script> {/* D3 */}
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script> {/* NVD3*/}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script> {/* NVD3 */}
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>
