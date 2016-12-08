@@ -19,7 +19,9 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
-import logger from './configs/log';
+import { logger } from './configs/log';
+const uuid = require('node-uuid');
+
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -75,7 +77,8 @@ fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 
 server.use((req, res, next) => {
-
+    req.reqId = uuid.v4();
+    logger.info({reqId: req.reqId, requested: req.url, from: req.ip, hostname: req.hostname});
     const context =  app.createContext({
         req: req,
         res: res  //for userStoragePlugin
@@ -84,13 +87,10 @@ server.use((req, res, next) => {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
         //}
     });
-    logger.debug('hello world from server.js');
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {
-        url: req.url
-    }, (err) => {
+    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
         if (err) {
-            //console.log(req.url, err);//, err);
+            logger.error({reqId: req.reqId, err: err});
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -107,9 +107,10 @@ server.use((req, res, next) => {
                 const html = ReactDOM.renderToStaticMarkup(htmlElement);
                 debug('Sending markup');
                 res.type('html');
-                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                // Pass through to next middleware
-                //next();
+                res.status(err.statusCode);
+                logger.info({reqId: req.reqId, responded: req.url, statusCode: res.statusCode});
+                res.write('<!DOCTYPE html>' + html);
+                res.end();
             } else {
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
                 debug('Rendering Application component into html');
@@ -125,8 +126,10 @@ server.use((req, res, next) => {
                 const html = ReactDOM.renderToStaticMarkup(htmlElement);
                 debug('Sending markup');
                 res.type('html');
-                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                //next(err);
+                res.status(err.statusCode);
+                logger.info({reqId: req.reqId, responded: req.url, statusCode: res.statusCode});
+                res.write('<!DOCTYPE html>' + html);
+                res.end();
             }
             return;
         }
@@ -150,6 +153,7 @@ server.use((req, res, next) => {
         debug('Sending markup');
         res.type('html');
         res.write('<!DOCTYPE html>' + html);
+        logger.info({reqId: req.reqId, responded: req.url, statusCode: res.statusCode});
         res.end();
     });
 });
@@ -157,6 +161,6 @@ server.use((req, res, next) => {
 
 const port = process.env.PORT || 3000;
 server.listen(port);
-console.log('SlideWiki Platform is now Listening on port ' + port);
+logger.info('SlideWiki Platform is now Listening on port ' + port);
 
 export default server;
