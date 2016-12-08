@@ -9,8 +9,6 @@ import { handleHistory } from 'fluxible-router';
 import pages from '../configs/routes';
 import ErrorStore from '../stores/ErrorStore';
 import Error from './Error/Error';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 
 class Application extends React.Component {
     render() {
@@ -45,7 +43,7 @@ class Application extends React.Component {
 }
 
 export default provideContext(handleHistory(connectToStores(
-    DragDropContext(HTML5Backend)(Application),
+    Application,
     [ApplicationStore, ErrorStore],
     (context, props) => {
         let appStore = context.getStore(ApplicationStore);
