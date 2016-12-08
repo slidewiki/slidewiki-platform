@@ -48,10 +48,10 @@ export default {
                     callback();
                 },
                 (callback) => {
-                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}, navigate: payload.navigate}, callback);
                 },
                 (callback) => {
-                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}}, callback);
+                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}, navigate: payload.navigate}, callback);
                 }
             ],
             (err, result) => {
@@ -76,7 +76,7 @@ export default {
                     callback();
                 },
                 (callback) => {
-                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
+                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}, navigate: payload.navigate}, callback); //for now limit 100, can change this later to infinite scroll
                 }
             ],
             (err, result) => {
@@ -389,7 +389,7 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Add Deck'
             });
-            context.executeAction(loadAddDeck, null, done);
+            context.executeAction(loadAddDeck, payload, done);
         }
     },
     /* This should be the last route in routes.js */
