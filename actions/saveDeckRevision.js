@@ -3,9 +3,11 @@ import handleRevisionChangesAndNavigate from './revisioning/handleRevisionChange
 import striptags from 'striptags';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
-
+import { logger, breadcrumb } from '../configs/log';
+import serviceUnavailable from './error/serviceUnavailable';
 
 export default function saveDeckRevision(context, payload, done) {
+    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -21,7 +23,9 @@ export default function saveDeckRevision(context, payload, done) {
         payload.root_deck = parent;
         context.service.update('deck.updateWithRevision', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
+                logger.error({reqId: payload.navigate.reqId, err: err});
+                context.executeAction(serviceUnavailable, payload, done);
+                //context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
             } else {
                 context.dispatch('SAVE_DECK_REVISION_SUCCESS', res);
                 let newSid = res._id + '-' + res.revisions[0].id;

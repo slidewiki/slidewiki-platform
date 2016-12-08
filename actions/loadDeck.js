@@ -12,10 +12,10 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
-import logger from '../configs/log';
+import { logger, breadcrumb} from '../configs/log';
 
 export default function loadDeck(context, payload, done) {
-    logger.info('Hello world from loadDeck.js');
+    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -103,7 +103,8 @@ export default function loadDeck(context, payload, done) {
     // final callback
 
     (err, results) => {
-        if (err){
+        if (err) {
+            logger.error({reqId: payload.navigate.reqId, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }

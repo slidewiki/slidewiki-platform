@@ -5,6 +5,7 @@ import addTreeNode from './addTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addTreeNodeWithRevisionCheck(context, payload, done) {
+    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         //enrich with user id
@@ -14,6 +15,7 @@ export default function addTreeNodeWithRevisionCheck(context, payload, done) {
             userid: userid
         }, (err, res) => {
             if (err) {
+                logger.error({reqId: payload.navigate.reqId, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {

@@ -8,6 +8,7 @@ import loadCommentsCount from './contentdiscussion/loadCommentsCount';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
+import serviceUnavailable from './error/serviceUnavailable';
 
 export default function loadContentModules(context, payload, done) {
     if (!(['deck', 'slide'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
@@ -43,7 +44,8 @@ export default function loadContentModules(context, payload, done) {
     // final callback
     (err, results) => {
         if (err){
-            console.log(err, 'Something extra');
+            logger.error({reqId: payload.navigate.reqId, err: err});
+            context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {selector: payload.params, moduleType: 'datasource'});
         let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;

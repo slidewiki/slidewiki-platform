@@ -2,6 +2,7 @@ import { shortTitle } from '../configs/general';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
+import serviceUnavailable from './error/serviceUnavailable';
 
 export default function loadContentUsage(context, payload, done) {
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){

@@ -4,8 +4,10 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import deckIdTypeError from '../error/deckIdTypeError';
 import deckContentPathError from '../error/deckContentPathError';
 import { AllowedPattern } from '../error/util/allowedPattern';
+import { logger, breadcrumb} from '../../configs/log';
 
 export default function loadDeckTree(context, payload, done) {
+    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -29,6 +31,7 @@ export default function loadDeckTree(context, payload, done) {
         //we need to load the whole tree for the first time
         context.service.read('decktree.nodes', payload, {}, (err, res) => {
             if (err) {
+                logger.error({reqId: payload.navigate.reqId, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 return;
             } else {

@@ -1,10 +1,13 @@
 import {shortTitle} from '../configs/general';
+import { logger, breadcrumb} from '../configs/log';
+
 export default function loadImportFile(context, payload, done) {
-    //console.log('test');
-    //console.log(payload);
+    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     context.service.create('import.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('LOAD_IMPORT_FILE_FAILURE', err);
+            logger.error({reqId: payload.navigate.reqId, err: err});
+            context.executeAction(serviceUnavailable, payload, done);
+            //context.dispatch('LOAD_IMPORT_FILE_FAILURE', err);
         } else {
             //console.log(res);
             context.dispatch('LOAD_IMPORT_FILE_SUCCESS', res);

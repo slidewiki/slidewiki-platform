@@ -10,8 +10,11 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import deckModeError from './error/deckModeError';
 import { AllowedPattern } from './error/util/allowedPattern';
+import serviceUnavailable from './error/serviceUnavailable';
+import { logger, breadcrumb} from '../configs/log';
 
 export default function loadContent(context, payload, done) {
+    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -79,8 +82,9 @@ export default function loadContent(context, payload, done) {
     ],
     // final callback
     (err, results) => {
-        if (err){
-            console.log(err);
+        if (err) {
+            logger.error({reqId: payload.navigate.reqId, err: err});
+            context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle
