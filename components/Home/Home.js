@@ -59,7 +59,9 @@ class Home extends React.Component {
                     <div>
                     <h2 className="ui header">Recent decks</h2>
                         <DeckList scope="recent"/>
-                        <button className="ui right floated button">
+                            <a className="ui right floated button" href='/recent'>View all</a>
+
+                        {/*<button className="ui right floated button">
 
                             <NavLink href={'/recent'}>View All</NavLink>
                         </button>
