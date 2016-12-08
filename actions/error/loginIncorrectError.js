@@ -1,8 +1,10 @@
 import ErrorStore from '../../stores/ErrorStore';
 import { ErrorsList } from '../../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
+import { logger, breadcrumb} from '../../configs/log';
 
-export default function slideIdTypeError(context, payload, done) {
+export default function LoginIncorrectError(context, payload, done) {
+    logger.error('Login incorrect.', {reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
     const error = fumble.http.forbidden();
     ErrorsList.LOGIN_INCORRECT_ERROR.statusCode = error.statusCode;
     ErrorsList.LOGIN_INCORRECT_ERROR.statusText = error.message;
