@@ -1,5 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+import { logger, breadcrumb} from '../configs/log';
 
 export default {
     name: 'decktree',
