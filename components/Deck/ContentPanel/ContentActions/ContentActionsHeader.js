@@ -51,11 +51,11 @@ class ContentActionsHeader extends React.Component {
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
         return (
-            <div className="ui top attached tabular menu">
-                <NavLink className={'item' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')}>
+            <div className="ui top attached tabular menu" role="tablist">
+                <NavLink className={'item' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     View
                 </NavLink>
-                <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)}>
+                <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
                     <i className="ui large blue edit icon "></i> Edit
                 </div>
                 {this.props.UserProfileStore.username === '' ? '' :
