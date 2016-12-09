@@ -323,7 +323,7 @@ class DeckTreeStore extends BaseStore {
         this.selector = newSelector;
         this.updatePrevNextSelectors();
     }
-    deleteTreeNode(selector) {
+    deleteTreeNode(selector, silent) {
         let selectorIm = Immutable.fromJS(selector);
         //should first update the selected node to the change target
         if(!Immutable.is(this.selector, selectorIm)){
@@ -356,7 +356,10 @@ class DeckTreeStore extends BaseStore {
         //should deselect the currently selected node first
         //should update the selector: set to parent node
         this.switchSelector(this.selector, this.findParentNodeSelector(this.selector.get('spath')));
-        this.emitChange();
+
+        if (!silent){
+            this.emitChange();
+        }
     }
     addTreeNode(payload) {
         let newNode = Immutable.fromJS(payload.node);
@@ -446,7 +449,10 @@ class DeckTreeStore extends BaseStore {
         }else{
             this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(targetIndex)));
         }
-        this.emitChange();
+
+        if (!payload.silent){
+            this.emitChange();
+        }
     }
     updateNodeRelPosition(path, newPosition) {
         let arr = path.split(';');
@@ -489,7 +495,7 @@ class DeckTreeStore extends BaseStore {
         this.emitChange();
     }
     moveTreeNode(payload){
-        let {sourceNode, targetNode, targetIndex} = payload;
+        let {sourceNode, targetNode, targetIndex, selector} = payload;
         let currentIndex = this.getRelPositionFromPath(sourceNode.get('path')) - 1;
         let targetNodeSelector = this.makeSelectorFromNode(targetNode);
 
@@ -519,8 +525,17 @@ class DeckTreeStore extends BaseStore {
                 }
             }
         }
-        this.deleteTreeNode(this.makeSelectorFromNode(sourceNode));
-        this.addTreeNode({node: sourceNode, selector: targetNodeSelector, targetIndex: targetIndex});
+        this.deleteTreeNode(this.makeSelectorFromNode(sourceNode), true);
+        this.addTreeNode({node: sourceNode, selector: targetNodeSelector, targetIndex: targetIndex, silent: true});
+        //by default we change the selected node to the moved one(done in addTreeNode) except for when
+        //root node was selected when reorder was initiated
+        if (!selector.spath){
+            this.switchSelector(this.selector, Immutable.fromJS(selector));
+        //or if we are at the subdeck view and we move a node within *that* subdeck
+        } else if (selector.spath === targetNodeSelector.get('spath') && targetNode.get('children').includes(sourceNode)) {
+            this.switchSelector(this.selector, targetNodeSelector);
+        }
+        this.emitChange();
     }
 }
 
