@@ -7,7 +7,7 @@ import undoRenameTreeNode from './undoRenameTreeNode';
 import { logger, breadcrumb} from '../../configs/log';
 
 export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         //enrich with user id

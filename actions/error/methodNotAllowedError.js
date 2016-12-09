@@ -4,7 +4,7 @@ const fumble = require('fumble');
 import { logger, breadcrumb} from '../../configs/log';
 
 export default function methodNotAllowedError(context, payload, done) {
-    logger.error('Method not allowed.', {reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.error('Method not allowed.', {reqId: payload.navigate.reqId, navStack: context.stack});
     const error = fumble.http.methodNotAllowed();
     ErrorsList.METHOD_NOT_ALLOWED_ERROR.statusCode = error.statusCode;
     ErrorsList.METHOD_NOT_ALLOWED_ERROR.statusText = error.message;

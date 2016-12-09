@@ -5,7 +5,7 @@ import { logger, breadcrumb} from '../configs/log';
 import serviceUnavailable from './error/serviceUnavailable';
 
 export default function loadDeckEdit(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);
         return;

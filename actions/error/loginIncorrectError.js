@@ -4,7 +4,7 @@ const fumble = require('fumble');
 import { logger, breadcrumb} from '../../configs/log';
 
 export default function LoginIncorrectError(context, payload, done) {
-    logger.error('Login incorrect.', {reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.error('Login incorrect.', {reqId: payload.navigate.reqId, navStack: context.stack});
     const error = fumble.http.forbidden();
     ErrorsList.LOGIN_INCORRECT_ERROR.statusCode = error.statusCode;
     ErrorsList.LOGIN_INCORRECT_ERROR.statusText = error.message;

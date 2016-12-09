@@ -14,7 +14,7 @@ import serviceUnavailable from './error/serviceUnavailable';
 import { logger, breadcrumb} from '../configs/log';
 
 export default function loadContent(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;

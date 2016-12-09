@@ -15,7 +15,7 @@ import { AllowedPattern } from './error/util/allowedPattern';
 import { logger, breadcrumb} from '../configs/log';
 
 export default function loadDeck(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;

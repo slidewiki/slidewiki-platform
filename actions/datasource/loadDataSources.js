@@ -6,7 +6,7 @@ import { AllowedPattern } from '../error/util/allowedPattern';
 import { logger, breadcrumb} from '../../configs/log';
 
 export default function loadDataSources(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
         return;

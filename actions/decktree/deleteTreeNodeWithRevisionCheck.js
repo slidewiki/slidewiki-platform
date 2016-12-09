@@ -6,7 +6,7 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import { logger, breadcrumb} from '../../configs/log';
 
 export default function deleteTreeNodeWithRevisionCheck(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     let userid = context.getStore(UserProfileStore).userid;
     let args = payload.params ? payload.params : payload;
     let selector = {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};

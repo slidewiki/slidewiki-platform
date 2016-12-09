@@ -3,7 +3,7 @@ import UserProfileStore from '../stores/UserProfileStore';
 //import { logger, breadcrumb} from '../configs/log';
 
 export default function loadAddDeck(context, payload, done) {
-    //logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    //logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     //redirect to homepage if not logged in
     let store = context.getStore(UserProfileStore);
     if (!((store.username !== undefined && store.username !== null && store.username !== '')

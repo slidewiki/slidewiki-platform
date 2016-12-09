@@ -4,7 +4,7 @@ import { logger, breadcrumb} from '../../configs/log';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addDeckSaveDeck(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, breadcrumb: breadcrumb(context.stack)});
+    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
     //enrich data
     if (payload.userid === undefined || payload.userid === null || payload.userid === '')
         payload.userid = context.getStore(UserProfileStore).userid;
