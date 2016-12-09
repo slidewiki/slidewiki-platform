@@ -239,7 +239,7 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.language
         });
-
+        const labelStyle = { 'cursor': 'pointer'};
 
         let filename = this.props.ImportStore.filename;
         if (filename.length > 40)
@@ -333,7 +333,7 @@ class AddDeck extends React.Component {
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
-                              <label htmlFor="terms">
+                              <label htmlFor="terms" style={labelStyle}>
                                   I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
                               </label>
                           </div>
