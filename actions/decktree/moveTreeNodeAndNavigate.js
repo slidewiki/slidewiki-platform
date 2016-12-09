@@ -13,28 +13,29 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
         (err, results) => {
             if (!err) {
                 let newURL;
+                let {selector, sourceNode, targetNode} = payload;
                 let removedChangeset = results[0].removed_changeset || results[0].changeset, insertedChangeset = results[0].inserted_changeset;
                 let hasRevisionChanges = removedChangeset || insertedChangeset;
                 if (hasRevisionChanges) {
-                    console.log(removedChangeset, insertedChangeset, payload);
-                    let rootId = payload.selector.id;
+                    let rootId = selector.id;
+                    // a new revision for the root deck may have been created
                     if (removedChangeset && removedChangeset.new_deck_id != null){
                         rootId = removedChangeset.new_deck_id;
                     } else if (insertedChangeset && insertedChangeset.new_deck_id != null){
                         rootId = insertedChangeset.new_deck_id;
                     }
                     newURL = '/deck/' + rootId;
+                } else if (selector.stype === 'deck' && selector.sid === selector.id) {
+                    // if we were at the root deck stay there
+                    newURL = '/deck/' + selector.id;
+                } else if (selector.stype === 'deck' && selector.sid === targetNode.get('id') && selector.spath === targetNode.get('path') && targetNode.get('children').includes(sourceNode)){
+                    // if we are at the subdeck view and we move a node within *that* subdeck navigate there
+                    newURL = '/deck/' + selector.id + '/deck/' + targetNode.get('id') + '/' + targetNode.get('path');
                 } else {
-                    //the logic for retrieving the moved node's selector is handled in the stores
-                    //therefore, we need to get access to the selector from the store
-                    let currentState = context.getStore(DeckTreeStore).getState();
-                    let selector = {
-                        id: currentState.selector.get('id'),
-                        stype: currentState.selector.get('stype'),
-                        sid: currentState.selector.get('sid'),
-                        spath: currentState.selector.get('spath')
-                    };
-                    newURL = selector.spath !== '' ? '/deck/' + selector.id + '/' + selector.stype + '/' + selector.sid + '/' + selector.spath : '/deck/' + selector.id;
+                    // the logic for retrieving the moved node's selector is handled in the stores
+                    // therefore, we need to get access to the selector from the store
+                    let newSelector = context.getStore(DeckTreeStore).getState().selector;
+                    newURL = '/deck/' + newSelector.get('id') + '/' + newSelector.get('stype') + '/' + newSelector.get('sid') + '/' + newSelector.get('spath');
                 }
                 //navigate to new url and force deck tree refetch in case of revisioning changes
                 context.executeAction(navigateAction, {
