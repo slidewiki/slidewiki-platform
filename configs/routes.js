@@ -40,7 +40,6 @@ export default {
         title: 'SlideWiki -- Home',
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
-            console.log(payload);
             async.series([
                 (callback) => {
                     context.dispatch('UPDATE_PAGE_TITLE', {

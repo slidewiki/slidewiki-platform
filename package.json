@@ -80,7 +80,6 @@
     "json3": "^3.3.2",
     "lodash": "^4.17.0",
     "md5": "^2.2.1",
-    "node-uuid": "^1.4.7",
     "npm": "^4.0.3",
     "react": "^15.3.2",
     "react-custom-scrollbars": "^4.0.0",
@@ -106,6 +105,7 @@
     "superagent-csrf-middleware": "^0.3.0",
     "sweetalert2": "^6.1.0",
     "url-loader": "^0.5.7",
+    "uuid": "^3.0.1",
     "winston": "^2.3.0"
   },
   "devDependencies": {

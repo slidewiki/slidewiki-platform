@@ -20,8 +20,7 @@ import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 import { logger } from './configs/log';
-const uuid = require('node-uuid');
-
+const uuidV4 = require('uuid/v4');
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -77,7 +76,7 @@ fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 
 server.use((req, res, next) => {
-    req.reqId = uuid.v4();
+    req.reqId = uuidV4();
     logger.info({reqId: req.reqId, requested: req.url, from: req.ip, hostname: req.hostname});
     const context =  app.createContext({
         req: req,
