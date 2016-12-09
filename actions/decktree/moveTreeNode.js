@@ -17,6 +17,16 @@ export default function moveTreeNode(context, payload, done) {
             'sid': targetNode.get('id'),
             'stype': targetNode.get('type')
         };
+        swal({
+            title: 'Refreshing Deck Structure...',
+            text: '',
+            type: 'success',
+            timer: 1000,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+            showConfirmButton: false
+        });
         context.service.update('decktree.move', {
             userid,
             selector,
