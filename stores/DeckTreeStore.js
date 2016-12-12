@@ -288,6 +288,8 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => false));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.newValue));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.newSid));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.newPath));
         this.emitChange();
     }
     //updates the nodes in the same level of selector which come after the selected node
