@@ -323,7 +323,7 @@ class DeckTreeStore extends BaseStore {
         this.selector = newSelector;
         this.updatePrevNextSelectors();
     }
-    deleteTreeNode(selector) {
+    deleteTreeNode(selector, silent) {
         let selectorIm = Immutable.fromJS(selector);
         //should first update the selected node to the change target
         if(!Immutable.is(this.selector, selectorIm)){
@@ -356,11 +356,15 @@ class DeckTreeStore extends BaseStore {
         //should deselect the currently selected node first
         //should update the selector: set to parent node
         this.switchSelector(this.selector, this.findParentNodeSelector(this.selector.get('spath')));
-        this.emitChange();
+
+        if (!silent){
+            this.emitChange();
+        }
     }
     addTreeNode(payload) {
         let newNode = Immutable.fromJS(payload.node);
         let selectorIm = Immutable.fromJS(payload.selector);
+        let targetIndex = payload.targetIndex;
         //should first update the selected node to the change target
         if(!Immutable.is(this.selector, selectorIm)){
             this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.selector.get('spath')),(node) => node.update('selected', (val) => false));
@@ -372,17 +376,20 @@ class DeckTreeStore extends BaseStore {
         let chain = this.deckTree;
 
         let newNodePathString = '';
-        //for decks, we should append it in the last child position
+        //for decks, we should append it in the last child position if payload does not contain a targetIndex 
         if(this.selector.get('stype')==='deck'){
             selectedNodeIndex.forEach((item, index) => {
                 //chain will be a list of all nodes in the same level
                 chain = chain.get(item);
             });
+            if (targetIndex == null){
+                targetIndex = chain.get('children').size;
+            }
             if(chain.get('path')){
-                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (chain.get('children').size + 1);
+                newNodePathString = chain.get('path') + ';' + newNode.get('id') + ':' + (targetIndex + 1);
             }else{
                 //for the first level node we don't need the ;
-                newNodePathString = newNode.get('id') + ':' + (chain.get('children').size + 1);
+                newNodePathString = newNode.get('id') + ':' + (targetIndex + 1);
             }
         }else{
             //for slides, we should append it next to slide
@@ -419,17 +426,19 @@ class DeckTreeStore extends BaseStore {
         if(this.selector.get('stype')==='slide'){
             chain = chain.insert(selectedRelPosition + 1, newNode);
         }else{
-            chain = chain.insert(chain.size, newNode);
+            chain = chain.insert(targetIndex, newNode);
         }
 
         //update tree
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('children', (list) => chain) );
-        //update sibling in case of slide
+        //set back to child list
+        selectedNodeIndex.push('children');
+        //update siblings
         if(this.selector.get('stype')==='slide'){
-            //set back to child list
-            selectedNodeIndex.push('children');
             //update the sibling nodes after adding the node
             this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition + 1);
+        } else {
+            this.updateSiblingNodes(selectedNodeIndex, targetIndex);
         }
         //need to update flat tree for node absolute positions
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
@@ -438,9 +447,12 @@ class DeckTreeStore extends BaseStore {
         if(this.selector.get('stype')==='slide'){
             this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(selectedRelPosition + 1)));
         }else{
-            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(chain.size - 1)));
+            this.switchSelector(this.selector, this.makeSelectorFromNode(chain.get(targetIndex)));
         }
-        this.emitChange();
+
+        if (!payload.silent){
+            this.emitChange();
+        }
     }
     updateNodeRelPosition(path, newPosition) {
         let arr = path.split(';');
@@ -482,6 +494,49 @@ class DeckTreeStore extends BaseStore {
         this.error = err;
         this.emitChange();
     }
+    moveTreeNode(payload){
+        let {sourceNode, targetNode, targetIndex, selector} = payload;
+        let currentIndex = this.getRelPositionFromPath(sourceNode.get('path')) - 1;
+        let targetNodeSelector = this.makeSelectorFromNode(targetNode);
+
+        //if reordering within same deck to a position after the initial one
+        //adjust target index to point to correct position after deleteTreeNode
+        if (targetNode.get('children').includes(sourceNode) && targetIndex > currentIndex){
+            targetIndex--;
+        } else {
+            //we need to check if an ancestor of the target node is sibling of and comes after the source node
+            //and adjust the corresponding index in the spath of the target node selector
+            let sourceArr = sourceNode.get('path').split(';');
+            let targetArr = targetNode.get('path').split(';');
+            if (targetArr.length >= sourceArr.length){
+                let hasCommonAncestor = true;
+                let i = sourceArr.length - 2;
+                while (hasCommonAncestor && i >= 0){
+                    if (sourceArr[i] !== targetArr[i]){
+                        hasCommonAncestor = false;
+                    }
+                    i--;
+                }
+                let targetAnc = targetArr[sourceArr.length - 1].split(':');
+                if (hasCommonAncestor && (targetAnc[1] - 1) > currentIndex) {
+                    targetAnc[1]--;
+                    targetArr[sourceArr.length - 1] = targetAnc.join(':');
+                    targetNodeSelector = targetNodeSelector.set('spath', targetArr.join(';'));
+                }
+            }
+        }
+        this.deleteTreeNode(this.makeSelectorFromNode(sourceNode), true);
+        this.addTreeNode({node: sourceNode, selector: targetNodeSelector, targetIndex: targetIndex, silent: true});
+        //by default we change the selected node to the moved one(done in addTreeNode) except for when
+        //root node was selected when reorder was initiated
+        if (!selector.spath){
+            this.switchSelector(this.selector, Immutable.fromJS(selector));
+        //or if we are at the subdeck view and we move a node within *that* subdeck
+        } else if (selector.spath === targetNodeSelector.get('spath') && targetNode.get('children').includes(sourceNode)) {
+            this.switchSelector(this.selector, targetNodeSelector);
+        }
+        this.emitChange();
+    }
 }
 
 DeckTreeStore.storeName = 'DeckTreeStore';
@@ -496,6 +551,7 @@ DeckTreeStore.handlers = {
     'UPDATE_TREE_NODE_SUCCESS': 'updateTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
+    'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
     //error handling msges
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
 };

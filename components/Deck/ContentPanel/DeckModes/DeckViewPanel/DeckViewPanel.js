@@ -45,8 +45,12 @@ class DeckViewPanel extends React.Component {
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
-        const deckLanguageCode = lodash.get(deckData, 'language', undefined);
-        const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
+        let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
+        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+        // default English
+        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+        //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
+        //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
         //const countryFlag = 'gb';
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
