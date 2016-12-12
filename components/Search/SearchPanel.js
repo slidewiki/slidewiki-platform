@@ -46,8 +46,8 @@ class SearchPanel extends React.Component {
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
                 numFound={this.props.SearchResultsStore.numFound}
-                entities={this.props.SearchParamsStore.entities}
-                languages={this.props.SearchParamsStore.languages}
+                // languages={this.props.SearchParamsStore.languages}
+                // entities={this.props.SearchParamsStore.entities}
             />;
         }
 // console.log("render");

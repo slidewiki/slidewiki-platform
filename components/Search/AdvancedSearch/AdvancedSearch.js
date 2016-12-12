@@ -2,7 +2,6 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 // import AdvancedSearchStore from '../../../stores/AdvancedSearchStore';
-import SearchResultsPanel from '../SearchResultsPanel/SearchResultsPanel';
 import SearchParamsStore from '../../../stores/SearchParamsStore';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 import UsersInput from '../AutocompleteComponents/UsersInput';
@@ -177,24 +176,24 @@ class AdvancedSearch extends React.Component {
 
                         <div className="two fields">
                             <div className="field">
-                                <label htmlFor="search_id">User</label>
+                                <label htmlFor="users_input_field">User</label>
                                 <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
-                            <div className="field">
+                            <div className="field disabled">
                                 <label htmlFor="tags">Tags</label>
-                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
+                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags' tabIndex="-1"></input>
                             </div>
 
                         </div>
-
-                        <div className="field">                           
-                            <div className="ui checkbox revisions" style={{marginTop: '1em', marginBottom: '1em'}}>
-                                <input name='revisions' id='revisions' onChange={this.onChange.bind(this)} tabIndex="0" type="checkbox" ref='revisions'></input>
-                            <label htmlFor="revisions">Include revisions</label>
-                            </div>
-                        </div>
-
+{
+                        // <div className="field">
+                        //     <div className="ui checkbox revisions" style={{marginTop: '1em', marginBottom: '1em'}}>
+                        //         <input name='revisions' id='revisions' onChange={this.onChange.bind(this)} tabIndex="0" type="checkbox" ref='revisions'></input>
+                        //     <label htmlFor="revisions">Include revisions</label>
+                        //     </div>
+                        // </div>
+}
                         <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
                              Submit
                         </div>
