@@ -3,15 +3,13 @@ class ChartRender {
   // nvd3 is included so far in the DefaultHTMLLayout file
   static createCharts () {
     $("div[id^=chart]").each(function(){
-      console.log('////////////////////////////////////////////////rendering chart');
-      console.log($(this).has('svg').length);
        if ($(this).has('svg').length) return '';
        // Extract the data of the chartID
        let chart = JSON.parse($(this).attr('datum'));
        let chartID = chart.data['this.chartID'];
        let chartType =  chart.data.chartType;
        let chartData = chart.data.chartData;
-       let data = null;
+       let data = [];
        chart = null;
       switch (chartType) {
           case 'lineChart':
@@ -26,8 +24,11 @@ class ChartRender {
               chart.xAxis.tickFormat(function(d) { return chartData[0].xlabels[d] || d; });
               break;
           case 'pieChart':
+              chartData = chartData[0].values;
+              chart = nv.models.pieChart();
+              break;
           case 'pie3DChart':
-              data = chartData[0].values;
+              chartData = chartData[0].values;
               chart = nv.models.pieChart();
               break;
           case 'areaChart':
@@ -54,19 +55,19 @@ class ChartRender {
                 .color(d3.scale.category10().range());
               chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
               chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
-                  break;
+              chartData = data;
+              break;
           default:
       }
 
       if (chart !== null) {
-
         d3.select('#' + chartID)
           .append('svg')
           .datum(chartData)
           .transition().duration(500)
           .call(chart);
 
-        // nv.utils.windowResize(chart.update);
+        nv.utils.windowResize(chart.update);
       }
     });
   }

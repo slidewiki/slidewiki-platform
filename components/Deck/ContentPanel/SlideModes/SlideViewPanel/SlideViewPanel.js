@@ -78,7 +78,7 @@ class SlideViewPanel extends React.Component {
             }
             */
             //initial resize
-            this.resize()
+            this.resize();
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
                 //console.log('resize');

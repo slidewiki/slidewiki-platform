@@ -9,9 +9,20 @@ import needsNewRevisionCheck from '../../../../../actions/revisioning/needsNewRe
 import handleRevisionChanges from '../../../../../actions/revisioning/handleRevisionChanges';
 import SlideContentEditor from './SlideContentEditor';
 import Error from '../../../../../components/Error/Error';
+import ChartRender from '../../../util/ChartRender';
 const ReactDOM = require('react-dom');
 
 class SlideEditPanel extends React.Component {
+
+    componentDidMount(){
+      ChartRender.createCharts();
+      this.forceUpdate();
+    }
+
+    componentDidUpdate(){
+      ChartRender.createCharts();
+    }
+
     render() {
         //------------------we need to check the revisioning conditions
         //handle the notifications --> in process.env.BROWSER
