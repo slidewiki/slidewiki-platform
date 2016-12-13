@@ -15,7 +15,6 @@ export default function saveTreeNode(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('SAVE_TREE_NODE_FAILURE', err);
             } else {
-                context.dispatch('SAVE_TREE_NODE_SUCCESS', payload);
                 let newSid = payload.selector.sid, newPath = payload.selector.spath;
                 if (payload.selector.stype === 'slide') {
                     newSid = res._id + '-' + res.revisions[0].id;
@@ -27,6 +26,7 @@ export default function saveTreeNode(context, payload, done) {
                         newPath = pathArr.join(';');
                     }
                 }
+                context.dispatch('SAVE_TREE_NODE_SUCCESS', {selector: payload.selector, newValue: payload.newValue, newSid: newSid, newPath: newPath});
                 let selector = {
                     id: payload.selector.id,
                     stype: payload.selector.stype,
