@@ -19,8 +19,9 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
-import { logger } from './configs/log';
+
 const uuidV4 = require('uuid/v4');
+let clog = require('./configs/log').log;
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -74,10 +75,11 @@ fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
+fetchrPlugin.registerService(require('./services/customlog'));
 
 server.use((req, res, next) => {
     req.reqId = uuidV4();
-    logger.info({reqId: req.reqId, requested: req.url, from: req.ip, hostname: req.hostname});
+    res.reqId = req.reqId;
     const context =  app.createContext({
         req: req,
         res: res  //for userStoragePlugin
@@ -86,10 +88,13 @@ server.use((req, res, next) => {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
         //}
     });
+    clog.info({reqId: req.reqId, url: req.url, ip: req.ip}, 'new request received');
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
+    context.getActionContext().executeAction(navigateAction, {
+        url: req.url
+    }, (err) => {
         if (err) {
-            logger.error({reqId: req.reqId, err: err});
+            clog.error({reqId: req.reqId, url: req.url, file: __filename.split('/').pop(), err:err});
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -107,9 +112,11 @@ server.use((req, res, next) => {
                 debug('Sending markup');
                 res.type('html');
                 res.status(err.statusCode);
-                logger.info({reqId: req.reqId, responded: req.url, statusCode: res.statusCode});
                 res.write('<!DOCTYPE html>' + html);
+                clog.warn({resId: res.reqId, url: req.url}, 'sending response.');
                 res.end();
+                // Pass through to next middleware
+                //next();
             } else {
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
                 debug('Rendering Application component into html');
@@ -126,9 +133,10 @@ server.use((req, res, next) => {
                 debug('Sending markup');
                 res.type('html');
                 res.status(err.statusCode);
-                logger.info({reqId: req.reqId, responded: req.url, statusCode: res.statusCode});
                 res.write('<!DOCTYPE html>' + html);
+                clog.warn({resId: res.reqId, url: req.url}, 'sending response.');
                 res.end();
+                //next(err);
             }
             return;
         }
@@ -152,7 +160,7 @@ server.use((req, res, next) => {
         debug('Sending markup');
         res.type('html');
         res.write('<!DOCTYPE html>' + html);
-        logger.info({reqId: req.reqId, responded: req.url, statusCode: res.statusCode});
+        clog.info({resId: res.reqId, url: req.url}, 'sending response.');
         res.end();
     });
 });
@@ -160,6 +168,6 @@ server.use((req, res, next) => {
 
 const port = process.env.PORT || 3000;
 server.listen(port);
-logger.info('SlideWiki Platform is now Listening on port ' + port);
+console.log('SlideWiki Platform is now Listening on port ' + port);
 
 export default server;

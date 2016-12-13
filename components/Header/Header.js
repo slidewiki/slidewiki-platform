@@ -52,7 +52,7 @@ class Header extends React.Component {
 
         return (
             <div>
-              {/*<MediaQuery query='(min-device-width: 768px)'>*/}
+              <MediaQuery query='(min-device-width: 768px)'>
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui container">
                         <a className="item" href='/'>
@@ -72,8 +72,7 @@ class Header extends React.Component {
 
                     </div>
                 </div>
-              {/*</MediaQuery>*/}
-              {/*
+              </MediaQuery>
               <MediaQuery query='(max-device-width: 767px)'>
                 <div className="ui inverted blue menu" ref="header">
                   <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
@@ -90,9 +89,7 @@ class Header extends React.Component {
                     <NavLink className="item" routeName="addDeck">
                         <i className="add icon"/>Add Deck
                     </NavLink>
-                */}
                     {/*<UserNotificationsBadge className="ui item"/>*/}
-                {/*
                     {mobileLoginButton}
                     <LoginModal/>
                     <div className="item search">
@@ -100,7 +97,6 @@ class Header extends React.Component {
                     </div>
                 </div>
               </MediaQuery>
-              */}
             </div>
         );
     }
