@@ -428,8 +428,10 @@ class SlideContentEditor extends React.Component {
     emitChange() {
 
       window.onbeforeunload = () => {
-        return 'If you don\'t save the slide, it won\'t be updated. ' +
+        swal('hello');
+        /*return 'If you don\'t save the slide, it won\'t be updated. ' +
           'Are you sure you want to exit this page?';
+          */
       };
     }
 /*
