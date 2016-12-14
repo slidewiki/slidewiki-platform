@@ -32,7 +32,7 @@ class Comment extends React.Component {
                         {ActivityFeedUtil.breakLines(comment.text)}
                     </div>
                     { (String(this.props.userid) !== '') ? replyLink : ''}
-                    { comment.replyBoxOpened ? (<AddReply comment={comment}/>) : '' }
+                    { comment.replyBoxOpened ? (<AddReply comment={comment} userid={this.props.userid}/>) : '' }
                 </div>
                 {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
             </div>
