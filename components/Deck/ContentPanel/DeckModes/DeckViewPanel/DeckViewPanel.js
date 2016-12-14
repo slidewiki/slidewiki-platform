@@ -19,7 +19,7 @@ class DeckViewPanel extends React.Component {
 
     render() {
         const heightStyle = {
-            height: '450px'
+            height: this.props.DeckViewStore.deckViewPanelHeight + 'px'
         };
         const deckData = this.props.DeckViewStore.deckData;
         let slidesArr = [];
@@ -27,12 +27,16 @@ class DeckViewPanel extends React.Component {
             slidesArr = this.props.DeckViewStore.slidesData.children;
         }
         let tags = [];
-        if (deckData && deckData.tags)
+        if (deckData && deckData.tags){
             tags = deckData.tags;
+        }
+        let currentRevision = 1;
+        if(deckData.revisions){
+            currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
+                return rev.id === deckData.active;
+            });
+        }
 
-        const currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
-            return rev.id === deckData.active;
-        });
         const totalRevisions = deckData.revisionCount;
         // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
         const deckTheme = lodash.get(deckData, 'theme', 'Simple');
@@ -41,8 +45,12 @@ class DeckViewPanel extends React.Component {
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
-        const deckLanguageCode = lodash.get(deckData, 'language', undefined);
-        const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
+        let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
+        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+        // default English
+        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+        //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
+        //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
         //const countryFlag = 'gb';
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);

@@ -51,6 +51,8 @@
                 var new_element = cEl.cloneNode(true);
                 cEl.parentNode.replaceChild(new_element, cEl);
                 var cEl = new_element;
+                if(cEl.style.width != '0px' && cEl.style.width != undefined && cEl.style.height != '0px' && cEl.style.height != undefined)
+                {
 
                 // create _simpleDraggable object for this dom element
                 // KLAAS -> added resize
@@ -81,6 +83,7 @@
                 //mouseenter / mouseleave
                 cEl.addEventListener("mouseenter", function (e) {
 
+                    //alert('test');
                     // TODO
                     // document.body.appendChild(cEl);
                     //KLAAS ADAPT
@@ -95,7 +98,7 @@
                     // fetch our section element
                     //var section = document.querySelector("section");
 
-                    //KLAAS -> for drag button
+                    //===============KLAAS -> for drag button
                     //let div = document.createElement("div");
                     cEl.dragdiv = document.createElement("div");
                     cEl.dragdiv.style.position = "absolute";
@@ -215,7 +218,7 @@
                     });
                     */
 
-                    //KLAAS -> for remove button
+                    //===============KLAAS -> for remove button
                     cEl.removediv = document.createElement("div");
                     cEl.removediv.style.position = "absolute";
                     cEl.removediv.style.zIndex = "9000000";
@@ -267,8 +270,91 @@
                         }
                     });
 
+                    //===============KLAAS -> for send-to-back button
+                    cEl.sendtobackdiv = document.createElement("div");
+                    cEl.sendtobackdiv.style.position = "absolute";
+                    cEl.sendtobackdiv.style.zIndex = "9000000";
+                    cEl.sendtobackdiv.id = "sendtobackdiv";
+                    cEl.sendtobackdiv.className = "sendtobackdiv";
+                    cEl.sendtobackdiv.style.width = "50px";
+                    cEl.sendtobackdiv.style.height = "50px";
 
-                    //KLAAS -> for resize button
+                    let imgsendtoback = document.createElement("IMG");
+                    imgsendtoback.style.zIndex = "9000000";
+                    imgsendtoback.src = '../../../../../assets/images/cursor_send_to_back.png';
+                    imgsendtoback.id = "imgremove";
+                    imgsendtoback.disabled = true;
+                    imgsendtoback.draggable = false;
+                    imgsendtoback.contentEditable = false;
+                    cEl.sendtobackdiv.appendChild(imgsendtoback);
+                    cEl.sendtobackdiv.contentEditable = false;
+                    //assign to bottom left of parent div
+                    //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                    cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
+
+                    cEl.insertBefore( cEl.sendtobackdiv, cEl.firstChild );
+                    //cEl.appendChild(cEl.removediv);
+
+                    cEl.sendtobackdiv.addEventListener("mousedown", function (e) {
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+
+                        //alert('test');
+                        //$(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
+                        let index_lowest = cEl.style.zIndex;
+                        $(".pptx2html [style*='absolute']").each(function() {
+                            var index_current = parseInt($(this).css("zIndex"), 10);
+                            if(index_current < index_lowest) {
+                                index_lowest = index_current;
+                            }
+                        });
+                        cEl.style.zIndex = index_lowest - 10;
+                    });
+
+                    //===============KLAAS -> for move-to-front button
+                    cEl.movetofrontdiv = document.createElement("div");
+                    cEl.movetofrontdiv.style.position = "absolute";
+                    cEl.movetofrontdiv.style.zIndex = "9000000";
+                    cEl.movetofrontdiv.id = "movetofrontdiv";
+                    cEl.movetofrontdiv.className = "movetofrontdiv";
+                    cEl.movetofrontdiv.style.width = "50px";
+                    cEl.movetofrontdiv.style.height = "50px";
+
+                    let imgmovetofront = document.createElement("IMG");
+                    imgmovetofront.style.zIndex = "9000000";
+                    imgmovetofront.src = '../../../../../assets/images/cursor_bring_to_front.png';
+                    imgmovetofront.id = "imgremove";
+                    imgmovetofront.disabled = true;
+                    imgmovetofront.draggable = false;
+                    imgmovetofront.contentEditable = false;
+                    cEl.movetofrontdiv.appendChild(imgmovetofront);
+                    cEl.movetofrontdiv.contentEditable = false;
+                    //assign to bottom left of parent div
+                    //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                    cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
+
+                    cEl.insertBefore( cEl.movetofrontdiv, cEl.firstChild );
+                    //cEl.appendChild(cEl.removediv);
+
+                    cEl.movetofrontdiv.addEventListener("mousedown", function (e) {
+
+                        //KLAAS ADAPT -> prevent default drag and drop.
+                        e.preventDefault ? e.preventDefault() : e.returnValue = false
+
+                        //alert('test');
+                        //$(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
+                        let index_highest = cEl.style.zIndex;
+                        $(".pptx2html [style*='absolute']").each(function() {
+                        var index_current = parseInt($(this).css("zIndex"), 10);
+                            if(index_current > index_highest) {
+                                index_highest = index_current;
+                            }
+                        });
+                        cEl.style.zIndex = index_highest + 10;
+                    });
+
+                    //===============KLAAS -> for resize button
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
                     cEl.resizediv.id = "resizediv";
@@ -432,6 +518,8 @@
                             cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
                             //move remove button with resized borders of absolute element
                             cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                            cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
+                            cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
                         }
                         else
                         { return; }
@@ -452,7 +540,10 @@
                     $('.dragdiv').remove();
                     $('.removediv').remove();
                     $('.resizediv').remove();
+                    $('.movetofrontdiv').remove();
+                    $('.sendtobackdiv').remove();
                 });
+            }
 
             })(allElms[i])
         }

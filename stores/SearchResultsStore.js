@@ -99,19 +99,8 @@ class SearchResultsStore extends BaseStore {
     }
     getState() {
         return {
-            queryparams: this.queryparams,
-            searchstring: this.searchstring,
-            entity: this.entity,
-            lang: this.lang,
-            // group: this.group,
-            fields: this.fields,
-            user: this.user,
-            tags: this.tags,
-            revisions: this.revisions,
             numFound: this.numFound,
             docs: this.docs,
-            entities: this.entities,
-            languages: this.languages,
             loading: this.loading,
             error: this.error
         };
@@ -120,19 +109,8 @@ class SearchResultsStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.queryparams = state.queryparams;
-        this.searchstring = state.searchstring;
-        this.entity = state.entity;
-        this.lang = state.lang;
-        // this.group = state.group;
-        this.fields = state.fields;
-        this.user = state.user;
-        this.tags = state.tags;
-        this.revisions = state.revisions;
         this.numFound = state.numFound;
         this.docs = state.docs;
-        this.entities = state.entities;
-        this.languages = state.languages;
         this.loading = state.loading;
         this.error = state.error;
     }
