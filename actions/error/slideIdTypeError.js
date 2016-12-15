@@ -1,10 +1,10 @@
 import ErrorStore from '../../stores/ErrorStore';
 import { ErrorsList } from '../../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function slideIdTypeError(context, payload, done) {
-    logger.error('Invalid slide id.', {deck_id: payload.params.id, slide_id: payload.params.sid, reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.error(context, payload, {msg: 'Invalid slide id'});
     const error = fumble.http.badRequest();
     ErrorsList.SLIDE_ID_TYPE_ERROR.statusCode = error.statusCode;
     ErrorsList.SLIDE_ID_TYPE_ERROR.statusText = error.message;

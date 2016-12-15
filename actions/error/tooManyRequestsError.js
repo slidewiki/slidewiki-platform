@@ -1,10 +1,10 @@
 import ErrorStore from '../../stores/ErrorStore';
 import { ErrorsList } from '../../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function tooManyRequestsError(context, payload, done) {
-    logger.error('Too many requests.', {reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.error(context, payload, {msg: 'Too many requests'});
     const error = fumble.http.tooManyRequests();
     ErrorsList.TOO_MANY_REQUESTS_ERROR.statusCode = error.statusCode;
     ErrorsList.TOO_MANY_REQUESTS_ERROR.statusText = error.message;

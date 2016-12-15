@@ -1,10 +1,10 @@
 import ErrorStore from '../../stores/ErrorStore';
 import { ErrorsList } from '../../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function gatewayTimeoutError(context, payload, done) {
-    logger.error('Gateway Timeout', {reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.error(context, payload, {msg: 'Gateway timeout'});
     const error = fumble.http.badRequest();
     ErrorsList.GATEWAY_TIMEOUT_ERROR.statusCode = error.statusCode;
     ErrorsList.GATEWAY_TIMEOUT_ERROR.statusText = error.message;

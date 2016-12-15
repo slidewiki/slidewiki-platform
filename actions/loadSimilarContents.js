@@ -2,11 +2,11 @@ import { shortTitle } from '../configs/general';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
-import { logger, breadcrumb} from '../configs/log';
+const clog = require('./log/clog');
 import serviceUnavailable from './error/serviceUnavailable';
 
 export default function loadSimilarContents(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -19,7 +19,7 @@ export default function loadSimilarContents(context, payload, done) {
 
     context.service.read('similarcontent.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            logger.error({reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_SIMILAR_CONTENT_FAILURE', err);
         } else {

@@ -1,8 +1,8 @@
 import notFoundError from './error/notFoundError';
-import { logger, breadcrumb} from '../configs/log';
+const clog = require('./log/clog');
 
 export default function loadNotFound(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     context.executeAction(notFoundError, payload, done);
     return;
 }

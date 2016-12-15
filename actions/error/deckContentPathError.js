@@ -1,10 +1,10 @@
 import ErrorStore from '../../stores/ErrorStore';
 import { ErrorsList } from '../../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function deckContentPathError(context, payload, done) {
-    logger.error('Invalid deck content path.', {deck_id: payload.params.id, spath: payload.params.spath, reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.error(context, payload, {deck_id: payload.params.id, spath: payload.params.spath, msg: 'Invalid deck content path'});
     const error = fumble.http.badRequest();
     ErrorsList.DECK_CONTENT_TYPE_ERROR.statusCode = error.statusCode;
     ErrorsList.DECK_CONTENT_TYPE_ERROR.statusText = error.message;

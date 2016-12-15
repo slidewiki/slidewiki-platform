@@ -2,11 +2,11 @@ import async from 'async';
 import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import deleteTreeNodeWithRevisionCheck from './deleteTreeNodeWithRevisionCheck';
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNodeAndNavigate(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     //load all required actions in parallel
     async.parallel([
         (callback) => {
@@ -31,7 +31,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
             });
         }
         else {
-            logger.error({reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
         }
         done();

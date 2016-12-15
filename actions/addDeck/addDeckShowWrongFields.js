@@ -1,8 +1,8 @@
 import {shortTitle} from '../../configs/general';
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function addDeckShowWrongFields(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     context.dispatch('SHOW_WRONG_FIELDS', payload);
     done();
 }

@@ -5,7 +5,7 @@ import addTreeNode from './addTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addTreeNodeWithRevisionCheck(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         //enrich with user id
@@ -15,7 +15,7 @@ export default function addTreeNodeWithRevisionCheck(context, payload, done) {
             userid: userid
         }, (err, res) => {
             if (err) {
-                logger.error({reqId: payload.navigate.reqId, err: err});
+                clog.error(context, payload, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {

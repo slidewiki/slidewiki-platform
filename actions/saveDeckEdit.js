@@ -1,11 +1,10 @@
 import UserProfileStore from '../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
-import { logger, breadcrumb } from '../configs/log';
 import serviceUnavailable from './error/serviceUnavailable';
 
 export default function saveDeckEdit(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -18,7 +17,7 @@ export default function saveDeckEdit(context, payload, done) {
         payload.userid = userid;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                logger.error({reqId: payload.navigate.reqId, err: err});
+                clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
             } else {

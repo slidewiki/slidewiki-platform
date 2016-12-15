@@ -1,7 +1,7 @@
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function hideLeftColumn(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     context.dispatch('HIDE_LEFT_COLUMN', payload);
     done();
 }

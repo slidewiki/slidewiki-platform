@@ -1,7 +1,7 @@
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function expandContentPanel(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     context.dispatch('EXPAND_CONTENET_PANEL', payload);
     context.dispatch('UPDATE_DECK_VIEW_PANEL_HEIGHT', 1);
     done();

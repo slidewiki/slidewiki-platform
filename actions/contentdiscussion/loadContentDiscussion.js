@@ -3,10 +3,10 @@ import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';
 import { AllowedPattern } from '../error/util/allowedPattern';
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function loadContentDiscussion(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -19,7 +19,7 @@ export default function loadContentDiscussion(context, payload, done) {
 
     context.service.read('discussion.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            logger.error({reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             return;
           // context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);

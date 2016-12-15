@@ -43,6 +43,9 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
                     runFetchTree: hasRevisionChanges
                 });
             }
+            else {
+                clog.error(context, payload, {filepath: __filename, err: err});
+            }
             done();
         });
 }

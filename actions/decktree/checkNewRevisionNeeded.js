@@ -1,7 +1,7 @@
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function checkNewRevisionNeeded(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     let selector = payload.selector;
     let tmp = selector.spath.split(';');
     let targetDeckID;

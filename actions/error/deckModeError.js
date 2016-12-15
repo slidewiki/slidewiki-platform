@@ -1,10 +1,10 @@
 import ErrorStore from '../../stores/ErrorStore';
 import { ErrorsList } from '../../components/Error/util/ErrorDescriptionUtil';
 const fumble = require('fumble');
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function deckModeError(context, payload, done) {
-    logger.error('Invalid deck mode.', {deck_id: payload.params.id, mode:payload.params.mode, reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.error(context, payload, {deck_id: payload.params.id, mode:payload.params.mode, msg: 'Invalid deck mode'});
     const error = fumble.http.badRequest();
     ErrorsList.DECK_MODE_ERROR.statusCode = error.statusCode;
     ErrorsList.DECK_MODE_ERROR.statusText = error.message;

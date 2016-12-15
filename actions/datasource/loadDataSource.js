@@ -1,7 +1,7 @@
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function loadDataSource(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     //context.service.read('datasource.item', payload, {timeout: 20 * 1000}, (err, res) => {
     //    if (err) {
     //        context.dispatch('LOAD_DATASOURCE_FAILURE', err);

@@ -44,7 +44,7 @@ export default function loadContentModules(context, payload, done) {
     // final callback
     (err, results) => {
         if (err){
-            logger.error({reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {selector: payload.params, moduleType: 'datasource'});

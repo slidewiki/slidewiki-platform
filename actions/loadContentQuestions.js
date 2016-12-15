@@ -17,7 +17,7 @@ export default function loadContentQuestions(context, payload, done) {
 
     context.service.read('questions.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            logger.error({reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_CONTENT_QUESTIONS_FAILURE', err);
         } else {

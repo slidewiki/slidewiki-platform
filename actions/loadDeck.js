@@ -12,10 +12,10 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
-import { logger, breadcrumb} from '../configs/log';
+const clog = require('./log/clog');
 
 export default function loadDeck(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -104,7 +104,7 @@ export default function loadDeck(context, payload, done) {
 
     (err, results) => {
         if (err) {
-            logger.error({reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }

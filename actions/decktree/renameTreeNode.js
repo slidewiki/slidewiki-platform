@@ -1,7 +1,7 @@
-import { logger, breadcrumb} from '../../configs/log';
+const clog = require('../log/clog');
 
 export default function renameTreeNode(context, payload, done) {
-    logger.info({reqId: payload.navigate.reqId, navStack: context.stack});
+    clog.info(context, payload);
     context.dispatch('RENAME_TREE_NODE_SUCCESS', payload);
     done();
 }
