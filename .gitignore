@@ -4,6 +4,7 @@ build
 *.log
 *.lock
 logs/*.log
+logs/*.log.*
 tmp.js
 coverage
 configs/microservices.js
