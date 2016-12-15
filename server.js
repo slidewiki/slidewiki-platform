@@ -75,11 +75,11 @@ fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
-fetchrPlugin.registerService(require('./services/customlog'));
+fetchrPlugin.registerService(require('./services/logservice'));
 
 server.use((req, res, next) => {
-    req.reqId = uuidV4();
-    res.reqId = req.reqId;
+    req.id = uuidV4();
+    res.id = req.id;
     const context =  app.createContext({
         req: req,
         res: res  //for userStoragePlugin
@@ -88,13 +88,10 @@ server.use((req, res, next) => {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
         //}
     });
-    clog.info({reqId: req.reqId, url: req.url, ip: req.ip}, 'new request received');
+    clog.info({id: req.id, method: req.method, url: req.url, ip: req.ip, message: 'new request'});
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {
-        url: req.url
-    }, (err) => {
+    context.getActionContext().executeAction(navigateAction, {url: req.url}, (err) => {
         if (err) {
-            clog.error({reqId: req.reqId, url: req.url, file: __filename.split('/').pop(), err:err});
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -113,7 +110,7 @@ server.use((req, res, next) => {
                 res.type('html');
                 res.status(err.statusCode);
                 res.write('<!DOCTYPE html>' + html);
-                clog.warn({resId: res.reqId, url: req.url}, 'sending response.');
+                clog.error({id: res.id, url: req.url, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
                 res.end();
                 // Pass through to next middleware
                 //next();
@@ -134,7 +131,7 @@ server.use((req, res, next) => {
                 res.type('html');
                 res.status(err.statusCode);
                 res.write('<!DOCTYPE html>' + html);
-                clog.warn({resId: res.reqId, url: req.url}, 'sending response.');
+                clog.error({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
                 res.end();
                 //next(err);
             }
@@ -160,7 +157,8 @@ server.use((req, res, next) => {
         debug('Sending markup');
         res.type('html');
         res.write('<!DOCTYPE html>' + html);
-        clog.info({resId: res.reqId, url: req.url}, 'sending response.');
+        //console.log(Object.keys(res), res.statusCode, res.statusMessage, Object.keys(res.req));
+        clog.info({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
         res.end();
     });
 });
@@ -168,6 +166,6 @@ server.use((req, res, next) => {
 
 const port = process.env.PORT || 3000;
 server.listen(port);
-console.log('SlideWiki Platform is now Listening on port ' + port);
+clog.info('SlideWiki Platform is now Listening on port ' + port);
 
 export default server;
