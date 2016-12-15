@@ -5,10 +5,6 @@ const port = (process.env.PORT + 1) || 3001;
 
 let webpackConfig = {
     resolve: {
-        alias: {
-            'winston': path.join(__dirname, '/empty_shim.js'),
-            fs: path.join(__dirname, '/empty_shim.js'),
-        },
         extensions: ['', '.js', '.jsx']
     },
     entry: {
@@ -28,7 +24,7 @@ let webpackConfig = {
         loaders: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
+                exclude: [/node_modules/],
                 loaders: [
                     require.resolve('react-hot-loader'),
                     require.resolve('babel-loader')
@@ -56,7 +52,6 @@ let webpackConfig = {
     ],
     devtool: 'eval',
     externals: {
-        'winston': 'require("winston")',
         'fs': 'require("fs")'
     }
 };
