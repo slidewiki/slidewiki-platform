@@ -22,7 +22,10 @@ class DeckPropertiesEditor extends React.Component {
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            license: props.deckProps.license || ''
+            license: props.deckProps.license || '',
+            visibility: 'public',
+            users: '',
+            groups: ''
         };
     }
 
@@ -31,6 +34,12 @@ class DeckPropertiesEditor extends React.Component {
         if (newProps.deckProps !== this.props.deckProps) {
             this.setState(this.getStateFromProps(newProps));
         }
+    }
+
+    componentDidMount() {
+        $('#groupsDropdown')
+            .dropdown()
+        ;
     }
 
     handleCancel() {
@@ -153,6 +162,44 @@ class DeckPropertiesEditor extends React.Component {
             <option value="CC BY-SA">CC BY-SA</option>
         </select>;
 
+        let visibilityOptions = <select className="ui search dropdown" id="visibility" aria-labelledby="visibility"
+                                     value={this.state.visibility}
+                                     onChange={this.handleChange.bind(this, 'visibility')}>
+            <option value="public">public</option>
+            <option value="restricted">restricted</option>
+            <option value="private">private</option>
+        </select>;
+
+        let groupsArray = [];
+        if (this.props.UserProfileStore.user.groups)
+            this.props.UserProfileStore.user.groups.forEach((group) => {
+                groupsArray.push((
+                    <div className="item" data-value={group.id}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
+                ));
+            });
+        let groupsOptions = <div className="ui fluid multiple search selection dropdown" id="groupsDropdown" aria-labelledby="groups"
+                                     onChange={this.handleChange.bind(this, 'groups')}>
+                                     <input type="hidden" name="groups" />
+            <i className="dropdown icon"></i>
+            <div className="default text">Select Groups</div>
+            <div className="menu">
+              {groupsArray}
+            </div>
+        </div>;
+
+        let usersOptions = <select className="ui search dropdown" id="users" aria-labelledby="users"
+                                     value={this.state.users}
+                                     onChange={this.handleChange.bind(this, 'users')}>
+            <option value="1">Kurt</option>
+            <option value="2">Roy</option>
+            <option value="3">Antje</option>
+        </select>;
+
+        let groupsFieldClass = classNames({
+            'field': true,
+            'disabled': this.state.visibility !== 'restricted'
+        });
+
         let saveDeckButton = isUserEditor ?
         <div className='ui primary button' role="button" aria-describedby="saveDeck" tabIndex="0"
              onClick={this.handleSave.bind(this, false)}>Save</div> : '';
@@ -193,6 +240,20 @@ class DeckPropertiesEditor extends React.Component {
                             <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
                                 <label id="license">License</label>
                                 {licenseOptions}
+                            </div>
+                        </div>
+                        <div className="field">
+                            <label id="visibility">Choose general visibility</label>
+                            {visibilityOptions}
+                        </div>
+                        <div className="two fields">
+                            <div className={groupsFieldClass}>
+                                <label id="groups">Add groups for edit rights</label>
+                                {groupsOptions}
+                            </div>
+                            <div className={groupsFieldClass}>
+                                <label id="users">Add users for edit rights</label>
+                                {usersOptions}
                             </div>
                         </div>
                         {saveDeckButton}
