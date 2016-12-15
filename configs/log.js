@@ -20,11 +20,11 @@ if (!obj.log) {
                 colorize: true,
                 level: 'debug',
                 handleExceptions: true,
-                humanReadableUnhandledException: true,
-                json: true,
+                humanReadableUnhandledException: true
             }),
             // file transport
             new (require('winston-daily-rotate-file'))({
+                label: 'slidewiki-platform',
                 filename: `${logDir}/-platform.log`,
                 timestamp: true,
                 datePattern: 'yyyy-MM-dd',
