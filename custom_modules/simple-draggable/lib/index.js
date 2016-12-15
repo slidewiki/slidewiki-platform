@@ -155,7 +155,11 @@
                     //drag mousehandlers
                     //KLAAS ADAPT -> applies to dragdiv in top-left corner only
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
-
+                        // Add warning of edition
+                        window.onbeforeunload = () => {
+                          return 'If you don\'t save the slide, it won\'t be updated. ' +
+                            'Are you sure you want to exit this page?';
+                        };
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
@@ -244,21 +248,33 @@
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
                         //KLAAS NEW -> remove entire div
                         //cEl.parentNode.replaceChild(new_element, cEl);
-                        if (confirm('Are you sure you want to delete this element?'))
-                        {
-                            //alert(cEl.parentNode.className);
-                            if (cEl.parentNode.childNodes.length === 1)
-                            {
-                                //add a div element to prevent empty PPTX element which gets removed by CKeditor
-                                let emptydiv = document.createElement("div");
-                                //emptydiv.innerHTML = "";
-                                cEl.parentNode.appendChild(emptydiv);
-                            }
-                            //else{
-                                cEl.parentNode.removeChild(cEl);
-                            //}
-                            //cEl.remove();
-                        }
+
+                        swal({
+                          title: "Are you sure?",
+                          type: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Yes, delete it!'
+                        }).then(function(){
+                          //edition warning
+                          window.onbeforeunload = () => {
+                            return 'If you don\'t save the slide, it won\'t be updated. ' +
+                              'Are you sure you want to exit this page?';
+                          };
+                          //alert(cEl.parentNode.className);
+                          if (cEl.parentNode.childNodes.length === 1)
+                          {
+                              //add a div element to prevent empty PPTX element which gets removed by CKeditor
+                              let emptydiv = document.createElement("div");
+                              //emptydiv.innerHTML = "";
+                              cEl.parentNode.appendChild(emptydiv);
+                          }
+                          //else{
+                              cEl.parentNode.removeChild(cEl);
+                          //}
+                          //cEl.remove();
+                        }).catch(swal.noop); // supress errors
                     });
 
                     //===============KLAAS -> for send-to-back button
@@ -379,7 +395,11 @@
 
                     //resize mousehandlers
                     cEl.resizediv.addEventListener("mousedown", function (e) {
-
+                        //edition warning
+                        window.onbeforeunload = () => {
+                          return 'If you don\'t save the slide, it won\'t be updated. ' +
+                            'Are you sure you want to exit this page?';
+                        };
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
