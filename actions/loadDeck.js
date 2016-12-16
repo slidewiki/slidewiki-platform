@@ -12,6 +12,8 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
+import fetchUser from './user/userprofile/fetchUser';
+import UserProfileStore from '../stores/UserProfileStore';
 
 export default function loadDeck(context, payload, done) {
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
@@ -73,6 +75,13 @@ export default function loadDeck(context, payload, done) {
     }
     //load all required actions in parallel
     async.parallel([
+        (callback) => {
+            context.executeAction(fetchUser, {
+                params: {
+                    username: context.getStore(UserProfileStore).getState().username
+                }
+            }, callback);
+        },
         (callback) => {
             context.executeAction(loadContent, payloadCustom, callback);
         },

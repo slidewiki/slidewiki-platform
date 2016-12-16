@@ -174,7 +174,7 @@ class DeckPropertiesEditor extends React.Component {
         if (this.props.UserProfileStore.user.groups)
             this.props.UserProfileStore.user.groups.forEach((group) => {
                 groupsArray.push((
-                    <div className="item" data-value={group.id}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
+                    <div key={group._id} className="item" data-value={group._id}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
                 ));
             });
         let groupsOptions = <div className="ui fluid multiple search selection dropdown" id="groupsDropdown" aria-labelledby="groups"
