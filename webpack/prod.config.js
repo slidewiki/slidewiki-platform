@@ -26,7 +26,7 @@ let webpackConfig = {
             {
                 test: /\.(js|jsx)$/,
                 //
-                exclude: /node_modules\/(?!identicons)/ ,
+                exclude: [/node_modules\/(?!identicons)/],
                 //exclude: /node_modules\/(?!(module1|module2)\/).*/
                 loaders: [
                     require.resolve('babel-loader')
@@ -75,7 +75,10 @@ let webpackConfig = {
         }),
         new Visualizer()
     ],
-    devtool: 'source-map'
+    devtool: 'source-map',
+    externals: {
+        'fs': 'require("fs")'
+    }
 };
 
 module.exports = webpackConfig;
