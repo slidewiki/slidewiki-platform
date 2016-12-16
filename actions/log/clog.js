@@ -1,20 +1,53 @@
 exports.error = function(context, payload, msg='') {
-    //console.log('Hey error', context, payload, msg);
-    payload.navStack = context.stack.slice();
-    console.log('before setting:', msg);
-    payload.msg = msg;
-    console.log('after setting:', msg);
-    context.service.update('log.error', payload, {timeout: 20 * 1000}, (err, res) => {
-        //console.log(err);
+    const body = {navStack: context.stack.slice(), msg: msg};
+    context.service.update('log.error', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
+    });
+    return;
+};
+
+exports.warn = function(context, payload, msg='') {
+    const body = {navStack: context.stack.slice(), msg: msg};
+    context.service.update('log.warn', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
     });
     return;
 };
 
 exports.info = function(context, payload, msg='') {
-    payload.navStack = context.stack.slice();
-    payload.msg = msg;
-    context.service.update('log.info', payload, {timeout: 20 * 1000}, (err, res) => {
-        //console.log(err);
+    const body = {navStack: context.stack.slice(), msg: msg};
+    context.service.update('log.info', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
+    });
+    return;
+};
+
+exports.verbose = function(context, payload, msg='') {
+    const body = {navStack: context.stack.slice(), msg: msg};
+    context.service.update('log.verbose', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
+    });
+    return;
+};
+
+exports.debug = function(context, payload, msg='') {
+    const body = {navStack: context.stack.slice(), msg: msg};
+    context.service.update('log.debug', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
+    });
+    return;
+};
+
+exports.silly = function(context, payload, msg='') {
+    const body = {navStack: context.stack.slice(), msg: msg};
+    context.service.update('log.silly', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
     });
     return;
 };
