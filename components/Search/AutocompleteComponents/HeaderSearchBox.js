@@ -90,7 +90,7 @@ class HeaderSearchBox extends React.Component {
             <div className={classes} ref="headerSearchBox" id="header_search_box_div">
                 <label htmlFor="searchString" hidden>Search</label>
                 <input type="text" placeholder="Search..." ref="searchstring" id="searchString" value={this.state.searchstring} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt" />
-                <i className="search link icon" onSelect={this.handleRedirect.bind(this)} onClick={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
+                <i className="search link icon" onClick={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
                 <div className="results"></div>
             </div>
         );
