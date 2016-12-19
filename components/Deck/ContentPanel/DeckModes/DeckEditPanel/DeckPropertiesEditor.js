@@ -1,4 +1,5 @@
 import React from 'react';
+import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
@@ -7,6 +8,7 @@ import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
+import updateAuthorizedUsers from '../../../../../actions/updateAuthorizedUsers';
 import { timeSince } from '../../../../../common';
 
 
@@ -54,13 +56,13 @@ class DeckPropertiesEditor extends React.Component {
                     $('#deck_edit_dropdown_usernames_remote').dropdown('clear');
                     $('#deck_edit_dropdown_usernames_remote').dropdown('hide');
 
-                    let users = this.props.UserProfileStore.authorizedUsers;
+                    let users = this.props.DeckEditStore.authorizedUsers;
                     if (users === undefined || users === null)
                         users = [];
 
                     // console.log('trying to add', name, 'to', group.members);
                     if (users.findIndex((member) => {
-                        return users === name && users === parseInt(value);
+                        return member.username === name && member.userid === parseInt(value);
                     }) === -1 && name !== this.props.UserProfileStore.username) {
                         users.push({
                             username: name,
@@ -133,13 +135,15 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     handleClickRemoveUser(member) {
-        console.log('handleClickRemoveUser', member);
+        console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
 
-        let users = this.props.UserProfileStore.authorizedUsers;
+        let users = this.props.DeckEditStore.authorizedUsers;
 
-        users.pop(member);
+        let newMembers = users.filter((member2) => {
+            return !(member2.username === member.username && member2.userid === parseInt(member.userid));
+        });
 
-        this.context.executeAction(updateAuthorizedUsers, users);
+        this.context.executeAction(updateAuthorizedUsers, newMembers);
     }
 
     render() {
@@ -236,10 +240,6 @@ class DeckPropertiesEditor extends React.Component {
             'disabled': this.state.visibility !== 'restricted'
         });
 
-        let authusersClass = classNames({
-            'hidden': this.state.visibility !== 'restricted'
-        });
-
         let userlist = [];
         if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
             this.props.DeckEditStore.authorizedUsers.forEach((user) => {
@@ -255,7 +255,7 @@ class DeckPropertiesEditor extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + user.username}>{user.username} ({user.userid})</a>
+                              <a className="header" href={'/user/' + user.username}>{user.username}</a>
                               <div className="description">Access granted {timeSince((new Date(user.joined)))} ago</div>
                           </div>
                         </div>
@@ -327,14 +327,18 @@ class DeckPropertiesEditor extends React.Component {
                             </div>
                         </div>
 
-                        <div className={authusersClass}>
-                            <div className="ui header">
-                                <h3>Authorized users:</h3>
-                            </div>
-                            <div className="ui relaxed divided list">
-                                {userlist}
-                            </div>
-                        </div>
+                        {this.state.visibility === 'restricted' ? (
+                          <div className="field">
+                              <div className="ui tiny header">
+                                  Authorized users:
+                              </div>
+                              <div className="ui relaxed divided list">
+                                  {userlist}
+                              </div>
+                              <div className="ui hidden divider">
+                              </div>
+                          </div>
+                        ) : ''}
 
                         {saveDeckButton}
                         <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision"
