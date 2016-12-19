@@ -26,8 +26,8 @@ class DeckPropertiesEditor extends React.Component {
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             license: props.deckProps.license || '',
-            visibility: 'public',
-            users: '',
+            accessLevel: props.deckProps.accessLevel || 'public',
+            users: '',//TODO read users and groups from deck props
             groups: ''
         };
     }
@@ -40,7 +40,7 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     componentDidMount() {
-        $('#groupsDropdown')
+        $('#deck_edit_dropdown_groups')
             .dropdown()
         ;
 
@@ -103,7 +103,20 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
+        let users = [], groupids = [];
+        if (this.state.accessLevel === 'restricted') {
+            users = this.props.DeckEditStore.authorizedUsers;
+            groupids = $('#deck_edit_dropdown_groups').dropdown('get value').split(',');
+
+            if (users.length === 0 && (groupids.length === 0  || (groupids.length === 1 && groupids[0] === ''))) {
+                validationErrors.accessLevel = 'The access level needs at minimum one selected group or user.';
+                isValid = false;
+            }
+        }
+        console.log('handleSave', this.state.accessLevel, users, groupids);
+
         this.setState({validationErrors: validationErrors});
+        //TODO does a reload after button is pressed
         if (isValid) {
             swal({
                 title: 'Saving Deck Properties...',
@@ -123,7 +136,10 @@ class DeckPropertiesEditor extends React.Component {
                 theme: this.state.theme,
                 license: this.state.license,
                 tags: [],
-                selector: this.props.selector
+                selector: this.props.selector,
+                accessLevel: this.state.accessLevel,
+                users: users,
+                groups: groupids
             });
         }
     }
@@ -168,6 +184,11 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.license != null
         });
+        let accessLevelFieldClass = classNames({
+            'required': true,
+            'field': true,
+            'error': this.state.validationErrors.accessLevel != null
+        });
         let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language"
                                       aria-required="true"
                                       value={this.state.language}
@@ -210,9 +231,9 @@ class DeckPropertiesEditor extends React.Component {
             <option value="CC BY-SA">CC BY-SA</option>
         </select>;
 
-        let visibilityOptions = <select className="ui search dropdown" id="visibility" aria-labelledby="visibility"
-                                     value={this.state.visibility}
-                                     onChange={this.handleChange.bind(this, 'visibility')}>
+        let visibilityOptions = <select className="ui search dropdown" id="accessLevel" aria-labelledby="accessLevel"
+                                     value={this.state.accessLevel}
+                                     onChange={this.handleChange.bind(this, 'accessLevel')}>
             <option value="public">public</option>
             <option value="restricted">restricted</option>
             <option value="private">private</option>
@@ -225,7 +246,7 @@ class DeckPropertiesEditor extends React.Component {
                     <div key={group._id} className="item" data-value={group._id}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
                 ));
             });
-        let groupsOptions = <div className="ui fluid multiple search selection dropdown" id="groupsDropdown" aria-labelledby="groups"
+        let groupsOptions = <div className="ui fluid multiple search selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
                                      onChange={this.handleChange.bind(this, 'groups')}>
                                      <input type="hidden" name="groups" />
             <i className="dropdown icon"></i>
@@ -237,7 +258,7 @@ class DeckPropertiesEditor extends React.Component {
 
         let groupsFieldClass = classNames({
             'field': true,
-            'disabled': this.state.visibility !== 'restricted'
+            'disabled': this.state.accessLevel !== 'restricted'
         });
 
         let userlist = [];
@@ -311,8 +332,8 @@ class DeckPropertiesEditor extends React.Component {
                                 {licenseOptions}
                             </div>
                         </div>
-                        <div className="field">
-                            <label id="visibility">Choose general visibility</label>
+                        <div className={accessLevelFieldClass} data-tooltip={this.state.validationErrors.accessLevel}>
+                            <label id="accessLevel">Choose general access level</label>
                             {visibilityOptions}
                         </div>
                         <div className="two fields">
@@ -327,7 +348,7 @@ class DeckPropertiesEditor extends React.Component {
                             </div>
                         </div>
 
-                        {this.state.visibility === 'restricted' ? (
+                        {this.state.accessLevel === 'restricted' ? (
                           <div className="field">
                               <div className="ui tiny header">
                                   Authorized users:
@@ -341,7 +362,7 @@ class DeckPropertiesEditor extends React.Component {
                         ) : ''}
 
                         {saveDeckButton}
-                        <button className='ui primary button'                     
+                        <button className='ui primary button'
                              onClick={this.handleSave.bind(this, true)}>
                             Save as new revision
                         </button>

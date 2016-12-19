@@ -172,7 +172,10 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
-                new_revision: false
+                new_revision: false,
+                accessLevel: params.accessLevel,
+                users: params.users,
+                groups: params.groups //TODO varify parameter names/structure
             };
             rp({
                 method: 'PUT',
@@ -200,7 +203,10 @@ export default {
                 user: params.userid.toString(),
                 license: params.license,
                 new_revision: true,
-                top_root_deck: selector.id
+                top_root_deck: selector.id,
+                accessLevel: params.accessLevel,
+                users: params.users,
+                groups: params.groups //TODO varify parameter names/structure
 
             };
             if (params.root_deck != null) {
