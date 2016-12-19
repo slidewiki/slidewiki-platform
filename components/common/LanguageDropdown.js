@@ -65,7 +65,7 @@ class LanguageDropdown extends React.Component {
 
         return (
             <div className={classes} data-tooltip={tooltip} data-position="top center" data-inverted="" ref="languageDropdown">
-                {this.props.required ? <input type="hidden" name="language" ref="language" defaultValue={this.props.language} required/> : <input type="hidden" name="language" ref="language" defaultValue={this.props.language}/>}
+                {this.props.required ? <input type="hidden" id="language" name="language" ref="language" defaultValue={this.props.language} required/> : <input type="hidden" name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
                 <div className="default text">Select your language</div>
                 {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}

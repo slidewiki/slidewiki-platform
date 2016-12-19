@@ -248,7 +248,6 @@
                         e.preventDefault ? e.preventDefault() : e.returnValue = false
                         //KLAAS NEW -> remove entire div
                         //cEl.parentNode.replaceChild(new_element, cEl);
-
                         swal({
                           title: "Are you sure?",
                           type: 'warning',
