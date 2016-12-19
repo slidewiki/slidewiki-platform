@@ -270,8 +270,8 @@ class DeckPropertiesEditor extends React.Component {
         }
 
         let saveDeckButton = isUserEditor ?
-        <div className='ui primary button' role="button" aria-describedby="saveDeck" tabIndex="0"
-             onClick={this.handleSave.bind(this, false)}>Save</div> : '';
+        <button className='ui primary button'
+             onClick={this.handleSave.bind(this, false)}>Save</button> : '';
 
         return (
         <div className="ui container">
@@ -341,15 +341,14 @@ class DeckPropertiesEditor extends React.Component {
                         ) : ''}
 
                         {saveDeckButton}
-                        <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision"
-                             tabIndex="0"
+                        <button className='ui primary button'                     
                              onClick={this.handleSave.bind(this, true)}>
                             Save as new revision
-                        </div>
-                        <div className="ui secondary button" role="button" aria-describedby="cancel" tabIndex="0"
+                        </button>
+                        <button className="ui secondary button"
                              onClick={this.handleCancel.bind(this)}>
                             Cancel
-                        </div>
+                        </button>
                     </form>
                 </div>
 
