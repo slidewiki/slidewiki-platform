@@ -157,7 +157,7 @@
                     cEl.dragdiv.addEventListener("mousedown", function (e) {
                         // Add warning of edition
                         window.onbeforeunload = () => {
-                          return 'If you don\'t save the slide, it won\'t be updated. ' +
+                          return 'If you do not save the slide your changes will be lost. ' +
                             'Are you sure you want to exit this page?';
                         };
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -258,7 +258,7 @@
                         }).then(function(){
                           //edition warning
                           window.onbeforeunload = () => {
-                            return 'If you don\'t save the slide, it won\'t be updated. ' +
+                            return 'If you do not save the slide your changes will be lost. ' +
                               'Are you sure you want to exit this page?';
                           };
                           //alert(cEl.parentNode.className);
@@ -396,7 +396,7 @@
                     cEl.resizediv.addEventListener("mousedown", function (e) {
                         //edition warning
                         window.onbeforeunload = () => {
-                          return 'If you don\'t save the slide, it won\'t be updated. ' +
+                          return 'If you do not save the slide your changes will be lost. ' +
                             'Are you sure you want to exit this page?';
                         };
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
