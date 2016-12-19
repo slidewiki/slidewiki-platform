@@ -33,8 +33,8 @@ class CountryDropdown extends React.Component {
             <div className={classes} ref="countryDropdown">
                 {this.props.required ? <input type="hidden" name="country" ref="country" defaultValue={this.props.country} required/> : <input type="hidden" name="country" ref="country" defaultValue={this.props.country}/>}
                 <i className="dropdown icon"/>
-                <div className="default text">Select your country</div>
-                <div className="menu">
+                <div className="default text" >Select your country</div>
+                <div className="menu" id="country">
                     <div className="item" data-value="AF">Afghanistan</div>
                     <div className="item" data-value="AL">Albania</div>
                     <div className="item" data-value="DZ">Algeria</div>
