@@ -7,6 +7,7 @@ import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
+import { timeSince } from '../../../../../common';
 
 
 class DeckPropertiesEditor extends React.Component {
@@ -40,6 +41,39 @@ class DeckPropertiesEditor extends React.Component {
         $('#groupsDropdown')
             .dropdown()
         ;
+
+        $('#deck_edit_dropdown_usernames_remote')
+            .dropdown({
+                apiSettings: {
+                    url: Microservices.user.uri + '/information/username/search/{query}'
+                },
+                saveRemoteData: false,
+                action: (name, value, source) => {
+                    console.log('dropdown select', name, value, source);
+
+                    $('#deck_edit_dropdown_usernames_remote').dropdown('clear');
+                    $('#deck_edit_dropdown_usernames_remote').dropdown('hide');
+
+                    let users = this.props.UserProfileStore.authorizedUsers;
+                    if (users === undefined || users === null)
+                        users = [];
+
+                    // console.log('trying to add', name, 'to', group.members);
+                    if (users.findIndex((member) => {
+                        return users === name && users === parseInt(value);
+                    }) === -1 && name !== this.props.UserProfileStore.username) {
+                        users.push({
+                            username: name,
+                            userid: parseInt(value),
+                            joined: (new Date()).toISOString()
+                        });
+                    }
+
+                    this.context.executeAction(updateAuthorizedUsers, users);
+
+                    return true;
+                }
+            });
     }
 
     handleCancel() {
@@ -96,6 +130,16 @@ class DeckPropertiesEditor extends React.Component {
         var stateChange = {};
         stateChange[fieldName] = event.target.value;
         this.setState(stateChange);
+    }
+
+    handleClickRemoveUser(member) {
+        console.log('handleClickRemoveUser', member);
+
+        let users = this.props.UserProfileStore.authorizedUsers;
+
+        users.pop(member);
+
+        this.context.executeAction(updateAuthorizedUsers, users);
     }
 
     render() {
@@ -187,18 +231,43 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         </div>;
 
-        let usersOptions = <select className="ui search dropdown" id="users" aria-labelledby="users"
-                                     value={this.state.users}
-                                     onChange={this.handleChange.bind(this, 'users')}>
-            <option value="1">Kurt</option>
-            <option value="2">Roy</option>
-            <option value="3">Antje</option>
-        </select>;
-
         let groupsFieldClass = classNames({
             'field': true,
             'disabled': this.state.visibility !== 'restricted'
         });
+
+        let authusersClass = classNames({
+            'hidden': this.state.visibility !== 'restricted'
+        });
+
+        let userlist = [];
+        if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
+            this.props.DeckEditStore.authorizedUsers.forEach((user) => {
+                let fct = () => {
+                    this.handleClickRemoveUser(user);
+                };
+                userlist.push(
+                  (
+                    <div className="item" key={user.userid}>
+                      <div className="ui grid">
+                        <div className="one wide column middle aligned">
+                          <i className="large user middle aligned icon"></i>
+                        </div>
+                        <div className="fourteen wide column">
+                          <div className="content">
+                              <a className="header" href={'/user/' + user.username}>{user.username} ({user.userid})</a>
+                              <div className="description">Access granted {timeSince((new Date(user.joined)))} ago</div>
+                          </div>
+                        </div>
+                        <div className="one wide column middle aligned">
+                          <i className="remove middle aligned icon" key={user.userid} onClick={fct}></i>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+            });
+        }
 
         let saveDeckButton = isUserEditor ?
         <div className='ui primary button' role="button" aria-describedby="saveDeck" tabIndex="0"
@@ -252,10 +321,21 @@ class DeckPropertiesEditor extends React.Component {
                                 {groupsOptions}
                             </div>
                             <div className={groupsFieldClass}>
-                                <label id="users">Add users for edit rights</label>
-                                {usersOptions}
+                                <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
+                                <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
+                                </select>
                             </div>
                         </div>
+
+                        <div className={authusersClass}>
+                            <div className="ui header">
+                                <h3>Authorized users:</h3>
+                            </div>
+                            <div className="ui relaxed divided list">
+                                {userlist}
+                            </div>
+                        </div>
+
                         {saveDeckButton}
                         <div className='ui primary button' role="button" aria-describedby="saveNewDeckRevision"
                              tabIndex="0"
