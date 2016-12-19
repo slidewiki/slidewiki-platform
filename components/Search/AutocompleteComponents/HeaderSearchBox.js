@@ -42,7 +42,7 @@ class HeaderSearchBox extends React.Component {
         else{
             searchstr += encodeURIComponent(this.refs.searchstring.value);
         }
-        searchstr += '&revisions=false';
+        // searchstr += '&revisions=false';
 
         this.context.executeAction(navigateAction, {
             url: '/search/' + searchstr

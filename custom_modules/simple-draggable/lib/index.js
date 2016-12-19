@@ -51,6 +51,8 @@
                 var new_element = cEl.cloneNode(true);
                 cEl.parentNode.replaceChild(new_element, cEl);
                 var cEl = new_element;
+                if(cEl.style.width != '0px' && cEl.style.width != undefined && cEl.style.height != '0px' && cEl.style.height != undefined)
+                {
 
                 // create _simpleDraggable object for this dom element
                 // KLAAS -> added resize
@@ -81,6 +83,7 @@
                 //mouseenter / mouseleave
                 cEl.addEventListener("mouseenter", function (e) {
 
+                    //alert('test');
                     // TODO
                     // document.body.appendChild(cEl);
                     //KLAAS ADAPT
@@ -527,6 +530,7 @@
                     $('.movetofrontdiv').remove();
                     $('.sendtobackdiv').remove();
                 });
+            }
 
             })(allElms[i])
         }

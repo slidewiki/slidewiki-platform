@@ -22,9 +22,9 @@ class SearchParamsStore extends BaseStore {
         this.entities = [
             {'id': '1', 'description':'Slide', 'value':'slide'},
             {'id': '2', 'description':'Deck', 'value':'deck'},
-            {'id': '3', 'description':'Answer', 'value':'answer'},
-            {'id': '4', 'description':'Question', 'value':'question'},
-            {'id': '5', 'description':'Comment', 'value':'comment'},
+            // {'id': '3', 'description':'Answer', 'value':'answer'},
+            // {'id': '4', 'description':'Question', 'value':'question'},
+            // {'id': '5', 'description':'Comment', 'value':'comment'},
         ];
         this.languages = [
             {'id': '1', 'description':'English', 'value':'en'},

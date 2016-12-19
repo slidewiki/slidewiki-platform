@@ -21,7 +21,7 @@ class Home extends React.Component {
                     </div>
                     <div className="ten wide column">
                         <div className="ui top right attached large blue label">beta</div>
-                        <img className="ui centered image" src="/assets/images/logo_full.png" />
+                        <img className="ui centered image" src="/assets/images/logo_full.png" alt="SlideWiki beta logo" />
                     </div>
                 </div>
             </div>
@@ -59,7 +59,9 @@ class Home extends React.Component {
                     <div>
                     <h2 className="ui header">Recent decks</h2>
                         <DeckList scope="recent"/>
-                        <button className="ui right floated button">
+                            <a className="ui right floated button" href='/recent'>View all</a>
+
+                        {/*<button className="ui right floated button">
 
                             <NavLink href={'/recent'}>View All</NavLink>
                         </button>
