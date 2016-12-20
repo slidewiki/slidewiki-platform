@@ -33,15 +33,31 @@ class SearchResultsPanel extends React.Component {
         // });
 
         let resultsDiv = <div ref="resultsDiv">
-            <h2 className="ui header">Search Results</h2>
-            <div className="ui centered grid">
+            <div className="ui grid" key="resultsHeader">
+                <div className="eight wide left floated column" key="resultsTitleDiv">
+                    <h2 className="ui header">Search Results</h2>
+                </div>
+
+                <div className="eight column right floated column" key="resultsSortDropdown">
+                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+                        <i className="icon exchange"/>
+                        <div className="text">Relevance</div>
+                        <div className="menu">
+                            <div className="item active selected" data-value={0}>Relevance</div>
+                            <div className="item" data-value={1}>Title</div>
+                            <div className="item" data-value={2}>Last updated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="ui centered grid" key="searchResults">
                 <div className="twelve wide column">
                     <SearchResultsList items={results} ></SearchResultsList>
                 </div>
             </div>
         </div>;
 
-        let noResultsDiv = <div ref="noResiltsDiv">
+        let noResultsDiv = <div key="noResiltsDiv">
             <div className="ui grid centered">
                 <h3>No results found for the specified input parameters.</h3>
             </div>
