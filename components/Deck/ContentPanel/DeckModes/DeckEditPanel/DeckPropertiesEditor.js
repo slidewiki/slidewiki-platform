@@ -84,7 +84,8 @@ class DeckPropertiesEditor extends React.Component {
         });
     }
 
-    handleSave(withNewRevision) {
+    handleSave(withNewRevision, event) {
+        event.preventDefault();
         const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
@@ -113,7 +114,7 @@ class DeckPropertiesEditor extends React.Component {
                 isValid = false;
             }
         }
-        console.log('handleSave', this.state.accessLevel, users, groupids);
+        console.log('handleSave', this.state.accessLevel, users, groupids, isValid);
 
         this.setState({validationErrors: validationErrors});
         //TODO does a reload after button is pressed
@@ -336,19 +337,19 @@ class DeckPropertiesEditor extends React.Component {
                             <label id="accessLevel">Choose general access level</label>
                             {visibilityOptions}
                         </div>
-                        <div className="two fields">
-                            <div className={groupsFieldClass}>
-                                <label id="groups">Add groups for edit rights</label>
-                                {groupsOptions}
-                            </div>
-                            <div className={groupsFieldClass}>
-                                <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
-                                <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
-                                </select>
-                            </div>
-                        </div>
 
-                        {this.state.accessLevel === 'restricted' ? (
+                        {this.state.accessLevel === 'restricted' ? (<div>
+                          <div className="two fields">
+                              <div className={groupsFieldClass}>
+                                  <label id="groups">Add groups for edit rights</label>
+                                  {groupsOptions}
+                              </div>
+                              <div className={groupsFieldClass}>
+                                  <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
+                                  <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
+                                  </select>
+                              </div>
+                          </div>
                           <div className="field">
                               <div className="ui tiny header">
                                   Authorized users:
@@ -359,11 +360,11 @@ class DeckPropertiesEditor extends React.Component {
                               <div className="ui hidden divider">
                               </div>
                           </div>
-                        ) : ''}
+                        </div>) : ''}
 
                         {saveDeckButton}
                         <button className='ui primary button'
-                             onClick={this.handleSave.bind(this, true)}>
+                             onClick={this.handleSave.bind(this, true)} id="strangebuttonawesome">
                             Save as new revision
                         </button>
                         <button className="ui secondary button"
