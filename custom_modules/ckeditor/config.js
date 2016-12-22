@@ -154,9 +154,10 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,texzilla,youtube';
+    config.extraPlugins = 'autosave,uploadimage,uploadwidget,codesnippet,texzilla,youtube';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
+    //config.extraPlugins = 'autosave';
     //config.extraPlugins = 'uploadimage';
     //config.extraPlugins = 'uploadwidget';
     //config.extraPlugins = 'codesnippet,texzilla,youtube';
@@ -164,7 +165,39 @@ CKEDITOR.editorConfig = function( config ) {
     //config.extraPlugins = 'texzilla';
     //config.extraPlugins = 'youtube';
 
+    config.autosave = {
+        // Auto save Key - The Default autosavekey can be overridden from the config ...
+        Savekey : "autosaveKey",
 
+        // Ignore Content older then X
+        //The Default Minutes (Default is 1440 which is one day) after the auto saved content is ignored can be overidden from the config ...
+        NotOlderThen : 1440,
+
+        // Save Content on Destroy - Setting to Save content on editor destroy (Default is false) ...
+        saveOnDestroy : false,
+
+        // Setting to set the Save button to inform the plugin when the content is saved by the user and doesn't need to be stored temporary ...
+        saveDetectionSelectors : "a[href^='javascript:__doPostBack'][id*='Save'],a[id*='Cancel']",
+
+        // Notification Type - Setting to set the if you want to show the "Auto Saved" message, and if yes you can show as Notification or as Message in the Status bar (Default is "notification")
+        messageType : "notification",
+
+        // Show in the Status Bar
+        messageType : "statusbar",
+
+        // Show no Message
+        messageType : "no",
+
+        // Delay
+        delay : 10,
+
+        // The Default Diff Type for the Compare Dialog, you can choose between "sideBySide" or "inline". Default is "sideBySide"
+        diffType : "sideBySide"
+    };
+
+    // Save Detection Selectors
+    // Setting to set the Save button to inform the plugin when the content is saved by the user and doesn't need to be stored temporary ...
+    // config.autosave_saveDetectionSelectors = "a[href^='javascript:__doPostBack'][id*='Save'],a[id*='Cancel']";
     // does not work and conflicts with codesnippet
     //config.extraPlugins = 'mathjax';
     //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
