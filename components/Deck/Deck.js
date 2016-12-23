@@ -80,7 +80,7 @@ class Deck extends React.Component {
                                                         </div>
                                                         <ul className="list">
                                                             <li><b>Description&#58;</b> {error.description} {error.actionRequired}</li>
-                                                            <li><b>Navigation&#58;</b> {error.breadcrumb}</li>
+                                                            <li><b>Navigation&#58;</b> {error.navStack}</li>
                                                         </ul>
                                                     </div>: ''
                 }
