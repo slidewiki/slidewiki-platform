@@ -7,6 +7,7 @@ export default function saveDeckEdit(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;
 
     if (userid == null || userid === '') {
+        context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', '');
         context.executeAction(navigateAction, {
             url: '/'
         });
@@ -15,8 +16,10 @@ export default function saveDeckEdit(context, payload, done) {
         payload.userid = userid;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
+                context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
             } else {
+                context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
                 context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);
                 console.log(payload.selector);
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {

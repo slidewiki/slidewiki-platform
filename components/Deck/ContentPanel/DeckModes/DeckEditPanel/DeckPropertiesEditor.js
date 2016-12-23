@@ -9,6 +9,7 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import updateAuthorizedUsers from '../../../../../actions/updateAuthorizedUsers';
+import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import { timeSince } from '../../../../../common';
 
 
@@ -37,9 +38,49 @@ class DeckPropertiesEditor extends React.Component {
         if (newProps.deckProps !== this.props.deckProps) {
             this.setState(this.getStateFromProps(newProps));
         }
+
+        if (this.props.DeckEditStore.viewstate === 'loading') {
+            if (newProps.DeckEditStore.viewstate === 'error') {
+                swal({
+                    title: 'Error',
+                    text: 'Unknown error while saving.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                })
+                .catch();
+            }
+            else if (newProps.DeckEditStore.viewstate === 'success') {
+                swal({
+                    title: 'Success',
+                    text: 'The deck was saved.',
+                    type: 'success',
+                    confirmButtonText: 'Confirm',
+                    confirmButtonClass: 'positive ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    location.reload();
+                    return true;
+                })
+                .catch();
+            }
+        }
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
+        this.handleDropboxes();
+    }
+
+    handleDropboxes() {
         $('#deck_edit_dropdown_groups')
             .dropdown()
         ;
@@ -117,18 +158,8 @@ class DeckPropertiesEditor extends React.Component {
         console.log('handleSave', this.state.accessLevel, users, groupids, isValid);
 
         this.setState({validationErrors: validationErrors});
-        //TODO does a reload after button is pressed
         if (isValid) {
-            swal({
-                title: 'Saving Deck Properties...',
-                text: '',
-                type: 'success',
-                timer: 1000,
-                showCloseButton: false,
-                showCancelButton: false,
-                allowEscapeKey: false,
-                showConfirmButton: false
-            });
+            this.context.executeAction(updateDeckEditViewState, 'loading');
             this.context.executeAction(saveAction, {
                 deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
                 title: this.state.title,
@@ -361,6 +392,8 @@ class DeckPropertiesEditor extends React.Component {
                               </div>
                           </div>
                         </div>) : ''}
+
+                        {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
                         {saveDeckButton}
                         <button className='ui primary button'

@@ -10,6 +10,7 @@ export default function saveDeckRevision(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;
 
     if (userid == null || userid === '') {
+        context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', '');
         context.executeAction(navigateAction, {
             url: '/'
         });
@@ -21,8 +22,10 @@ export default function saveDeckRevision(context, payload, done) {
         payload.root_deck = parent;
         context.service.update('deck.updateWithRevision', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
+                context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
             } else {
+                context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
                 context.dispatch('SAVE_DECK_REVISION_SUCCESS', res);
                 let newSid = res._id + '-' + res.revisions[0].id;
                 let newPath = '';
