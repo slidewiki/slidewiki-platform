@@ -1,7 +1,7 @@
 import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../stores/UserProfileStore';
-const clog = require('./log/clog');
 import serviceUnavailable from './error/serviceUnavailable';
+const clog = require('./log/clog');
 
 export default function loadResetPassword(context, payload, done) {
     clog.info(context, payload);

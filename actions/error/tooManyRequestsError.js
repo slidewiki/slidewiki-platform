@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const clog = require('../log/clog');
 
 export default function tooManyRequestsError(context, payload, done) {
-    clog.error(context, payload, {msg: 'Too many requests'});
+    clog.error(context, payload, 'Too many requests');
     const error = fumble.http.tooManyRequests();
     ErrorsList.TOO_MANY_REQUESTS_ERROR.statusCode = error.statusCode;
     ErrorsList.TOO_MANY_REQUESTS_ERROR.statusText = error.message;

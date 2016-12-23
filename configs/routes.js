@@ -41,17 +41,14 @@ export default {
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
             async.series([
-                (callback) => {
-                    context.dispatch('UPDATE_PAGE_TITLE', {
-                        pageTitle: fullTitle
-                    });
+                (callback) => {context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: fullTitle});
                     callback();
                 },
                 (callback) => {
-                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}, navigate: payload.navigate}, callback);
+                    context.executeAction(loadFeatured, {params: {limit: 3, offset: 0}}, callback);
                 },
                 (callback) => {
-                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}, navigate: payload.navigate}, callback);
+                    context.executeAction(loadRecent, {params: {limit: 3, offset: 0}}, callback);
                 }
             ],
             (err, result) => {
@@ -76,7 +73,7 @@ export default {
                     callback();
                 },
                 (callback) => {
-                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}, navigate: payload.navigate}, callback); //for now limit 100, can change this later to infinite scroll
+                    context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
                 }
             ],
             (err, result) => {
@@ -145,9 +142,7 @@ export default {
         title: 'SlideWiki -- Sign up',
         handler: require('../components/User/UserRegistration/UserRegistration'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Sign up'
-            });
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Sign up'});
             done();
         }
     },

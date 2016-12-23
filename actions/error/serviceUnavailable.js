@@ -7,7 +7,6 @@ export default function serviceUnavailable(context, payload, done) {
     const error = fumble.http.serviceUnavailable();
     ErrorsList.SERVICE_UNAVAILABLE.statusCode = error.statusCode;
     ErrorsList.SERVICE_UNAVAILABLE.statusText = error.message;
-    ErrorsList.SERVICE_UNAVAILABLE.breadcrumb = breadcrumb(context.stack);
     clog.error(context, payload, ErrorsList.SERVICE_UNAVAILABLE);
     context.dispatch('SERVICE_UNAVAILABLE', ErrorsList.SERVICE_UNAVAILABLE);
     done(error);

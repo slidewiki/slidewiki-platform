@@ -2,6 +2,7 @@ import UserProfileStore from '../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from './error/serviceUnavailable';
+const clog = require('./log/clog');
 
 export default function saveDeckEdit(context, payload, done) {
     clog.info(context, payload);
@@ -17,7 +18,7 @@ export default function saveDeckEdit(context, payload, done) {
         payload.userid = userid;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
+                clog.error(context, payload, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
             } else {

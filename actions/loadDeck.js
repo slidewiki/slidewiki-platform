@@ -15,7 +15,7 @@ import { AllowedPattern } from './error/util/allowedPattern';
 const clog = require('./log/clog');
 
 export default function loadDeck(context, payload, done) {
-    clog.info(context, payload);
+    clog.info(context, payload); // do not remove such log messages. If you don't want to see them, change log level in config
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -104,7 +104,7 @@ export default function loadDeck(context, payload, done) {
 
     (err, results) => {
         if (err) {
-            clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }

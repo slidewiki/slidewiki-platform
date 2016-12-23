@@ -1,6 +1,7 @@
 // import _ from 'lodash';
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const clog = require('../actions/log/clog');
 
 // let now = Date.now();
 // const args = {
@@ -59,6 +60,7 @@ export default {
     name: 'activities',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        clog.warn('Some message from activities.js');
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
 
@@ -72,7 +74,7 @@ export default {
 
                 rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '/more/0/30' }).then((res) => {
                     let activities = JSON.parse(res);
-                    
+
                     activities.forEach((activity) => adjustIDs(activity));//TODO solve these ID issues
 
                     callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});

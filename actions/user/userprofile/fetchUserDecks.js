@@ -1,10 +1,11 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
 //import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError  from '../../error/methodNotAllowedError';
-
 import { isEmpty } from '../../../common.js';
+const clog = require('../../log/clog');
 
 export function fetchUserDecks(context, payload, done) {
+    clog.info(context, payload);
     payload.params.id2 = context.getStore(UserProfileStore).user.id;
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;

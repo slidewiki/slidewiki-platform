@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const clog = require('../log/clog');
 
 export default function LoginIncorrectError(context, payload, done) {
-    clog.error(context, payload, {msg: 'Login incorrect'});
+    clog.error(context, payload, 'Login incorrect');
     const error = fumble.http.forbidden();
     ErrorsList.LOGIN_INCORRECT_ERROR.statusCode = error.statusCode;
     ErrorsList.LOGIN_INCORRECT_ERROR.statusText = error.message;

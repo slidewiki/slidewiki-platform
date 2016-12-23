@@ -2,8 +2,10 @@ import async from 'async';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import {navigateAction} from 'fluxible-router';
 import moveTreeNodeWithRevisionCheck from './moveTreeNodeWithRevisionCheck';
+const clog = require('../log/clog');
 
 export default function moveTreeNodeAndNavigate(context, payload, done) {
+    clog.info(context, payload);
     //load all required actions in parallel
     async.parallel([
         (callback) => {

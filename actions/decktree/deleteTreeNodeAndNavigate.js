@@ -32,7 +32,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
         }
         else {
             clog.error(context, payload, {filepath: __filename, err: err});
-            context.executeAction(serviceUnavailable, payload, done);
+            //context.executeAction(serviceUnavailable, payload, done);
         }
         done();
     });

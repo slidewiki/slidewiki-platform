@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const clog = require('../log/clog');
 
 export default function notFoundError(context, payload, done) {
-    clog.error(context, payload, {msg: 'Not found'});
+    clog.error(context, payload, 'Not found');
     const error = fumble.http.notFound();
     ErrorsList.NOT_FOUND_ERROR.statusCode = error.statusCode;
     ErrorsList.NOT_FOUND_ERROR.statusText = error.message;

@@ -3,8 +3,10 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
+const clog = require('./log/clog');
 
 export default function loadContentUsage(context, payload, done) {
+    clog.info(context, payload);
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -17,6 +19,7 @@ export default function loadContentUsage(context, payload, done) {
 
     context.service.read('usage.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
+            clog.error(context, payload, {filepath: __filename, err: err});
             context.dispatch('LOAD_CONTENT_USAGE_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_USAGE_SUCCESS', res);

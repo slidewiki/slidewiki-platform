@@ -83,7 +83,7 @@ export default function loadContent(context, payload, done) {
     // final callback
     (err, results) => {
         if (err) {
-            clog.error(context, payload, {reqId: payload.navigate.reqId, err: err});
+            clog.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {

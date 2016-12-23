@@ -3,7 +3,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import moveTreeNode from './moveTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
-
+const clog = require('../log/clog');
 
 export default function moveTreeNodeWithRevisionCheck(context, payload, done) {
     let userid = context.getStore(UserProfileStore).userid;

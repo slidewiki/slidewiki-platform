@@ -48,7 +48,6 @@ let webpackConfig = {
                 BROWSER: JSON.stringify(true)
             }
         }),
-
     ],
     devtool: 'eval',
     externals: {

@@ -16,7 +16,7 @@ export default function addTreeNodeWithRevisionCheck(context, payload, done) {
         }, (err, res) => {
             if (err) {
                 clog.error(context, payload, {filepath: __filename, err: err});
-                context.executeAction(serviceUnavailable, payload, done);
+                //context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {
                     swal({

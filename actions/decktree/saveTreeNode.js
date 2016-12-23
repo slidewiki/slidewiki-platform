@@ -1,7 +1,7 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
-const clog = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
+const clog = require('../log/clog');
 
 export default function saveTreeNode(context, payload, done) {
     clog.info(context, payload);

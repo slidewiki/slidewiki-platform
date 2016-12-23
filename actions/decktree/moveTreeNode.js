@@ -1,7 +1,8 @@
 import UserProfileStore from '../../stores/UserProfileStore';
-
+const clog = require('../log/clog');
 
 export default function moveTreeNode(context, payload, done) {
+    clog.info(context, payload);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         let {selector, sourceNode, targetNode, targetIndex} = payload;

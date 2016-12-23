@@ -88,9 +88,10 @@ server.use((req, res, next) => {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
         //}
     });
+
     clog.info({id: req.id, method: req.method, url: req.url, ip: req.ip, message: 'new request'});
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {url: req.url}, (err) => {
+    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.id}, (err) => {
         if (err) {
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block

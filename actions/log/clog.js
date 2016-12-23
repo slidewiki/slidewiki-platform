@@ -1,5 +1,5 @@
 exports.error = function(context, payload, msg='') {
-    const body = {navStack: context.stack.slice(), msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.error', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -8,7 +8,7 @@ exports.error = function(context, payload, msg='') {
 };
 
 exports.warn = function(context, payload, msg='') {
-    const body = {navStack: context.stack.slice(), msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.warn', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -17,7 +17,7 @@ exports.warn = function(context, payload, msg='') {
 };
 
 exports.info = function(context, payload, msg='') {
-    const body = {navStack: context.stack.slice(), msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.info', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -26,7 +26,7 @@ exports.info = function(context, payload, msg='') {
 };
 
 exports.verbose = function(context, payload, msg='') {
-    const body = {navStack: context.stack.slice(), msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.verbose', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -35,7 +35,7 @@ exports.verbose = function(context, payload, msg='') {
 };
 
 exports.debug = function(context, payload, msg='') {
-    const body = {navStack: context.stack.slice(), msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.debug', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -44,7 +44,7 @@ exports.debug = function(context, payload, msg='') {
 };
 
 exports.silly = function(context, payload, msg='') {
-    const body = {navStack: context.stack.slice(), msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.silly', payload, body, (err, res) => {
         if (err)
             console.log(err);

@@ -3,8 +3,10 @@ import { navigateAction } from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
 //import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
+const clog = require('../../log/clog');
 
 export default function removeUser(context, payload, done) {
+    clog.info(context, payload);
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
