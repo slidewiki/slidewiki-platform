@@ -9,23 +9,6 @@ import SearchResultsPanel from './SearchResultsPanel/SearchResultsPanel';
 
 class SearchPanel extends React.Component {
     render() {
-        let advSearchDiv='';
-        // let openExtraFields = false;
-        // let searchPanelTitle = 'Search';
-        // // if(this.props.SearchResultsStore.searchstring != undefined && this.props.SearchResultsStore.searchstring !== ''){
-        // //     openExtraFields = false;
-        // // }
-        // if(this.props.SearchResultsStore.searchstatus === 'advsearch' || this.props.SearchResultsStore.searchstatus === 'advsearchresults'){
-        //     openExtraFields = true;
-        //     searchPanelTitle = 'Advanced Search';
-        // }
-        // console.log("open : " + this.props.SearchResultsStore.searchstatus + " - " + openExtraFields);
-        // if(this.props.SearchResultsStore.searchstatus === 'results'){
-        advSearchDiv = <AdvancedSearch />;
-        // }
-        // else{
-        //     advSearchDiv = <AdvancedSearch title={searchPanelTitle} openExtraFields={openExtraFields}/>;
-        // }
         let loadingDiv = <div className="ui basic segment">
             <div className="ui active text loader">Loading</div>
         </div>;
@@ -46,15 +29,12 @@ class SearchPanel extends React.Component {
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
                 numFound={this.props.SearchResultsStore.numFound}
-                // languages={this.props.SearchParamsStore.languages}
-                // entities={this.props.SearchParamsStore.entities}
             />;
         }
-// console.log("render");
         return (
             <div className="ui container" ref="searchPanel">
                 <div className='advancedSearch'>
-                    {advSearchDiv}
+                    <AdvancedSearch ref='advancedSearchFields' SearchParamsStore={this.props.SearchParamsStore}/>
                 </div>
                 <br/>
                 <div className='searchResults'>
@@ -67,8 +47,8 @@ class SearchPanel extends React.Component {
 
 SearchPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
-    // getState: React.PropTypes.func.isRequired,
 };
+
 SearchPanel = connectToStores(SearchPanel, [SearchResultsStore, SearchParamsStore], (context, props) => {
     return {
         SearchResultsStore: context.getStore(SearchResultsStore).getState(),

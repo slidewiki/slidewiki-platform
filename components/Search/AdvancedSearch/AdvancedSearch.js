@@ -1,7 +1,5 @@
 import React from 'react';
-import {connectToStores} from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
-// import AdvancedSearchStore from '../../../stores/AdvancedSearchStore';
 import SearchParamsStore from '../../../stores/SearchParamsStore';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 import UsersInput from '../AutocompleteComponents/UsersInput';
@@ -11,20 +9,20 @@ class AdvancedSearch extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            searchstring: this.props.paramsStore.searchstring,
-            entity: this.props.paramsStore.entity,
-            lang: this.props.paramsStore.lang,
-            fields: this.props.paramsStore.fields,
-            users: this.props.paramsStore.users,
-            tags: this.props.paramsStore.tags,
-            revisions: this.props.paramsStore.revisions,
-            license: this.props.paramsStore.license
+            searchstring: this.props.SearchParamsStore.searchstring,
+            entity: this.props.SearchParamsStore.entity,
+            language: this.props.SearchParamsStore.language,
+            fields: this.props.SearchParamsStore.fields,
+            users: this.props.SearchParamsStore.users,
+            tags: this.props.SearchParamsStore.tags,
+            revisions: this.props.SearchParamsStore.revisions,
+            license: this.props.SearchParamsStore.license
         };
     }
     componentWillReceiveProps(nextProps){
-        // TODO: check a more elegant way to do this!
-        if(!this.props.paramsStore.fetch) return;
-        this.setState(this.props.paramsStore);
+        // TODO: find a more elegant way to do this!
+        if(!nextProps.SearchParamsStore.fetch) return;
+        this.setState(nextProps.SearchParamsStore);
     }
     onChange(event) {
         let curstate = {};
@@ -114,29 +112,13 @@ class AdvancedSearch extends React.Component {
         return false;
     }
     render() {
-        // facet lists initialization
-        const languageList = this.props.paramsStore.languages.map((item, index) => {
-            return (
-                <option key={item.id} value={item.value}>{item.description}</option>
-            );
-        });
-
-        const entityList = this.props.paramsStore.entities.map((item, index) => {
-            return (
-                <option key={item.id} value={item.value}>{item.description}</option>
-            );
-        });
-        let searchstring = decodeURIComponent(this.state.searchstring);
-        let defaultSearchstring = (searchstring === '*:*') ? '' : searchstring;
-        let clearInputIcon = '';
-
         return (
                 <div className="ui content">
                     <h2 className="ui header" style={{marginTop: '1em'}}>Search</h2>
                     <form className="ui form success">
                         <div className="field">
                             <label htmlFor="SearchTerm">Search Term</label>
-                            <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
+                            <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.searchstring)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                         </div>
                         <div className="four fields">
                             <div className="field">
@@ -154,7 +136,8 @@ class AdvancedSearch extends React.Component {
                                 <label htmlFor="entity">Entity</label>
                                 <select name='entity' id='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
                                   <option value=''>Select Entity</option>
-                                  {entityList}
+                                  <option value='slide'>Slide</option>
+                                  <option value='deck'>Deck</option>
                                 </select>
                             </div>
 
@@ -162,7 +145,13 @@ class AdvancedSearch extends React.Component {
                                 <label htmlFor="language">Language</label>
                                 <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                   <option value=''>Select Language</option>
-                                  {languageList}
+                                  <option value='en'>English</option>
+                                  <option value='de'>German</option>
+                                  <option value='el'>Greek</option>
+                                  <option value='it'>Italian</option>
+                                  <option value='pt'>Portugese</option>
+                                  <option value='sr'>Serbian</option>
+                                  <option value='es'>Spanish</option>
                                 </select>
                             </div>
 
@@ -214,11 +203,5 @@ class AdvancedSearch extends React.Component {
 AdvancedSearch.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
-AdvancedSearch = connectToStores(AdvancedSearch, [SearchParamsStore], (context, props) => {
-    return {
-        paramsStore: context.getStore(SearchParamsStore).getState()
-    };
-});
 
 export default AdvancedSearch;
