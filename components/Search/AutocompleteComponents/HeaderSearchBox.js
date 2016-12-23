@@ -4,6 +4,12 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
 
 class HeaderSearchBox extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            searchstring: ''
+        };
+    }
     initAutocomplete(){
         $('#header_search_box_div').search({
             fields: {
@@ -13,6 +19,7 @@ class HeaderSearchBox extends React.Component {
             maxResults: 5,
             showNoResults: false,
             cache: false,
+            onSelect: this.onSelect.bind(this),
             apiSettings:{
                 responseAsync: function(settings, callback) {
                     const query = settings.urlData.query;
@@ -33,28 +40,41 @@ class HeaderSearchBox extends React.Component {
         this.initAutocomplete();
     }
     handleRedirect(searchstring){
+        let querystring = (searchstring) ? searchstring : this.refs.searchstring.value;
 
         let searchstr = 'q=';
-        if(this.refs.searchstring.value.trim() === ''){
+        if(querystring.trim() === ''){
             // searchstr += encodeURIComponent('*:*');
             return;
         }
         else{
-            searchstr += encodeURIComponent(this.refs.searchstring.value);
+            searchstr += encodeURIComponent(querystring);
         }
-        searchstr += '&revisions=false';
+        // searchstr += '&revisions=false';
 
         this.context.executeAction(navigateAction, {
             url: '/search/' + searchstr
         });
 
-        this.refs.searchstring.value = '';
+        // this.refs.searchstring.value = '';
+
+        // unfocus input element
+        this.refs.searchstring.blur();
+
+        this.setState({searchstring: ''});
+
         return false;
     }
     handleKeyPress(event){
         if(event.key === 'Enter'){
             this.handleRedirect();
         }
+    }
+    onChange(){
+        this.setState({searchstring: this.refs.searchstring.value});
+    }
+    onSelect(result, response){
+        this.handleRedirect(result.key);
     }
     render() {
         let classes = classNames({
@@ -65,10 +85,11 @@ class HeaderSearchBox extends React.Component {
             'search': true
         });
         // "ui small icon input
+
         return (
             <div className={classes} ref="headerSearchBox" id="header_search_box_div">
                 <label htmlFor="searchString" hidden>Search</label>
-                <input type="text" placeholder="Search..." ref="searchstring" id="searchString" onKeyPress={this.handleKeyPress.bind(this)} className="prompt" />
+                <input type="text" placeholder="Search..." ref="searchstring" id="searchString" value={this.state.searchstring} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt" />
                 <i className="search link icon" onClick={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
                 <div className="results"></div>
             </div>
