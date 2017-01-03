@@ -28,8 +28,8 @@ class DeckPropertiesEditor extends React.Component {
             theme: props.deckProps.theme || '',
             license: props.deckProps.license || '',
             accessLevel: props.deckProps.accessLevel || 'public',
-            users: '',//TODO read users and groups from deck props
-            groups: ''
+            users: props.deckProps.editors.users,
+            groups: props.deckProps.editors.groups
         };
     }
 

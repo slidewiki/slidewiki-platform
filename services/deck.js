@@ -100,7 +100,12 @@ export default {
                     language: revision.language,
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
-                    license: revision.license != null ? revision.license : deck.license
+                    license: revision.license != null ? revision.license : deck.license,
+                    accessLevel: revision.accessLevel || 'public',
+                    editors: revision.editors || {
+                        users: [],
+                        groups: []
+                    }
                 };
                 callback(null, {
                     deckProps: deckProps,
@@ -174,8 +179,11 @@ export default {
                 license: params.license,
                 new_revision: false,
                 accessLevel: params.accessLevel,
-                users: params.users,
-                groups: params.groups //TODO varify parameter names/structure
+                editors: {
+                    users: params.users,
+                    groups: params.groups
+                }
+
             };
             rp({
                 method: 'PUT',
@@ -205,8 +213,10 @@ export default {
                 new_revision: true,
                 top_root_deck: selector.id,
                 accessLevel: params.accessLevel,
-                users: params.users,
-                groups: params.groups //TODO varify parameter names/structure
+                editors: {
+                    users: params.users,
+                    groups: params.groups
+                }
 
             };
             if (params.root_deck != null) {
