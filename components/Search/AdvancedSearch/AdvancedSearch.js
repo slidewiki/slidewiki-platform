@@ -35,6 +35,10 @@ class AdvancedSearch extends React.Component {
         this.setState({searchstring: ''});
         this.refs.keywords.focus();
     }
+    onSelect(searchstring){
+        this.setState({searchstring: searchstring});
+        this.handleRedirect();
+    }
     // shouldComponentUpdate(nextProps, nextState) {
     //     return (nextProps.searchstring != this.state.searchstring);
     // }
@@ -132,7 +136,7 @@ class AdvancedSearch extends React.Component {
                     <form className="ui form success">
                         <div className="field">
                             <label htmlFor="SearchTerm">Search Term</label>
-                            <KeywordsInput ref='keywords' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
+                            <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={defaultSearchstring} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                         </div>
                         <div className="four fields">
                             <div className="field">
@@ -176,13 +180,13 @@ class AdvancedSearch extends React.Component {
 
                         <div className="two fields">
                             <div className="field">
-                                <label htmlFor="search_id">User</label>
+                                <label htmlFor="users_input_field">User</label>
                                 <UsersInput ref='users' placeholder='Select Users' />
                             </div>
 
-                            <div className="field">
+                            <div className="field disabled">
                                 <label htmlFor="tags">Tags</label>
-                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags'></input>
+                                <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags' tabIndex="-1"></input>
                             </div>
 
                         </div>

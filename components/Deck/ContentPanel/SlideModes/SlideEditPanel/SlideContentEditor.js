@@ -298,6 +298,8 @@ class SlideContentEditor extends React.Component {
         //show that content is outside of pptx2html box
         $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
 
+        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
+        $("#inlineSpeakerNotes [style*='absolute']").css({'position': 'relative', 'zIndex': '0'});
     }
 
     componentWillUnmount() {
@@ -395,6 +397,11 @@ class SlideContentEditor extends React.Component {
         return (
 
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                 <i className="save icon"></i>
+                 Save
+                </button>
+                {this.addBoxButtonHTML}
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
@@ -405,13 +412,7 @@ class SlideContentEditor extends React.Component {
                 </div>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
-                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon"></i>
-                 Save
-                </button>
-                {this.addBoxButtonHTML}
             </ResizeAware>
-
         );
     }
 
@@ -427,8 +428,9 @@ class SlideContentEditor extends React.Component {
     emitChange() {
 
       window.onbeforeunload = () => {
-        return 'If you don\'t save the slide the content won\'t be updated. ' +
+        return 'If you don\'t save the slide, it won\'t be updated. ' +
           'Are you sure you want to exit this page?';
+
       };
     }
 /*

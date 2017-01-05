@@ -25,3 +25,12 @@
 .translation-div{
 	display: inline-block;
 }
+
+.sw-tree .ui.list>.item:first-child {
+	padding-top: 0.21428571em;
+}
+
+.sw-tree .ui.list>.item:last-child {
+	padding-bottom: 0.21428571em;
+}
+

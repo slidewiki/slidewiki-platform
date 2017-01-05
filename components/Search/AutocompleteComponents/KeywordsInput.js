@@ -16,6 +16,7 @@ class KeywordsInput extends React.Component {
             maxResults: 5,
             showNoResults: false,
             cache: false,
+            onSelect: this.onSelect.bind(this),
             apiSettings:{
                 responseAsync: function(settings, callback) {
                     const query = settings.urlData.query;
@@ -40,6 +41,9 @@ class KeywordsInput extends React.Component {
     }
     focus(){
         this.refs.searchstring.focus();
+    }
+    onSelect(result, response){
+        this.props.onSelect(result.key);
     }
     render(){
         let classes = classNames({
