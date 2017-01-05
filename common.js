@@ -32,5 +32,15 @@ export default {
             return interval + ' minutes';
         }
         return Math.floor(seconds) + ' seconds';
+    },
+
+    getBrowserLanguage: function() {
+        let language =  navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
+
+        return language;
     }
 };

@@ -120,9 +120,7 @@ class UserProfile extends React.Component {
     }
 
     displayAccounts() {
-        let changePassword = '';
-        if (this.props.UserProfileStore.user.hasPassword) {
-            changePassword = (
+        let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
                     <h3>Change password</h3>
@@ -132,8 +130,7 @@ class UserProfile extends React.Component {
                     <ChangePassword failures={ this.props.UserProfileStore.failures }/>
                   </div>
                 </div>
-            );
-        }
+            ) : '';
         return (
           <div>
             {changePassword}

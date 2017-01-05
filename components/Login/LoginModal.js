@@ -1,15 +1,17 @@
 import React from 'react';
+import async from 'async';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
-import deleteSocialData from '../../actions/user/deleteSocialData';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
+import common from '../../common';
+import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 
@@ -84,19 +86,27 @@ class LoginModal extends React.Component {
                 buttonsStyling: false
             })
             .then((dismiss) => {
-                return this.handleRegisterFirst(dismiss);  //TODO should the loginModal be hidden?
+                // console.log('action after dismiss', dismiss);
+                $('.ui.login.modal').modal('hide');
+                return this.handleRegisterFirst(dismiss);
             })
             .catch((action) => {
+                // console.log('action after click', action);
                 localStorage.setItem(MODI, 'login_failed');
 
                 //delete old data
-                this.context.executeAction(newSocialData, {});
-                this.context.executeAction(deleteSocialData, { });
-
-                if (action === 'close')
-                    return true;
-
-                this.handleLoginButton();
+                let that = this;
+                async.series([
+                    function(callback) {
+                        that.context.executeAction(newSocialData, {});
+                        callback(null, 'one');
+                    }
+                ],
+                // optional callback
+                (err, results) => {
+                    if (action !== 'close')
+                        that.handleLoginButton();
+                });
 
                 return true;
             });
@@ -104,15 +114,18 @@ class LoginModal extends React.Component {
     }
 
     handleRegisterFirst(dismiss) {
-        if (dismiss === 'cancel')
-            return true;
-
         localStorage.setItem(MODI, 'login_failed_register_now');
 
-        this.context.executeAction(deleteSocialData, { });
-        this.context.executeAction(navigateAction, {
-            url: '/signup'
-        });
+        let thatContext = this.context;
+        async.series([
+            function(callback) {
+                thatContext.executeAction(navigateAction, {
+                    url: '/signup'
+                });
+                callback(null, 'two');
+            }
+        ]);
+
         return true;
     }
 
@@ -144,7 +157,7 @@ class LoginModal extends React.Component {
         });
     }
 
-    socialLogin(e, provider) {
+    socialLogin(provider, e) {
         e.preventDefault();
         console.log('Hit on social login icon', provider);
         this.provider = provider;
@@ -168,12 +181,11 @@ class LoginModal extends React.Component {
             confirmButtonClass: 'positive ui button',
             buttonsStyling: false,
             showCloseButton: false,
-            showCancelButton: false,
-            allowEscapeKey: false
+            showCancelButton: false
         })
         .then(() => {
-            //create new tab
-            let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
+            //create new window
+            let url = Microservices.authorization.uri + '/connect/' + provider;
 
             let width = screen.width*0.75, height = screen.height*0.75;
             if (width < 600)
@@ -187,19 +199,7 @@ class LoginModal extends React.Component {
 
             return true;
         })
-        .catch();
-    }
-
-    clickedFacebook(e) {
-        this.socialLogin(e, 'facebook');
-    }
-
-    clickedGoogle(e) {
-        this.socialLogin(e, 'google');
-    }
-
-    clickedGithub(e) {
-        this.socialLogin(e, 'github');
+        .catch(() => {});
     }
 
     handleStorageEvent(e) {
@@ -222,7 +222,7 @@ class LoginModal extends React.Component {
         }
 
         //add language before send to service
-        let language = navigator.browserLanguage || navigator.language;
+        let language = common.getBrowserLanguage();
         if (language.length === 2) {
             language += '-' + language.toUpperCase();
         }
@@ -294,9 +294,9 @@ class LoginModal extends React.Component {
                       </form>
                       <br/>
                       <div className="container">
-                        <i className="big circular facebook square link icon" onClick={this.clickedFacebook.bind(this)} ></i>
-                        <i className="big circular google plus link icon" onClick={this.clickedGoogle.bind(this)} ></i>
-                        <i className="big circular github link icon" onClick={this.clickedGithub.bind(this)} ></i>
+                        <i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>
+                        <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
+                        <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
                       </div>
                       <br/>
                       <div className="ui floated right">

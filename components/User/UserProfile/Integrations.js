@@ -7,6 +7,8 @@ import resetProviderStuff from '../../../actions/user/userprofile/resetProviderS
 import newSocialData from '../../../actions/user/registration/newSocialData';
 import updateProviderAction from '../../../actions/user/userprofile/updateProviderAction';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import common from '../../../common';
+import {Microservices} from '../../../configs/microservices';
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
@@ -23,7 +25,7 @@ class Integrations extends React.Component {
         if (this.props.UserProfileStore.removeProviderError === false && nextProps.UserProfileStore.removeProviderError) {
             swal({
                 title: 'Error',
-                text: 'The provider couldn&apos;t be disabled. Unknown error.',
+                text: 'The provider couldn&apos;t be disabled. Try again later.',
                 type: 'error',
                 confirmButtonText: 'Confirmed',
                 confirmButtonClass: 'negative ui button',
@@ -36,7 +38,7 @@ class Integrations extends React.Component {
         else if (this.props.UserProfileStore.addProviderError === false && nextProps.UserProfileStore.addProviderError) {
             swal({
                 title: 'Error',
-                text: 'The provider couldn&apos;t be added. Unknown error.',
+                text: 'The provider couldn&apos;t be added. Try again later.',
                 type: 'error',
                 confirmButtonText: 'Confirmed',
                 confirmButtonClass: 'negative ui button',
@@ -86,8 +88,8 @@ class Integrations extends React.Component {
         //observe storage
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
-        //create new tab
-        let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + this.provider;
+        //create new window
+        let url = Microservices.authorization.uri + '/connect/' + this.provider;
 
         let width = screen.width*0.75, height = screen.height*0.75;
         if (width < 600)
@@ -98,6 +100,16 @@ class Integrations extends React.Component {
 
         let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
         win.focus();
+
+        //handle close of window
+        let thatContext = this.context;
+        let timer = setInterval(() => {
+            // console.log('Time for window - closed:', win.closed);
+            if(win.closed) {
+                clearInterval(timer);
+                thatContext.executeAction(updateProviderAction, '');
+            }
+        }, 1400);
     }
 
     handleDisable(e) {
@@ -155,7 +167,7 @@ class Integrations extends React.Component {
         }
 
         //add language before send to service
-        let language = navigator.browserLanguage || navigator.language;
+        let language = common.getBrowserLanguage();
         if (language.length === 2) {
             language += '-' + language.toUpperCase();
         }
@@ -171,7 +183,8 @@ class Integrations extends React.Component {
             return false;
         }
 
-        if  (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) {
+        const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if  (!regex.test(data.email)) {
             //show hint
             const provider = this.getProviderName();
             swal({
@@ -187,10 +200,6 @@ class Integrations extends React.Component {
         }
 
         this.context.executeAction(newSocialData, data);
-
-        //TODO show spinner
-
-
         this.context.executeAction(addProvider, data);
 
         return true;
@@ -291,8 +300,8 @@ class Integrations extends React.Component {
                     <p>
                       SlideWiki provides the possibility to sign in with multiple providers.
                       In order to be able to use a specific provider you have to active it.
-                      Activating a provider will open a new tab for a sign in there.
-                      Please sign in there and don&apos;t close the tab.
+                      Activating a provider will open a new window for a sign in there.
+                      Please sign in there and don&apos;t close the window.
                     </p>
                   </div>
 

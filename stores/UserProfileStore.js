@@ -221,6 +221,7 @@ class UserProfileStore extends BaseStore {
     handleSocialSignInError(err) {
         this.socialLoginError = true;
         this.emitChange();
+        this.socialLoginError = false;
     }
 
     extractMessage(raw) {
@@ -231,11 +232,6 @@ class UserProfileStore extends BaseStore {
             message2 = JSON.parse(message1).error;
         }
         return message2;
-    }
-
-    deleteSocialData() {
-        this.socialLoginError = false;
-        this.emitChange();
     }
 
     socialRegister(res) {
@@ -313,7 +309,6 @@ UserProfileStore.handlers = {
     'SIGNIN_FAILURE': 'handleSignInError',
     'SOCIAL_SIGNIN_FAILURE': 'handleSocialSignInError',
     'USER_SIGNOUT': 'handleSignOut',
-    'DELETE_SOCIAL_DATA': 'deleteSocialData',
     //social
     'SOCIAL_SIGNIN_SUCCESS': 'socialRegister',
     'REMOVE_PROVIDER_SUCCESS': 'removeProviderSuccess',

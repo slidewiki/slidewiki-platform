@@ -25,13 +25,15 @@ class Social extends React.Component {
     findGetParameter(parameterName) {
         let result = null,
             index = 0;
-        location.search
+        result = location.search
         .substr(1)
             .split('&')
-            .forEach((item) => {
+            .map((item) => {
                 index = item.indexOf('=');
-                if (item.substring(0, index) === parameterName) result = decodeURIComponent(item.substring(index+1));
-            });
+                if (index > 0 && item.substring(0, index) === parameterName)
+                    return item.substring(index+1);
+            })
+            .reduce((prev, item) => {return item;}, '');
 
         //handle #
         index = result.lastIndexOf('}#');
@@ -46,7 +48,7 @@ class Social extends React.Component {
             <div>
                 <b>We acquire your data. This should take just a few seconds.<br/>The window will be closed automatically.</b>
             </div>
-      );
+        );
     }
 }
 

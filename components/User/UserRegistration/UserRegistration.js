@@ -14,13 +14,8 @@ import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
+import common from '../../../common';
 
-const headerStyle = {
-    'textAlign': 'center'
-};
-const modalStyle = {
-    top: '15%'
-};
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
 
@@ -134,12 +129,11 @@ class UserRegistration extends React.Component {
             return (usernameNotAllowed !== undefined) ? !usernameNotAllowed : true;
         });
 
-        $('.ui.form').not('.registrationmodalform').form(validationRules);
-
+        $(ReactDOM.findDOMNode(this.refs.UserRegistration_form)).form(validationRules);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
+        // console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
         if (localStorage.getItem(MODI) === 'login_failed' && nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
             this.setUserdata({}, false);
             return;
@@ -234,10 +228,8 @@ class UserRegistration extends React.Component {
     handleSignUp(e) {
         e.preventDefault();
 
-        let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
-        if (language.length === 2) {
-            language += '-' + language.toUpperCase();
-        }
+        let language = common.getBrowserLanguage();
+
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
         localStorage.setItem(MODI, '');
@@ -282,9 +274,9 @@ class UserRegistration extends React.Component {
         }
     }
 
-    socialRegister(e, provider) {
+    socialRegister(provider, e) {
         e.preventDefault();
-        console.log('Hit on social register icon', provider);
+        // console.log('Hit on social register icon', provider);
 
         //delete old data
         this.context.executeAction(newSocialData, {});
@@ -330,20 +322,8 @@ class UserRegistration extends React.Component {
         .catch();
     }
 
-    clickedFacebook(e) {
-        this.socialRegister(e, 'facebook');
-    }
-
-    clickedGoogle(e) {
-        this.socialRegister(e, 'google');
-    }
-
-    clickedGithub(e) {
-        this.socialRegister(e, 'github');
-    }
-
     handleStorageEvent(e) {
-        console.log('storage event', e.key, localStorage.getItem(e.key));
+        // console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
 
         if (e.key !== NAME || localStorage.getItem(MODI) !== 'register')
@@ -362,10 +342,7 @@ class UserRegistration extends React.Component {
         }
 
         //add language before send to service
-        let language = navigator.browserLanguage || navigator.language;
-        if (language.length === 2) {
-            language += '-' + language.toUpperCase();
-        }
+        let language = common.getBrowserLanguage();
         data.language = language;
 
         //check data - valid and not empty
@@ -483,7 +460,7 @@ class UserRegistration extends React.Component {
                 <div className="eight wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
-                        <form className="ui form" >
+                        <form className="ui form" ref="UserRegistration_form" >
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>First name * </label>
                                 <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
@@ -529,9 +506,9 @@ class UserRegistration extends React.Component {
                         <div className="container">
                             Register with another platform:
                             <br/>
-                            <i className="big circular facebook square link icon" onClick={this.clickedFacebook.bind(this)} ></i>
-                            <i className="big circular google plus link icon" onClick={this.clickedGoogle.bind(this)} ></i>
-                            <i className="big circular github link icon" onClick={this.clickedGithub.bind(this)} ></i>
+                            <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
+                            <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>
+                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'githu')} ></i>
                         </div>
                         <div className="ui dividing header" ></div>
                         <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>

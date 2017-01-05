@@ -7,6 +7,7 @@ import socialSignUp from '../../../actions/user/registration/socialSignUp';
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
+import common from '../../../common';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -86,7 +87,7 @@ class UserRegistrationSocial extends React.Component {
             return (usernameNotAllowed !== undefined) ? !usernameNotAllowed : true;
         });
 
-        $('.ui.registrationmodalform.form').form(validationRules);
+        $(ReactDOM.findDOMNode(this.refs.UserSocialRegistration_form)).form(validationRules);
 
     }
 
@@ -105,14 +106,14 @@ class UserRegistrationSocial extends React.Component {
     handleSignUp(e) {
         e.preventDefault();
 
-        $('.ui.socialregistration.modal').modal('hide');
+        $(ReactDOM.findDOMNode(this.refs.SocialRegistration_Modal)).modal('hide');
         let user = this.props.UserRegistrationStore.socialuserdata;
         user.email = this.refs.email.value;
         user.username = this.refs.username.value;
         user.forename = this.refs.firstname.value;
         user.surname = this.refs.lastname.value;
 
-        let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+        let language = common.getBrowserLanguage();
         if (language.length === 2) {
             language += '-' + language.toUpperCase();
         }
@@ -163,7 +164,7 @@ class UserRegistrationSocial extends React.Component {
 
     handleNoAccessClick(e) {
         e.preventDefault();
-        $('.ui.socialregistration.modal').modal('hide');
+        $(ReactDOM.findDOMNode(this.refs.SocialRegistration_Modal)).modal('hide');
         this.context.executeAction(navigateAction, {
             url: '/resetpassword'
         });
@@ -204,12 +205,12 @@ class UserRegistrationSocial extends React.Component {
         }
         return (
           <div>
-            <div className="ui socialregistration modal" id='signinModal' style={modalStyle}>
+            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal" >
               <div className="header">
                   <h1 style={headerStyle}>Validate user information</h1>
               </div>
               <div className="content">
-                  <form className="ui registrationmodalform form" >
+                  <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
                       <div className="ui inline field">
                           <label style={signUpLabelStyle}>First name * </label>
                           <div className="ui icon input"><input type="text" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
