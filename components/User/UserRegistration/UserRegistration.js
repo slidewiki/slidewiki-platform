@@ -290,36 +290,18 @@ class UserRegistration extends React.Component {
         //observe storage
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
-        //show hint before open tab
-        const Provider = this.getProviderName();
-        swal({
-            title: 'Information',
-            text: 'A new window of your browser will be opened where you could do a sign in on ' + Provider + '. Please do so.',
-            type: 'info',
-            confirmButtonText: 'Confirm',
-            confirmButtonClass: 'positive ui button',
-            buttonsStyling: false,
-            showCloseButton: false,
-            showCancelButton: false,
-            allowEscapeKey: false,
-        })
-        .then(() => {
-            //create new tab
-            let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
+        //create new tab
+        let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
 
-            let width = screen.width*0.75, height = screen.height*0.75;
-            if (width < 600)
-                width = screen.width;
-            if (height < 500)
-                height = screen.height;
-            let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+        let width = screen.width*0.75, height = screen.height*0.75;
+        if (width < 600)
+            width = screen.width;
+        if (height < 500)
+            height = screen.height;
+        let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
 
-            let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
-            win.focus();
-
-            return true;
-        })
-        .catch();
+        let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
+        win.focus();
     }
 
     handleStorageEvent(e) {
