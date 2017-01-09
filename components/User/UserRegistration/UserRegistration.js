@@ -139,11 +139,11 @@ class UserRegistration extends React.Component {
             return;
         }
         if (nextProps.UserRegistrationStore.socialCredentialsTaken && !this.props.UserRegistrationStore.socialCredentialsTaken) {
-            $('.ui.socialregistration.modal').modal('hide');
+            $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal('hide');
 
             swal({
                 title: 'Information',
-                text: 'Sign up with a provider failed, because the user of this provider is already assigned a a SLideWiki user. Either you do a login with that or you register with other credentials.',
+                text: 'Sign up with a provider failed, because the user of this provider is already assigned to a SlideWiki user. Either you do a login with that or you register with other credentials.',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -166,8 +166,6 @@ class UserRegistration extends React.Component {
                 return true;
             })
             .catch(() => {
-                $('.ui.socialregistration.modal').modal('hide');
-
                 return true;
             });
         }
@@ -350,15 +348,13 @@ class UserRegistration extends React.Component {
 
         this.context.executeAction(newSocialData, data);
 
-        $('.ui.socialregistration.modal')
-        .modal({
+        $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal({
             closable  : false,
             onDeny    : function(){
                 //nothing
                 return true;
             }
-        })
-        .modal('show');
+        }).modal('show');
 
         return true;
     }
@@ -498,7 +494,7 @@ class UserRegistration extends React.Component {
                 </div>
             </div>
 
-            <UserRegistrationSocial />
+            <UserRegistrationSocial ref="modal_social"/>
 
           </div>
         );

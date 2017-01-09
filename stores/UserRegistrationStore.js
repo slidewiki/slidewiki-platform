@@ -28,7 +28,9 @@ class UserRegistrationStore extends BaseStore {
     }
 
     handleSocialCreateUserSuccess(res) {
+        // console.log('UserRegistrationStore handleSocialCreateUserSuccess:', res);
         this.socialError = false;
+        this.socialCredentialsTaken = false;
         this.emitChange();
     }
 
@@ -49,8 +51,8 @@ class UserRegistrationStore extends BaseStore {
     }
 
     handleSocialUserRegistrationError(err) {
-        console.log('UserRegistrationStore handleSocialUserRegistrationError()', err);
-        if (err.message.startsWith('409')) {
+        // console.log('UserRegistrationStore handleSocialUserRegistrationError()', err, '___', err.message, '___', err.statusCode, '___', err.toString());
+        if (err.statusCode.toString() === '409') {
             this.socialCredentialsTaken = true;
         }
         else
@@ -98,7 +100,7 @@ class UserRegistrationStore extends BaseStore {
     }
 
     newSocialData(data) {
-        // console.log('UserRegistrationStore newSocialData', data);
+        console.log('UserRegistrationStore newSocialData', data);
 
         this.socialuserdata = data || {};
         this.socialError = false;
