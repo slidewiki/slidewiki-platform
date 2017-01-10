@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
@@ -81,21 +82,21 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     handleDropboxes() {
-        $('#deck_edit_dropdown_groups')
+        $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown()
         ;
 
-        $('#deck_edit_dropdown_usernames_remote')
+        $(ReactDOM.findDOMNode(this.refs.AddUser))
             .dropdown({
                 apiSettings: {
                     url: Microservices.user.uri + '/information/username/search/{query}'
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
-                    console.log('dropdown select', name, value, source);
+                    console.log('dropdown select', name, value);
 
-                    $('#deck_edit_dropdown_usernames_remote').dropdown('clear');
-                    $('#deck_edit_dropdown_usernames_remote').dropdown('hide');
+                    $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
+                    $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
 
                     let users = this.props.DeckEditStore.authorizedUsers;
                     if (users === undefined || users === null)
@@ -105,10 +106,12 @@ class DeckPropertiesEditor extends React.Component {
                     if (users.findIndex((member) => {
                         return member.username === name && member.userid === parseInt(value);
                     }) === -1 && name !== this.props.UserProfileStore.username) {
+                        let data = JSON.parse(decodeURIComponent(value));
                         users.push({
                             username: name,
-                            userid: parseInt(value),
-                            joined: (new Date()).toISOString()
+                            userid: parseInt(data.userid),
+                            joined: (new Date()).toISOString(),
+                            picture: data.picture
                         });
                     }
 
@@ -182,7 +185,8 @@ class DeckPropertiesEditor extends React.Component {
         this.setState(stateChange);
     }
 
-    handleClickRemoveUser(member) {
+    handleClickRemoveUser(member, event) {
+        event.preventDefault();
         console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
 
         let users = this.props.DeckEditStore.authorizedUsers;
@@ -278,8 +282,8 @@ class DeckPropertiesEditor extends React.Component {
                     <div key={group._id} className="item" data-value={group._id}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
                 ));
             });
-        let groupsOptions = <div className="ui fluid multiple search selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
-                                     onChange={this.handleChange.bind(this, 'groups')}>
+        let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
+                                     onChange={this.handleChange.bind(this, 'groups')} ref="AddGroups">
                                      <input type="hidden" name="groups" />
             <i className="dropdown icon"></i>
             <div className="default text">Select Groups</div>
@@ -296,24 +300,20 @@ class DeckPropertiesEditor extends React.Component {
         let userlist = [];
         if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
             this.props.DeckEditStore.authorizedUsers.forEach((user) => {
-                let fct = () => {
-                    this.handleClickRemoveUser(user);
+                let fct = (event) => {
+                    this.handleClickRemoveUser(user, event);
                 };
                 userlist.push(
                   (
                     <div className="item" key={user.userid}>
-                      <div className="ui grid">
-                        <div className="one wide column middle aligned">
-                          <i className="large user middle aligned icon"></i>
-                        </div>
-                        <div className="fourteen wide column">
-                          <div className="content">
-                              <a className="header" href={'/user/' + user.username}>{user.username}</a>
-                              <div className="description">Access granted {timeSince((new Date(user.joined)))} ago</div>
-                          </div>
-                        </div>
-                        <div className="one wide column middle aligned">
-                          <i className="remove middle aligned icon" key={user.userid} onClick={fct}></i>
+                      <img className="ui avatar image" src={user.picture} />
+                      <div className="content">
+                        <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                        <div className="description">
+                          Access granted {timeSince((new Date(user.joined)))} ago&nbsp;&nbsp;&nbsp;
+                          <button className="ui tiny compact borderless black basic button" key={user.userid} onClick={fct}>
+                            Remove
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -372,7 +372,7 @@ class DeckPropertiesEditor extends React.Component {
                         {this.state.accessLevel === 'restricted' ? (<div>
                           <div className="two fields">
                               <div className={groupsFieldClass}>
-                                  <label id="groups">Add groups for edit rights</label>
+                                  <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
                                   {groupsOptions}
                               </div>
                               <div className={groupsFieldClass}>
@@ -383,9 +383,9 @@ class DeckPropertiesEditor extends React.Component {
                           </div>
                           <div className="field">
                               <div className="ui tiny header">
-                                  Authorized users:
+                                  Authorized:
                               </div>
-                              <div className="ui relaxed divided list">
+                              <div className="ui very relaxed  list">
                                   {userlist}
                               </div>
                               <div className="ui hidden divider">
