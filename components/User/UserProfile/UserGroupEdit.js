@@ -56,10 +56,12 @@ class UserGroupEdit extends React.Component {
                     if (group.members.findIndex((member) => {
                         return member.username === name && member.userid === parseInt(value);
                     }) === -1 && name !== this.props.UserProfileStore.username) {
+                        let data = JSON.parse(decodeURIComponent(value));
                         group.members.push({
                             username: name,
-                            userid: parseInt(value),
-                            joined: (new Date()).toISOString()
+                            userid: parseInt(data.userid),
+                            joined: (new Date()).toISOString(),
+                            picture: data.picture
                         });
                     }
 
