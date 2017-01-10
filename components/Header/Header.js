@@ -37,7 +37,6 @@ class Header extends React.Component {
 
     render() {
 
-        const addDeckButton = <button className="ui right labeled icon button"><i className="right plus icon"></i>Add deck</button>;
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/> Sign in</a>;
 
@@ -64,8 +63,8 @@ class Header extends React.Component {
                         </div>
                         <div className="ui right inverted blue menu">
                             <div className="item">
-                              <NavLink routeName="addDeck" activeClass="active">
-                                  {addDeckButton}
+                              <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button">
+                                  <i className="right plus icon"></i>Add deck
                               </NavLink>
                             </div>
                             {/*<UserNotificationsBadge className="ui item"/>*/}
