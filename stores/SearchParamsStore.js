@@ -16,6 +16,7 @@ class SearchParamsStore extends BaseStore {
         this.revisions = false;
         this.license = '';
         this.fetch = false;
+        this.sort = '';
     }
     getUriParams(qstr){
         let query = {};
@@ -50,6 +51,7 @@ class SearchParamsStore extends BaseStore {
         this.tags = (params.tags || '');
         this.revisions = params.revisions;
         this.license = params.license;
+        this.sort = params.sort;
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -65,6 +67,7 @@ class SearchParamsStore extends BaseStore {
         this.tags = '';
         this.revisions = false;
         this.license = '';
+        this.sort = '';
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -81,6 +84,7 @@ class SearchParamsStore extends BaseStore {
             tags: this.tags,
             revisions: this.revisions,
             license: this.license,
+            sort: this.sort,
             fetch: this.fetch
         };
     }
@@ -98,6 +102,7 @@ class SearchParamsStore extends BaseStore {
         this.tags = state.tags;
         this.revisions = state.revisions;
         this.license = state.license;
+        this.sort = state.sort;
         this.fetch = state.fetch;
     }
 }

@@ -7,8 +7,16 @@ import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 class SearchResultsPanel extends React.Component {
+
     initSortDropdown(){
-        $('#sortDropdown').dropdown();
+        let changeSort = this.props.handleRedirect.bind(this);
+        $('#sortDropdown').dropdown({
+            onChange: function(value, text, $choice){
+                changeSort({
+                    sort: value
+                });
+            }
+        });
     }
     componentDidMount(){
         this.initSortDropdown();
@@ -31,7 +39,7 @@ class SearchResultsPanel extends React.Component {
                         <i className="icon exchange"/>
                         <div className="text">Relevance</div>
                         <div className="menu">
-                            <div className="item active selected" data-value="relvance">Relevance</div>
+                            <div className="item active selected" data-value="rel">Relevance</div>
                             <div className="item" data-value="lastUpdate">Last updated</div>
                         </div>
                     </div>
