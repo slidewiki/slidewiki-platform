@@ -19,14 +19,17 @@ class AdvancedSearch extends React.Component {
             license: this.props.SearchParamsStore.license
         };
     }
-    initDropdown(){
-        $('.ui.dropdown').dropdown();
+    initDropdownFilters(){
+        $('#fields').dropdown();
+        $('#entity').dropdown();
+        $('#language').dropdown();
+        $('#license').dropdown();
     }
     componentDidMount(){
-        this.initDropdown();
+        this.initDropdownFilters();
     }
     componentDidUpdate(){
-        this.initDropdown();
+        this.initDropdownFilters();
     }
     componentWillReceiveProps(nextProps){
         // TODO: find a more elegant way to do this!

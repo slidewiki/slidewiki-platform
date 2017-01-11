@@ -7,7 +7,15 @@ import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 class SearchResultsPanel extends React.Component {
-
+    initSortDropdown(){
+        $('#sortDropdown').dropdown();
+    }
+    componentDidMount(){
+        this.initSortDropdown();
+    }
+    componentDidUpdate(){
+        this.initSortDropdown();
+    }
     render() {
         const results = this.props.results;
         const numFound = this.props.numFound;
@@ -19,7 +27,7 @@ class SearchResultsPanel extends React.Component {
                 </div>
 
                 <div className="eight wide right floated column" key="resultsSortDropdown">
-                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown" id="sortDropdown">
                         <i className="icon exchange"/>
                         <div className="text">Relevance</div>
                         <div className="menu">
