@@ -19,6 +19,15 @@ class AdvancedSearch extends React.Component {
             license: this.props.SearchParamsStore.license
         };
     }
+    initDropdown(){
+        $('.ui.dropdown').dropdown();
+    }
+    componentDidMount(){
+        this.initDropdown();
+    }
+    componentDidUpdate(){
+        this.initDropdown();
+    }
     componentWillReceiveProps(nextProps){
         // TODO: find a more elegant way to do this!
         if(!nextProps.SearchParamsStore.fetch) return;
@@ -93,6 +102,9 @@ class AdvancedSearch extends React.Component {
     encodeParams(queryparams){
         let encodedParams = '';
         for (let key in queryparams) {
+            if(queryparams[key].trim() === ''){
+                continue;
+            }
             if(encodedParams){
                 encodedParams += '&';
             }
@@ -124,18 +136,18 @@ class AdvancedSearch extends React.Component {
                             <div className="field">
                                 <label htmlFor="fields">Search field</label>
                                 <select name='fields' id='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
-                                  <option value=''>Select Search field</option>
+                                  <option value=' '>Select Search field</option>
                                   <option value='title'>Title</option>
+                                  <option value='description'>Description</option>
                                   <option value='content'>Content</option>
                                   <option value='speakernotes'>Speakernotes</option>
-                                  <option value='description'>Description</option>
                                 </select>
                             </div>
 
                             <div className="field">
                                 <label htmlFor="entity">Entity</label>
                                 <select name='entity' id='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
-                                  <option value=''>Select Entity</option>
+                                  <option value=' '>Select Entity</option>
                                   <option value='slide'>Slide</option>
                                   <option value='deck'>Deck</option>
                                 </select>
@@ -144,7 +156,7 @@ class AdvancedSearch extends React.Component {
                             <div className="field">
                                 <label htmlFor="language">Language</label>
                                 <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-                                  <option value=''>Select Language</option>
+                                  <option value=' '>Select Language</option>
                                   <option value='en'>English</option>
                                   <option value='de'>German</option>
                                   <option value='el'>Greek</option>
@@ -158,7 +170,7 @@ class AdvancedSearch extends React.Component {
                             <div className="field">
                                 <label htmlFor="license">License</label>
                                 <select name='license' id='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
-                                  <option value=''>Select Search field</option>
+                                  <option value=' '>Select Search field</option>
                                   <option value='CC0'>CC0</option>
                                   <option value='CC BY'>CC BY</option>
                                   <option value='CC BY-SA'>CC BY-SA</option>

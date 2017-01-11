@@ -7,6 +7,7 @@ import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
 
 class SearchResultsPanel extends React.Component {
+
     render() {
         const results = this.props.results;
         const numFound = this.props.numFound;
@@ -17,14 +18,13 @@ class SearchResultsPanel extends React.Component {
                     <h2 className="ui header">Search Results</h2>
                 </div>
 
-                <div className="eight column right floated column" key="resultsSortDropdown">
+                <div className="eight wide right floated column" key="resultsSortDropdown">
                     <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                         <i className="icon exchange"/>
                         <div className="text">Relevance</div>
                         <div className="menu">
-                            <div className="item active selected" data-value={0}>Relevance</div>
-                            <div className="item" data-value={1}>Title</div>
-                            <div className="item" data-value={2}>Last updated</div>
+                            <div className="item active selected" data-value="relvance">Relevance</div>
+                            <div className="item" data-value="lastUpdate">Last updated</div>
                         </div>
                     </div>
                 </div>
