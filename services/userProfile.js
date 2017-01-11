@@ -60,6 +60,7 @@ export default {
                 timestamp: !isEmpty(params.timestamp) ? params.timestamp : (new Date()).toISOString(),
                 members: params.members
             };
+            // console.log('sending:', tosend, params.jwt);
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/usergroup/createorupdate',

@@ -183,8 +183,8 @@ export default {
                     users: params.users,
                     groups: params.groups
                 }
-
             };
+            // console.log('send:', toSend, toSend.editors);
             rp({
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,

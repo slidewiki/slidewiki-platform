@@ -7,6 +7,7 @@ class DeckEditStore extends BaseStore {
         this.editors = [];
         this.selector = {};
         this.authorizedUsers = [];
+        this.authorizedGroups = [];
         this.viewstate = '';
     }
 
@@ -17,6 +18,7 @@ class DeckEditStore extends BaseStore {
 
         //accessLevel adoptions
         this.authorizedUsers = payload.deckProps.editors.users;
+        this.authorizedGroups = payload.deckProps.editors.groups;
 
         this.emitChange();
     }
@@ -27,6 +29,7 @@ class DeckEditStore extends BaseStore {
             editors: this.editors,
             selector: this.selector,
             authorizedUsers: this.authorizedUsers,
+            authorizedGroups: this.authorizedGroups,
             viewstate: this.viewstate
         };
     }
@@ -41,10 +44,16 @@ class DeckEditStore extends BaseStore {
         this.selector = state.selector;
         this.authorizedUsers = state.authorizedUsers;
         this.viewstate = state.viewstate;
+        this.authorizedGroups = state.authorizedGroups;
     }
 
     updateAuthorizedUsers(users) {
         this.authorizedUsers = users;
+        this.emitChange();
+    }
+
+    updateAuthorizedGroups(groups) {
+        this.authorizedGroups = groups;
         this.emitChange();
     }
 
@@ -58,6 +67,7 @@ DeckEditStore.storeName = 'DeckEditStore';
 DeckEditStore.handlers = {
     'LOAD_DECK_PROPS_SUCCESS': 'updateProperties',
     'UPDATE_AUTHORIZED_USERS': 'updateAuthorizedUsers',
+    'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState'
 };
 

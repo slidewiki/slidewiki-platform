@@ -9,7 +9,7 @@ import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
-import updateAuthorizedUsers from '../../../../../actions/updateAuthorizedUsers';
+import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import { timeSince } from '../../../../../common';
 
@@ -83,8 +83,33 @@ class DeckPropertiesEditor extends React.Component {
 
     handleDropboxes() {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
-            .dropdown()
-        ;
+            .dropdown({
+                action: (someText, dataValue, source) => {
+                    console.log('group dropdown select', dataValue);
+
+                    $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('clear');
+                    $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('hide');
+
+                    let groups = this.props.DeckEditStore.authorizedGroups;
+                    if (groups === undefined || groups === null)
+                        groups = [];
+
+                    let data = JSON.parse(decodeURIComponent(dataValue));
+                    if (groups.findIndex((group) => {
+                        return group.id === parseInt(data.id);
+                    }) === -1) {
+                        groups.push({
+                            name: data.name,
+                            id: parseInt(data.id),
+                            joined: (new Date()).toISOString()
+                        });
+                    }
+
+                    this.context.executeAction(updateAuthorizedGroups, groups);
+
+                    return true;
+                }
+            });
 
         $(ReactDOM.findDOMNode(this.refs.AddUser))
             .dropdown({
@@ -93,7 +118,7 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
-                    console.log('dropdown select', name, value);
+                    console.log('user dropdown select', name, value);
 
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
@@ -122,7 +147,8 @@ class DeckPropertiesEditor extends React.Component {
             });
     }
 
-    handleCancel() {
+    handleCancel(event) {
+        event.preventDefault();
         this.context.executeAction(navigateAction, {
             url: ContentUtil.makeNodeURL(this.props.selector, 'view')
         });
@@ -148,17 +174,17 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
-        let users = [], groupids = [];
+        let users = [], groups = [];
         if (this.state.accessLevel === 'restricted') {
             users = this.props.DeckEditStore.authorizedUsers;
-            groupids = $('#deck_edit_dropdown_groups').dropdown('get value').split(',');
+            groups = this.props.DeckEditStore.authorizedGroups;
 
-            if (users.length === 0 && (groupids.length === 0  || (groupids.length === 1 && groupids[0] === ''))) {
+            if (users.length === 0 && (groups.length === 0)) {
                 validationErrors.accessLevel = 'The access level needs at minimum one selected group or user.';
                 isValid = false;
             }
         }
-        console.log('handleSave', this.state.accessLevel, users, groupids, isValid);
+        console.log('handleSave', this.state.accessLevel, users, groups, isValid);
 
         this.setState({validationErrors: validationErrors});
         if (isValid) {
@@ -174,13 +200,13 @@ class DeckPropertiesEditor extends React.Component {
                 selector: this.props.selector,
                 accessLevel: this.state.accessLevel,
                 users: users,
-                groups: groupids
+                groups: groups
             });
         }
     }
 
     handleChange(fieldName, event) {
-        var stateChange = {};
+        let stateChange = {};
         stateChange[fieldName] = event.target.value;
         this.setState(stateChange);
     }
@@ -198,6 +224,75 @@ class DeckPropertiesEditor extends React.Component {
         this.context.executeAction(updateAuthorizedUsers, newMembers);
     }
 
+    handleClickRemoveGroup(group, event) {
+        event.preventDefault();
+        console.log('handleClickRemoveGroup', group, this.props.DeckEditStore.authorizedGroups);
+
+        let groups = this.props.DeckEditStore.authorizedGroups;
+
+        let newGroups = groups.filter((group2) => {
+            return !(group2.name === group.name && group2.id === parseInt(group.id));
+        });
+
+        this.context.executeAction(updateAuthorizedGroups, newGroups);
+    }
+
+    getListOfAuthorized() {
+        let list_authorized = [];
+        if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
+            this.props.DeckEditStore.authorizedUsers.forEach((user) => {
+                let fct = (event) => {
+                    this.handleClickRemoveUser(user, event);
+                };
+                list_authorized.push(
+                  (
+                    <div className="item" key={user.userid}>
+                      <img className="ui avatar image" src={user.picture} />
+                      <div className="content">
+                        <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                        <div className="description">
+                          Access granted {timeSince((new Date(user.joined)))} ago&nbsp;&nbsp;&nbsp;
+                          <button className="ui tiny compact borderless black basic button" key={user.userid} onClick={fct}>
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+            });
+        }
+        if (this.props.DeckEditStore.authorizedGroups !== undefined && this.props.DeckEditStore.authorizedGroups.length > 0) {
+            this.props.DeckEditStore.authorizedGroups.forEach((group) => {
+                let fct = (event) => {
+                    this.handleClickRemoveGroup(group, event);
+                };
+                list_authorized.push(
+                  (
+                    <div className="item" key={group.id}>
+                      <i className="large group middle aligned icon"></i>
+                      <div className="content">
+                        <a className="header">{group.name}</a>
+                        <div className="description">
+                          Access granted {timeSince((new Date(group.joined)))} ago&nbsp;&nbsp;&nbsp;
+                          <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                            Remove
+                          </button>
+                          &nbsp;&nbsp;&nbsp;
+                          <button className="ui tiny compact borderless black basic button" key={group.id}>
+                            Show details
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+            });
+        }
+
+        return list_authorized;
+    }
+
     render() {
         let userid = this.props.UserProfileStore.userid;
         let isUserEditor = false;
@@ -205,6 +300,7 @@ class DeckPropertiesEditor extends React.Component {
             isUserEditor = true;
         }
 
+        //CSS
         let titleFieldClass = classNames({
             'required': true,
             'field': true,
@@ -225,6 +321,12 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.accessLevel != null
         });
+        let groupsFieldClass = classNames({
+            'field': true,
+            'disabled': this.state.accessLevel !== 'restricted'
+        });
+
+        //content elements
         let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language"
                                       aria-required="true"
                                       value={this.state.language}
@@ -278,12 +380,16 @@ class DeckPropertiesEditor extends React.Component {
         let groupsArray = [];
         if (this.props.UserProfileStore.user.groups)
             this.props.UserProfileStore.user.groups.forEach((group) => {
+                let data = {
+                    id: group._id,
+                    name: group.name
+                };
                 groupsArray.push((
-                    <div key={group._id} className="item" data-value={group._id}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
+                    <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
                 ));
             });
         let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
-                                     onChange={this.handleChange.bind(this, 'groups')} ref="AddGroups">
+                                     ref="AddGroups">
                                      <input type="hidden" name="groups" />
             <i className="dropdown icon"></i>
             <div className="default text">Select Groups</div>
@@ -291,36 +397,6 @@ class DeckPropertiesEditor extends React.Component {
               {groupsArray}
             </div>
         </div>;
-
-        let groupsFieldClass = classNames({
-            'field': true,
-            'disabled': this.state.accessLevel !== 'restricted'
-        });
-
-        let userlist = [];
-        if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
-            this.props.DeckEditStore.authorizedUsers.forEach((user) => {
-                let fct = (event) => {
-                    this.handleClickRemoveUser(user, event);
-                };
-                userlist.push(
-                  (
-                    <div className="item" key={user.userid}>
-                      <img className="ui avatar image" src={user.picture} />
-                      <div className="content">
-                        <a className="header" href={'/user/' + user.username}>{user.username}</a>
-                        <div className="description">
-                          Access granted {timeSince((new Date(user.joined)))} ago&nbsp;&nbsp;&nbsp;
-                          <button className="ui tiny compact borderless black basic button" key={user.userid} onClick={fct}>
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                );
-            });
-        }
 
         let saveDeckButton = isUserEditor ?
         <button className='ui primary button'
@@ -386,7 +462,7 @@ class DeckPropertiesEditor extends React.Component {
                                   Authorized:
                               </div>
                               <div className="ui very relaxed  list">
-                                  {userlist}
+                                  {this.getListOfAuthorized()}
                               </div>
                               <div className="ui hidden divider">
                               </div>
