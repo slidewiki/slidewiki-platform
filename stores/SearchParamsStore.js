@@ -16,25 +16,7 @@ class SearchParamsStore extends BaseStore {
         this.revisions = false;
         this.license = '';
         this.fetch = false;
-
-        // facets
-        // this.filters = new Map();
-        this.entities = [
-            {'id': '1', 'description':'Slide', 'value':'slide'},
-            {'id': '2', 'description':'Deck', 'value':'deck'},
-            // {'id': '3', 'description':'Answer', 'value':'answer'},
-            // {'id': '4', 'description':'Question', 'value':'question'},
-            // {'id': '5', 'description':'Comment', 'value':'comment'},
-        ];
-        this.languages = [
-            {'id': '1', 'description':'English', 'value':'en'},
-            {'id': '2', 'description':'German', 'value':'de'},
-            {'id': '3', 'description':'Greek', 'value':'gr'},
-            {'id': '4', 'description':'Italian', 'value':'it'},
-            {'id': '5', 'description':'Portugese', 'value':'pt'},
-            {'id': '6', 'description':'Serbian', 'value':'sr'},
-            {'id': '7', 'description':'Spanish', 'value':'es'},
-        ];
+        this.sort = '';
     }
     getUriParams(qstr){
         let query = {};
@@ -69,6 +51,7 @@ class SearchParamsStore extends BaseStore {
         this.tags = (params.tags || '');
         this.revisions = params.revisions;
         this.license = params.license;
+        this.sort = params.sort;
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -84,6 +67,7 @@ class SearchParamsStore extends BaseStore {
         this.tags = '';
         this.revisions = false;
         this.license = '';
+        this.sort = '';
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -93,15 +77,14 @@ class SearchParamsStore extends BaseStore {
             queryparams: this.queryparams,
             searchstring: this.searchstring,
             entity: this.entity,
-            lang: this.language,
+            language: this.language,
             // group: this.group,
             fields: this.fields,
             users: this.users,
             tags: this.tags,
             revisions: this.revisions,
-            entities: this.entities,
-            languages: this.languages,
             license: this.license,
+            sort: this.sort,
             fetch: this.fetch
         };
     }
@@ -118,9 +101,8 @@ class SearchParamsStore extends BaseStore {
         this.users = state.users;
         this.tags = state.tags;
         this.revisions = state.revisions;
-        this.entities = state.entities;
-        this.languages = state.languages;
         this.license = state.license;
+        this.sort = state.sort;
         this.fetch = state.fetch;
     }
 }

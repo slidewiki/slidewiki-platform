@@ -5,32 +5,28 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
-import updateUserResultsVisibility from '../../../actions/search/updateUserResultsVisibility';
 
 class SearchResultsPanel extends React.Component {
+
+    initSortDropdown(){
+        let changeSort = this.props.handleRedirect.bind(this);
+        $('#sortDropdown').dropdown({
+            onChange: function(value, text, $choice){
+                changeSort({
+                    sort: value
+                });
+            }
+        });
+    }
+    componentDidMount(){
+        this.initSortDropdown();
+    }
+    componentDidUpdate(){
+        this.initSortDropdown();
+    }
     render() {
-        const results = this.props.results;  //this.props.SearchResultsStore.results;
+        const results = this.props.results;
         const numFound = this.props.numFound;
-        // const entities = this.props.entities;
-        // const languages = this.props.languages;
-        //
-        // const entityList = entities.map((s, index) => {
-        //     return (
-        //         <div className="ui item toggle checkbox" key={index} >
-        //             <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'type', s.description)}*/ />
-        //             <label>{s.description}</label>
-        //         </div>
-        //     );
-        // });
-        //
-        // const languageList = languages.map((s, index) => {
-        //     return (
-        //         <div className="ui item toggle checkbox" key={index} >
-        //             <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'lang', s.description)}*/ />
-        //             <label>{s.description}</label>
-        //         </div>
-        //     );
-        // });
 
         let resultsDiv = <div ref="resultsDiv">
             <div className="ui grid" key="resultsHeader">
@@ -38,14 +34,13 @@ class SearchResultsPanel extends React.Component {
                     <h2 className="ui header">Search Results</h2>
                 </div>
 
-                <div className="eight column right floated column" key="resultsSortDropdown">
-                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
+                <div className="eight wide right floated column" key="resultsSortDropdown">
+                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown" id="sortDropdown">
                         <i className="icon exchange"/>
                         <div className="text">Relevance</div>
                         <div className="menu">
-                            <div className="item active selected" data-value={0}>Relevance</div>
-                            <div className="item" data-value={1}>Title</div>
-                            <div className="item" data-value={2}>Last updated</div>
+                            <div className="item active selected" data-value="rel">Relevance</div>
+                            <div className="item" data-value="lastUpdate">Last updated</div>
                         </div>
                     </div>
                 </div>
@@ -76,10 +71,5 @@ class SearchResultsPanel extends React.Component {
 SearchResultsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-// SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
-//     return {
-//         SearchResultsStore: context.getStore(SearchResultsStore).getState()
-//     };
-// });
 
 export default SearchResultsPanel;
