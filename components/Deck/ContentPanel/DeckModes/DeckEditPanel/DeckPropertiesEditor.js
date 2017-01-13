@@ -11,7 +11,9 @@ import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
+import GroupDetailsModal from './GroupDetailsModal';
 import { timeSince } from '../../../../../common';
+import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 
 
 class DeckPropertiesEditor extends React.Component {
@@ -237,6 +239,16 @@ class DeckPropertiesEditor extends React.Component {
         this.context.executeAction(updateAuthorizedGroups, newGroups);
     }
 
+    handleClickShowGroupDetails(groupid, event) {
+        event.preventDefault();
+        console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
+
+        //call service
+        this.context.executeAction(loadUsergroup, {groupid: groupid});
+
+        $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
+    }
+
     getListOfAuthorized() {
         let list_authorized = [];
         if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
@@ -267,6 +279,9 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveGroup(group, event);
                 };
+                let fct2 = (event) => {
+                    this.handleClickShowGroupDetails(group.id, event);
+                };
                 list_authorized.push(
                   (
                     <div className="item" key={group.id}>
@@ -279,7 +294,7 @@ class DeckPropertiesEditor extends React.Component {
                             Remove
                           </button>
                           &nbsp;&nbsp;&nbsp;
-                          <button className="ui tiny compact borderless black basic button" key={group.id}>
+                          <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
                             Show details
                           </button>
                         </div>
@@ -289,6 +304,8 @@ class DeckPropertiesEditor extends React.Component {
                 );
             });
         }
+
+        //TODO order list
 
         return list_authorized;
     }
@@ -466,6 +483,7 @@ class DeckPropertiesEditor extends React.Component {
                               </div>
                               <div className="ui hidden divider">
                               </div>
+                              <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
                           </div>
                         </div>) : ''}
 
