@@ -20,7 +20,10 @@ let ReactDOM = require('react-dom');
 
 //let simpledraggable = require('simple-draggable'); //remove window dependency
 //let SimpleDraggable = require('../../../../../assets/simpledraggable');
-const absolutediv = '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: 80000;"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
+const absolutediv = '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: 80000;">' +
+                    '<div class="h-left">' +
+                    '<span class="text-block" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">' +
+                    'New content</span></div></div>';
 
 
 class SlideContentEditor extends React.Component {
@@ -372,6 +375,13 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
 
+        const sectionElementStyle = {
+            overflowY: 'hidden',
+            overflowX: 'auto',
+            height: '100%'
+
+        };
+
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
         /*
@@ -406,7 +416,9 @@ class SlideContentEditor extends React.Component {
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
                         <div className="slides">
-                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                <section className="present"  style={sectionElementStyle}>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                </section>
                         </div>
                     </div>
                 </div>
