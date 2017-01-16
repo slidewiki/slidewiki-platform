@@ -13,6 +13,7 @@ import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../acti
 import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
 import GroupDetailsModal from './GroupDetailsModal';
 import { timeSince } from '../../../../../common';
+import UserPicture from '../../../../common/UserPicture';
 import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 
 
@@ -258,15 +259,19 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 list_authorized.push(
                   (
-                    <div className="item" key={user.userid}>
-                      <img className="ui avatar image" src={user.picture} />
-                      <div className="content">
-                        <a className="header" href={'/user/' + user.username}>{user.username}</a>
-                        <div className="description">
-                          Access granted {timeSince((new Date(user.joined)))} ago&nbsp;&nbsp;&nbsp;
-                          <button className="ui tiny compact borderless black basic button" key={user.userid} onClick={fct}>
-                            Remove
-                          </button>
+                    <div className="item" key={user.userid} ktype="user" kname={user.username} >
+                      <div className="ui grid">
+                        <div className="one wide column">
+                          <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
+                        </div>
+                        <div className="fifteen wide column">
+                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                          <div className="description">
+                            Access granted {timeSince((new Date(user.joined)))} ago&nbsp;&nbsp;&nbsp;
+                            <button className="ui tiny compact borderless black basic button" key={user.userid} onClick={fct}>
+                              Remove
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -274,6 +279,11 @@ class DeckPropertiesEditor extends React.Component {
                 );
             });
         }
+        list_authorized.sort((a, b) => {
+            return (a.props.kname < b.props.kname) ? -1 : 1;
+        });
+
+        let temp_list = [];
         if (this.props.DeckEditStore.authorizedGroups !== undefined && this.props.DeckEditStore.authorizedGroups.length > 0) {
             this.props.DeckEditStore.authorizedGroups.forEach((group) => {
                 let fct = (event) => {
@@ -282,21 +292,25 @@ class DeckPropertiesEditor extends React.Component {
                 let fct2 = (event) => {
                     this.handleClickShowGroupDetails(group.id, event);
                 };
-                list_authorized.push(
+                temp_list.push(
                   (
-                    <div className="item" key={group.id}>
-                      <i className="large group middle aligned icon"></i>
-                      <div className="content">
-                        <a className="header">{group.name}</a>
-                        <div className="description">
-                          Access granted {timeSince((new Date(group.joined)))} ago&nbsp;&nbsp;&nbsp;
-                          <button className="ui tiny compact borderless black basic button" onClick={fct}>
-                            Remove
-                          </button>
-                          &nbsp;&nbsp;&nbsp;
-                          <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
-                            Show details
-                          </button>
+                    <div className="item" key={group.id} ktype="group" kname={group.name} >
+                      <div className="ui grid">
+                        <div className="one wide column">
+                          <i className="large group middle aligned icon"></i>
+                        </div>
+                        <div className="fifteen wide column">
+                          <a className="header">{group.name}</a>
+                          <div className="description">
+                            Access granted {timeSince((new Date(group.joined)))} ago&nbsp;&nbsp;&nbsp;
+                            <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                              Remove
+                            </button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
+                              Show details
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -304,8 +318,11 @@ class DeckPropertiesEditor extends React.Component {
                 );
             });
         }
+        temp_list.sort((a, b) => {
+            return (a.props.kname < b.props.kname) ? -1 : 1;
+        });
 
-        //TODO order list
+        list_authorized = list_authorized.concat(temp_list);
 
         return list_authorized;
     }
