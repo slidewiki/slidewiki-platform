@@ -106,6 +106,7 @@ class SearchPanel extends React.Component {
             queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
         }
 
+        // add sort
         return this.encodeParams(queryparams);
     }
     encodeParams(queryparams){
@@ -127,7 +128,7 @@ class SearchPanel extends React.Component {
             return;
         }
         this.context.executeAction(navigateAction, {
-            url:  '/search/' + this.getEncodedParams() + '&sort=' + params.sort
+            url:  '/search/' + this.getEncodedParams()
         });
 
         return false;

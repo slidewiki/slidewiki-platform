@@ -53,7 +53,7 @@ class HeaderSearchBox extends React.Component {
         // searchstr += '&revisions=false';
 
         this.context.executeAction(navigateAction, {
-            url: '/search/' + searchstr
+            url: '/search/' + searchstr + '&sort=rel'
         });
 
         // this.refs.searchstring.value = '';
