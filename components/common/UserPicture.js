@@ -11,6 +11,7 @@ import classNames from 'classnames';
  *   centered: true|false
  *   size: semantic-ui size classes, like mini, tiny, small, medium, large, big, huge, massive
  *   width: positive integer - width of the identicon
+ *   avatar:
  */
 
 class UserPicture extends React.Component {
@@ -34,13 +35,11 @@ class UserPicture extends React.Component {
             'centered': this.props.centered,
             'avatar': this.props.avatar,
             'rounded': true,
-            'bordered': this.props.bordered != null ? this.props.bordered : true, //bordered by default
+            'bordered': this.props.bordered !== null ? this.props.bordered : true, //bordered by default
             'image': true,
         });
         let picture = '';
         let width = this.props.width;
-        if (width === undefined || width === null || width === '')
-            width = '100%';
         if (this.props.picture === '' || !this.props.picture) {
             let styles = {width: width, height: width};
             picture = <div className={ classes } style={ styles } height={ width }><Identicons id={ this.props.username } width={ width } size={ 5 }/></div>;

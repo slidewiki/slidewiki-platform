@@ -17,11 +17,15 @@ class GroupDetailsModal extends React.Component {
         members.push(
           (
             <div className="item" key={this.props.group.creator.userid}>
-              <UserPicture avatar="true" size="tiny" bordered="false" picture={this.props.group.creator.picture} username={this.props.group.creator.username} />
-              <div className="content">
-                <a className="header" href={'/user/' + this.props.group.creator.username}>{this.props.group.creator.username}</a>
-                <div className="description">
-                  Group leader
+              <div className="ui grid">
+                <div className="one wide column">
+                  <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
+                </div>
+                <div className="fifteen wide column">
+                  <a className="header" href={'/user/' + this.props.group.creator.username}>{this.props.group.creator.username}</a>
+                  <div className="description">
+                    Group leader
+                  </div>
                 </div>
               </div>
             </div>
@@ -32,9 +36,13 @@ class GroupDetailsModal extends React.Component {
                 members.push(
                   (
                     <div className="item" key={user.userid}>
-                      <img className="ui avatar image" src={user.picture} />
-                      <div className="content">
-                        <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                      <div className="ui grid">
+                        <div className="one wide column">
+                          <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
+                        </div>
+                        <div className="fifteen wide column">
+                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                        </div>
                       </div>
                     </div>
                   )
@@ -50,7 +58,7 @@ class GroupDetailsModal extends React.Component {
               <div className="content">
                 <div className="ui container">
                   <h3 className="header" >{this.props.group.name}</h3>
-                  <p>There are {this.props.group.members.length} member{(this.props.group.members.length !== 1) ? 's': ''} in this group.</p>
+                  <p>There are {this.props.group.members.length+1} member{(this.props.group.members.length !== 0) ? 's': ''} in this group.</p>
                   <div className="ui very relaxed  list">
                       {members}
                   </div>

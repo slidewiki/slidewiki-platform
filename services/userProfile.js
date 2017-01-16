@@ -52,13 +52,20 @@ export default {
             .then((body) => callback(null, params))
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
+            //prepare data
+            let members = params.members.reduce((prev, curr) => {
+                delete curr.username;
+                delete curr.picture;
+                prev.push(curr);
+                return prev;
+            }, []);
             let tosend = {
                 id: params.id,
                 name: params.name,
                 description: !isEmpty(params.description) ? params.description : '',
                 isActive: !isEmpty(params.isActive) ? params.isActive : true,
                 timestamp: !isEmpty(params.timestamp) ? params.timestamp : (new Date()).toISOString(),
-                members: params.members
+                members: members
             };
             // console.log('sending:', tosend, params.jwt);
             rp({
