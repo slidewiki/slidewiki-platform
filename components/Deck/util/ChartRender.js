@@ -1,17 +1,19 @@
+import nv from 'nvd3';
+
 class ChartRender {
   //Render the chart according to its type and data, it uses nvd3
-  // nvd3 is included so far in the DefaultHTMLLayout file
   static createCharts () {
     $("div[id^=chart]").each(function(){
-       if ($(this).has('svg').length) return '';
-       // Extract the data of the chartID
-       let chart = JSON.parse($(this).attr('datum'));
-       let chartID = chart.data['this.chartID'];
-       let chartType =  chart.data.chartType;
-       let chartData = chart.data.chartData;
-       let data = [];
-       chart = null;
-      switch (chartType) {
+        // In case the chart is already rendered, it doesn't need to be rendered again.
+        if ($(this).has('svg').length) return '';
+        // Extract the data of the chartID
+        let chart = JSON.parse($(this).attr('datum'));
+        let chartID = chart.data['this.chartID'];
+        let chartType =  chart.data.chartType;
+        let chartData = chart.data.chartData;
+        let data = [];
+        chart = null;
+        switch (chartType) {
           case 'lineChart':
               data = chartData;
               chart = nv.models.lineChart()
@@ -48,7 +50,7 @@ class ChartRender {
                   data.push({key: 'data' + (i + 1), values: arr});
               }
 
-
+              console.log('///////////////ola');
               chart = nv.models.scatterChart()
                 .showDistX(true)
                 .showDistY(true)
@@ -56,9 +58,10 @@ class ChartRender {
               chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
               chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
               chartData = data;
+              console.log('///////////////ola');
               break;
           default:
-      }
+        }
 
       if (chart !== null) {
         d3.select('#' + chartID)

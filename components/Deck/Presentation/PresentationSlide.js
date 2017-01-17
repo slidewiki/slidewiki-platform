@@ -11,7 +11,8 @@ let sectionStyle = { 'top': 'unset !important'};
 class PresentationSlide extends React.Component {
 		componentDidMount(){
 		//this.props.style = sectionStyle;
-			this.forceUpdate();
+            // If there are some charts in the slide, render them.
+            if ($("div[id^=chart]").length) this.forceUpdate();
 		}
 
 		componentDidUpdate(){

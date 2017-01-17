@@ -15,12 +15,55 @@ const ReactDOM = require('react-dom');
 class SlideEditPanel extends React.Component {
 
     componentDidMount(){
-      ChartRender.createCharts();
-      this.forceUpdate();
+        this.resize();
+        /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
+        {
+            this.resize();
+        });*/
+  //      this.resize();
+        // If there are some charts in the slide, render them.
+        if ($("div[id^=chart]").length) this.forceUpdate();
     }
 
     componentDidUpdate(){
-      ChartRender.createCharts();
+//        this.resize();
+        if ($("div[id^=chart]").length) ChartRender.createCharts();
+    }
+
+    resize()
+    {
+        let containerwidth = document.getElementById('container').offsetWidth;
+        let containerheight = document.getElementById('container').offsetHeight;
+        //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
+
+        //reset scaling of pptx2html element to get original size
+        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+
+        //Function to fit contents in edit and view component
+        let pptxwidth = $('.pptx2html').width();
+        let pptxheight = $('.pptx2html').height();
+
+        //only calculate scaleration for width for now
+        this.scaleratio = containerwidth / pptxwidth;
+
+        if ($('.pptx2html').length)
+        {
+            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+
+            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
+            //width = pptxwidth + 40
+            //height + 40
+            //this.refs.slideViewPanel.style.width = ((pptxwidth + 40) * this.scaleratio) + 'px';
+            //this.refs.slideViewPanel.style.padding = '20px 20px 20px 20px';
+            //$(".pptx2html").css({'padding': '20px 20px 20px 20px'});
+            //style.padding left = 20 px, top 20 px
+            //this.refs.slideEditPanel.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+
+            $(".pptx2html").css({'borderStyle': 'none none double none ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            //all borders
+            //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+        }
     }
 
     render() {

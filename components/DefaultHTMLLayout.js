@@ -22,9 +22,6 @@ class DefaultHTMLLayout extends React.Component {
                 {/*<link href="/custom_modules/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet" />*/}
             </head>
             <body>
-                {/*for Charts*/}
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script> {/* D3 */}
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script> {/* NVD3 */}
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>
