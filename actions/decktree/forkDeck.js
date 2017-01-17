@@ -15,7 +15,10 @@ export default function forkDeck(context, payload, done) {
 
         context.service.update('deck.fork', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                context.dispatch('FORK_DECK_FAILURE', err);
+                if (err.statusCode === 401) {
+                    context.dispatch('FORK_DECK_FAILURE', err);
+                    //TODO detect if not authorized - special message
+                }
             } else {
                 context.dispatch('FORK_DECK_SUCCESS', res);
                 let newSid = res._id + '-' + res.revisions[0].id;
