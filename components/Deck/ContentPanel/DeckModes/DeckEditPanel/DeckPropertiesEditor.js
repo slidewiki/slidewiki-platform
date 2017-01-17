@@ -88,7 +88,7 @@ class DeckPropertiesEditor extends React.Component {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown({
                 action: (someText, dataValue, source) => {
-                    console.log('group dropdown select', dataValue);
+                    // console.log('group dropdown select', dataValue);
 
                     $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('hide');
@@ -121,7 +121,7 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
-                    console.log('user dropdown select', name, value);
+                    // console.log('user dropdown select', name, value);
 
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
@@ -216,7 +216,7 @@ class DeckPropertiesEditor extends React.Component {
 
     handleClickRemoveUser(member, event) {
         event.preventDefault();
-        console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
+        // console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
 
         let users = this.props.DeckEditStore.authorizedUsers;
 
@@ -229,7 +229,7 @@ class DeckPropertiesEditor extends React.Component {
 
     handleClickRemoveGroup(group, event) {
         event.preventDefault();
-        console.log('handleClickRemoveGroup', group, this.props.DeckEditStore.authorizedGroups);
+        // console.log('handleClickRemoveGroup', group, this.props.DeckEditStore.authorizedGroups);
 
         let groups = this.props.DeckEditStore.authorizedGroups;
 
@@ -242,7 +242,7 @@ class DeckPropertiesEditor extends React.Component {
 
     handleClickShowGroupDetails(groupid, event) {
         event.preventDefault();
-        console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
+        // console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
 
         //call service
         this.context.executeAction(loadUsergroup, {groupid: groupid});
@@ -259,7 +259,7 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 list_authorized.push(
                   (
-                    <div className="item" key={user.userid} ktype="user" kname={user.username} >
+                    <div className="item" key={user.username + user.userid} >
                       <div className="ui grid">
                         <div className="one wide column">
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
@@ -280,7 +280,7 @@ class DeckPropertiesEditor extends React.Component {
             });
         }
         list_authorized.sort((a, b) => {
-            return (a.props.kname < b.props.kname) ? -1 : 1;
+            return (a.key < b.key) ? -1 : 1;
         });
 
         let temp_list = [];
@@ -294,7 +294,7 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 temp_list.push(
                   (
-                    <div className="item" key={group.id} ktype="group" kname={group.name} >
+                    <div className="item" key={group.id + group.name} >
                       <div className="ui grid">
                         <div className="one wide column">
                           <i className="large group middle aligned icon"></i>
@@ -319,7 +319,7 @@ class DeckPropertiesEditor extends React.Component {
             });
         }
         temp_list.sort((a, b) => {
-            return (a.props.kname < b.props.kname) ? -1 : 1;
+            return (a.key < b.key) ? -1 : 1;
         });
 
         list_authorized = list_authorized.concat(temp_list);
