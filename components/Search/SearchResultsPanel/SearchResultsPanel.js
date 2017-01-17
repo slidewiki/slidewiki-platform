@@ -25,17 +25,17 @@ class SearchResultsPanel extends React.Component {
         this.initSortDropdown();
     }
     renderSortDropdownItems(){
-        if(this.props.sort === 'lastUpdated'){
+        if(this.props.sort === 'lastUpdate'){
             return <div className="menu">
-                <div className="item" data-value="rel">Relevance</div>
+                <div className="item" data-value="score">Relevance</div>
                 <div className="item active selected" data-value="lastUpdate">Last updated</div>
-            </div>
+            </div>;
         }
         else {
             return <div className="menu">
-                <div className="item active selected" data-value="rel">Relevance</div>
-                <div className="item" data-value="lastUpdated">Last updated</div>
-            </div>
+                <div className="item active selected" data-value="score">Relevance</div>
+                <div className="item" data-value="lastUpdate">Last updated</div>
+            </div>;
         }
     }
     render() {
@@ -50,7 +50,7 @@ class SearchResultsPanel extends React.Component {
                 <div className="eight wide right floated column" key="resultsSortDropdown">
                     <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown" id="sortDropdown">
                         <i className="icon exchange"/>
-                        <div className="text">{(this.props.sort === 'lastUpdated') ? 'Last Updated' : 'Relevance'}</div>
+                        <div className="text">{(this.props.sort === 'lastUpdate') ? 'Last Updated' : 'Relevance'}</div>
                         {this.renderSortDropdownItems()}
                     </div>
                 </div>

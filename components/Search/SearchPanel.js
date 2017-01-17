@@ -63,7 +63,7 @@ class SearchPanel extends React.Component {
             this.handleRedirect();
         }
     }
-    getEncodedParams(){
+    getEncodedParams(params){
         let queryparams = {};
 
         // determine given params
@@ -106,7 +106,11 @@ class SearchPanel extends React.Component {
             queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
         }
 
-        // add sort
+        // encode extra parameters paased as arguments e.g. sort param
+        if(params && params.sort){
+            queryparams.sort = params.sort;
+        }
+
         return this.encodeParams(queryparams);
     }
     encodeParams(queryparams){
@@ -128,7 +132,7 @@ class SearchPanel extends React.Component {
             return;
         }
         this.context.executeAction(navigateAction, {
-            url:  '/search/' + this.getEncodedParams()
+            url:  '/search/' + this.getEncodedParams(params)
         });
 
         return false;
