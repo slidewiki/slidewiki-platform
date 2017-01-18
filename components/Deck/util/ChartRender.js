@@ -50,7 +50,6 @@ class ChartRender {
                   data.push({key: 'data' + (i + 1), values: arr});
               }
 
-              console.log('///////////////ola');
               chart = nv.models.scatterChart()
                 .showDistX(true)
                 .showDistY(true)
@@ -58,7 +57,6 @@ class ChartRender {
               chart.xAxis.axisLabel('X').tickFormat(d3.format('.02f'));
               chart.yAxis.axisLabel('Y').tickFormat(d3.format('.02f'));
               chartData = data;
-              console.log('///////////////ola');
               break;
           default:
         }
