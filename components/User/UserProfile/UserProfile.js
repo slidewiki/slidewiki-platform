@@ -4,6 +4,8 @@ import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
 import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
+import UserGroups from './UserGroups';
+import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile';
@@ -71,6 +73,11 @@ class UserProfile extends React.Component {
             case categories.categories[1]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
+                        return this.displayGroups();
+                        break;
+                    case categories.groups[1]:
+                        return this.displayGroupedit();
+                        break;
                     default:
                         return this.notImplemented();
                 }});
@@ -154,6 +161,14 @@ class UserProfile extends React.Component {
         return (
             <Integrations />
         );
+    }
+
+    displayGroups() {
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+    }
+
+    displayGroupedit() {
+        return (<UserGroupEdit />);
     }
 
     notImplemented() {

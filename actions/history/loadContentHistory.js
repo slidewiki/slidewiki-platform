@@ -2,6 +2,8 @@ import { shortTitle } from '../../configs/general';
 import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError from '../error/slideIdTypeError';
 import { AllowedPattern } from '../error/util/allowedPattern';
+import DeckTreeStore from '../../stores/DeckTreeStore.js'
+import { isEmpty } from '../../common.js';
 
 export default function loadContentHistory(context, payload, done) {
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
@@ -12,6 +14,17 @@ export default function loadContentHistory(context, payload, done) {
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
+    }
+
+    // we need the spath for the history service call
+    if (isEmpty(payload.params.spath)) {
+        // in current state of the UI, the history tab is always loaded alongside the deck tree,
+        // and the loading happens on user click after the page has completed loading,
+        // therefore the spath is already calculated and stored in the DeckTreeStore state
+        let deckTreeStore = context.getStore(DeckTreeStore);
+        let deckTreeState = deckTreeStore.getState();
+
+        payload.params.spath = deckTreeState.selector.get('spath');
     }
 
     context.service.read('history.list', payload, {timeout: 20 * 1000}, (err, res) => {

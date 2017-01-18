@@ -1,15 +1,25 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
 import UserNotificationsStore from '../../../stores/UserNotificationsStore';
+import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
+    componentWillMount() {
+        if ((String(this.props.UserProfileStore.userid) === '')) {//the user is loggedin
+            this.context.executeAction(navigateAction, {
+                url: '/'
+            });
+        }
+    }
+
     componentDidMount() {
         this.context.executeAction(loadUserNotifications, {
-            uid: 1//TODO get real user_id
+            uid: this.props.UserProfileStore.userid
         });
     }
 
@@ -26,7 +36,7 @@ class UserNotificationsPanel extends React.Component {
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {
-            uid: 1,
+            uid: this.props.UserProfileStore.userid
         });
     }
 
@@ -85,6 +95,45 @@ class UserNotificationsPanel extends React.Component {
             );
         };
         // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
+        const filters = (
+            <div className="five wide column">
+                <div className="ui basic segment">
+                    <h4 className="ui header">Show notifications for:</h4>
+                    <label>Users:</label>
+                    <div className="subscriptions">
+                        <div ref="subscriptionslist">
+                            <div className="ui relaxed list">
+                                {userSubscriptionList}
+                            </div>
+                         </div>
+                    </div>
+                    <label>Slides:</label>
+                    <div className="subscriptions">
+                        <div ref="subscriptionslist">
+                            <div className="ui relaxed list">
+                                {slideSubscriptionList}
+                            </div>
+                         </div>
+                    </div>
+                    <label>Decks:</label>
+                    <div className="subscriptions">
+                        <div ref="subscriptionslist">
+                            <div className="ui relaxed list">
+                                {deckSubscriptionList}
+                            </div>
+                         </div>
+                    </div>
+                    <h4 className="ui header">Show activity types:</h4>
+                    <div className="activityTypes">
+                        <div ref="activityTypeList">
+                            <div className="ui relaxed list">
+                                {activityTypeList}
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        );
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui top attached secondary pointing menu">
@@ -100,46 +149,15 @@ class UserNotificationsPanel extends React.Component {
                 </div>
 
                 <div className="ui grid">
-                    <div className="five wide column">
-                        <div className="ui basic segment">
-                            <h4 className="ui header">Show notifications for:</h4>
-                            <label>Users:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {userSubscriptionList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Slides:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {slideSubscriptionList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <label>Decks:</label>
-                            <div className="subscriptions">
-                                <div ref="subscriptionslist">
-                                    <div className="ui relaxed list">
-                                        {deckSubscriptionList}
-                                    </div>
-                                 </div>
-                            </div>
-                            <h4 className="ui header">Show activity types:</h4>
-                            <div className="activityTypes">
-                                <div ref="activityTypeList">
-                                    <div className="ui relaxed list">
-                                        {activityTypeList}
-                                    </div>
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*filters*/}
                     <div className="ten wide column">
                         <div className="ui basic segment">
-                            <UserNotificationsList items={notifications} selector={selector} />
+                            {(notifications.length === 0)
+                                ?
+                                <div>There are currently no notifications.</div>
+                                :
+                                <UserNotificationsList items={notifications} selector={selector} />
+                            }
                         </div>
                     </div>
                 </div>
@@ -151,9 +169,10 @@ class UserNotificationsPanel extends React.Component {
 UserNotificationsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-UserNotificationsPanel = connectToStores(UserNotificationsPanel, [UserNotificationsStore], (context, props) => {
+UserNotificationsPanel = connectToStores(UserNotificationsPanel, [UserNotificationsStore, UserProfileStore], (context, props) => {
     return {
-        UserNotificationsStore: context.getStore(UserNotificationsStore).getState()
+        UserNotificationsStore: context.getStore(UserNotificationsStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default UserNotificationsPanel;
