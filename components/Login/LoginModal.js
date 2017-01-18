@@ -75,7 +75,7 @@ class LoginModal extends React.Component {
         if (!this.props.UserProfileStore.socialLoginError && nextProps.UserProfileStore.socialLoginError){
             swal({
                 title: 'Information',
-                text: 'These credentials are new to us. Either you choosed a not yet added provider or you have to register for a new account first.',
+                text: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -225,7 +225,7 @@ class LoginModal extends React.Component {
             const provider = this.getProviderName();
             swal({
                 title: 'Error',
-                text: 'The data from ' + provider + ' was incomplete. At least your email should be available for us.',
+                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.',
                 type: 'error',
                 confirmButtonText: 'Confirm',
                 confirmButtonClass: 'negative ui button',
