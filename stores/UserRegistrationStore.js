@@ -10,6 +10,7 @@ class UserRegistrationStore extends BaseStore {
         this.suggestedUsernames = [];
         this.socialError = false;
         this.socialCredentialsTaken = false;
+        this.socialCredentialsTakenByDeactivatedAccount = false;
         this.socialuserdata = {};
     }
 
@@ -31,6 +32,7 @@ class UserRegistrationStore extends BaseStore {
         // console.log('UserRegistrationStore handleSocialCreateUserSuccess:', res);
         this.socialError = false;
         this.socialCredentialsTaken = false;
+        this.socialCredentialsTakenByDeactivatedAccount = false;
         this.emitChange();
     }
 
@@ -54,6 +56,9 @@ class UserRegistrationStore extends BaseStore {
         // console.log('UserRegistrationStore handleSocialUserRegistrationError()', err, '___', err.message, '___', err.statusCode, '___', err.toString());
         if (err.statusCode.toString() === '409') {
             this.socialCredentialsTaken = true;
+        }
+        else if (err.statusCode.toString() === '423') {
+            this.socialCredentialsTakenByDeactivatedAccount = true;
         }
         else
             this.socialError = true;
@@ -105,6 +110,7 @@ class UserRegistrationStore extends BaseStore {
         this.socialuserdata = data || {};
         this.socialError = false;
         this.socialCredentialsTaken = false;
+        this.socialCredentialsTakenByDeactivatedAccount = false;
         this.emitChange();
     }
 
@@ -116,7 +122,8 @@ class UserRegistrationStore extends BaseStore {
             errorMessage: this.errorMessage,
             socialError: this.socialError,
             socialCredentialsTaken: this.socialCredentialsTaken,
-            socialuserdata: this.socialuserdata
+            socialuserdata: this.socialuserdata,
+            socialCredentialsTakenByDeactivatedAccount: this.socialCredentialsTakenByDeactivatedAccount
         };
     }
 
@@ -132,6 +139,7 @@ class UserRegistrationStore extends BaseStore {
         this.socialError = state.socialError;
         this.socialCredentialsTaken = state.socialCredentialsTaken;
         this.socialuserdata = state.socialuserdata;
+        this.socialCredentialsTakenByDeactivatedAccount = state.socialCredentialsTakenByDeactivatedAccount;
     }
 }
 

@@ -140,6 +140,7 @@ class UserRegistration extends React.Component {
         }
         if (nextProps.UserRegistrationStore.socialCredentialsTaken && !this.props.UserRegistrationStore.socialCredentialsTaken) {
             $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal('hide');
+            window.scrollTo(0,0);
 
             swal({
                 title: 'Information',
@@ -163,6 +164,27 @@ class UserRegistration extends React.Component {
 
                 $('.ui.login.modal').modal('show');
 
+                return true;
+            })
+            .catch(() => {
+                return true;
+            });
+        }
+        else if (nextProps.UserRegistrationStore.socialCredentialsTakenByDeactivatedAccount && !this.props.UserRegistrationStore.socialCredentialsTakenByDeactivatedAccount) {
+            $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal('hide');
+            window.scrollTo(0,0);
+
+            swal({
+                title: 'Information',
+                text: 'These provider credentials are already used by a deactivated user. To reactivate a specific user please contact us directly.',
+                type: 'error',
+                showCloseButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'positive ui button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
                 return true;
             })
             .catch(() => {
@@ -486,7 +508,7 @@ class UserRegistration extends React.Component {
                             <br/>
                             <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
                             <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>
-                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'githu')} ></i>
+                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'github')} ></i>
                         </div>
                         <div className="ui dividing header" ></div>
                         <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
