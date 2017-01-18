@@ -144,7 +144,7 @@ class UserRegistration extends React.Component {
 
             swal({
                 title: 'Information',
-                text: 'Sign up with a provider failed, because the user of this provider is already assigned to a SlideWiki user. Either you do a login with that or you register with other credentials.',
+                text: 'Signing up with a provider failed because the user of this provider is already registered at SlideWiki. Either log in with this provider or register with another one.',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -359,7 +359,7 @@ class UserRegistration extends React.Component {
             const provider = this.getProviderName();
             swal({
                 title: 'Error',
-                text: 'The data from ' + provider + ' was incomplete. At least your email should be available for us.',
+                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.',
                 type: 'error',
                 confirmButtonText: 'Confirm',
                 confirmButtonClass: 'negative ui button',
@@ -504,7 +504,7 @@ class UserRegistration extends React.Component {
                         </div>
                         <div className="ui dividing header" ></div>
                         <div className="container">
-                            Register with another platform:
+                            Register with a social provider:
                             <br/>
                             <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
                             <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>

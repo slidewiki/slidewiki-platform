@@ -25,7 +25,7 @@ class Integrations extends React.Component {
         if (this.props.UserProfileStore.removeProviderError === false && nextProps.UserProfileStore.removeProviderError) {
             swal({
                 title: 'Error',
-                text: 'The provider couldn&apos;t be disabled. Try again later.',
+                text: 'The provider hasn\'t been disabled, because something unexpected happened. Please try again later.',
                 type: 'error',
                 confirmButtonText: 'Confirmed',
                 confirmButtonClass: 'negative ui button',
@@ -38,7 +38,7 @@ class Integrations extends React.Component {
         else if (this.props.UserProfileStore.addProviderError === false && nextProps.UserProfileStore.addProviderError) {
             swal({
                 title: 'Error',
-                text: 'The provider couldn&apos;t be added. Try again later.',
+                text: 'The provider hasn\'t been added, because something unexpected happened. Please try again later.',
                 type: 'error',
                 confirmButtonText: 'Confirmed',
                 confirmButtonClass: 'negative ui button',
@@ -51,7 +51,7 @@ class Integrations extends React.Component {
         else if (this.props.UserProfileStore.addProviderAlreadyUsedError === false && nextProps.UserProfileStore.addProviderAlreadyUsedError) {
             swal({
                 title: 'Duplication',
-                text: 'The user of this provider is already assigned to another user.',
+                text: 'The provider you wanted to add is already assigned to another user. Do you have another user account at SlideWiki?',
                 type: 'warning',
                 confirmButtonText: 'Confirmed',
                 confirmButtonClass: 'negative ui button',
@@ -189,7 +189,7 @@ class Integrations extends React.Component {
             const provider = this.getProviderName();
             swal({
                 title: 'Error',
-                text: 'The data from ' + provider + ' was incomplete. At least your email should be available for us.',
+                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.',
                 type: 'error',
                 confirmButtonText: 'Confirm',
                 confirmButtonClass: 'negative ui button',
@@ -286,8 +286,8 @@ class Integrations extends React.Component {
             'button': true,
         });
 
-        let text_providerEnabled = 'This provider is enabled and could be used.';
-        let text_providerDisabled = 'If you want to sign in later with this provider, you have to click the Enable button.';
+        let text_providerEnabled = 'This provider is enabled and you may use it.';
+        let text_providerDisabled = 'This provider is currently disabled. To enable it, click on the button next to it.';
 
         return (
           <div>
@@ -298,10 +298,10 @@ class Integrations extends React.Component {
                   </div>
                   <div className="ui segment">
                     <p>
-                      SlideWiki provides the possibility to sign in with multiple providers.
-                      In order to be able to use a specific provider you have to active it.
-                      Activating a provider will open a new window for a sign in there.
-                      Please sign in there and don&apos;t close the window.
+                      SlideWiki provides the possibility to sign in with multiple providers (new features will be added soon).
+                      In order to use a specific provider you have to enable the provider separately.
+                      Enabling a provider will open a new window for you to sign in.
+                      Please sign in and don&apos;t close the opened window, as it will close automatically.
                     </p>
                   </div>
 

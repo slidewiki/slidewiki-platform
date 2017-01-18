@@ -46,7 +46,7 @@ class Social extends React.Component {
     render() {
         return (
             <div>
-                <b>We acquire your data. This should take just a few seconds.<br/>The window will be closed automatically.</b>
+                <b>We acquire your data. This will take just a few seconds.<br/>This window will close automatically.</b>
             </div>
         );
     }
