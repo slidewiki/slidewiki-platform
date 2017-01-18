@@ -3,6 +3,7 @@ import { navigateAction } from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
 //import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
+import async from 'async';
 
 export default function removeUser(context, payload, done) {
     payload.params = {};
@@ -17,12 +18,30 @@ export default function removeUser(context, payload, done) {
                 return;
             } else
                 context.dispatch('DELETE_USER_FAILURE', err);
+
+            done();
         } else {
-            context.deleteUser();
-            context.dispatch('DELETE_USER_SUCCESS', null);
-            context.executeAction(navigateAction, { url: '/' });
-            location.reload();
+            async.series([
+                (callback) => {
+                    context.deleteUser();
+                    callback(null, '');
+                },
+                (callback) => {
+                    context.dispatch('DELETE_USER_SUCCESS', null);
+                    callback(null, '');
+                },
+                (callback) => {
+                    context.executeAction(navigateAction, { url: '/' });
+                    callback(null, '');
+                },
+                (callback) => {
+                    location.reload();
+                    callback(null, '');
+                }
+            ],
+            (err, results) => {
+                done();
+            });
         }
-        done();
     });
 }
