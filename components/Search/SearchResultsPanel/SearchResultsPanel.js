@@ -48,8 +48,8 @@ class SearchResultsPanel extends React.Component {
                     <h2 className="ui header">Search Results</h2>
                 </div>
                 <div className="eight wide right floated column" key="resultsSortDropdown">
-                    <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown" id="sortDropdown">
-                        <i className="icon exchange"/>
+                    <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
+                        <i className="sort content ascending icon"/>
                         <div className="text">{(this.props.sort === 'lastUpdate') ? 'Last Updated' : 'Relevance'}</div>
                         {this.renderSortDropdownItems()}
                     </div>

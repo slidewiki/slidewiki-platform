@@ -135,6 +135,8 @@ class SearchPanel extends React.Component {
             url:  '/search/' + this.getEncodedParams(params)
         });
 
+        this.refs.keywords.blur();
+        
         return false;
     }
     render() {
