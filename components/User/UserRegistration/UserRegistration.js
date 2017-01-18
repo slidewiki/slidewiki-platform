@@ -494,23 +494,29 @@ class UserRegistration extends React.Component {
                                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
+                            <br/>
                             <button type="submit" className="ui blue labeled submit icon button" >
                                 <i className="icon add user"/> Sign Up
                             </button>
                         </form>
-                        <br/>
-                        <div >
-                            By clicking Sign Up, you agree to our <a href="">Terms</a>.
-                        </div>
                         <div className="ui dividing header" ></div>
+                        By clicking Sign Up, you agree to our <a href="">Terms</a>.
+                        <br/><br/>
+                        <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
+                    </div>
+                </div>
+                <div className="seven wide column">
+                    <div className="ui blue padded center aligned segment">
+                        <h2 className="ui dividing header">Sign Up with a Social Provider</h2>
+
                         <div className="container">
-                            Register with a social provider:
-                            <br/>
                             <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
                             <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>
                             <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'github')} ></i>
                         </div>
                         <div className="ui dividing header" ></div>
+                        By clicking on a Social Provider, you agree to our <a href="">Terms</a>.
+                        <br/><br/>
                         <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                     </div>
                 </div>
