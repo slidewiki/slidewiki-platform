@@ -9,6 +9,12 @@
 
     //add        '/',
     // to add a line in the toolbar
+
+CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
+CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+CKEDITOR.plugins.addExternal('texzilla', '/custom_modules/texzilla/');
+
+
 CKEDITOR.disableAutoInline = true;
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
