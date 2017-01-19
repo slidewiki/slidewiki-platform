@@ -32,6 +32,11 @@ class UserProfileStore extends BaseStore {
         this.jwt = '';
         this.userpicture = undefined;
         this.errorMessage = '';
+        this.currentUsergroup = {};
+        this.saveUsergroupError = '';
+        this.saveUsergroupIsLoading = false;
+        this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -69,6 +74,11 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+        this.currentUsergroup = {};
+        this.saveUsergroupError = '';
+        this.saveUsergroupIsLoading = false;
+        this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
 
         //LoginModal
         this.showLoginModal = false;
@@ -88,7 +98,12 @@ class UserProfileStore extends BaseStore {
             userpicture: this.userpicture,
             errorMessage: this.errorMessage,
             showLoginModal: this.showLoginModal,
-            lastUser: this.lastUser
+            lastUser: this.lastUser,
+            currentUsergroup: this.currentUsergroup,
+            saveUsergroupError: this.saveUsergroupError,
+            saveUsergroupIsLoading: this.saveUsergroupIsLoading,
+            deleteUsergroupError: this.deleteUsergroupError,
+            usergroupsViewStatus: this.usergroupsViewStatus
         };
     }
 
@@ -110,6 +125,11 @@ class UserProfileStore extends BaseStore {
         this.errorMessage = state.errorMessage;
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
+        this.currentUsergroup = state.currentUsergroup;
+        this.saveUsergroupError = state.saveUsergroupError;
+        this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
+        this.deleteUsergroupError = state.deleteUsergroupError;
+        this.usergroupsViewStatus = state.usergroupsViewStatus;
     }
 
     changeTo(payload) {
@@ -207,6 +227,60 @@ class UserProfileStore extends BaseStore {
         }
         return message2;
     }
+
+    updateUsergroup(group) {
+        this.currentUsergroup = group;
+        console.log('UserProfileStore: updateUsergroup', group);
+        this.saveUsergroupError = '';
+        this.deleteUsergroupError = '';
+        this.emitChange();
+    }
+
+    saveUsergroupFailed(error) {
+        this.saveUsergroupIsLoading = false;
+        this.saveUsergroupError = error.message;
+        this.emitChange();
+    }
+
+    saveUsergroupSuccess() {
+        this.saveUsergroupIsLoading = false;
+        this.currentUsergroup = {};
+        this.saveUsergroupError = '';
+        this.emitChange();
+    }
+
+    saveUsergroupStart() {
+        this.saveUsergroupIsLoading = true;
+        this.emitChange();
+    }
+
+    deleteUsergroupFailed(error) {
+        this.deleteUsergroupError = {
+            action: 'delete',
+            message: error.message
+        };
+        this.usergroupsViewStatus = '';
+        this.emitChange();
+    }
+
+    deleteUsergroupSuccess(groupid) {
+        console.log('UserProfileStore deleteUsergroupSuccess: delete % from %', groupid, this.user.groups);
+        //remove group from user
+        let groups = this.user.groups.reduce((prev, curr) => {
+            if (curr._id.toString() !== groupid.toString())
+                prev.push(curr);
+            return prev;
+        }, []);
+        this.user.groups = groups;
+        this.deleteUsergroupError = '';
+        this.usergroupsViewStatus = '';
+        this.emitChange();
+    }
+
+    updateUsergroupsStatus() {
+        this.usergroupsViewStatus = 'pending';
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -224,7 +298,16 @@ UserProfileStore.handlers = {
     'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
-    'USER_SIGNOUT': 'handleSignOut'
+    'USER_SIGNOUT': 'handleSignOut',
+    'UPDATE_USERGROUP': 'updateUsergroup',
+    'SAVE_USERGROUP_START': 'saveUsergroupStart',
+    'SAVE_USERGROUP_FAILED': 'saveUsergroupFailed',
+    'SAVE_USERGROUP_SUCCESS': 'saveUsergroupSuccess',
+    'DELETE_USERGROUP_FAILED': 'deleteUsergroupFailed',
+    'DELETE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
+    'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
+    'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
+    'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
 };
 
 export default UserProfileStore;

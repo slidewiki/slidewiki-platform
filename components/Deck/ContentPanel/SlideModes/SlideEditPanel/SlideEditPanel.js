@@ -11,8 +11,12 @@ import SlideContentEditor from './SlideContentEditor';
 import Error from '../../../../../components/Error/Error';
 import ChartRender from '../../../util/ChartRender';
 const ReactDOM = require('react-dom');
+import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 class SlideEditPanel extends React.Component {
+    componentWillUnmount(){
+        //show deckTree again
+        context.executeAction(restoreDeckPageLayout,{});
 
     componentDidMount(){
         this.resize();
