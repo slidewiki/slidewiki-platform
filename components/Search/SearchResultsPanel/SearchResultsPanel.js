@@ -5,43 +5,64 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
-import updateUserResultsVisibility from '../../../actions/search/updateUserResultsVisibility';
 
 class SearchResultsPanel extends React.Component {
+
+    initSortDropdown(){
+        let changeSort = this.props.handleRedirect.bind(this);
+        $('#sortDropdown').dropdown({
+            onChange: function(value, text, $choice){
+                changeSort({
+                    sort: value
+                });
+            }
+        });
+    }
+    componentDidMount(){
+        this.initSortDropdown();
+    }
+    componentDidUpdate(){
+        this.initSortDropdown();
+    }
+    renderSortDropdownItems(){
+        if(this.props.sort === 'lastUpdate'){
+            return <div className="menu">
+                <div className="item" data-value="score">Relevance</div>
+                <div className="item active selected" data-value="lastUpdate">Last updated</div>
+            </div>;
+        }
+        else {
+            return <div className="menu">
+                <div className="item active selected" data-value="score">Relevance</div>
+                <div className="item" data-value="lastUpdate">Last updated</div>
+            </div>;
+        }
+    }
     render() {
-        const results = this.props.results;  //this.props.SearchResultsStore.results;
+        const results = this.props.results;
         const numFound = this.props.numFound;
-        // const entities = this.props.entities;
-        // const languages = this.props.languages;
-        //
-        // const entityList = entities.map((s, index) => {
-        //     return (
-        //         <div className="ui item toggle checkbox" key={index} >
-        //             <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'type', s.description)}*/ />
-        //             <label>{s.description}</label>
-        //         </div>
-        //     );
-        // });
-        //
-        // const languageList = languages.map((s, index) => {
-        //     return (
-        //         <div className="ui item toggle checkbox" key={index} >
-        //             <input name="toggleCheckbox" type="checkbox" defaultChecked={true} /*onChange={this.handleChangeToggle.bind(this, 'lang', s.description)}*/ />
-        //             <label>{s.description}</label>
-        //         </div>
-        //     );
-        // });
 
         let resultsDiv = <div ref="resultsDiv">
-            <h2 className="ui header">Search Results</h2>
-            <div className="ui centered grid">
+            <div className="ui grid" key="resultsHeader">
+                <div className="eight wide left floated column" key="resultsTitleDiv">
+                    <h2 className="ui header">Search Results</h2>
+                </div>
+                <div className="eight wide right floated column" key="resultsSortDropdown">
+                    <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
+                        <i className="sort content ascending icon"/>
+                        <div className="text">{(this.props.sort === 'lastUpdate') ? 'Last Updated' : 'Relevance'}</div>
+                        {this.renderSortDropdownItems()}
+                    </div>
+                </div>
+            </div>
+            <div className="ui centered grid" key="searchResults">
                 <div className="twelve wide column">
                     <SearchResultsList items={results} ></SearchResultsList>
                 </div>
             </div>
         </div>;
 
-        let noResultsDiv = <div ref="noResiltsDiv">
+        let noResultsDiv = <div key="noResiltsDiv">
             <div className="ui grid centered">
                 <h3>No results found for the specified input parameters.</h3>
             </div>
@@ -60,10 +81,5 @@ class SearchResultsPanel extends React.Component {
 SearchResultsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-// SearchResultsPanel = connectToStores(SearchResultsPanel, [SearchResultsStore], (context, props) => {
-//     return {
-//         SearchResultsStore: context.getStore(SearchResultsStore).getState()
-//     };
-// });
 
 export default SearchResultsPanel;
