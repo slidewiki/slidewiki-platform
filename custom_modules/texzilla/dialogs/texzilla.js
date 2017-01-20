@@ -94,26 +94,26 @@ case 1:
     this.$ = $$[$0-1].replace(/\\[\\\]]/g, function(match) { return match.slice(1); });
     /* Escape some XML characters. */
     this.$ = escapeText(this.$);
-
+  
 break;
 case 2:
     /* Unescape \} and \\. */
     this.$ = $$[$0-1].replace(/\\[\\\}]/g, function(match) { return match.slice(1); });
     /* Escape some XML characters. */
     this.$ = escapeText(this.$);
-
+  
 break;
 case 3:
     this.$ = parseLength($$[$0-1]);
-
+  
 break;
 case 4:
     this.$ = parseLength($$[$0-1]);
-
+  
 break;
-case 5: this.$ = "\"" + escapeQuote($$[$0]) + "\"";
+case 5: this.$ = "\"" + escapeQuote($$[$0]) + "\""; 
 break;
-case 6: this.$ = "\"" + escapeQuote($$[$0]) + "\"";
+case 6: this.$ = "\"" + escapeQuote($$[$0]) + "\""; 
 break;
 case 7:
     /* The MathML specification indicates that trailing/leading whitespaces
@@ -122,7 +122,7 @@ case 7:
        write e.g. \text{ if }. We also collapse internal whitespace here.
        See https://github.com/fred-wang/TeXZilla/issues/25. */
     this.$ = $$[$0].replace(/\s+/g, " ").replace(/^ | $/g, "\u00A0");
-
+  
 break;
 case 8:
     $$[$0] = $$[$0].trim();
@@ -135,7 +135,7 @@ case 8:
     } else {
       throw "Unknown array alignment";
     }
-
+  
 break;
 case 9:
     this.$ = "";
@@ -154,646 +154,646 @@ case 9:
     } else {
         throw "Invalid column alignments";
     }
-
+  
 break;
-case 10: this.$ = "columnalign=" + $$[$0];
+case 10: this.$ = "columnalign=" + $$[$0]; 
 break;
-case 11: this.$ = "columnalign=" + $$[$0];
+case 11: this.$ = "columnalign=" + $$[$0]; 
 break;
-case 12: this.$ = "rowalign=" + $$[$0];
+case 12: this.$ = "rowalign=" + $$[$0]; 
 break;
-case 13: this.$ = "rowspan=" + $$[$0];
+case 13: this.$ = "rowspan=" + $$[$0]; 
 break;
-case 14: this.$ = "colspan=" + $$[$0];
+case 14: this.$ = "colspan=" + $$[$0]; 
 break;
-case 15: this.$ = "align=" + $$[$0];
+case 15: this.$ = "align=" + $$[$0]; 
 break;
-case 16: this.$ = "equalrows=" + $$[$0];
+case 16: this.$ = "equalrows=" + $$[$0]; 
 break;
-case 17: this.$ = "equalcolumns=" + $$[$0];
+case 17: this.$ = "equalcolumns=" + $$[$0]; 
 break;
-case 18: this.$ = "rowlines=" + $$[$0];
+case 18: this.$ = "rowlines=" + $$[$0]; 
 break;
-case 19: this.$ = "columnlines=" + $$[$0];
+case 19: this.$ = "columnlines=" + $$[$0]; 
 break;
-case 20: this.$ = "frame=" + $$[$0];
+case 20: this.$ = "frame=" + $$[$0]; 
 break;
-case 21: this.$ = "rowspacing=" + $$[$0] + " columnspacing=" + $$[$0];
+case 21: this.$ = "rowspacing=" + $$[$0] + " columnspacing=" + $$[$0]; 
 break;
-case 22: this.$ = $$[$0];
+case 22: this.$ = $$[$0]; 
 break;
-case 23: this.$ = $$[$0];
+case 23: this.$ = $$[$0]; 
 break;
-case 24: this.$ = $$[$0];
+case 24: this.$ = $$[$0]; 
 break;
-case 25: this.$ = $$[$0];
+case 25: this.$ = $$[$0]; 
 break;
-case 26: this.$ = $$[$0];
+case 26: this.$ = $$[$0]; 
 break;
-case 27: this.$ = $$[$0-1] + " " + $$[$0];
+case 27: this.$ = $$[$0-1] + " " + $$[$0]; 
 break;
-case 28: this.$ = $$[$0];
+case 28: this.$ = $$[$0]; 
 break;
-case 29: this.$ = $$[$0];
+case 29: this.$ = $$[$0]; 
 break;
-case 30: this.$ = $$[$0];
+case 30: this.$ = $$[$0]; 
 break;
-case 31: this.$ = $$[$0];
+case 31: this.$ = $$[$0]; 
 break;
-case 32: this.$ = $$[$0];
+case 32: this.$ = $$[$0]; 
 break;
-case 33: this.$ = $$[$0];
+case 33: this.$ = $$[$0]; 
 break;
-case 34: this.$ = $$[$0];
+case 34: this.$ = $$[$0]; 
 break;
-case 35: this.$ = $$[$0];
+case 35: this.$ = $$[$0]; 
 break;
-case 36: this.$ = $$[$0];
+case 36: this.$ = $$[$0]; 
 break;
-case 37: this.$ = $$[$0];
+case 37: this.$ = $$[$0]; 
 break;
-case 38: this.$ = $$[$0];
+case 38: this.$ = $$[$0]; 
 break;
-case 39: this.$ = $$[$0];
+case 39: this.$ = $$[$0]; 
 break;
-case 40: this.$ = $$[$0];
+case 40: this.$ = $$[$0]; 
 break;
-case 41: this.$ = $$[$0-1] + " " + $$[$0];
+case 41: this.$ = $$[$0-1] + " " + $$[$0]; 
 break;
-case 42: this.$ = $$[$0];
+case 42: this.$ = $$[$0]; 
 break;
-case 43: this.$ = $$[$0-1] + " " + $$[$0];
+case 43: this.$ = $$[$0-1] + " " + $$[$0]; 
 break;
 case 44:
     this.$ = newMo($$[$0]);
-
+  
 break;
 case 45:
     this.$ = "";
-
+  
 break;
 case 46:
     this.$ = newMo($$[$0]);
-
+  
 break;
 case 47:
     this.$ = "";
-
+  
 break;
-case 48: this.$ = "<mrow/>";
+case 48: this.$ = "<mrow/>"; 
 break;
-case 49: this.$ = newMrow($$[$0-1]);
+case 49: this.$ = newMrow($$[$0-1]); 
 break;
 case 50:
     this.$ = newTag("mo", $$[$0], "maxsize=\"1.2em\" minsize=\"1.2em\"");
-
+  
 break;
 case 51:
     this.$ = newTag("mo", $$[$0], "maxsize=\"1.8em\" minsize=\"1.8em\"");
-
+  
 break;
 case 52:
     this.$ = newTag("mo", $$[$0], "maxsize=\"2.4em\" minsize=\"2.4em\"");
-
+  
 break;
 case 53:
     this.$ = newTag("mo", $$[$0], "maxsize=\"3em\" minsize=\"3em\"");
-
+  
 break;
 case 54:
     this.$ = newTag("mo", $$[$0], "maxsize=\"1.2em\" minsize=\"1.2em\"");
-
+  
 break;
 case 55:
     this.$ = newTag("mo", $$[$0], "maxsize=\"1.8em\" minsize=\"1.8em\"");
-
+  
 break;
 case 56:
     this.$ = newTag("mo", $$[$0], "maxsize=\"2.4em\" minsize=\"2.4em\"");
-
+  
 break;
 case 57:
     this.$ = newTag("mo", $$[$0], "maxsize=\"3em\" minsize=\"3em\"");
-
+  
 break;
 case 58:
     this.$ = newTag("mrow", $$[$0-2] + newMrow($$[$0-1]) + $$[$0]);
-
+  
 break;
 case 59:
     this.$ = newTag("mfrac", newMrow($$[$0-3]) + newMrow($$[$0-1]), "linethickness=\"0\"");
-
+  
 break;
 case 60:
     this.$ = newTag("mfrac", newMrow($$[$0-3]) + newMrow($$[$0-1]), "linethickness=\"0\"");
     this.$ = newTag("mrow", $$[$0-4] + this.$ + $$[$0-2]);
-
+  
 break;
 case 61:
     this.$ = newTag("mfrac", newMrow($$[$0-3]) + newMrow($$[$0-1]));
-
+  
 break;
 case 62:
     this.$ = newTag("mfrac", newMrow($$[$0-3]) + newMrow($$[$0-1]));
     this.$ = newTag("mrow", $$[$0-4] + this.$ + $$[$0-2]);
-
+  
 break;
 case 63:
     this.$ = newTag("mfrac", newMrow($$[$0-3]) + newMrow($$[$0-1]),
                 "linethickness=\"0\"");
     this.$ = newTag("mrow", newMo("(") + this.$ + newMo(")"));
-
+  
 break;
 case 64:
     this.$ = newTag("mfrac", newMrow($$[$0-3]) + newMrow($$[$0-1]),
                 "linethickness=\"0\"");
     this.$ = newTag("mrow", $$[$0-4] + this.$ + $$[$0-2]);
     this.$ = newTag("mrow", newMo("(") + this.$ + newMo(")"));
-
+  
 break;
-case 65: this.$ = newTag("mn", $$[$0]);
+case 65: this.$ = newTag("mn", $$[$0]); 
 break;
-case 66: this.$ = newTag("mtext", $$[$0]);
+case 66: this.$ = newTag("mtext", $$[$0]); 
 break;
-case 67: this.$ = newTag("mi", escapeText($$[$0]));
+case 67: this.$ = newTag("mi", escapeText($$[$0])); 
 break;
-case 68: this.$ = newMo($$[$0], "0em", "0em");
+case 68: this.$ = newMo($$[$0], "0em", "0em"); 
 break;
-case 69: this.$ = newTag("mi", $$[$0]);
+case 69: this.$ = newTag("mi", $$[$0]); 
 break;
-case 70: this.$ = newTag("mn", $$[$0]);
+case 70: this.$ = newTag("mn", $$[$0]); 
 break;
-case 71: this.$ = newMo($$[$0]);
+case 71: this.$ = newMo($$[$0]); 
 break;
-case 72: this.$ = newMo($$[$0]);
+case 72: this.$ = newMo($$[$0]); 
 break;
-case 73: this.$ = newMo($$[$0]);
+case 73: this.$ = newMo($$[$0]); 
 break;
-case 74: this.$ = newTag("mo", $$[$0], "stretchy=\"false\"");
+case 74: this.$ = newTag("mo", $$[$0], "stretchy=\"false\""); 
 break;
-case 75: this.$ = newTag("mo", $$[$0], "stretchy=\"false\"");
+case 75: this.$ = newTag("mo", $$[$0], "stretchy=\"false\""); 
 break;
-case 76: this.$ = newTag("mo", $$[$0], "stretchy=\"false\"");
+case 76: this.$ = newTag("mo", $$[$0], "stretchy=\"false\""); 
 break;
-case 77: this.$ = newTag("ms", $$[$0]);
+case 77: this.$ = newTag("ms", $$[$0]); 
 break;
 case 78:
      this.$ = newTag("ms", $$[$0], "lquote=" + $$[$0-2] + " rquote=" + $$[$0-1]);
-
+  
 break;
-case 79: this.$ = newTag("mtext", $$[$0]);
+case 79: this.$ = newTag("mtext", $$[$0]); 
 break;
-case 80: this.$ = newTag("mtext", $$[$0-1] + $$[$0]);
+case 80: this.$ = newTag("mtext", $$[$0-1] + $$[$0]); 
 break;
-case 81: this.$ = newTag("mtext", $$[$0]);
+case 81: this.$ = newTag("mtext", $$[$0]); 
 break;
 case 82:
     this.$ = newMo($$[$0], "0em", "thinmathspace");
-
+  
 break;
 case 83:
     this.$ = newMo($$[$0], "thinmathspace", "thinmathspace");
-
+  
 break;
 case 84:
     this.$ = newMo($$[$0], "mediummathspace", "mediummathspace");
-
+  
 break;
 case 85:
     this.$ = newMo($$[$0], "thickmathspace", "thickmathspace");
-
+  
 break;
-case 86: this.$ = newTag("mfrac", $$[$0-1] + $$[$0]);
+case 86: this.$ = newTag("mfrac", $$[$0-1] + $$[$0]); 
 break;
-case 87: this.$ = newTag("mroot", $$[$0] + $$[$0-1]);
+case 87: this.$ = newTag("mroot", $$[$0] + $$[$0-1]); 
 break;
-case 88: this.$ = newTag("msqrt", $$[$0]);
+case 88: this.$ = newTag("msqrt", $$[$0]); 
 break;
 case 89:
     this.$ = newTag("mroot", $$[$0] + newMrow($$[$0-2]));
-
+  
 break;
-case 90: this.$ = newTag("munder", $$[$0] + $$[$0-1]);
+case 90: this.$ = newTag("munder", $$[$0] + $$[$0-1]); 
 break;
-case 91: this.$ = newTag("mover", $$[$0] + $$[$0-1]);
+case 91: this.$ = newTag("mover", $$[$0] + $$[$0-1]); 
 break;
 case 92:
-    this.$ = newTag("munderover", $$[$0] + $$[$0-2] + $$[$0-1]);
+    this.$ = newTag("munderover", $$[$0] + $$[$0-2] + $$[$0-1]); 
 break;
 case 93:
     this.$ = ($$[$0] === "<mrow/>" ?
           newTag("munder", newMo($$[$0-4]) + newMrow($$[$0-2])) :
           newTag("munderover", newMo($$[$0-4]) + newMrow($$[$0-2]) + $$[$0]));
-
+  
 break;
 case 94:
     this.$ = newTag("mover", newMo($$[$0-1]) + $$[$0]);
-
+  
 break;
-case 95: this.$ = newTag("mpadded", $$[$0], "width=\"0em\"");
+case 95: this.$ = newTag("mpadded", $$[$0], "width=\"0em\""); 
 break;
 case 96:
     this.$ = newTag("mpadded", $$[$0], "width=\"0em\" lspace=\"-100%width\"");
-
+  
 break;
 case 97:
     this.$ = newTag("mpadded", $$[$0], "width=\"0em\" lspace=\"-50%width\"");
-
+  
 break;
-case 98: this.$ = newTag("mphantom", $$[$0]);
+case 98: this.$ = newTag("mphantom", $$[$0]); 
 break;
 case 99:
     this.$ = newTag("mfrac", $$[$0-1] + $$[$0]);
     this.$ = newTag("mstyle", this.$, "displaystyle=\"false\"");
-
+  
 break;
 case 100:
     this.$ = newTag("mfrac", $$[$0-1] + $$[$0], "linethickness=\"0\"");
     this.$ = newTag("mrow", newMo("(") + this.$ + newMo(")"));
-
+  
 break;
 case 101:
     this.$ = newTag("mfrac", $$[$0-1] + $$[$0], "linethickness=\"0\"");
     this.$ = newTag("mstyle", this.$, "displaystyle=\"false\"");
     this.$ = newTag("mrow", newMo("(") + this.$ + newMo(")"));
-
+  
 break;
 case 102:
     this.$ = "<mrow><mo lspace=\"mediummathspace\">(</mo><mo rspace=\"thinmathspace\">mod</mo>" + $$[$0] + "<mo rspace=\"mediummathspace\">)</mo></mrow>";
-
+  
 break;
-case 103: this.$ = newTag("munder", $$[$0] + newMo("\u23DF"));
+case 103: this.$ = newTag("munder", $$[$0] + newMo("\u23DF")); 
 break;
-case 104: this.$ = newTag("munder", $$[$0] + newMo("_"));
+case 104: this.$ = newTag("munder", $$[$0] + newMo("_")); 
 break;
-case 105: this.$ = newTag("mover", $$[$0] + newMo("\u23DE"));
+case 105: this.$ = newTag("mover", $$[$0] + newMo("\u23DE")); 
 break;
 case 106:
     this.$ = newTag("mover", $$[$0] + newMo($$[$0-1]));
-
+  
 break;
 case 107:
     this.$ = newTag("mover", $$[$0] + newTag("mo", $$[$0-1], "stretchy=\"false\""));
-
+  
 break;
-case 108: this.$ = newTag("menclose", $$[$0], "notation=\"box\"");
+case 108: this.$ = newTag("menclose", $$[$0], "notation=\"box\""); 
 break;
 case 109:
     this.$ = newTag("menclose", $$[$0], "notation=\"updiagonalstrike\"");
-
+  
 break;
-case 110: this.$ = "<mspace width=\"1em\"/>";
+case 110: this.$ = "<mspace width=\"1em\"/>"; 
 break;
-case 111: this.$ = "<mspace width=\"2em\"/>";
+case 111: this.$ = "<mspace width=\"2em\"/>"; 
 break;
-case 112: this.$ = "<mspace width=\"negativethinmathspace\"/>";
+case 112: this.$ = "<mspace width=\"negativethinmathspace\"/>"; 
 break;
-case 113: this.$ = "<mspace width=\"negativemediummathspace\"/>";
+case 113: this.$ = "<mspace width=\"negativemediummathspace\"/>"; 
 break;
-case 114: this.$ = "<mspace width=\"negativethickmathspace\"/>";
+case 114: this.$ = "<mspace width=\"negativethickmathspace\"/>"; 
 break;
-case 115: this.$ = "<mspace width=\"thinmathspace\"/>";
+case 115: this.$ = "<mspace width=\"thinmathspace\"/>"; 
 break;
-case 116: this.$ = "<mspace width=\"mediummathspace\"/>";
+case 116: this.$ = "<mspace width=\"mediummathspace\"/>"; 
 break;
-case 117: this.$ = "<mspace width=\"thickmathspace\"/>";
+case 117: this.$ = "<mspace width=\"thickmathspace\"/>"; 
 break;
 case 118:
     this.$ = "<mspace height=\"." + $$[$0-2] + "ex\" depth=\"." + $$[$0-1] + "ex\" " +
                   "width=\"." + $$[$0] + "em\"/>";
-
+  
 break;
 case 119:
     this.$ = newTag("mpadded", $$[$0],
                 "voffset=\"" + $$[$0-3].l + $$[$0-3].u + "\" " +
                 "height=\"" + $$[$0-2].l + $$[$0-2].u + "\" " +
                 "depth=\"" + $$[$0-1].l + $$[$0-1].u + "\"");
-
+  
 break;
 case 120:
     this.$ = newTag("mpadded", $$[$0],
                 "voffset=\"" + $$[$0-2].l + $$[$0-2].u + "\" " +
                 "height=\"" + $$[$0-1].l + $$[$0-1].u + "\" depth=\"" +
                 ($$[$0-2].l < 0 ? "+" + (-$$[$0-2].l) + $$[$0-2].u : "depth") + "\"");
-
+  
 break;
 case 121:
     this.$ = newTag("mpadded", $$[$0],
                 "voffset=\"" + $$[$0-1].l + $$[$0-1].u + "\" " +
                 ($$[$0-1].l >= 0 ? "height=\"+" + $$[$0-1].l + $$[$0-1].u + "\"" :
                  "height=\"0pt\" depth=\"+" + (-$$[$0-1].l) + $$[$0-1].u + "\""));
-
+  
 break;
 case 122:
     this.$ = newTag("mstyle", $$[$0], "mathvariant=\"double-struck\"");
-
+  
 break;
-case 123: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"bold\"");
+case 123: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"bold\""); 
 break;
 case 124: this.$ = newTag("mstyle", $$[$0],
-                                     "mathvariant=\"bold-italic\"");
+                                     "mathvariant=\"bold-italic\""); 
 break;
-case 125: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"script\"");
+case 125: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"script\""); 
 break;
 case 126:
     this.$ = newTag("mstyle", $$[$0], "mathvariant=\"bold-script\"");
-
+  
 break;
 case 127:
     this.$ = newTag("mstyle", $$[$0], "mathvariant=\"sans-serif\"");
-
+  
 break;
 case 128:
     this.$ = newTag("mstyle", $$[$0], "mathvariant=\"fraktur\"");
-
+  
 break;
-case 129: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"italic\"");
+case 129: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"italic\""); 
 break;
-case 130: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"monospace\"");
+case 130: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"monospace\""); 
 break;
-case 131: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"normal\"");
+case 131: this.$ = newTag("mstyle", $$[$0], "mathvariant=\"normal\""); 
 break;
 case 132:
     this.$ = newTag("mrow", $$[$0], yy.mSafeMode ? null : "href=" + $$[$0-1]);
-
+  
 break;
 case 133:
     this.$ = yy.mSafeMode ? $$[$0] :
          newTag("maction",
                 $$[$0] + newTag("mtext", $$[$0-1]), "actiontype=\"statusline\"");
-
+  
 break;
 case 134:
     this.$ = yy.mSafeMode ? $$[$0] :
          newTag("maction",
                 $$[$0] + newTag("mtext", $$[$0-1]), "actiontype=\"tooltip\"");
-
+  
 break;
 case 135:
     /* Backward compatibility with itex2MML */
     this.$ = yy.mSafeMode ? $$[$0] :
          newTag("maction", $$[$0-1] + $$[$0], "actiontype=\"toggle\" selection=\"2\"");
-
+  
 break;
 case 136:
     this.$ = yy.mSafeMode ? newTag("mrow", $$[$0-1]) :
          newTag("maction", $$[$0-1], "actiontype=\"toggle\"");
-
+  
 break;
 case 137:
     this.$ = newTag("mmultiscripts", $$[$0-3] + $$[$0-1]);
-
+  
 break;
 case 138:
     this.$ = newTag("mmultiscripts", $$[$0-3] + $$[$0-1] + "<mprescripts/>" + $$[$0-5]);
-
+  
 break;
 case 139:
     this.$ = newTag("mmultiscripts", $$[$0-2] + "<mprescripts/>" + $$[$0-4]);
-
+  
 break;
 case 140:
     this.$ = newTag("mmultiscripts", $$[$0-3] + $$[$0-1]);
-
+  
 break;
 case 141:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
-
+  
 break;
 case 142:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"true\" rowspacing=\"1.0ex\"");
-
+  
 break;
 case 143:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
     this.$ = newTag("mrow", newMo("(") + this.$ + newMo(")"));
-
+  
 break;
 case 144:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
     this.$ = newTag("mrow", newMo("[") + this.$ + newMo("]"));
-
+  
 break;
 case 145:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
     this.$ = newTag("mrow", newMo("|") + this.$ + newMo("|"));
-
+  
 break;
 case 146:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
     this.$ = newTag("mrow", newMo("{") + this.$ + newMo("}"));
-
+  
 break;
 case 147:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
     this.$ = newTag("mrow", newMo("\u2016") + this.$ + newMo("\u2016"));
-
+  
 break;
 case 148:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" rowspacing=\"0.5ex\"");
     this.$ = newTag("mstyle", this.$, "scriptlevel=\"2\"");
-
+  
 break;
 case 149:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" columnalign=\"left left\"");
     this.$ = newTag("mrow", newMo("{") + this.$);
-
+  
 break;
 case 150:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"true\" columnalign=\"right left right left right left right left right left\" columnspacing=\"0em\"");
-
+  
 break;
 case 151:
     this.$ = newTag("mtable", $$[$0-1],
                 "displaystyle=\"false\" rowspacing=\"0.5ex\" " +
                 "align=\"" + $$[$0-3] + "\" " +
                 "columnalign=\"" + $$[$0-2] + "\"");
-
+  
 break;
 case 152:
     this.$ = newTag("mtable", $$[$0-1],
                 "displaystyle=\"false\" rowspacing=\"0.5ex\" " +
                 "columnalign=\"" + $$[$0-2] + "\"");
-
+  
 break;
 case 153:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" columnalign=\"center\" rowspacing=\"0.5ex\"");
-
+  
 break;
 case 154:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\"");
-
+  
 break;
 case 155:
     this.$ = newTag("mtable", $$[$0-1], "displaystyle=\"false\" " + $$[$0-3]);
-
+  
 break;
 case 156:
     this.$ = $$[$0];
-
+  
 break;
 case 157:
     this.$ = $$[$0-1] + $$[$0];
-
+  
 break;
 case 158:
     this.$ = newTag("mmultiscripts", $$[$0-1] + $$[$0]);
-
+  
 break;
 case 159:
     this.$ = newScript(false, $$[$0-4], $$[$0-2], $$[$0]);
-
+  
 break;
 case 160:
     this.$ = newScript(false, $$[$0-3], $$[$0-1], newMo($$[$0]));
-
+  
 break;
 case 161:
     this.$ = newScript(false, $$[$0-4], $$[$0], $$[$0-2]);
-
+  
 break;
 case 162:
     this.$ = newScript(false, $$[$0-3], $$[$0], newMo($$[$0-2]));
-
+  
 break;
 case 163:
     this.$ = newScript(false, $$[$0-2], $$[$0], null);
-
+  
 break;
 case 164:
     this.$ = newScript(false, $$[$0-2], null, $$[$0]);
-
+  
 break;
 case 165:
     this.$ = newScript(false, $$[$0-1], null, newMo($$[$0]));
-
+  
 break;
-case 166: this.$ = $$[$0];
+case 166: this.$ = $$[$0]; 
 break;
 case 167:
     this.$ = newScript(true, $$[$0-4], $$[$0-2], $$[$0]);
-
+  
 break;
 case 168:
     this.$ = newScript(true, $$[$0-4], $$[$0], $$[$0-2]);
-
+  
 break;
 case 169:
     this.$ = newScript(true, $$[$0-2], $$[$0], null);
-
+  
 break;
 case 170:
     this.$ = newScript(true, $$[$0-2], null, $$[$0]);
-
+  
 break;
-case 171: this.$ = $$[$0];
+case 171: this.$ = $$[$0]; 
 break;
-case 172: this.$ = newMo($$[$0]);
+case 172: this.$ = newMo($$[$0]); 
 break;
-case 173: this.$ = newMo($$[$0], "0em", "0em");
+case 173: this.$ = newMo($$[$0], "0em", "0em"); 
 break;
-case 174: this.$ = [$$[$0]];
+case 174: this.$ = [$$[$0]]; 
 break;
-case 175: $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+case 175: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 break;
-case 176: this.$ = $$[$0];
+case 176: this.$ = $$[$0]; 
 break;
-case 177: this.$ = $$[$0];
+case 177: this.$ = $$[$0]; 
 break;
-case 178: this.$ = $$[$0-2] + $$[$0];
+case 178: this.$ = $$[$0-2] + $$[$0]; 
 break;
-case 179: this.$ = $$[$0] + "<none/>";
+case 179: this.$ = $$[$0] + "<none/>"; 
 break;
-case 180: this.$ = "<none/>" + $$[$0];
+case 180: this.$ = "<none/>" + $$[$0]; 
 break;
-case 181: this.$ = "<none/>" + $$[$0];
+case 181: this.$ = "<none/>" + $$[$0]; 
 break;
-case 182: this.$ = $$[$0];
+case 182: this.$ = $$[$0]; 
 break;
-case 183: this.$ = $$[$0-1] + $$[$0];
+case 183: this.$ = $$[$0-1] + $$[$0]; 
 break;
-case 184: this.$ = "displaystyle=\"true\"";
+case 184: this.$ = "displaystyle=\"true\""; 
 break;
-case 185: this.$ = "displaystyle=\"false\"";
+case 185: this.$ = "displaystyle=\"false\""; 
 break;
-case 186: this.$ = "scriptlevel=\"0\"";
+case 186: this.$ = "scriptlevel=\"0\""; 
 break;
-case 187: this.$ = "scriptlevel=\"1\"";
+case 187: this.$ = "scriptlevel=\"1\""; 
 break;
-case 188: this.$ = "scriptlevel=\"2\"";
+case 188: this.$ = "scriptlevel=\"2\""; 
 break;
-case 189: this.$ = "mathcolor=" + $$[$0];
+case 189: this.$ = "mathcolor=" + $$[$0]; 
 break;
-case 190: this.$ = "mathbackground=" + $$[$0];
+case 190: this.$ = "mathbackground=" + $$[$0]; 
 break;
-case 191: this.$ = [newMrow($$[$0], "mstyle", $$[$0-1])];
+case 191: this.$ = [newMrow($$[$0], "mstyle", $$[$0-1])]; 
 break;
-case 192: this.$ = $$[$0];
+case 192: this.$ = $$[$0]; 
 break;
-case 193: this.$ = newTag("mtd", "");
+case 193: this.$ = newTag("mtd", ""); 
 break;
 case 194:
     this.$ = newMrow($$[$0], "mtd", $$[$0-2]);
-
+  
 break;
-case 195: this.$ = newMrow($$[$0], "mtd");
+case 195: this.$ = newMrow($$[$0], "mtd"); 
 break;
-case 196: this.$ = $$[$0];
+case 196: this.$ = $$[$0]; 
 break;
-case 197: this.$ = $$[$0-2] + $$[$0];
+case 197: this.$ = $$[$0-2] + $$[$0]; 
 break;
 case 198:
     this.$ = this.$ = newTag("mtr", $$[$0], $$[$0-2]);
-
+  
 break;
-case 199: this.$ = newTag("mtr", $$[$0]);
+case 199: this.$ = newTag("mtr", $$[$0]); 
 break;
-case 200: this.$ = $$[$0];
+case 200: this.$ = $$[$0]; 
 break;
-case 201: this.$ = $$[$0-2] + $$[$0];
+case 201: this.$ = $$[$0-2] + $$[$0]; 
 break;
 case 202:
     this.$ = $$[$0-1]
     return this.$;
-
+  
 break;
-case 203: this.$ = $$[$0];
+case 203: this.$ = $$[$0]; 
 break;
-case 204: this.$ = $$[$0-1] + $$[$0]
+case 204: this.$ = $$[$0-1] + $$[$0] 
 break;
 case 205:
     this.$ = $$[$0];
-
+  
 break;
 case 206:
     // \( \)
     this.$ = newMath(["<mrow/>"], false, yy.tex);
-
+  
 break;
 case 207:
     // \( ... \)
     this.$ = newMath($$[$0-1], false, yy.tex);
-
+  
 break;
 case 208:
     // \[ \]
     this.$ = newMath(["<mrow/>"], true, yy.tex);
-
+  
 break;
 case 209:
     // \[ ... \]
     this.$ = newMath($$[$0-1], true, yy.tex);
-
+  
 break;
 case 210:
     // $ ... $
     this.$ = newMath($$[$0-1], false, yy.tex);
-
+  
 break;
 case 211:
     // this.$ ... this.$
     this.$ = newMath($$[$0-1], true, yy.tex);
-
+  
 break;
 }
 },
@@ -822,7 +822,7 @@ parse: function parse(input) {
     if (true) {
         this.parseError = parseError;
     } else {
-
+        
     }
     function popStack(n) {
         stack.length = stack.length - 2 * n;
@@ -1619,7 +1619,7 @@ performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0: this.unput(yy_.yytext); this.pushState("DOCUMENT");
+case 0: this.unput(yy_.yytext); this.pushState("DOCUMENT"); 
 break;
 case 1:
   this.pushState("MATH" + (0+!!yy.mItexIdentifierMode));
@@ -1628,9 +1628,9 @@ case 1:
                        (yy_.yytext[1] == "$" || yy_.yytext[1] == "["));
 
 break;
-case 2: this.popState(); return "EOF";
+case 2: this.popState(); return "EOF"; 
 break;
-case 3: yy_.yytext = yy_.yytext[1]; return "TEXT";
+case 3: yy_.yytext = yy_.yytext[1]; return "TEXT"; 
 break;
 case 4:
   if (yy.escapeXML) {
@@ -1641,21 +1641,21 @@ case 4:
 break;
 case 5:return "TEXT";
 break;
-case 6: this.popState(); return "[";
+case 6: this.popState(); return "["; 
 break;
-case 7: this.unput(yy_.yytext); this.popState(); this.popState();
+case 7: this.unput(yy_.yytext); this.popState(); this.popState(); 
 break;
-case 8: return "TEXTOPTARG";
+case 8: return "TEXTOPTARG"; 
 break;
-case 9: this.popState(); return "]";
+case 9: this.popState(); return "]"; 
 break;
 case 10:return "{";
 break;
 case 11:return "TEXTARG";
 break;
-case 12: this.popState(); return "}";
+case 12: this.popState(); return "}"; 
 break;
-case 13: this.popState(); return "]";
+case 13: this.popState(); return "]"; 
 break;
 case 14:/* skip whitespace */
 break;
@@ -1683,157 +1683,157 @@ case 22:return "ROWSEP"
 break;
 case 23:return "NUM";
 break;
-case 24: return "A";
+case 24: return "A"; 
 break;
-case 25: yy_.yytext = "\u0396"; return "A";
+case 25: yy_.yytext = "\u0396"; return "A"; 
 break;
-case 26: yy_.yytext = "\u03B6"; return "A";
+case 26: yy_.yytext = "\u03B6"; return "A"; 
 break;
-case 27: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21CC"; return "XARROW";
+case 27: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21CC"; return "XARROW"; 
 break;
-case 28: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21D2"; return "XARROW";
+case 28: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21D2"; return "XARROW"; 
 break;
-case 29: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u2192"; return  "XARROW";
+case 29: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u2192"; return  "XARROW"; 
 break;
-case 30: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21A6"; return "XARROW";
+case 30: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21A6"; return "XARROW"; 
 break;
-case 31: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21CB"; return "XARROW";
+case 31: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21CB"; return "XARROW"; 
 break;
-case 32: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21D4"; return "XARROW";
+case 32: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21D4"; return "XARROW"; 
 break;
-case 33: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u2194"; return "XARROW";
+case 33: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u2194"; return "XARROW"; 
 break;
-case 34: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21D0"; return "XARROW";
+case 34: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21D0"; return "XARROW"; 
 break;
-case 35: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u2190"; return "XARROW";
+case 35: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u2190"; return "XARROW"; 
 break;
-case 36: yy_.yytext = "\u039E"; return "A";
+case 36: yy_.yytext = "\u039E"; return "A"; 
 break;
-case 37: yy_.yytext = "\u03BE"; return "A";
+case 37: yy_.yytext = "\u03BE"; return "A"; 
 break;
-case 38: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21AA"; return "XARROW";
+case 38: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21AA"; return "XARROW"; 
 break;
-case 39: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21A9"; return "XARROW";
+case 39: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); yy_.yytext = "\u21A9"; return "XARROW"; 
 break;
-case 40: yy_.yytext = "\u2240"; return "OP";
+case 40: yy_.yytext = "\u2240"; return "OP"; 
 break;
-case 41: yy_.yytext = "\u2118"; return "A";
+case 41: yy_.yytext = "\u2118"; return "A"; 
 break;
-case 42: yy_.yytext = "\u21C0"; return "ACCENT";
+case 42: yy_.yytext = "\u21C0"; return "ACCENT"; 
 break;
-case 43: yy_.yytext = "\u02DC"; return "ACCENT";
+case 43: yy_.yytext = "\u02DC"; return "ACCENT"; 
 break;
-case 44: yy_.yytext = "\u005E"; return "ACCENT";
+case 44: yy_.yytext = "\u005E"; return "ACCENT"; 
 break;
-case 45: yy_.yytext = "\u02C7"; return "ACCENT";
+case 45: yy_.yytext = "\u02C7"; return "ACCENT"; 
 break;
-case 46: yy_.yytext = "\u00AF"; return "ACCENT";
+case 46: yy_.yytext = "\u00AF"; return "ACCENT"; 
 break;
-case 47: yy_.yytext = "\u2259"; return "OP";
+case 47: yy_.yytext = "\u2259"; return "OP"; 
 break;
-case 48: yy_.yytext = "\u22C0"; return "OPM";
+case 48: yy_.yytext = "\u22C0"; return "OPM"; 
 break;
-case 49: yy_.yytext = "\u2227"; return "OP";
+case 49: yy_.yytext = "\u2227"; return "OP"; 
 break;
-case 50: yy_.yytext = "\u2980"; return "OPFS";
+case 50: yy_.yytext = "\u2980"; return "OPFS"; 
 break;
-case 51: yy_.yytext = "\u22AA"; return "OP";
+case 51: yy_.yytext = "\u22AA"; return "OP"; 
 break;
-case 52: yy_.yytext = "\u2016"; return "OPFS";
+case 52: yy_.yytext = "\u2016"; return "OPFS"; 
 break;
-case 53: yy_.yytext = "\u007C"; return "OPFS";
+case 53: yy_.yytext = "\u007C"; return "OPFS"; 
 break;
-case 54: yy_.yytext = "\u22BB"; return "OP";
+case 54: yy_.yytext = "\u22BB"; return "OP"; 
 break;
-case 55: yy_.yytext = "\u22C1"; return "OPM";
+case 55: yy_.yytext = "\u22C1"; return "OPM"; 
 break;
-case 56: yy_.yytext = "\u2228"; return "OP";
+case 56: yy_.yytext = "\u2228"; return "OP"; 
 break;
-case 57: yy_.yytext = "\u21C0"; return "ACCENTNS";
+case 57: yy_.yytext = "\u21C0"; return "ACCENTNS"; 
 break;
-case 58: yy_.yytext = "\u22EE"; return "OP";
+case 58: yy_.yytext = "\u22EE"; return "OP"; 
 break;
-case 59: yy_.yytext = "\u22AB"; return "OP";
+case 59: yy_.yytext = "\u22AB"; return "OP"; 
 break;
-case 60: yy_.yytext = "\u22A9"; return "OP";
+case 60: yy_.yytext = "\u22A9"; return "OP"; 
 break;
-case 61: yy_.yytext = "\u22A8"; return "OP";
+case 61: yy_.yytext = "\u22A8"; return "OP"; 
 break;
-case 62: yy_.yytext = "\u22A2"; return "OP";
+case 62: yy_.yytext = "\u22A2"; return "OP"; 
 break;
-case 63: yy_.yytext = "\u2AEB"; return "OP";
+case 63: yy_.yytext = "\u2AEB"; return "OP"; 
 break;
-case 64: yy_.yytext = "\u22B3"; return "OP";
+case 64: yy_.yytext = "\u22B3"; return "OP"; 
 break;
-case 65: yy_.yytext = "\u22B2"; return "OP";
+case 65: yy_.yytext = "\u22B2"; return "OP"; 
 break;
-case 66: yy_.yytext = "\u25B5"; return "OP";
+case 66: yy_.yytext = "\u25B5"; return "OP"; 
 break;
-case 67: yy_.yytext = "\u03D1"; return "A";
+case 67: yy_.yytext = "\u03D1"; return "A"; 
 break;
-case 68: yy_.yytext = "\u2ACC\uFE00"; return "OP";
+case 68: yy_.yytext = "\u2ACC\uFE00"; return "OP"; 
 break;
-case 69: yy_.yytext = "\u228B\uFE00"; return "OP";
+case 69: yy_.yytext = "\u228B\uFE00"; return "OP"; 
 break;
-case 70: yy_.yytext = "\u2ACB\uFE00"; return "OP";
+case 70: yy_.yytext = "\u2ACB\uFE00"; return "OP"; 
 break;
-case 71: yy_.yytext = "\u228A\uFE00"; return "OP";
+case 71: yy_.yytext = "\u228A\uFE00"; return "OP"; 
 break;
-case 72: yy_.yytext = "\u228A\uFE00"; return "OP";
+case 72: yy_.yytext = "\u228A\uFE00"; return "OP"; 
 break;
-case 73: yy_.yytext = "\u03C2"; return "A";
+case 73: yy_.yytext = "\u03C2"; return "A"; 
 break;
-case 74: yy_.yytext = "\u03F1"; return "A";
+case 74: yy_.yytext = "\u03F1"; return "A"; 
 break;
-case 75: yy_.yytext = "\u221D"; return "OP";
+case 75: yy_.yytext = "\u221D"; return "OP"; 
 break;
-case 76: yy_.yytext = "\u03D6"; return "A";
+case 76: yy_.yytext = "\u03D6"; return "A"; 
 break;
-case 77: yy_.yytext = "\u03C6"; return "A";
+case 77: yy_.yytext = "\u03C6"; return "A"; 
 break;
-case 78: yy_.yytext = "\u2205"; return "A";
+case 78: yy_.yytext = "\u2205"; return "A"; 
 break;
-case 79: yy_.yytext = "\u03F0"; return "A";
+case 79: yy_.yytext = "\u03F0"; return "A"; 
 break;
-case 80: yy_.yytext = "\u03B5"; return "A";
+case 80: yy_.yytext = "\u03B5"; return "A"; 
 break;
-case 81: yy_.yytext = "\u290A"; return "OPS";
+case 81: yy_.yytext = "\u290A"; return "OPS"; 
 break;
-case 82: yy_.yytext = "\u21C8"; return "OPS";
+case 82: yy_.yytext = "\u21C8"; return "OPS"; 
 break;
-case 83: yy_.yytext = "\u03D2"; return "A";
+case 83: yy_.yytext = "\u03D2"; return "A"; 
 break;
-case 84: yy_.yytext = "\u03C5"; return "A";
+case 84: yy_.yytext = "\u03C5"; return "A"; 
 break;
-case 85: yy_.yytext = "\u03D2"; return "A";
+case 85: yy_.yytext = "\u03D2"; return "A"; 
 break;
-case 86: yy_.yytext = "\u228E"; return "OP";
+case 86: yy_.yytext = "\u228E"; return "OP"; 
 break;
-case 87: yy_.yytext = "\u2A1B"; return "OP";
+case 87: yy_.yytext = "\u2A1B"; return "OP"; 
 break;
-case 88: yy_.yytext = "\u21BF"; return "OPS";
+case 88: yy_.yytext = "\u21BF"; return "OPS"; 
 break;
-case 89: yy_.yytext = "\u21BE"; return "OPS";
+case 89: yy_.yytext = "\u21BE"; return "OPS"; 
 break;
-case 90: yy_.yytext = "\u21D5"; return "OPS";
+case 90: yy_.yytext = "\u21D5"; return "OPS"; 
 break;
-case 91: yy_.yytext = "\u2195"; return "OPS";
+case 91: yy_.yytext = "\u2195"; return "OPS"; 
 break;
-case 92: yy_.yytext = "\u2195"; return "OPS";
+case 92: yy_.yytext = "\u2195"; return "OPS"; 
 break;
-case 93: yy_.yytext = "\u21D1"; return "OPS";
+case 93: yy_.yytext = "\u21D1"; return "OPS"; 
 break;
-case 94: yy_.yytext = "\u2191"; return "OPS";
+case 94: yy_.yytext = "\u2191"; return "OPS"; 
 break;
-case 95: yy_.yytext = "\u2191"; return "OPS";
+case 95: yy_.yytext = "\u2191"; return "OPS"; 
 break;
-case 96: yy_.yytext = "\u22B5"; return "OP";
+case 96: yy_.yytext = "\u22B5"; return "OP"; 
 break;
-case 97: yy_.yytext = "\u22B4"; return "OP";
+case 97: yy_.yytext = "\u22B4"; return "OP"; 
 break;
-case 98: yy_.yytext = "\u22C3"; return "OPM";
+case 98: yy_.yytext = "\u22C3"; return "OPM"; 
 break;
-case 99: yy_.yytext = "\u222A"; return "OP";
+case 99: yy_.yytext = "\u222A"; return "OP"; 
 break;
 case 100:return "UNDERSET";
 break;
@@ -1843,7 +1843,7 @@ case 102:return "UNDERLINE";
 break;
 case 103:return "UNDERBRACE";
 break;
-case 104: yy_.yytext = "\u22F0"; return "OP";
+case 104: yy_.yytext = "\u22F0"; return "OP"; 
 break;
 case 105:return "OP";
 break;
@@ -1957,63 +1957,63 @@ case 159:return "OP";
 break;
 case 160:return "OP";
 break;
-case 161: yy_.yytext = "\u2916"; return "OP";
+case 161: yy_.yytext = "\u2916"; return "OP"; 
 break;
-case 162: yy_.yytext = "\u21A0"; return "OPS";
+case 162: yy_.yytext = "\u21A0"; return "OPS"; 
 break;
-case 163: yy_.yytext = "\u219E"; return "OPS";
+case 163: yy_.yytext = "\u219E"; return "OPS"; 
 break;
-case 164: yy_.yytext = "\u222D"; return "OP";
+case 164: yy_.yytext = "\u222D"; return "OP"; 
 break;
-case 165: yy_.yytext = "\u22B5"; return "OP";
+case 165: yy_.yytext = "\u22B5"; return "OP"; 
 break;
-case 166: yy_.yytext = "\u25B9"; return "OP";
+case 166: yy_.yytext = "\u25B9"; return "OP"; 
 break;
-case 167: yy_.yytext = "\u225C"; return "OP";
+case 167: yy_.yytext = "\u225C"; return "OP"; 
 break;
-case 168: yy_.yytext = "\u22B4"; return "OP";
+case 168: yy_.yytext = "\u22B4"; return "OP"; 
 break;
-case 169: yy_.yytext = "\u25C3"; return "OP";
+case 169: yy_.yytext = "\u25C3"; return "OP"; 
 break;
-case 170: yy_.yytext = "\u25BF"; return "OP";
+case 170: yy_.yytext = "\u25BF"; return "OP"; 
 break;
-case 171: yy_.yytext = "\u25B5"; return "OP";
+case 171: yy_.yytext = "\u25B5"; return "OP"; 
 break;
-case 172: yy_.yytext = "\u292A"; return "OP";
+case 172: yy_.yytext = "\u292A"; return "OP"; 
 break;
-case 173: yy_.yytext = "\u2929"; return "OP";
+case 173: yy_.yytext = "\u2929"; return "OP"; 
 break;
-case 174: yy_.yytext = "\u22A4"; return "OP";
+case 174: yy_.yytext = "\u22A4"; return "OP"; 
 break;
-case 175: this.pushState("TEXTARG"); return "TOOLTIP";
+case 175: this.pushState("TEXTARG"); return "TOOLTIP"; 
 break;
-case 176: yy_.yytext = "\u2927"; return "OP";
+case 176: yy_.yytext = "\u2927"; return "OP"; 
 break;
-case 177: return "TOGGLE";
+case 177: return "TOGGLE"; 
 break;
-case 178: yy_.yytext = "\u2928"; return "OP";
+case 178: yy_.yytext = "\u2928"; return "OP"; 
 break;
-case 179: yy_.yytext = "\u2192"; return "OPS";
+case 179: yy_.yytext = "\u2192"; return "OPS"; 
 break;
-case 180: yy_.yytext = "\u22A0"; return "OP";
+case 180: yy_.yytext = "\u22A0"; return "OP"; 
 break;
-case 181: yy_.yytext = "\u00D7"; return "OP";
+case 181: yy_.yytext = "\u00D7"; return "OP"; 
 break;
-case 182: yy_.yytext = "\u02DC"; return "ACCENTNS";
+case 182: yy_.yytext = "\u02DC"; return "ACCENTNS"; 
 break;
 case 183:return "THINSPACE";
 break;
 case 184:return "THICKSPACE";
 break;
-case 185: yy_.yytext = "\u223C"; return "OP";
+case 185: yy_.yytext = "\u223C"; return "OP"; 
 break;
-case 186: yy_.yytext = "\u2248"; return "OP";
+case 186: yy_.yytext = "\u2248"; return "OP"; 
 break;
-case 187: yy_.yytext = "\u0398"; return "A";
+case 187: yy_.yytext = "\u0398"; return "A"; 
 break;
-case 188: yy_.yytext = "\u03B8"; return "A";
+case 188: yy_.yytext = "\u03B8"; return "A"; 
 break;
-case 189: yy_.yytext = "\u2234"; return "OP";
+case 189: yy_.yytext = "\u2234"; return "OP"; 
 break;
 case 190:return "TFRAC";
 break;
@@ -2021,313 +2021,313 @@ case 191:return "TEXTSTYLE";
 break;
 case 192:return "TEXTSIZE";
 break;
-case 193: yy_.yytext = "\u201D"; return "OPF";
+case 193: yy_.yytext = "\u201D"; return "OPF"; 
 break;
-case 194: yy_.yytext = "\u201C"; return "OPF";
+case 194: yy_.yytext = "\u201C"; return "OPF"; 
 break;
-case 195: yy_.yytext = "\u007E"; return "OPS";
+case 195: yy_.yytext = "\u007E"; return "OPS"; 
 break;
-case 196: yy_.yytext = "\u0060"; return "OP";
+case 196: yy_.yytext = "\u0060"; return "OP"; 
 break;
-case 197: yy_.yytext = "\u005E"; return "OPS";
+case 197: yy_.yytext = "\u005E"; return "OPS"; 
 break;
-case 198: yy_.yytext = "\u00B4"; return "OP";
+case 198: yy_.yytext = "\u00B4"; return "OP"; 
 break;
-case 199: this.begin("TEXTARG"); return "MTEXT";
+case 199: this.begin("TEXTARG"); return "MTEXT"; 
 break;
 case 200:return "TENSOR";
 break;
 case 201:return "TBINOM";
 break;
-case 202: yy_.yytext = "\u03A4"; return "A";
+case 202: yy_.yytext = "\u03A4"; return "A"; 
 break;
-case 203: yy_.yytext = "\u03C4"; return "A";
+case 203: yy_.yytext = "\u03C4"; return "A"; 
 break;
-case 204: yy_.yytext = "\u21D9"; return "OPS";
+case 204: yy_.yytext = "\u21D9"; return "OPS"; 
 break;
-case 205: yy_.yytext = "\u2199"; return "OPS";
+case 205: yy_.yytext = "\u2199"; return "OPS"; 
 break;
-case 206: yy_.yytext = "\u21D9"; return "OPS";
+case 206: yy_.yytext = "\u21D9"; return "OPS"; 
 break;
-case 207: yy_.yytext = "\u2199"; return "OPS";
+case 207: yy_.yytext = "\u2199"; return "OPS"; 
 break;
-case 208: yy_.yytext = "\u221A"; return "OPS";
+case 208: yy_.yytext = "\u221A"; return "OPS"; 
 break;
-case 209: yy_.yytext = "\u2ACC"; return "OP";
+case 209: yy_.yytext = "\u2ACC"; return "OP"; 
 break;
-case 210: yy_.yytext = "\u228B"; return "OP";
+case 210: yy_.yytext = "\u228B"; return "OP"; 
 break;
-case 211: yy_.yytext = "\u2AC6"; return "OP";
+case 211: yy_.yytext = "\u2AC6"; return "OP"; 
 break;
-case 212: yy_.yytext = "\u2287"; return "OP";
+case 212: yy_.yytext = "\u2287"; return "OP"; 
 break;
-case 213: yy_.yytext = "\u22D1"; return "OP";
+case 213: yy_.yytext = "\u22D1"; return "OP"; 
 break;
-case 214: yy_.yytext = "\u2283"; return "OP";
+case 214: yy_.yytext = "\u2283"; return "OP"; 
 break;
-case 215: yy_.yytext = "\u2211"; return "OPM";
+case 215: yy_.yytext = "\u2211"; return "OPM"; 
 break;
-case 216: yy_.yytext = "\u227F"; return "OP";
+case 216: yy_.yytext = "\u227F"; return "OP"; 
 break;
-case 217: yy_.yytext = "\u22E9"; return "OP";
+case 217: yy_.yytext = "\u22E9"; return "OP"; 
 break;
-case 218: yy_.yytext = "\u2AB6"; return "OP";
+case 218: yy_.yytext = "\u2AB6"; return "OP"; 
 break;
-case 219: yy_.yytext = "\u2ABA"; return "OP";
+case 219: yy_.yytext = "\u2ABA"; return "OP"; 
 break;
-case 220: yy_.yytext = "\u2AB0"; return "OP";
+case 220: yy_.yytext = "\u2AB0"; return "OP"; 
 break;
-case 221: yy_.yytext = "\u227D"; return "OP";
+case 221: yy_.yytext = "\u227D"; return "OP"; 
 break;
-case 222: yy_.yytext = "\u2AB8"; return "OP";
+case 222: yy_.yytext = "\u2AB8"; return "OP"; 
 break;
-case 223: yy_.yytext = "\u227B"; return "OP";
+case 223: yy_.yytext = "\u227B"; return "OP"; 
 break;
 case 224:return "SUBSTACK";
 break;
-case 225: yy_.yytext = "\u2ACB"; return "OP";
+case 225: yy_.yytext = "\u2ACB"; return "OP"; 
 break;
-case 226: yy_.yytext = "\u228A"; return "OP";
+case 226: yy_.yytext = "\u228A"; return "OP"; 
 break;
-case 227: yy_.yytext = "\u2AC5"; return "OP";
+case 227: yy_.yytext = "\u2AC5"; return "OP"; 
 break;
-case 228: yy_.yytext = "\u2286"; return "OP";
+case 228: yy_.yytext = "\u2286"; return "OP"; 
 break;
-case 229: yy_.yytext = "\u22D0"; return "OP";
+case 229: yy_.yytext = "\u22D0"; return "OP"; 
 break;
-case 230: yy_.yytext = "\u2282"; return "OP";
+case 230: yy_.yytext = "\u2282"; return "OP"; 
 break;
-case 231: this.pushState("TEXTARG"); return "STATUSLINE";
+case 231: this.pushState("TEXTARG"); return "STATUSLINE"; 
 break;
-case 232: yy_.yytext = "\u22C6"; return "OP";
+case 232: yy_.yytext = "\u22C6"; return "OP"; 
 break;
 case 233:return "OVERSET";
 break;
-case 234: yy_.yytext = "\u2AFD"; return "OP";
+case 234: yy_.yytext = "\u2AFD"; return "OP"; 
 break;
-case 235: yy_.yytext = "\u25A1"; return "OP";
+case 235: yy_.yytext = "\u25A1"; return "OP"; 
 break;
-case 236: yy_.yytext = "\u2292"; return "OP";
+case 236: yy_.yytext = "\u2292"; return "OP"; 
 break;
-case 237: yy_.yytext = "\u2290"; return "OP";
+case 237: yy_.yytext = "\u2290"; return "OP"; 
 break;
-case 238: yy_.yytext = "\u2291"; return "OP";
+case 238: yy_.yytext = "\u2291"; return "OP"; 
 break;
-case 239: yy_.yytext = "\u228F"; return "OP";
+case 239: yy_.yytext = "\u228F"; return "OP"; 
 break;
-case 240: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); return "SQRT";
+case 240: this.pushState("OPTARG"); this.pushState("TRYOPTARG"); return "SQRT"; 
 break;
-case 241: yy_.yytext = "\u2294"; return "OP";
+case 241: yy_.yytext = "\u2294"; return "OP"; 
 break;
-case 242: yy_.yytext = "\u2293"; return "OP";
+case 242: yy_.yytext = "\u2293"; return "OP"; 
 break;
-case 243: yy_.yytext = "\u2222"; return "OP";
+case 243: yy_.yytext = "\u2222"; return "OP"; 
 break;
-case 244: yy_.yytext = "\u2660"; return "OP";
+case 244: yy_.yytext = "\u2660"; return "OP"; 
 break;
-case 245: this.pushState("TEXTARG"); this.pushState("TEXTARG"); this.pushState("TEXTARG"); return "SPACE";
+case 245: this.pushState("TEXTARG"); this.pushState("TEXTARG"); this.pushState("TEXTARG"); return "SPACE"; 
 break;
-case 246: yy_.yytext = "\u2323"; return "OP";
+case 246: yy_.yytext = "\u2323"; return "OP"; 
 break;
-case 247: yy_.yytext = "\u2323"; return "OP";
+case 247: yy_.yytext = "\u2323"; return "OP"; 
 break;
-case 248: yy_.yytext = "\u2216"; return "OP";
+case 248: yy_.yytext = "\u2216"; return "OP"; 
 break;
-case 249: yy_.yytext = "\u2322"; return "OP";
+case 249: yy_.yytext = "\u2322"; return "OP"; 
 break;
 case 250:return "SLASH";
 break;
-case 251: yy_.yytext = "\u2243"; return "OP";
+case 251: yy_.yytext = "\u2243"; return "OP"; 
 break;
-case 252: yy_.yytext = "\u223C"; return "OP";
+case 252: yy_.yytext = "\u223C"; return "OP"; 
 break;
-case 253: yy_.yytext = "\u03A3"; return "A";
+case 253: yy_.yytext = "\u03A3"; return "A"; 
 break;
-case 254: yy_.yytext = "\u03C3"; return "A";
+case 254: yy_.yytext = "\u03C3"; return "A"; 
 break;
-case 255: yy_.yytext = "\u29E2"; return "OP";
+case 255: yy_.yytext = "\u29E2"; return "OP"; 
 break;
-case 256: yy_.yytext = "\u2225"; return "OP";
+case 256: yy_.yytext = "\u2225"; return "OP"; 
 break;
-case 257: yy_.yytext = "\u2223"; return "OP";
+case 257: yy_.yytext = "\u2223"; return "OP"; 
 break;
-case 258: yy_.yytext = "\u266F"; return "OP";
+case 258: yy_.yytext = "\u266F"; return "OP"; 
 break;
-case 259: yy_.yytext = "\u2216"; return "OP";
+case 259: yy_.yytext = "\u2216"; return "OP"; 
 break;
-case 260: yy_.yytext = "\u292D"; return "OP";
+case 260: yy_.yytext = "\u292D"; return "OP"; 
 break;
-case 261: yy_.yytext = "\u21D8"; return "OPS";
+case 261: yy_.yytext = "\u21D8"; return "OPS"; 
 break;
-case 262: yy_.yytext = "\u2198"; return "OPS";
+case 262: yy_.yytext = "\u2198"; return "OPS"; 
 break;
-case 263: yy_.yytext = "\u21D8"; return "OPS";
+case 263: yy_.yytext = "\u21D8"; return "OPS"; 
 break;
-case 264: yy_.yytext = "\u2198"; return "OPS";
+case 264: yy_.yytext = "\u2198"; return "OPS"; 
 break;
 case 265:return "SCRIPTSIZE";
 break;
 case 266:return "SCRIPTSCRIPTSIZE";
 break;
-case 267: yy_.yytext = "\u22CA"; return "OP";
+case 267: yy_.yytext = "\u22CA"; return "OP"; 
 break;
-case 268: yy_.yytext = "\u21B1"; return "OPS";
+case 268: yy_.yytext = "\u21B1"; return "OPS"; 
 break;
-case 269: yy_.yytext = "\u21DB"; return "OPS";
+case 269: yy_.yytext = "\u21DB"; return "OPS"; 
 break;
-case 270: yy_.yytext = "\u27EB"; return "OPFS";
+case 270: yy_.yytext = "\u27EB"; return "OPFS"; 
 break;
-case 271: yy_.yytext = "\u2019"; return "OPF";
+case 271: yy_.yytext = "\u2019"; return "OPF"; 
 break;
-case 272: this.begin("TEXTARG"); return "ROWSPAN";
+case 272: this.begin("TEXTARG"); return "ROWSPAN"; 
 break;
 case 273:return "ROWOPTS";
 break;
-case 274: this.pushState("TEXTARG"); return "ROWLINES";
+case 274: this.pushState("TEXTARG"); return "ROWLINES"; 
 break;
-case 275: this.begin("TEXTARG"); return "ROWALIGN";
+case 275: this.begin("TEXTARG"); return "ROWALIGN"; 
 break;
 case 276:return "ROOT";
 break;
-case 277: yy_.yytext = "\u23B1"; return "OP";
+case 277: yy_.yytext = "\u23B1"; return "OP"; 
 break;
-case 278: yy_.yytext = "\u2253"; return "OP";
+case 278: yy_.yytext = "\u2253"; return "OP"; 
 break;
-case 279: yy_.yytext = "\u27F2"; return "OP";
+case 279: yy_.yytext = "\u27F2"; return "OP"; 
 break;
-case 280: yy_.yytext = "\u22CC"; return "OP";
+case 280: yy_.yytext = "\u22CC"; return "OP"; 
 break;
-case 281: yy_.yytext = "\u219D"; return "OPS";
+case 281: yy_.yytext = "\u219D"; return "OPS"; 
 break;
-case 282: yy_.yytext = "\u21C9"; return "OPS";
+case 282: yy_.yytext = "\u21C9"; return "OPS"; 
 break;
-case 283: yy_.yytext = "\u21CC"; return "OPS";
+case 283: yy_.yytext = "\u21CC"; return "OPS"; 
 break;
-case 284: yy_.yytext = "\u21C4"; return "OPS";
+case 284: yy_.yytext = "\u21C4"; return "OPS"; 
 break;
-case 285: yy_.yytext = "\u21C0"; return "OPS";
+case 285: yy_.yytext = "\u21C0"; return "OPS"; 
 break;
-case 286: yy_.yytext = "\u21C1"; return "OPS";
+case 286: yy_.yytext = "\u21C1"; return "OPS"; 
 break;
-case 287: yy_.yytext = "\u21FE"; return "OPS";
+case 287: yy_.yytext = "\u21FE"; return "OPS"; 
 break;
-case 288: yy_.yytext = "\u21A3"; return "OPS";
+case 288: yy_.yytext = "\u21A3"; return "OPS"; 
 break;
-case 289: yy_.yytext = "\u21D2"; return "OPS";
+case 289: yy_.yytext = "\u21D2"; return "OPS"; 
 break;
-case 290: yy_.yytext = "\u2192"; return "OPS";
+case 290: yy_.yytext = "\u2192"; return "OPS"; 
 break;
 case 291:return "RIGHT";
 break;
-case 292: yy_.yytext = "\u03A1"; return "A";
+case 292: yy_.yytext = "\u03A1"; return "A"; 
 break;
-case 293: yy_.yytext = "\u03C1"; return "A";
+case 293: yy_.yytext = "\u03C1"; return "A"; 
 break;
-case 294: yy_.yytext = "\u22B3"; return "OP";
+case 294: yy_.yytext = "\u22B3"; return "OP"; 
 break;
-case 295: yy_.yytext = "\u230B"; return "OPFS";
+case 295: yy_.yytext = "\u230B"; return "OPFS"; 
 break;
-case 296: yy_.yytext = "\u211C"; return "A";
+case 296: yy_.yytext = "\u211C"; return "A"; 
 break;
-case 297: yy_.yytext = "\u2930"; return "OP";
+case 297: yy_.yytext = "\u2930"; return "OP"; 
 break;
-case 298: yy_.yytext = "\u292B"; return "OP";
+case 298: yy_.yytext = "\u292B"; return "OP"; 
 break;
-case 299: yy_.yytext = "\u2309"; return "OPFS";
+case 299: yy_.yytext = "\u2309"; return "OPFS"; 
 break;
-case 300: yy_.yytext = "\u005D"; return "OPFS";
+case 300: yy_.yytext = "\u005D"; return "OPFS"; 
 break;
-case 301: yy_.yytext = "\u007D"; return "OPFS";
+case 301: yy_.yytext = "\u007D"; return "OPFS"; 
 break;
-case 302: yy_.yytext = "\u27E9"; return "OPFS";
+case 302: yy_.yytext = "\u27E9"; return "OPFS"; 
 break;
-case 303: yy_.yytext = "\u27E9"; return "OPFS";
+case 303: yy_.yytext = "\u27E9"; return "OPFS"; 
 break;
-case 304: yy_.yytext = "\u225F"; return "OP";
+case 304: yy_.yytext = "\u225F"; return "OP"; 
 break;
-case 305: yy_.yytext = "\u2A0C"; return "OP";
+case 305: yy_.yytext = "\u2A0C"; return "OP"; 
 break;
 case 306:return "QUAD";
 break;
 case 307:return "QQUAD";
 break;
-case 308: yy_.yytext = "\u25AA"; return "OP";
+case 308: yy_.yytext = "\u25AA"; return "OP"; 
 break;
-case 309: yy_.yytext = "\u03A8"; return "A";
+case 309: yy_.yytext = "\u03A8"; return "A"; 
 break;
-case 310: yy_.yytext = "\u03C8"; return "A";
+case 310: yy_.yytext = "\u03C8"; return "A"; 
 break;
-case 311: yy_.yytext = "\u221D"; return "OP";
+case 311: yy_.yytext = "\u221D"; return "OP"; 
 break;
-case 312: yy_.yytext = "\u220F"; return "OPM";
+case 312: yy_.yytext = "\u220F"; return "OPM"; 
 break;
-case 313: yy_.yytext = "\u220F"; return "OPM";
+case 313: yy_.yytext = "\u220F"; return "OPM"; 
 break;
-case 314: yy_.yytext = "\u2032"; return "OPP";
+case 314: yy_.yytext = "\u2032"; return "OPP"; 
 break;
-case 315: yy_.yytext = "\u227E"; return "OP";
+case 315: yy_.yytext = "\u227E"; return "OP"; 
 break;
-case 316: yy_.yytext = "\u22E8"; return "OP";
+case 316: yy_.yytext = "\u22E8"; return "OP"; 
 break;
-case 317: yy_.yytext = "\u2AB5"; return "OP";
+case 317: yy_.yytext = "\u2AB5"; return "OP"; 
 break;
-case 318: yy_.yytext = "\u2AB9"; return "OP";
+case 318: yy_.yytext = "\u2AB9"; return "OP"; 
 break;
-case 319: yy_.yytext = "\u2AAF"; return "OP";
+case 319: yy_.yytext = "\u2AAF"; return "OP"; 
 break;
-case 320: yy_.yytext = "\u227C"; return "OP";
+case 320: yy_.yytext = "\u227C"; return "OP"; 
 break;
-case 321: yy_.yytext = "\u2AB7"; return "OP";
+case 321: yy_.yytext = "\u2AB7"; return "OP"; 
 break;
-case 322: yy_.yytext = "\u227A"; return "OP";
+case 322: yy_.yytext = "\u227A"; return "OP"; 
 break;
 case 323:return "PMOD";
 break;
-case 324: yy_.yytext = "\u00B1"; return "OP";
+case 324: yy_.yytext = "\u00B1"; return "OP"; 
 break;
-case 325: yy_.yytext = "\u2A25"; return "OP";
+case 325: yy_.yytext = "\u2A25"; return "OP"; 
 break;
-case 326: yy_.yytext = "\u229E"; return "OP";
+case 326: yy_.yytext = "\u229E"; return "OP"; 
 break;
-case 327: yy_.yytext = "\u22D4"; return "OP";
+case 327: yy_.yytext = "\u22D4"; return "OP"; 
 break;
-case 328: yy_.yytext = "\u03A0"; return "A";
+case 328: yy_.yytext = "\u03A0"; return "A"; 
 break;
-case 329: yy_.yytext = "\u03C0"; return "A";
+case 329: yy_.yytext = "\u03C0"; return "A"; 
 break;
-case 330: yy_.yytext = "\u03A6"; return "A";
+case 330: yy_.yytext = "\u03A6"; return "A"; 
 break;
-case 331: yy_.yytext = "\u03D5"; return "A";
+case 331: yy_.yytext = "\u03D5"; return "A"; 
 break;
 case 332:return "PHANTOM";
 break;
-case 333: yy_.yytext = "\u2AEB"; return "OP";
+case 333: yy_.yytext = "\u2AEB"; return "OP"; 
 break;
-case 334: yy_.yytext = "\u22A5"; return "OP";
+case 334: yy_.yytext = "\u22A5"; return "OP"; 
 break;
-case 335: yy_.yytext = "\u2AA3"; return "OP";
+case 335: yy_.yytext = "\u2AA3"; return "OP"; 
 break;
-case 336: yy_.yytext = "\u2202"; return "OP";
+case 336: yy_.yytext = "\u2202"; return "OP"; 
 break;
-case 337: yy_.yytext = "\u214B"; return "OP";
+case 337: yy_.yytext = "\u214B"; return "OP"; 
 break;
-case 338: yy_.yytext = "\u2225"; return "OP";
+case 338: yy_.yytext = "\u2225"; return "OP"; 
 break;
-case 339: this.pushState("TEXTARG"); return "PADDING";
+case 339: this.pushState("TEXTARG"); return "PADDING"; 
 break;
 case 340:return "OVERSET";
 break;
-case 341: yy_.yytext = "\u00AF"; return "ACCENT";
+case 341: yy_.yytext = "\u00AF"; return "ACCENT"; 
 break;
 case 342:return "OVERBRACE";
 break;
 case 343:return "TEXOVER";
 break;
-case 344: yy_.yytext = "\u2A34"; return "OP";
+case 344: yy_.yytext = "\u2A34"; return "OP"; 
 break;
-case 345: yy_.yytext = "\u2297"; return "OP";
+case 345: yy_.yytext = "\u2297"; return "OP"; 
 break;
-case 346: yy_.yytext = "\u2298"; return "OP";
+case 346: yy_.yytext = "\u2298"; return "OP"; 
 break;
 case 347:return "OPS";
 break;
@@ -2335,149 +2335,149 @@ case 348:return "OPP";
 break;
 case 349:return "OPM";
 break;
-case 350: yy_.yytext = "\u2A2D"; return "OP";
+case 350: yy_.yytext = "\u2A2D"; return "OP"; 
 break;
-case 351: yy_.yytext = "\u2295"; return "OP";
+case 351: yy_.yytext = "\u2295"; return "OP"; 
 break;
 case 352:return "OPFS";
 break;
 case 353:return "OPF";
 break;
-case 354: this.begin("TEXTARG"); return "OPERATORNAME";
+case 354: this.begin("TEXTARG"); return "OPERATORNAME"; 
 break;
 case 355:return "OP";
 break;
-case 356: yy_.yytext = "\u2296"; return "OP";
+case 356: yy_.yytext = "\u2296"; return "OP"; 
 break;
-case 357: yy_.yytext = "\u2134"; return "A";
+case 357: yy_.yytext = "\u2134"; return "A"; 
 break;
-case 358: yy_.yytext = "\u03A9"; return "A";
+case 358: yy_.yytext = "\u03A9"; return "A"; 
 break;
-case 359: yy_.yytext = "\u03C9"; return "A";
+case 359: yy_.yytext = "\u03C9"; return "A"; 
 break;
-case 360: yy_.yytext = "\u222E"; return "OP";
+case 360: yy_.yytext = "\u222E"; return "OP"; 
 break;
-case 361: yy_.yytext = "\u222F"; return "OP";
+case 361: yy_.yytext = "\u222F"; return "OP"; 
 break;
-case 362: yy_.yytext = "\u2230"; return "OP";
+case 362: yy_.yytext = "\u2230"; return "OP"; 
 break;
-case 363: yy_.yytext = "\u2299"; return "OP";
+case 363: yy_.yytext = "\u2299"; return "OP"; 
 break;
-case 364: yy_.yytext = "\u229D"; return "OP";
+case 364: yy_.yytext = "\u229D"; return "OP"; 
 break;
-case 365: yy_.yytext = "\u29B8"; return "OP";
+case 365: yy_.yytext = "\u29B8"; return "OP"; 
 break;
-case 366: yy_.yytext = "\u2932"; return "OP";
+case 366: yy_.yytext = "\u2932"; return "OP"; 
 break;
-case 367: yy_.yytext = "\u21D6"; return "OPS";
+case 367: yy_.yytext = "\u21D6"; return "OPS"; 
 break;
-case 368: yy_.yytext = "\u2196"; return "OPS";
+case 368: yy_.yytext = "\u2196"; return "OPS"; 
 break;
-case 369: yy_.yytext = "\u21D6"; return "OPS";
+case 369: yy_.yytext = "\u21D6"; return "OPS"; 
 break;
-case 370: yy_.yytext = "\u2196"; return "OPS";
+case 370: yy_.yytext = "\u2196"; return "OPS"; 
 break;
-case 371: yy_.yytext = "\u22AF"; return "OP";
+case 371: yy_.yytext = "\u22AF"; return "OP"; 
 break;
-case 372: yy_.yytext = "\u22AE"; return "OP";
+case 372: yy_.yytext = "\u22AE"; return "OP"; 
 break;
-case 373: yy_.yytext = "\u22AD"; return "OP";
+case 373: yy_.yytext = "\u22AD"; return "OP"; 
 break;
-case 374: yy_.yytext = "\u22AC"; return "OP";
+case 374: yy_.yytext = "\u22AC"; return "OP"; 
 break;
 case 375:return "NUM";
 break;
-case 376: yy_.yytext = "\u039D"; return "A";
+case 376: yy_.yytext = "\u039D"; return "A"; 
 break;
-case 377: yy_.yytext = "\u03BD"; return "A";
+case 377: yy_.yytext = "\u03BD"; return "A"; 
 break;
-case 378: yy_.yytext = "\u22ED"; return "OP";
+case 378: yy_.yytext = "\u22ED"; return "OP"; 
 break;
-case 379: yy_.yytext = "\u22EB"; return "OP";
+case 379: yy_.yytext = "\u22EB"; return "OP"; 
 break;
-case 380: yy_.yytext = "\u22EC"; return "OP";
+case 380: yy_.yytext = "\u22EC"; return "OP"; 
 break;
-case 381: yy_.yytext = "\u22EA"; return "OP";
+case 381: yy_.yytext = "\u22EA"; return "OP"; 
 break;
-case 382: yy_.yytext = "\u2289"; return "OP";
+case 382: yy_.yytext = "\u2289"; return "OP"; 
 break;
-case 383: yy_.yytext = "\u2285"; return "OP";
+case 383: yy_.yytext = "\u2285"; return "OP"; 
 break;
-case 384: yy_.yytext = "\u227F\u0338"; return "OP";
+case 384: yy_.yytext = "\u227F\u0338"; return "OP"; 
 break;
-case 385: yy_.yytext = "\u2AB0\u0338"; return "OP";
+case 385: yy_.yytext = "\u2AB0\u0338"; return "OP"; 
 break;
-case 386: yy_.yytext = "\u2281"; return "OP";
+case 386: yy_.yytext = "\u2281"; return "OP"; 
 break;
-case 387: yy_.yytext = "\u2288"; return "OP";
+case 387: yy_.yytext = "\u2288"; return "OP"; 
 break;
-case 388: yy_.yytext = "\u2288"; return "OP";
+case 388: yy_.yytext = "\u2288"; return "OP"; 
 break;
-case 389: yy_.yytext = "\u2284"; return "OP";
+case 389: yy_.yytext = "\u2284"; return "OP"; 
 break;
-case 390: yy_.yytext = "\u2244"; return "OP";
+case 390: yy_.yytext = "\u2244"; return "OP"; 
 break;
-case 391: yy_.yytext = "\u2241"; return "OP";
+case 391: yy_.yytext = "\u2241"; return "OP"; 
 break;
-case 392: yy_.yytext = "\u2226"; return "OP";
+case 392: yy_.yytext = "\u2226"; return "OP"; 
 break;
-case 393: yy_.yytext = "\u2224"; return "OP";
+case 393: yy_.yytext = "\u2224"; return "OP"; 
 break;
-case 394: yy_.yytext = "\u21CF"; return "OP";
+case 394: yy_.yytext = "\u21CF"; return "OP"; 
 break;
-case 395: yy_.yytext = "\u219B"; return "OP";
+case 395: yy_.yytext = "\u219B"; return "OP"; 
 break;
-case 396: yy_.yytext = "\u2AAF\u0338"; return "OP";
+case 396: yy_.yytext = "\u2AAF\u0338"; return "OP"; 
 break;
-case 397: yy_.yytext = "\u2280"; return "OP";
+case 397: yy_.yytext = "\u2280"; return "OP"; 
 break;
-case 398: yy_.yytext = "\u2226"; return "OP";
+case 398: yy_.yytext = "\u2226"; return "OP"; 
 break;
-case 399: yy_.yytext = "\u220C"; return "OP";
+case 399: yy_.yytext = "\u220C"; return "OP"; 
 break;
-case 400: yy_.yytext = "\u2209"; return "OP";
+case 400: yy_.yytext = "\u2209"; return "OP"; 
 break;
-case 401: yy_.yytext = "\u00AC"; return "OP";
+case 401: yy_.yytext = "\u00AC"; return "OP"; 
 break;
-case 402: yy_.yytext = "\u2224"; return "OP";
+case 402: yy_.yytext = "\u2224"; return "OP"; 
 break;
-case 403: yy_.yytext = "\u226E"; return "OP";
+case 403: yy_.yytext = "\u226E"; return "OP"; 
 break;
-case 404: yy_.yytext = "\u2A7D\u0338"; return "OP";
+case 404: yy_.yytext = "\u2A7D\u0338"; return "OP"; 
 break;
-case 405: yy_.yytext = "\u2A7D\u0338"; return "OP";
+case 405: yy_.yytext = "\u2A7D\u0338"; return "OP"; 
 break;
-case 406: yy_.yytext = "\u2270"; return "OP";
+case 406: yy_.yytext = "\u2270"; return "OP"; 
 break;
-case 407: yy_.yytext = "\u21CE"; return "OP";
+case 407: yy_.yytext = "\u21CE"; return "OP"; 
 break;
-case 408: yy_.yytext = "\u21AE"; return "OP";
+case 408: yy_.yytext = "\u21AE"; return "OP"; 
 break;
-case 409: yy_.yytext = "\u21CD"; return "OP";
+case 409: yy_.yytext = "\u21CD"; return "OP"; 
 break;
-case 410: yy_.yytext = "\u219A"; return "OP";
+case 410: yy_.yytext = "\u219A"; return "OP"; 
 break;
-case 411: yy_.yytext = "\u220B"; return "OP";
+case 411: yy_.yytext = "\u220B"; return "OP"; 
 break;
-case 412: yy_.yytext = "\u226F"; return "OP";
+case 412: yy_.yytext = "\u226F"; return "OP"; 
 break;
-case 413: yy_.yytext = "\u2A7E\u0338"; return "OP";
+case 413: yy_.yytext = "\u2A7E\u0338"; return "OP"; 
 break;
-case 414: yy_.yytext = "\u2A7E\u0338"; return "OP";
+case 414: yy_.yytext = "\u2A7E\u0338"; return "OP"; 
 break;
-case 415: yy_.yytext = "\u2271"; return "OP";
+case 415: yy_.yytext = "\u2271"; return "OP"; 
 break;
-case 416: yy_.yytext = "\u2204"; return "OP";
+case 416: yy_.yytext = "\u2204"; return "OP"; 
 break;
-case 417: yy_.yytext = "\u2262"; return "OP";
+case 417: yy_.yytext = "\u2262"; return "OP"; 
 break;
-case 418: yy_.yytext = "\u2242\u0338"; return "OP";
+case 418: yy_.yytext = "\u2242\u0338"; return "OP"; 
 break;
-case 419: yy_.yytext = "\u2260"; return "OP";
+case 419: yy_.yytext = "\u2260"; return "OP"; 
 break;
-case 420: yy_.yytext = "\u292E"; return "OP";
+case 420: yy_.yytext = "\u292E"; return "OP"; 
 break;
-case 421: yy_.yytext = "\u2931"; return "OP";
+case 421: yy_.yytext = "\u2931"; return "OP"; 
 break;
 case 422:return "NEGTHICKSPACE";
 break;
@@ -2485,73 +2485,73 @@ case 423:return "NEGSPACE";
 break;
 case 424:return "NEGMEDSPACE";
 break;
-case 425: yy_.yytext = "\u00AC"; return "OP";
+case 425: yy_.yytext = "\u00AC"; return "OP"; 
 break;
-case 426: yy_.yytext = "\u21D7"; return "OPS";
+case 426: yy_.yytext = "\u21D7"; return "OPS"; 
 break;
-case 427: yy_.yytext = "\u2197"; return "OPS";
+case 427: yy_.yytext = "\u2197"; return "OPS"; 
 break;
-case 428: yy_.yytext = "\u21D7"; return "OPS";
+case 428: yy_.yytext = "\u21D7"; return "OPS"; 
 break;
-case 429: yy_.yytext = "\u2197"; return "OPS";
+case 429: yy_.yytext = "\u2197"; return "OPS"; 
 break;
-case 430: yy_.yytext = "\u2260"; return "OP";
+case 430: yy_.yytext = "\u2260"; return "OP"; 
 break;
-case 431: yy_.yytext = "\u2247"; return "OP";
+case 431: yy_.yytext = "\u2247"; return "OP"; 
 break;
-case 432: yy_.yytext = "\u224E\u0338"; return "OP";
+case 432: yy_.yytext = "\u224E\u0338"; return "OP"; 
 break;
-case 433: yy_.yytext = "\u224F\u0338"; return "OP";
+case 433: yy_.yytext = "\u224F\u0338"; return "OP"; 
 break;
-case 434: yy_.yytext = "\u266E"; return "OP";
+case 434: yy_.yytext = "\u266E"; return "OP"; 
 break;
-case 435: yy_.yytext = "\u2249"; return "OP";
+case 435: yy_.yytext = "\u2249"; return "OP"; 
 break;
-case 436: yy_.yytext = "\u2207"; return "OP";
+case 436: yy_.yytext = "\u2207"; return "OP"; 
 break;
 case 437:return "MULTI";
 break;
-case 438: yy_.yytext = "\u22B8"; return "OP";
+case 438: yy_.yytext = "\u22B8"; return "OP"; 
 break;
-case 439: yy_.yytext = "\u039C"; return "A";
+case 439: yy_.yytext = "\u039C"; return "A"; 
 break;
-case 440: yy_.yytext = "\u03BC"; return "A";
+case 440: yy_.yytext = "\u03BC"; return "A"; 
 break;
-case 441: this.begin("TEXTARG"); return "MTEXT";
+case 441: this.begin("TEXTARG"); return "MTEXT"; 
 break;
-case 442: this.pushState("TEXTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); return "MS";
+case 442: this.pushState("TEXTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); return "MS"; 
 break;
-case 443: yy_.yytext = "\u2213"; return "OP";
+case 443: yy_.yytext = "\u2213"; return "OP"; 
 break;
-case 444: yy_.yytext = "\u22A7"; return "OP";
+case 444: yy_.yytext = "\u22A7"; return "OP"; 
 break;
-case 445: yy_.yytext = "mod"; return "MO";
+case 445: yy_.yytext = "mod"; return "MO"; 
 break;
-case 446: this.pushState("TEXTARG"); return "MO";
+case 446: this.pushState("TEXTARG"); return "MO"; 
 break;
-case 447: this.pushState("TEXTARG"); return "MN";
+case 447: this.pushState("TEXTARG"); return "MN"; 
 break;
-case 448: yy_.yytext = "\u2ADB"; return "OP";
+case 448: yy_.yytext = "\u2ADB"; return "OP"; 
 break;
-case 449: yy_.yytext = "\u2A2A"; return "OP";
+case 449: yy_.yytext = "\u2A2A"; return "OP"; 
 break;
-case 450: yy_.yytext = "\u229F"; return "OP";
+case 450: yy_.yytext = "\u229F"; return "OP"; 
 break;
-case 451: yy_.yytext = "\u2212"; return "OP";
+case 451: yy_.yytext = "\u2212"; return "OP"; 
 break;
-case 452: yy_.yytext = yy_.yytext.slice(1); return "FM";
+case 452: yy_.yytext = yy_.yytext.slice(1); return "FM"; 
 break;
-case 453: yy_.yytext = "\u2223"; return "OP";
+case 453: yy_.yytext = "\u2223"; return "OP"; 
 break;
-case 454: this.pushState("TEXTARG"); return "MI";
+case 454: this.pushState("TEXTARG"); return "MI"; 
 break;
-case 455: yy_.yytext = "\u2127"; return "A";
+case 455: yy_.yytext = "\u2127"; return "A"; 
 break;
-case 456: yy_.yytext = "\u2127"; return "A";
+case 456: yy_.yytext = "\u2127"; return "A"; 
 break;
 case 457:return "MEDSPACE";
 break;
-case 458: yy_.yytext = "\u2221"; return "OP";
+case 458: yy_.yytext = "\u2221"; return "OP"; 
 break;
 case 459:return "MATHTT";
 break;
@@ -2563,11 +2563,11 @@ case 462:return "MATHRM";
 break;
 case 463:return "MATHRLAP";
 break;
-case 464: this.begin("TEXTARG"); return "MATHREL";
+case 464: this.begin("TEXTARG"); return "MATHREL"; 
 break;
-case 465: this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); this.pushState("TEXTARG"); return "MATHRAISEBOX";
+case 465: this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); this.pushState("TEXTARG"); return "MATHRAISEBOX"; 
 break;
-case 466: this.begin("TEXTARG"); return "MATHOP";
+case 466: this.begin("TEXTARG"); return "MATHOP"; 
 break;
 case 467:return "MATHIT";
 break;
@@ -2587,7 +2587,7 @@ case 474:return "MATHBSCR";
 break;
 case 475:return "MATHBIT";
 break;
-case 476: this.begin("TEXTARG"); return "MATHBIN";
+case 476: this.begin("TEXTARG"); return "MATHBIN"; 
 break;
 case 477:return "MATHBF";
 break;
@@ -2595,337 +2595,337 @@ case 478:return "MATHBSCR";
 break;
 case 479:return "MATHBB";
 break;
-case 480: yy_.yytext = "\u2907"; return "OP";
+case 480: yy_.yytext = "\u2907"; return "OP"; 
 break;
-case 481: yy_.yytext = "\u21A6"; return "OPS";
+case 481: yy_.yytext = "\u21A6"; return "OPS"; 
 break;
-case 482: yy_.yytext = "\u2906"; return "OP";
+case 482: yy_.yytext = "\u2906"; return "OP"; 
 break;
-case 483: yy_.yytext = "\u21A6"; return "OPS";
+case 483: yy_.yytext = "\u21A6"; return "OPS"; 
 break;
-case 484: yy_.yytext = "\u2268\uFE00"; return "OP";
+case 484: yy_.yytext = "\u2268\uFE00"; return "OP"; 
 break;
-case 485: yy_.yytext = "\u2268\uFE00"; return "OP";
+case 485: yy_.yytext = "\u2268\uFE00"; return "OP"; 
 break;
-case 486: yy_.yytext = "\u22C9"; return "OP";
+case 486: yy_.yytext = "\u22C9"; return "OP"; 
 break;
-case 487: yy_.yytext = "\u003C"; return "OP";
+case 487: yy_.yytext = "\u003C"; return "OP"; 
 break;
-case 488: yy_.yytext = "\u21B0"; return "OPS";
+case 488: yy_.yytext = "\u21B0"; return "OPS"; 
 break;
-case 489: yy_.yytext = "\u2018"; return "OPF";
+case 489: yy_.yytext = "\u2018"; return "OPF"; 
 break;
-case 490: yy_.yytext = "\u25CA"; return "OP";
+case 490: yy_.yytext = "\u25CA"; return "OP"; 
 break;
-case 491: yy_.yytext = "\u2A1C"; return "OP";
+case 491: yy_.yytext = "\u2A1C"; return "OP"; 
 break;
-case 492: yy_.yytext = "\u21AC"; return "OPS";
+case 492: yy_.yytext = "\u21AC"; return "OPS"; 
 break;
-case 493: yy_.yytext = "\u21AB"; return "OPS";
+case 493: yy_.yytext = "\u21AB"; return "OPS"; 
 break;
-case 494: yy_.yytext = "\u27F9"; return "OPS";
+case 494: yy_.yytext = "\u27F9"; return "OPS"; 
 break;
-case 495: yy_.yytext = "\u27F6"; return "OPS";
+case 495: yy_.yytext = "\u27F6"; return "OPS"; 
 break;
-case 496: yy_.yytext = "\u27FC"; return "OPS";
+case 496: yy_.yytext = "\u27FC"; return "OPS"; 
 break;
-case 497: yy_.yytext = "\u27FA"; return "OPS";
+case 497: yy_.yytext = "\u27FA"; return "OPS"; 
 break;
-case 498: yy_.yytext = "\u27F7"; return "OPS";
+case 498: yy_.yytext = "\u27F7"; return "OPS"; 
 break;
-case 499: yy_.yytext = "\u27F8"; return "OPS";
+case 499: yy_.yytext = "\u27F8"; return "OPS"; 
 break;
-case 500: yy_.yytext = "\u27F5"; return "OPS";
+case 500: yy_.yytext = "\u27F5"; return "OPS"; 
 break;
-case 501: yy_.yytext = "\u22E6"; return "OP";
+case 501: yy_.yytext = "\u22E6"; return "OP"; 
 break;
-case 502: yy_.yytext = "\u2268"; return "OP";
+case 502: yy_.yytext = "\u2268"; return "OP"; 
 break;
-case 503: yy_.yytext = "\u2A87"; return "OP";
+case 503: yy_.yytext = "\u2A87"; return "OP"; 
 break;
-case 504: yy_.yytext = "\u2A89"; return "OP";
+case 504: yy_.yytext = "\u2A89"; return "OP"; 
 break;
-case 505: yy_.yytext = "\u23B0"; return "OP";
+case 505: yy_.yytext = "\u23B0"; return "OP"; 
 break;
-case 506: yy_.yytext = "\u22D8"; return "OP";
+case 506: yy_.yytext = "\u22D8"; return "OP"; 
 break;
-case 507: yy_.yytext = "\u21DA"; return "OPS";
+case 507: yy_.yytext = "\u21DA"; return "OPS"; 
 break;
-case 508: yy_.yytext = "\u27EA"; return "OPFS";
+case 508: yy_.yytext = "\u27EA"; return "OPFS"; 
 break;
-case 509: yy_.yytext = "\u226A"; return "OP";
+case 509: yy_.yytext = "\u226A"; return "OP"; 
 break;
-case 510: yy_.yytext = "\u22B2"; return "OP";
+case 510: yy_.yytext = "\u22B2"; return "OP"; 
 break;
-case 511: yy_.yytext = "\u230A"; return "OPFS";
+case 511: yy_.yytext = "\u230A"; return "OPFS"; 
 break;
-case 512: yy_.yytext = "\u2272"; return "OP";
+case 512: yy_.yytext = "\u2272"; return "OP"; 
 break;
-case 513: yy_.yytext = "\u2276"; return "OP";
+case 513: yy_.yytext = "\u2276"; return "OP"; 
 break;
-case 514: yy_.yytext = "\u2A8B"; return "OP";
+case 514: yy_.yytext = "\u2A8B"; return "OP"; 
 break;
-case 515: yy_.yytext = "\u22DA"; return "OP";
+case 515: yy_.yytext = "\u22DA"; return "OP"; 
 break;
-case 516: yy_.yytext = "\u22D6"; return "OP";
+case 516: yy_.yytext = "\u22D6"; return "OP"; 
 break;
-case 517: yy_.yytext = "\u2A85"; return "OP";
+case 517: yy_.yytext = "\u2A85"; return "OP"; 
 break;
-case 518: yy_.yytext = "\u003C"; return "OP";
+case 518: yy_.yytext = "\u003C"; return "OP"; 
 break;
-case 519: yy_.yytext = "\u2A7D"; return "OP";
+case 519: yy_.yytext = "\u2A7D"; return "OP"; 
 break;
-case 520: yy_.yytext = "\u2266"; return "OP";
+case 520: yy_.yytext = "\u2266"; return "OP"; 
 break;
-case 521: yy_.yytext = "\u2264"; return "OP";
+case 521: yy_.yytext = "\u2264"; return "OP"; 
 break;
-case 522: yy_.yytext = "\u27F3"; return "OP";
+case 522: yy_.yytext = "\u27F3"; return "OP"; 
 break;
-case 523: yy_.yytext = "\u22CB"; return "OP";
+case 523: yy_.yytext = "\u22CB"; return "OP"; 
 break;
-case 524: yy_.yytext = "\u219C"; return "OPS";
+case 524: yy_.yytext = "\u219C"; return "OPS"; 
 break;
-case 525: yy_.yytext = "\u21AD"; return "OPS";
+case 525: yy_.yytext = "\u21AD"; return "OPS"; 
 break;
-case 526: yy_.yytext = "\u21CB"; return "OPS";
+case 526: yy_.yytext = "\u21CB"; return "OPS"; 
 break;
-case 527: yy_.yytext = "\u21FF"; return "OPS";
+case 527: yy_.yytext = "\u21FF"; return "OPS"; 
 break;
-case 528: yy_.yytext = "\u21C6"; return "OPS";
+case 528: yy_.yytext = "\u21C6"; return "OPS"; 
 break;
-case 529: yy_.yytext = "\u21D4"; return "OPS";
+case 529: yy_.yytext = "\u21D4"; return "OPS"; 
 break;
-case 530: yy_.yytext = "\u2194"; return "OPS";
+case 530: yy_.yytext = "\u2194"; return "OPS"; 
 break;
-case 531: yy_.yytext = "\u21C7"; return "OPS";
+case 531: yy_.yytext = "\u21C7"; return "OPS"; 
 break;
-case 532: yy_.yytext = "\u21BC"; return "OPS";
+case 532: yy_.yytext = "\u21BC"; return "OPS"; 
 break;
-case 533: yy_.yytext = "\u21BD"; return "OPS";
+case 533: yy_.yytext = "\u21BD"; return "OPS"; 
 break;
-case 534: yy_.yytext = "\u21FD"; return "OPS";
+case 534: yy_.yytext = "\u21FD"; return "OPS"; 
 break;
-case 535: yy_.yytext = "\u21A2"; return "OPS";
+case 535: yy_.yytext = "\u21A2"; return "OPS"; 
 break;
-case 536: yy_.yytext = "\u21D0"; return "OPS";
+case 536: yy_.yytext = "\u21D0"; return "OPS"; 
 break;
-case 537: yy_.yytext = "\u2190"; return "OPS";
+case 537: yy_.yytext = "\u2190"; return "OPS"; 
 break;
 case 538:return "LEFT";
 break;
-case 539: yy_.yytext = "\u2264"; return "OP";
+case 539: yy_.yytext = "\u2264"; return "OP"; 
 break;
-case 540: yy_.yytext = "\u2026"; return "OP";
+case 540: yy_.yytext = "\u2026"; return "OP"; 
 break;
-case 541: yy_.yytext = "\u2308"; return "OPFS";
+case 541: yy_.yytext = "\u2308"; return "OPFS"; 
 break;
-case 542: yy_.yytext = "\u005B"; return "OPFS";
+case 542: yy_.yytext = "\u005B"; return "OPFS"; 
 break;
-case 543: yy_.yytext = "\u007B"; return "OPFS";
+case 543: yy_.yytext = "\u007B"; return "OPFS"; 
 break;
-case 544: yy_.yytext = "\u27E8"; return "OPFS";
+case 544: yy_.yytext = "\u27E8"; return "OPFS"; 
 break;
-case 545: yy_.yytext = "\u27E8"; return "OPFS";
+case 545: yy_.yytext = "\u27E8"; return "OPFS"; 
 break;
-case 546: yy_.yytext = "\u039B"; return "A";
+case 546: yy_.yytext = "\u039B"; return "A"; 
 break;
-case 547: yy_.yytext = "\u03BB"; return "A";
+case 547: yy_.yytext = "\u03BB"; return "A"; 
 break;
-case 548: yy_.yytext = "\u223B"; return "OP";
+case 548: yy_.yytext = "\u223B"; return "OP"; 
 break;
-case 549: yy_.yytext = "\u039A"; return "A";
+case 549: yy_.yytext = "\u039A"; return "A"; 
 break;
-case 550: yy_.yytext = "\u03BA"; return "A";
+case 550: yy_.yytext = "\u03BA"; return "A"; 
 break;
-case 551: yy_.yytext = "\u0237"; return "A";
+case 551: yy_.yytext = "\u0237"; return "A"; 
 break;
-case 552: this.pushState("TEXTARG"); return "MN";
+case 552: this.pushState("TEXTARG"); return "MN"; 
 break;
-case 553: yy_.yytext = "\u0399"; return "A";
+case 553: yy_.yytext = "\u0399"; return "A"; 
 break;
-case 554: yy_.yytext = "\u03B9"; return "A";
+case 554: yy_.yytext = "\u03B9"; return "A"; 
 break;
-case 555: yy_.yytext = "\u214B"; return "OP";
+case 555: yy_.yytext = "\u214B"; return "OP"; 
 break;
-case 556: yy_.yytext = "\u2A18"; return "OP";
+case 556: yy_.yytext = "\u2A18"; return "OP"; 
 break;
-case 557: yy_.yytext = "\u2A3D"; return "OP";
+case 557: yy_.yytext = "\u2A3D"; return "OP"; 
 break;
-case 558: yy_.yytext = "\u2A3C"; return "OP";
+case 558: yy_.yytext = "\u2A3C"; return "OP"; 
 break;
-case 559: yy_.yytext = "\u22C2"; return "OPM";
+case 559: yy_.yytext = "\u22C2"; return "OPM"; 
 break;
-case 560: yy_.yytext = "\u2229"; return "OP";
+case 560: yy_.yytext = "\u2229"; return "OP"; 
 break;
-case 561: yy_.yytext = "\u2AF4"; return "OP";
+case 561: yy_.yytext = "\u2AF4"; return "OP"; 
 break;
-case 562: yy_.yytext = "\u22BA"; return "OP";
+case 562: yy_.yytext = "\u22BA"; return "OP"; 
 break;
-case 563: yy_.yytext = "\u222B"; return "OP";
+case 563: yy_.yytext = "\u222B"; return "OP"; 
 break;
-case 564: yy_.yytext = "\u2A1A"; return "OP";
+case 564: yy_.yytext = "\u2A1A"; return "OP"; 
 break;
-case 565: yy_.yytext = "\u2A19"; return "OP";
+case 565: yy_.yytext = "\u2A19"; return "OP"; 
 break;
-case 566: yy_.yytext = "\u2A0E"; return "OP";
+case 566: yy_.yytext = "\u2A0E"; return "OP"; 
 break;
-case 567: yy_.yytext = "\u2A0D"; return "OP";
+case 567: yy_.yytext = "\u2A0D"; return "OP"; 
 break;
-case 568: yy_.yytext = "\u222B"; return "OP";
+case 568: yy_.yytext = "\u222B"; return "OP"; 
 break;
-case 569: yy_.yytext = "\u221E"; return "NUM";
+case 569: yy_.yytext = "\u221E"; return "NUM"; 
 break;
-case 570: yy_.yytext = "\u221E"; return "NUM";
+case 570: yy_.yytext = "\u221E"; return "NUM"; 
 break;
-case 571: yy_.yytext = yy_.yytext.slice(1); return "FM";
+case 571: yy_.yytext = yy_.yytext.slice(1); return "FM"; 
 break;
-case 572: yy_.yytext = "\u220A"; return "OP";
+case 572: yy_.yytext = "\u220A"; return "OP"; 
 break;
-case 573: yy_.yytext = "\u21D2"; return "OPS";
+case 573: yy_.yytext = "\u21D2"; return "OPS"; 
 break;
-case 574: yy_.yytext = "\u21D0"; return "OPS";
+case 574: yy_.yytext = "\u21D0"; return "OPS"; 
 break;
-case 575: yy_.yytext = "\u0131"; return "A";
+case 575: yy_.yytext = "\u0131"; return "A"; 
 break;
-case 576: yy_.yytext = "\u2111"; return "A";
+case 576: yy_.yytext = "\u2111"; return "A"; 
 break;
-case 577: yy_.yytext = "\u222C"; return "OP";
+case 577: yy_.yytext = "\u222C"; return "OP"; 
 break;
-case 578: yy_.yytext = "\u222D"; return "OP";
+case 578: yy_.yytext = "\u222D"; return "OP"; 
 break;
-case 579: yy_.yytext = "\u2A0C"; return "OP";
+case 579: yy_.yytext = "\u2A0C"; return "OP"; 
 break;
-case 580: yy_.yytext = "\u27FA"; return "OPS";
+case 580: yy_.yytext = "\u27FA"; return "OPS"; 
 break;
-case 581: yy_.yytext = "\u210F"; return "A";
+case 581: yy_.yytext = "\u210F"; return "A"; 
 break;
-case 582: this.pushState("TEXTARG"); return "HREF";
+case 582: this.pushState("TEXTARG"); return "HREF"; 
 break;
-case 583: yy_.yytext = "\u21AA"; return "OPS";
+case 583: yy_.yytext = "\u21AA"; return "OPS"; 
 break;
-case 584: yy_.yytext = "\u21A9"; return "OPS";
+case 584: yy_.yytext = "\u21A9"; return "OPS"; 
 break;
-case 585: yy_.yytext = "\u2926"; return "OP";
+case 585: yy_.yytext = "\u2926"; return "OP"; 
 break;
-case 586: yy_.yytext = "\u2925"; return "OP";
+case 586: yy_.yytext = "\u2925"; return "OP"; 
 break;
-case 587: yy_.yytext = "\u2661"; return "OP";
+case 587: yy_.yytext = "\u2661"; return "OP"; 
 break;
-case 588: yy_.yytext = "\u210F"; return "A";
+case 588: yy_.yytext = "\u210F"; return "A"; 
 break;
-case 589: yy_.yytext = "\u005E"; return "ACCENTNS";
+case 589: yy_.yytext = "\u005E"; return "ACCENTNS"; 
 break;
-case 590: yy_.yytext = "\u2269\uFE00"; return "OP";
+case 590: yy_.yytext = "\u2269\uFE00"; return "OP"; 
 break;
-case 591: yy_.yytext = "\u2269\uFE00"; return "OP";
+case 591: yy_.yytext = "\u2269\uFE00"; return "OP"; 
 break;
-case 592: yy_.yytext = "\u2273"; return "OP";
+case 592: yy_.yytext = "\u2273"; return "OP"; 
 break;
-case 593: yy_.yytext = "\u2277"; return "OP";
+case 593: yy_.yytext = "\u2277"; return "OP"; 
 break;
-case 594: yy_.yytext = "\u2A8C"; return "OP";
+case 594: yy_.yytext = "\u2A8C"; return "OP"; 
 break;
-case 595: yy_.yytext = "\u22DB"; return "OP";
+case 595: yy_.yytext = "\u22DB"; return "OP"; 
 break;
-case 596: yy_.yytext = "\u22D7"; return "OP";
+case 596: yy_.yytext = "\u22D7"; return "OP"; 
 break;
-case 597: yy_.yytext = "\u2A86"; return "OP";
+case 597: yy_.yytext = "\u2A86"; return "OP"; 
 break;
-case 598: yy_.yytext = "\u003E"; return "OP";
+case 598: yy_.yytext = "\u003E"; return "OP"; 
 break;
-case 599: yy_.yytext = "\u003E"; return "OP";
+case 599: yy_.yytext = "\u003E"; return "OP"; 
 break;
-case 600: yy_.yytext = "\u22E7"; return "OP";
+case 600: yy_.yytext = "\u22E7"; return "OP"; 
 break;
-case 601: yy_.yytext = "\u2269"; return "OP";
+case 601: yy_.yytext = "\u2269"; return "OP"; 
 break;
-case 602: yy_.yytext = "\u2A88"; return "OP";
+case 602: yy_.yytext = "\u2A88"; return "OP"; 
 break;
-case 603: yy_.yytext = "\u2A8A"; return "OP";
+case 603: yy_.yytext = "\u2A8A"; return "OP"; 
 break;
-case 604: yy_.yytext = "\u2137"; return "A";
+case 604: yy_.yytext = "\u2137"; return "A"; 
 break;
-case 605: yy_.yytext = "\u22D9"; return "OP";
+case 605: yy_.yytext = "\u22D9"; return "OP"; 
 break;
-case 606: yy_.yytext = "\u226B"; return "OP";
+case 606: yy_.yytext = "\u226B"; return "OP"; 
 break;
-case 607: yy_.yytext = "\u2A7E"; return "OP";
+case 607: yy_.yytext = "\u2A7E"; return "OP"; 
 break;
-case 608: yy_.yytext = "\u2267"; return "OP";
+case 608: yy_.yytext = "\u2267"; return "OP"; 
 break;
-case 609: yy_.yytext = "\u2265"; return "OP";
+case 609: yy_.yytext = "\u2265"; return "OP"; 
 break;
-case 610: yy_.yytext = "\u2265"; return "OP";
+case 610: yy_.yytext = "\u2265"; return "OP"; 
 break;
-case 611: yy_.yytext = "\u0393"; return "A";
+case 611: yy_.yytext = "\u0393"; return "A"; 
 break;
-case 612: yy_.yytext = "\u03B3"; return "A";
+case 612: yy_.yytext = "\u03B3"; return "A"; 
 break;
-case 613: yy_.yytext = "\u2322"; return "OP";
+case 613: yy_.yytext = "\u2322"; return "OP"; 
 break;
-case 614: this.pushState("TEXTARG"); return "FRAME";
+case 614: this.pushState("TEXTARG"); return "FRAME"; 
 break;
 case 615:return "FRAC";
 break;
-case 616: yy_.yytext = "\u2ADD"; return "OP";
+case 616: yy_.yytext = "\u2ADD"; return "OP"; 
 break;
-case 617: yy_.yytext = "\u2ADD\u0338"; return "OP";
+case 617: yy_.yytext = "\u2ADD\u0338"; return "OP"; 
 break;
-case 618: yy_.yytext = "\u2200"; return "OP";
+case 618: yy_.yytext = "\u2200"; return "OP"; 
 break;
-case 619: yy_.yytext = "\u266D"; return "OP";
+case 619: yy_.yytext = "\u266D"; return "OP"; 
 break;
-case 620: yy_.yytext = "\u292C"; return "OP";
+case 620: yy_.yytext = "\u292C"; return "OP"; 
 break;
-case 621: yy_.yytext = "\u292F"; return "OP";
+case 621: yy_.yytext = "\u292F"; return "OP"; 
 break;
-case 622: yy_.yytext = "\u2252"; return "OP";
+case 622: yy_.yytext = "\u2252"; return "OP"; 
 break;
-case 623: yy_.yytext = "\u2203"; return "OP";
+case 623: yy_.yytext = "\u2203"; return "OP"; 
 break;
-case 624: yy_.yytext = "\u00F0"; return "A";
+case 624: yy_.yytext = "\u00F0"; return "A"; 
 break;
-case 625: yy_.yytext = "\u00F0"; return "A";
+case 625: yy_.yytext = "\u00F0"; return "A"; 
 break;
-case 626: yy_.yytext = "\u0397"; return "A";
+case 626: yy_.yytext = "\u0397"; return "A"; 
 break;
-case 627: yy_.yytext = "\u03B7"; return "A";
+case 627: yy_.yytext = "\u03B7"; return "A"; 
 break;
-case 628: yy_.yytext = "\u2261"; return "OP";
+case 628: yy_.yytext = "\u2261"; return "OP"; 
 break;
-case 629: this.pushState("TEXTARG"); return "EQROWS";
+case 629: this.pushState("TEXTARG"); return "EQROWS"; 
 break;
-case 630: this.pushState("TEXTARG"); return "EQCOLS";
+case 630: this.pushState("TEXTARG"); return "EQCOLS"; 
 break;
-case 631: yy_.yytext = "\u2A95"; return "OP";
+case 631: yy_.yytext = "\u2A95"; return "OP"; 
 break;
-case 632: yy_.yytext = "\u2A96"; return "OP";
+case 632: yy_.yytext = "\u2A96"; return "OP"; 
 break;
-case 633: yy_.yytext = "\u2242"; return "OP";
+case 633: yy_.yytext = "\u2242"; return "OP"; 
 break;
-case 634: yy_.yytext = "\u003D\u2237"; return "OP";
+case 634: yy_.yytext = "\u003D\u2237"; return "OP"; 
 break;
-case 635: yy_.yytext = "\u2255"; return "OP";
+case 635: yy_.yytext = "\u2255"; return "OP"; 
 break;
-case 636: yy_.yytext = "\u2212\u2237"; return "OP";
+case 636: yy_.yytext = "\u2212\u2237"; return "OP"; 
 break;
-case 637: yy_.yytext = "\u003D\u2237"; return "OP";
+case 637: yy_.yytext = "\u003D\u2237"; return "OP"; 
 break;
-case 638: yy_.yytext = "\u003D\u2237"; return "OP";
+case 638: yy_.yytext = "\u003D\u2237"; return "OP"; 
 break;
-case 639: yy_.yytext = "\u003D\u2237"; return "OP";
+case 639: yy_.yytext = "\u003D\u2237"; return "OP"; 
 break;
-case 640: yy_.yytext = "\u2255"; return "OP";
+case 640: yy_.yytext = "\u2255"; return "OP"; 
 break;
-case 641: yy_.yytext = "\u2256"; return "OP";
+case 641: yy_.yytext = "\u2256"; return "OP"; 
 break;
-case 642: yy_.yytext = "\u03F5"; return "A";
+case 642: yy_.yytext = "\u03F5"; return "A"; 
 break;
 case 643:return "EVVMATRIX";
 break;
 case 644:return "EVMATRIX";
 break;
-case 645: return "ETOGGLE";
+case 645: return "ETOGGLE"; 
 break;
 case 646:return "EALIGNED";
 break;
@@ -2947,303 +2947,303 @@ case 654:return "EARRAY";
 break;
 case 655:return "EALIGNED";
 break;
-case 656: yy_.yytext = "\u2205"; return "A";
+case 656: yy_.yytext = "\u2205"; return "A"; 
 break;
-case 657: yy_.yytext = "\u2205"; return "A";
+case 657: yy_.yytext = "\u2205"; return "A"; 
 break;
-case 658: yy_.yytext = "\u21AA"; return "OPS";
+case 658: yy_.yytext = "\u21AA"; return "OPS"; 
 break;
-case 659: yy_.yytext = "\u2113"; return "A";
+case 659: yy_.yytext = "\u2113"; return "A"; 
 break;
-case 660: yy_.yytext = "\u2195"; return "OPS";
+case 660: yy_.yytext = "\u2195"; return "OPS"; 
 break;
-case 661: yy_.yytext = "\u29DF"; return "OP";
+case 661: yy_.yytext = "\u29DF"; return "OP"; 
 break;
-case 662: yy_.yytext = "\u2910"; return "OPS";
+case 662: yy_.yytext = "\u2910"; return "OPS"; 
 break;
-case 663: yy_.yytext = "\u2195"; return "OPS";
+case 663: yy_.yytext = "\u2195"; return "OPS"; 
 break;
-case 664: yy_.yytext = "\u21C2"; return "OPS";
+case 664: yy_.yytext = "\u21C2"; return "OPS"; 
 break;
-case 665: yy_.yytext = "\u21C3"; return "OPS";
+case 665: yy_.yytext = "\u21C3"; return "OPS"; 
 break;
-case 666: yy_.yytext = "\u21CA"; return "OPS";
+case 666: yy_.yytext = "\u21CA"; return "OPS"; 
 break;
-case 667: yy_.yytext = "\u21D3"; return "OPS";
+case 667: yy_.yytext = "\u21D3"; return "OPS"; 
 break;
-case 668: yy_.yytext = "\u2193"; return "OPS";
+case 668: yy_.yytext = "\u2193"; return "OPS"; 
 break;
-case 669: yy_.yytext = "\u222C"; return "OP";
+case 669: yy_.yytext = "\u222C"; return "OP"; 
 break;
-case 670: yy_.yytext = "\u2306"; return "OP";
+case 670: yy_.yytext = "\u2306"; return "OP"; 
 break;
-case 671: yy_.yytext = "\u2306"; return "OP";
+case 671: yy_.yytext = "\u2306"; return "OP"; 
 break;
-case 672: yy_.yytext = "\u2026"; return "OP";
+case 672: yy_.yytext = "\u2026"; return "OP"; 
 break;
-case 673: yy_.yytext = "\u2214"; return "OP";
+case 673: yy_.yytext = "\u2214"; return "OP"; 
 break;
-case 674: yy_.yytext = "\u2238"; return "OP";
+case 674: yy_.yytext = "\u2238"; return "OP"; 
 break;
-case 675: yy_.yytext = "\u2251"; return "OP";
+case 675: yy_.yytext = "\u2251"; return "OP"; 
 break;
-case 676: yy_.yytext = "\u2251"; return "OP";
+case 676: yy_.yytext = "\u2251"; return "OP"; 
 break;
-case 677: yy_.yytext = "\u2250"; return "OP";
+case 677: yy_.yytext = "\u2250"; return "OP"; 
 break;
-case 678: yy_.yytext = "\u02D9"; return "ACCENT";
+case 678: yy_.yytext = "\u02D9"; return "ACCENT"; 
 break;
-case 679: yy_.yytext = "\u22C7"; return "OP";
+case 679: yy_.yytext = "\u22C7"; return "OP"; 
 break;
-case 680: yy_.yytext = "\u00F7"; return "OP";
+case 680: yy_.yytext = "\u00F7"; return "OP"; 
 break;
 case 681:return "DISPLAYSTYLE";
 break;
-case 682: yy_.yytext = "\u2A08"; return "OPM";
+case 682: yy_.yytext = "\u2A08"; return "OPM"; 
 break;
-case 683: yy_.yytext = "\u03DD"; return "A";
+case 683: yy_.yytext = "\u03DD"; return "A"; 
 break;
-case 684: yy_.yytext = "\u2662"; return "OP";
+case 684: yy_.yytext = "\u2662"; return "OP"; 
 break;
-case 685: yy_.yytext = "\u22C4"; return "OP";
+case 685: yy_.yytext = "\u22C4"; return "OP"; 
 break;
-case 686: yy_.yytext = "\u22C4"; return "OP";
+case 686: yy_.yytext = "\u22C4"; return "OP"; 
 break;
-case 687: yy_.yytext = yy_.yytext.slice(1); return "FM";
+case 687: yy_.yytext = yy_.yytext.slice(1); return "FM"; 
 break;
-case 688: yy_.yytext = "\u0394"; return "A";
+case 688: yy_.yytext = "\u0394"; return "A"; 
 break;
-case 689: yy_.yytext = "\u03B4"; return "A";
+case 689: yy_.yytext = "\u03B4"; return "A"; 
 break;
-case 690: yy_.yytext = "\u2207"; return "OP";
+case 690: yy_.yytext = "\u2207"; return "OP"; 
 break;
-case 691: yy_.yytext = "\u00B0"; return "OP";
+case 691: yy_.yytext = "\u00B0"; return "OP"; 
 break;
-case 692: yy_.yytext = "\u290B"; return "OPS";
+case 692: yy_.yytext = "\u290B"; return "OPS"; 
 break;
-case 693: yy_.yytext = "\u2A77"; return "OP";
+case 693: yy_.yytext = "\u2A77"; return "OP"; 
 break;
-case 694: yy_.yytext = "\u22F1"; return "OP";
+case 694: yy_.yytext = "\u22F1"; return "OP"; 
 break;
-case 695: yy_.yytext = "\u0308"; return "ACCENT";
+case 695: yy_.yytext = "\u0308"; return "ACCENT"; 
 break;
-case 696: yy_.yytext = "\u20DB"; return "OP";
+case 696: yy_.yytext = "\u20DB"; return "OP"; 
 break;
-case 697: yy_.yytext = "\u20DB"; return "ACCENT";
+case 697: yy_.yytext = "\u20DB"; return "ACCENT"; 
 break;
-case 698: yy_.yytext = "\u20DC"; return "OP";
+case 698: yy_.yytext = "\u20DC"; return "OP"; 
 break;
-case 699: yy_.yytext = "\u20DC"; return "ACCENT";
+case 699: yy_.yytext = "\u20DC"; return "ACCENT"; 
 break;
-case 700: yy_.yytext = "\u2021"; return "OP";
+case 700: yy_.yytext = "\u2021"; return "OP"; 
 break;
-case 701: yy_.yytext = "\u2237"; return "OP";
+case 701: yy_.yytext = "\u2237"; return "OP"; 
 break;
-case 702: yy_.yytext = "\u290F"; return "OPS";
+case 702: yy_.yytext = "\u290F"; return "OPS"; 
 break;
-case 703: yy_.yytext = "\u2AE4"; return "OP";
+case 703: yy_.yytext = "\u2AE4"; return "OP"; 
 break;
-case 704: yy_.yytext = "\u2AE3"; return "OP";
+case 704: yy_.yytext = "\u2AE3"; return "OP"; 
 break;
-case 705: yy_.yytext = "\u22A3"; return "OP";
+case 705: yy_.yytext = "\u22A3"; return "OP"; 
 break;
-case 706: yy_.yytext = "\u290F"; return "OPS";
+case 706: yy_.yytext = "\u290F"; return "OPS"; 
 break;
-case 707: yy_.yytext = "\u290E"; return "OPS";
+case 707: yy_.yytext = "\u290E"; return "OPS"; 
 break;
-case 708: yy_.yytext = "\u2193"; return "OPS";
+case 708: yy_.yytext = "\u2193"; return "OPS"; 
 break;
-case 709: yy_.yytext = "\u2138"; return "A";
+case 709: yy_.yytext = "\u2138"; return "A"; 
 break;
-case 710: yy_.yytext = "\u2020"; return "OP";
+case 710: yy_.yytext = "\u2020"; return "OP"; 
 break;
-case 711: yy_.yytext = "\u21B7"; return "OP";
+case 711: yy_.yytext = "\u21B7"; return "OP"; 
 break;
-case 712: yy_.yytext = "\u21B6"; return "OP";
+case 712: yy_.yytext = "\u21B6"; return "OP"; 
 break;
-case 713: yy_.yytext = "\u293B"; return "OP";
+case 713: yy_.yytext = "\u293B"; return "OP"; 
 break;
-case 714: yy_.yytext = "\u22CF"; return "OP";
+case 714: yy_.yytext = "\u22CF"; return "OP"; 
 break;
-case 715: yy_.yytext = "\u22CE"; return "OP";
+case 715: yy_.yytext = "\u22CE"; return "OP"; 
 break;
-case 716: yy_.yytext = "\u22DF"; return "OP";
+case 716: yy_.yytext = "\u22DF"; return "OP"; 
 break;
-case 717: yy_.yytext = "\u22DE"; return "OP";
+case 717: yy_.yytext = "\u22DE"; return "OP"; 
 break;
-case 718: yy_.yytext = "\u228D"; return "OP";
+case 718: yy_.yytext = "\u228D"; return "OP"; 
 break;
-case 719: yy_.yytext = "\u22D3"; return "OP";
+case 719: yy_.yytext = "\u22D3"; return "OP"; 
 break;
-case 720: yy_.yytext = "\u222A"; return "OP";
+case 720: yy_.yytext = "\u222A"; return "OP"; 
 break;
-case 721: yy_.yytext = "\u2210"; return "OPM";
+case 721: yy_.yytext = "\u2210"; return "OPM"; 
 break;
-case 722: yy_.yytext = "\u2210"; return "OPM";
+case 722: yy_.yytext = "\u2210"; return "OPM"; 
 break;
-case 723: yy_.yytext = "\u222E"; return "OP";
+case 723: yy_.yytext = "\u222E"; return "OP"; 
 break;
-case 724: yy_.yytext = "\u2A07"; return "OPM";
+case 724: yy_.yytext = "\u2A07"; return "OPM"; 
 break;
-case 725: yy_.yytext = "\u222E"; return "OP";
+case 725: yy_.yytext = "\u222E"; return "OP"; 
 break;
-case 726: yy_.yytext = "\u2245"; return "OP";
+case 726: yy_.yytext = "\u2245"; return "OP"; 
 break;
-case 727: yy_.yytext = "\u2201"; return "OP";
+case 727: yy_.yytext = "\u2201"; return "OP"; 
 break;
-case 728: this.begin("TEXTARG"); return "COLSPAN";
+case 728: this.begin("TEXTARG"); return "COLSPAN"; 
 break;
-case 729: this.pushState("TEXTARG"); return "COLOR";
+case 729: this.pushState("TEXTARG"); return "COLOR"; 
 break;
-case 730: yy_.yytext = "\u2237\u223C"; return "OP";
+case 730: yy_.yytext = "\u2237\u223C"; return "OP"; 
 break;
-case 731: yy_.yytext = "\u2236\u223C"; return "OP";
+case 731: yy_.yytext = "\u2236\u223C"; return "OP"; 
 break;
-case 732: yy_.yytext = "\u2A74"; return "OP";
+case 732: yy_.yytext = "\u2A74"; return "OP"; 
 break;
-case 733: yy_.yytext = "\u2254"; return "OP";
+case 733: yy_.yytext = "\u2254"; return "OP"; 
 break;
-case 734: yy_.yytext = "\u2237\u2212"; return "OP";
+case 734: yy_.yytext = "\u2237\u2212"; return "OP"; 
 break;
-case 735: yy_.yytext = "\u2254"; return "OP";
+case 735: yy_.yytext = "\u2254"; return "OP"; 
 break;
-case 736: yy_.yytext = "\u2237\u2248"; return "OP";
+case 736: yy_.yytext = "\u2237\u2248"; return "OP"; 
 break;
-case 737: yy_.yytext = "\u2236\u2248"; return "OP";
+case 737: yy_.yytext = "\u2236\u2248"; return "OP"; 
 break;
-case 738: yy_.yytext = "\u2237"; return "OP";
+case 738: yy_.yytext = "\u2237"; return "OP"; 
 break;
-case 739: yy_.yytext = "\u003A"; return "OP";
+case 739: yy_.yytext = "\u003A"; return "OP"; 
 break;
-case 740: this.pushState("TEXTARG"); return "COLLINES";
+case 740: this.pushState("TEXTARG"); return "COLLINES"; 
 break;
 case 741: this.pushState("TEXTARG"); return "COLLAYOUT";
 break;
-case 742: this.begin("TEXTARG"); return "COLALIGN";
+case 742: this.begin("TEXTARG"); return "COLALIGN"; 
 break;
-case 743: yy_.yytext = "\u2663"; return "OP";
+case 743: yy_.yytext = "\u2663"; return "OP"; 
 break;
-case 744: yy_.yytext = "\u00AF"; return "ACCENT";
+case 744: yy_.yytext = "\u00AF"; return "ACCENT"; 
 break;
-case 745: yy_.yytext = "\u229D"; return "OP";
+case 745: yy_.yytext = "\u229D"; return "OP"; 
 break;
-case 746: yy_.yytext = "\u229A"; return "OP";
+case 746: yy_.yytext = "\u229A"; return "OP"; 
 break;
-case 747: yy_.yytext = "\u229B"; return "OP";
+case 747: yy_.yytext = "\u229B"; return "OP"; 
 break;
-case 748: yy_.yytext = "\u2941"; return "OP";
+case 748: yy_.yytext = "\u2941"; return "OP"; 
 break;
-case 749: yy_.yytext = "\u2940"; return "OP";
+case 749: yy_.yytext = "\u2940"; return "OP"; 
 break;
-case 750: yy_.yytext = "\u2257"; return "OP";
+case 750: yy_.yytext = "\u2257"; return "OP"; 
 break;
-case 751: yy_.yytext = "\u2218"; return "OP";
+case 751: yy_.yytext = "\u2218"; return "OP"; 
 break;
 case 752:return "TEXCHOOSE";
 break;
-case 753: yy_.yytext = "\u03C7"; return "A";
+case 753: yy_.yytext = "\u03C7"; return "A"; 
 break;
-case 754: yy_.yytext = "\u02C7"; return "ACCENTNS";
+case 754: yy_.yytext = "\u02C7"; return "ACCENTNS"; 
 break;
 case 755:return "CELLOPTS";
 break;
-case 756: yy_.yytext = "\u22EF"; return "OP";
+case 756: yy_.yytext = "\u22EF"; return "OP"; 
 break;
-case 757: yy_.yytext = "\u00B7"; return "OP";
+case 757: yy_.yytext = "\u00B7"; return "OP"; 
 break;
-case 758: yy_.yytext = "\u22C5"; return "OP";
+case 758: yy_.yytext = "\u22C5"; return "OP"; 
 break;
-case 759: yy_.yytext = "\u22D2"; return "OP";
+case 759: yy_.yytext = "\u22D2"; return "OP"; 
 break;
-case 760: yy_.yytext = "\u2229"; return "OP";
+case 760: yy_.yytext = "\u2229"; return "OP"; 
 break;
-case 761: yy_.yytext = "\u2AAE"; return "OP";
+case 761: yy_.yytext = "\u2AAE"; return "OP"; 
 break;
-case 762: yy_.yytext = "\u224E"; return "OP";
+case 762: yy_.yytext = "\u224E"; return "OP"; 
 break;
-case 763: yy_.yytext = "\u224F"; return "OP";
+case 763: yy_.yytext = "\u224F"; return "OP"; 
 break;
-case 764: yy_.yytext = "\u2022"; return "OP";
+case 764: yy_.yytext = "\u2022"; return "OP"; 
 break;
-case 765: yy_.yytext = "\u2A32"; return "OP";
+case 765: yy_.yytext = "\u2A32"; return "OP"; 
 break;
-case 766: yy_.yytext = "\u22A0"; return "OP";
+case 766: yy_.yytext = "\u22A0"; return "OP"; 
 break;
-case 767: yy_.yytext = "\u229E"; return "OP";
+case 767: yy_.yytext = "\u229E"; return "OP"; 
 break;
-case 768: yy_.yytext = "\u229F"; return "OP";
+case 768: yy_.yytext = "\u229F"; return "OP"; 
 break;
 case 769:return "BOXED";
 break;
-case 770: yy_.yytext = "\u22A1"; return "OP";
+case 770: yy_.yytext = "\u22A1"; return "OP"; 
 break;
-case 771: yy_.yytext = "\u29C4"; return "OP";
+case 771: yy_.yytext = "\u29C4"; return "OP"; 
 break;
-case 772: yy_.yytext = "\u29C7"; return "OP";
+case 772: yy_.yytext = "\u29C7"; return "OP"; 
 break;
-case 773: yy_.yytext = "\u29C5"; return "OP";
+case 773: yy_.yytext = "\u29C5"; return "OP"; 
 break;
-case 774: yy_.yytext = "\u29C6"; return "OP";
+case 774: yy_.yytext = "\u29C6"; return "OP"; 
 break;
-case 775: yy_.yytext = "\u25A1"; return "OP";
+case 775: yy_.yytext = "\u25A1"; return "OP"; 
 break;
-case 776: yy_.yytext = "\u22C8"; return "OP";
+case 776: yy_.yytext = "\u22C8"; return "OP"; 
 break;
-case 777: yy_.yytext = "\u22A5"; return "OP";
+case 777: yy_.yytext = "\u22A5"; return "OP"; 
 break;
-case 778: yy_.yytext = "\u22A5"; return "OP";
+case 778: yy_.yytext = "\u22A5"; return "OP"; 
 break;
 case 779:return "MATHBF";
 break;
-case 780: yy_.yytext = "\u25B8"; return "OP";
+case 780: yy_.yytext = "\u25B8"; return "OP"; 
 break;
-case 781: yy_.yytext = "\u25C2"; return "OP";
+case 781: yy_.yytext = "\u25C2"; return "OP"; 
 break;
-case 782: yy_.yytext = "\u25BE"; return "OP";
+case 782: yy_.yytext = "\u25BE"; return "OP"; 
 break;
-case 783: yy_.yytext = "\u25B4"; return "OP";
+case 783: yy_.yytext = "\u25B4"; return "OP"; 
 break;
-case 784: yy_.yytext = "\u25A0"; return "OP";
+case 784: yy_.yytext = "\u25A0"; return "OP"; 
 break;
-case 785: yy_.yytext = "\u29EB"; return "OP";
+case 785: yy_.yytext = "\u29EB"; return "OP"; 
 break;
-case 786: yy_.yytext = "\u290D"; return "OPS";
+case 786: yy_.yytext = "\u290D"; return "OPS"; 
 break;
 case 787:return "BINOM";
 break;
-case 788: yy_.yytext = "\u22C0"; return "OPM";
+case 788: yy_.yytext = "\u22C0"; return "OPM"; 
 break;
-case 789: yy_.yytext = "\u22C1"; return "OPM";
+case 789: yy_.yytext = "\u22C1"; return "OPM"; 
 break;
-case 790: yy_.yytext = "\u2A04"; return "OPM";
+case 790: yy_.yytext = "\u2A04"; return "OPM"; 
 break;
-case 791: yy_.yytext = "\u25B3"; return "OP";
+case 791: yy_.yytext = "\u25B3"; return "OP"; 
 break;
-case 792: yy_.yytext = "\u25BD"; return "OP";
+case 792: yy_.yytext = "\u25BD"; return "OP"; 
 break;
-case 793: yy_.yytext = "\u2A09"; return "OPM";
+case 793: yy_.yytext = "\u2A09"; return "OPM"; 
 break;
-case 794: yy_.yytext = "\u2605"; return "OP";
+case 794: yy_.yytext = "\u2605"; return "OP"; 
 break;
-case 795: yy_.yytext = "\u2A06"; return "OPM";
+case 795: yy_.yytext = "\u2A06"; return "OPM"; 
 break;
-case 796: yy_.yytext = "\u2A05"; return "OPM";
+case 796: yy_.yytext = "\u2A05"; return "OPM"; 
 break;
 case 797:return "BBIG";
 break;
 case 798:return "BIG";
 break;
-case 799: yy_.yytext = "\u2A02"; return "OPM";
+case 799: yy_.yytext = "\u2A02"; return "OPM"; 
 break;
-case 800: yy_.yytext = "\u2A01"; return "OPM";
+case 800: yy_.yytext = "\u2A01"; return "OPM"; 
 break;
-case 801: yy_.yytext = "\u2A00"; return "OPM";
+case 801: yy_.yytext = "\u2A00"; return "OPM"; 
 break;
 case 802:return "BBIGL";
 break;
 case 803:return "BIGL";
 break;
-case 804: yy_.yytext = "\u2AFC"; return "OPM";
+case 804: yy_.yytext = "\u2AFC"; return "OPM"; 
 break;
 case 805:return "BBIGG";
 break;
@@ -3257,33 +3257,33 @@ case 809:return "BBIGG";
 break;
 case 810:return "BIGG";
 break;
-case 811: yy_.yytext = "\u2A03"; return "OPM";
+case 811: yy_.yytext = "\u2A03"; return "OPM"; 
 break;
-case 812: yy_.yytext = "\u22C3"; return "OPM";
+case 812: yy_.yytext = "\u22C3"; return "OPM"; 
 break;
-case 813: yy_.yytext = "\u25CB"; return "OP";
+case 813: yy_.yytext = "\u25CB"; return "OP"; 
 break;
-case 814: yy_.yytext = "\u22C2"; return "OPM";
+case 814: yy_.yytext = "\u22C2"; return "OPM"; 
 break;
 case 815:return "BBIG";
 break;
 case 816:return "BIG";
 break;
-case 817: this.pushState("TEXTARG"); return "BGCOLOR";
+case 817: this.pushState("TEXTARG"); return "BGCOLOR"; 
 break;
-case 818: yy_.yytext = "\u226C"; return "OP";
+case 818: yy_.yytext = "\u226C"; return "OP"; 
 break;
-case 819: yy_.yytext = "\u2136"; return "A";
+case 819: yy_.yytext = "\u2136"; return "A"; 
 break;
-case 820: yy_.yytext = "\u0392"; return "A";
+case 820: yy_.yytext = "\u0392"; return "A"; 
 break;
-case 821: yy_.yytext = "\u03B2"; return "A";
+case 821: yy_.yytext = "\u03B2"; return "A"; 
 break;
 case 822:return "BVVMATRIX";
 break;
 case 823:return "BVMATRIX";
 break;
-case 824: return "BTOGGLE";
+case 824: return "BTOGGLE"; 
 break;
 case 825:return "BALIGNED";
 break;
@@ -3301,73 +3301,73 @@ case 831:return "BBBMATRIX";
 break;
 case 832:return "BBMATRIX";
 break;
-case 833: this.pushState("TEXTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); return "BARRAY";
+case 833: this.pushState("TEXTARG"); this.pushState("TEXTOPTARG"); this.pushState("TRYOPTARG"); return "BARRAY"; 
 break;
 case 834:return "BALIGNED";
 break;
-case 835: yy_.yytext = "\u2235"; return "OP";
+case 835: yy_.yytext = "\u2235"; return "OP"; 
 break;
-case 836: yy_.yytext = "\u213F"; return "A";
+case 836: yy_.yytext = "\u213F"; return "A"; 
 break;
-case 837: yy_.yytext = "\u2305"; return "OP";
+case 837: yy_.yytext = "\u2305"; return "OP"; 
 break;
-case 838: yy_.yytext = "\u00AF"; return "ACCENTNS";
+case 838: yy_.yytext = "\u00AF"; return "ACCENTNS"; 
 break;
-case 839: yy_.yytext = "\u005C"; return "OP";
+case 839: yy_.yytext = "\u005C"; return "OP"; 
 break;
-case 840: yy_.yytext = "\u22CD"; return "OP";
+case 840: yy_.yytext = "\u22CD"; return "OP"; 
 break;
-case 841: yy_.yytext = "\u223D"; return "OP";
+case 841: yy_.yytext = "\u223D"; return "OP"; 
 break;
-case 842: yy_.yytext = "\u2035"; return "OPP";
+case 842: yy_.yytext = "\u2035"; return "OPP"; 
 break;
-case 843: yy_.yytext = "\u03F6"; return "OP";
+case 843: yy_.yytext = "\u03F6"; return "OP"; 
 break;
 case 844:return "TEXATOP";
 break;
-case 845: yy_.yytext = "\u224D"; return "OP";
+case 845: yy_.yytext = "\u224D"; return "OP"; 
 break;
-case 846: yy_.yytext = "\u2217"; return "OP";
+case 846: yy_.yytext = "\u2217"; return "OP"; 
 break;
 case 847:return "ARRAYOPTS";
 break;
 case 848:return "ARRAY";
 break;
-case 849: yy_.yytext = yy_.yytext.slice(1); return "F";
+case 849: yy_.yytext = yy_.yytext.slice(1); return "F"; 
 break;
-case 850: yy_.yytext = "\u224A"; return "OP";
+case 850: yy_.yytext = "\u224A"; return "OP"; 
 break;
-case 851: yy_.yytext = "\u2248"; return "OP";
+case 851: yy_.yytext = "\u2248"; return "OP"; 
 break;
-case 852: yy_.yytext = "\u2220"; return "OP";
+case 852: yy_.yytext = "\u2220"; return "OP"; 
 break;
-case 853: yy_.yytext = "\u2A3F"; return "OP";
+case 853: yy_.yytext = "\u2A3F"; return "OP"; 
 break;
-case 854: yy_.yytext = "\u0391"; return "A";
+case 854: yy_.yytext = "\u0391"; return "A"; 
 break;
-case 855: yy_.yytext = "\u03B1"; return "A";
+case 855: yy_.yytext = "\u03B1"; return "A"; 
 break;
-case 856: this.pushState("TEXTARG"); return "ALIGN";
+case 856: this.pushState("TEXTARG"); return "ALIGN"; 
 break;
-case 857: yy_.yytext = "\u2135"; return "A";
+case 857: yy_.yytext = "\u2135"; return "A"; 
 break;
-case 858: yy_.yytext = "\u22F0"; return "OP";
+case 858: yy_.yytext = "\u22F0"; return "OP"; 
 break;
-case 859: yy_.yytext = "\u212B"; return "A";
+case 859: yy_.yytext = "\u212B"; return "A"; 
 break;
 case 860:return "A";
 break;
-case 861: yy_.yytext = "\u0025"; return "A";
+case 861: yy_.yytext = "\u0025"; return "A"; 
 break;
-case 862: yy_.yytext = "\u0023"; return "OP";
+case 862: yy_.yytext = "\u0023"; return "OP"; 
 break;
-case 863: yy_.yytext = "\u0026"; return "A";
+case 863: yy_.yytext = "\u0026"; return "A"; 
 break;
-case 864: yy_.yytext = "\u0024"; return "A";
+case 864: yy_.yytext = "\u0024"; return "A"; 
 break;
-case 865: yy_.yytext = "\u007D"; return "OPFS";
+case 865: yy_.yytext = "\u007D"; return "OPFS"; 
 break;
-case 866: yy_.yytext = "\u007B"; return "OPFS";
+case 866: yy_.yytext = "\u007B"; return "OPFS"; 
 break;
 case 867:return "NEGSPACE";
 break;
@@ -3377,15 +3377,15 @@ case 869:return "THICKSPACE";
 break;
 case 870:return "THINSPACE";
 break;
-case 871: yy_.yytext = "\u2016"; return "OPFS";
+case 871: yy_.yytext = "\u2016"; return "OPFS"; 
 break;
-case 872: yy_.yytext = "\u2057"; return "OPP";
+case 872: yy_.yytext = "\u2057"; return "OPP"; 
 break;
-case 873: yy_.yytext = "\u2034"; return "OPP";
+case 873: yy_.yytext = "\u2034"; return "OPP"; 
 break;
-case 874: yy_.yytext = "\u2033"; return "OPP";
+case 874: yy_.yytext = "\u2033"; return "OPP"; 
 break;
-case 875: yy_.yytext = "\u2032"; return "OPP";
+case 875: yy_.yytext = "\u2032"; return "OPP"; 
 break;
 case 876:return "HIGH_SURROGATE";
 break;
@@ -3576,7 +3576,7 @@ if (typeof require !== "undefined") {
       aResponse.end();
     });
   };
-
+  
   var startWebServer = function (aPort)
   {
     try {
@@ -3718,7 +3718,7 @@ CKEDITOR.dialog.add("texzillaDialog", function(editor) {
             }, {
                 id: "instruction",
                 type: "html",
-                html: "<div>For example: &#92;sum_{n=1}^{+&#92;infty} &#92;frac{1}{n^2} = &#92;frac{&#92;pi^2}{6} <br \> MathML support required in browser (not supported in Chrome) <br \> (Clicking outside of the textarea updates the preview)</div>"
+                html: "<div>(Clicking outside of the textarea updates the preview)</div>"
             }, {
                 id: "options",
                 type: "html",
