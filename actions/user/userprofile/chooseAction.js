@@ -7,7 +7,7 @@ const clog = require('../../log/clog');
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups'],
     settings: ['profile', 'account', 'integrations'],
-    groups: ['overview']
+    groups: ['overview', 'edit']
 };
 
 export function chooseAction(context, payload, done) {

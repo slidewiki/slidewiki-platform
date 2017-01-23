@@ -3,7 +3,7 @@ import removeUser from '../../../actions/user/userprofile/removeUser';
 
 class DeactivateAccount extends React.Component {
 
-    handleAccountDelete(e) {
+    handleAccountDeactivate(e) {
         this.context.executeAction(removeUser, {});
         $(this.refs.modal1).modal('hide');
     }
@@ -23,20 +23,20 @@ class DeactivateAccount extends React.Component {
                 </div>
 
                 <div className="ui modal" ref="modal1">
-                    <div className="ui red header">Refuse the cake</div>
+                    <div className="ui red header">Deactivate SlideWiki Account</div>
                     <div className="image content">
                         <i className="ui massive warning sign icon"/>
                         <div className="description">
-                            <div className="ui header">Are you sure you do not want any cake?</div>
-                            <p>I know we do not had the best relationship ever.... in case it seems to be pretty bad. But remember the cake at the end of all these tests! Or do I try to trick you with reverse psychology? I mean, seriously, now.</p>
+                            <div className="ui header">Are you sure you want to deactivate your SlideWiki Account?</div>
+                            <p>Deactivating your account will remove your profile and account from SlideWiki. The content you have added to SlideWiki will remain. Do you wish to continue?</p>
                         </div>
                     </div>
                     <div className="actions">
                         <div className="ui green right labeled icon deny button">
-                            <i className="checkmark icon"></i> Cake? I am still in!
+                            <i className="checkmark icon"></i> Cancel
                         </div>
-                        <div className="ui red right labeled icon button" onClick={ this.handleAccountDelete.bind(this) }>
-                        <i className="sign out icon"></i> I don not like cake, I will leave!
+                        <div className="ui red right labeled icon button" onClick={ this.handleAccountDeactivate.bind(this) }>
+                        <i className="sign out icon"></i> Deactivate account
                         </div>
                     </div>
                 </div>

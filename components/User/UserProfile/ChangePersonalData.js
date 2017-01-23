@@ -33,24 +33,24 @@ class ChangePersonalData extends React.Component {
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
                     <div className="two fields">
                         <div className="ui field">
-                            <label>Firstname</label>
-                            <input type="text" placeholder="John" name="fname" defaultValue={this.props.user.fname} ref="fname" required/>
+                            <label htmlFor="fname">Firstname</label>
+                            <input type="text" placeholder="John" name="fname" id="fname" defaultValue={this.props.user.fname} ref="fname" required/>
                         </div>
                         <div className="ui field">
-                            <label>Lastname</label>
-                            <input type="text" placeholder="Doe" name="lname" defaultValue={this.props.user.lname} ref="lname" required/>
+                            <label htmlFor="lname">Lastname</label>
+                            <input type="text" placeholder="Doe" name="lname" id="lname" defaultValue={this.props.user.lname} ref="lname" required/>
                         </div>
                     </div>
 
                     <div className="two fields">
                         <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="">
-                            <label>E-Mail</label>
-                            <input type="email" placeholder="j.doe@ex.org" name="email" defaultValue={this.props.user.email} ref="email" required/>
+                            <label htmlFor="email">E-Mail</label>
+                            <input type="email" placeholder="j.doe@ex.org" name="email" id="email" defaultValue={this.props.user.email} ref="email" required/>
                         </div>
                         <div className="ui field">
                             <div className="ui field">
-                                <label>Language</label>
-                                <LanguageDropdown ref="language" required={true} language={this.props.user.language}/>
+                                <label htmlFor="language">Interface language</label>
+                                <LanguageDropdown ref="language" id="language" required={true} language={this.props.user.language}/>
                             </div>
                         </div>
                     </div>
@@ -58,19 +58,19 @@ class ChangePersonalData extends React.Component {
                     <div className="two fields">
                         <div className="ui field">
                             <div className="ui field">
-                                <label>Country</label>
-                                <CountryDropdown ref="country" required={false} country={this.props.user.country}/>
+                                <label htmlFor="country">Country</label>
+                                <CountryDropdown ref="country" id="country" required={false} country={this.props.user.country}/>
                             </div>
                         </div>
                         <div className="ui field">
-                            <label>Organization</label>
-                            <input type="text" placeholder="Google" name="organization" defaultValue={this.props.user.organization} ref="organization"/>
+                            <label htmlFor="organization">Organization</label>
+                            <input type="text" placeholder="Google" name="organization" id="organization" defaultValue={this.props.user.organization} ref="organization"/>
                         </div>
                     </div>
 
                     <div className="ui field">
-                        <label>Bio</label>
-                        <textarea rows="2" maxLength="120" placeholder="A few words about yourself - max 120 characters" name="description" defaultValue={this.props.user.description} ref="description"/>
+                        <label htmlFor="bio">Biography</label>
+                        <textarea rows="2" maxLength="120" placeholder="A few words about yourself - max 120 characters" id="bio" name="description" defaultValue={this.props.user.description} ref="description"/>
                     </div>
 
                     <button type="submit" className="ui blue labeled submit icon button">

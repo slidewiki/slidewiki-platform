@@ -31,28 +31,28 @@ class HeaderDropdown extends React.Component {
     render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
         return(
-            <div className="ui top right pointing dropdown" ref="userDropDown">
+            <div className="ui top right pointing dropdown" ref="userDropDown" role="button" aria-haspopup="true" aria-label="User management">
                 <div className="text">
-                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 }/>
+                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>
-                <div className="menu">
+                <div className="menu" role="menu">
                     <div className="header">
                         {this.props.UserProfileStore.username}
                     </div>
                     <div className="divider"></div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username}>
-                        <i className="user icon link"/> My Decks
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
+                        <i className="user icon link"  /> My Decks
                     </div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}>
-                        <i className="setting icon"/> My Settings
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
+                        <i className="setting icon" /> My Settings
                     </div>
-                    <div className="item" data-value={'logout'}>
-                        <i className="sign out icon"/> Sign Out
+                    <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
+                        <i className="sign out icon"  /> Sign Out
                     </div>
                 </div>
             </div>
-      );
+        );
     }
 }
 

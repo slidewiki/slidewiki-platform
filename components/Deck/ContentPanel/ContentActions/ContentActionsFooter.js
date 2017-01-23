@@ -6,12 +6,13 @@ import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
-
+import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
         super(props);
-        this.state={expanded: 0};
+        //this.state={expanded: 0};
+        this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -121,4 +122,10 @@ class ContentActionsFooter extends React.Component {
 ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore], (context, props) => {
+    return {
+        ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState()
+    };
+});
 export default ContentActionsFooter;

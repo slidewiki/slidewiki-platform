@@ -17,6 +17,17 @@ export default function loadContentHistory(context, payload, done) {
         return;
     }
 
+    // we need the spath for the history service call
+    if (isEmpty(payload.params.spath)) {
+        // in current state of the UI, the history tab is always loaded alongside the deck tree,
+        // and the loading happens on user click after the page has completed loading,
+        // therefore the spath is already calculated and stored in the DeckTreeStore state
+        let deckTreeStore = context.getStore(DeckTreeStore);
+        let deckTreeState = deckTreeStore.getState();
+
+        payload.params.spath = deckTreeState.selector.get('spath');
+    }
+
     context.service.read('history.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             clog.error(context, payload, {filepath: __filename, err: err});

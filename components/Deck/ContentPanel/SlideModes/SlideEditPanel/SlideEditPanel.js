@@ -1,17 +1,20 @@
 import React from 'react';
-import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import ContentUtil from '../../util/ContentUtil';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import RevisioningStore from '../../../../../stores/RevisioningStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
-import needsNewRevisionCheck from '../../../../../actions/revisioning/needsNewRevisionCheck';
-import handleRevisionChanges from '../../../../../actions/revisioning/handleRevisionChanges';
 import SlideContentEditor from './SlideContentEditor';
-import Error from '../../../../../components/Error/Error';
-const ReactDOM = require('react-dom');
+import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
+
+
 
 class SlideEditPanel extends React.Component {
+    componentWillUnmount(){
+        //show deckTree again
+        context.executeAction(restoreDeckPageLayout,{});
+
+    }
+
     render() {
         //------------------we need to check the revisioning conditions
         //handle the notifications --> in process.env.BROWSER
