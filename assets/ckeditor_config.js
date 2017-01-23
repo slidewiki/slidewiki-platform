@@ -12,7 +12,6 @@
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
-CKEDITOR.plugins.addExternal('texzilla', '/custom_modules/texzilla/');
 
 
 CKEDITOR.disableAutoInline = true;
@@ -36,10 +35,8 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
             { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
-            //{ name: 'formula', items: [ 'Mathjax'] },
-            { name: 'source', items: [ 'texzilla'] },
+            { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
             { name: 'document', items: [ 'Sourcedialog'] },
@@ -160,7 +157,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,texzilla,youtube';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
@@ -170,10 +167,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.extraPlugins = 'texzilla';
     //config.extraPlugins = 'youtube';
 
-
-    // does not work and conflicts with codesnippet
-    //config.extraPlugins = 'mathjax';
-    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    config.mathJaxLib = '/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
 
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*

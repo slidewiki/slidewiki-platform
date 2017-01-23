@@ -58,6 +58,9 @@ class SlideViewPanel extends React.Component {
     }
     componentDidMount(){
         if(process.env.BROWSER){
+            // update mathjax rendering
+            // add to the mathjax rendering queue the command to type-set the inlineContent
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,"inlineContent"]);
 
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
