@@ -80,7 +80,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.entities_latin = false;
     config.entities_greek = false;
     config.entities_processNumerical = false;
-    config.allowedContent = true; // don't filter my data
+    config.allowedContent = true; // don't filter my data 
 
 
     //'div,' +
