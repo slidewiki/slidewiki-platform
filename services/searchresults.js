@@ -9,7 +9,7 @@ export default {
         let args = params.params? params.params : params;
 
         if(resource === 'searchresults.list'){
-
+            
             // fetch results from search-microservice
             rp.get({uri: Microservices.search.uri + '/get/' + args.queryparams}).then((results) => {
                 let searchResults = JSON.parse(results);
@@ -36,7 +36,7 @@ export default {
                             kind: 'Deck',
                             title: firstRevision.title,
                             description: (res.description && res.description.length > 85) ? res.description.substring(0,85)+'...' : res.description,
-                            lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
+                            lastModified: customDate.format(res.lastUpdate, 'Do MMMM YYYY'),
                             user: {
                                 id: firstRevision.user,
                                 username: '',
@@ -60,7 +60,7 @@ export default {
                             kind: 'Slide',
                             title: firstRevision.title,
                             description: (firstRevision.content && firstRevision.content.length > 85) ? firstRevision.content.substring(0,85)+'...' : firstRevision.content,
-                            lastModified: customDate.format(firstRevision.timestamp, 'Do MMMM YYYY'),
+                            lastModified: customDate.format(res.lastUpdate, 'Do MMMM YYYY'),
                             user: {
                                 id: firstRevision.user,
                                 username: '',
