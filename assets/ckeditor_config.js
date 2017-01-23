@@ -11,9 +11,8 @@
     // to add a line in the toolbar
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
-CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+//CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('texzilla', '/custom_modules/texzilla/');
-CKEDITOR.plugins.addExternal('mathjax', '/custom_modules/mathjax/');
 
 
 CKEDITOR.disableAutoInline = true;
@@ -33,14 +32,14 @@ CKEDITOR.editorConfig = function( config ) {
         '/',
             { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
+            //{ name: 'styles', items: [ 'lineheight' ] },
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
             //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
             { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
-            { name: 'formula', items: [ 'Mathjax'] },
-            //{ name: 'source', items: [ 'texzilla'] },
+            //{ name: 'formula', items: [ 'Mathjax'] },
+            { name: 'source', items: [ 'texzilla'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
             { name: 'document', items: [ 'Sourcedialog'] },
@@ -117,7 +116,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'link,' +
 		'list,' +
 		'liststyle,' +
-        'lineheight,' +
+        //'lineheight,' +
 		'magicline,' +
 		'maximize,' +
 		'newpage,' +
@@ -172,12 +171,25 @@ CKEDITOR.editorConfig = function( config ) {
     //config.extraPlugins = 'youtube';
 
 
-    // does not work and conflicts with codesnippet
+    // requires extra library to show resulting latex
     config.extraPlugins = 'mathjax';
     //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_SVG';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-MML-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_CHTML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_CHTML-full';
     config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
-    config.mathJaxClass = 'my-math';
-    
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_SVG';
+    //<script type="text/javascript" src="//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    //config.mathJaxClass = 'my-math';
+    //config.mathJaxClass = 'math-tex';
+    //config.mathJaxClass = 'equation';
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
