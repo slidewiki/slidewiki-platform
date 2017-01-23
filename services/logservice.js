@@ -22,23 +22,29 @@ export default {
             msg = [];
 
         switch(resource) {
-            case 'log.silly':
-                clog.silly({id: req.id, navStack: body.navStack, message: msg});
-                break;
             case 'log.debug':
                 clog.debug({id: req.id, navStack: body.navStack, message: msg});
                 break;
             case 'log.info':
                 clog.info({id: req.id, navStack: body.navStack, message: msg});
                 break;
-            case 'log.verbose':
-                clog.verbose({id: req.id, navStack: body.navStack, message: msg});
+            case 'log.notice':
+                clog.notice({id: req.id, navStack: body.navStack, message: msg});
                 break;
-            case 'log.warn':
-                clog.warn({id: req.id, navStack: body.navStack, message: msg});
+            case 'log.warning':
+                clog.warning({id: req.id, navStack: body.navStack, message: msg});
                 break;
             case 'log.error':
                 clog.error({id: req.id, navStack: body.navStack, message: msg});
+                break;
+            case 'log.crit':
+                clog.crit({id: req.id, navStack: body.navStack, message: msg});
+                break;
+            case 'log.alert':
+                clog.alert({id: req.id, navStack: body.navStack, message: msg});
+                break;
+            case 'log.emerg':
+                clog.emerg({id: req.id, navStack: body.navStack, message: msg});
                 break;
         }
         return;
