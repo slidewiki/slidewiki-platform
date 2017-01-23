@@ -20,7 +20,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
 
-    config.uiColor = '#4183C4';
+    //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
     //config.extraPlugins = 'sourcedialog';
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
@@ -80,7 +80,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.entities_latin = false;
     config.entities_greek = false;
     config.entities_processNumerical = false;
-    config.allowedContent = true; // don't filter my data 
+    config.allowedContent = true; // don't filter my data
 
 
     //'div,' +
@@ -171,10 +171,25 @@ CKEDITOR.editorConfig = function( config ) {
     //config.extraPlugins = 'youtube';
 
 
-    // does not work and conflicts with codesnippet
-    //config.extraPlugins = 'mathjax';
+    // requires extra library to show resulting latex
+    config.extraPlugins = 'mathjax';
     //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_SVG';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-MML-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_CHTML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_CHTML-full';
+    config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_SVG';
+    //<script type="text/javascript" src="//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    //config.mathJaxClass = 'my-math';
+    //config.mathJaxClass = 'math-tex';
+    //config.mathJaxClass = 'equation';
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
