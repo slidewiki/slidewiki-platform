@@ -44,6 +44,9 @@ server.use('/es6-shim', express.static(path.join(__dirname, '/node_modules/es6-s
 server.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery')));
 server.use('/sweetalert2', express.static(path.join(__dirname, '/node_modules/sweetalert2')));
 server.use('/headjs', express.static(path.join(__dirname, '/node_modules/headjs')));
+server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckeditor')));
+server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
+server.use('/ckeditor-plugins/lineheight', express.static(path.join(__dirname, 'node_modules/ckeditor-lineheight-plugin')));
 
 //server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance

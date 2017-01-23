@@ -51,6 +51,45 @@ export default {
             })
             .then((body) => callback(null, params))
             .catch((err) => callback(err));
+        } else if (resource === 'userProfile.saveUsergroup') {
+            let tosend = {
+                id: params.id,
+                name: params.name,
+                description: !isEmpty(params.description) ? params.description : '',
+                isActive: !isEmpty(params.isActive) ? params.isActive : true,
+                timestamp: !isEmpty(params.timestamp) ? params.timestamp : (new Date()).toISOString(),
+                members: params.members
+            };
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/usergroup/createorupdate',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                body: tosend,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.deleteUsergroup') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.user.uri + '/usergroup/' + params.groupid,
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.leaveUsergroup') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/usergroup/' + params.groupid + '/leave',
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                timeout: body.timeout
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
         } else {
             callback('failure');
         }
@@ -77,7 +116,8 @@ export default {
                         country: !isEmpty(body.country) ? body.country : '',
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : ''
+                        description: !isEmpty(body.description) ? body.description : '',
+                        groups: !isEmpty(body.groups) ? body.groups : []
                     };
                     callback(null, converted);
                 })

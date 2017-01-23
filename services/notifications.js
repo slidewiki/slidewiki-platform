@@ -23,7 +23,10 @@ export default {
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         let args = params.params? params.params : params;
-        const uid = args.uid;//TODO use uid when calling the service
+        let uid = args.uid;
+        if (uid === undefined) {
+            uid = 0;
+        }
         // let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
 
         // if (resource === 'notifications.count'){
@@ -39,22 +42,24 @@ export default {
             // let notifications = mockupNotifications;
             let subscriptionsString = '';
             // callback(null, {notifications: notifications, subscriptions: subscriptions});
-            mockupSubscriptions.forEach((subscription) => {
-                // const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
-                const id = subscription.id;
-                switch (subscription.type) {
-                    case 'user':
-                        subscriptionsString += '/u' + id;
-                        break;
-                    case 'slide':
-                        subscriptionsString += '/s' + id;
-                        break;
-                    case 'deck':
-                        subscriptionsString += '/d' + id;
-                        break;
-                    default:
-                }
-            });
+            // mockupSubscriptions.forEach((subscription) => {
+            //     // const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
+            //     const id = subscription.id;
+            //     switch (subscription.type) {
+            //         case 'user':
+            //             subscriptionsString += '/u' + id;
+            //             break;
+            //         case 'slide':
+            //             subscriptionsString += '/s' + id;
+            //             break;
+            //         case 'deck':
+            //             subscriptionsString += '/d' + id;
+            //             break;
+            //         default:
+            //     }
+            // });
+
+            subscriptionsString += '/o' + uid;
 
             rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
                 let notifications = JSON.parse(res);
