@@ -7,7 +7,7 @@ exports.error = function(context, payload, msg='') {
     return;
 };
 
-exports.warn = function(context, payload, msg='') {
+exports.warning = function(context, payload, msg='') {
     const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
     context.service.update('log.warn', payload, body, (err, res) => {
         if (err)
@@ -25,9 +25,9 @@ exports.info = function(context, payload, msg='') {
     return;
 };
 
-exports.verbose = function(context, payload, msg='') {
+exports.crit = function(context, payload, msg='') {
     const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
-    context.service.update('log.verbose', payload, body, (err, res) => {
+    context.service.update('log.crit', payload, body, (err, res) => {
         if (err)
             console.log(err);
     });
@@ -43,9 +43,27 @@ exports.debug = function(context, payload, msg='') {
     return;
 };
 
-exports.silly = function(context, payload, msg='') {
+exports.notice = function(context, payload, msg='') {
     const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
-    context.service.update('log.silly', payload, body, (err, res) => {
+    context.service.update('log.notice', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
+    });
+    return;
+};
+
+exports.emerg = function(context, payload, msg='') {
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    context.service.update('log.emerg', payload, body, (err, res) => {
+        if (err)
+            console.log(err);
+    });
+    return;
+};
+
+exports.alert = function(context, payload, msg='') {
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    context.service.update('log.alert', payload, body, (err, res) => {
         if (err)
             console.log(err);
     });
