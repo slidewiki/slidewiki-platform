@@ -113,6 +113,7 @@ class SlideContentEditor extends React.Component {
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
 
         if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
+            customConfig: '/assets/ckeditor_config.js',
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
@@ -137,6 +138,7 @@ class SlideContentEditor extends React.Component {
         //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
         //TODO - remove more buttons speakernotes
         if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
+            customConfig: '/assets/ckeditor_config.js',
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
@@ -169,7 +171,9 @@ class SlideContentEditor extends React.Component {
             //alert('test: ' + Microservices.import.uri + '/importImage/' + userId);
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
-            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
+            CKEDITOR.inline('inlineContent', {
+                customConfig: '/assets/ckeditor_config.js',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
 
         }
         this.currentcontent = this.props.content;
