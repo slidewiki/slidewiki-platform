@@ -11,7 +11,7 @@
     // to add a line in the toolbar
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
-//CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('texzilla', '/custom_modules/texzilla/');
 
 
@@ -20,7 +20,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
 
-    config.uiColor = '#4183C4';
+    //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
     //config.extraPlugins = 'sourcedialog';
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
@@ -32,7 +32,7 @@ CKEDITOR.editorConfig = function( config ) {
         '/',
             { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
-            //{ name: 'styles', items: [ 'lineheight' ] },
+            { name: 'styles', items: [ 'lineheight' ] },
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
@@ -116,7 +116,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'link,' +
 		'list,' +
 		'liststyle,' +
-        //'lineheight,' +
+        'lineheight,' +
 		'magicline,' +
 		'maximize,' +
 		'newpage,' +
