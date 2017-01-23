@@ -13,6 +13,7 @@
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('texzilla', '/custom_modules/texzilla/');
+CKEDITOR.plugins.addExternal('mathjax', '/custom_modules/mathjax/');
 
 
 CKEDITOR.disableAutoInline = true;
@@ -38,8 +39,8 @@ CKEDITOR.editorConfig = function( config ) {
         '/',
             //{ name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'MathJax'] },
             { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
-            //{ name: 'formula', items: [ 'Mathjax'] },
-            { name: 'source', items: [ 'texzilla'] },
+            { name: 'formula', items: [ 'Mathjax'] },
+            //{ name: 'source', items: [ 'texzilla'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
             { name: 'document', items: [ 'Sourcedialog'] },
@@ -80,7 +81,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.entities_latin = false;
     config.entities_greek = false;
     config.entities_processNumerical = false;
-    config.allowedContent = true; // don't filter my data 
+    config.allowedContent = true; // don't filter my data
 
 
     //'div,' +
@@ -172,9 +173,11 @@ CKEDITOR.editorConfig = function( config ) {
 
 
     // does not work and conflicts with codesnippet
-    //config.extraPlugins = 'mathjax';
+    config.extraPlugins = 'mathjax';
     //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-
+    config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+    config.mathJaxClass = 'my-math';
+    
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
