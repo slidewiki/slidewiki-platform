@@ -6,7 +6,7 @@ export default {
     name: 'deck',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        clog.warn('Some message from deck.js');
+        //clog.warn('Some message from deck.js');
         let args = params.params ? params.params : params;
         if (resource === 'deck.featured') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), resource: resource});
