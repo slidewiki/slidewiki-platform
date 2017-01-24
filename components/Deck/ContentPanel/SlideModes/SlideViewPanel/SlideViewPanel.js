@@ -58,7 +58,6 @@ class SlideViewPanel extends React.Component {
     }
     componentDidMount(){
         if(process.env.BROWSER){
-
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
             //$(".pptx2html [style*='absolute']").addClass('schaal');
@@ -85,6 +84,10 @@ class SlideViewPanel extends React.Component {
         this.forceUpdate();
     }
     componentDidUpdate() {
+        // update mathjax rendering
+        // add to the mathjax rendering queue the command to type-set the inlineContent
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"inlineContent"]);
+
         this.resize();
     }
     resize()
