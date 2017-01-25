@@ -1,6 +1,8 @@
 import React from 'react';
 import DeckList from './DeckList';
 import {NavLink} from 'fluxible-router';
+
+
 class Home extends React.Component {
     render() {
         const heightStyle = {
@@ -10,6 +12,7 @@ class Home extends React.Component {
         return (
 
         <div ref="home">
+
             <div className="ui message">
                 <div className="ui container two column grid">
                     <div className="six wide column">
@@ -74,6 +77,9 @@ class Home extends React.Component {
                 </div>
             </div>
         </div>
+
+
+
         );
     }
 }

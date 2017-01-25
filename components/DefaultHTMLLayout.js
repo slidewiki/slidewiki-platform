@@ -1,5 +1,6 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
+import CookieBanner from 'react-cookie-banner';
 
 class DefaultHTMLLayout extends React.Component {
     render() {
@@ -23,6 +24,11 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
             </head>
             <body>
+
+            <div id="container"></div>
+            <script src="/custom_modules/cookie/bundle.js"></script>
+          
+
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>
