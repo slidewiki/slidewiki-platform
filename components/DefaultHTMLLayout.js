@@ -1,7 +1,11 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
+import cookie from 'react-cookie';
+import CookieBanner from 'react-cookie-banner';
+
 
 class DefaultHTMLLayout extends React.Component {
+
     render() {
         return (
             <html>
@@ -19,8 +23,20 @@ class DefaultHTMLLayout extends React.Component {
                 }
                 {/*<link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />*/}
                 {/*<link href="/custom_modules/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet" />*/}
+
             </head>
             <body>
+
+
+
+              {/*
+                  Cookie banner display
+              */}
+            <div id="container"></div>
+            <script src="/custom_modules/cookie/bundle.js"></script>
+
+
+
                 <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>

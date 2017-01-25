@@ -7,10 +7,12 @@ export default function userSignIn(context, payload, done) {
             context.dispatch('SIGNIN_FAILURE', err);
             done();
         } else {
+            console.log("userSignIn.js.login successful");
             context.setUser(res); //save user as cookie via userStoragePlugin
             async.series([
                 (callback) => {
                     context.dispatch('SIGNIN_SUCCESS', res);
+
                     callback();
                 },
                 (callback) => {

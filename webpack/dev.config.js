@@ -1,3 +1,4 @@
+'use strict';
 let webpack = require('webpack');
 let path = require('path');
 const host = process.env.HOST || '0.0.0.0';

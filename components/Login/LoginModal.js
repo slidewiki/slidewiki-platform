@@ -10,6 +10,7 @@ import {hashPassword} from '../../configs/general';
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 
+
 const headerStyle = {
     'textAlign': 'center'
 };
@@ -24,6 +25,8 @@ class LoginModal extends React.Component {
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
+
+
     }
 
     isModalShown() {
@@ -40,11 +43,16 @@ class LoginModal extends React.Component {
 
     signin(e) {
         e.preventDefault();
+        console.log("login called");
         const email = this.refs.email1.value;
         let regExp = /\S+@\S+\.\S+/;
         if (email === '' || !regExp.test(email)) {//Check if email is valid
             $('.ui.form.signin').form('add errors', ['Please use a valid email address']);
         } else {
+
+          this.state.email = email;
+          cookie.save('email', email);
+          console.log("email saved");
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
                 password: hashPassword(this.refs.password1.value)
@@ -93,9 +101,13 @@ class LoginModal extends React.Component {
         });
     }
 
+
+
     render() {
 
         return(
+
+
           <div>
             <div className="ui login modal" id='signinModal' style={modalStyle}>
               <div className="header">
@@ -117,12 +129,13 @@ class LoginModal extends React.Component {
                         </div>
                         <br/>
                         <div className="ui center aligned">
-                            <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In</button>
+                            <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/> Sign In3</button>
                         </div>
                         <br/>
 
                         <div className="ui error message"/>
                       </form>
+
                       <br/>
                       <div className="ui floated right">
                           <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
