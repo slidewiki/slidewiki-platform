@@ -8,6 +8,7 @@ WORKDIR /nodeApp
 # ---------------- #
 
 ADD . /nodeApp
+RUN npm install napa --save-dev
 RUN npm install
 
 # -------------------------------------- #

@@ -49,7 +49,7 @@ class ChangePersonalData extends React.Component {
                         </div>
                         <div className="ui field">
                             <div className="ui field">
-                                <label htmlFor="language">Language</label>
+                                <label htmlFor="language">Interface language</label>
                                 <LanguageDropdown ref="language" id="language" required={true} language={this.props.user.language}/>
                             </div>
                         </div>

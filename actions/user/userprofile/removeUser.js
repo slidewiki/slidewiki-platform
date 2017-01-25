@@ -13,7 +13,7 @@ export default function removeUser(context, payload, done) {
         if (err) {
             if (err.statusCode === 404) {
                 context.dispatch('DELETE_USER_FAILURE', err);
-            } else if (err.statusCode === 401) {
+            } else if (err.statusCode === 401 || err.statusCode === 403) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
