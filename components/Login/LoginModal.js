@@ -72,7 +72,7 @@ class LoginModal extends React.Component {
             localStorage.setItem(MODI, 'login_success');
             $('.ui.login.modal').modal('hide');
         }
-        if (!this.props.UserProfileStore.socialLoginError && nextProps.UserProfileStore.socialLoginError){
+        if (localStorage.getItem(MODI) === 'login'&& nextProps.UserProfileStore.socialLoginError){
             swal({
                 title: 'Information',
                 text: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
