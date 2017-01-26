@@ -18,11 +18,6 @@ import {Microservices} from '../../../../../configs/microservices';
 
 let ReactDOM = require('react-dom');
 
-//let simpledraggable = require('simple-draggable'); //remove window dependency
-//let SimpleDraggable = require('../../../../../assets/simpledraggable');
-const absolutediv = '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: 80000;"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-
-
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -99,10 +94,25 @@ class SlideContentEditor extends React.Component {
     addAbsoluteDiv() {
         //absolutediv
         //this.props.SlideEditStore.content = CKEDITOR.instances.inlineContent.getData();
-        $('.pptx2html').append(absolutediv);
-        $(".pptx2html [style*='absolute']")
+        let index_highest = 0;
+        $('.pptx2html [style*="absolute"]').each(function() {
+            let index_current = parseInt($(this).css('zIndex'), 10);
+            if(index_current > index_highest) {
+                index_highest = index_current;
+            }
+        });
+        //cEl.style.zIndex = index_highest + 10;
+
+        $('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
+        $('.pptx2html [style*="absolute"]')
         .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
         this.forceUpdate();
+    }
+    getAbsoluteDiv(zindex){
+        //let simpledraggable = require('simple-draggable'); //remove window dependency
+        //let SimpleDraggable = require('../../../../../assets/simpledraggable');
+        //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
+        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
     }
     componentDidMount() {
         //alert('remount');
