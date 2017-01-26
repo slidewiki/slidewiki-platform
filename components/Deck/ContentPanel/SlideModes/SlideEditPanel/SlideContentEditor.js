@@ -197,9 +197,9 @@ class SlideContentEditor extends React.Component {
             //this.forceUpdate();
             //this.resize();
         //    }
-            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            if ($(".pptx2html [style*='absolute']").not('.drawing-container').css('borderStyle') !== 'dashed')
             {
-                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $(".pptx2html [style*='absolute']").not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             }
             let containerwidth = document.getElementById('container').offsetWidth;
             let containerheight = document.getElementById('container').offsetHeight;
@@ -258,9 +258,9 @@ class SlideContentEditor extends React.Component {
             //require('../../SetupReveal.css');
             /*add border*/
             //alert($(".pptx2html [style*='absolute']").css('borderStyle'));
-            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            if ($(".pptx2html [style*='absolute']").not('.drawing-container').css('borderStyle') !== 'dashed')
             {
-                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $(".pptx2html [style*='absolute']").not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             }
         //}
 
