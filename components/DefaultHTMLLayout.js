@@ -11,6 +11,7 @@ class DefaultHTMLLayout extends React.Component {
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link href="/custom_modules/custom-semantic-ui/dist/semantic.min.css" rel="stylesheet" type="text/css" />
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+                <link href="/assets/css/nv.d3.min.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
