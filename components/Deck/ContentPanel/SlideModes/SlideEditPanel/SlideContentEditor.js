@@ -139,7 +139,7 @@ class SlideContentEditor extends React.Component {
 		{ name: 'about', groups: [ 'about' ] }
             ],
             floatSpacePreferRight: true,
-            uiColor: '#4183C4',
+            //uiColor: '#4183C4',
             removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Undo,Clipboard,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
@@ -165,7 +165,7 @@ class SlideContentEditor extends React.Component {
 		{ name: 'about', groups: [ 'about' ] }
             ],
             floatSpacePreferRight: true,
-            uiColor: '#4183C4',
+            //uiColor: '#4183C4',
             removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
@@ -181,7 +181,7 @@ class SlideContentEditor extends React.Component {
             //alert('test: ' + Microservices.import.uri + '/importImage/' + userId);
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
-            CKEDITOR.inline('inlineContent', {
+            CKEDITOR.replace('inlineContent', {
                 customConfig: '/assets/ckeditor_config.js',
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
 
@@ -225,6 +225,9 @@ class SlideContentEditor extends React.Component {
             $(".pptx2html").css({'transform': '', 'transform-origin': ''});
             $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
             require('../../../../../custom_modules/simple-draggable/lib/index.js');
+            CKEDITOR.instances.inlineContent.resize( '100%', '100%', true );
+            CKEDITOR.instances.inlineContent.height( '100%'); //pptxheight
+            CKEDITOR.instances.inlineContent.height( pptxheight); //pptxheight
 
             SimpleDraggable(".pptx2html [style*='absolute']", {
                 onlyX: false
@@ -308,8 +311,14 @@ class SlideContentEditor extends React.Component {
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-
-        //show that content is outside of pptx2html box
+        this.refs.inlineContent.style.minheight = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+        if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined')
+        {
+            //editor.resize( '100%', '350', true );
+            //CKEDITOR.instances.inlineContent.resize( '++', '100%', true );
+            //CKEDITOR.instances.inlineContent.resize( '800', '100%', false );
+            //show that content is outside of pptx2html box
+        }
         $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
 
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832

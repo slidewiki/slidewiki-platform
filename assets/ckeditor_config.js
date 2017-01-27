@@ -29,21 +29,15 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
-        '/',
-            { name: 'styles', items: [ 'Font'] },
-            { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
-            { name: 'styles', items: [ 'Styles' ] },
-            { name: 'styles', items: [ 'Format'] },
-        '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
-            { name: 'source', items: [ 'Mathjax'] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        '/',
-            { name: 'document', items: [ 'Sourcedialog'] },
-            { name: 'document', items: [ 'CodeSnippet'] },
+//        '/',
+//        '/',
+            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'insert', items: [ 'Table', 'Image', 'Symbol', 'Youtube', 'Mathjax', 'CodeSnippet'] },
+//        '/',
+            { name: 'styles', items: [ 'Font', 'FontSize' , 'lineheight',  'Styles' , 'Format'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        '/',
+            { name: 'document', items: [ 'Sourcedialog'] },
+//        '/',
     ];
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
@@ -68,8 +62,12 @@ CKEDITOR.editorConfig = function( config ) {
     ///config.toolbarLocation = 'bottom';
 
     //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
-    config.removePlugins = 'magicline';
-    CKEDITOR.config.magicline_color = '#0000FF';
+
+    config.removePlugins = 'elementspath, magicline, resize';
+    config.resize_enabled = false;
+
+    //CKEDITOR.config.magicline_color = '#0000FF';
+    //config.removePlugins = 'magicline';
 
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
@@ -191,7 +189,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.mathJaxClass = 'my-math';
     //config.mathJaxClass = 'math-tex';
     //config.mathJaxClass = 'equation';
-    
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
