@@ -2,7 +2,6 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
-import ChartRender from '../../../util/ChartRender';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 const ReactDOM = require('react-dom');
@@ -58,8 +57,6 @@ class SlideViewPanel extends React.Component {
         );
     }
     componentDidMount(){
-
-
         if(process.env.BROWSER){
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
@@ -77,15 +74,14 @@ class SlideViewPanel extends React.Component {
             }
             */
             //initial resize
-            this.resize();
+            this.resize()
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
                 //console.log('resize');
                 this.resize();
             });
         }
-        // If there are some charts in the slide, render them.
-        if ($("div[id^=chart]").length) this.forceUpdate();
+        this.forceUpdate();
     }
     componentDidUpdate() {
         // update mathjax rendering
@@ -93,7 +89,6 @@ class SlideViewPanel extends React.Component {
         MathJax.Hub.Queue(["Typeset",MathJax.Hub,"inlineContent"]);
 
         this.resize();
-        ChartRender.createCharts();
     }
     resize()
     {
