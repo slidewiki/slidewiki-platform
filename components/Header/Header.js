@@ -3,7 +3,6 @@ import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
-import AddDeckPanel from '../AddDeck/AddDeckPanel.js';
 import HeaderDropdown from '../Login/HeaderDropdown.js';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
@@ -63,13 +62,14 @@ class Header extends React.Component {
                             <SearchBox className="item"/>
                         </div>
                         <div className="ui right inverted blue menu">
-                            <NavLink className="item" routeName="addDeck" activeClass="active">
-                                <AddDeckPanel />
-                            </NavLink>
+                            <div className="item">
+                              <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button">
+                                  <i className="right plus icon"></i>Add deck
+                              </NavLink>
+                            </div>
                             {/*<UserNotificationsBadge className="ui item"/>*/}
                             <div className="item">{loginButton}<LoginModal/></div>
                         </div>
-
                     </div>
                 </div>
               </MediaQuery>

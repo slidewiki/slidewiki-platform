@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
+import cheerio from 'cheerio';
 
 class Breadcrumb extends React.Component {
     render() {
@@ -12,7 +13,7 @@ class Breadcrumb extends React.Component {
                 if(index === (nodes.length - 1)){
                     return (
                         <div key={index} className="section">
-                            {this.props.pathNames[index]}
+                            {cheerio.load(this.props.pathNames[index]).text()}
                         </div>
                     );
                 }else{

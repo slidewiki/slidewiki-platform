@@ -9,14 +9,14 @@ export default function fetchUser(context, payload, done) {
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;
     context.service.read('userProfile.read', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            if (err.statusCode === 404) {
+            if (err.statusCode === 404 || err.statusCode === 423) {
                 if(payload.params.username === payload.params.loggedInUser)
                     context.deleteUser();
                 else {
                     context.executeAction(notFoundError, {}, done);
                     return;
                 }
-            } else if (err.statusCode === 401) {
+            } else if (err.statusCode === 403) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else

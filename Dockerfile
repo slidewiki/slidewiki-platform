@@ -8,7 +8,9 @@ WORKDIR /nodeApp
 # ---------------- #
 
 ADD . /nodeApp
+#RUN npm install napa --save-dev
 RUN npm install
+RUN npm run install
 
 # -------------------------------------- #
 #   Default Microservice Configuration   #
