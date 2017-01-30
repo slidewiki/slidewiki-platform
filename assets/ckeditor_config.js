@@ -12,6 +12,7 @@
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
 
 
 CKEDITOR.disableAutoInline = true;
@@ -35,7 +36,7 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar', 'Youtube'] },
+            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
             { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
@@ -131,7 +132,6 @@ CKEDITOR.editorConfig = function( config ) {
 		'smiley,' +
 		'sourcearea,' +
 		'sourcedialog,' +
-        'specialchar,' +
 		'stylescombo,' +
 		'tab,' +
 		'table,' +
@@ -157,7 +157,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
