@@ -17,9 +17,6 @@ export default {
         'user': {
             uri: (!co.isEmpty(process.env.SERVICE_URL_USER)) ? process.env.SERVICE_URL_USER : 'http://userservice.experimental.slidewiki.org'
         },
-        'authorization': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_USER)) ? process.env.SERVICE_URL_USER : 'http://authorizationservice.manfredfris.ch:3000'
-        },
         'import': {
             uri: (!co.isEmpty(process.env.SERVICE_URL_IMPORT)) ? process.env.SERVICE_URL_IMPORT : 'http://importservice.experimental.slidewiki.org',
             protocol: 'http:',

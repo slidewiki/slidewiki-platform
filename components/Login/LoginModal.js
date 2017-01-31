@@ -172,7 +172,7 @@ class LoginModal extends React.Component {
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
         //create new window
-        let url = Microservices.authorization.uri + '/connect/' + provider;
+        let url = Microservices.user.uri + '/connect/' + provider;
 
         let width = screen.width*0.75, height = screen.height*0.75;
         if (width < 600)

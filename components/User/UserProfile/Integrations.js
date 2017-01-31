@@ -89,7 +89,7 @@ class Integrations extends React.Component {
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
         //create new window
-        let url = Microservices.authorization.uri + '/connect/' + this.provider;
+        let url = Microservices.user.uri + '/connect/' + this.provider;
 
         let width = screen.width*0.75, height = screen.height*0.75;
         if (width < 600)

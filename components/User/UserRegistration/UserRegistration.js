@@ -311,7 +311,7 @@ class UserRegistration extends React.Component {
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
         //create new tab
-        let url = 'http://authorizationservice.manfredfris.ch:3000/connect/' + provider;
+        let url = Microservices.user.uri + '/connect/' + provider;
 
         let width = screen.width*0.75, height = screen.height*0.75;
         if (width < 600)
