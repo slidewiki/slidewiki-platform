@@ -144,7 +144,7 @@ class UserRegistration extends React.Component {
 
             swal({
                 title: 'Information',
-                text: 'Signing up with a provider failed because the user of this provider is already registered at SlideWiki. Either log in with this provider or register with another one.',
+                text: 'Signing up with a provider failed because the user of this provider is already registered at SlideWiki. Either sign in with this provider or sign up with another one.',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -180,8 +180,8 @@ class UserRegistration extends React.Component {
                 type: 'error',
                 showCloseButton: true,
                 showCancelButton: false,
-                confirmButtonText: 'Confirm',
-                confirmButtonClass: 'positive ui button',
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'ui button',
                 buttonsStyling: false
             })
             .then((dismiss) => {
