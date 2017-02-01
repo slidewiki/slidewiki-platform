@@ -8,6 +8,8 @@ WORKDIR /nodeApp
 # ---------------- #
 
 ADD . /nodeApp
+RUN ./make_version.sh
+
 RUN npm install
 RUN npm run install
 
