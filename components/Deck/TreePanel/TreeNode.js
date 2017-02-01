@@ -6,6 +6,7 @@ import TreeUtil from './util/TreeUtil';
 import {DragSource, DropTarget} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
+import cheerio from 'cheerio';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -190,7 +191,7 @@ class TreeNode extends React.Component {
             </div>
         );
         //change the node title style if it is selected
-        let nodeTitle = this.props.item.get('title');
+        const nodeTitle = cheerio.load(this.props.item.get('title')).text();
         let nodeTitleDIV = nodeTitle;
         if (this.props.item.get('selected')) {
             nodeTitleDIV = <strong> {nodeTitle} </strong>;
