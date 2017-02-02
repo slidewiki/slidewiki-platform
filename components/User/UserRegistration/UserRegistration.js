@@ -67,8 +67,8 @@ class UserRegistration extends React.Component {
                         type: 'empty',
                         prompt: 'Please enter your email address'
                     }, {
-                        type: 'email',
-                        prompt: 'Please enter a valid email address'
+                        type   : 'regExp[/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$/]',
+                        prompt : 'Please enter a valid email address'
                     }, {
                         type: 'uniqueEmail',
                         prompt: 'The email address is already in use'
@@ -475,11 +475,11 @@ class UserRegistration extends React.Component {
                             </div>
                             <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
                                 <label style={signUpLabelStyle}>Email * </label>
-                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Re-enter email * </label>
-                                <div className="ui icon input"><input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
+                                <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Password * </label>
