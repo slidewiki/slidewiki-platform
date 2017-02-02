@@ -285,11 +285,11 @@ class LoginModal extends React.Component {
                         <div className="ui error message"/>
                       </form>
                       <br/>
-                      <div className="container">
+                      {/*<div className="container">
                         <i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>
                         <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
                         <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
-                      </div>
+                      </div>*/}
                       <br/>
                       <div className="ui floated right">
                           <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>

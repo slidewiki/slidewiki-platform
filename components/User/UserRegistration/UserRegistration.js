@@ -523,7 +523,7 @@ class UserRegistration extends React.Component {
                         <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                     </div>
                 </div>
-                <div className="seven wide column">
+                {/*<div className="seven wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up with a Social Provider</h2>
 
@@ -537,10 +537,10 @@ class UserRegistration extends React.Component {
                         <br/><br/>
                         <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                     </div>
-                </div>
+                </div>*/}
             </div>
 
-            <UserRegistrationSocial ref="modal_social"/>
+            {/*<UserRegistrationSocial ref="modal_social"/>*/}
 
           </div>
         );
