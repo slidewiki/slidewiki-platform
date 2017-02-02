@@ -6,14 +6,14 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
-        extensions: ['', '.js']
+        extensions: ['.js']
     },
     entry: {
         main: [
             './client.js'
         ],
         vendor: [
-            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend'
+            'react', 'react-dom', 'react-hotkeys', 'react-list', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags'
         ]
     },
     output: {
@@ -22,18 +22,25 @@ let webpackConfig = {
         filename: '[name].js'
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.(js|jsx)$/,
-                //
-                exclude: /node_modules\/(?!identicons)/ ,
-                //exclude: /node_modules\/(?!(module1|module2)\/).*/
-                loaders: [
-                    require.resolve('babel-loader')
-                ]
+                exclude: /node_modules\/(?!identicons|striptags)/ ,
+                loader: 'babel-loader',
+                options: {
+                    presets: [
+                        ['es2015', { modules: false }]
+                    ]
+                }
             },
-            { test: /\.json$/, loader: 'json-loader'},
-            { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css') },
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract({
+                    fallbackLoader: 'style-loader',
+                    loader: 'css-loader',
+                    publicPath: '/public/css/'
+                })
+            },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
             { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
         ]
@@ -43,7 +50,11 @@ let webpackConfig = {
     },
     plugins: [
         // css files from the extract-text-plugin loader
-        new ExtractTextPlugin('../css/vendor.bundle.css'),
+        new ExtractTextPlugin({
+            filename: 'vendor.bundle.css',
+            disable: false,
+            allChunks: true
+        }),
 
         new webpack.DefinePlugin({
             'process.env': {
@@ -53,9 +64,8 @@ let webpackConfig = {
                 BROWSER: JSON.stringify(true),
             }
         }),
-
-        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
             compress: {
                 warnings: false
             }
