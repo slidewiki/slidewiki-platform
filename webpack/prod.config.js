@@ -25,7 +25,7 @@ let webpackConfig = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules\/(?!identicons|striptags)/ ,
+                exclude: /node_modules\/(?!identicons)/ ,
                 loader: 'babel-loader',
                 options: {
                     presets: [
