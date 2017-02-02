@@ -5,7 +5,7 @@ const port = (process.env.PORT + 1) || 3001;
 
 let webpackConfig = {
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
     },
     entry: {
         main: [
@@ -21,19 +21,31 @@ let webpackConfig = {
         filename: '[name].js'
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loaders: [
-                    require.resolve('react-hot-loader'),
-                    require.resolve('babel-loader')
+                use: [
+                    {
+                        loader: 'react-hot-loader'
+                    },
+                    {
+                        loader: 'babel-loader'
+                    }
                 ]
             },
-            { test: /\.json$/, loader: 'json-loader'},
+            { test: /\.css$/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    }
+                ]
+            },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
             { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'},
-            { test: /\.css$/, loader: 'style-loader!css-loader'}
         ]
     },
     node: {
@@ -41,7 +53,7 @@ let webpackConfig = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('dev'),
