@@ -36,6 +36,12 @@ class SlideViewPanel extends React.Component {
 
         }
 
+        const sectionElementStyle = {
+            overflowY: 'hidden',
+            overflowX: 'auto',
+            height: '100%'
+
+        };
 
         return (
           <div className="ui bottom attached segment">
@@ -43,7 +49,9 @@ class SlideViewPanel extends React.Component {
                   <div ref="slideViewPanel" className="ui" style={compStyle}>
                       <div className="reveal">
                           <div className="slides">
+                            <section className="present"  style={sectionElementStyle}>
                               <div id="inlineContent" dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+                            </section>
                           </div>
                           <br />
                       </div>
