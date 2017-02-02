@@ -1,6 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
-const host = process.env.HOST ? process.env.HOST : 'localhost';
+const host = process.env.HOST ? process.env.HOST : '0.0.0.0';
 const mainPort = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 const devPort = process.env.PORT ? parseInt(process.env.PORT) + 1 : 3001;
 
