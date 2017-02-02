@@ -51,7 +51,7 @@ let webpackConfig = {
     plugins: [
         // css files from the extract-text-plugin loader
         new ExtractTextPlugin({
-            filename: 'vendor.bundle.css',
+            filename: '../css/vendor.bundle.css',
             disable: false,
             allChunks: true
         }),
