@@ -45,6 +45,13 @@ class UserRegistration extends React.Component {
                         prompt: 'Please enter your last name'
                     }]
                 },
+                organisation: {
+                    identifier: 'organisation',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please enter your organisation'
+                    }]
+                },
                 username: {
                     identifier: 'username',
                     rules: [{
@@ -201,7 +208,7 @@ class UserRegistration extends React.Component {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
             swal({
                 title: 'Thanks for signing up!',
-                text: 'Thank you. You have successfully registered. Please sign in with your new credentials.',
+                text: 'We will verify your affiliation with the SlideWiki trial partner you indicated. You will receive a mail when your account has been activated.',
                 type: 'success',
                 confirmButtonText: 'Close',
                 confirmButtonClass: 'positive ui button',
@@ -417,8 +424,8 @@ class UserRegistration extends React.Component {
         //TODO email confirmation
         // const successMessage1 = 'To complete the registration process you have to confirm your account. An email has been sent to your address.';
         // const successMessage2 = 'To confirm and activate your account please check your inbox and click on the link inside the email we just sent you.';
-        const successMessage1 = 'Thank you. You have successfully registered.';
-        const successMessage2 = 'Please sign in with your new credentials.';
+        const successMessage1 = 'Thank youfor signing up to the SlideWiki beta.';
+        const successMessage2 = 'If your account is authorised, you will receive an email to confirm you sign in details.';
 
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
@@ -458,8 +465,15 @@ class UserRegistration extends React.Component {
           <div>
             <div className="ui page centered grid" >
                 <div className="eight wide column">
-                    <div className="ui blue padded center aligned segment">
+                    <div className="ui blue padded segment">
                         <h2 className="ui dividing header">Sign Up</h2>
+	                    <div className="left aligned eight wide column">
+                            <div className="ui message"  id="signupwelcome">
+                                <div className="header"  >Welcome to SlideWiki beta.</div>
+                                <p>This is the beta site for organisations involved with trialling SlideWiki. If you wish to add or edit decks on SlideWiki, use this form to sign up for an account. You will receive an email if your account is authorised.</p>
+                            </div>
+                        </div>
+                        <div className="ui hidden divider"></div>
                         <form className="ui form" ref="UserRegistration_form" >
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>First name * </label>
@@ -468,6 +482,10 @@ class UserRegistration extends React.Component {
                             <div className="ui inline field">
                                 <label style={signUpLabelStyle}>Last name * </label>
                                 <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                            </div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} htmlFor="organisation">Organisation</label>
+                                <div className="ui icon input"><input type="text" id="organisation" name="organisation" ref="organisation" placeholder="Organisation" aria-required="true"/></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
                                 <label style={signUpLabelStyle}>Username * </label>
