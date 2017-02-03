@@ -8,6 +8,9 @@ import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
 
+import common from '../../common';
+import {Microservices} from '../../configs/microservices';
+
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 
