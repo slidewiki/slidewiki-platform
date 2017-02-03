@@ -13,6 +13,7 @@ class Home extends React.Component {
 
         <div ref="home">
 
+
             <div className="ui message">
                 <div className="ui container two column grid">
                     <div className="six wide column">

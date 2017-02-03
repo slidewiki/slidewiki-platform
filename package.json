@@ -87,6 +87,7 @@
     "md5": "^2.2.1",
     "npm": "^4.0.3",
     "react": "^15.3.2",
+    "react-cookie": "^1.0.4",
     "react-cookie-banner": "0.0.17",
     "react-custom-scrollbars": "^4.0.0",
     "react-dnd": "^2.1.4",
@@ -149,6 +150,7 @@
     "webpack-dev-server": "1.16.2",
     "webpack-stats-plugin": "0.1.4",
     "webpack-vendor-chunk-plugin": "1.0.0",
-    "webpack-visualizer-plugin": "0.1.5"
+    "webpack-visualizer-plugin": "0.1.5",
+    "react-cookie": "^1.0.4"
   }
 }

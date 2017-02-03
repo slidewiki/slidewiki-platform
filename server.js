@@ -16,6 +16,7 @@ import path from 'path';
 import {navigateAction} from 'fluxible-router';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import cookie from 'react-cookie';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
@@ -88,7 +89,7 @@ server.use((req, res, next) => {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
         //}
     });
-
+    cookie.plugToRequest(req,res);
     debug('Executing navigate action');
     context.getActionContext().executeAction(navigateAction, {
         url: req.url
@@ -162,5 +163,7 @@ server.use((req, res, next) => {
 const port = process.env.PORT || 3000;
 server.listen(port);
 console.log('SlideWiki Platform is now Listening on port ' + port);
+
+
 
 export default server;
