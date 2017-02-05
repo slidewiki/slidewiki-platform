@@ -87,8 +87,6 @@
     "md5": "^2.2.1",
     "npm": "^4.1.2",
     "react": "^15.4.2",
-    "react-cookie": "^1.0.4",
-    "react-cookie-banner": "0.0.17",
     "react-custom-scrollbars": "^4.0.1",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
