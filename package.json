@@ -150,7 +150,6 @@
     "webpack-dev-server": "1.16.2",
     "webpack-stats-plugin": "0.1.4",
     "webpack-vendor-chunk-plugin": "1.0.0",
-    "webpack-visualizer-plugin": "0.1.5",
-    "react-cookie": "^1.0.4"
+    "webpack-visualizer-plugin": "0.1.5"
   }
 }
