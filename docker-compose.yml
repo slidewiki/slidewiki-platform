@@ -6,6 +6,8 @@ slidewikiplatform:
   environment:
     - PORT=80
     - VIRTUAL_HOST=platform.experimental.slidewiki.org
+    - LETSENCRYPT_HOST=platform.experimental.slidewiki.org
+    - LETSENCRYPT_EMAIL=meissner@informatik.uni-leipzig.de
     - SERVICE_URL_DECK=http://deckservice.experimental.slidewiki.org
     - SERVICE_URL_DISCUSSION=http://discussionservice.experimental.slidewiki.org
     - SERVICE_URL_ACTIVITIES=http://activitiesservice.experimental.slidewiki.org
