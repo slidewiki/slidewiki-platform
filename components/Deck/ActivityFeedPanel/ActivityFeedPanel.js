@@ -6,6 +6,31 @@ import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
 
 class ActivityFeedPanel extends React.Component {
+    componentWillMount() {
+        let selector = this.props.ActivityFeedStore.selector;
+        if (selector !== undefined) {
+            if (this.isLocalStorageOn()) {
+                console.log('localstorage', localStorage.getItem('activitiesCount'));
+
+                if (String(localStorage.getItem('activitiesCount')) !== String(this.props.ActivityFeedStore.activities.length)) {
+                    console.log('not equal', localStorage.getItem('activitiesCount'), );// wrong data read from browser cache
+                    let date = new Date().getTime();
+                    this.context.executeAction(loadActivities, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                }
+            }
+        }
+    }
+
+    isLocalStorageOn () {
+        let mod = 'react-count';
+        try {
+            localStorage.setItem(mod, mod);
+            localStorage.removeItem(mod);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
 
     render() {
         let pointingMenu = '';
