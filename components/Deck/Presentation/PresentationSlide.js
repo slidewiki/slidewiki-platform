@@ -4,7 +4,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores, provideContext } from 'fluxible-addons-react';
 import PresentationStore from '../../../stores/PresentationStore';
 import SlideViewStore from '../../../stores/SlideViewStore';
-import ChartRender from '../util/ChartRender';
+// import ChartRender from '../util/ChartRender';
 
 let sectionStyle = { 'top': 'unset !important'};
 

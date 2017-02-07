@@ -9,7 +9,7 @@ import needsNewRevisionCheck from '../../../../../actions/revisioning/needsNewRe
 import handleRevisionChanges from '../../../../../actions/revisioning/handleRevisionChanges';
 import SlideContentEditor from './SlideContentEditor';
 import Error from '../../../../../components/Error/Error';
-import ChartRender from '../../../util/ChartRender';
+// import ChartRender from '../../../util/ChartRender';
 const ReactDOM = require('react-dom');
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
 

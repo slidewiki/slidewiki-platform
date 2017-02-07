@@ -2,7 +2,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
-import ChartRender from '../../../util/ChartRender';
+// import ChartRender from '../../../util/ChartRender';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 const ReactDOM = require('react-dom');
