@@ -51,7 +51,6 @@ class ActivityFeedStore extends BaseStore {
         this.activities.unshift(newActivity);//add to the beginning
         if (this.isLocalStorageOn()) {
             localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
-            console.log('setlocalstorage', localStorage.getItem('activitiesCount'));
         }
 
         this.emitChange();

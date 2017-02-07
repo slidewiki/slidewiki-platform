@@ -6,21 +6,6 @@ import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
 
 class ActivityFeedPanel extends React.Component {
-    componentWillMount() {
-        let selector = this.props.ActivityFeedStore.selector;
-        if (selector !== undefined) {
-            if (this.isLocalStorageOn()) {
-                console.log('localstorage', localStorage.getItem('activitiesCount'));
-
-                if (String(localStorage.getItem('activitiesCount')) !== String(this.props.ActivityFeedStore.activities.length)) {
-                    console.log('not equal', localStorage.getItem('activitiesCount'), );// wrong data read from browser cache
-                    let date = new Date().getTime();
-                    this.context.executeAction(loadActivities, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
-                }
-            }
-        }
-    }
-
     isLocalStorageOn () {
         let mod = 'react-count';
         try {
@@ -29,6 +14,21 @@ class ActivityFeedPanel extends React.Component {
             return true;
         } catch(e) {
             return false;
+        }
+    }
+
+    componentWillMount() {
+        let selector = this.props.ActivityFeedStore.selector;
+        //check localStorage to see if invalid data have been read from the browser cache
+        if (selector !== undefined && this.isLocalStorageOn()) {
+            const activitiesCountFromLocalStorage = localStorage.getItem('activitiesCount');
+            if (activitiesCountFromLocalStorage !== undefined) {
+                if (String(activitiesCountFromLocalStorage) !== String(this.props.ActivityFeedStore.activities.length)) {// wrong data read from browser cache
+                    let date = new Date().getTime();
+                    this.context.executeAction(loadActivities, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                }
+                localStorage.removeItem('activitiesCount');// reset the state in localStorage
+            }
         }
     }
 
