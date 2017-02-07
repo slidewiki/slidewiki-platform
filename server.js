@@ -19,6 +19,15 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
+import acceptLanguage from 'accept-language';
+
+acceptLanguage.languages(['en', 'ru', 'de', 'es', 'nl', 'gr', 'fr']);
+
+function detectLocale(req) {
+    const cookieLocale = req.cookies.locale;
+
+    return acceptLanguage.get(cookieLocale || req.headers['accept-language']) || 'en';
+}
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -158,6 +167,10 @@ server.use((req, res, next) => {
             markup: markup
         });
         const html = ReactDOM.renderToStaticMarkup(htmlElement);
+
+        //Getting default browser language and saving it in cookie
+        const locale = detectLocale(req);
+        res.cookie('locale', locale, { maxAge: (new Date() * 0.001) + (365 * 24 * 3600) });
 
         debug('Sending markup');
         res.type('html');

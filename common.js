@@ -1,5 +1,20 @@
 export default {
 
+    getIntlMessage: function(messages, path) {
+        const pathParts = path.split('.');
+        let message;
+
+        try {
+            message = pathParts.reduce((obj, pathPart) => obj[pathPart], messages);
+        } finally {
+            if (message === undefined) {
+                throw new ReferenceError('Could not find Intl message: ' + path);
+            }
+        }
+
+        return message;
+    },
+
     isEmpty: function(toTest) {
         return (toTest === undefined ||
             toTest === null ||
