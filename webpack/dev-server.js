@@ -1,3 +1,4 @@
+'use strict';
 let WebpackDevServer = require ('webpack-dev-server');
 let webpack = require ('webpack');
 let config = require ('./dev.config');
