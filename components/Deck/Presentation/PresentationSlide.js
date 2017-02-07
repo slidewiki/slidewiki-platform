@@ -16,7 +16,7 @@ class PresentationSlide extends React.Component {
 		}
 
 		componentDidUpdate(){
-			ChartRender.createCharts();
+		//	ChartRender.createCharts();
 		}
 
 		render(){

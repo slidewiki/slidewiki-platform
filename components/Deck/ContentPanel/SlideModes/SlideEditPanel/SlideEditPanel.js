@@ -14,17 +14,14 @@ const ReactDOM = require('react-dom');
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
 
 class SlideEditPanel extends React.Component {
-    componentWillUnmount(){
+    componentWillUnmount() {
         //show deckTree again
-        context.executeAction(restoreDeckPageLayout,{});
+        context.executeAction(restoreDeckPageLayout, {});
+
+    }
 
     componentDidMount(){
         this.resize();
-        /*ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
-        {
-            this.resize();
-        });*/
-  //      this.resize();
         // If there are some charts in the slide, render them.
         if ($("div[id^=chart]").length) this.forceUpdate();
     }

@@ -90,7 +90,7 @@ class SlideViewPanel extends React.Component {
     }
     componentDidUpdate() {
         this.resize();
-        ChartRender.createCharts();
+        // ChartRender.createCharts();
     }
     resize()
     {
