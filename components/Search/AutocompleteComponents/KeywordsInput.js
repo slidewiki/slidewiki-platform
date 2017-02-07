@@ -45,6 +45,9 @@ class KeywordsInput extends React.Component {
     onSelect(result, response){
         this.props.onSelect(result.key);
     }
+    blur(){
+        this.refs.searchstring.blur();
+    }
     render(){
         let classes = classNames({
             'ui': true,

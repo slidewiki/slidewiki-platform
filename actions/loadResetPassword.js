@@ -7,7 +7,7 @@ export default function loadResetPassword(context, payload, done) {
       && (store.userid !== undefined && store.userid !== null && store.userid !== '')
       && (store.jwt !== undefined && store.jwt !== null && store.jwt !== '')) {
         context.executeAction(navigateAction, {
-            url: '/user/'+store.username+'/settings'
+            url: '/user/'+store.username+'/settings/account'
         }, done);
         return;
     }
