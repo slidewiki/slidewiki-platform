@@ -20,8 +20,9 @@ import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 import acceptLanguage from 'accept-language';
+import {locales } from './configs/general';
 
-acceptLanguage.languages(['en', 'ru', 'de', 'es', 'nl', 'gr', 'fr']);
+acceptLanguage.languages(locales);
 
 function detectLocale(req) {
     const cookieLocale = req.cookies.locale;
