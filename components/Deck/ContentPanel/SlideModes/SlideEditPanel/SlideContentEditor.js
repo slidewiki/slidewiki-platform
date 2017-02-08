@@ -18,11 +18,6 @@ import {Microservices} from '../../../../../configs/microservices';
 
 let ReactDOM = require('react-dom');
 
-//let simpledraggable = require('simple-draggable'); //remove window dependency
-//let SimpleDraggable = require('../../../../../assets/simpledraggable');
-const absolutediv = '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: 80000;"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-
-
 class SlideContentEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -99,10 +94,25 @@ class SlideContentEditor extends React.Component {
     addAbsoluteDiv() {
         //absolutediv
         //this.props.SlideEditStore.content = CKEDITOR.instances.inlineContent.getData();
-        $('.pptx2html').append(absolutediv);
-        $(".pptx2html [style*='absolute']")
+        let index_highest = 0;
+        $('.pptx2html [style*="absolute"]').each(function() {
+            let index_current = parseInt($(this).css('zIndex'), 10);
+            if(index_current > index_highest) {
+                index_highest = index_current;
+            }
+        });
+        //cEl.style.zIndex = index_highest + 10;
+
+        $('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
+        $('.pptx2html [style*="absolute"]')
         .css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
         this.forceUpdate();
+    }
+    getAbsoluteDiv(zindex){
+        //let simpledraggable = require('simple-draggable'); //remove window dependency
+        //let SimpleDraggable = require('../../../../../assets/simpledraggable');
+        //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
+        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
     }
     componentDidMount() {
         //alert('remount');
@@ -113,6 +123,7 @@ class SlideContentEditor extends React.Component {
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
 
         if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
+            customConfig: '/assets/ckeditor_config.js',
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
@@ -129,7 +140,7 @@ class SlideContentEditor extends React.Component {
             ],
             floatSpacePreferRight: true,
             uiColor: '#4183C4',
-            removeButtons: 'Youtube,texzilla,Sourcedialog,CodeSnippet,Undo,Clipboard,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Undo,Clipboard,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
 
@@ -137,6 +148,7 @@ class SlideContentEditor extends React.Component {
         //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
         //TODO - remove more buttons speakernotes
         if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
+            customConfig: '/assets/ckeditor_config.js',
             toolbarGroups: [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
@@ -154,7 +166,7 @@ class SlideContentEditor extends React.Component {
             ],
             floatSpacePreferRight: true,
             uiColor: '#4183C4',
-            removeButtons: 'Youtube,texzilla,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
         if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
@@ -169,7 +181,9 @@ class SlideContentEditor extends React.Component {
             //alert('test: ' + Microservices.import.uri + '/importImage/' + userId);
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
-            CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
+            CKEDITOR.inline('inlineContent', {
+                customConfig: '/assets/ckeditor_config.js',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
 
         }
         this.currentcontent = this.props.content;
@@ -193,9 +207,9 @@ class SlideContentEditor extends React.Component {
             //this.forceUpdate();
             //this.resize();
         //    }
-            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            if ($(".pptx2html [style*='absolute']").not('.drawing-container').css('borderStyle') !== 'dashed')
             {
-                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $(".pptx2html [style*='absolute']").not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             }
             let containerwidth = document.getElementById('container').offsetWidth;
             let containerheight = document.getElementById('container').offsetHeight;
@@ -254,9 +268,9 @@ class SlideContentEditor extends React.Component {
             //require('../../SetupReveal.css');
             /*add border*/
             //alert($(".pptx2html [style*='absolute']").css('borderStyle'));
-            if ($(".pptx2html [style*='absolute']").css('borderStyle') !== 'dashed')
+            if ($(".pptx2html [style*='absolute']").not('.drawing-container').css('borderStyle') !== 'dashed')
             {
-                $(".pptx2html [style*='absolute']").css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $(".pptx2html [style*='absolute']").not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             }
         //}
 

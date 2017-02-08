@@ -51,6 +51,32 @@ export default {
             })
             .then((body) => callback(null, params))
             .catch((err) => callback(err));
+        } else if (resource === 'userProfile.removeProvider') {
+            rp({
+                method: 'DELETE',
+                uri: Microservices.user.uri + '/social/provider/' + params.provider,
+                headers: { '----jwt----': params.jwt },
+                json: true
+            })
+            .then((body) => callback(null, body))
+            .catch((err) => callback(err));
+        } else if (resource === 'userProfile.addProvider') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.user.uri + '/social/provider/' + params.provider,
+                headers: { '----jwt----': params.jwt },
+                json: true,
+                body: {
+                    provider: params.provider,
+                    identifier: params.identifier,
+                    token: params.token,
+                    token_creation: params.token_creation,
+                    email: params.email,
+                    language: params.language
+                }
+            })
+              .then((body) => callback(null, body))
+              .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
             //prepare data
             let members = params.members.reduce((prev, curr) => {
@@ -125,6 +151,8 @@ export default {
                         picture: !isEmpty(body.picture) ? body.picture : '',
                         organization: !isEmpty(body.organization) ? body.organization : '',
                         description: !isEmpty(body.description) ? body.description : '',
+                        hasPassword: body.hasPassword || false,
+                        providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : []
                     };
                     callback(null, converted);

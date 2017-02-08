@@ -14,11 +14,11 @@ class ContentHistoryItem extends React.Component {
 
     render() {
         const revision = this.props.revision;
-        const revertIcon = (
+        const revertIcon = this.props.userid !== '' ? (
         <a className="like" onClick={this.handleRevertClick.bind(this)}>
             <i className="undo icon"/>
         </a>
-        );
+        ) : '';
         let revisionLink = <NavLink
         href={ActivityFeedUtil.makeNodeRevisionURL(this.props.selector, revision.id)}>Revision {revision.id} </NavLink>;
         return (

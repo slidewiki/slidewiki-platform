@@ -8,6 +8,10 @@ class UserRegistrationStore extends BaseStore {
         this.failures = {
         };
         this.suggestedUsernames = [];
+        this.socialError = false;
+        this.socialCredentialsTaken = false;
+        this.socialCredentialsTakenByDeactivatedAccount = false;
+        this.socialuserdata = {};
     }
 
     handleCreateUserSuccess(res) {
@@ -24,6 +28,14 @@ class UserRegistrationStore extends BaseStore {
         this.emitChange();
     }
 
+    handleSocialCreateUserSuccess(res) {
+        // console.log('UserRegistrationStore handleSocialCreateUserSuccess:', res);
+        this.socialError = false;
+        this.socialCredentialsTaken = false;
+        this.socialCredentialsTakenByDeactivatedAccount = false;
+        this.emitChange();
+    }
+
     handleResetUserRegistrationStatus() {
         this.registrationStatus = 'guest';
         this.errorMessage = '';
@@ -37,6 +49,19 @@ class UserRegistrationStore extends BaseStore {
         }
         this.errorMessage = this.extractMessage(rawMessage);
         this.registrationStatus = 'error';
+        this.emitChange();
+    }
+
+    handleSocialUserRegistrationError(err) {
+        // console.log('UserRegistrationStore handleSocialUserRegistrationError()', err, '___', err.message, '___', err.statusCode, '___', err.toString());
+        if (err.statusCode.toString() === '409') {
+            this.socialCredentialsTaken = true;
+        }
+        else if (err.statusCode.toString() === '423') {
+            this.socialCredentialsTakenByDeactivatedAccount = true;
+        }
+        else
+            this.socialError = true;
         this.emitChange();
     }
 
@@ -85,12 +110,26 @@ class UserRegistrationStore extends BaseStore {
         return newUsernames;
     }
 
+    newSocialData(data) {
+        console.log('UserRegistrationStore newSocialData', data);
+
+        this.socialuserdata = data || {};
+        this.socialError = false;
+        this.socialCredentialsTaken = false;
+        this.socialCredentialsTakenByDeactivatedAccount = false;
+        this.emitChange();
+    }
+
     getState() {
         return {
             registrationStatus: this.registrationStatus,
             failures: this.failures,
             suggestedUsernames: this.suggestedUsernames,
-            errorMessage: this.errorMessage
+            errorMessage: this.errorMessage,
+            socialError: this.socialError,
+            socialCredentialsTaken: this.socialCredentialsTaken,
+            socialuserdata: this.socialuserdata,
+            socialCredentialsTakenByDeactivatedAccount: this.socialCredentialsTakenByDeactivatedAccount
         };
     }
 
@@ -103,6 +142,10 @@ class UserRegistrationStore extends BaseStore {
         this.failures = state.failures;
         this.suggestedUsernames = state.suggestedUsernames;
         this.errorMessage = state.errorMessage;
+        this.socialError = state.socialError;
+        this.socialCredentialsTaken = state.socialCredentialsTaken;
+        this.socialuserdata = state.socialuserdata;
+        this.socialCredentialsTakenByDeactivatedAccount = state.socialCredentialsTakenByDeactivatedAccount;
     }
 }
 
@@ -112,8 +155,12 @@ UserRegistrationStore.handlers = {
     'RESET_USER_REGISTRATION_STATUS': 'handleResetUserRegistrationStatus',
     'CHECK_EMAIL_SUCCESS': 'handleEmailChecked',
     'CHECK_USERNAME_SUCCESS': 'handleUsernameChecked',
+    'SOCIAL_CREATE_USER_SUCCESS': 'handleSocialCreateUserSuccess',
     //error handling
-    'CREATE_USER_FAILURE': 'handleUserRegistrationError'
+    'CREATE_USER_FAILURE': 'handleUserRegistrationError',
+    'SOCIAL_CREATE_USER_FAILURE': 'handleSocialUserRegistrationError',
+
+    'NEW_SOCIAL_DATA': 'newSocialData'
 };
 
 export default UserRegistrationStore;

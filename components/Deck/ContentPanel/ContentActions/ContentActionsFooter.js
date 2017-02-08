@@ -6,12 +6,13 @@ import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
-
+import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
         super(props);
-        this.state={expanded: 0};
+        //this.state={expanded: 0};
+        this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -47,19 +48,31 @@ class ContentActionsFooter extends React.Component {
             window.open(this.getPrintHref());
         }
     }*/
-    getPDFHref(){
 
+    handlePrintClick(e){
+
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getExportHref('PDF'));
+        }
+
+    }
+
+    getExportHref(type){
+        if (type !== 'EPub' && type !== 'PDF') {
+          return;
+        }
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0)
         {
             //console.log(this.props.ContentStore.selector.id);
             let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
-            let pdfHref = Microservices.pdf.uri + '/exportPDF/' + splittedId[0];
+            let pdfHref = Microservices.pdf.uri + '/export' + type + '/' + splittedId[0];
             return pdfHref;
         }
         else
         {
             // in adddeck this.props.ContentStore.selector.id is 0
-            return Microservices.pdf.uri + '/exportPDF/';
+            return Microservices.pdf.uri + '/export' + type + '/';
         }
     }
 
@@ -67,7 +80,7 @@ class ContentActionsFooter extends React.Component {
 
         if(process.env.BROWSER){
             e.preventDefault();
-            window.open(this.getPDFHref());
+            window.open(this.getExportHref('EPub'));
         }
 
     }
@@ -89,12 +102,12 @@ class ContentActionsFooter extends React.Component {
                                 </button>
                             </NavLink>
 
-                           <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
+                           <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
-                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getPDFHref()} target="_blank">
+                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getExportHref('EPub')} target="_blank">
                                 <button className="ui button" type="button" aria-label="Download" data-tooltip="Download" >
                                     <i className="download large icon"></i>
                                 </button>
@@ -121,4 +134,10 @@ class ContentActionsFooter extends React.Component {
 ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore], (context, props) => {
+    return {
+        ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState()
+    };
+});
 export default ContentActionsFooter;

@@ -36,7 +36,7 @@ class ChangePicture extends React.Component {
                             </div>
                             <div className="ui hidden divider"/>
                             <button className="ui primary labeled icon button" onClick={ this.useGravatar.bind(this) }>
-                                <i className="icon user"/>Use Gravater Image
+                                <i className="icon user"/>Use Gravatar Image
                             </button>
                             <div className="ui hidden divider"/>
                             <button className="ui red labeled icon button" onClick={ this.removePicture.bind(this) }>

@@ -13,9 +13,11 @@ class PublicUserData extends React.Component {
                 <h3>
                     { this.props.user.uname }
                     <strong>     </strong>
-                    <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' }>
+                    {(this.props.user.uname === this.props.loggedinuser) ? (
+                      <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' }>
                         <i className="setting icon"/>
-                    </NavLink>
+                      </NavLink>
+                      ) : ''}
                 </h3>
                 { !isEmpty(this.props.user.description) ? <p>{ this.props.user.description }</p> : '' }
                 <div className = "ui divider" />
