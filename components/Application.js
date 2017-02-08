@@ -14,20 +14,25 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { IntlProvider } from 'react-intl';
 import Cookie from 'js-cookie';
 
-import { addLocaleData } from 'react-intl';
-import ru from 'react-intl/locale-data/ru';
+// app.js
+import {addLocaleData} from 'react-intl';
 import en from 'react-intl/locale-data/en';
+import fr from 'react-intl/locale-data/fr';
+import es from 'react-intl/locale-data/es';
+import ru from 'react-intl/locale-data/ru';
+import de from 'react-intl/locale-data/de';
 
-addLocaleData([en, ru]);
+addLocaleData([...en, ...fr, ...es, ...ru, ...de]);
 
 const locale = Cookie.get('locale') || 'en';
+const messages = require(`../intl/${locale}`).messages;
 
 class Application extends React.Component {
     render() {
         let Handler = this.props.currentRoute.handler;
         if (this.props.ErrorStore.error) {
             return (
-                <IntlProvider locale={locale}>
+                <IntlProvider locale={locale} messages = {messages}>
                     <div className="slidewiki-page">
                         <Header currentRoute={this.props.currentRoute} links={pages} />
                         <Error error={this.props.ErrorStore.error} />
@@ -38,7 +43,7 @@ class Application extends React.Component {
         }
         else {
             return (
-                <IntlProvider locale={locale}>
+                <IntlProvider locale={locale} messages = {messages}>
                     <div className="slidewiki-page">
                         <Header currentRoute={this.props.currentRoute} links={pages} />
                         <Handler />
