@@ -21,6 +21,7 @@ import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 import acceptLanguage from 'accept-language';
 import {locales } from './configs/general';
+import { loadIntlMessages } from './actions/intl';
 
 acceptLanguage.languages(locales);
 
@@ -97,7 +98,6 @@ fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 
 server.use((req, res, next) => {
-
     const context =  app.createContext({
         req: req,
         res: res  //for userStoragePlugin
@@ -108,77 +108,94 @@ server.use((req, res, next) => {
     });
 
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {
-        url: req.url
-    }, (err) => {
+    context.executeAction(loadIntlMessages, { locale: 'en' }, (err) => {
         if (err) {
-            console.log(req.url, err);//, err);
-            if (err.statusCode && err.statusCode === 404) {
-                // TODO refector the code in this if-else block
-                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-                debug('Rendering Application component into html');
-                const markup = ReactDOM.renderToString(createElementWithContext(context));
-                //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                const htmlElement = React.createElement(HTMLComponent, {
-                    clientFile: 'main.js',
-                    addAssets: (env === 'production'),
-                    context: context.getComponentContext(),
-                    state: exposed,
-                    markup: markup
-                });
-                const html = ReactDOM.renderToStaticMarkup(htmlElement);
-                debug('Sending markup');
-                res.type('html');
-                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                // Pass through to next middleware
-                //next();
-            } else {
-                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-                debug('Rendering Application component into html');
-                const markup = ReactDOM.renderToString(createElementWithContext(context));
-                //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                const htmlElement = React.createElement(HTMLComponent, {
-                    clientFile: 'main.js',
-                    addAssets: (env === 'production'),
-                    context: context.getComponentContext(),
-                    state: exposed,
-                    markup: markup
-                });
-                const html = ReactDOM.renderToStaticMarkup(htmlElement);
-                debug('Sending markup');
-                res.type('html');
-                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                //next(err);
-            }
-            return;
+            console.log(err);
+        }else{
+        
+            context.getActionContext().executeAction(navigateAction, {
+                url: req.url
+            }, (err) => {
+                if (err) {
+                    console.log(req.url, err);//, err);
+                    if (err.statusCode && err.statusCode === 404) {
+                        // TODO refector the code in this if-else block
+                        const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+                        debug('Rendering Application component into html');
+                        const markup = ReactDOM.renderToString(createElementWithContext(context));
+                        //todo: for future, we can choose to not include specific scripts in some predefined layouts
+                        const htmlElement = React.createElement(HTMLComponent, {
+                            clientFile: 'main.js',
+                            addAssets: (env === 'production'),
+                            context: context.getComponentContext(),
+                            state: exposed,
+                            markup: markup
+                        });
+                        const html = ReactDOM.renderToStaticMarkup(htmlElement);
+                        debug('Sending markup');
+                        res.type('html');
+                        res.status(err.statusCode).send('<!DOCTYPE html>' + html);
+                        // Pass through to next middleware
+                        //next();
+                    } else {
+                        const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+                        debug('Rendering Application component into html');
+                        const markup = ReactDOM.renderToString(createElementWithContext(context));
+                        //todo: for future, we can choose to not include specific scripts in some predefined layouts
+                        const htmlElement = React.createElement(HTMLComponent, {
+                            clientFile: 'main.js',
+                            addAssets: (env === 'production'),
+                            context: context.getComponentContext(),
+                            state: exposed,
+                            markup: markup
+                        });
+                        const html = ReactDOM.renderToStaticMarkup(htmlElement);
+                        debug('Sending markup');
+                        res.type('html');
+                        res.status(err.statusCode).send('<!DOCTYPE html>' + html);
+                        //next(err);
+                    }
+                    return;
+                } else{
+                    debug('Exposing context state');
+                    const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+
+                    debug('Rendering Application component into html');
+                    const markup = ReactDOM.renderToString(createElementWithContext(context));
+                    //todo: for future, we can choose to not include specific scripts in some predefined layouts
+                    const htmlElement = React.createElement(HTMLComponent, {
+                        //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
+                        clientFile: 'main.js',
+                        addAssets: (env === 'production'),
+                        context: context.getComponentContext(),
+                        state: exposed,
+                        markup: markup
+                    });
+                    const html = ReactDOM.renderToStaticMarkup(htmlElement);
+
+                    //Getting default browser language and saving it in cookie
+                    const locale = detectLocale(req);
+                    res.cookie('locale', locale, { maxAge: (new Date() * 0.001) + (365 * 24 * 3600) });
+
+                    debug('Sending markup');
+                    res.type('html');
+                    res.write('<!DOCTYPE html>' + html);
+                    res.end();
+                }
+
+            });
         }
-
-        debug('Exposing context state');
-        const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-
-        debug('Rendering Application component into html');
-        const markup = ReactDOM.renderToString(createElementWithContext(context));
-        //todo: for future, we can choose to not include specific scripts in some predefined layouts
-        const htmlElement = React.createElement(HTMLComponent, {
-            //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
-            clientFile: 'main.js',
-            addAssets: (env === 'production'),
-            context: context.getComponentContext(),
-            state: exposed,
-            markup: markup
-        });
-        const html = ReactDOM.renderToStaticMarkup(htmlElement);
-
-        //Getting default browser language and saving it in cookie
-        const locale = detectLocale(req);
-        res.cookie('locale', locale, { maxAge: (new Date() * 0.001) + (365 * 24 * 3600) });
-
-        debug('Sending markup');
-        res.type('html');
-        res.write('<!DOCTYPE html>' + html);
-        res.end();
     });
 });
+
+
+
+
+
+
+
+
+
 
 
 server.listen(port);

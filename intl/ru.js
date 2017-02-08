@@ -1,14 +1,9 @@
 export default {
-    locales: ['en'],
+    locales: ['ru'],
 
     messages: {
 
-        'home.slogan': 'SlideWiki revolutionises how educational material is authored, shared and used.'
-    //   "description": "Demo application made with React and Fluxible",
-    //   "loadingTitle": "Loading…",
-    //   "errorTitle": "Error displaying this page",
-    //   "notFoundTitle": "Page not found"
-        
+        'home.slogan':  'русский слоган',
     //
     // "features": {
     //   "popular": "Most Popular",

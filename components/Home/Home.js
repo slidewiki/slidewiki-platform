@@ -19,7 +19,7 @@ class Home extends React.Component {
                         <div className="item">
                             <div className="middle aligned content">
                                 <h2 className="ui center aligned grey header">
-                                    <FormattedMessage id='Home.Slogan' defaultMessage='SlideWiki revolutionises how educational material is authored, shared and used.'/>
+                                    <FormattedMessage id='home.slogan'/>
                                 </h2>
                             </div>
                         </div>
