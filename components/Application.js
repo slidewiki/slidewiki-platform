@@ -24,7 +24,8 @@ import de from 'react-intl/locale-data/de';
 
 addLocaleData([...en, ...fr, ...es, ...ru, ...de]);
 
-const locale = Cookie.get('locale') || 'en';
+
+const locale = Cookie.get('locale') || 'ru';
 const messages = require(`../intl/${locale}`).messages;
 
 class Application extends React.Component {

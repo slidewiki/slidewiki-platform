@@ -43,10 +43,6 @@ class LocaleSwitcher extends React.Component {
 
 }
 
-// LocaleSwitcher.contextTypes = {
-//     currentLocale: React.PropTypes.string.isRequired
-// };
-
 LocaleSwitcher = connectToStores(LocaleSwitcher, [IntlStore], (context, props) => {
     return {
         currentLocale: context.getStore(IntlStore).getCurrentLocale()
