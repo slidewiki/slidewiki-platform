@@ -18,6 +18,40 @@ import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
 
 class ContentModulesPanel extends React.Component {
+    isLocalStorageOn () {
+        let mod = 'react-count';
+        try {
+            localStorage.setItem(mod, mod);
+            localStorage.removeItem(mod);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    componentWillMount() {
+        let selector = this.props.ContentModulesStore.selector;
+        //check localStorage to see if invalid data have been read from the browser cache
+        if (selector !== undefined && this.isLocalStorageOn()) {
+            const sourcesCountFromLocalStorage = localStorage.getItem('sourcesCount');
+            if (sourcesCountFromLocalStorage !== undefined) {
+                if (String(sourcesCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.datasource.length)) {// wrong data read from browser cache
+                    let date = new Date().getTime();
+                    this.context.executeAction(loadDataSources, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                }
+                localStorage.removeItem('sourcesCount');// reset the state in localStorage
+            }
+            const commentsCountFromLocalStorage = localStorage.getItem('commentsCount');
+            if (commentsCountFromLocalStorage !== undefined) {
+                if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments.length)) {// wrong data read from browser cache
+                    let date = new Date().getTime();
+                    this.context.executeAction(loadContentDiscussion, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                }
+                localStorage.removeItem('commentsCount');// reset the state in localStorage
+            }
+        }
+    }
+
     handleTabClick(type, e) {
         switch (type) {
             /*
