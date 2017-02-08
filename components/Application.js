@@ -14,6 +14,12 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { IntlProvider } from 'react-intl';
 import Cookie from 'js-cookie';
 
+import { addLocaleData } from 'react-intl';
+import ru from 'react-intl/locale-data/ru';
+import en from 'react-intl/locale-data/en';
+
+addLocaleData([en, ru]);
+
 const locale = Cookie.get('locale') || 'en';
 
 class Application extends React.Component {
