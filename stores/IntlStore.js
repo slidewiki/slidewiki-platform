@@ -7,7 +7,7 @@ class IntlStore extends BaseStore {
         super(dispatcher);
         this.messages = {};
         this.locales = [];
-        this.currentLocale = null;
+        this.currentLocale = 'en';
     }
 
     handleLoad({ messages, locales }) {

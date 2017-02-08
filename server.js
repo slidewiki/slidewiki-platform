@@ -22,14 +22,9 @@ import { createElementWithContext } from 'fluxible-addons-react';
 import acceptLanguage from 'accept-language';
 import {locales } from './configs/general';
 import { loadIntlMessages } from './actions/intl';
+import Cookie from 'js-cookie';
 
-acceptLanguage.languages(locales);
 
-function detectLocale(req) {
-    const cookieLocale = req.cookies.locale;
-
-    return acceptLanguage.get(cookieLocale || req.headers['accept-language']) || 'en';
-}
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -97,6 +92,15 @@ fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 
+
+
+function detectLocale(req) {
+    const cookieLocale = req.cookies.locale;
+
+    return acceptLanguage.get(cookieLocale || req.headers['accept-language']) || 'ru';
+}
+
+
 server.use((req, res, next) => {
     const context =  app.createContext({
         req: req,
@@ -107,12 +111,18 @@ server.use((req, res, next) => {
         //}
     });
 
+    acceptLanguage.languages(locales);
+
+
+
+    let locale = detectLocale(req);
+    res.cookie('locale', locale, { maxAge: (new Date() * 0.001) + (365 * 24 * 3600) });
+
     debug('Executing navigate action');
-    context.executeAction(loadIntlMessages, { locale: 'en' }, (err) => {
+    context.executeAction(loadIntlMessages, locale, (err) => {
         if (err) {
             console.log(err);
         }else{
-        
             context.getActionContext().executeAction(navigateAction, {
                 url: req.url
             }, (err) => {
@@ -174,8 +184,8 @@ server.use((req, res, next) => {
                     const html = ReactDOM.renderToStaticMarkup(htmlElement);
 
                     //Getting default browser language and saving it in cookie
-                    const locale = detectLocale(req);
-                    res.cookie('locale', locale, { maxAge: (new Date() * 0.001) + (365 * 24 * 3600) });
+
+
 
                     debug('Sending markup');
                     res.type('html');
