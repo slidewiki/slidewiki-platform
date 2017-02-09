@@ -28,6 +28,18 @@ import locale from 'locale';
 import handleServerRendering from './server/handleServerRendering';
 import setLocale from './server/setLocale';
 
+import { IntlProvider } from 'react-intl';
+
+// app.js
+import {addLocaleData} from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import fr from 'react-intl/locale-data/fr';
+import es from 'react-intl/locale-data/es';
+import ru from 'react-intl/locale-data/ru';
+import de from 'react-intl/locale-data/de';
+
+addLocaleData([...en, ...fr, ...es, ...ru, ...de]);
+
 
 //acceptLanguage.languages(['en', 'ru']);
 
@@ -139,16 +151,32 @@ server.use((req, res, next) => {
             console.log(req.url, err);//, err);
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
+                debug('Exposing context state');
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+
+                const Root = app.getComponent();
+                const messages = require('./intl/'+req.locale).messages;
+
+                // Render the Root to string
+                const content = ReactDOM.renderToString(
+                  <IntlProvider locale={ req.locale } messages={messages}>
+                    <Root context={ context.getComponentContext() } />
+                  </IntlProvider>
+                );
+
                 debug('Rendering Application component into html');
-                const markup = ReactDOM.renderToString(createElementWithContext(context));
+
+
+
                 //todo: for future, we can choose to not include specific scripts in some predefined layouts
                 const htmlElement = React.createElement(HTMLComponent, {
+                    //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
                     clientFile: 'main.js',
                     addAssets: (env === 'production'),
                     context: context.getComponentContext(),
                     state: exposed,
-                    markup: markup
+                    markup: content,
+                    lang: req.locale
                 });
                 const html = ReactDOM.renderToStaticMarkup(htmlElement);
                 debug('Sending markup');
@@ -157,16 +185,32 @@ server.use((req, res, next) => {
                 // Pass through to next middleware
                 //next();
             } else {
+                debug('Exposing context state');
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+
+                const Root = app.getComponent();
+                const messages = require('./intl/'+req.locale).messages;
+
+                // Render the Root to string
+                const content = ReactDOM.renderToString(
+                  <IntlProvider locale={ req.locale } messages={messages}>
+                    <Root context={ context.getComponentContext() } />
+                  </IntlProvider>
+                );
+
                 debug('Rendering Application component into html');
-                const markup = ReactDOM.renderToString(createElementWithContext(context));
+
+
+
                 //todo: for future, we can choose to not include specific scripts in some predefined layouts
                 const htmlElement = React.createElement(HTMLComponent, {
+                    //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
                     clientFile: 'main.js',
                     addAssets: (env === 'production'),
                     context: context.getComponentContext(),
                     state: exposed,
-                    markup: markup
+                    markup: content,
+                    lang: req.locale
                 });
                 const html = ReactDOM.renderToStaticMarkup(htmlElement);
                 debug('Sending markup');
@@ -180,8 +224,20 @@ server.use((req, res, next) => {
         debug('Exposing context state');
         const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
 
+        const Root = app.getComponent();
+        const messages = require('./intl/'+req.locale).messages;
+
+        // Render the Root to string
+        const content = ReactDOM.renderToString(
+          <IntlProvider locale={ req.locale } messages={messages}>
+            <Root context={ context.getComponentContext() } />
+          </IntlProvider>
+        );
+
         debug('Rendering Application component into html');
-        const markup = ReactDOM.renderToString(createElementWithContext(context));
+
+
+
         //todo: for future, we can choose to not include specific scripts in some predefined layouts
         const htmlElement = React.createElement(HTMLComponent, {
             //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
@@ -189,7 +245,8 @@ server.use((req, res, next) => {
             addAssets: (env === 'production'),
             context: context.getComponentContext(),
             state: exposed,
-            markup: markup
+            markup: content,
+            lang: req.locale
         });
         const html = ReactDOM.renderToStaticMarkup(htmlElement);
 
