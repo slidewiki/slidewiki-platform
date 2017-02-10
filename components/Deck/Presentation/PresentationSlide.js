@@ -12,7 +12,7 @@ class PresentationSlide extends React.Component {
 		componentDidMount(){
 		//this.props.style = sectionStyle;
             // If there are some charts in the slide, render them.
-            if ($("div[id^=chart]").length) this.forceUpdate();
+            // if ($("div[id^=chart]").length) this.forceUpdate();
 		}
 
 		componentDidUpdate(){

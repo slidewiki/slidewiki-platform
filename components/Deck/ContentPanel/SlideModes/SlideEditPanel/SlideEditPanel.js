@@ -23,12 +23,12 @@ class SlideEditPanel extends React.Component {
     componentDidMount(){
         this.resize();
         // If there are some charts in the slide, render them.
-        if ($("div[id^=chart]").length) this.forceUpdate();
+        // if ($("div[id^=chart]").length) this.forceUpdate();
     }
 
     componentDidUpdate(){
-//        this.resize();
-        if ($("div[id^=chart]").length) ChartRender.createCharts();
+        // this.resize();
+        // if ($("div[id^=chart]").length) ChartRender.createCharts();
     }
 
     resize()
