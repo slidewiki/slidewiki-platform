@@ -63,7 +63,7 @@ let webpackConfig = {
         }),
 
     ],
-    devtool: 'eval'
+    devtool: 'source-map'
 };
 
 module.exports = webpackConfig;

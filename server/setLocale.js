@@ -12,14 +12,18 @@ export default function setLocale(req, res, next) {
         if (locales.indexOf(req.query.locale) > -1) {
             req.locale = req.query.locale;
             console.log('Locale has been set from querystring: %s', req.locale);
+        }else{
+            console.log(locales[0]);
         }
     }
 
     // Or by setting a `locale` cookie
     else if (req.cookies.locale) {
-        if (locales.indexOf(req.cookies.hl) > -1) {
+        if (locales.indexOf(req.cookies.locale) > -1) {
             req.locale = req.cookies.locale;
             console.log('Locale has been set from cookie: %s', req.locale);
+        }else{
+            console.log(locales[0]);
         }
     }
 
