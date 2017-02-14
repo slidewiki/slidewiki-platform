@@ -16,6 +16,8 @@ import fetchUser from './user/userprofile/fetchUser';
 import UserProfileStore from '../stores/UserProfileStore';
 
 export default function loadDeck(context, payload, done) {
+    // console.log('Action loadDeck');
+
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -73,6 +75,9 @@ export default function loadDeck(context, payload, done) {
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
         runNonContentActions = 0;
     }
+
+    // console.log('payload', payloadCustom);
+
     //load all required actions in parallel
     async.parallel([
         (callback) => {

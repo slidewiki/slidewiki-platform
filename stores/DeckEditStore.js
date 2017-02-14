@@ -17,6 +17,7 @@ class DeckEditStore extends BaseStore {
             },
             members: []
         };
+        this.allowedToEditTheDeck = true;
     }
 
     updateProperties(payload) {
@@ -27,6 +28,9 @@ class DeckEditStore extends BaseStore {
         //accessLevel adoptions
         this.authorizedUsers = payload.deckProps.editors.users;
         this.authorizedGroups = payload.deckProps.editors.groups;
+
+        //reset value
+        this.allowedToEditTheDeck = true;
 
         this.emitChange();
     }
@@ -39,7 +43,8 @@ class DeckEditStore extends BaseStore {
             authorizedUsers: this.authorizedUsers,
             authorizedGroups: this.authorizedGroups,
             viewstate: this.viewstate,
-            detailedGroup: this.detailedGroup
+            detailedGroup: this.detailedGroup,
+            allowedToEditTheDeck: this.allowedToEditTheDeck
         };
     }
 
@@ -55,6 +60,7 @@ class DeckEditStore extends BaseStore {
         this.viewstate = state.viewstate;
         this.authorizedGroups = state.authorizedGroups;
         this.detailedGroup = state.detailedGroup;
+        this.allowedToEditTheDeck = state.allowedToEditTheDeck;
     }
 
     updateAuthorizedUsers(users) {
@@ -76,6 +82,11 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = group;
         this.emitChange();
     }
+
+    editDeckNotAllowed() {
+        this.allowedToEditTheDeck = false;
+        this.emitChange();
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -84,7 +95,8 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_USERS': 'updateAuthorizedUsers',
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
-    'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup'
+    'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
+    'EDIT_DECK_NOT_ALLOWED': 'editDeckNotAllowed'
 };
 
 export default DeckEditStore;

@@ -7,6 +7,7 @@ import {navigateAction} from 'fluxible-router';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import ContentStore from '../../../../../stores/ContentStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
@@ -77,6 +78,55 @@ class DeckPropertiesEditor extends React.Component {
                 })
                 .catch();
             }
+        }
+
+        console.log('wil receive new stuff', this.props.DeckEditStore.allowedToEditTheDeck, newProps.DeckEditStore.allowedToEditTheDeck, this.props.ContentStore.mode);
+        if (!this.props.DeckEditStore.allowedToEditTheDeck && newProps.DeckEditStore.allowedToEditTheDeck) {
+            swal({
+                title: 'Warning',
+                text: 'You are not allowed to edit this deck.',
+                type: 'warning',
+                showCloseButton: false,
+                showCancelButton: false,
+                confirmButtonText: 'Go back',
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                history.back();
+
+                return true;
+            })
+            .catch(() => {
+                history.back();
+
+                return true;
+            });
+        }
+    }
+
+    componentDidMount () {
+        if (!this.props.DeckEditStore.allowedToEditTheDeck) {
+            swal({
+                title: 'Warning',
+                text: 'You are not allowed to edit this deck.',
+                type: 'warning',
+                showCloseButton: false,
+                showCancelButton: false,
+                confirmButtonText: 'Go back',
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                history.back();
+
+                return true;
+            })
+            .catch(() => {
+                history.back();
+
+                return true;
+            });
         }
     }
 
@@ -532,7 +582,8 @@ DeckPropertiesEditor.contextTypes = {
 DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, UserProfileStore], (context, props) => {
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 

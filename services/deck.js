@@ -114,6 +114,19 @@ export default {
             }).catch((err) => {
                 callback(err);
             });
+        } else if (resource === 'deck.editAllowed') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed',
+                headers: { '----jwt----': params.params.jwt },
+                json: true
+            })
+            .then((body) => {
+                // console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed', body);
+
+                callback(null, body.allowed);
+            })
+            .catch((err) => callback(err));
         } else if (resource === 'deck.numberofslides') {
             let args = params.params ? params.params : params;
             rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'}).then((res) => {
