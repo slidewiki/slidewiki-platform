@@ -27,7 +27,7 @@ process.env.BROWSER = false;
 
 const debug = debugLib('slidewiki-platform');
 
-const host = process.env.HOST ? process.env.HOST : 'localhost';
+const host = process.env.HOST ? process.env.HOST : '0.0.0.0';
 let port = 3000 ;
 if(env === 'production'){
     port = process.env.PORT ? process.env.PORT :  3000;
