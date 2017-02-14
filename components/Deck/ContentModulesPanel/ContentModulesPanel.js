@@ -34,16 +34,20 @@ class ContentModulesPanel extends React.Component {
         //check localStorage to see if invalid data have been read from the browser cache
         if (selector !== undefined && this.isLocalStorageOn()) {
             const sourcesCountFromLocalStorage = localStorage.getItem('sourcesCount');
-            if (sourcesCountFromLocalStorage !== undefined) {
-                if (String(sourcesCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.datasource.length)) {// wrong data read from browser cache
+            if (sourcesCountFromLocalStorage !== undefined && sourcesCountFromLocalStorage !== null) {
+                if (String(sourcesCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.datasource)) {// wrong data read from browser cache
                     let date = new Date().getTime();
                     this.context.executeAction(loadDataSources, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
                 }
                 localStorage.removeItem('sourcesCount');// reset the state in localStorage
             }
             const commentsCountFromLocalStorage = localStorage.getItem('commentsCount');
-            if (commentsCountFromLocalStorage !== undefined) {
-                if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments.length)) {// wrong data read from browser cache
+            console.log('commentsCountFromLocalStorage', commentsCountFromLocalStorage);
+            console.log('this.props.ContentModulesStore.moduleCount.comments', this.props.ContentModulesStore.moduleCount.comments);
+            if (commentsCountFromLocalStorage !== undefined && commentsCountFromLocalStorage !== null) {
+                if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments)) {// wrong data read from browser cache
+
+                    console.log('should read again');
                     let date = new Date().getTime();
                     this.context.executeAction(loadContentDiscussion, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
                 }
