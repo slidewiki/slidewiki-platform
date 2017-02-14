@@ -105,7 +105,9 @@ export default {
                     editors: revision.editors || {
                         users: [],
                         groups: []
-                    }
+                    },
+                    deckOwner: deck.user,
+                    revisionOwner: revision.user
                 };
                 callback(null, {
                     deckProps: deckProps,

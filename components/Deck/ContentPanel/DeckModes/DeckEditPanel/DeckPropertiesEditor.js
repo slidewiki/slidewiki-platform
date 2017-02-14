@@ -80,7 +80,6 @@ class DeckPropertiesEditor extends React.Component {
             }
         }
 
-        console.log('wil receive new stuff', this.props.DeckEditStore.allowedToEditTheDeck, newProps.DeckEditStore.allowedToEditTheDeck, this.props.ContentStore.mode);
         if (!this.props.DeckEditStore.allowedToEditTheDeck && newProps.DeckEditStore.allowedToEditTheDeck) {
             swal({
                 title: 'Warning',
