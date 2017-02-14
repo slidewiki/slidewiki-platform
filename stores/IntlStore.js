@@ -7,14 +7,22 @@ class IntlStore extends BaseStore {
         super(dispatcher);
         this.messages = {};
         this.locales = [];
-        this.currentLocale = 'en';
+        this.currentLocale = '';
     }
 
-    handleLoad({ messages, locales }) {
-        this.messages = messages;
-        this.locales = locales;
-        this.currentLocale = locales[0];
+    handleLoad(payload) {
+        this.messages = payload.messages;
+        this.locales = payload.locales;
+        this.currentLocale = payload.locales[0];
         this.emitChange();
+    }
+
+    getState() {
+        return {
+            messages: this.messages,
+            locales: this.locales,
+            currentLocale: this.currentLocale
+        };
     }
 
     getMessages() {
@@ -34,11 +42,7 @@ class IntlStore extends BaseStore {
     }
 
     dehydrate() {
-        return {
-            currentLocale: this.currentLocale,
-            locales: this.locales,
-            messages: this.messages
-        };
+        return this.getState();
     }
 
     rehydrate({ messages, locales, currentLocale }) {
