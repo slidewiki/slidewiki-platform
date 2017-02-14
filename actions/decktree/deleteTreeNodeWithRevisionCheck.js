@@ -16,6 +16,7 @@ export default function deleteTreeNodeWithRevisionCheck(context, payload, done) 
             userid: userid
         }, (err, res) => {
             if (err) {
+                console.log('deleteTreeNodeWithRevisionCheck: Error:', err);
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {

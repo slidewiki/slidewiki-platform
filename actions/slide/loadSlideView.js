@@ -11,7 +11,8 @@ export default function loadSlideView(context, payload, done) {
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.executeAction(serviceUnavailable, payload, done);
+            console.log('loadSlideView: Error:', err);
+            loadDeckViewcontext.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
             context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
