@@ -92,7 +92,8 @@ ContentModulesStore.handlers = {
     'LOAD_AMOUNT_OF_COMMENTS_SUCCESS': 'updateCommentsCount',
     'ADD_REPLY_SUCCESS': 'addCommentSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
-    'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess'
+    'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
+    'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess'
 };
 
 export default ContentModulesStore;

@@ -49,7 +49,7 @@ class ContentModulesPanel extends React.Component {
 
                     console.log('should read again');
                     let date = new Date().getTime();
-                    this.context.executeAction(loadContentDiscussion, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                    this.context.executeAction(loadCommentsCount, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
                 }
                 localStorage.removeItem('commentsCount');// reset the state in localStorage
             }
