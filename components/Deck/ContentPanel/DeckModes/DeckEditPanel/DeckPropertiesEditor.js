@@ -25,6 +25,13 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     getStateFromProps(props) {
+        let editors = props.deckProps.editors;
+        if (editors === undefined)
+            editors = {
+                users: [],
+                groups: []
+            };
+
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
@@ -33,8 +40,8 @@ class DeckPropertiesEditor extends React.Component {
             theme: props.deckProps.theme || '',
             license: props.deckProps.license || '',
             accessLevel: props.deckProps.accessLevel || 'public',
-            users: props.deckProps.editors.users,
-            groups: props.deckProps.editors.groups
+            users: editors.users,
+            groups: editors.groups
         };
     }
 
@@ -399,9 +406,11 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.license != null
         });
+        let isUserAllowedToChangeEditRights = this.state.accessLevel === 'public' || (this.props.DeckEditStore.deckProps.deckOwner === this.props.UserProfileStore.userid);
         let accessLevelFieldClass = classNames({
-            'required': true,
+            'required': isUserAllowedToChangeEditRights,
             'field': true,
+            'disabled': !isUserAllowedToChangeEditRights,
             'error': this.state.validationErrors.accessLevel != null
         });
         let groupsFieldClass = classNames({
@@ -528,7 +537,7 @@ class DeckPropertiesEditor extends React.Component {
                             {visibilityOptions}
                         </div>
 
-                        {this.state.accessLevel === 'restricted' ? (<div>
+                        {(this.state.accessLevel === 'restricted' && isUserAllowedToChangeEditRights) ? (<div>
                           <div className="two fields">
                               <div className={groupsFieldClass}>
                                   <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
