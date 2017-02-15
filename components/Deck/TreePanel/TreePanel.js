@@ -13,6 +13,7 @@ import saveTreeNodeWithRevisionCheck from '../../../actions/decktree/saveTreeNod
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
+import checkForkingRights from '../../../actions/decktree/checkForkingRights';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 
 class TreePanel extends React.Component {
@@ -118,9 +119,10 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            'disabled': (!this.props.UserProfileStore.userid),
+            'disabled': (!this.props.DeckTreeStore.isForkingPossible),
             'button': true
         });
+        this.context.executeAction(checkForkingRights, this.props.DeckTreeStore.isForkingPossible);
 
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;

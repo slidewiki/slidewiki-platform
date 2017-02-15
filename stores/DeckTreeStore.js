@@ -11,6 +11,7 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = Immutable.fromJS({});
         this.flatTree = Immutable.fromJS({});
         this.error = 0;
+        this.isForkingPossible = false;
     }
     updateDeckTree(payload) {
         this.selector = Immutable.fromJS(payload.selector);
@@ -478,7 +479,8 @@ class DeckTreeStore extends BaseStore {
             flatTree: this.flatTree,
             prevSelector: this.prevSelector,
             nextSelector: this.nextSelector,
-            error: this.error
+            error: this.error,
+            isForkingPossible: this.isForkingPossible
         };
     }
     dehydrate() {
@@ -491,6 +493,7 @@ class DeckTreeStore extends BaseStore {
         this.prevSelector = Immutable.fromJS(state.prevSelector);
         this.nextSelector = Immutable.fromJS(state.nextSelector);
         this.error  = state.error;
+        this.isForkingPossible = state.isForkingPossible;
     }
     handleDeckTreeError(err){
         this.error = err;
@@ -539,6 +542,11 @@ class DeckTreeStore extends BaseStore {
         }
         this.emitChange();
     }
+
+    forkingRightsHaveChanged(newRights) {
+        this.isForkingPossible = newRights;
+        this.emitChange();
+    }
 }
 
 DeckTreeStore.storeName = 'DeckTreeStore';
@@ -554,6 +562,7 @@ DeckTreeStore.handlers = {
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
+    'FORKING_RIGHTS_CHANGED': 'forkingRightsHaveChanged',
     //error handling msges
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
 };
