@@ -6,7 +6,7 @@ class ContentHistoryList extends React.Component {
         const selector = this.props.selector;
         const list = this.props.revisions.map((node, index) => {
             return (
-                <ContentHistoryItem key={index} revision={node} selector={selector} userid={this.props.userid}/>
+                <ContentHistoryItem key={index} revision={node} selector={selector} allowRevert={this.props.allowRevert}/>
             );
         });
 
