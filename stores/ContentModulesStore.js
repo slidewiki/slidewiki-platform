@@ -17,7 +17,6 @@ class ContentModulesStore extends BaseStore {
         this.emitChange();
     }
     updateDataSourceCount(payload) {
-        console.log('updateDataSourceCount');
         this.moduleCount.datasource = payload.count;
         this.emitChange();
     }
@@ -31,28 +30,18 @@ class ContentModulesStore extends BaseStore {
         this.emitChange();
     }
     addCommentSuccess() {
-        console.log('addCommentSuccess');
         this.moduleCount.comments++;
-
-
-
         if (this.isLocalStorageOn()) {
             localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
         }
-
-
-
-
         this.emitChange();
     }
     updateDataSourcesSuccess(payload) {
-        console.log('updateDataSourcesSuccess');
         this.moduleCount.datasource = payload.dataSources.length;
 
         if (this.isLocalStorageOn()) {
             localStorage.setItem('sourcesCount', this.moduleCount.datasource);// save this to compare it later with rehydrated data
         }
-
 
         this.emitChange();
     }

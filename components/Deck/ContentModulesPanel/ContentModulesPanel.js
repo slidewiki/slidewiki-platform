@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import restoreDeckPageLayout from '../../../actions/deckpagelayout/restoreDeckPageLayout';
 import loadActivities from '../../../actions/activityfeed/loadActivities';
 import loadContentDiscussion from '../../../actions/contentdiscussion/loadContentDiscussion';
+import loadCommentsCount from '../../../actions/contentdiscussion/loadCommentsCount';
 import loadContentHistory from '../../../actions/history/loadContentHistory';
 import loadContentUsage from '../../../actions/loadContentUsage';
 //import loadContentQuestions from '../../../actions/loadContentQuestions';
@@ -46,8 +47,6 @@ class ContentModulesPanel extends React.Component {
             console.log('this.props.ContentModulesStore.moduleCount.comments', this.props.ContentModulesStore.moduleCount.comments);
             if (commentsCountFromLocalStorage !== undefined && commentsCountFromLocalStorage !== null) {
                 if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments)) {// wrong data read from browser cache
-
-                    console.log('should read again');
                     let date = new Date().getTime();
                     this.context.executeAction(loadCommentsCount, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
                 }
