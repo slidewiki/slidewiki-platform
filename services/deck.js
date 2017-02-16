@@ -107,7 +107,8 @@ export default {
                         groups: []
                     },
                     deckOwner: deck.user,
-                    revisionOwner: revision.user
+                    revisionOwner: revision.user,
+                    sid: args.sid
                 };
                 callback(null, {
                     deckProps: deckProps,
@@ -124,9 +125,22 @@ export default {
                 json: true
             })
             .then((body) => {
-                // console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed', body);
+                console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed', body);
 
                 callback(null, body.allowed);
+            })
+            .catch((err) => callback(err));
+        } else if (resource === 'deck.forkAllowed') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.sid + '/forkAllowed',
+                headers: { '----jwt----': args.jwt },
+                json: true
+            })
+            .then((body) => {
+                console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/forkAllowed', body);
+
+                callback(null, body);
             })
             .catch((err) => callback(err));
         } else if (resource === 'deck.numberofslides') {

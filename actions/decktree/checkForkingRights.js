@@ -1,32 +1,34 @@
 import DeckEditStore from '../../stores/DeckEditStore';
 import DeckViewStore from '../../stores/DeckViewStore';
 import ContentStore from '../../stores/ContentStore';
+import UserProfileStore from '../../stores/UserProfileStore';
 
 export default function checkForkingRights(context, payload, done) {
     let isForkingPossible = payload;
 
-    let isPrivateOrRestricted = (accessLevel) => accessLevel === 'restricted' || accessLevel === 'private';
+    let deck = {
+        sid: context.getStore(DeckViewStore).deckData._id + '-' + context.getStore(DeckViewStore).deckData.active,
+        jwt: context.getStore(UserProfileStore).jwt
+    };
 
-    if (context.getStore(ContentStore).mode === 'view') {
-        // console.log('Check view stores deck data:', context.getStore(DeckViewStore).deckData);
-        let deck = context.getStore(DeckViewStore).deckData;
-        if (deck === undefined || deck.revisions === undefined)
-            deck = {
-                revisions:[],
-                active: 0
+    if (context.getStore(ContentStore).mode === 'edit') {
+        deck.sid = context.getStore(DeckEditStore).deckProps.sid;
+    }
+
+    if (deck.sid === 'undefined-undefined' || deck.sid === undefined)
+        return done();
+
+    context.service.read('deck.forkAllowed', deck, {timeout: 20 * 1000}, (err, res) => {
+        if (err) {
+            console.log('Error on request:', err);
+            res = {
+                forkAllowed: false
             };
-        let revision = deck.revisions.filter((revision) => {
-            return revision.id === deck.active;
-        })[0] || {accessLevel: ''};
-        isForkingPossible = !isPrivateOrRestricted(revision.accessLevel);
-    }
-    else {
-        isForkingPossible = !isPrivateOrRestricted(context.getStore(DeckEditStore).deckProps.accessLevel);
-    }
+        }
+        if (isForkingPossible !== res.forkAllowed) {
+            context.dispatch('FORKING_RIGHTS_CHANGED', res.forkAllowed);
+        }
 
-    if (isForkingPossible !== payload) {
-        context.dispatch('FORKING_RIGHTS_CHANGED', isForkingPossible);
-    }
-
-    done();
+        done();
+    });
 }
