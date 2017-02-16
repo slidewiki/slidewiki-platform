@@ -9,7 +9,7 @@ import suggestUsers from '../../../actions/search/suggestUsers';
 
 class UsersInput extends React.Component {
     initDropdown(){
-        let returnType = (this.props.returnType === 'username') ? 'username' : '_id';
+        let returnType = (this.props.returnType === 'username') ? 'username' : 'db_id';
 
         $('#users_input_div').dropdown({
             fields: {
@@ -48,7 +48,7 @@ class UsersInput extends React.Component {
             'search': true,
             'selection': true,
             'dropdown': true
-            
+
         });
         return (
             <div className={classes} id='users_input_div'>
