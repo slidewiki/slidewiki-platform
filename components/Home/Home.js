@@ -25,9 +25,7 @@ class Home extends React.Component {
                         </div>
                     </div>
                     <div className="ten wide column">
-                    <div className='item'>
-                        <LocaleSwitcher className='item' />
-                     </div>
+                    
                         <div className="ui top right attached large blue label">beta</div>
                         <img className="ui centered image" src="/assets/images/logo_full.png" alt="SlideWiki beta logo" />
                     </div>

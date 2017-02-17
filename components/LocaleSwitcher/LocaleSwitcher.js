@@ -29,29 +29,6 @@ class LocaleSwitcher extends React.Component {
 
     renderLocaleLink(locale) {
 
-
-
-        // if (locale === currentLocale) {
-        //     return;
-        // }
-
-        //        <Dropdown trigger={trigger}>
-        //   <Dropdown.Menu>
-        //     <Dropdown.Item disabled>
-        //       Signed in as <strong>Bob Smith</strong>
-        //     </Dropdown.Item>
-        //     <Dropdown.Divider />
-        //     <Dropdown.Item>Your Profile</Dropdown.Item>
-        //     <Dropdown.Item>Your Stars</Dropdown.Item>
-        //     <Dropdown.Item>Explore</Dropdown.Item>
-        //     <Dropdown.Item>Integrations</Dropdown.Item>
-        //     <Dropdown.Item>Help</Dropdown.Item>
-        //     <Dropdown.Divider />
-        //     <Dropdown.Item>Settings</Dropdown.Item>
-        //     <Dropdown.Item>Sign Out</Dropdown.Item>
-        //   </Dropdown.Menu>
-        // </Dropdown>
-
         return (
             <Dropdown.Item
             key = {locale}
