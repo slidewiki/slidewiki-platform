@@ -23,28 +23,28 @@ export default {
 
         switch(resource) {
             case 'log.debug':
-                clog.debug({id: req.id, navStack: body.navStack, message: msg});
+                clog.debug({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.info':
-                clog.info({id: req.id, navStack: body.navStack, message: msg});
+                clog.info({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.notice':
-                clog.notice({id: req.id, navStack: body.navStack, message: msg});
+                clog.notice({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.warning':
-                clog.warning({id: req.id, navStack: body.navStack, message: msg});
+                clog.warning({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.error':
-                clog.error({id: req.id, navStack: body.navStack, message: msg});
+                clog.error({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.crit':
-                clog.crit({id: req.id, navStack: body.navStack, message: msg});
+                clog.crit({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.alert':
-                clog.alert({id: req.id, navStack: body.navStack, message: msg});
+                clog.alert({id: req.id, actions: body.actions, message: msg});
                 break;
             case 'log.emerg':
-                clog.emerg({id: req.id, navStack: body.navStack, message: msg});
+                clog.emerg({id: req.id, actions: body.actions, message: msg});
                 break;
         }
         return;

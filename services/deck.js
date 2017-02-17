@@ -1,12 +1,12 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-const clog = require('../actions/log/clog');
+const log = require('../configs/log').log;
 
 export default {
     name: 'deck',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        //clog.warn('Some message from deck.js');
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'deck.featured') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), resource: resource});
@@ -145,6 +145,7 @@ export default {
     },
     // other methods
     create: (req, resource, params, body, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'create', method: req.method});
         if (resource === 'deck.create') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), resource: resource});
             if (params.tags.length === 1 && params.tags[0].length === 0)
@@ -170,6 +171,7 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'update', method: req.method});
         if (resource === 'deck.update') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), resource: resource});
             if (params.tags.length === 1 && params.tags[0].length === 0)

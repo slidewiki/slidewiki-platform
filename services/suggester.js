@@ -1,10 +1,12 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 export default {
     name: 'suggester',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         let args = params.params ? params.params : params;
         let urlPrefix = '';
 

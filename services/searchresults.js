@@ -1,15 +1,17 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
+const log = require('../configs/log').log;
 
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         let args = params.params? params.params : params;
 
         if(resource === 'searchresults.list'){
-            
+
             // fetch results from search-microservice
             rp.get({uri: Microservices.search.uri + '/get/' + args.queryparams}).then((results) => {
                 let searchResults = JSON.parse(results);

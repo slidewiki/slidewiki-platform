@@ -1,7 +1,10 @@
+const log = require('../configs/log').log;
+
 export default {
     name: 'similarcontent',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         let args = params.params? params.params : params;
         let selector= {'sid': args.sid, 'stype': args.stype};
         if(resource === 'similarcontent.list'){

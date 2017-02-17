@@ -1,10 +1,12 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 export default {
     name: 'decktree',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
@@ -19,6 +21,7 @@ export default {
         }
     },
     create: (req, resource, params, body, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'create', method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         let nodeSpec = {'id': String(args.nodeSpec.id), 'type': args.nodeSpec.type};
@@ -40,6 +43,7 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'update', method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         if(resource === 'decktree.nodeTitle'){
@@ -80,6 +84,7 @@ export default {
         }
     },
     delete: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'delete', method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.node'){

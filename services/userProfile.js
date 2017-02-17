@@ -1,11 +1,13 @@
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
+const log = require('../configs/log').log;
 
 export default {
     name: 'userProfile',
 
     delete: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'delete', method: req.method});
         rp({
             method: 'DELETE',
             uri: Microservices.user.uri + '/user/' + params.params.id,
@@ -16,6 +18,7 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'update', method: req.method});
         if (resource === 'userProfile.updatePassword') {
             let tosend = {
                 oldPassword: params.oldpw,
@@ -122,6 +125,7 @@ export default {
     },
 
     read: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         if(resource !== 'userProfile.fetchUserDecks') {
             if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
                 rp({

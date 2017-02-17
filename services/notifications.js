@@ -1,5 +1,6 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 function adjustIDs(activity) {
     activity.content_id = adjustID(activity.content_id);
@@ -22,6 +23,7 @@ export default {
     name: 'notifications',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
         let args = params.params? params.params : params;
         let uid = args.uid;
         if (uid === undefined) {
@@ -86,6 +88,7 @@ export default {
         }
     },
     delete: (req, resource, params, config, callback) => {
+        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'delete', method: req.method});
         let args = params.params? params.params : params;
 
         if (resource === 'notifications.item'){
