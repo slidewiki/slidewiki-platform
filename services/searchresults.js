@@ -9,9 +9,14 @@ export default {
         let args = params.params? params.params : params;
 
         if(resource === 'searchresults.list'){
-            
+
+            console.log('edw ' + JSON.stringify(args));
+
             // fetch results from search-microservice
-            rp.get({uri: Microservices.search.uri + '/get/' + args.queryparams}).then((results) => {
+            rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams}).then((results) => {
+
+                console.log(JSON.stringify(JSON.parse(results), null, 2));
+
                 let searchResults = JSON.parse(results);
                 let allPromises = [], decks = {}, decksIdHash = {}, deckRevisions = {};
                 let userPromises = [], usernames = {}, userIdHash = {};

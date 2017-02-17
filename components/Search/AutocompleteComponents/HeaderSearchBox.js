@@ -42,9 +42,8 @@ class HeaderSearchBox extends React.Component {
     handleRedirect(searchstring){
         let querystring = (searchstring) ? searchstring : this.refs.searchstring.value;
 
-        let searchstr = 'q=';
+        let searchstr = 'keywords=';
         if(querystring.trim() === ''){
-            // searchstr += encodeURIComponent('*:*');
             return;
         }
         else{

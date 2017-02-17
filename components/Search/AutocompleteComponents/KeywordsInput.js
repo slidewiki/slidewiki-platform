@@ -37,16 +37,16 @@ class KeywordsInput extends React.Component {
         this.initAutocomplete();
     }
     getSelected(){
-        return this.refs.searchstring.value;
+        return this.refs.keywords.value;
     }
     focus(){
-        this.refs.searchstring.focus();
+        this.refs.keywords.focus();
     }
     onSelect(result, response){
         this.props.onSelect(result.key);
     }
     blur(){
-        this.refs.searchstring.blur();
+        this.refs.keywords.blur();
     }
     render(){
         let classes = classNames({
@@ -57,7 +57,7 @@ class KeywordsInput extends React.Component {
 
         return (
             <div className={classes} id="keywords_search_div">
-                <input name='searchstring' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={this.props.value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref='searchstring'></input>
+                <input name='keywords' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={this.props.value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref='keywords'></input>
                 <div className="results"></div>
             </div>
         );
