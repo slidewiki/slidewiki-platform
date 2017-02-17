@@ -1,4 +1,5 @@
 import {BaseStore} from 'fluxible/addons';
+import { isLocalStorageOn } from '../common.js';
 
 class ContentModulesStore extends BaseStore {
     constructor(dispatcher) {
@@ -31,7 +32,7 @@ class ContentModulesStore extends BaseStore {
     }
     addCommentSuccess() {
         this.moduleCount.comments++;
-        if (this.isLocalStorageOn()) {
+        if (isLocalStorageOn()) {
             localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
         }
         this.emitChange();
@@ -39,7 +40,7 @@ class ContentModulesStore extends BaseStore {
     updateDataSourcesSuccess(payload) {
         this.moduleCount.datasource = payload.dataSources.length;
 
-        if (this.isLocalStorageOn()) {
+        if (isLocalStorageOn()) {
             localStorage.setItem('sourcesCount', this.moduleCount.datasource);// save this to compare it later with rehydrated data
         }
 
@@ -59,16 +60,6 @@ class ContentModulesStore extends BaseStore {
         this.moduleType = state.moduleType;
         this.selector = state.selector;
         this.moduleCount = state.moduleCount;
-    }
-    isLocalStorageOn () {
-        let mod = 'react-count';
-        try {
-            localStorage.setItem(mod, mod);
-            localStorage.removeItem(mod);
-            return true;
-        } catch(e) {
-            return false;
-        }
     }
 }
 

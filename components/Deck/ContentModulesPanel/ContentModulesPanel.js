@@ -17,23 +17,13 @@ import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPa
 import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
+import { isLocalStorageOn } from '../../../common.js';
 
 class ContentModulesPanel extends React.Component {
-    isLocalStorageOn () {
-        let mod = 'react-count';
-        try {
-            localStorage.setItem(mod, mod);
-            localStorage.removeItem(mod);
-            return true;
-        } catch(e) {
-            return false;
-        }
-    }
-
     componentWillMount() {
         let selector = this.props.ContentModulesStore.selector;
         //check localStorage to see if invalid data have been read from the browser cache
-        if (selector !== undefined && this.isLocalStorageOn()) {
+        if (selector !== undefined && isLocalStorageOn()) {
             const sourcesCountFromLocalStorage = localStorage.getItem('sourcesCount');
             if (sourcesCountFromLocalStorage !== undefined && sourcesCountFromLocalStorage !== null) {
                 if (String(sourcesCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.datasource)) {// wrong data read from browser cache
