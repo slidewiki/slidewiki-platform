@@ -1,5 +1,6 @@
 export default {
     locales: ['ru'],
+    language: 'Русский',
 
     messages: {
 
