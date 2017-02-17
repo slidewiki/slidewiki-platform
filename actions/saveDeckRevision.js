@@ -4,10 +4,10 @@ import striptags from 'striptags';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from './error/serviceUnavailable';
-const clog = require('./log/clog');
+const log = require('./log/clog');
 
 export default function saveDeckRevision(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -23,7 +23,7 @@ export default function saveDeckRevision(context, payload, done) {
         payload.root_deck = parent;
         context.service.update('deck.updateWithRevision', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                clog.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, payload, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
             } else {

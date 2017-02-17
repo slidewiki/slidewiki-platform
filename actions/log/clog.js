@@ -1,5 +1,5 @@
 exports.error = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.error', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -8,7 +8,7 @@ exports.error = function(context, payload, msg='') {
 };
 
 exports.warning = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.warn', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -17,7 +17,7 @@ exports.warning = function(context, payload, msg='') {
 };
 
 exports.info = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.info', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -26,7 +26,7 @@ exports.info = function(context, payload, msg='') {
 };
 
 exports.crit = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.crit', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -35,7 +35,7 @@ exports.crit = function(context, payload, msg='') {
 };
 
 exports.debug = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.debug', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -44,7 +44,7 @@ exports.debug = function(context, payload, msg='') {
 };
 
 exports.notice = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.notice', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -53,7 +53,7 @@ exports.notice = function(context, payload, msg='') {
 };
 
 exports.emerg = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.emerg', payload, body, (err, res) => {
         if (err)
             console.log(err);
@@ -62,7 +62,7 @@ exports.emerg = function(context, payload, msg='') {
 };
 
 exports.alert = function(context, payload, msg='') {
-    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {navStack: context.stack.slice(), msg: msg} : {navStack: [], msg: msg};
+    const body = (typeof context === 'object' && context.hasOwnProperty('stack')) ? {actions: context.stack.slice(), msg: msg} : {actions: [], msg: msg};
     context.service.update('log.alert', payload, body, (err, res) => {
         if (err)
             console.log(err);

@@ -3,10 +3,10 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 //import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
 import serviceUnavailable from '../../error/serviceUnavailable';
-const clog = require('../../log/clog');
+const log = require('../../log/clog');
 
 export default function changePassword(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
@@ -18,7 +18,7 @@ export default function changePassword(context, payload, done) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else {
-                clog.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, payload, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 context.dispatch('EDIT_USER_FAILED', err);
             }

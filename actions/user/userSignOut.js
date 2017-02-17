@@ -1,9 +1,9 @@
 import async from 'async';
 import { navigateAction } from 'fluxible-router';
-const clog = require('../log/clog');
+const log = require('../log/clog');
 
 export default function userSignOut(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     async.series([
             // (callback) => {
             //     context.dispatch('USER_SIGNOUT', payload);

@@ -1,9 +1,9 @@
 import {navigateAction} from 'fluxible-router';
 import UserProfileStore from '../stores/UserProfileStore';
-const clog = require('./log/clog');
+const log = require('./log/clog');
 
 export default function loadAddDeck(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     //redirect to homepage if not logged in
     let store = context.getStore(UserProfileStore);
     if (!((store.username !== undefined && store.username !== null && store.username !== '')

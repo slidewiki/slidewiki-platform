@@ -11,10 +11,10 @@ import slideIdTypeError from './error/slideIdTypeError';
 import deckModeError from './error/deckModeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
-const clog = require('./log/clog');
+const log = require('./log/clog');
 
 export default function loadContent(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -83,7 +83,7 @@ export default function loadContent(context, payload, done) {
     // final callback
     (err, results) => {
         if (err) {
-            clog.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {

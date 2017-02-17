@@ -1,10 +1,10 @@
 'use strict';
 import { shortTitle } from '../../configs/general';
 import serviceUnavailable from '../error/serviceUnavailable';
-const clog = require('../log/clog');
+const log = require('../log/clog');
 
 export default function uploadFile(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     context.dispatch('UPLOAD_STARTED', null);
 
     //use timer in order to make a working progress bar
@@ -30,7 +30,7 @@ export default function uploadFile(context, payload, done) {
 
         // context.myStuff.uploadFinished = true;
         if (err) {
-            clog.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('UPLOAD_FAILED', err);
             //context.dispatch('CREATION_FAILURE', err);

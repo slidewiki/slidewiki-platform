@@ -1,8 +1,8 @@
 import { shortTitle } from '../../configs/general';
-const clog = require('../log/clog');
+const log = require('../log/clog');
 
 export default function storeFile(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     context.dispatch('STORE_FILE', payload);
     done();
 }

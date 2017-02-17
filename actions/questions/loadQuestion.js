@@ -1,7 +1,7 @@
-const clog = require('../log/clog');
+const log = require('../log/clog');
 
 export default function loadQuestion(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     context.dispatch('LOAD_QUESTION', payload);
     done();
 }

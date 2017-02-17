@@ -1,10 +1,10 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from '../error/serviceUnavailable';
-const clog = require('../log/clog');
+const log = require('../log/clog');
 
 export default function forkDeck(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
     if (userid == null || userid === '') {
@@ -17,7 +17,7 @@ export default function forkDeck(context, payload, done) {
 
         context.service.update('deck.fork', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                clog.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, payload, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('FORK_DECK_FAILURE', err);
             } else {

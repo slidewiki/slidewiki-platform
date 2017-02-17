@@ -2,10 +2,10 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
 import { isEmpty } from '../../../common.js';
-const clog = require('../../log/clog');
+const log = require('../../log/clog');
 
 export default function fetchUser(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;

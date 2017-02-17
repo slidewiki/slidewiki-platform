@@ -2,11 +2,11 @@ import async from 'async';
 import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import addTreeNodeWithRevisionCheck from './addTreeNodeWithRevisionCheck';
-const clog = require('../log/clog');
+const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addTreeNodeAndNavigate(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     //load all required actions in parallel
     async.parallel([
         (callback) => {
@@ -32,7 +32,7 @@ export default function addTreeNodeAndNavigate(context, payload, done) {
             });
         }
         else {
-            clog.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, payload, {filepath: __filename, err: err});
             //context.executeAction(serviceUnavailable, payload, done);
         }
 

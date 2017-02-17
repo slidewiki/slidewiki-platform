@@ -3,10 +3,10 @@ import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
-const clog = require('./log/clog');
+const log = require('./log/clog');
 
 export default function loadTranslations(context, payload, done) {
-    clog.info(context, payload);
+    log.info(context, payload);
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -19,7 +19,7 @@ export default function loadTranslations(context, payload, done) {
 
     context.service.read('translation.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            clog.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             context.dispatch('LOAD_TRANSLATIONS_FAILURE', err);
         } else {
