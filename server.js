@@ -21,7 +21,7 @@ import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 
 const uuidV4 = require('uuid/v4');
-let clog = require('./configs/log').log;
+const log = require('./configs/log').log;
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -102,7 +102,7 @@ server.use((req, res, next) => {
         //}
     });
 
-    clog.info({id: req.id, method: req.method, url: req.url, ip: req.ip, message: 'new request'});
+    log.info({id: req.id, method: req.method, url: req.url, ip: req.ip, message: 'new request'});
     debug('Executing navigate action');
     context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.id}, (err) => {
         if (err) {
@@ -124,7 +124,7 @@ server.use((req, res, next) => {
                 res.type('html');
                 res.status(err.statusCode);
                 res.write('<!DOCTYPE html>' + html);
-                clog.error({id: res.id, url: req.url, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
+                log.error({id: res.id, url: req.url, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
                 res.end();
                 // Pass through to next middleware
                 //next();
@@ -145,7 +145,7 @@ server.use((req, res, next) => {
                 res.type('html');
                 res.status(err.statusCode);
                 res.write('<!DOCTYPE html>' + html);
-                clog.error({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
+                log.error({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
                 res.end();
                 //next(err);
             }
@@ -172,7 +172,7 @@ server.use((req, res, next) => {
         res.type('html');
         res.write('<!DOCTYPE html>' + html);
         //console.log(Object.keys(res), res.statusCode, res.statusMessage, Object.keys(res.req));
-        clog.info({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
+        log.info({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
         res.end();
     });
 });
