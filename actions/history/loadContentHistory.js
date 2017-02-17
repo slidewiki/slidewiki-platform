@@ -3,6 +3,8 @@ import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';
 import { AllowedPattern } from '../error/util/allowedPattern';
+import DeckTreeStore from '../../stores/DeckTreeStore.js';
+import { isEmpty } from '../../common.js';
 const log = require('../log/clog');
 
 export default function loadContentHistory(context, payload, done) {
@@ -32,7 +34,7 @@ export default function loadContentHistory(context, payload, done) {
         if (err) {
             log.error(context, payload, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('LOAD_CONTENT_HISTORY_FAILURE', err);
+            context.dispatch('LOAD_CONTENT_HISTORY_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_HISTORY_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'history'});

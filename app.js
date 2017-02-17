@@ -74,7 +74,7 @@ const app = new Fluxible({
         RevisioningStore,
         DeckListStore,
         ContentActionsFooterStore,
-	ServiceErrorStore
+	    ServiceErrorStore
     ]
 });
 
