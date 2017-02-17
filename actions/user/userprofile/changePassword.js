@@ -14,7 +14,7 @@ export default function changePassword(context, payload, done) {
         if (err) {
             if (err.statusCode === 404) {
                 context.dispatch('WRONG_PASSWORD', err);
-            } else if (err.statusCode === 401) {
+            } else if (err.statusCode === 401 || err.statusCode === 403) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else {

@@ -1,40 +1,47 @@
 const co = require('../common');
 
+/*
+This microservice configuration points the platform towards
+using the experimental server of the SlideWiki development
+team.
+*/
+
+
 export default {
     Microservices: {
         'deck': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_DECK)) ? process.env.SERVICE_URL_DECK : 'http://deckservice.experimental.slidewiki.org'
+            uri: 'https://deckservice.experimental.slidewiki.org'
         },
         'discussion': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_DISCUSSION)) ? process.env.SERVICE_URL_DISCUSSION : 'http://discussionservice.experimental.slidewiki.org'
+            uri: 'https://discussionservice.experimental.slidewiki.org'
         },
         'activities': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_ACTIVITIES)) ? process.env.SERVICE_URL_ACTIVITIES : 'http://activitiesservice.experimental.slidewiki.org'
+            uri: 'https://activitiesservice.experimental.slidewiki.org'
         },
         'notification': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_NOTIFICATION)) ? process.env.SERVICE_URL_NOTIFICATION : 'http://notificationservice.experimental.slidewiki.org'
+            uri: 'https://notificationservice.experimental.slidewiki.org'
         },
         'user': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_USER)) ? process.env.SERVICE_URL_USER : 'http://userservice.experimental.slidewiki.org'
+            uri: 'https://userservice.experimental.slidewiki.org'
         },
         'import': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_IMPORT)) ? process.env.SERVICE_URL_IMPORT : 'http://importservice.experimental.slidewiki.org',
-            protocol: 'http:',
-            host: (!co.isEmpty(process.env.SERVICE_VAR_IMPORT_HOST)) ? process.env.SERVICE_VAR_IMPORT_HOST : 'importservice.experimental.slidewiki.org',
+            uri: 'https://importservice.experimental.slidewiki.org',
+            protocol: 'https:',
+            host: 'importservice.experimental.slidewiki.org',
             path: '/importPPTX',
             port: 80
         },
         'search': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_SEARCH)) ? process.env.SERVICE_URL_SEARCH : 'http://searchservice.experimental.slidewiki.org'
+            uri: 'https://searchservice.experimental.slidewiki.org'
         },
         'image': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_IMAGE)) ? process.env.SERVICE_URL_IMAGE : 'http://imageservice.experimental.slidewiki.org'
+            uri: 'https://imageservice.experimental.slidewiki.org'
         },
         'file': {
-            uri: (!co.isEmpty(process.env.SERVICE_URL_FILE)) ? process.env.SERVICE_URL_FILE : 'http://fileservice.experimental.slidewiki.org'
+            uri: 'https://fileservice.experimental.slidewiki.org'
         },
         'pdf': {
-            uri : (!co.isEmpty(process.env.SERVICE_URL_PDF)) ? process.env.SERVICE_URL_PDF : 'http://pdfservice.experimental.slidewiki.org'
+            uri : 'https://pdfservice.experimental.slidewiki.org'
         }
     }
 };

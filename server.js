@@ -30,6 +30,14 @@ process.env.BROWSER = false;
 
 const debug = debugLib('slidewiki-platform');
 
+const host = process.env.HOST ? process.env.HOST : '0.0.0.0';
+let port = 3000 ;
+if(env === 'production'){
+    port = process.env.PORT ? process.env.PORT :  3000;
+}else{
+    port = process.env.PORT ? parseInt(process.env.PORT) + 1 : 3001;
+}
+
 const server = express();
 server.use(cookieParser());
 server.use(bodyParser.json({limit: '50mb'}));
@@ -47,6 +55,11 @@ server.use('/es6-shim', express.static(path.join(__dirname, '/node_modules/es6-s
 server.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery')));
 server.use('/sweetalert2', express.static(path.join(__dirname, '/node_modules/sweetalert2')));
 server.use('/headjs', express.static(path.join(__dirname, '/node_modules/headjs')));
+
+server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckeditor')));
+server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
+server.use('/ckeditor-plugins/lineheight', express.static(path.join(__dirname, 'node_modules/ckeditor-lineheight-plugin')));
+server.use('/mathjax', express.static(path.join(__dirname, 'node_modules/mathjax')));
 
 //server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
@@ -165,8 +178,12 @@ server.use((req, res, next) => {
 });
 
 
-const port = process.env.PORT || 3000;
 server.listen(port);
-clog.info('SlideWiki Platform is now Listening on port ' + port);
+if(env === 'production'){
+    console.log('[production environment] Check your application on http://%s:%s', host, port);
+}else{
+    console.log('[development environment] Proxy server listening on port ' + port);
+    console.log('[development environment] Check your application on http://%s:%s', host, port-1);
+}
 
 export default server;

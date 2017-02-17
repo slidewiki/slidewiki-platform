@@ -18,7 +18,7 @@ export default function changeUserData(context, payload, done) {
             else if (err.statusCode === 404) {
                 context.executeAction(notFoundError, {}, done);
                 return;
-            } else if (err.statusCode === 401) {
+            } else if (err.statusCode === 401 || err.statusCode === 403) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
