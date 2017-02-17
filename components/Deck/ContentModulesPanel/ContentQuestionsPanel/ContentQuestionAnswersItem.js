@@ -7,9 +7,9 @@ class ContentQuestionAnswersItem extends React.Component {
 
         let rightIcon = (<i className="icon"></i>);
         switch (answer.correct) {
-            case true:
-                rightIcon = (<i className="checkmark icon teal"></i>);
-                break;
+          case true:
+            rightIcon = (<i className="checkmark icon teal"></i>);
+            break;
         }
 
         return (

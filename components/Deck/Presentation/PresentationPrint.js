@@ -20,7 +20,7 @@ let clearStyle = {
 
 let pdf;
 if(process.env.BROWSER){
-    pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
+        pdf = require('../../../custom_modules/reveal.js/css/print/pdf.css');
 }
 
 
@@ -95,7 +95,7 @@ class Presentation extends React.Component{
         if(slides){
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
-                let notes = '';
+                let notes = ''
                 if(slide.speakernotes){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }

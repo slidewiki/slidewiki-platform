@@ -89,7 +89,7 @@ class Presentation extends React.Component{
         if(slides){
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
-                let notes = '';
+                let notes = ''
                 if(slide.speakernotes){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }

@@ -60,7 +60,7 @@ class ContentActionsFooter extends React.Component {
 
     getExportHref(type){
         if (type !== 'EPub' && type !== 'PDF') {
-            return;
+          return;
         }
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0)
         {

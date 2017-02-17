@@ -112,7 +112,7 @@ class Import extends React.Component {
                               <p>Select your presentation file and upload it to SlideWiki.</p>
                               <p>Only PowerPoint (.pptx) is supported (Max size: {MAX_FILESIZE_MB}MB).</p>
                               <div className="ui input file focus animated">
-                                    <input ref="selectbutton" accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
+                                    <input ref="selectbutton" accept={ acceptedFormats + "application/vnd.openxmlformats-officedocument.presentationml.presentation"} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
                               </div>
                           </div>
                           <div className="actions">

@@ -3,30 +3,34 @@ import createMockComponentContext from 'fluxible/utils/createMockComponentContex
 import provideContext from 'fluxible-addons-react/provideContext';
 import connectToStores from 'fluxible-addons-react/connectToStores';
 import TestUtils from 'react-addons-test-utils';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import ContentModuleStore from '../../stores/ContentModulesStore';
 
-
-describe('ContentModulesStore', () => {
-    let component = null;
+import createStore from 'fluxible/addons/createStore';
 
 
-    beforeEach('render and locate element', (done) => {
-        let testStores = [ContentModuleStore];
-        let context = createMockComponentContext({
-            stores: testStores
-        });
+describe('ContentModulesStore', function(){
+  var component = null;
 
-        let testComponent = provideContext(connectToStores(component, testStores, () => {
-            return {};
-        }));
-        let x = 42;
-        component = TestUtils.renderIntoDocument(<testComponent context={context} abc={x}/>);
 
-        done();
+  beforeEach('render and locate element', function(done){
+
+    let testStores = [ContentModuleStore];
+    let context = createMockComponentContext({
+      stores : testStores
     });
 
-    it('should render', () => {
-        expect(component).to.exist;
-    });
+    let testComponent = provideContext(connectToStores(component, testStores, function(){
+      return {};
+    }));
+    let x = 42;
+    component = TestUtils.renderIntoDocument(<testComponent context={context} abc={x} />);
+
+    done();
+
+  });
+
+  it('should render', function(){
+    expect(component).to.exist;
+  });
 });
