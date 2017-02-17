@@ -19,11 +19,11 @@
     "arrow-spacing": [2, { "before": true, "after": true }],
     "arrow-parens": [2, "always"],
     "eqeqeq": [2, "smart"],
-    "indent": [2, 4, {"SwitchCase": 1}],
-    "quotes": [2, "single"],
+    "indent": [2, 4, {SwitchCase: 1}],
+    "quotes": [2, 'single'],
     "linebreak-style": [2, "unix"],
     "prefer-arrow-callback": 2,
-    "dot-notation": [2, {"allowKeywords": true}],  //some libraries use keywords like catch or delete
+    "dot-notation": [2, {allowKeywords: true}],  //some libraries use keywords like catch or delete
     "no-use-before-define": 0,
     "no-unused-vars": 0, // see https://github.com/babel/babel-eslint/issues/21
     "semi": [2, "always"],
