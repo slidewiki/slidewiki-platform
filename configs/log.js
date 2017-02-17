@@ -9,8 +9,8 @@ if (!fs.existsSync(logDir)) {
 }
 
 // winston.setLevels(winston.config.npm.levels);
-winston.setLevels(winston.config.syslog.levels);
-winston.addColors(winston.config.npm.colors);
+//winston.setLevels(winston.config.syslog.levels);
+//winston.addColors(winston.config.npm.colors);
 
 if (!obj.log) {
     obj.log = new (winston.Logger)({
@@ -39,6 +39,8 @@ if (!obj.log) {
         ],
         exitOnError: false
     });
+    
+    obj.log.setLevels(winston.config.syslog.levels);
 }
 
 module.exports = obj;
