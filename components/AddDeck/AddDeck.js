@@ -270,9 +270,9 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.deckId !== null &&
             this.props.ImportStore.uploadProgress < 100 &&
             this.props.ImportStore.error === null) {
-                setTimeout( () => {
-                    this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
-                }, 100);
+            setTimeout( () => {
+                this.context.executeAction(checkNoOfSlides, {id: this.props.ImportStore.deckId});
+            }, 100);
         }
 
         return (
