@@ -44,9 +44,10 @@ class PrivatePublicUserProfile extends React.Component {
                       </div>
                   </div>
               </div>
-              <div className="ui tab" data-tab="activity"></div>
+              <div className="ui tab" data-tab="activity">
           </div>
-        );
+      </div>
+    );
     }
 }
 

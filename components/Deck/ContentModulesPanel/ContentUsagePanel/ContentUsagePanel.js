@@ -10,7 +10,7 @@ class ContentUsagePanel extends React.Component {
             this {this.props.ContentUsageStore.selector.stype}.</div>;
         const usageListComp = <div>
             <ContentUsageList usage={this.props.ContentUsageStore.usage}
-                              selector={this.props.ContentUsageStore.selector}/></div>;
+                              selector={this.props.ContentUsageStore.selector}/></div>
         return (
         <div ref="contentUsagePanel" className="ui">
             <div> {(this.props.ContentUsageStore.usage.length === 0) ? noUsageMessage : usageListComp}</div>

@@ -84,7 +84,7 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     handleChange(fieldName, event) {
-        let stateChange = {};
+        var stateChange = {};
         stateChange[fieldName] = event.target.value;
         this.setState(stateChange);
     }
