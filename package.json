@@ -31,7 +31,7 @@
     "dev:dashboard": "DASHBOARD=1 webpack-dashboard -- webpack-dev-server --config ./webpack/dev-server.js",
     "dev:windows:dashboard": "set HOST=127.0.0.1 && set PORT=3000 && set DASHBOARD=1 && webpack-dashboard -- webpack-dev-server --config ./webpack/dev-server.js",
     "dev:windows": "set HOST=127.0.0.1 && set PORT=3000 && node ./webpack/dev-server.js",
-    "lint": "eslint ./**/*.js",
+    "lint": "eslint -c .eslintrc \"./**/*.js\"",
     "test": "mocha test/unit/ --recursive --compilers js:babel-register --reporter spec",
     "coverage": "istanbul cover _mocha --include-all-sources tests/unit/*.js",
     "coverall": "npm run coverage && #cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
