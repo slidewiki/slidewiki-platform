@@ -21,36 +21,11 @@ import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 import acceptLanguage from 'accept-language';
-import { locales } from './configs/general';
+import { locales } from './configs/general'; //a list of supported locales, defines also the localeSwitcher component
 import Cookie from 'js-cookie';
 import locale from 'locale';
-import handleServerRendering from './server/handleServerRendering';
-import setLocale from './server/setLocale';
-import {loadIntlMessages} from './actions/intl';
-
-import { IntlProvider } from 'react-intl';
-
-// app.js
-import {addLocaleData} from 'react-intl';
-import en from 'react-intl/locale-data/en';
-import fr from 'react-intl/locale-data/fr';
-import es from 'react-intl/locale-data/es';
-import ru from 'react-intl/locale-data/ru';
-import de from 'react-intl/locale-data/de';
-
-addLocaleData([...en, ...fr, ...es, ...ru, ...de]);
-
-
-//acceptLanguage.languages(['en', 'ru']);
-
-
-
-// function detectLocale(req) {
-//     const cookieLocale = req.cookies.locale;
-//
-//     return acceptLanguage.get(cookieLocale || req.headers['accept-language']) || 'en';
-// }
-
+import handleServerRendering from './server/handleServerRendering'; //moved here the rendering part
+import setLocale from './server/setLocale'; //sets the locale from browser or cookies
 
 
 const env = process.env.NODE_ENV;
@@ -120,155 +95,37 @@ fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 
 
+// ************************** UI Internationalisation routines ***************************************
+
+// locale data from the intl library
+import {addLocaleData} from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import fr from 'react-intl/locale-data/fr';
+import es from 'react-intl/locale-data/es';
+import ru from 'react-intl/locale-data/ru';
+import de from 'react-intl/locale-data/de';
+
+addLocaleData([...en, ...fr, ...es, ...ru, ...de]);
+
+
 // Set the default locale
 
-locale.Locale.default = locales[0];
+locale.Locale.default = locales[0]; //the default locale is the first locale from a config
 
 // Set req.locale based on the browser settings
 
 server.use(locale(locales));
 
-// Overwrite req.locale either from cookie or querystring
+// Overwrite req.locale either from cookie or querystring, if it is supported
 
 server.use(setLocale);
 
-server.use((req, res, next) => {
+// ************************************ Rendering ***************************************************
 
-    const context =  app.createContext({
-        req: req,
-        res: res  //for userStoragePlugin
-        //, // The fetchr plugin depends on this
-        // xhrContext: {
-        //     _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
-        // }
-    });
+//render the server, as previous but from a separate file
+server.use(handleServerRendering);
 
-    debug('Executing navigate action');
-    context.getActionContext().executeAction(loadIntlMessages, {
-        locale: req.locale
-    }, (err) => {
-        if (err) {
-            console.log('ERROR:' + err);
-        }
-        else{
-            context.getActionContext().executeAction(navigateAction, {
-                url: req.url
-            }, (err) => {
-                if (err) {
-                    console.log(req.url, err);//, err);
-                    if (err.statusCode && err.statusCode === 404) {
-                        // TODO refector the code in this if-else block
-                        debug('Exposing context state');
-                        const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-
-                        const Root = app.getComponent();
-                        const messages = require('./intl/'+req.locale).messages;
-
-                        // Render the Root to string
-                        const content = ReactDOM.renderToString(
-                          <IntlProvider locale={ req.locale } messages={messages}>
-                            <Root context={ context.getComponentContext() } />
-                          </IntlProvider>
-                        );
-
-                        debug('Rendering Application component into html');
-
-
-
-                        //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                        const htmlElement = React.createElement(HTMLComponent, {
-                            //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
-                            clientFile: 'main.js',
-                            addAssets: (env === 'production'),
-                            context: context.getComponentContext(),
-                            state: exposed,
-                            markup: content,
-                            lang: req.locale
-                        });
-                        const html = ReactDOM.renderToStaticMarkup(htmlElement);
-                        debug('Sending markup');
-                        res.type('html');
-                        res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                        // Pass through to next middleware
-                        //next();
-                    } else {
-                        debug('Exposing context state');
-                        const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-
-                        const Root = app.getComponent();
-                        const messages = require('./intl/'+req.locale).messages;
-
-                        // Render the Root to string
-                        const content = ReactDOM.renderToString(
-                          <IntlProvider locale={ req.locale } messages={messages}>
-                            <Root context={ context.getComponentContext() } />
-                          </IntlProvider>
-                        );
-
-                        debug('Rendering Application component into html');
-
-
-
-                        //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                        const htmlElement = React.createElement(HTMLComponent, {
-                            //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
-                            clientFile: 'main.js',
-                            addAssets: (env === 'production'),
-                            context: context.getComponentContext(),
-                            state: exposed,
-                            markup: content,
-                            lang: req.locale
-                        });
-                        const html = ReactDOM.renderToStaticMarkup(htmlElement);
-                        debug('Sending markup');
-                        res.type('html');
-                        res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                        //next(err);
-                    }
-                    return;
-                }
-
-                debug('Exposing context state');
-                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-
-                const Root = app.getComponent();
-                const messages = require('./intl/'+req.locale).messages;
-
-                // Render the Root to string
-                const content = ReactDOM.renderToString(
-                  <IntlProvider locale={ req.locale } messages={messages}>
-                    <Root context={ context.getComponentContext() } />
-                  </IntlProvider>
-                );
-
-                debug('Rendering Application component into html');
-
-
-
-                //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                const htmlElement = React.createElement(HTMLComponent, {
-                    //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
-                    clientFile: 'main.js',
-                    addAssets: (env === 'production'),
-                    context: context.getComponentContext(),
-                    state: exposed,
-                    markup: content,
-                    lang: req.locale
-                });
-                const html = ReactDOM.renderToStaticMarkup(htmlElement);
-
-                //define browser locale and set it to cookies
-                // const locale = detectLocale(req);
-                // res.cookie('locale', locale, { maxAge: (new Date() * 0.001) + (365 * 24 * 3600) });
-
-                debug('Sending markup');
-                res.type('html');
-                res.write('<!DOCTYPE html>' + html);
-                res.end();
-            });
-        }
-    });
-});
+//server.use();
 
 
 server.listen(port);

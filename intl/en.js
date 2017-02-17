@@ -1,5 +1,6 @@
 export default {
     locales: ['en'],
+    language: ['English'],
 
     messages: {
 

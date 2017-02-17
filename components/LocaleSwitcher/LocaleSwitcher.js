@@ -9,6 +9,8 @@ import { Dropdown, Menu, Flag } from 'semantic-ui-react';
 
 import IntlStore from '../../stores/IntlStore';
 
+import Iso from 'iso-639-1';
+
 class LocaleSwitcher extends React.Component {
     constructor(props){
         super(props);
@@ -56,7 +58,7 @@ class LocaleSwitcher extends React.Component {
             onClick={ this.handleLocaleClick.bind(this, locale) }
             href={ `?locale=${locale}` }
             >
-            { locale }
+            { Iso.getName(locale) }
             </Dropdown.Item>
         );
     }
@@ -67,7 +69,7 @@ class LocaleSwitcher extends React.Component {
         if (this.state.currentLocale === 'en'){
             currentFlag = 'gb';
         }
-        let current_header = <span><Flag name={currentFlag}/>{this.state.currentLocale}</span>;
+        let current_header = <span><Flag name={currentFlag}/>{Iso.getName(this.state.currentLocale)}</span>;
 
         return (
 
