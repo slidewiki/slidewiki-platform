@@ -2,7 +2,7 @@ import { shortTitle } from '../../configs/general';
 import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError from '../error/slideIdTypeError';
 import { AllowedPattern } from '../error/util/allowedPattern';
-import DeckTreeStore from '../../stores/DeckTreeStore.js'
+import DeckTreeStore from '../../stores/DeckTreeStore.js';
 import { isEmpty } from '../../common.js';
 
 export default function loadContentHistory(context, payload, done) {
