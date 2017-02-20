@@ -1,45 +1,61 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import revertRevision from '../../../../actions/history/revertRevision';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
+import classNames from 'classnames';
 
 
 class ContentHistoryItem extends React.Component {
 
-    handleRevertClick() {
+    handleRevisionSelection(e) {
+        this.context.executeAction(navigateAction, {
+            url: ActivityFeedUtil.makeNodeRevisionURL(this.props.selector, this.props.revision.id)
+        });
+    }
+
+    handleRevertClick(e) {
+        e.stopPropagation();
         this.context.executeAction(revertRevision, {
             selector: this.props.selector, revisionId: this.props.revision.id
         });
     }
 
+    handleUserClick(e) {
+        e.stopPropagation();
+    }
+
     render() {
         const revision = this.props.revision;
-        const revertIcon = this.props.allowRevert? (
-        <a className="like" onClick={this.handleRevertClick.bind(this)}>
-            <i className="undo icon"/>
-        </a>
+        let revertBtnClass = classNames({
+            'ui right floated button mini compact': true
+        });
+        let itemClass = classNames({
+            'item': true,
+            'active': this.props.isSelected
+        });
+
+        const revertBtn = revision.active ?
+        <i className='check large circle icon green right floated'></i> : this.props.allowRevert ? (
+        <button className={revertBtnClass} onClick={this.handleRevertClick.bind(this)}>Make Active</button>
         ) : '';
-        let revisionLink = <NavLink
-        href={ActivityFeedUtil.makeNodeRevisionURL(this.props.selector, revision.id)}>Revision {revision.id} </NavLink>;
+
         return (
-        <div className="item">
+        <div className={itemClass} onClick={this.handleRevisionSelection.bind(this)}>
             <div className="content">
+                {revertBtn}
                 <div className="header">
-                    {revisionLink}
-                    {revision.active ? <i className='check circle icon green'></i> : revertIcon}
+                    <span>{' ' + ActivityFeedUtil.formatDate(revision.timestamp)}</span>
                 </div>
                 <div className="description">
                     <span>{'by '}</span>
-                    <a className="user" href={'/user/' + revision.user}>
-                        {revision.username}
-                    </a>
-                    <span>{' ' + ActivityFeedUtil.formatDate(revision.timestamp)}</span>
+                    <a href={'/user/' + revision.user} onClick={this.handleUserClick.bind(this)}>{revision.username}</a>
                 </div>
             </div>
         </div>
         );
     }
 }
+
 
 ContentHistoryItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
