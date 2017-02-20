@@ -110,7 +110,7 @@ module.exports = function userStoragePlugin(options) {
                                 host = host.substring(0, dpIndex);
                             }
                             res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, user, {
-                                expires: -1,
+                                expires: new Date(0),
                                 maxAge: 1,
                                 sameSite: true,
                                 domain: host

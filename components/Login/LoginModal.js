@@ -1,8 +1,11 @@
 import React from 'react';
+import async from 'async';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
+import userSocialSignIn from '../../actions/user/userSocialSignIn';
+import newSocialData from '../../actions/user/registration/newSocialData';
 import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
@@ -18,6 +21,8 @@ const headerStyle = {
 const modalStyle = {
     top: '15%'
 };
+const MODI = 'sociallogin_modi';
+const NAME = 'sociallogin_data';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -26,6 +31,7 @@ class LoginModal extends React.Component {
         this.handleSignupClick = this.handleSignupClick.bind(this);
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
+        this.provider = '';
     }
 
     isModalShown() {
@@ -64,8 +70,64 @@ class LoginModal extends React.Component {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
         }
         if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
+            localStorage.setItem(MODI, 'login_success');
             $('.ui.login.modal').modal('hide');
         }
+        if (localStorage.getItem(MODI) === 'login'&& nextProps.UserProfileStore.socialLoginError){
+            swal({
+                title: 'Information',
+                text: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Register now',
+                confirmButtonClass: 'positive ui button',
+                cancelButtonText: 'Try another provider',
+                cancelButtonClass: 'ui orange button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                // console.log('action after dismiss', dismiss);
+                $('.ui.login.modal').modal('hide');
+                return this.handleRegisterFirst(dismiss);
+            })
+            .catch((action) => {
+                // console.log('action after click', action);
+                localStorage.setItem(MODI, 'login_failed');
+
+                //delete old data
+                let that = this;
+                async.series([
+                    function(callback) {
+                        that.context.executeAction(newSocialData, {});
+                        callback(null, 'one');
+                    }
+                ],
+                // optional callback
+                (err, results) => {
+                    if (action !== 'close')
+                        that.handleLoginButton();
+                });
+
+                return true;
+            });
+        }
+    }
+
+    handleRegisterFirst(dismiss) {
+        localStorage.setItem(MODI, 'login_failed_register_now');
+
+        let thatContext = this.context;
+        async.series([
+            function(callback) {
+                thatContext.executeAction(navigateAction, {
+                    url: '/signup'
+                });
+                callback(null, 'two');
+            }
+        ]);
+
+        return true;
     }
 
     componentDidUpdate() {
@@ -73,7 +135,7 @@ class LoginModal extends React.Component {
             //redirect if on a specific page
             if (location.pathname === '/signup' || location.pathname === '/resetpassword') {
                 this.context.executeAction(navigateAction, {
-                    url: '/user/' + this.props.UserProfileStore.username + '/settings'
+                    url: '/user/' + this.props.UserProfileStore.username + '/settings/profile'
                 });
             }
         }
@@ -94,6 +156,103 @@ class LoginModal extends React.Component {
         this.context.executeAction(navigateAction, {
             url: '/resetpassword'
         });
+    }
+
+    socialLogin(provider, e) {
+        e.preventDefault();
+        console.log('Hit on social login icon', provider);
+        this.provider = provider;
+
+        $('.ui.login.modal').modal('toggle');
+
+        //prepare localStorage
+        localStorage.setItem(MODI, 'login');
+        localStorage.setItem(NAME, '');
+
+        //observe storage
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+        //create new window
+        let url = Microservices.user.uri + '/connect/' + provider;
+
+        let width = screen.width*0.75, height = screen.height*0.75;
+        if (width < 600)
+            width = screen.width;
+        if (height < 500)
+            height = screen.height;
+        let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+        let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
+        win.focus();
+    }
+
+    handleStorageEvent(e) {
+        console.log('storage event', e.key, localStorage.getItem(e.key));
+        //this is available
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
+            return;
+
+        let data = {};
+        try {
+            data = JSON.parse(localStorage.getItem(e.key));
+        } catch (err) {
+            console.log('Error while parsing data', err);
+            return;
+        }
+        finally {
+            //delete data
+            localStorage.setItem(NAME, '');
+        }
+
+        //add language before send to service
+        let language = common.getBrowserLanguage();
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
+        data.language = language;
+
+        // console.log('LoginModal got social data', data);
+
+        //check data - valid and not empty
+        if ( (data.token.length < 1)
+          || (data.provider.length < 3)
+          || (data.token_creation.length < 22) )
+            //Failure
+            return;
+
+        if ( (data.email === undefined || data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
+            //show hint
+            const provider = this.getProviderName();
+            swal({
+                title: 'Error',
+                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+
+            return;
+        }
+
+        let thatContext = this.context;
+        async.series([
+            function(callback) {
+                thatContext.executeAction(newSocialData, data);
+                callback(null, 'two');
+            },
+            function(callback) {
+                thatContext.executeAction(userSocialSignIn, data);
+                callback(null, 'two');
+            }
+        ]);
+    }
+
+    getProviderName() {
+        if (this.provider.length < 1)
+            return '';
+        return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
     }
 
     render() {
@@ -126,6 +285,12 @@ class LoginModal extends React.Component {
 
                         <div className="ui error message"/>
                       </form>
+                      <br/>
+                      <div className="container">
+                        <i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>
+                        <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
+                        <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
+                      </div>
                       <br/>
                       <div className="ui floated right">
                           <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>

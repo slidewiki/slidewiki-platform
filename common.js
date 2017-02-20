@@ -32,5 +32,26 @@ export default {
             return interval + ' minutes';
         }
         return Math.floor(seconds) + ' seconds';
-    }
+    },
+
+    getBrowserLanguage: function() {
+        let language =  navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+
+        if (language.length === 2) {
+            language += '-' + language.toUpperCase();
+        }
+
+        return language;
+    },
+
+    isLocalStorageOn: function() {
+        let mod = 'react-count';
+        try {
+            localStorage.setItem(mod, mod);
+            localStorage.removeItem(mod);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }    
 };

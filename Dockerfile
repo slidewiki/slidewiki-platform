@@ -8,20 +8,26 @@ WORKDIR /nodeApp
 # ---------------- #
 
 ADD . /nodeApp
-RUN npm install napa --save-dev
+RUN ./make_version.sh
+
 RUN npm install
+RUN npm run install
 
-# -------------------------------------- #
-#   Default Microservice Configuration   #
-# -------------------------------------- #
+# ----------------------------------- #
+#   Default Container Configuration   #
+# ----------------------------------- #
 
-ENV SERVICE_URL_DECK="http://deckservice.manfredfris.ch" \
-    SERVICE_URL_DISCUSSION="http://discussionservice.manfredfris.ch" \
-    SERVICE_URL_ACTIVITIES="http://activitiesservice.manfredfris.ch" \
-    SERVICE_URL_NOTIFICATION="http://notificationservice.manfredfris.ch" \
-    SERVICE_URL_USER="http://userservice.manfredfris.ch" \
-    SERVICE_URL_IMPORT="http://importservice.manfredfris.ch" \
-    SERVICE_VAR_IMPORT_HOST="importservice.manfredfris.ch"
+ENV SLIDEWIKI_URL_DECK="https://deckservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_DISCUSSION="https://discussionservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_ACTIVITIES="https://activitiesservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_NOTIFICATION="https://notificationservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_USER="https://userservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_IMPORT="https://importservice.experimental.slidewiki.org" \
+    SLIDEWIKI_VAR_IMPORT_HOST="importservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_SEARCH="https://searchservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_IMAGE="https://imageservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_FILE="https://fileservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_PDF="https://pdfservice.experimental.slidewiki.org"
 
 # -------- #
 #   Run!   #

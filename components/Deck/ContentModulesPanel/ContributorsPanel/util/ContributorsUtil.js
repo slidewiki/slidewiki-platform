@@ -7,8 +7,8 @@ class ContributorsUtil {
     }
 
     static contains(slides, slide) {
-        var found = false;
-        for (var i = 0; i < slides.length; i++) {
+        let found = false;
+        for (let i = 0; i < slides.length; i++) {
             if (slides[i] === slide) {
                 found = true;
                 break;

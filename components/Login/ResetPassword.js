@@ -8,6 +8,7 @@ import resetPassword from '../../actions/user/resetPassword';
 import resetPasswordResetStore from '../../actions/user/resetPasswordResetStore';
 import ResetPasswordStore from '../../stores/ResetPasswordStore';
 import ReCAPTCHA from 'react-google-recaptcha';
+import common from '../../common';
 
 class ResetPassword extends React.Component {
     componentDidMount() {
@@ -133,7 +134,7 @@ class ResetPassword extends React.Component {
 
     handleClick(e) {
         e.preventDefault();
-        let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+        let language = common.getBrowserLanguage();
 
         this.context.executeAction(resetPassword, {
             language: language,
