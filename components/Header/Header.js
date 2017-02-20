@@ -74,7 +74,7 @@ class Header extends React.Component {
                           dismissOnScroll={false}
                           onAccept={() => {}}
                         />;
-          }
+        }
 
 
         return (
