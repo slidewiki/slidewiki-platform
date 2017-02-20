@@ -3,6 +3,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import revertRevision from '../../../../actions/history/revertRevision';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import classNames from 'classnames';
+import moment from 'moment';
 
 
 class ContentHistoryItem extends React.Component {
@@ -44,7 +45,9 @@ class ContentHistoryItem extends React.Component {
             <div className="content">
                 {revertBtn}
                 <div className="header">
-                    <span>{' ' + ActivityFeedUtil.formatDate(revision.timestamp)}</span>
+                    <span>{moment(revision.timestamp).calendar(null, {
+                        sameElse: 'lll'
+                    })}</span>
                 </div>
                 <div className="description">
                     <span>{'by '}</span>

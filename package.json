@@ -85,6 +85,7 @@
     "lodash": "^4.17.4",
     "mathjax": "^2.7.0",
     "md5": "^2.2.1",
+    "moment": "^2.17.1",
     "npm": "^4.2.0",
     "react": "^15.4.2",
     "react-custom-scrollbars": "^4.0.2",
