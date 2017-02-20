@@ -56,40 +56,45 @@ class SearchPanel extends React.Component {
         this.setState({searchstring: searchstring});
         this.handleRedirect();
     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return (nextProps.searchstring != this.state.searchstring);
-    // }
     handleKeyPress(event){
         if(event.key === 'Enter'){
             this.handleRedirect();
         }
     }
     getEncodedParams(params){
-        return this.encodeParams({
+        let queryparams = {
             keywords: this.refs.keywords.getSelected().trim(),
             field: this.refs.field.value.trim(),
             kind: this.refs.kind.value.trim(),
             language: this.refs.language.value.trim(),
             license: this.refs.license.value.trim(),
-            user: this.refs.user.getSelected(),
+            user: this.refs.user.getSelected().split(','),
             tag: this.refs.tag.value.trim(),
             // revisions: $('.ui.checkbox.revisions').checkbox('is checked')
-            sort: (params.sort) ? params.sort : ''
-        });
-    }
-    encodeParams(queryparams){
+            sort: (params && params.sort) ? params.sort : ''
+        };
+
+        // encode params
         let encodedParams = '';
-        for (let key in queryparams) {
-            if(queryparams[key].trim() === ''){
-                continue;
+        for(let key in queryparams){
+            if(queryparams[key] instanceof Array){
+                for(let el in queryparams[key]){
+                    encodedParams += this.encodeParam(encodedParams, key, queryparams[key][el]);
+                }
             }
-            if(encodedParams){
-                encodedParams += '&';
+            else{
+                encodedParams += this.encodeParam(encodedParams, key, queryparams[key]);
             }
-            encodedParams += encodeURIComponent(key) + '=' + encodeURIComponent(queryparams[key]);
         }
 
         return encodedParams;
+    }
+    encodeParam(encodedParams, key, value){
+        if(value.trim() === '')
+            return '';
+
+        return ((encodedParams) ? '&' : '')
+                + encodeURIComponent(key) + '=' + encodeURIComponent(value);
     }
     handleRedirect(params){
         if(this.refs.keywords.getSelected().trim() === ''){

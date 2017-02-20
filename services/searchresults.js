@@ -10,74 +10,58 @@ export default {
 
         if(resource === 'searchresults.list'){
 
-            console.log('edw ' + JSON.stringify(args));
-
             // fetch results from search-microservice
             rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams}).then((results) => {
 
-                console.log(JSON.stringify(JSON.parse(results), null, 2));
+                // console.log(JSON.stringify(JSON.parse(results), null, 2));
 
                 let searchResults = JSON.parse(results);
                 let allPromises = [], decks = {}, decksIdHash = {}, deckRevisions = {};
                 let userPromises = [], usernames = {}, userIdHash = {};
-                let returnData = [];
+                // let returnData = [];
 
-                searchResults.docs.forEach( (res) => {
-
-                    // revision to show in result title
-                    let firstRevision = res.revisions.docs[0];
+                searchResults.response.docs.forEach( (res) => {
 
                     // keep user id to request later
-                    if(firstRevision.user !== null){
-                        userIdHash[parseInt(firstRevision.user)] = true;
+                    if(res.creator !== null){
+                        userIdHash[res.creator] = true;
                     }
 
                     // transform results to return to frontend
                     if(res.kind === 'deck'){
-                        returnData.push({
-                            id: parseInt(res._id),
-                            revisionId: parseInt(firstRevision.id),
-                            link: '/deck/' + res._id + '-' + firstRevision.id,
-                            kind: 'Deck',
-                            title: firstRevision.title,
-                            description: (res.description && res.description.length > 85) ? res.description.substring(0,85)+'...' : res.description,
-                            lastModified: customDate.format(res.lastUpdate, 'Do MMMM YYYY'),
-                            user: {
-                                id: firstRevision.user,
-                                username: '',
-                                link: ''
-                            }
-                        });
+                        res.link = '/deck/' + res.db_id + '-' + res.db_revision_id;
+                        res.kind = 'Deck';
+                        res.description = (res.description && res.description.length > 85) ? res.description.substring(0,85)+'...' : res.description;
+                        res.lastUpdate = customDate.format(res.lastUpdate, 'Do MMMM YYYY');
+                        res.user = {
+                            id: res.creator,
+                            username: '',
+                            link: ''
+                        };
 
                         //keep deck id to request later
-                        decksIdHash[parseInt(res._id)] = true;
+                        decksIdHash[res.db_id] = true;
                     }
                     else if(res.kind === 'slide'){
-                        returnData.push({
-                            id: parseInt(res._id),
-                            revisionId: parseInt(firstRevision.id),
-                            deck: {
-                                id: firstRevision.usage[0],
-                                title: '',
-                                link: ''
-                            },
-                            link: '/deck/' + firstRevision.usage[0] + '/slide/' + res._id + '-' + firstRevision.id,
-                            kind: 'Slide',
-                            title: firstRevision.title,
-                            description: (firstRevision.content && firstRevision.content.length > 85) ? firstRevision.content.substring(0,85)+'...' : firstRevision.content,
-                            lastModified: customDate.format(res.lastUpdate, 'Do MMMM YYYY'),
-                            user: {
-                                id: firstRevision.user,
-                                username: '',
-                                link: '',
-                            },
-                            usage: firstRevision.usage
-                        });
+                        res.deck = {
+                            id: res.usage[0],
+                            title: '',
+                            link: ''
+                        };
+                        res.link = '/deck/' + res.usage[0] + '/slide/' + res.db_id + '-' + res.db_revision_id;
+                        res.kind = 'Slide';
+                        res.description = (res.content && res.content.length > 85) ? res.content.substring(0,85)+'...' : res.content;
+                        res.lastUpdate = customDate.format(res.lastUpdate, 'Do MMMM YYYY');
+                        res.user = {
+                            id: res.creator,
+                            username: '',
+                            link: ''
+                        };
 
                         // keep more deck ids to request later
-                        firstRevision.usage.forEach( (deckRev) => {
+                        res.usage.forEach( (deckRev) => {
                             let deckId = deckRev.split('-')[0];
-                            decksIdHash[parseInt(deckId)] = true;
+                            decksIdHash[deckId] = true;
                         });
                     }
 
@@ -108,11 +92,10 @@ export default {
                         return Promise.resolve(err);
                     }));
                 }
-
+                //
                 Promise.all(allPromises).then( () => {
-
-                    returnData.forEach( (returnItem) => {
-
+                    searchResults.response.docs.forEach( (returnItem) => {
+                        // console.log(returnItem);
                         // fill extra user info
                         returnItem.user.username = usernames[returnItem.user.id];
                         returnItem.user.link = '/user/' + returnItem.user.username;
@@ -120,9 +103,9 @@ export default {
                         if(returnItem.kind === 'Deck'){
 
                             // fill deck subitems (revisions of the deck)
-                            returnItem.subItems = decks[returnItem.id].revisions.filter( (rev) => {
+                            returnItem.subItems = decks[returnItem.db_id].revisions.filter( (rev) => {
                                 // do not contain revision presented in result title
-                                return (rev.id !== returnItem.revisionId);
+                                return (rev.id !== returnItem.db_revision_id);
                             }).map( (rev) => {
                                 return {
                                     id: rev.id,
@@ -151,13 +134,12 @@ export default {
 
                     // console.log(JSON.stringify(returnData, null, 2));
                     callback(null, {
-                        numFound: returnData.length,
-                        docs: returnData
+                        numFound: searchResults.response.docs.length,
+                        docs: searchResults.response.docs
                     });
                 });
 
             }).catch((error) => {
-                // console.log(error);
                 callback(error);
             });
 

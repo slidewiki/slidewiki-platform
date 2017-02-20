@@ -52,7 +52,7 @@ class SearchResultsItem extends React.Component {
                                             {result.description}
                                         </div>
                                         <div className="row">
-                                            {result.kind} last modified: {result.lastModified}
+                                            {result.kind} last modified: {result.lastUpdate}
                                         </div>
                                         <div className="row">
                                             {userLine}
