@@ -27,27 +27,25 @@ class ContentHistoryItem extends React.Component {
 
     render() {
         const revision = this.props.revision;
-        let revertBtnClass = classNames({
-            'ui right floated button mini compact': true
-        });
+
         let itemClass = classNames({
-            'item': true,
+            'item revision': true,
             'active': this.props.isSelected
         });
 
-        const revertBtn = revision.active ?
-        <i className='check large circle icon green right floated'></i> : this.props.allowRevert ? (
-        <button className={revertBtnClass} onClick={this.handleRevertClick.bind(this)}>Make Active</button>
+        const revertBtn = !revision.active && this.props.allowRevert ? (
+        <button className="ui right floated button compact revert" onClick={this.handleRevertClick.bind(this)}>Make Active</button>
         ) : '';
 
         return (
         <div className={itemClass} onClick={this.handleRevisionSelection.bind(this)}>
-            <div className="content">
+            <div className="middle aligned content">
                 {revertBtn}
                 <div className="header">
                     <span>{moment(revision.timestamp).calendar(null, {
                         sameElse: 'lll'
-                    })}</span>
+                    })} </span>
+                    {revision.active ? <i className='check circle icon green'></i> : ''}
                 </div>
                 <div className="description">
                     <span>{'by '}</span>

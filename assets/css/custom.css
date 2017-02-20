@@ -34,3 +34,10 @@
 	padding-bottom: 0.21428571em;
 }
 
+.revision button.revert{
+	visibility: hidden;
+}
+
+.revision:hover button.revert{
+	visibility: visible;
+}

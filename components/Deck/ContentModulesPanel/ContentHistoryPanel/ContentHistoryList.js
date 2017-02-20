@@ -14,7 +14,7 @@ class ContentHistoryList extends React.Component {
 
         return (
             <div ref="contentHistoryList">
-                <div className="ui middle aligned relaxed divided selection list">
+                <div className="ui relaxed divided selection list revisions">
                     {list}
                 </div>
             </div>
