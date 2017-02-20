@@ -8,15 +8,14 @@ import SlideViewStore from '../../../stores/SlideViewStore';
 let sectionStyle = { 'top': 'unset !important'};
 
 class PresentationSlide extends React.Component {
-		componentDidMount(){
+    componentDidMount(){
 		//this.props.style = sectionStyle;
-		}
-		render(){
-
-				return (
-					<section dangerouslySetInnerHTML={{__html:this.props.content}} id={this.props.id} />
-				);
-		}
+    }
+    render(){
+        return (
+            <section dangerouslySetInnerHTML={{__html:this.props.content}} id={this.props.id} />
+        );
+    }
 
 }
 

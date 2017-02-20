@@ -8,6 +8,8 @@ WORKDIR /nodeApp
 # ---------------- #
 
 ADD . /nodeApp
+RUN ./make_version.sh
+
 RUN npm install
 RUN npm run install
 
@@ -15,17 +17,17 @@ RUN npm run install
 #   Default Container Configuration   #
 # ----------------------------------- #
 
-ENV SLIDEWIKI_URL_DECK="http://deckservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_DISCUSSION="http://discussionservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_ACTIVITIES="http://activitiesservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_NOTIFICATION="http://notificationservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_USER="http://userservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_IMPORT="http://importservice.experimental.slidewiki.org" \
+ENV SLIDEWIKI_URL_DECK="https://deckservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_DISCUSSION="https://discussionservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_ACTIVITIES="https://activitiesservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_NOTIFICATION="https://notificationservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_USER="https://userservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_IMPORT="https://importservice.experimental.slidewiki.org" \
     SLIDEWIKI_VAR_IMPORT_HOST="importservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_SEARCH="http://searchservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_IMAGE="http://imageservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_FILE="http://fileservice.experimental.slidewiki.org" \
-    SLIDEWIKI_URL_PDF="http://pdfservice.experimental.slidewiki.org"
+    SLIDEWIKI_URL_SEARCH="https://searchservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_IMAGE="https://imageservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_FILE="https://fileservice.experimental.slidewiki.org" \
+    SLIDEWIKI_URL_PDF="https://pdfservice.experimental.slidewiki.org"
 
 # -------- #
 #   Run!   #
