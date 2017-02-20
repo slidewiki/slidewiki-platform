@@ -1,6 +1,7 @@
 node_modules
 bower_components
 build
+custom_modules
 *.log
 *.lock
 logs/*.log

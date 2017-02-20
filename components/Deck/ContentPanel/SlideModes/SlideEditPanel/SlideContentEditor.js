@@ -31,15 +31,7 @@ class SlideContentEditor extends React.Component {
 
 
     handleSaveButton(){
-
-        if (this.props.UserProfileStore.username === '')
-        {
-            //TODO: show login modal via context action
-            alert('you need to login to save changes');
-        }
-        else
-        {
-
+        if (this.props.UserProfileStore.username !== '') {
             // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             swal({
                 title: 'Saving Content...',
@@ -54,10 +46,10 @@ class SlideContentEditor extends React.Component {
             //remove editing borders:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
-            $(".pptx2html")
+            $('.pptx2html')
             .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
             //reset scaling of pptx2html element to get original size
-            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
             //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
             //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
@@ -183,21 +175,20 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             CKEDITOR.inline('inlineContent', {
                 customConfig: '/assets/ckeditor_config.js',
-            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
+                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
 
         }
         this.currentcontent = this.props.content;
 
-        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
-        {
-                if(process.env.BROWSER){
-                    //this.resize();
-                    //alert('resize');
-                    this.forceUpdate();
-                }
+        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
+            if(process.env.BROWSER){
+                //this.resize();
+                // alert('resize');
+                this.forceUpdate();
+            }
         });
 
-        CKEDITOR.instances.inlineContent.on("instanceReady", function() {
+        CKEDITOR.instances.inlineContent.on('instanceReady', function() {
         //needs copy of resize function == cannot find this.something in this context.
         //tried ReactDOM.findDOMNode(this.refs.inlineContent).addEventListener('instanceReady', (evt) =>
         //but did not work
@@ -207,13 +198,13 @@ class SlideContentEditor extends React.Component {
             //this.forceUpdate();
             //this.resize();
         //    }
-            if ($(".pptx2html [style*='absolute']").not('.drawing-container').css('borderStyle') !== 'dashed')
+            if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed')
             {
-                $(".pptx2html [style*='absolute']").not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             }
             let containerwidth = document.getElementById('container').offsetWidth;
             let containerheight = document.getElementById('container').offsetHeight;
-            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             let pptxwidth = $('.pptx2html').width();
             let pptxheight = $('.pptx2html').height();
             if (containerwidth > pptxwidth)
@@ -222,25 +213,25 @@ class SlideContentEditor extends React.Component {
             } else {
                 this.scaleratio = containerwidth / pptxwidth;
             }
-            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
             require('../../../../../custom_modules/simple-draggable/lib/index.js');
 
-            SimpleDraggable(".pptx2html [style*='absolute']", {
+            SimpleDraggable('.pptx2html [style*="absolute"]', {
+                onlyX: false,
+                onlyY: false,
+                ratio: this.scaleratio
+            });
+            SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
                 onlyX: false
               , onlyY: false
               , ratio: this.scaleratio
             });
-            SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
-                onlyX: false
-              , onlyY: false
-              , ratio: this.scaleratio
-            });
-            if(document.domain != "localhost")
+            if(document.domain !== 'localhost')
             {
                 document.domain = 'slidewiki.org';
             }
-            $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            $('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         });
 
 
@@ -257,8 +248,7 @@ class SlideContentEditor extends React.Component {
             this.resize();
         }
     }
-    resize()
-    {
+    resize() {
         //if(process.env.BROWSER){
             //require('../../../../../bower_components/reveal.js/css/reveal.css');
             // Uncomment this to see with the different themes.  Assuming testing for PPTPX2HTML for now
@@ -268,10 +258,9 @@ class SlideContentEditor extends React.Component {
             //require('../../SetupReveal.css');
             /*add border*/
             //alert($(".pptx2html [style*='absolute']").css('borderStyle'));
-            if ($(".pptx2html [style*='absolute']").not('.drawing-container').css('borderStyle') !== 'dashed')
-            {
-                $(".pptx2html [style*='absolute']").not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-            }
+        if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
+            $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+        }
         //}
 
         let containerwidth = document.getElementById('container').offsetWidth;
@@ -279,7 +268,7 @@ class SlideContentEditor extends React.Component {
         //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
 
         //reset scaling of pptx2html element to get original size
-        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
         //Function to fit contents in edit and view component
         //let pptxwidth = document.getElementByClassName('pptx2html').offsetWidth;
@@ -290,17 +279,17 @@ class SlideContentEditor extends React.Component {
 
         this.scaleratio = containerwidth / pptxwidth;
 
-        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-        $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+        $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
         require('../../../../../custom_modules/simple-draggable/lib/index.js');
 
         //TODO: remove previous event listeners!
-        SimpleDraggable(".pptx2html [style*='absolute']", {
+        SimpleDraggable('.pptx2html [style*="absolute"]', {
             onlyX: false
           , onlyY: false
           , ratio: this.scaleratio
         });
-        SimpleDraggable(".pptx2html > [style*='absolute'] > [style*='absolute']", {
+        SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
             onlyX: false
           , onlyY: false
           , ratio: this.scaleratio
@@ -310,10 +299,10 @@ class SlideContentEditor extends React.Component {
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
 
         //show that content is outside of pptx2html box
-        $(".pptx2html").css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+        $('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
 
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-        $("#inlineSpeakerNotes [style*='absolute']").css({'position': 'relative', 'zIndex': '0'});
+        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
     }
 
     componentWillUnmount() {
@@ -405,7 +394,7 @@ class SlideContentEditor extends React.Component {
             this.addBoxButtonHTML = <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
                              <i className="plus square outline icon"></i>
                              Add input box
-                             </button>
+                             </button>;
         } else {this.addBoxButtonHTML = '';}
 
         return (
@@ -440,12 +429,10 @@ class SlideContentEditor extends React.Component {
     }*/
 
     emitChange() {
-
-      window.onbeforeunload = () => {
-        return 'If you don\'t save the slide, it won\'t be updated. ' +
-          'Are you sure you want to exit this page?';
-
-      };
+        window.onbeforeunload = () => {
+            return 'If you don\'t save the slide, it won\'t be updated. ' +
+            'Are you sure you want to exit this page?';
+        };
     }
 /*
     confirmExit() {
