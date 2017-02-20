@@ -19,11 +19,11 @@ let MediaQuery = require ('react-responsive');
 
 class Header extends React.Component {
 
-  constructor(props) {
-  super(props);
-    this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
+    constructor(props) {
+        super(props);
+        this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
     //console.log('this.state.user_cookies='+this.state.user_cookies);
- }
+    }
 
 
     componentDidMount() {
