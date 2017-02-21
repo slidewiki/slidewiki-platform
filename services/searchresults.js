@@ -31,6 +31,7 @@ export default {
                     if(res.kind === 'deck'){
                         res.link = '/deck/' + res.db_id + '-' + res.db_revision_id;
                         res.kind = 'Deck';
+                        res.title = (res.title && res.title.length > 70) ? res.title.substring(0,70)+'...' : res.title;
                         res.description = (res.description && res.description.length > 85) ? res.description.substring(0,85)+'...' : res.description;
                         res.lastUpdate = customDate.format(res.lastUpdate, 'Do MMMM YYYY');
                         res.user = {
@@ -50,6 +51,7 @@ export default {
                         };
                         res.link = '/deck/' + res.usage[0] + '/slide/' + res.db_id + '-' + res.db_revision_id;
                         res.kind = 'Slide';
+                        res.title = (res.title && res.title.length > 70) ? res.title.substring(0,70)+'...' : res.title;
                         res.description = (res.content && res.content.length > 85) ? res.content.substring(0,85)+'...' : res.content;
                         res.lastUpdate = customDate.format(res.lastUpdate, 'Do MMMM YYYY');
                         res.user = {

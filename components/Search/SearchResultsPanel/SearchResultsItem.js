@@ -11,8 +11,8 @@ class SearchResultsItem extends React.Component {
         // choose result icon
         let kindIcon =
             (result.kind === 'Slide')
-                ?    <i className="big black square outline middle aligned icon" aria-label="slide"></i>
-                :    <i className="big black block layout middle aligned icon" aria-label="deck"></i>;
+                ?    <i className="large grey file text middle aligned icon" aria-label="slide"></i>
+                :    <i className="large yellow folder open aligned icon" aria-label="deck"></i>;
 
 
         // form sublist items and expand button
