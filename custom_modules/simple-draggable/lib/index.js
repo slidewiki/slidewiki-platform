@@ -160,6 +160,15 @@
                           return 'If you don\'t save the slide, it won\'t be updated. ' +
                             'Are you sure you want to exit this page?';
                         };
+                        /*
+                        $('.pptx2html').css('overflow', 'hidden')
+                        $('.pptx2html').css('height', '100%')
+                        $('body').css('overflow', 'hidden')
+                        $('body').css('height', '100%')
+                        */
+                        //cEl.style.overflow = 'hidden';
+
+
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
