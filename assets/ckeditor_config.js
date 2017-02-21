@@ -13,6 +13,7 @@
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
+CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
 
 
 CKEDITOR.disableAutoInline = true;
@@ -26,7 +27,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
         '/',
@@ -157,7 +158,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
@@ -191,7 +192,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.mathJaxClass = 'my-math';
     //config.mathJaxClass = 'math-tex';
     //config.mathJaxClass = 'equation';
-    
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
