@@ -38,6 +38,15 @@ class SearchResultsPanel extends React.Component {
             </div>;
         }
     }
+    renderSpellcheckCollations(){
+        return <div key="spellcheckDiv" className="ui grid container">
+            <div className="row">
+                <h4>Do you mean: {this.props.spellcheck.collations.map( (el) => {
+                    return <a href='#' key={el} onClick={this.props.handleRedirect.bind(this, {keywords: el})}> {el} </a>;
+                })}?</h4>
+            </div>
+        </div>;
+    }
     render() {
         const results = this.props.results;
         const numFound = this.props.numFound;
@@ -62,16 +71,23 @@ class SearchResultsPanel extends React.Component {
             </div>
         </div>;
 
-        let noResultsDiv = <div key="noResiltsDiv">
-            <div className="ui grid centered">
+        let noResultsDiv = <div key="noResultsDiv" className="ui grid centered container">
+            <div className="row">
                 <h3>No results found for the specified input parameters.</h3>
             </div>
         </div>;
+
+        let spellcheckDiv = '';
+
+        if(this.props.spellcheck.collations.length > 0){
+            spellcheckDiv = this.renderSpellcheckCollations();
+        }
 
         let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
 
         return (
             <div ref="searchResultsPanel">
+                {spellcheckDiv}
                 {resultsPanel}
             </div>
         );

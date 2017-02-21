@@ -8,6 +8,7 @@ class SearchResultsStore extends BaseStore {
         // solr results
         this.numFound = '';
         this.docs = [];
+        this.spellcheck = '';
 
         this.error = false;
         this.loading = false;
@@ -19,6 +20,7 @@ class SearchResultsStore extends BaseStore {
     updateResults(payload){
         this.numFound = payload.numFound;
         this.docs = payload.docs;
+        this.spellcheck = payload.spellcheck;
         this.error = payload.error;
 
         // hide loading
@@ -30,6 +32,7 @@ class SearchResultsStore extends BaseStore {
         // solr results
         this.numFound= '' ;
         this.docs = [];
+        this.spellcheck = '';
         this.loading = false;
         this.error = false;
 
@@ -44,6 +47,7 @@ class SearchResultsStore extends BaseStore {
         return {
             numFound: this.numFound,
             docs: this.docs,
+            spellcheck: this.spellcheck,
             loading: this.loading,
             error: this.error
         };
@@ -54,6 +58,7 @@ class SearchResultsStore extends BaseStore {
     rehydrate(state) {
         this.numFound = state.numFound;
         this.docs = state.docs;
+        this.spellcheck = state.spellcheck;
         this.loading = state.loading;
         this.error = state.error;
     }

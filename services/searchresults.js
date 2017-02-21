@@ -2,6 +2,36 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
 
+function extractSuggestions(){
+    return [];
+}
+
+function extractCollations(collations){
+    let arr = [];
+
+    // collations are returned in an array with the term 'collation' in odd cells
+    // and the actual collations in even cells
+    for(let i=1; i<collations.length; i+=2){
+        let collation = collations[i].collationQuery;
+        let col = '';
+
+        // if query was made against a specific field, remove this field name from the collation
+        if(collation.startsWith('title:') || collation.startsWith('description:') ||
+                collation.startsWith('content:') || collation.startsWith('speakernotes:')){
+
+            let index = collation.indexOf(':');
+            col = collation.substring(index+2, collation.length-1);     //terms are inside parentheses
+        }
+        else{
+            col = collation.substring(1, collation.length-1);           //same here
+        }
+
+        arr.push(col.trim());
+    }
+
+    return arr;
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -18,7 +48,6 @@ export default {
                 let searchResults = JSON.parse(results);
                 let allPromises = [], decks = {}, decksIdHash = {}, deckRevisions = {};
                 let userPromises = [], usernames = {}, userIdHash = {};
-                // let returnData = [];
 
                 searchResults.response.docs.forEach( (res) => {
 
@@ -94,7 +123,7 @@ export default {
                         return Promise.resolve(err);
                     }));
                 }
-                //
+
                 Promise.all(allPromises).then( () => {
                     searchResults.response.docs.forEach( (returnItem) => {
                         // console.log(returnItem);
@@ -135,9 +164,17 @@ export default {
                     });
 
                     // console.log(JSON.stringify(returnData, null, 2));
+                    // console.log(JSON.stringify(searchResults.spellcheck));
+
+                    let collations = (searchResults.spellcheck && searchResults.spellcheck.collations)
+                            ? extractCollations(searchResults.spellcheck.collations) : [];
+
                     callback(null, {
                         numFound: searchResults.response.docs.length,
-                        docs: searchResults.response.docs
+                        docs: searchResults.response.docs,
+                        spellcheck: {
+                            collations: collations
+                        }
                     });
                 });
 

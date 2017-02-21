@@ -43,7 +43,7 @@ class SearchPanel extends React.Component {
         this.setState(nextProps.SearchParamsStore);
     }
     onChange(event) {
-        console.log(event.target.name + ' -> ' + event.target.value);
+        // console.log(event.target.name + ' -> ' + event.target.value);
         let curstate = {};
         curstate[event.target.name] = event.target.value;
         this.setState(curstate);
@@ -53,7 +53,10 @@ class SearchPanel extends React.Component {
         this.refs.keywords.focus();
     }
     onSelect(searchstring){
-        this.setState({searchstring: searchstring});
+        console.log('edw2342');
+        console.log(searchstring);
+        this.setState({keywords: searchstring});
+        console.log(this.state);
         this.handleRedirect();
     }
     handleKeyPress(event){
@@ -63,7 +66,7 @@ class SearchPanel extends React.Component {
     }
     getEncodedParams(params){
         let queryparams = {
-            keywords: this.refs.keywords.getSelected().trim(),
+            keywords: (params && params.keywords) ? params.keywords : this.refs.keywords.getSelected().trim(),    //
             field: this.refs.field.value.trim(),
             kind: this.refs.kind.value.trim(),
             language: this.refs.language.value.trim(),
@@ -128,6 +131,7 @@ class SearchPanel extends React.Component {
         else if(this.props.SearchParamsStore.queryparams){
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
+                spellcheck={this.props.SearchResultsStore.spellcheck}
                 numFound={this.props.SearchResultsStore.numFound}
                 sort={this.props.SearchParamsStore.sort}
                 handleRedirect={this.handleRedirect.bind(this)}
