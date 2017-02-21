@@ -72,6 +72,11 @@ CKEDITOR.editorConfig = function( config ) {
     config.removePlugins = 'magicline';
     CKEDITOR.config.magicline_color = '#0000FF';
 
+    //limit Copy Formatting to only allow basic text styles (bold, italic, underline, strikethrough) to be copied:
+    //config.copyFormatting_allowRules = 'b s u i em a strong ul li em p h1 h2 h3; span{text-decoration,font-weight}';
+    config.copyFormatting_disallowRules = 'div';
+
+
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
     config.basicEntities = true; //Klaas -> do we need this?
