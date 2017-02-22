@@ -12,7 +12,7 @@ export default {
             json: true
         })
             .then((res) => {
-                console.log('Got usergroups:', res);
+                // console.log('Got usergroups:', res);
                 callback(null, res);
             })
             .catch((err) => {

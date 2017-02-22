@@ -213,7 +213,7 @@ export default {
                     groups: params.groups
                 }
             };
-            // console.log('send:', toSend, toSend.editors);
+            // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,

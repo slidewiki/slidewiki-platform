@@ -11,6 +11,7 @@ export default function saveDeckEdit(context, payload, done) {
         context.executeAction(navigateAction, {
             url: '/'
         });
+        done();
     } else {
         //enrich with user id
         payload.userid = userid;
@@ -18,6 +19,7 @@ export default function saveDeckEdit(context, payload, done) {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
+                console.log('Error saving deck:', err);
             } else {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
                 context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);

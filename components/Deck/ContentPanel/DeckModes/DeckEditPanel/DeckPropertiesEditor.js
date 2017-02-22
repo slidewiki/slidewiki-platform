@@ -243,7 +243,7 @@ class DeckPropertiesEditor extends React.Component {
                 isValid = false;
             }
         }
-        console.log('handleSave', this.state.accessLevel, users, groups, isValid);
+        // console.log('handleSave', this.state.accessLevel, users, groups, isValid);
 
         this.setState({validationErrors: validationErrors});
         if (isValid) {
