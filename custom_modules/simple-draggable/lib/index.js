@@ -160,6 +160,16 @@
                           return 'If you don\'t save the slide, it won\'t be updated. ' +
                             'Are you sure you want to exit this page?';
                         };
+
+                        //fix to prevent scrolling
+                        $('.pptx2html').css('overflow', 'hidden');
+                        //$('.pptx2html').css('height', '100%');
+                        $('body').css('overflow', 'hidden');
+                        //$('body').css('height', '100%');
+
+                        //cEl.style.overflow = 'hidden';
+
+
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
@@ -191,6 +201,12 @@
                     //KLAAS ADAPT -> apply to div in top-left corner only
                     cEl.dragdiv.addEventListener("mouseup", function (e) {
                         //alert('test');
+
+                        //restore fix to prevent scrolling
+                        $('.pptx2html').css('overflow', '');
+                        //$('.pptx2html').css('height', '');
+                        $('body').css('overflow', '');
+                        //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex - 9000000;
@@ -393,6 +409,13 @@
                           return 'If you don\'t save the slide, it won\'t be updated. ' +
                             'Are you sure you want to exit this page?';
                         };
+
+                        //fix to prevent scrolling
+                        $('.pptx2html').css('overflow', 'hidden');
+                        //$('.pptx2html').css('height', '100%');
+                        $('body').css('overflow', 'hidden');
+                        //$('body').css('height', '100%');
+
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex + 9000000;
 
@@ -430,6 +453,12 @@
                     //KLAAS ADAPT -> apply to div in top-left corner only
                     cEl.resizediv.addEventListener("mouseup", function (e) {
                         //alert('test');
+
+                        //restore fix to prevent scrolling
+                        $('.pptx2html').css('overflow', '');
+                        //$('.pptx2html').css('height', '');
+                        $('body').css('overflow', '');
+                        //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex - 9000000;
