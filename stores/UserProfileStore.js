@@ -32,6 +32,11 @@ class UserProfileStore extends BaseStore {
         this.jwt = '';
         this.userpicture = undefined;
         this.errorMessage = '';
+        this.socialLoginError = false;
+        this.removeProviderError = false;
+        this.addProviderError = false;
+        this.addProviderAlreadyUsedError = false;
+        this.providerAction = '';
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
@@ -74,6 +79,11 @@ class UserProfileStore extends BaseStore {
         this.lastUser = '';
         this.userpicture = undefined;
         this.userDecks = [];
+        this.socialLoginError = false;
+        this.removeProviderError = false;
+        this.addProviderError = false;
+        this.addProviderAlreadyUsedError = false;
+        this.providerAction = '';
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
@@ -99,6 +109,11 @@ class UserProfileStore extends BaseStore {
             errorMessage: this.errorMessage,
             showLoginModal: this.showLoginModal,
             lastUser: this.lastUser,
+            socialLoginError: this.socialLoginError,
+            removeProviderError: this.removeProviderError,
+            addProviderError: this.addProviderError,
+            providerAction: this.providerAction,
+            addProviderAlreadyUsedError: this.addProviderAlreadyUsedError,
             currentUsergroup: this.currentUsergroup,
             saveUsergroupError: this.saveUsergroupError,
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
@@ -125,6 +140,11 @@ class UserProfileStore extends BaseStore {
         this.errorMessage = state.errorMessage;
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
+        this.socialLoginError = state.socialLoginError;
+        this.removeProviderError = state.removeProviderError;
+        this.addProviderError = state.addProviderError;
+        this.providerAction = state.providerAction;
+        this.addProviderAlreadyUsedError = state.addProviderAlreadyUsedError;
         this.currentUsergroup = state.currentUsergroup;
         this.saveUsergroupError = state.saveUsergroupError;
         this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
@@ -218,6 +238,12 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    handleSocialSignInError(err) {
+        this.socialLoginError = true;
+        this.emitChange();
+        this.socialLoginError = false;
+    }
+
     extractMessage(raw) {
         const message = raw.substring(7, raw.length - 1);// There is an error code at the beginning (e.g. 422 - "{\"statusCode\":422,\"error\":\"Unprocessable Entity\",\"message\":\"The username is already taken\"}")
         const message1 = message.replace(/\\\"/g, '"');// replace \" with "
@@ -226,6 +252,63 @@ class UserProfileStore extends BaseStore {
             message2 = JSON.parse(message1).error;
         }
         return message2;
+    }
+
+    socialRegister(res) {
+        this.userpicture = res.picture;
+
+        this.handleSignInSuccess(res);
+    }
+
+    removeProviderSuccess(provider) {
+        console.log('UserProfileStore removeProviderSuccess()', provider, this.user.providers);
+        if (this.user.providers !== undefined && this.user.providers !== null && this.user.providers.length > 0)
+            this.user.providers = this.user.providers.reduce((prev, cur) => {
+                if (cur !== provider)
+                    prev.push(cur);
+                return prev;
+            }, []);
+        this.removeProviderError = false;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    removeProviderFailure() {
+        this.removeProviderError = true;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    resetProviderStuff() {
+        this.removeProviderError = false;
+        this.addProviderError = false;
+        this.addProviderAlreadyUsedError = false;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    addProviderSucess(providerData) {
+        console.log('UserProfileStore addProviderSucess()', providerData.provider, this.user.providers);
+        this.addProviderError = false;
+        if (this.user.providers === undefined || this.user.providers === null)
+            this.user.providers = [];
+        this.user.providers.push(providerData.provider);
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    addProviderFailure(error) {
+        if (error.message.startsWith('409'))
+            this.addProviderAlreadyUsedError = true;
+        else
+            this.addProviderError = true;
+        this.providerAction = '';
+        this.emitChange();
+    }
+
+    updateProviderAction(action) {
+        this.providerAction = action;
+        this.emitChange();
     }
 
     updateUsergroup(group) {
@@ -298,6 +381,16 @@ UserProfileStore.handlers = {
     'WRONG_PASSWORD': 'wrongPassword',
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
+    'SOCIAL_SIGNIN_FAILURE': 'handleSocialSignInError',
+    'USER_SIGNOUT': 'handleSignOut',
+    //social
+    'SOCIAL_SIGNIN_SUCCESS': 'socialRegister',
+    'REMOVE_PROVIDER_SUCCESS': 'removeProviderSuccess',
+    'REMOVE_PROVIDER_FAILURE': 'removeProviderFailure',
+    'ADD_PROVIDER_SUCCESS': 'addProviderSucess',
+    'ADD_PROVIDER_FAILURE': 'addProviderFailure',
+    'RESET_PROVIDER_STUFF': 'resetProviderStuff',
+    'UPDATE_PROVIDER_ACTION': 'updateProviderAction',
     'USER_SIGNOUT': 'handleSignOut',
     'UPDATE_USERGROUP': 'updateUsergroup',
     'SAVE_USERGROUP_START': 'saveUsergroupStart',

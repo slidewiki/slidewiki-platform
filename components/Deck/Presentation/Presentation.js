@@ -6,7 +6,9 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
-
+if(process.env.BROWSER){
+    require('../../../assets/css/PresentationDefaults.css');
+}
 
 let playerCss = {
     height: '100%',
@@ -45,7 +47,7 @@ class Presentation extends React.Component{
 
 
             this.revealDiv.style.display = 'inline';
-
+ 
             let pptxwidth = $('.pptx2html').width();
             let pptxheight = $('.pptx2html').height();
 
@@ -87,7 +89,7 @@ class Presentation extends React.Component{
         if(slides){
             for (let i = 0; i < slides.length; i++) {
                 let slide = slides[i];
-                let notes = ''
+                let notes = '';
                 if(slide.speakernotes){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }

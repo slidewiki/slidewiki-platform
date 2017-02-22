@@ -17,6 +17,11 @@ class Footer extends React.Component {
                          &nbsp;&middot;&nbsp;
                         <NavLink className="item" routeName="dataprotection">Data Protection Conditions</NavLink>
                     </div>
+                    <div className="ui left aligned segment">
+                        <p>
+                            Build GIT_COMMIT&#64;GIT_BRANCH
+                        </p>
+                    </div>
             </div>
         );
     }
