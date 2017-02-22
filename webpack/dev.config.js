@@ -24,6 +24,15 @@ let webpackConfig = {
     module: {
         rules: [
             {
+                test: /\.json$/,            // Load JSON-files into code base.
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'json-loader',
+                    }
+                ]
+            },
+            {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: [
