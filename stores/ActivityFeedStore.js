@@ -1,4 +1,5 @@
 import {BaseStore} from 'fluxible/addons';
+import { isLocalStorageOn } from '../common.js';
 
 class ActivityFeedStore extends BaseStore {
     constructor(dispatcher) {
@@ -49,6 +50,10 @@ class ActivityFeedStore extends BaseStore {
             author: comment.author
         };
         this.activities.unshift(newActivity);//add to the beginning
+        if (isLocalStorageOn()) {
+            localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
+        }
+
         this.emitChange();
     }
     getState() {
