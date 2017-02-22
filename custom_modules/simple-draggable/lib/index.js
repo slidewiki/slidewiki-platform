@@ -163,9 +163,9 @@
 
                         //fix to prevent scrolling
                         $('.pptx2html').css('overflow', 'hidden');
-                        $('.pptx2html').css('height', '100%');
+                        //$('.pptx2html').css('height', '100%');
                         $('body').css('overflow', 'hidden');
-                        $('body').css('height', '100%');
+                        //$('body').css('height', '100%');
 
                         //cEl.style.overflow = 'hidden';
 
@@ -204,9 +204,9 @@
 
                         //restore fix to prevent scrolling
                         $('.pptx2html').css('overflow', '');
-                        $('.pptx2html').css('height', '');
+                        //$('.pptx2html').css('height', '');
                         $('body').css('overflow', '');
-                        $('body').css('height', '');
+                        //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex - 9000000;
@@ -412,9 +412,9 @@
 
                         //fix to prevent scrolling
                         $('.pptx2html').css('overflow', 'hidden');
-                        $('.pptx2html').css('height', '100%');
+                        //$('.pptx2html').css('height', '100%');
                         $('body').css('overflow', 'hidden');
-                        $('body').css('height', '100%');
+                        //$('body').css('height', '100%');
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex + 9000000;
@@ -456,9 +456,9 @@
 
                         //restore fix to prevent scrolling
                         $('.pptx2html').css('overflow', '');
-                        $('.pptx2html').css('height', '');
+                        //$('.pptx2html').css('height', '');
                         $('body').css('overflow', '');
-                        $('body').css('height', '');
+                        //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
                         cEl.style.zIndex = cEl.style.zIndex - 9000000;
