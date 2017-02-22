@@ -28,16 +28,33 @@ class LocaleSwitcher extends React.Component {
 
 
     renderLocaleLink(locale) {
+        let flag = locale;
+        if (locale === 'en'){
+            flag = 'gb';
+        }
+        if (locale === this.state.currentLocale){
+            return (
+                <Dropdown.Item
+                key = {locale}
+                onClick={ this.handleLocaleClick.bind(this, locale) }
+                href={ `?locale=${locale}` }
+                className = 'active'
+                >
+                <Flag name={flag}/>{ Iso.getName(locale) }
+                </Dropdown.Item>
+            );
+        } else{
+            return (
+                <Dropdown.Item
+                key = {locale}
+                onClick={ this.handleLocaleClick.bind(this, locale) }
+                href={ `?locale=${locale}` }
+                >
+                <Flag name={flag}/>{ Iso.getName(locale) }
+                </Dropdown.Item>
+            );
+        }
 
-        return (
-            <Dropdown.Item
-            key = {locale}
-            onClick={ this.handleLocaleClick.bind(this, locale) }
-            href={ `?locale=${locale}` }
-            >
-            { Iso.getName(locale) }
-            </Dropdown.Item>
-        );
     }
 
     render() {
@@ -46,19 +63,30 @@ class LocaleSwitcher extends React.Component {
         if (this.state.currentLocale === 'en'){
             currentFlag = 'gb';
         }
-        let current_header = <span><Flag name={currentFlag}/>{Iso.getName(this.state.currentLocale)}</span>;
-
-        return (
-
-              <Dropdown trigger={current_header}>
-                <Dropdown.Menu>
-                    { locales.map(this.renderLocaleLink, this) }
-                </Dropdown.Menu>
-              </Dropdown>
-
-
-
-        );
+        let switcher, current_header = '';
+        switch (this.props.mode) {
+            case 'icon':
+                current_header = <Flag name={currentFlag}/>;
+                return (
+                    <Dropdown trigger={current_header}>
+                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
+                    </Dropdown>
+                );
+            case 'menu':
+                current_header = <span><i className='icon comments'/>Language</span>;
+                return (
+                    <Dropdown item trigger={current_header}>
+                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
+                    </Dropdown>
+                );
+            default:
+                current_header = <span><i className='icon comments'/>Language</span>;
+                return (
+                    <Dropdown item text={current_header}>
+                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
+                    </Dropdown>
+                );
+        }
     }
 
 }
