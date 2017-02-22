@@ -384,12 +384,6 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
-        let userid = this.props.UserProfileStore.userid;
-        let isUserEditor = false;
-        if (userid != null && userid !== '' && this.props.DeckEditStore.editors.includes(userid)) {
-            isUserEditor = true;
-        }
-
         //CSS
         let titleFieldClass = classNames({
             'required': true,
@@ -406,6 +400,7 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.license != null
         });
+        //TODO update it for deck edit rights version 2
         let isUserAllowedToChangeEditRights = this.state.accessLevel === 'public' || (this.props.DeckEditStore.deckProps.deckOwner === this.props.UserProfileStore.userid);
         let accessLevelFieldClass = classNames({
             'required': isUserAllowedToChangeEditRights,
@@ -490,7 +485,7 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         </div>;
 
-        let saveDeckButton = isUserEditor ?
+        let saveDeckButton = this.props.DeckEditStore.savingWithoutCreatingRevision ?
         <button className='ui primary button'
              onClick={this.handleSave.bind(this, false)}>Save</button> : '';
 

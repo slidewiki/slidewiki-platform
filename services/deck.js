@@ -121,7 +121,7 @@ export default {
             rp({
                 method: 'GET',
                 uri: Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed',
-                headers: { '----jwt----': params.params.jwt },
+                headers: { '----jwt----': args.jwt },
                 json: true
             })
             .then((body) => {
@@ -153,11 +153,11 @@ export default {
             });
         } else if (resource === 'deck.needsNewRevision') {
             let args = params.params ? params.params : params;
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/needsNewRevision?user=' + args.userID}).then((res) => {
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/needsNewRevision?user=' + args.userID, headers: {'----jwt----': args.jwt }}).then((res) => {
                 callback(null, {status: JSON.parse(res)});
             }).catch((err) => {
                 console.log('serviceErr', err);
-                callback(null, {status: {}});
+                callback(null, {status: {}, err: err});
             });
         } else if (resource === 'deck.handleRevisionChanges') {
             let args = params.params ? params.params : params;
