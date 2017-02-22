@@ -16,6 +16,7 @@ export default {
         form.append('file', params.base64);
         form.append('filename', params.filename ? params.filename : 'unknown');
         form.append('user', params.user);
+        form.append('jwt', params.jwt);
         form.append('language', params.language);
         form.append('license', params.license);
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
