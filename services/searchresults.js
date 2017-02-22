@@ -2,34 +2,37 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
 
-function extractSuggestions(){
-    return [];
-}
+function extractSpellcheckSuggestion(spellcheck){
 
-function extractCollations(collations){
-    let arr = [];
+    if(spellcheck.collations && spellcheck.collations.length > 0){
+        // collations are returned in an array with the term 'collation' in odd cells
+        // and the actual collations in even cells
+        for(let i=1; i<spellcheck.collations.length; i+=2){
+            let collation = spellcheck.collations[i].collationQuery;
+            let col = '';
+            let index = 1;
 
-    // collations are returned in an array with the term 'collation' in odd cells
-    // and the actual collations in even cells
-    for(let i=1; i<collations.length; i+=2){
-        let collation = collations[i].collationQuery;
-        let col = '';
+            // if query was made against a specific field, remove this field name from the collation
+            if(collation.startsWith('title:') || collation.startsWith('description:') ||
+                    collation.startsWith('content:') || collation.startsWith('speakernotes:')){
 
-        // if query was made against a specific field, remove this field name from the collation
-        if(collation.startsWith('title:') || collation.startsWith('description:') ||
-                collation.startsWith('content:') || collation.startsWith('speakernotes:')){
-
-            let index = collation.indexOf(':');
-            col = collation.substring(index+2, collation.length-1);     //terms are inside parentheses
+                index = collation.indexOf(':') + 2;
+            }
+            return collation.substring(index, collation.length-1); //terms are inside parentheses
         }
-        else{
-            col = collation.substring(1, collation.length-1);           //same here
-        }
+    }
+    else if(spellcheck.suggestions && spellcheck.suggestions.length > 0){
+        let suggestion = '';
 
-        arr.push(col.trim());
+        // collations are not present, so concatenate suggestions of individual terms
+        for(let i=1; i<spellcheck.suggestions.length; i+=2){
+            suggestion += spellcheck.suggestions[i].suggestion[0].word + ' ';
+        }
+        return suggestion.trim();
+
     }
 
-    return arr;
+    return '';
 }
 
 export default {
@@ -166,15 +169,10 @@ export default {
                     // console.log(JSON.stringify(returnData, null, 2));
                     // console.log(JSON.stringify(searchResults.spellcheck));
 
-                    let collations = (searchResults.spellcheck && searchResults.spellcheck.collations)
-                            ? extractCollations(searchResults.spellcheck.collations) : [];
-
                     callback(null, {
                         numFound: searchResults.response.docs.length,
                         docs: searchResults.response.docs,
-                        spellcheck: {
-                            collations: collations
-                        }
+                        spellcheck: extractSpellcheckSuggestion(searchResults.spellcheck)
                     });
                 });
 

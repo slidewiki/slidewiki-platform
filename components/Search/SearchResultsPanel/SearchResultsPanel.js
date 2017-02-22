@@ -5,6 +5,7 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
+import SpellcheckPanel from './SpellcheckPanel';
 
 class SearchResultsPanel extends React.Component {
 
@@ -38,15 +39,6 @@ class SearchResultsPanel extends React.Component {
             </div>;
         }
     }
-    renderSpellcheckCollations(){
-        return <div key="spellcheckDiv" className="ui grid container">
-            <div className="row">
-                <h4>Do you mean: {this.props.spellcheck.collations.map( (el) => {
-                    return <a href='#' key={el} onClick={this.props.handleRedirect.bind(this, {keywords: el})}> {el} </a>;
-                })}?</h4>
-            </div>
-        </div>;
-    }
     render() {
         const results = this.props.results;
         const numFound = this.props.numFound;
@@ -71,23 +63,15 @@ class SearchResultsPanel extends React.Component {
             </div>
         </div>;
 
-        let noResultsDiv = <div key="noResultsDiv" className="ui grid centered container">
-            <div className="row">
-                <h3>No results found for the specified input parameters.</h3>
-            </div>
+        let noResultsDiv = <div key="noResultsDiv" className="ui basic segment center aligned">
+            <h3>No results found for the specified input parameters.</h3>
         </div>;
-
-        let spellcheckDiv = '';
-
-        if(this.props.spellcheck.collations.length > 0){
-            spellcheckDiv = this.renderSpellcheckCollations();
-        }
 
         let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
 
         return (
             <div ref="searchResultsPanel">
-                {spellcheckDiv}
+                <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />
                 {resultsPanel}
             </div>
         );

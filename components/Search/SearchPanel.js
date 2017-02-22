@@ -53,10 +53,7 @@ class SearchPanel extends React.Component {
         this.refs.keywords.focus();
     }
     onSelect(searchstring){
-        console.log('edw2342');
-        console.log(searchstring);
         this.setState({keywords: searchstring});
-        console.log(this.state);
         this.handleRedirect();
     }
     handleKeyPress(event){
