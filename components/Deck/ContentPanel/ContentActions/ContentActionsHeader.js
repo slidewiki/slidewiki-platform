@@ -76,6 +76,12 @@ class ContentActionsHeader extends React.Component {
                             </i>
 
                         </button>
+                        <button className={addDeckClass}  type="button" aria-label="Import Deck" data-tooltip="Import Deck">
+                            <i className="medium icons">
+                              <i className="yellow large folder icon"></i>
+                              <i className="corner reply up icon"></i>
+                             </i>
+                        </button>
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 
