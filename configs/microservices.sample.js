@@ -1,40 +1,47 @@
 const co = require('../common');
 
+/*
+This microservice configuration points the platform towards
+using the experimental server of the SlideWiki development
+team.
+*/
+
+
 export default {
     Microservices: {
         'deck': {
-            uri: 'http://deckservice.stable.slidewiki.org'
+            uri: 'https://deckservice.experimental.slidewiki.org'
         },
         'discussion': {
-            uri: 'http://discussionservice.stable.slidewiki.org'
+            uri: 'https://discussionservice.experimental.slidewiki.org'
         },
         'activities': {
-            uri: 'http://activitiesservice.stable.slidewiki.org'
+            uri: 'https://activitiesservice.experimental.slidewiki.org'
         },
         'notification': {
-            uri: 'http://notificationservice.stable.slidewiki.org'
+            uri: 'https://notificationservice.experimental.slidewiki.org'
         },
         'user': {
-            uri: 'http://userservice.stable.slidewiki.org'
+            uri: 'https://userservice.experimental.slidewiki.org'
         },
         'import': {
-            uri: 'http://importservice.stable.slidewiki.org',
-            protocol: 'http:',
-            host: 'importservice.stable.slidewiki.org',
+            uri: 'https://importservice.experimental.slidewiki.org',
+            protocol: 'https:',
+            host: 'importservice.experimental.slidewiki.org',
             path: '/importPPTX',
             port: 80
         },
         'search': {
-            uri: 'http://searchservice.stable.slidewiki.org'
+            uri: 'https://searchservice.experimental.slidewiki.org'
         },
         'image': {
-            uri: 'http://imageservice.stable.slidewiki.org'
+            uri: 'https://imageservice.experimental.slidewiki.org'
         },
         'file': {
-            uri: 'http://fileservice.stable.slidewiki.org'
+            uri: 'https://fileservice.experimental.slidewiki.org'
         },
         'pdf': {
-            uri : 'http://pdfservice.stable.slidewiki.org'
+            uri : 'https://pdfservice.experimental.slidewiki.org'
         }
     }
 };

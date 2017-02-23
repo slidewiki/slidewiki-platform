@@ -9,18 +9,25 @@
 
     //add        '/',
     // to add a line in the toolbar
+
+CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
+CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
+CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
+CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
+
+
 CKEDITOR.disableAutoInline = true;
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
 
-    config.uiColor = '#4183C4';
+    //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
-    config.extraPlugins = 'sourcedialog';
+    //config.extraPlugins = 'sourcedialog';
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
         '/',
@@ -30,11 +37,13 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'SpecialChar'] },
+            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
+            { name: 'document', items: [ 'Sourcedialog'] },
+            { name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-            { name: 'document', items: [ 'Sourcedialog', '-', 'Save', 'Preview', 'Print', '-'] },
         '/',
     ];
     //{ name: 'document', items: ['Templates' ] },
@@ -62,6 +71,11 @@ CKEDITOR.editorConfig = function( config ) {
     //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
     config.removePlugins = 'magicline';
     CKEDITOR.config.magicline_color = '#0000FF';
+
+    //limit Copy Formatting to only allow basic text styles (bold, italic, underline, strikethrough) to be copied:
+    //config.copyFormatting_allowRules = 'b s u i em a strong ul li em p h1 h2 h3; span{text-decoration,font-weight}';
+    config.copyFormatting_disallowRules = 'div';
+
 
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
@@ -123,7 +137,7 @@ CKEDITOR.editorConfig = function( config ) {
 		'showborders,' +
 		'smiley,' +
 		'sourcearea,' +
-		'specialchar,' +
+		'sourcedialog,' +
 		'stylescombo,' +
 		'tab,' +
 		'table,' +
@@ -137,16 +151,53 @@ CKEDITOR.editorConfig = function( config ) {
 
     //klaas adapt: extra right-click menu options
     //config.extraPlugins = 'dialogadvtab';
-    
+
 	//config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elements.
     config.format_tags = 'p;h1;h2;h3;pre';
 
     //#####Image upload via CKeditor - TODO//
+    //config.uploadUrl;
+    //config.uploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
+    //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
+    //config.codeSnippet_theme = 'github';
+    //config.codeSnippet_theme = 'pojoaque';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
+    //config.codeSnippet_theme = 'pojoaque';
+    //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
+    //config.extraPlugins = 'uploadimage';
+    //config.extraPlugins = 'uploadwidget';
+    //config.extraPlugins = 'codesnippet,texzilla,youtube';
+    //config.extraPlugins = 'codesnippet';
+    //config.extraPlugins = 'texzilla';
+    //config.extraPlugins = 'youtube';
 
-    config.extraPlugins = 'uploadimage';
-    config.extraPlugins = 'uploadwidget';
+    config.mathJaxLib = '/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+
+
+    // requires extra library to show resulting latex
+    //config.extraPlugins = 'mathjax';
+
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_SVG';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-MML-AM_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_CHTML';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AM_CHTML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_CHTML';
+    //config.mathJaxLib = 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_CHTML-full';
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+
+    //config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_SVG';
+    //<script type="text/javascript" src="//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    //config.mathJaxClass = 'my-math';
+    //config.mathJaxClass = 'math-tex';
+    //config.mathJaxClass = 'equation';
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';
@@ -180,6 +231,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	//config.removeDialogTabs = 'image:advanced;link:advanced';
+
 };
 CKEDITOR.disableAutoInline = true;
 

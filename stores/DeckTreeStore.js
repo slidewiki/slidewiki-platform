@@ -288,6 +288,8 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('editable', (val) => false));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('onAction', (val) => false));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.newValue));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.newSid));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.newPath));
         this.emitChange();
     }
     //updates the nodes in the same level of selector which come after the selected node
@@ -342,7 +344,7 @@ class DeckTreeStore extends BaseStore {
             //chain will be a list of all nodes in the same level
             chain = chain.get(item);
         });
-        if(chain.size > 1){
+        if(chain.size > 0) {
             //push back last item
             selectedNodeIndex.push(lastItem[0]);
             this.deckTree = this.deckTree.deleteIn(selectedNodeIndex);
@@ -357,7 +359,7 @@ class DeckTreeStore extends BaseStore {
         //should update the selector: set to parent node
         this.switchSelector(this.selector, this.findParentNodeSelector(this.selector.get('spath')));
 
-        if (!silent){
+        if (silent !== true){
             this.emitChange();
         }
     }
@@ -376,7 +378,7 @@ class DeckTreeStore extends BaseStore {
         let chain = this.deckTree;
 
         let newNodePathString = '';
-        //for decks, we should append it in the last child position if payload does not contain a targetIndex 
+        //for decks, we should append it in the last child position if payload does not contain a targetIndex
         if(this.selector.get('stype')==='deck'){
             selectedNodeIndex.forEach((item, index) => {
                 //chain will be a list of all nodes in the same level

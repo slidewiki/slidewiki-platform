@@ -4,9 +4,12 @@ import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
 import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
+import UserGroups from './UserGroups';
+import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile';
+import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
 class UserProfile extends React.Component {
@@ -62,12 +65,19 @@ class UserProfile extends React.Component {
                         return this.displayAccounts();
                         break;
                     case categories.settings[2]:
+                        return this.displayIntegrations();
+                        break;
                     default:
                         return this.notImplemented();
                 }});
             case categories.categories[1]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
+                        return this.displayGroups();
+                        break;
+                    case categories.groups[1]:
+                        return this.displayGroupedit();
+                        break;
                     default:
                         return this.notImplemented();
                 }});
@@ -80,7 +90,7 @@ class UserProfile extends React.Component {
         return (
             <div className = "ui stackable grid page" >
                 <div className = "four wide column" >
-                    <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username }/>
+                    <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
                 </div>
                 <div className = "twelve wide column" >
@@ -117,34 +127,52 @@ class UserProfile extends React.Component {
     }
 
     displayAccounts() {
-        return (<div>
-            <div className="ui segments">
-            <div className="ui secondary segment">
-              <h3>Change password</h3>
-            </div>
+        let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
+                <div className="ui segments">
+                  <div className="ui secondary segment">
+                    <h3>Change password</h3>
+                  </div>
 
-            <div className="ui segment">
-              <ChangePassword failures={ this.props.UserProfileStore.failures }/>
-            </div>
-            </div>
+                  <div className="ui segment">
+                    <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+                  </div>
+                </div>
+            ) : '';
+        return (
+          <div>
+            {changePassword}
             <div className="ui segments">
-            <div className="ui red inverted segment">
-              <h3>Deactivate Account</h3>
-            </div>
+              <div className="ui red inverted segment">
+                <h3>Deactivate Account</h3>
+              </div>
 
-            <div className="ui segment">
-              <DeactivateAccount />
-            </div>
+              <div className="ui segment">
+                <DeactivateAccount />
+              </div>
             </div>
         </div>);
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks}/>);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} />);
+    }
+
+    displayIntegrations() {
+        return (
+            <Integrations />
+        );
+    }
+
+    displayGroups() {
+        return (<UserGroups error={this.props.UserProfileStore.deleteUsergroupError} status={this.props.UserProfileStore.usergroupsViewStatus} groups={this.props.UserProfileStore.user.groups} username={this.props.UserProfileStore.username} userid={this.props.UserProfileStore.userid} />);
+    }
+
+    displayGroupedit() {
+        return (<UserGroupEdit />);
     }
 
     notImplemented() {
-        return (<h3>This feature is curently not implemented. Please wait for future realeses of SlideWiki</h3>);
+        return (<h3>This feature is curently not implemented. Please wait for future releases of SlideWiki</h3>);
     }
 
     render() {

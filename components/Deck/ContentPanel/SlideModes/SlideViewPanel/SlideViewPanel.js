@@ -25,6 +25,11 @@ class SlideViewPanel extends React.Component {
             //overflow: 'hidden,'
             position: 'relative'
         };
+        const sectionElementStyle = {
+            overflowY: 'hidden',
+            overflowX: 'auto',
+            height: '100%'
+        };        
         const compSpeakerStyle = {
             maxHeight: 50,
             minHeight: 50,
@@ -34,7 +39,7 @@ class SlideViewPanel extends React.Component {
 
         const containerMinHeight = {
 
-        }
+        };
 
 
         return (
@@ -43,7 +48,9 @@ class SlideViewPanel extends React.Component {
                   <div ref="slideViewPanel" className="ui" style={compStyle}>
                       <div className="reveal">
                           <div className="slides">
+                            <section className="present"  style={sectionElementStyle}>
                               <div id="inlineContent" dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}} />
+                            </section>
                           </div>
                           <br />
                       </div>
@@ -58,7 +65,6 @@ class SlideViewPanel extends React.Component {
     }
     componentDidMount(){
         if(process.env.BROWSER){
-
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
             //$(".pptx2html [style*='absolute']").addClass('schaal');
@@ -75,7 +81,7 @@ class SlideViewPanel extends React.Component {
             }
             */
             //initial resize
-            this.resize()
+            this.resize();
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
                 //console.log('resize');
@@ -85,6 +91,10 @@ class SlideViewPanel extends React.Component {
         this.forceUpdate();
     }
     componentDidUpdate() {
+        // update mathjax rendering
+        // add to the mathjax rendering queue the command to type-set the inlineContent
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
+
         this.resize();
     }
     resize()
@@ -94,7 +104,7 @@ class SlideViewPanel extends React.Component {
         //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
 
         //reset scaling of pptx2html element to get original size
-        $(".pptx2html").css({'transform': '', 'transform-origin': ''});
+        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
 
         //Function to fit contents in edit and view component
         let pptxwidth = $('.pptx2html').width();
@@ -105,8 +115,8 @@ class SlideViewPanel extends React.Component {
 
         if ($('.pptx2html').length)
         {
-            $(".pptx2html").css({'transform': '', 'transform-origin': ''});
-            $(".pptx2html").css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
             //width = pptxwidth + 40
@@ -117,7 +127,7 @@ class SlideViewPanel extends React.Component {
             //style.padding left = 20 px, top 20 px
             this.refs.slideViewPanel.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
 
-            $(".pptx2html").css({'borderStyle': 'none none double none ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            $('.pptx2html').css({'borderStyle': 'none none double none ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
             //all borders
             //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }

@@ -1,5 +1,5 @@
 import async from 'async';
-import { navigateAction } from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
 
 export default function userSignOut(context, payload, done) {
     async.series([
@@ -8,8 +8,14 @@ export default function userSignOut(context, payload, done) {
         //     callback();
         // },
         (callback) => {
-            if(location.pathname.split('/').pop() !== payload.username && location.pathname.includes(payload.username))
-                context.executeAction(navigateAction, { url: '/' }, callback);
+            console.log(location.pathname.split('/')[location.pathname.split('/').length - 1]);
+
+            if (location.pathname.split('/').pop() !== payload.username && location.pathname.includes(payload.username))
+                context.executeAction(navigateAction, {url: '/'}, callback);
+            else if (location.pathname.split('/').pop() === 'edit') {
+                let newPath = location.pathname.substring(0, location.pathname.length - 4).concat('view');
+                context.executeAction(navigateAction, {url: newPath}, callback);
+            }
             else
                 callback();
         },
@@ -17,9 +23,8 @@ export default function userSignOut(context, payload, done) {
             context.deleteUser(); //clear user (is cookie) via userStoragePlugin
             callback();
         }
-    ],
-    (err, result) => {
-        if(err) console.log(err);
+    ], (err, result) => {
+        if (err) console.log(err);
         done();
     });
 }

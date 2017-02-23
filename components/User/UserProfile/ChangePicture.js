@@ -30,13 +30,13 @@ class ChangePicture extends React.Component {
                     <div className="eight wide column">
                         <div className="ui vertical buttons">
                             <div data-tooltip="This is currently not supported" data-position="right center" data-inverted="">
-                                <button className="ui blue labeled icon button disabled" onClick={ this.uploadNewPicture.bind(this) }>
+                                <button tabIndex="-1" className="ui lightgrey labeled icon button disabled" onClick={ this.uploadNewPicture.bind(this) }>
                                     <i className="icon upload"/>Upload new Image
                                 </button>
                             </div>
                             <div className="ui hidden divider"/>
-                            <button className="ui green labeled icon button" onClick={ this.useGravatar.bind(this) }>
-                                <i className="icon user"/>Use Gravater Image
+                            <button className="ui primary labeled icon button" onClick={ this.useGravatar.bind(this) }>
+                                <i className="icon user"/>Use Gravatar Image
                             </button>
                             <div className="ui hidden divider"/>
                             <button className="ui red labeled icon button" onClick={ this.removePicture.bind(this) }>

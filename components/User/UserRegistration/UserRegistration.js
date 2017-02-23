@@ -9,11 +9,24 @@ import userSignUp from '../../../actions/user/registration/userSignUp';
 import resetUserRegistrationStatus from '../../../actions/user/registration/resetUserRegistrationStatus';
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
+import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
+import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
+import common from '../../../common';
+
+const MODI = 'sociallogin_modi';
+const NAME = 'sociallogin_data';
 
 class UserRegistration extends React.Component {
+    constructor(props) {
+        super(props);
+        this.provider = '';
+
+        this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
+    }
+
     componentDidMount() {
         //Form validation
         const validationRules = {
@@ -123,8 +136,72 @@ class UserRegistration extends React.Component {
             return (usernameNotAllowed !== undefined) ? !usernameNotAllowed : true;
         });
 
-        $('.ui.form').form(validationRules);
+        $(ReactDOM.findDOMNode(this.refs.UserRegistration_form)).form(validationRules);
+    }
 
+    componentWillReceiveProps(nextProps) {
+        // console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
+        if (localStorage.getItem(MODI) === 'login_failed' && nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
+            this.setUserdata({}, false);
+            return;
+        }
+        if (nextProps.UserRegistrationStore.socialCredentialsTaken && !this.props.UserRegistrationStore.socialCredentialsTaken) {
+            $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal('hide');
+            window.scrollTo(0,0);
+
+            swal({
+                title: 'Information',
+                text: 'Signing up with a provider failed because the user of this provider is already registered at SlideWiki. Either sign in with this provider or sign up with another one.',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                confirmButtonClass: 'positive ui button',
+                cancelButtonText: 'Register',
+                cancelButtonClass: 'ui orange button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                if (dismiss === 'cancel')
+                    return true;
+
+                this.context.executeAction(navigateAction, {
+                    url: '/'
+                });
+
+                $('.ui.login.modal').modal('show');
+
+                return true;
+            })
+            .catch(() => {
+                return true;
+            });
+        }
+        else if (nextProps.UserRegistrationStore.socialCredentialsTakenByDeactivatedAccount && !this.props.UserRegistrationStore.socialCredentialsTakenByDeactivatedAccount) {
+            $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal('hide');
+            window.scrollTo(0,0);
+
+            swal({
+                title: 'Information',
+                text: 'These provider credentials are already used by a deactivated user. To reactivate a specific user please contact us directly.',
+                type: 'error',
+                showCloseButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                return true;
+            })
+            .catch(() => {
+                return true;
+            });
+        }
+        else if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'login_failed_register_now') {
+            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
+                this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
+        }
     }
 
     componentDidUpdate() {
@@ -177,22 +254,31 @@ class UserRegistration extends React.Component {
 
     handleSignUp(e) {
         e.preventDefault();
-        let language = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
-        if (language.length === 2) {
-            language += '-' + language.toUpperCase();
-        }
+
+        let language = common.getBrowserLanguage();
+
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
-        this.context.executeAction(userSignUp, {
-            firstname: this.refs.firstname.value,
-            lastname: this.refs.lastname.value,
-            organisation: this.refs.organisation.value,
-            username: this.refs.username.value,
-            language: language,
-            email: this.refs.email.value,
-            password: hashPassword(this.refs.password.value),
-            grecaptcharesponse: this.state.grecaptcharesponse
-        });
+        localStorage.setItem(MODI, '');
+
+        let data = {};
+        try {
+            data = {
+                firstname: this.refs.firstname.value,
+                lastname: this.refs.lastname.value,
+                organisation: this.refs.organisation.value,
+                username: this.refs.username.value,
+                language: language,
+                email: this.refs.email.value,
+                password: hashPassword(this.refs.password.value),
+                grecaptcharesponse: this.state.grecaptcharesponse
+            };
+        } catch (e) {
+            //somehow this is sometimes called when doing login
+            return false;
+        }
+
+        this.context.executeAction(userSignUp, data);
         return false;
     }
 
@@ -214,6 +300,125 @@ class UserRegistration extends React.Component {
         if (this.props.UserRegistrationStore.failures.usernameNotAllowed !== undefined || username !== '') {
             this.context.executeAction(checkUsername, {username: username});
         }
+    }
+
+    socialRegister(provider, e) {
+        e.preventDefault();
+        // console.log('Hit on social register icon', provider);
+
+        //delete old data
+        this.context.executeAction(newSocialData, {});
+
+        //prepare localStorage
+        localStorage.setItem(MODI, 'register');
+        localStorage.setItem(NAME, '');
+
+        this.provider = provider;
+
+        //observe storage
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+        //create new tab
+        let url = Microservices.user.uri + '/connect/' + provider;
+
+        let width = screen.width*0.75, height = screen.height*0.75;
+        if (width < 600)
+            width = screen.width;
+        if (height < 500)
+            height = screen.height;
+        let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+        let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
+        win.focus();
+    }
+
+    handleStorageEvent(e) {
+        // console.log('storage event', e.key, localStorage.getItem(e.key));
+        //this is available
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'register')
+            return false;
+
+        let data = {};
+        try {
+            data = JSON.parse(localStorage.getItem(e.key));
+        } catch (err) {
+            console.log('Error while parsing data', err);
+            return false;
+        }
+        finally {
+            //delete data
+            localStorage.setItem(NAME, '');
+        }
+
+        //add language before send to service
+        let language = common.getBrowserLanguage();
+        data.language = language;
+
+        //check data - valid and not empty
+        if ( (data.token.length < 1)
+          || (data.provider.length < 3)
+          || (data.token_creation.length < 22) )
+            //Failure
+            return false;
+
+        if  (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) {
+            //show hint
+            const provider = this.getProviderName();
+            swal({
+                title: 'Error',
+                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+            return false;
+        }
+
+        this.context.executeAction(newSocialData, data);
+
+        $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal({
+            closable  : false,
+            onDeny    : function(){
+                //nothing
+                return true;
+            }
+        }).modal('show');
+
+        return true;
+    }
+
+    setUserdata(data, check = true) {
+        // console.log('UserRegistration setUserdata()', data);
+
+        this.provider = data.provider;
+
+        this.refs.username.value = data.username || '';
+        this.refs.email.value = data.email || '';
+        let name = data.name || '';
+        if (name.indexOf(' ') !== -1) {
+            this.refs.firstname.value = data.forename || name.split(' ')[0];
+            this.refs.lastname.value = data.surname || name.substring(name.indexOf(' '));
+        }
+
+        if (check) {
+            this.checkUsername();
+            this.checkEmail();
+        }
+    }
+
+    getProviderName() {
+        if (this.provider.length < 1)
+            return '';
+        return this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
+    }
+
+    handleNoAccessClick(e) {
+        e.preventDefault();
+        this.context.executeAction(navigateAction, {
+            url: '/resetpassword'
+        });
     }
 
     render() {
@@ -260,6 +465,7 @@ class UserRegistration extends React.Component {
             usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
         }
         return (
+          <div>
             <div className="ui page centered grid" >
                 <div className="eight wide column">
                     <div className="ui blue padded segment">
@@ -309,17 +515,39 @@ class UserRegistration extends React.Component {
                                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
-                            <button type="submit" className="ui blue labeled submit icon button" aria-describedby="signupagree">
+                            <br/>
+                            <button type="submit" className="ui blue labeled submit icon button" aria-describedby="signupagree" >
                                 <i className="icon add user"/> Sign Up
                             </button>
                         </form>
-                        <br/>
+                        <div className="ui dividing header" ></div>
                         <div className="ui message" id="signupagree">
                             <p>By clicking Sign Up, you agree to our <a href="/imprint">Terms</a>.</p>
                         </div>
+                        <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
+                    </div>
+                </div>
+                <div className="seven wide column">
+                    <div className="ui blue padded center aligned segment">
+                        <h2 className="ui dividing header">Sign Up with a Social Provider</h2>
+
+                        <div className="container">
+                            <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
+                            <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>
+                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'github')} ></i>
+                        </div>
+                        <div className="ui dividing header" ></div>
+                        <div className="ui message" id="signupagree">
+                            <p>By clicking Sign Up, you agree to our <a href="/imprint">Terms</a>.</p>
+                        </div>
+                        <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                     </div>
                 </div>
             </div>
+
+            <UserRegistrationSocial ref="modal_social"/>
+
+          </div>
         );
     }
 }

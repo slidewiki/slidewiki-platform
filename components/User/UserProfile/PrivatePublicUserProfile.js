@@ -22,7 +22,7 @@ class PrivatePublicUserProfile extends React.Component {
         return (
           <div className = "ui stackable grid page" >
               <div className = "four wide column" >
-                  <PublicUserData user={ this.props.user }/>
+                  <PublicUserData user={ this.props.user } loggedinuser= { this.props.loggedinuser }/>
               </div>
               <div className = "twelve wide column" >
                   <div className="ui segments">
@@ -44,10 +44,9 @@ class PrivatePublicUserProfile extends React.Component {
                       </div>
                   </div>
               </div>
-              <div className="ui tab" data-tab="activity">
+              <div className="ui tab" data-tab="activity"></div>
           </div>
-      </div>
-    );
+        );
     }
 }
 

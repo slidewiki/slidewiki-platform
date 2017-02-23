@@ -392,6 +392,19 @@ export default {
             context.executeAction(loadAddDeck, null, done);
         }
     },
+    socialLogin: {
+        path: '/socialLogin',
+        method: 'get',
+        page: 'socialLogin',
+        title: 'SlideWiki -- Login',
+        handler: require('../components/Login/Social'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Login'
+            });
+            done();
+        }
+    },
     /* This should be the last route in routes.js */
     notfound: {
         path: '*',
