@@ -1,6 +1,9 @@
 import React from 'react';
 import DeckList from './DeckList';
 import {NavLink} from 'fluxible-router';
+import { FormattedMessage } from 'react-intl';
+import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
+
 class Home extends React.Component {
     render() {
         const heightStyle = {
@@ -15,11 +18,14 @@ class Home extends React.Component {
                     <div className="six wide column">
                         <div className="item">
                             <div className="middle aligned content">
-                        <h2 className="ui center aligned grey header">SlideWiki revolutionises how educational material is authored, shared and used.</h2>
+                                <h2 className="ui center aligned grey header">
+                                    <FormattedMessage id='home.slogan' />
+                                </h2>
+                            </div>
                         </div>
                     </div>
-                    </div>
                     <div className="ten wide column">
+
                         <div className="ui top right attached large blue label">beta</div>
                         <img className="ui centered image" src="/assets/images/logo_full.png" alt="SlideWiki beta logo" />
                     </div>

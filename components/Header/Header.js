@@ -7,6 +7,7 @@ import HeaderDropdown from '../Login/HeaderDropdown.js';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
+import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 let MediaQuery = require ('react-responsive');
 
 class Header extends React.Component {
@@ -39,6 +40,7 @@ class Header extends React.Component {
 
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/> Sign in</a>;
+        let notification_locale = '';
 
         if (this.props.UserProfileStore.username !== '') {
             loginButton = <HeaderDropdown/>;
@@ -47,6 +49,11 @@ class Header extends React.Component {
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>My Settings</NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>Logout</a>
             </div>);
+            notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
+
+        } else{
+            notification_locale = <div className="item"><LocaleSwitcher mode ='icon' className = 'ui item'/></div>;
+
         }
 
         return (
@@ -67,7 +74,7 @@ class Header extends React.Component {
                                   <i className="right plus icon"></i>Add deck
                               </NavLink>
                             </div>
-                            {/*<UserNotificationsBadge className="ui item"/>*/}
+                            {notification_locale}
                             <div className="item">{loginButton}<LoginModal/></div>
                         </div>
                     </div>

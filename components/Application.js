@@ -12,25 +12,30 @@ import Error from './Error/Error';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
+
 class Application extends React.Component {
     render() {
         let Handler = this.props.currentRoute.handler;
         if (this.props.ErrorStore.error) {
             return (
-                <div className="slidewiki-page">
-                    <Header currentRoute={this.props.currentRoute} links={pages} />
-                    <Error error={this.props.ErrorStore.error} />
-                    <Footer />
-                </div>
+
+                    <div className="slidewiki-page">
+                        <Header currentRoute={this.props.currentRoute} links={pages} />
+                        <Error error={this.props.ErrorStore.error} />
+                        <Footer />
+                    </div>
+
             );
         }
         else {
             return (
-                <div className="slidewiki-page">
-                    <Header currentRoute={this.props.currentRoute} links={pages} />
-                    <Handler />
-                    <Footer />
-                </div>
+
+                    <div className="slidewiki-page">
+                        <Header currentRoute={this.props.currentRoute} links={pages} />
+                        <Handler />
+                        <Footer />
+                    </div>
+
             );
         }
     }
