@@ -1,7 +1,5 @@
 export default {
 
-    
-
     writeCookie(name, value, days) {
         let expires;
 

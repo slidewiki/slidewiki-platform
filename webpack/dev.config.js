@@ -41,6 +41,7 @@ let webpackConfig = {
                     },
                     {
                         loader: 'babel-loader'
+
                     }
                 ]
             },
