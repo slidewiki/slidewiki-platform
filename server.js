@@ -91,8 +91,8 @@ fetchrPlugin.registerService(require('./services/suggester'));
 fetchrPlugin.registerService(require('./services/logservice'));
 
 server.use((req, res, next) => {
-    req.id = uuidV4();
-    res.id = req.id;
+    req.reqId = uuidV4().replace(/-/g, '');
+    res.reqId = req.reqId.replace(/-/g, '');
     const context =  app.createContext({
         req: req,
         res: res  //for userStoragePlugin
@@ -102,9 +102,9 @@ server.use((req, res, next) => {
         //}
     });
 
-    log.info({id: req.id, method: req.method, url: req.url, ip: req.ip, message: 'new request'});
+    log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.id}, (err) => {
+    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
         if (err) {
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
@@ -124,7 +124,7 @@ server.use((req, res, next) => {
                 res.type('html');
                 res.status(err.statusCode);
                 res.write('<!DOCTYPE html>' + html);
-                log.error({id: res.id, url: req.url, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
+                log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
                 res.end();
                 // Pass through to next middleware
                 //next();
@@ -145,7 +145,7 @@ server.use((req, res, next) => {
                 res.type('html');
                 res.status(err.statusCode);
                 res.write('<!DOCTYPE html>' + html);
-                log.error({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
+                log.error({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
                 res.end();
                 //next(err);
             }
@@ -172,7 +172,7 @@ server.use((req, res, next) => {
         res.type('html');
         res.write('<!DOCTYPE html>' + html);
         //console.log(Object.keys(res), res.statusCode, res.statusMessage, Object.keys(res.req));
-        log.info({id: res.id, statusCode: res.statusCode, statusMessage: res.statusMessage, message: 'sending response'});
+        log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
         res.end();
     });
 });
