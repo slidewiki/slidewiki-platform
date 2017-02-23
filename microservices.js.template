@@ -22,7 +22,7 @@ export default {
             protocol: 'http:',
             host: '${SERVICE_VAR_IMPORT_HOST}',
             path: '/importPPTX',
-            port: 80
+            port: 443
         },
         'search': {
             uri: '${SERVICE_URL_SEARCH}'
