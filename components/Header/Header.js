@@ -58,7 +58,7 @@ class Header extends React.Component {
 
         return (
             <div>
-              <MediaQuery query='(min-device-width: 768px)'>
+              <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui container">
                         <a className="item" href='/'>
@@ -80,7 +80,7 @@ class Header extends React.Component {
                     </div>
                 </div>
               </MediaQuery>
-              <MediaQuery query='(max-device-width: 767px)'>
+              <MediaQuery maxDeviceWidth={767}>
                 <div className="ui inverted blue menu" ref="header">
                   <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
                   <div className="ui right inverted blue menu">

@@ -82,7 +82,7 @@ class LocaleSwitcher extends React.Component {
             default:
                 current_header = <span><i className='icon comments'/>Language</span>;
                 return (
-                    <Dropdown item text={current_header}>
+                    <Dropdown item trigger={current_header}>
                       <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
                     </Dropdown>
                 );
