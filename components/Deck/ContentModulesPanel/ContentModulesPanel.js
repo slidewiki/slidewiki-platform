@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import restoreDeckPageLayout from '../../../actions/deckpagelayout/restoreDeckPageLayout';
 import loadActivities from '../../../actions/activityfeed/loadActivities';
 import loadContentDiscussion from '../../../actions/contentdiscussion/loadContentDiscussion';
+import loadCommentsCount from '../../../actions/contentdiscussion/loadCommentsCount';
 import loadContentHistory from '../../../actions/history/loadContentHistory';
 import loadContentUsage from '../../../actions/loadContentUsage';
 //import loadContentQuestions from '../../../actions/loadContentQuestions';
@@ -16,8 +17,34 @@ import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPa
 import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
+import { isLocalStorageOn } from '../../../common.js';
 
 class ContentModulesPanel extends React.Component {
+    componentWillMount() {
+        let selector = this.props.ContentModulesStore.selector;
+        //check localStorage to see if invalid data have been read from the browser cache
+        if (selector !== undefined && isLocalStorageOn()) {
+            const sourcesCountFromLocalStorage = localStorage.getItem('sourcesCount');
+            if (sourcesCountFromLocalStorage !== undefined && sourcesCountFromLocalStorage !== null) {
+                if (String(sourcesCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.datasource)) {// wrong data read from browser cache
+                    let date = new Date().getTime();
+                    this.context.executeAction(loadDataSources, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                }
+                localStorage.removeItem('sourcesCount');// reset the state in localStorage
+            }
+            const commentsCountFromLocalStorage = localStorage.getItem('commentsCount');
+            console.log('commentsCountFromLocalStorage', commentsCountFromLocalStorage);
+            console.log('this.props.ContentModulesStore.moduleCount.comments', this.props.ContentModulesStore.moduleCount.comments);
+            if (commentsCountFromLocalStorage !== undefined && commentsCountFromLocalStorage !== null) {
+                if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments)) {// wrong data read from browser cache
+                    let date = new Date().getTime();
+                    this.context.executeAction(loadCommentsCount, {params: {date: date, id: selector.id, spath: selector.spath, stype: selector.stype, sid: selector.sid, smode: selector.smode}});
+                }
+                localStorage.removeItem('commentsCount');// reset the state in localStorage
+            }
+        }
+    }
+
     handleTabClick(type, e) {
         switch (type) {
             /*

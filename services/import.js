@@ -23,13 +23,13 @@ export default {
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
             //knownLength: params.file.size ? params.file.size : params.base64.length
 
-        let request = form.submit({
+        /*{
             port: Microservices.import.port ? Microservices.import.port : 80,
             host: Microservices.import.host,
             path: Microservices.import.path ? Microservices.import.path : '/',
-            protocol: Microservices.import.protocol ? Microservices.import.protocol : 'http:',
-            timeout: body.timeout
-        }, (err, res) => {
+            protocol: Microservices.import.protocol ? Microservices.import.protocol : 'http:',                timeout: body.timeout
+        }*/
+        let request = form.submit(Microservices.import.url + '/importPPTX', (err, res) => {
             //res.setTimeout(body.timeout);
 
             if (err) {
