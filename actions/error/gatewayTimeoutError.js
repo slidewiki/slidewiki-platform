@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const log = require('../log/clog');
 
 export default function gatewayTimeoutError(context, payload, done) {
-    log.error(context, payload, 'Gateway timeout');
+    log.error(context,  'Gateway timeout');
     const error = fumble.http.badRequest();
     ErrorsList.GATEWAY_TIMEOUT_ERROR.statusCode = error.statusCode;
     ErrorsList.GATEWAY_TIMEOUT_ERROR.statusText = error.message;

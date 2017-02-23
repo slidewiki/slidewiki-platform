@@ -7,7 +7,7 @@ export default function addSlide(context, payload, done) {
 
     context.service.create('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('ADD_SLIDE_EDIT_FAILURE', err); // not implemented in store
         } else {

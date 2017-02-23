@@ -5,7 +5,7 @@ import methodNotAllowedError  from '../../error/methodNotAllowedError';
 const log = require('../../log/clog');
 
 export default function changeUserData(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;

@@ -13,7 +13,7 @@ const log = require('./log/clog');
 
 
 export default function loadContentModules(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     if (!(['deck', 'slide'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -47,7 +47,7 @@ export default function loadContentModules(context, payload, done) {
     // final callback
     (err, results) => {
         if (err){
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {selector: payload.params, moduleType: 'datasource'});

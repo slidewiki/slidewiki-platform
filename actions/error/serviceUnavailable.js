@@ -8,7 +8,7 @@ export default function serviceUnavailable(context, payload, done) {
     ErrorsList.SERVICE_UNAVAILABLE.statusCode = error.statusCode;
     ErrorsList.SERVICE_UNAVAILABLE.statusText = error.message;
     ErrorsList.SERVICE_UNAVAILABLE.navStack = (context.stack.slice()).join(', ');
-    log.error(context, payload, ErrorsList.SERVICE_UNAVAILABLE);
+    log.error(context, ErrorsList.SERVICE_UNAVAILABLE);
     context.dispatch('SERVICE_UNAVAILABLE', ErrorsList.SERVICE_UNAVAILABLE);
     done(error);
 }

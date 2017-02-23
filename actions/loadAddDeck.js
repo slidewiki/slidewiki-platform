@@ -3,7 +3,7 @@ import UserProfileStore from '../stores/UserProfileStore';
 const log = require('./log/clog');
 
 export default function loadAddDeck(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     //redirect to homepage if not logged in
     let store = context.getStore(UserProfileStore);
     if (!((store.username !== undefined && store.username !== null && store.username !== '')

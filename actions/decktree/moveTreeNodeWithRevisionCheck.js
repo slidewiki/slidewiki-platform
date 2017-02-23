@@ -15,7 +15,7 @@ export default function moveTreeNodeWithRevisionCheck(context, payload, done) {
             userid: userid
         }, (err, res) => {
             if (err) {
-                log.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename, err: err});
                 //context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {

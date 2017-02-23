@@ -5,7 +5,7 @@ const log = require('../log/clog');
 export default function loadSlideAll(context, payload, done) {
     context.service.read('slide.all', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_SLIDE_ALL_FAILURE', err);
         } else {

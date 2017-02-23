@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const log = require('../log/clog');
 
 export default function searchSyntaxError(context, payload, done) {
-    log.error(context, payload, 'Search syntax error');
+    log.error(context,  'Search syntax error');
     const error = fumble.http.badRequest();
     ErrorsList.SEARCH_SYNTAX_ERROR.statusCode = error.statusCode;
     ErrorsList.SEARCH_SYNTAX_ERROR.statusText = error.message;

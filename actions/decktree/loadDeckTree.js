@@ -7,7 +7,7 @@ import { AllowedPattern } from '../error/util/allowedPattern';
 const log = require('../log/clog');
 
 export default function loadDeckTree(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -31,7 +31,7 @@ export default function loadDeckTree(context, payload, done) {
         //we need to load the whole tree for the first time
         context.service.read('decktree.nodes', payload, {}, (err, res) => {
             if (err) {
-                log.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 return;
             } else {

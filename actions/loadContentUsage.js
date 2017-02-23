@@ -6,7 +6,7 @@ import serviceUnavailable from './error/serviceUnavailable';
 const log = require('./log/clog');
 
 export default function loadContentUsage(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -19,7 +19,7 @@ export default function loadContentUsage(context, payload, done) {
 
     context.service.read('usage.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.dispatch('LOAD_CONTENT_USAGE_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_USAGE_SUCCESS', res);

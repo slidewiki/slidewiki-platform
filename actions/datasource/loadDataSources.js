@@ -6,7 +6,7 @@ import { AllowedPattern } from '../error/util/allowedPattern';
 const log = require('../log/clog');
 
 export default function loadDataSources(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload).catch((err) => {done(err);});
         return;
@@ -19,7 +19,7 @@ export default function loadDataSources(context, payload, done) {
 
     context.service.read('datasource.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_DATASOURCES_FAILURE', err);
         } else {

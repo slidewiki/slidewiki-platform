@@ -1,11 +1,18 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
 import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
+import serviceUnavailable from '../../error/serviceUnavailable';
 import { isEmpty } from '../../../common.js';
 const log = require('../../log/clog');
 
 export default function fetchUser(context, payload, done) {
-    log.info(context, payload);
+    console.log(context);
+    context.id = context.id ? context.id : '-1';
+    if (context.id === '-1')
+        context.stack = ['fetchUser']; // this is needed as fluxible context stack gets minified in production. This is the case when action is called from component
+    console.log(context);
+    log.info(context);
+
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;
@@ -22,7 +29,8 @@ export default function fetchUser(context, payload, done) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else
-                context.dispatch('FETCH_USER_FAILED', err);
+                context.executeAction(serviceUnavailable, payload, done);
+                //context.dispatch('FETCH_USER_FAILED', err);
         } else {
             if(!isEmpty(payload.params.category)){
                 if(context.getStore(UserProfileStore).username === payload.params.username)

@@ -14,7 +14,7 @@ import serviceUnavailable from './error/serviceUnavailable';
 const log = require('./log/clog');
 
 export default function loadContent(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -83,7 +83,7 @@ export default function loadContent(context, payload, done) {
     // final callback
     (err, results) => {
         if (err) {
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('UPDATE_PAGE_TITLE', {

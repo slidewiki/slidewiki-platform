@@ -11,7 +11,7 @@ export const categories = { //Do NOT alter the order of these items! Just add yo
 };
 
 export function chooseAction(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     async.series([
         (callback) => {
             context.executeAction(fetchUser, payload, callback);

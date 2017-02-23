@@ -5,7 +5,7 @@ import serviceUnavailable from './error/serviceUnavailable';
 const log = require('./log/clog');
 
 export default function saveDeckEdit(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -18,7 +18,7 @@ export default function saveDeckEdit(context, payload, done) {
         payload.userid = userid;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                log.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
             } else {

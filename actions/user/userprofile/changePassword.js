@@ -6,7 +6,7 @@ import serviceUnavailable from '../../error/serviceUnavailable';
 const log = require('../../log/clog');
 
 export default function changePassword(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
@@ -18,7 +18,7 @@ export default function changePassword(context, payload, done) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else {
-                log.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
                 context.dispatch('EDIT_USER_FAILED', err);
             }

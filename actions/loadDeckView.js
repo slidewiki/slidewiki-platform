@@ -5,7 +5,7 @@ import { AllowedPattern } from './error/util/allowedPattern';
 const log = require('./log/clog');
 
 export default function loadDeckView(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
@@ -13,7 +13,7 @@ export default function loadDeckView(context, payload, done) {
 
     context.service.read('deck.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, payload, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {

@@ -5,7 +5,7 @@ import moveTreeNodeWithRevisionCheck from './moveTreeNodeWithRevisionCheck';
 const log = require('../log/clog');
 
 export default function moveTreeNodeAndNavigate(context, payload, done) {
-    log.info(context, payload);
+    log.info(context);
     //load all required actions in parallel
     async.parallel([
         (callback) => {
@@ -46,7 +46,7 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
                 });
             }
             else {
-                log.error(context, payload, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename, err: err});
             }
             done();
         });

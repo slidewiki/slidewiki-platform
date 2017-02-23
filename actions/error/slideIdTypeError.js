@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const log = require('../log/clog');
 
 export default function slideIdTypeError(context, payload, done) {
-    log.error(context, payload, 'Invalid slide id');
+    log.error(context,  'Invalid slide id');
     const error = fumble.http.badRequest();
     ErrorsList.SLIDE_ID_TYPE_ERROR.statusCode = error.statusCode;
     ErrorsList.SLIDE_ID_TYPE_ERROR.statusText = error.message;

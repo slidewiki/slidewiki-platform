@@ -4,7 +4,7 @@ const fumble = require('fumble');
 const log = require('../log/clog');
 
 export default function deckContentPathError(context, payload, done) {
-    log.error(context, payload, {deck_id: payload.params.id, spath: payload.params.spath, text: 'Invalid deck content path'});
+    log.error(context, {deck_id: payload.params.id, spath: payload.params.spath, text: 'Invalid deck content path'});
     const error = fumble.http.badRequest();
     ErrorsList.DECK_CONTENT_TYPE_ERROR.statusCode = error.statusCode;
     ErrorsList.DECK_CONTENT_TYPE_ERROR.statusText = error.message;
