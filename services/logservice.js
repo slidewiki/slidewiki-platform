@@ -3,48 +3,35 @@ const clog = require('../configs/log').log;
 export default {
     name: 'log',
     update: (req, resource, params, body, config, callback) => {
-        if (!req.id)
-            req.id = '-1';
+        if (req.reqId === 'undefined' || !req.reqId)
+            req.reqId = -1;
 
-        let msg = '';
-        if (body.msg) {
-            const keys = Object.keys(body.msg);
-            if (keys.length > 0) {
-                for (let k of keys) {
-                    msg += k + ':' + body.msg[k] + ', ';
-                }
-                msg = msg.slice(0, -2);
-            }
-            else
-                msg = body.msg;
-        }
-        else
-            msg = [];
+        let logObject = {Id: req.reqId, message: body};
 
         switch(resource) {
             case 'log.debug':
-                clog.debug({id: req.id, actions: body.actions, message: msg});
+                clog.debug(logObject);
                 break;
             case 'log.info':
-                clog.info({id: req.id, actions: body.actions, message: msg});
+                clog.info(logObject);
                 break;
             case 'log.notice':
-                clog.notice({id: req.id, actions: body.actions, message: msg});
+                clog.notice(logObject);
                 break;
             case 'log.warning':
-                clog.warning({id: req.id, actions: body.actions, message: msg});
+                clog.warning(logObject);
                 break;
             case 'log.error':
-                clog.error({id: req.id, actions: body.actions, message: msg});
+                clog.error(logObject);
                 break;
             case 'log.crit':
-                clog.crit({id: req.id, actions: body.actions, message: msg});
+                clog.crit(logObject);
                 break;
             case 'log.alert':
-                clog.alert({id: req.id, actions: body.actions, message: msg});
+                clog.alert(logObject);
                 break;
             case 'log.emerg':
-                clog.emerg({id: req.id, actions: body.actions, message: msg});
+                clog.emerg(logObject);
                 break;
         }
         return;

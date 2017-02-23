@@ -7,7 +7,8 @@ export default {
     name: 'user',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         // let selector = {
         //     'id': parseInt(args.id),
@@ -99,7 +100,8 @@ export default {
     },
 
     create: (req, resource, params, body, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'create', method: req.method});
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
             const hashedPassword = args.password;
@@ -202,7 +204,8 @@ export default {
 
     // other methods
     update: (req, resource, params, body, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'update', method: req.method});
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'user.resetPassword') {
             rp.put({
                 uri: Microservices.user.uri + '/resetPassword',

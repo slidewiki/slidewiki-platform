@@ -7,7 +7,7 @@ export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
 
         if(resource === 'searchresults.list'){

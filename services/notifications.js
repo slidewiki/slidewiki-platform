@@ -23,7 +23,7 @@ export default {
     name: 'notifications',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let uid = args.uid;
         if (uid === undefined) {
@@ -88,14 +88,14 @@ export default {
         }
     },
     delete: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'delete', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         let args = params.params? params.params : params;
 
         if (resource === 'notifications.item'){
             /*********connect to microservices*************/
             const nid = args.newNotificationId;
             let options = {
-                method: 'DELETE',
+                Method: 'DELETE',
                 uri: Microservices.notification.uri + '/notification/delete',
                 body:JSON.stringify({
                     id: nid
@@ -112,7 +112,7 @@ export default {
             let uid = String(args.uid);
             uid = (!uid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - uid.length) + uid) : uid;//TODO solve these ID issues
             let options = {
-                method: 'DELETE',
+                Method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',
                 body:JSON.stringify({
                     subscribed_user_id: uid

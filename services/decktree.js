@@ -6,7 +6,7 @@ export default {
     name: 'decktree',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
@@ -21,7 +21,7 @@ export default {
         }
     },
     create: (req, resource, params, body, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'create', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         let nodeSpec = {'id': String(args.nodeSpec.id), 'type': args.nodeSpec.type};
@@ -43,7 +43,7 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'update', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
         if(resource === 'decktree.nodeTitle'){
@@ -84,13 +84,13 @@ export default {
         }
     },
     delete: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'delete', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             let options = {
-                method: 'DELETE',
+                Method: 'DELETE',
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 body:JSON.stringify({
                     user: args.userid.toString(),

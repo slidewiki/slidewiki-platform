@@ -14,7 +14,7 @@ export default {
 
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'read', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         let selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         let isRootDeck = selector.stype === 'deck' && selector.id === selector.sid;
@@ -91,7 +91,7 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
-        log.info({id: req.id, service: __filename.split('/').pop(), resource: resource, operation: 'update', method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'history.revert') {
             let parentId = TreeUtil.getParentId(args.selector);
