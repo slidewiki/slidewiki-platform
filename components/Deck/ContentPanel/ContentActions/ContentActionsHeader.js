@@ -7,6 +7,7 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
+import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
 
 class ContentActionsHeader extends React.Component {
     componentDidUpdate(){
@@ -74,14 +75,8 @@ class ContentActionsHeader extends React.Component {
                               <i className="yellow large folder icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-
                         </button>
-                        <button className={addDeckClass}  type="button" aria-label="Import Deck" data-tooltip="Import Deck">
-                            <i className="medium icons">
-                              <i className="yellow large folder icon"></i>
-                              <i className="corner reply up icon"></i>
-                             </i>
-                        </button>
+                        <AttachSubdeck calledFrom="actionsHeader"/>
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 

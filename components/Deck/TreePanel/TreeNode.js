@@ -7,6 +7,7 @@ import {DragSource, DropTarget} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
+import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -168,14 +169,7 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <button className="ui button"
-                            aria-label="Import deck"
-                            data-tooltip="Import deck">
-                        <i className="medium icons">
-                            <i className="yellow folder icon"></i>
-                            <i className="corner reply up icon"></i>
-                        </i>
-                    </button>
+                    <AttachSubdeck/>
                     <button className={duplicateItemClass} title="Duplicate"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),
