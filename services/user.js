@@ -73,7 +73,7 @@ export default {
                     callback(err, null);
                 });
         } else if (resource === 'user.checkemail') {
-            let regExp = /\S+@\S+\.\S+/;
+            let regExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$/;
             if (args.email === '' || !regExp.test(args.email)) {//Do not call microservice with invalid email
                 callback(null, {taken: undefined});
             } else {
