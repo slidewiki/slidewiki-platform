@@ -16,6 +16,7 @@ import path from 'path';
 import {navigateAction} from 'fluxible-router';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import cookie from 'react-cookie';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
@@ -101,7 +102,7 @@ server.use((req, res, next) => {
         //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
         //}
     });
-
+    cookie.plugToRequest(req,res);
     log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
     debug('Executing navigate action');
     context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
@@ -185,5 +186,7 @@ if(env === 'production'){
     console.log('[development environment] Proxy server listening on port ' + port);
     console.log('[development environment] Check your application on http://%s:%s', host, port-1);
 }
+
+
 
 export default server;
