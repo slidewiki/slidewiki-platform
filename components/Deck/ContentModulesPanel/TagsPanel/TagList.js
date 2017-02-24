@@ -1,6 +1,10 @@
 import React from 'react';
 
 class TagList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         const selector = this.props.selector;
         const editable = this.props.editable;

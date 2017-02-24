@@ -3,12 +3,31 @@ import {connectToStores} from 'fluxible-addons-react';
 import TagsStore from '../../../../stores/TagsStore';
 import TagList from './TagList';
 // import EditTag from './EditTag';
-// import newTag from '../../../../actions/tags/newTag';
+import newTag from '../../../../actions/tags/newTag';
 // import showMoreTags from '../../../../actions/tags/showMoreTags';
 
 class TagsPanel extends React.Component {
-    handleNewTag() {
-        //this.context.executeAction(newTag);
+    constructor(props) {
+        super(props);
+        this.state = { isEditMode: false };
+    }
+
+    onAddTag(e) {
+        e.preventDefault();
+        const val = this.refs.taginp.value;
+        if (!val) {
+            return false;
+        }
+        console.log(val);
+
+        // get text from e
+        this.context.executeAction(newTag, {
+            'tag': val
+        });
+    }
+
+    onShowEditForm(component) {
+        this.setState({isEditMode: true});
     }
 
     handleShowMore(e) {
@@ -34,6 +53,26 @@ class TagsPanel extends React.Component {
                 {showMoreLink}
             </div>
             ;
+
+        let editBtn = <div className="column right aligned">
+            <button className="ui right floated button blue" onClick={this.onShowEditForm.bind(this)}>
+                <i className="edit icon" data-reactid="640"></i>Edit Tags
+            </button>
+        </div>;
+
+        let editForm = <div className="column right aligned">
+            <div className="ui right labeled left icon input">
+                <label id="EnterTags">
+                </label>
+                <input ref="taginp" type="text" placeholder="Enter tags" aria-labelledby="EnterTags"/>
+                    <a className="ui tag label" role="button" tabIndex="0" onClick={this.onAddTag.bind(this)}>
+                        Add Tag
+                    </a>
+            </div>
+        </div>;
+
+        let editSection = this.state.isEditMode? editForm : editBtn;
+
         // let editForm = <EditTag tag={tag}/>;
 
         return (
@@ -42,13 +81,9 @@ class TagsPanel extends React.Component {
                     <div className="column">
                         <h3 className="ui header">Tags</h3>
                     </div>
-                    <div className="column right aligned">
-                        <button className="ui right floated button blue" onClick={this.handleNewTag.bind(this)}>
-                            <i className="edit icon" data-reactid="640"></i>Edit Tags
-                        </button>
-                    </div>
+                    { editSection }
                 </div>
-                {(tag === undefined) ? tagList : editForm}<br/>
+                { tagList }<br/>
             </div>
         );
     }

@@ -5,7 +5,6 @@ class TagsStore extends BaseStore {
         super(dispatcher);
         this.tags = [];
         this.showAllTags = false;
-        this.tag = undefined;
         this.selectedIndex = -1;
         this.contentOwner = 0;
         this.selector = {};
@@ -13,28 +12,28 @@ class TagsStore extends BaseStore {
     loadTags(payload) {
         this.tags = payload.tags;
         this.selector = payload.selector;
-        this.tag = undefined;
         this.selectedIndex = -1;
         this.contentOwner = payload.owner;
         this.emitChange();
     }
     loadTag(payload) {
-        this.tag = this.tags[payload.dsindex];
+        const tag = this.tags[payload.dsindex];
         this.selectedIndex = payload.dsindex;
         this.emitChange();
     }
     updateTags(payload) {
         this.tags = payload.tags;
-        this.tag = undefined;
         this.selectedIndex = -1;
         this.emitChange();
     }
-    newTag() {
-        this.tag = null;
+    newTag(payload) {
+        this.tags.push(payload.tag);
         this.emitChange();
     }
+    removeTag(payload) {
+        this.tags = this.tags.filter(item => item !== payload.tag);
+    }
     cancelEditTag() {
-        this.tag = undefined;
         this.selectedIndex = -1;
         this.emitChange();
     }
@@ -58,7 +57,6 @@ class TagsStore extends BaseStore {
     rehydrate(state) {
         this.tags = state.tags;
         this.showAllTags = state.showAllTags;
-        this.tag = state.tag;
         this.selectedIndex = state.selectedIndex;
         this.contentOwner = state.contentOwner;
         this.selector = state.selector;
