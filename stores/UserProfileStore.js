@@ -42,6 +42,7 @@ class UserProfileStore extends BaseStore {
         this.saveUsergroupIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.accountHaveToBeUnlocked = false;
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -89,6 +90,7 @@ class UserProfileStore extends BaseStore {
         this.saveUsergroupIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.accountHaveToBeUnlocked = false;
 
         //LoginModal
         this.showLoginModal = false;
@@ -118,7 +120,8 @@ class UserProfileStore extends BaseStore {
             saveUsergroupError: this.saveUsergroupError,
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
-            usergroupsViewStatus: this.usergroupsViewStatus
+            usergroupsViewStatus: this.usergroupsViewStatus,
+            accountHaveToBeUnlocked: this.accountHaveToBeUnlocked
         };
     }
 
@@ -150,6 +153,7 @@ class UserProfileStore extends BaseStore {
         this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
+        this.accountHaveToBeUnlocked = state.accountHaveToBeUnlocked;
     }
 
     changeTo(payload) {
@@ -239,6 +243,9 @@ class UserProfileStore extends BaseStore {
     }
 
     handleSocialSignInError(err) {
+        if (err.statusCode.toString() === '423') {
+            this.accountHaveToBeUnlocked = true;
+        }
         this.socialLoginError = true;
         this.emitChange();
         this.socialLoginError = false;
@@ -256,6 +263,7 @@ class UserProfileStore extends BaseStore {
 
     socialRegister(res) {
         this.userpicture = res.picture;
+        this.accountHaveToBeUnlocked = false;
 
         this.handleSignInSuccess(res);
     }

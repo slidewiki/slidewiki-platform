@@ -111,6 +111,25 @@ class LoginModal extends React.Component {
                 return true;
             });
         }
+
+        if (this.props.UserProfileStore.accountHaveToBeUnlocked === false &&  nextProps.UserProfileStore.accountHaveToBeUnlocked) {
+            swal({
+                title: 'Information',
+                text: 'Your user account is not enabled yet or was deactivated. To reactivate a specific user or get to know why your account is not enabled yet, please contact us directly.',
+                type: 'error',
+                showCloseButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            })
+            .then((dismiss) => {
+                return true;
+            })
+            .catch(() => {
+                return true;
+            });
+        }
     }
 
     handleRegisterFirst(dismiss) {

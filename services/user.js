@@ -179,7 +179,8 @@ export default {
                     language: args.language,
                     username: args.username,
                     forename: args.forename,
-                    surname: args.surname
+                    surname: args.surname,
+                    organization: args.organisation
                 }),
                 resolveWithFullResponse: true
             })
