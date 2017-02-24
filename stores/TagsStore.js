@@ -31,7 +31,7 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     removeTag(payload) {
-        this.tags = this.tags.filter(item => item !== payload.tag);
+        this.tags = this.tags.filter((item) => item !== payload.tag);
     }
     cancelEditTag() {
         this.selectedIndex = -1;
