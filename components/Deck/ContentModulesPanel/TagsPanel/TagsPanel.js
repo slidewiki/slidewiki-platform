@@ -4,12 +4,12 @@ import TagsStore from '../../../../stores/TagsStore';
 import TagList from './TagList';
 // import EditTag from './EditTag';
 import newTag from '../../../../actions/tags/newTag';
+import changeEditMode from '../../../../actions/tags/changeEditMode';
 // import showMoreTags from '../../../../actions/tags/showMoreTags';
 
 class TagsPanel extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isEditMode: false };
     }
 
     onAddTag(e) {
@@ -18,16 +18,18 @@ class TagsPanel extends React.Component {
         if (!val) {
             return false;
         }
-        console.log(val);
+        this.refs.taginp.value = '';
 
-        // get text from e
         this.context.executeAction(newTag, {
             'tag': val
         });
     }
 
-    onShowEditForm(component) {
-        this.setState({isEditMode: true});
+    onShowEditForm(e) {
+        e.preventDefault();
+        console.log(this.props.TagsStore.isEditMode);
+        this.context.executeAction(changeEditMode, {isEditMode: true});
+        console.log(this.props.TagsStore.isEditMode);
     }
 
     handleShowMore(e) {
@@ -40,7 +42,6 @@ class TagsPanel extends React.Component {
         const arrayOfTagsIsLarge = tags.length > 10;
         const showAllTags = this.props.TagsStore.showAllTags;
         const displayTags = (arrayOfTagsIsLarge && !showAllTags) ? tags.slice(0, 9) : tags;
-        const tag = this.props.TagsStore.tag;
         const selector = this.props.TagsStore.selector;
 
         let showMoreLink = (!showAllTags && arrayOfTagsIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div> : '';
@@ -49,7 +50,11 @@ class TagsPanel extends React.Component {
             <div>There are currently no tags for this {this.props.DataSourceStore.selector.stype}.</div>
             :
             <div>
-                <TagList items={displayTags} editable ={true} selector={selector}/>
+                <TagList items={displayTags}
+                         editable={true}
+                         selector={selector}
+                         isEditMode={this.props.TagsStore.isEditMode}
+                />
                 {showMoreLink}
             </div>
             ;
@@ -70,10 +75,7 @@ class TagsPanel extends React.Component {
                     </a>
             </div>
         </div>;
-
-        let editSection = this.state.isEditMode? editForm : editBtn;
-
-        // let editForm = <EditTag tag={tag}/>;
+        let editSection = this.props.TagsStore.isEditMode? editForm : editBtn;
 
         return (
             <div className="ui bottom attached" ref="dataSourcePanel">

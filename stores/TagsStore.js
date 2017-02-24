@@ -4,6 +4,7 @@ class TagsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.tags = [];
+        this.isEditMode = false;
         this.showAllTags = false;
         this.selectedIndex = -1;
         this.contentOwner = 0;
@@ -41,6 +42,10 @@ class TagsStore extends BaseStore {
         this.showAllTags = true;
         this.emitChange();
     }
+    changeMode(payload) {
+        this.isEditMode = payload.isEditMode;
+        this.emitChange();
+    }
     getState() {
         return {
             tags: this.tags,
@@ -49,6 +54,7 @@ class TagsStore extends BaseStore {
             selectedIndex: this.selectedIndex,
             contentOwner: this.contentOwner,
             selector: this.selector,
+            isEditMode: this.isEditMode
         };
     }
     dehydrate() {
@@ -60,6 +66,7 @@ class TagsStore extends BaseStore {
         this.selectedIndex = state.selectedIndex;
         this.contentOwner = state.contentOwner;
         this.selector = state.selector;
+        this.isEditMode = state.isEditMode;
     }
 }
 
@@ -70,7 +77,8 @@ TagsStore.handlers = {
     'NEW_TAG': 'newTag',
     'SHOW_ALL_TAGS': 'handleShowAllTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
-    'CANCEL_EDIT_TAGS': 'cancelEditTag'
+    'CANCEL_EDIT_TAGS': 'cancelEditTag',
+    'CHANGE_EDIT_MODE': 'changeMode'
 };
 
 export default TagsStore;
