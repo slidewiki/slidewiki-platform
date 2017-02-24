@@ -29,7 +29,7 @@ export default {
             protocol: 'https:',
             host: 'importservice.experimental.slidewiki.org',
             path: '/importPPTX',
-            port: 80
+            port: 443
         },
         'search': {
             uri: 'https://searchservice.experimental.slidewiki.org'

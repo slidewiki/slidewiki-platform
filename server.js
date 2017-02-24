@@ -21,6 +21,9 @@ import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 
+const uuidV4 = require('uuid/v4');
+const log = require('./configs/log').log;
+
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
 //otherwise it will try and transpile CSS into JavaScript.
@@ -86,9 +89,11 @@ fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
+fetchrPlugin.registerService(require('./services/logservice'));
 
 server.use((req, res, next) => {
-
+    req.reqId = uuidV4().replace(/-/g, '');
+    res.reqId = req.reqId.replace(/-/g, '');
     const context =  app.createContext({
         req: req,
         res: res  //for userStoragePlugin
@@ -98,12 +103,10 @@ server.use((req, res, next) => {
         //}
     });
     cookie.plugToRequest(req,res);
+    log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
     debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {
-        url: req.url
-    }, (err) => {
+    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
         if (err) {
-            console.log(req.url, err);//, err);
             if (err.statusCode && err.statusCode === 404) {
                 // TODO refector the code in this if-else block
                 const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
@@ -120,7 +123,10 @@ server.use((req, res, next) => {
                 const html = ReactDOM.renderToStaticMarkup(htmlElement);
                 debug('Sending markup');
                 res.type('html');
-                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
+                res.status(err.statusCode);
+                res.write('<!DOCTYPE html>' + html);
+                log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                res.end();
                 // Pass through to next middleware
                 //next();
             } else {
@@ -138,7 +144,10 @@ server.use((req, res, next) => {
                 const html = ReactDOM.renderToStaticMarkup(htmlElement);
                 debug('Sending markup');
                 res.type('html');
-                res.status(err.statusCode).send('<!DOCTYPE html>' + html);
+                res.status(err.statusCode);
+                res.write('<!DOCTYPE html>' + html);
+                log.error({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                res.end();
                 //next(err);
             }
             return;
@@ -163,6 +172,8 @@ server.use((req, res, next) => {
         debug('Sending markup');
         res.type('html');
         res.write('<!DOCTYPE html>' + html);
+        //console.log(Object.keys(res), res.statusCode, res.statusMessage, Object.keys(res.req));
+        log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
         res.end();
     });
 });
