@@ -5,22 +5,22 @@ class TagList extends React.Component {
         super(props);
     }
 
-    onTagDelete(e) {
-        e.preventDefault();
+    onTagDelete(tag) {
+        console.log(tag);
+        this.props.onTagDelete(tag);
     }
 
     render() {
-        const selector = this.props.selector;
-        const editable = this.props.editable;
-        const deleteIcon = this.props.isEditMode?
-            <i onClick={this.onTagDelete.bind(this)} className="delete icon" />
-            : '';
-
         return (
             <div ref="tagList">
                 <div className="ui basic segment">
                     { this.props.items.map((tag) => (<a className="ui large tag label" tabIndex="0" role="link">
-                        { tag }{ deleteIcon }
+                        { tag }
+                        {
+                            this.props.isEditMode?
+                                <i onClick={this.onTagDelete.bind(this, tag)} className="delete icon" />
+                                : ''
+                        }
                     </a>)) }
                 </div>
              </div>

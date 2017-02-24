@@ -5,6 +5,7 @@ import TagList from './TagList';
 // import EditTag from './EditTag';
 import newTag from '../../../../actions/tags/newTag';
 import changeEditMode from '../../../../actions/tags/changeEditMode';
+import removeTag from '../../../../actions/tags/removeTag';
 // import showMoreTags from '../../../../actions/tags/showMoreTags';
 
 class TagsPanel extends React.Component {
@@ -32,6 +33,12 @@ class TagsPanel extends React.Component {
         console.log(this.props.TagsStore.isEditMode);
     }
 
+    onRemoveTag(tag) {
+        this.context.executeAction(removeTag, {
+            'tag': tag
+        });
+    }
+
     handleShowMore(e) {
         e.preventDefault();
         //this.context.executeAction(showMoreTags);
@@ -42,18 +49,17 @@ class TagsPanel extends React.Component {
         const arrayOfTagsIsLarge = tags.length > 10;
         const showAllTags = this.props.TagsStore.showAllTags;
         const displayTags = (arrayOfTagsIsLarge && !showAllTags) ? tags.slice(0, 9) : tags;
-        const selector = this.props.TagsStore.selector;
 
         let showMoreLink = (!showAllTags && arrayOfTagsIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div> : '';
         let tagList = (tags.length === 0)
             ?
-            <div>There are currently no tags for this {this.props.DataSourceStore.selector.stype}.</div>
+            <div>There are currently no tags.</div>
             :
             <div>
                 <TagList items={displayTags}
                          editable={true}
-                         selector={selector}
                          isEditMode={this.props.TagsStore.isEditMode}
+                         onTagDelete={this.onRemoveTag.bind(this)}
                 />
                 {showMoreLink}
             </div>

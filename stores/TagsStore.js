@@ -33,6 +33,7 @@ class TagsStore extends BaseStore {
     }
     removeTag(payload) {
         this.tags = this.tags.filter((item) => item !== payload.tag);
+        this.emitChange();
     }
     cancelEditTag() {
         this.selectedIndex = -1;
@@ -78,7 +79,8 @@ TagsStore.handlers = {
     'SHOW_ALL_TAGS': 'handleShowAllTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
     'CANCEL_EDIT_TAGS': 'cancelEditTag',
-    'CHANGE_EDIT_MODE': 'changeMode'
+    'CHANGE_EDIT_MODE': 'changeMode',
+    'REMOVE_TAG': 'removeTag'
 };
 
 export default TagsStore;
