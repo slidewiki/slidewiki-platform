@@ -466,8 +466,8 @@ class UserRegistration extends React.Component {
                                 <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Last name * </label>
-                                <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                                <p className="sr-only">Last name * </p>
+                                <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" aria-required="true"/></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
                                 <label style={signUpLabelStyle}>Username * </label>
@@ -510,9 +510,10 @@ class UserRegistration extends React.Component {
                         <h2 className="ui dividing header">Sign Up with a Social Provider</h2>
 
                         <div className="container">
-                            <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
-                            <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>
-                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'github')} ></i>
+                           <div><i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} tabIndex="0" ></i>
+                                <span className="sr-only">Sign up with Facebook</span></div>
+                            <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} tabIndex="0" role="button"></i>
+                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'github')} tabIndex="0" role="button"></i>
                         </div>
                         <div className="ui dividing header" ></div>
                         By clicking on a Social Provider, you agree to our <a href="">Terms</a>.
