@@ -7,10 +7,8 @@ class TagList extends React.Component {
 
         return (
             <div ref="tagList">
-                <div className="ui relaxed divided list">
-                  <ul>
-                    { this.props.items.map((tag) => (<li>{tag}</li>)) }
-                  </ul>
+                <div className="ui basic segment">
+                    { this.props.items.map((tag) => (<a className="ui large tag label" tabIndex="0" role="link">{tag}</a>)) }
                 </div>
              </div>
         );
