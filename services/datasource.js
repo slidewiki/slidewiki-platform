@@ -1,10 +1,12 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 export default {
     name: 'datasource',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
 
@@ -54,6 +56,7 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
         if(resource === 'datasource.array') {
             rp.put({
