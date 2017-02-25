@@ -28,12 +28,18 @@ class ContentModulesStore extends BaseStore {
 
         this.emitChange();
     }
+    updateTagCountDeck(payload) {
+        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
+        this.moduleCount.tags = lastRevision.tags?
+            lastRevision.tags.length : 0;
+
+        this.emitChange();
+    }
     updateQuestionsCount(payload){
         this.moduleCount.questions = payload.count;
         this.emitChange();
     }
     updateCommentsCount(payload) {
-        console.log('updateCommentsCount');
         this.moduleCount.comments = payload.count;
         this.emitChange();
     }
@@ -86,6 +92,7 @@ ContentModulesStore.handlers = {
     'LOAD_AMOUNT_OF_QUESTIONS_SUCCESS': 'updateQuestionsCount',
     'LOAD_AMOUNT_OF_COMMENTS_SUCCESS': 'updateCommentsCount',
     'LOAD_SLIDE_CONTENT_SUCCESS': 'updateTagCount',
+    'LOAD_DECK_CONTENT_SUCCESS': 'updateTagCountDeck',
     'ADD_REPLY_SUCCESS': 'addCommentSuccess',
     'REMOVE_TAG': 'removeTagSuccess',
     'NEW_TAG': 'addTagSuccess',

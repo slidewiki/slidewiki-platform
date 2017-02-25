@@ -9,10 +9,7 @@ export default {
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'slide.content'){
             /*********connect to microservices*************/
-            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
-            //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
-                console.log('From slide service:', res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
@@ -21,10 +18,7 @@ export default {
         }
         if(resource === 'slide.all'){
             /*********connect to microservices*************/
-            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/allslide'}).then((res) => {
-                //console.log(JSON.parse(res));
-                //console.log(res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);

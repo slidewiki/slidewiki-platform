@@ -11,6 +11,7 @@ class TagsStore extends BaseStore {
         this.selector = {};
     }
     loadTagsSlide(payload) {
+        this.tags = [];
         let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
         this.tags = lastRevision.tags? lastRevision.tags: [];
         this.selector = payload.selector;
@@ -19,7 +20,7 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     loadTagsDeck(payload) {
-        console.log(payload);
+        this.tags = [];
         let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
         this.tags = lastRevision.tags? lastRevision.tags: [];
         this.selector = {

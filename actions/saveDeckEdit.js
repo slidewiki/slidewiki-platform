@@ -18,7 +18,6 @@ export default function saveDeckEdit(context, payload, done) {
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
             } else {
                 context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);
-                console.log(payload.selector);
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
                     selector: payload.selector,
                     nodeSpec: {

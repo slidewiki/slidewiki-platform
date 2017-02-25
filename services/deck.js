@@ -45,7 +45,6 @@ export default {
                     content: err
                 }, {});
             });
-            console.log(args);
             let revisionCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/revisionCount'}).catch((err) => {
                 callback({
                     msg: 'Error in retrieving revisions count',
