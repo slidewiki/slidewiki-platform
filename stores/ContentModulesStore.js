@@ -5,7 +5,7 @@ class ContentModulesStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.moduleType = 'questions';
-        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0};
+        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0};
         this.selector = {};
     }
     updateContentModules(payload) {
@@ -19,6 +19,10 @@ class ContentModulesStore extends BaseStore {
     }
     updateDataSourceCount(payload) {
         this.moduleCount.datasource = payload.count;
+        this.emitChange();
+    }
+    updateTagCount(payload) {
+        this.moduleCount.tags = payload.tags.length;
         this.emitChange();
     }
     updateQuestionsCount(payload){
@@ -35,6 +39,14 @@ class ContentModulesStore extends BaseStore {
         if (isLocalStorageOn()) {
             localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
         }
+        this.emitChange();
+    }
+    addTagSuccess() {
+        this.moduleCount.tags++;
+        this.emitChange();
+    }
+    removeTagSuccess() {
+        this.moduleCount.tags--;
         this.emitChange();
     }
     updateDataSourcesSuccess(payload) {
@@ -70,7 +82,10 @@ ContentModulesStore.handlers = {
     'LOAD_AMOUNT_OF_DATA_SOURCES_SUCCESS': 'updateDataSourceCount',
     'LOAD_AMOUNT_OF_QUESTIONS_SUCCESS': 'updateQuestionsCount',
     'LOAD_AMOUNT_OF_COMMENTS_SUCCESS': 'updateCommentsCount',
+    'LOAD_TAGS_SUCCESS': 'updateTagCount',
     'ADD_REPLY_SUCCESS': 'addCommentSuccess',
+    'REMOVE_TAG': 'removeTagSuccess',
+    'NEW_TAG': 'addTagSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess'
