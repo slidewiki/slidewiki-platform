@@ -4,13 +4,15 @@ import rp from 'request-promise';
 export default {
     name: 'tags',
     read: (req, resource, params, config, callback) => {
+        const { id } = params;
+
         switch (resource) {
             case 'tags.slide':
                 // TODO: get tags for slide, use parameter destructuring
-                callback(null, getTagsForSlide());
+                callback(null, getTagsForSlide(id));
                 break;
             case 'tags.deck':
-                callback(null, getTagsForDeck());
+                callback(null, getTagsForDeck(id));
                 break;
         }
     },
@@ -25,10 +27,10 @@ export default {
     }
 };
 
-function getTagsForDeck() {
+function getTagsForDeck(id) {
     return ['Tag1Deck', 'Tag2Deck'];
 }
 
-function getTagsForSlide() {
+function getTagsForSlide(id) {
     return ['Tag1Slide', 'Tag2Slide'];
 }
