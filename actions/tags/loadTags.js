@@ -4,17 +4,16 @@ import slideIdTypeError from '../error/slideIdTypeError';
 import { AllowedPattern } from '../error/util/allowedPattern';
 
 export default function loadTags(context, payload, done) {
-    const {params: {sid, id}} = payload;
-    const serviceAddr = sid? 'tags.slide': 'tags.deck';
-    const objId = sid? sid: id;
-    
+    console.log(params);
+    const {params: {sid, id, stype}} = payload;
+    const serviceAddr = 'tags.' + stype;
+    const objId = stype === 'slide'? sid: id;
     const params = {
         id: objId
     };
 
     context.service.read(serviceAddr, params, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log(err);
             context.dispatch('LOAD_TAGS_FAILURE', err);
         } else {
             context.dispatch('LOAD_TAGS_SUCCESS', {tags: res, selector: payload.selector, owner: ''});
