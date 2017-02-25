@@ -9,8 +9,6 @@ import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';
 
-
-
 class DeckList extends React.Component {
 
     render() {
@@ -32,7 +30,6 @@ class DeckList extends React.Component {
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
 
                     return (
-
                         <div className="ui vertical segment " key={'deck_meta' + deck._id}>
                             <div className="ui two column stackable grid">
                                 <div className="column">

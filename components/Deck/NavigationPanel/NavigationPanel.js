@@ -4,7 +4,6 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import Breadcrumb from './Breadcrumb';
 
-
 class NavigationPanel extends React.Component {
     getNameofNodes(tree, selector) {
         if(!selector.get('spath')){
@@ -27,14 +26,11 @@ class NavigationPanel extends React.Component {
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
         return (
-
             <div className="ui menu sw-deck-navigation-panel" ref="navigationPanel">
                <div className="item">
                  <Breadcrumb selector={selector} pathNames={this.getNameofNodes(deckTree, selector)} rootDeckName={deckTree.get('title')} />
                </div>
-
              </div>
-
         );
     }
 }

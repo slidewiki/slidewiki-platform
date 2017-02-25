@@ -1,7 +1,6 @@
 import BaseStore from 'fluxible/addons/BaseStore';
 import RouteStore from './RouteStore';
 
-
 class ApplicationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
@@ -23,10 +22,7 @@ class ApplicationStore extends BaseStore {
     }
     rehydrate(state) {
         this.pageTitle = state.pageTitle;
-
     }
-
-
 }
 
 ApplicationStore.storeName = 'ApplicationStore';
