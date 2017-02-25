@@ -17,9 +17,8 @@ class TagsStore extends BaseStore {
         this.contentOwner = payload.owner;
         this.emitChange();
     }
-    loadTag(payload) {
-        const tag = this.tags[payload.dsindex];
-        this.selectedIndex = payload.dsindex;
+    loadTagsFail(err) {
+        this.tagError = err? err: 'Cannot load tags';
         this.emitChange();
     }
     updateTags(payload) {
@@ -74,7 +73,7 @@ class TagsStore extends BaseStore {
 TagsStore.storeName = 'TagsStore';
 TagsStore.handlers = {
     'LOAD_TAGS_SUCCESS': 'loadTags',
-    'LOAD_TAG': 'loadTag',
+    'LOAD_TAGS_FAILURE': 'loadTagsFail',
     'NEW_TAG': 'newTag',
     'SHOW_ALL_TAGS': 'handleShowAllTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
