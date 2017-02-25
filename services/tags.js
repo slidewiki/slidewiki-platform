@@ -33,7 +33,18 @@ export default {
         // TODO: implement update
     },
     delete: (req, resource, params, body, config, callback) => {
-        // TODO: implement delete
+        // TODO: implement delete for real service
+        const { id, tag } = params;
+
+        switch (resource) {
+            case 'tags.slide':
+                // TODO: add tag to real service
+                removeTagFromSlide(id, tag, callback);
+                break;
+            case 'tags.deck':
+                removeTagFromDeck(id, tag, callback);
+                break;
+        }
     }
 };
 
@@ -51,4 +62,12 @@ function addTagToDeck(id, tag, callback) {
 
 function addTagToSlide(id, tag, callback) {
     callback(null, { success: true, id: id, tag: tag });
+}
+
+function removeTagFromSlide(id, tag, callback) {
+    callback(null, { success: true, id: id, tag: tag });
+}
+
+function removeTagFromDeck(id, tag, callback) {
+    callback(null, { success: true, id: id, tag: tag});
 }

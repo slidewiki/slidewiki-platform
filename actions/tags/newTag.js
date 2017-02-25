@@ -1,5 +1,4 @@
 export default function addReply(context, payload, done) {
-    console.log(payload);
     const {selector: { sid, id, stype }, tag} = payload;
     const serviceAddr = 'tags.' + stype;
     const objId = stype === 'slide'? sid: id;

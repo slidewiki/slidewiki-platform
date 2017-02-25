@@ -22,8 +22,6 @@ class TagsPanel extends React.Component {
         }
         this.refs.taginp.value = '';
 
-        console.log(selector);
-
         this.context.executeAction(newTag, {
             'tag': val,
             'selector': selector
@@ -38,8 +36,11 @@ class TagsPanel extends React.Component {
     }
 
     onRemoveTag(tag) {
+        const { selector } = this.props;
+
         this.context.executeAction(removeTag, {
-            'tag': tag
+            'tag': tag,
+            'selector': selector
         });
     }
 
