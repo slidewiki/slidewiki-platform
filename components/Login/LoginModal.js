@@ -53,7 +53,6 @@ class LoginModal extends React.Component {
         if (email === '' || !regExp.test(email)) {//Check if email is valid
             $('.ui.form.signin').form('add errors', ['Please use a valid email address']);
         } else {
-            //console.log('signin called');
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
                 password: hashPassword(this.refs.password1.value)

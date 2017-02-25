@@ -7,32 +7,13 @@ import HeaderDropdown from '../Login/HeaderDropdown.js';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
-
-import CookieBanner from 'react-cookie-banner';
-import BannerContent from 'react-cookie-banner';
-//import {cookie} from 'react-cookie-banner';
-import cookie from 'react-cookie';
-
-
-
-
 //import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-
 let MediaQuery = require ('react-responsive');
 
 class Header extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
-    //console.log('this.state.user_cookies='+this.state.user_cookies);
-    }
-
-
     componentDidMount() {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
-
     }
 
     toggleSidebar() {
@@ -59,7 +40,6 @@ class Header extends React.Component {
 
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/> Sign in</a>;
-        let cookieBanner = '';
         let notification_locale = '';
 
         if (this.props.UserProfileStore.username !== '') {
@@ -76,27 +56,10 @@ class Header extends React.Component {
 
         }
 
-        if (!this.state.user_cookies) {
-            cookieBanner = <CookieBanner
-                          message='This website uses cookies to ensure you get the best experience on our website.'
-                          cookie='user-has-accepted-cookies'
-                          dismissOnScroll={false}
-                          onAccept={() => {}}
-                        />;
-        }
-
-
         return (
-
-
             <div>
-
-              {cookieBanner}
-
               <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
-
                 <div className="ui inverted blue menu" ref="header">
-
                     <div className="ui container">
                         <a className="item" href='/'>
                             <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
@@ -141,9 +104,6 @@ class Header extends React.Component {
                     </div>
                 </div>
               </MediaQuery>
-
-
-
             </div>
         );
     }
