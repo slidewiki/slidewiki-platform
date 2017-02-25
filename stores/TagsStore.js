@@ -11,7 +11,8 @@ class TagsStore extends BaseStore {
         this.selector = {};
     }
     loadTags(payload) {
-        this.tags = payload.tags;
+        let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
+        this.tags = lastRevision.tags? lastRevision.tags: [];
         this.selector = payload.selector;
         this.selectedIndex = -1;
         this.contentOwner = payload.owner;
@@ -72,9 +73,9 @@ class TagsStore extends BaseStore {
 
 TagsStore.storeName = 'TagsStore';
 TagsStore.handlers = {
-    'LOAD_TAGS_SUCCESS': 'loadTags',
     'LOAD_TAGS_FAILURE': 'loadTagsFail',
     'NEW_TAG': 'newTag',
+    'LOAD_SLIDE_CONTENT_SUCCESS': 'loadTags',
     'SHOW_ALL_TAGS': 'handleShowAllTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
     'CANCEL_EDIT_TAGS': 'cancelEditTag',
