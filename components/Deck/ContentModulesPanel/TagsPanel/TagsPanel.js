@@ -16,13 +16,17 @@ class TagsPanel extends React.Component {
     onAddTag(e) {
         e.preventDefault();
         const val = this.refs.taginp.value;
+        const { selector } = this.props;
         if (!val) {
             return false;
         }
         this.refs.taginp.value = '';
 
+        console.log(selector);
+
         this.context.executeAction(newTag, {
-            'tag': val
+            'tag': val,
+            'selector': selector
         });
     }
 

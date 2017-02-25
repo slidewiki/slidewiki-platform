@@ -1,5 +1,6 @@
 export default function addReply(context, payload, done) {
-    const {params: {sid, id, tag}} = payload;
+    console.log(payload);
+    const {selector: { sid, id, stype }, tag} = payload;
     const serviceAddr = 'tags.' + stype;
     const objId = stype === 'slide'? sid: id;
     const params = {
@@ -11,7 +12,7 @@ export default function addReply(context, payload, done) {
         if (err) {
             context.dispatch('ADD_TAG_FAILURE', err);
         } else {
-            context.dispatch('NEW_TAG', tag);
+            context.dispatch('NEW_TAG', res);
             done();
         }
     });
