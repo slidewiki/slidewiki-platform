@@ -2,11 +2,9 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import TagsStore from '../../../../stores/TagsStore';
 import TagList from './TagList';
-// import EditTag from './EditTag';
 import newTag from '../../../../actions/tags/newTag';
 import changeEditMode from '../../../../actions/tags/changeEditMode';
 import removeTag from '../../../../actions/tags/removeTag';
-// import showMoreTags from '../../../../actions/tags/showMoreTags';
 
 class TagsPanel extends React.Component {
     constructor(props) {
@@ -30,9 +28,7 @@ class TagsPanel extends React.Component {
 
     onShowEditForm(e) {
         e.preventDefault();
-        console.log(this.props.TagsStore.isEditMode);
         this.context.executeAction(changeEditMode, {isEditMode: true});
-        console.log(this.props.TagsStore.isEditMode);
     }
 
     onRemoveTag(tag) {
@@ -108,7 +104,7 @@ TagsPanel.contextTypes = {
 
 TagsPanel = connectToStores(TagsPanel, [TagsStore], (context, props) => {
     return {
-        TagsStore: context.getStore(TagsStore).getState(),
+        TagsStore: context.getStore(TagsStore).getState()
     };
 });
 
