@@ -78,8 +78,7 @@ class SlideContentEditor extends React.Component {
             //console.log(speakernotes);
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
-            console.log('save slide on edit')
-            console.log(tags)
+
             this.context.executeAction(saveSlide, {id: currentSelector.sid, deckID: deckID,
                 title: title, content: content, speakernotes: speakernotes,
                 dataSources: dataSources, selector: currentSelector, tags: tags});

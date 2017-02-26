@@ -1,18 +1,22 @@
-export default function removeTag(context, payload, done) {
-    const {selector: { sid, id, stype }, tag} = payload;
-    const serviceAddr = 'tags.' + stype;
-    const objId = stype === 'slide'? sid: id;
-    const params = {
-        id: objId,
-        tag: tag
-    };
+import TagsStore from '../../stores/TagsStore';
+import updateTagsSlide from './updateTagsSlide';
+import updateTagsDeck from './updateTagsDeck';
 
-    context.service.create(serviceAddr, params, {timeout: 20 * 1000}, (err, res) => {
-        if (err) {
-            context.dispatch('REMOVE_TAG_FAILURE', err);
-        } else {
-            context.dispatch('REMOVE_TAG', res);
-            done();
-        }
-    });
+export default function removeTag(context, payload, done) {
+    let { selector } = payload;
+    let { tags } = context.getStore(TagsStore).getState();
+    context.dispatch('REMOVE_TAG', payload);
+
+    if (selector.stype === 'slide') {
+        context.executeAction(updateTagsSlide, {
+            tags: tags,
+            selector: selector
+        });
+    } else {
+        context.executeAction(updateTagsDeck, {
+            tags: tags,
+            selector: selector
+        });
+    }
+    done();
 }
