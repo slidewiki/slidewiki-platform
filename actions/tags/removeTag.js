@@ -4,8 +4,8 @@ import updateTagsDeck from './updateTagsDeck';
 
 export default function removeTag(context, payload, done) {
     let { selector } = payload;
-    let { tags } = context.getStore(TagsStore).getState();
     context.dispatch('REMOVE_TAG', payload);
+    let { tags } = context.getStore(TagsStore).getState();
 
     if (selector.stype === 'slide') {
         context.executeAction(updateTagsSlide, {

@@ -6,7 +6,6 @@ class TagList extends React.Component {
     }
 
     onTagDelete(tag) {
-        console.log(tag);
         this.props.onTagDelete(tag);
     }
 
