@@ -1,40 +1,23 @@
 import TagsStore from '../../stores/TagsStore';
-import DataSourceStore from '../../stores/DataSourceStore';
-import saveSlide from '../../actions/slide/saveSlide';
-import SlideViewStore from '../../stores/SlideViewStore';
-import DeckViewStore from '../../stores/DeckViewStore';
+import updateTagsSlide from './updateTagsSlide';
+import updateTagsDeck from './updateTagsDeck';
 
 export default function addReply(context, payload, done) {
-    console.log(payload.tag);
     let { selector } = payload;
-    // const serviceAddr = 'tags.' + stype;
-    context.dispatch('NEW_TAG', payload);
     let { tags } = context.getStore(TagsStore).getState();
+
+    context.dispatch('NEW_TAG', payload);
+
     if (selector.stype === 'slide') {
-        onSlideExecute(selector, tags, context);
+        context.executeAction(updateTagsSlide, {
+            tags: tags,
+            selector: selector
+        });
     } else {
-        onDeckExecute(selector, tags, context);
+        context.executeAction(updateTagsDeck, {
+            tags: tags,
+            selector: selector
+        });
     }
     done();
-}
-
-function onSlideExecute(selector, tags, context) {
-    const dataStore = context.getStore(DataSourceStore).getState();
-    const slideStore = context.getStore(SlideViewStore).getState();
-
-    const { id, sid } = selector;
-    let { dataSources } = dataStore;
-    dataSources = dataSources? dataSources: [];
-
-    let { title, content, speakernotes } = slideStore;
-
-    context.executeAction(saveSlide,
-        {id: sid, deckID: id, title: title, content: content,
-            speakernotes: speakernotes, dataSources: dataSources,
-            selector: selector, tags: tags});
-}
-
-function onDeckExecute(selector, tags) {
-    const deckStore = context.getStore(DeckViewStore).getState();
-    console.log('dec execute');
 }
