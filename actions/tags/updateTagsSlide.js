@@ -16,9 +16,15 @@ export default function onSlideExecute(context, payload, done) {
     dataSources = dataSources? dataSources: [];
 
     let { title, content, speakernotes } = slideStore;
-    console.log(slideStore);
-    context.executeAction(saveSlide,
-        {id: sid, deckID: id, title: title, content: content,
-            speakernotes: speakernotes, dataSources: dataSources,
-            selector: selector, tags: tags});
+
+    context.executeAction(saveSlide, {
+        id: sid,
+        deckID: id,
+        title: title,
+        content: content,
+        speakernotes: speakernotes,
+        dataSources: dataSources,
+        selector: selector,
+        tags: tags
+    });
 }

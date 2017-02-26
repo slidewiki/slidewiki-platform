@@ -19,7 +19,6 @@ class SlideViewStore extends BaseStore {
             this.content = lastRevision.content;
             this.speakernotes = lastRevision.speakernotes;
             this.tags = lastRevision.tags? lastRevision.tags: [];
-            console.log(this.tags);
             this.emitChange();
         }
         else

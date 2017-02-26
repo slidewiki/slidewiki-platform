@@ -162,12 +162,10 @@ export default {
     },
     update: (req, resource, params, body, config, callback) => {
         if (resource === 'deck.update') {
-            if (params.tags.length === 1 && params.tags[0].length === 0)
-                params.tags = undefined;
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
-                tags: params.tags,
+                tags: params.tags? params.tags: [],
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,

@@ -79,10 +79,16 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
 
-            this.context.executeAction(saveSlide, {id: currentSelector.sid, deckID: deckID,
-                title: title, content: content, speakernotes: speakernotes,
-                dataSources: dataSources, selector: currentSelector, tags: tags});
-            //console.log('saving slide');
+            this.context.executeAction(saveSlide, {
+                id: currentSelector.sid,
+                deckID: deckID,
+                title: title,
+                content: content,
+                speakernotes: speakernotes,
+                dataSources: dataSources,
+                selector: currentSelector,
+                tags: tags
+            });
             this.resize();
         }
         return false;
