@@ -60,6 +60,7 @@ export default {
     name: 'activities',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
@@ -112,6 +113,7 @@ export default {
     },
     //Not used
     create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         //TODO get real user id and content name
         const randomUserId = '11223344556677889900000' + String(1 + Math.round(Math.random() * 5));
@@ -144,6 +146,7 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
         if(resource === 'activities.like'){

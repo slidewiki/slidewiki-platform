@@ -3,7 +3,7 @@ const clog = require('../configs/log').log;
 export default {
     name: 'log',
     update: (req, resource, params, body, config, callback) => {
-        if (req.reqId === 'undefined' || !req.reqId)
+        if (req.reqId === undefined)
             req.reqId = -1;
 
         let logObject = {Id: req.reqId, message: body};
