@@ -2,10 +2,12 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request';
 import formdata from 'form-data';
 const util = require('util');
+const log = require('../configs/log').log;
 
 export default {
     name: 'import',
     create: (req, resource, params, body, config, callback) => {
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let form = new formdata();
 
         //let keys = [];

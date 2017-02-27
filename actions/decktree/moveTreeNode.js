@@ -1,7 +1,8 @@
 import UserProfileStore from '../../stores/UserProfileStore';
-
+const log = require('../log/clog');
 
 export default function moveTreeNode(context, payload, done) {
+    log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         let {selector, sourceNode, targetNode, targetIndex} = payload;
@@ -35,6 +36,7 @@ export default function moveTreeNode(context, payload, done) {
             targetIndex
         }, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
+                log.error(context, {filepath: __filename, err: err});
                 context.dispatch('MOVE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('MOVE_TREE_NODE_SUCCESS', payload);

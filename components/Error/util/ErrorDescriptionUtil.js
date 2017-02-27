@@ -57,7 +57,7 @@ export default {
         },
         SERVICE_UNAVAILABLE: {
             type: 'Service Unavailable',
-            description: 'The server is currently unable to handle the request due to one of the following reasons: temporary overload, maintenance or temporary connection error.',
+            description: 'Server is currently unable to handle the request.', // due to one of the following reasons: temporary overload, maintenance or temporary connection error.',
             actionRequired: 'Please try after some time.'
         },
         TOO_MANY_REQUESTS_ERROR: {
