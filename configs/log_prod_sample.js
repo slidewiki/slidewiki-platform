@@ -8,12 +8,21 @@ if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }
 
-winston.setLevels(winston.config.syslog.levels);
-winston.addColors(winston.config.npm.colors);
+// winston.setLevels(winston.config.npm.levels);
+//winston.setLevels(winston.config.syslog.levels);
+//winston.addColors(winston.config.npm.colors);
 
 if (!obj.log) {
     obj.log = new (winston.Logger)({
         transports: [
+            // Console transport
+            new (winston.transports.Console)({
+                timestamp: true,
+                colorize: true,
+                level: 'warning',
+                handleExceptions: true,
+                humanReadableUnhandledException: true
+            }),
             // file transport
             new (require('winston-daily-rotate-file'))({
                 label: 'slidewiki-platform',
@@ -30,6 +39,8 @@ if (!obj.log) {
         ],
         exitOnError: false
     });
+
+    obj.log.setLevels(winston.config.syslog.levels);
 }
 
 module.exports = obj;
