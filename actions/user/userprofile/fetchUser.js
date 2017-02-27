@@ -6,11 +6,9 @@ import { isEmpty } from '../../../common.js';
 const log = require('../../log/clog');
 
 export default function fetchUser(context, payload, done) {
-    console.log(context);
     context.id = context.id ? context.id : '-1';
     if (context.id === '-1')
         context.stack = ['fetchUser']; // this is needed as fluxible context stack gets minified in production. This is the case when action is called from component
-    console.log(context);
     log.info(context);
 
     payload.params.id = context.getStore(UserProfileStore).userid;
