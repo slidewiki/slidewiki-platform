@@ -495,31 +495,31 @@ class UserRegistration extends React.Component {
                             </div>
                             <div className="ui inline required field">
                                <label style={signUpLabelStyle} id="LastName">Last name</label>
-                                <div className="ui icon input"><input type="text" aria-labelledby="LastName" name="lastname" ref="lastname" aria-required="true"/></div>
+                                <div className="ui icon input"><input type="text" aria-labelledby="LastName" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
                             </div>
                             <div className="ui inline required field">
                                 <label style={signUpLabelStyle} id="Organisation">Organisation</label>
                                 <div className="ui icon input"><input type="text" aria-labelledby="Organisation" name="organisation" ref="organisation" placeholder="Organisation" aria-required="true"/></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                                <label style={signUpLabelStyle} id="username">User name </label>
-                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" aria-labelledby="username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="Username">User name </label>
+                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" aria-labelledby="Username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                             </div>
                             <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                                <label style={signUpLabelStyle} id="email">Email</label>
-                                <div className="ui icon input"><i className={emailIconClasses}/><input type="text" aria-labelledby="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="Email">Email</label>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="text" aria-labelledby="Email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline required field">
                                 <label style={signUpLabelStyle} id="reenteremail">Re-enter email</label>
                                 <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-labelledby="Reenter-email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline required field">
-                                <label style={signUpLabelStyle} id="password">Password</label>
-                                <div className="ui icon input"><input type="password" aria-labelledby="password" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="Password">Password</label>
+                                <div className="ui icon input"><input type="password" id="password" aria-labelledby="Password" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle} id="reenterpassword">Re-enter password</label>
-                                <div className="ui icon input"><input type="password" aria-labelledby="reenterpassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="ReenterPassword">Re-enter password</label>
+                                <div className="ui icon input"><input type="password" id="reenterpassword" aria-labelledby="ReenterPassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
                             </div>
                             <div>
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
