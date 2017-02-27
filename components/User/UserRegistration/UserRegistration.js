@@ -436,7 +436,6 @@ class UserRegistration extends React.Component {
         let emailClasses = classNames({
             'ui': true,
             'field': true,
-            'required': true,
             'inline': true,
             'required': true,
             'error': (emailNotAllowed !== undefined) ? emailNotAllowed : false
@@ -452,7 +451,6 @@ class UserRegistration extends React.Component {
         let usernameClasses = classNames({
             'ui': true,
             'field': true,
-            'required': true,
             'inline': true,
             'required': true,
             'error': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false

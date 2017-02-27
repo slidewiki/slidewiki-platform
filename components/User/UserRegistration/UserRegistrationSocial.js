@@ -186,6 +186,7 @@ class UserRegistrationSocial extends React.Component {
             'ui': true,
             'field': true,
             'inline': true,
+            'required': true,
             'error': (emailNotAllowed !== undefined) ? emailNotAllowed : false
         });
         let emailIconClasses = classNames({
@@ -200,6 +201,7 @@ class UserRegistrationSocial extends React.Component {
             'ui': true,
             'field': true,
             'inline': true,
+            'required': true,
             'error': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false
         });
         let usernameIconClasses = classNames({
@@ -219,25 +221,25 @@ class UserRegistrationSocial extends React.Component {
               </div>
               <div className="content">
                   <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
-                      <div className="ui inline field">
-                          <label style={signUpLabelStyle}>First name * </label>
-                          <div className="ui icon input"><input type="text" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
-                      </div>
-                      <div className="ui inline field">
-                          <label style={signUpLabelStyle}>Last name * </label>
-                          <div className="ui icon input"><input type="text" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                      <div className="ui inline required field">
+                          <label style={signUpLabelStyle} id="FirstName">First name </label>
+                          <div className="ui icon input"><input type="text" aria-labelledby="FirstName" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                       </div>
                       <div className="ui inline required field">
-                          <label style={signUpLabelStyle} htmlFor="organisation">Organisation</label>
-                          <div className="ui icon input"><input type="text" id="organisation" name="organisation" ref="organisation" placeholder="Organisation" aria-required="true"/></div>
+                         <label style={signUpLabelStyle} id="LastName">Last name</label>
+                          <div className="ui icon input"><input type="text" aria-labelledby="LastName" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                      </div>
+                      <div className="ui inline required field">
+                          <label style={signUpLabelStyle} id="Organisation">Organisation</label>
+                          <div className="ui icon input"><input type="text" aria-labelledby="Organisation" name="organisation" ref="organisation" placeholder="Organisation" aria-required="true"/></div>
                       </div>
                       <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                          <label style={signUpLabelStyle}>Username * </label>
-                          <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                          <label style={signUpLabelStyle} id="Username">User name </label>
+                          <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" aria-labelledby="Username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                       </div>
                       <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                          <label style={signUpLabelStyle}>Email * </label>
-                          <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                          <label style={signUpLabelStyle} id="Email">Email</label>
+                          <div className="ui icon input"><i className={emailIconClasses}/><input type="text" aria-labelledby="Email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                       </div>
                       <div className="ui error message"></div>
                       <button type="submit" className="ui blue labeled submit icon button" >
