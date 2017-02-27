@@ -1,7 +1,7 @@
 exports.error = function(context, message='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -17,7 +17,7 @@ exports.error = function(context, message='') {
 exports.warning = function(context, msg='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -33,7 +33,7 @@ exports.warning = function(context, msg='') {
 exports.info = function(context, message='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -49,7 +49,7 @@ exports.info = function(context, message='') {
 exports.crit = function(context, msg='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -65,7 +65,7 @@ exports.crit = function(context, msg='') {
 exports.debug = function(context, msg='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -81,7 +81,7 @@ exports.debug = function(context, msg='') {
 exports.notice = function(context, msg='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -97,7 +97,7 @@ exports.notice = function(context, msg='') {
 exports.emerg = function(context, msg='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
@@ -113,7 +113,7 @@ exports.emerg = function(context, msg='') {
 exports.alert = function(context, msg='') {
     let logFields = {};
     logFields.Actions = context.stack.slice();
-    if (context.getUser() !== 'undefined')
+    if (context.getUser() !== undefined)
         logFields.User = context.getUser().username;
 
     if (message)
