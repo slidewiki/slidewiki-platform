@@ -22,7 +22,7 @@ if (!obj.log) {
                 timestamp: true,
                 datePattern: 'yyyy-MM-dd',
                 prepend: true,
-                level: 'warning',
+                level: 'info',
                 handleExceptions: true,
                 humanReadableUnhandledException: true,
                 maxsize: 1024 * 1024 * 10, // in bytes, 10 MB
