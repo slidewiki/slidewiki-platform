@@ -1,10 +1,7 @@
 'use strict';
 import { shortTitle } from '../../configs/general';
-import serviceUnavailable from '../error/serviceUnavailable';
-const log = require('../log/clog');
 
 export default function uploadFile(context, payload, done) {
-    log.info(context);
     context.dispatch('UPLOAD_STARTED', null);
 
     //use timer in order to make a working progress bar
@@ -30,10 +27,8 @@ export default function uploadFile(context, payload, done) {
 
         // context.myStuff.uploadFinished = true;
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
-            context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('UPLOAD_FAILED', err);
-            //context.dispatch('CREATION_FAILURE', err);
+            context.dispatch('UPLOAD_FAILED', err);
+            context.dispatch('CREATION_FAILURE', err);
         } else {
             //TODO: use correct headers - atm service is not ready
             if (res.deckid === undefined) {
