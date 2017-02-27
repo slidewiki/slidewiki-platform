@@ -2,15 +2,17 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request';
 import formdata from 'form-data';
 const util = require('util');
+const log = require('../configs/log').log;
 
 export default {
     name: 'import',
     create: (req, resource, params, body, config, callback) => {
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let form = new formdata();
 
         //let keys = [];
         //for(let k in params) keys.push(k);
-        //console.log('import service', keys, params.file, params.base64.length);
+        console.log('import service', params.file, params.base64.length);
 
         //create a HTTP POST form request
         form.append('file', params.base64);
@@ -21,11 +23,12 @@ export default {
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
             //knownLength: params.file.size ? params.file.size : params.base64.length
 
+            // form.submit(Microservices.import.url + '/importPPTX'
         let request = form.submit({
-            port: Microservices.import.port ? Microservices.import.port : 80,
+            port: Microservices.import.port ? Microservices.import.port : 3000,
             host: Microservices.import.host,
             path: Microservices.import.path ? Microservices.import.path : '/',
-            protocol: Microservices.import.protocol ? Microservices.import.protocol : 'http:',
+            protocol: Microservices.import.protocol ? Microservices.import.protocol : 'https:',
             timeout: body.timeout
         }, (err, res) => {
             //res.setTimeout(body.timeout);
