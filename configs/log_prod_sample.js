@@ -15,14 +15,6 @@ if (!fs.existsSync(logDir)) {
 if (!obj.log) {
     obj.log = new (winston.Logger)({
         transports: [
-            // Console transport
-            new (winston.transports.Console)({
-                timestamp: true,
-                colorize: true,
-                level: 'warning',
-                handleExceptions: true,
-                humanReadableUnhandledException: true
-            }),
             // file transport
             new (require('winston-daily-rotate-file'))({
                 label: 'slidewiki-platform',
