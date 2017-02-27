@@ -4,10 +4,8 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 //import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
 import async from 'async';
-const log = require('../../log/clog');
 
 export default function removeUser(context, payload, done) {
-    log.info(context);
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
