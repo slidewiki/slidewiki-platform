@@ -434,7 +434,7 @@ class DeckPropertiesEditor extends React.Component {
                 Italian
             </option>
             <option value="pt_PT" >
-                Portugese
+                Portuguese
             </option>
             <option value="sr_RS" >
                 Serbian
@@ -561,7 +561,7 @@ class DeckPropertiesEditor extends React.Component {
 
                         {saveDeckButton}
                         <button className='ui primary button'
-                             onClick={this.handleSave.bind(this, true)} id="strangebuttonawesome">
+                             onClick={this.handleSave.bind(this, true)}>
                             Save as new revision
                         </button>
                         <button className="ui secondary button"
