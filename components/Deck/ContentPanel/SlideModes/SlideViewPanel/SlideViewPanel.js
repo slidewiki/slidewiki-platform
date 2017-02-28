@@ -20,7 +20,7 @@ class SlideViewPanel extends React.Component {
             minHeight: 450,
             //minHeight: '100%',
             overflowY: 'auto',
-            overflowX: 'hidden',
+            overflowX: 'auto',
             //overflowY: 'visible',
             //overflow: 'hidden,'
             position: 'relative'
@@ -30,7 +30,7 @@ class SlideViewPanel extends React.Component {
             // maxHeight: 450,
             minHeight: 450,
             overflowY: 'auto',
-            overflowX: 'hidden',
+            overflowX: 'auto',
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
