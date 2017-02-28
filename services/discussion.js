@@ -1,12 +1,11 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-const log = require('../configs/log').log;
 
 export default {
     name: 'discussion',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
+
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype, 'mode': args.mode};
 
@@ -32,7 +31,6 @@ export default {
     },
 
     create: (req, resource, params, body, config, callback) => {
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
         let selector= args.selector;
         if(resource === 'discussion.comment'){

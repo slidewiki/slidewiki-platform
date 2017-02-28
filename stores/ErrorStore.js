@@ -38,7 +38,7 @@ ErrorStore.handlers = {
     'SLIDE_ID_TYPE_ERROR'       : 'handleError',
     'SEARCH_QUERY_EMPTY_ERROR'  : 'handleError',
     'SEARCH_SYNTAX_ERROR'       : 'handleError',
-    //'SERVICE_UNAVAILABLE'       : 'handleError',
+    'SERVICE_UNAVAILABLE'       : 'handleError',
     'TOO_MANY_REQUESTS_ERROR'   : 'handleError',
 };
 

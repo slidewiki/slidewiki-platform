@@ -1,15 +1,10 @@
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
-import serviceUnavailable from '../error/serviceUnavailable';
-const log = require('../log/clog');
 
 export default function revertRevision(context, payload, done) {
-    log.info(context);
     context.service.update('history.revert', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
-            context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('REVERT_REVISION_FAILURE', err);
+            context.dispatch('REVERT_REVISION_FAILURE', err);
         } else {
             context.dispatch('REVERT_REVISION_SUCCESS', res);
             let newSid = res._id + '-' + res.revisions[0].id;

@@ -2,11 +2,9 @@ import md5 from 'md5';
 import UserProfileStore from '../../../stores/UserProfileStore';
 //import notFoundError from '../../error/notFoundError';
 import methodNotAllowedError from '../../error/methodNotAllowedError';
-import serviceUnavailable from '../../error/serviceUnavailable';
-const log = require('../../log/clog');
+
 
 export default function changePassword(context, payload, done) {
-    log.info(context);
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
@@ -17,11 +15,8 @@ export default function changePassword(context, payload, done) {
             } else if (err.statusCode === 401 || err.statusCode === 403) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
-            } else {
-                log.error(context, {filepath: __filename, err: err});
-                context.executeAction(serviceUnavailable, payload, done);
+            } else
                 context.dispatch('EDIT_USER_FAILED', err);
-            }
         } else {
             context.dispatch('NEW_PASSWORD', res);
         }
