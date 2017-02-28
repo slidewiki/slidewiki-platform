@@ -1,13 +1,10 @@
 import {shortTitle} from '../configs/general';
-const log = require('./log/clog');
-
 export default function loadImportFile(context, payload, done) {
-    log.info(context);
+    //console.log('test');
+    //console.log(payload);
     context.service.create('import.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
-            context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('LOAD_IMPORT_FILE_FAILURE', err);
+            context.dispatch('LOAD_IMPORT_FILE_FAILURE', err);
         } else {
             //console.log(res);
             context.dispatch('LOAD_IMPORT_FILE_SUCCESS', res);

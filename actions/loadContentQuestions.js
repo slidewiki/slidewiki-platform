@@ -2,11 +2,8 @@ import { shortTitle } from '../configs/general';
 import deckContentTypeError from './error/deckContentTypeError';
 import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
-import serviceUnavailable from './error/serviceUnavailable';
-const log = require('./log/clog');
 
 export default function loadContentQuestions(context, payload, done) {
-    log.info(context);
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -19,9 +16,7 @@ export default function loadContentQuestions(context, payload, done) {
 
     context.service.read('questions.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
-            context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('LOAD_CONTENT_QUESTIONS_FAILURE', err);
+            context.dispatch('LOAD_CONTENT_QUESTIONS_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_QUESTIONS_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'questions'});

@@ -4,8 +4,6 @@ import {shortTitle} from '../../configs/general';
 import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import striptags from 'striptags';
 import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
-const log = require('../log/clog');
-import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function saveSlide(context, payload, done) {
     //enrich with user id

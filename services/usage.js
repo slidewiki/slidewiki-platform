@@ -1,13 +1,11 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import _ from 'lodash';
-const log = require('../configs/log').log;
 
 export default {
     name: 'usage',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         let selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         if (resource === 'usage.list') {
