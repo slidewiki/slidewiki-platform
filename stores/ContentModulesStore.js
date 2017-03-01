@@ -26,7 +26,6 @@ class ContentModulesStore extends BaseStore {
         this.emitChange();
     }
     updateCommentsCount(payload) {
-        console.log('updateCommentsCount');
         this.moduleCount.comments = payload.count;
         this.emitChange();
     }

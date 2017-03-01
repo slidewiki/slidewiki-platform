@@ -33,8 +33,6 @@ class ContentModulesPanel extends React.Component {
                 localStorage.removeItem('sourcesCount');// reset the state in localStorage
             }
             const commentsCountFromLocalStorage = localStorage.getItem('commentsCount');
-            console.log('commentsCountFromLocalStorage', commentsCountFromLocalStorage);
-            console.log('this.props.ContentModulesStore.moduleCount.comments', this.props.ContentModulesStore.moduleCount.comments);
             if (commentsCountFromLocalStorage !== undefined && commentsCountFromLocalStorage !== null) {
                 if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments)) {// wrong data read from browser cache
                     let date = new Date().getTime();
