@@ -15,7 +15,8 @@ class AttachSubdeckModal extends React.Component{
         this.state = {modalOpen:false};
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.calledFrom = props.calledFrom;
+
+
 
     }
 
@@ -30,16 +31,14 @@ class AttachSubdeckModal extends React.Component{
         this.setState({
             modalOpen: false,
         });
-    
+
     }
     render() {
-
-
         return (
             <Modal trigger={
-                    <Button icon as="button" className="item small"
+                    <Button as="button" className={this.props.buttonStyle.classNames}
                       type="button" aria-label="Attach Slide" data-tooltip="Attach Slide"
-                      basic attached ="left" open={this.state.modalOpen} onClick={this.handleOpen}>
+                      icon basic attached="left" open={this.state.modalOpen} onClick={this.handleOpen}>
                         <Icon.Group size="large">
                             <Icon className="yellow" name="folder" />
                             <Icon className="corner" name="attach" />

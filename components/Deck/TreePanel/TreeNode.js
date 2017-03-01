@@ -148,6 +148,10 @@ class TreeNode extends React.Component {
             'ui button': true,
             'disabled': this.props.item.get('type') === 'deck'
         });
+        let buttonStyle = {
+            classNames : 'ui',
+            iconSize : 'medium'
+        };
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
@@ -169,7 +173,7 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <AttachSubdeck/>
+                    <AttachSubdeck buttonStyle={buttonStyle}/>
                     <button className={duplicateItemClass} title="Duplicate"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),

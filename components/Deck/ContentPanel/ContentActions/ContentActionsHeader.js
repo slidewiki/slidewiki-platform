@@ -51,6 +51,10 @@ class ContentActionsHeader extends React.Component {
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+        let buttonStyle = {
+            classNames : 'item small',
+            iconSize : 'large'
+        } ;
         return (
             <div className="ui top attached tabular menu" role="tablist">
                 <NavLink className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
@@ -76,7 +80,7 @@ class ContentActionsHeader extends React.Component {
                               <i className="inverted corner plus icon"></i>
                             </i>
                         </button>
-                        <AttachSubdeck calledFrom="actionsHeader"/>
+                        <AttachSubdeck buttonStyle={buttonStyle}/>
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 
