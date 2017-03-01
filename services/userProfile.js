@@ -1,16 +1,13 @@
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
-const log = require('../configs/log').log;
 
 export default {
     name: 'userProfile',
 
     delete: (req, resource, params, config, callback) => {
-        req.reqId = req.reqId ? req.reqId : -1;
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         rp({
-            Method: 'DELETE',
+            method: 'DELETE',
             uri: Microservices.user.uri + '/user/' + params.params.id,
             headers: { '----jwt----': params.params.jwt }
         })
@@ -19,15 +16,13 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
-        req.reqId = req.reqId ? req.reqId : -1;
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'userProfile.updatePassword') {
             let tosend = {
                 oldPassword: params.oldpw,
                 newPassword: params.newpw
             };
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/passwd',
                 headers: { '----jwt----': params.params.jwt },
                 json: true,
@@ -48,7 +43,7 @@ export default {
                 description: !isEmpty(params.description) ? params.description : ''
             };
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
                 headers: { '----jwt----': params.params.jwt },
                 json: true,
@@ -58,7 +53,7 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.removeProvider') {
             rp({
-                Method: 'DELETE',
+                method: 'DELETE',
                 uri: Microservices.user.uri + '/social/provider/' + params.provider,
                 headers: { '----jwt----': params.jwt },
                 json: true
@@ -67,7 +62,7 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.addProvider') {
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.user.uri + '/social/provider/' + params.provider,
                 headers: { '----jwt----': params.jwt },
                 json: true,
@@ -92,7 +87,7 @@ export default {
                 members: params.members
             };
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.user.uri + '/usergroup/createorupdate',
                 headers: { '----jwt----': params.jwt },
                 json: true,
@@ -103,7 +98,7 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.deleteUsergroup') {
             rp({
-                Method: 'DELETE',
+                method: 'DELETE',
                 uri: Microservices.user.uri + '/usergroup/' + params.groupid,
                 headers: { '----jwt----': params.jwt },
                 json: true,
@@ -113,7 +108,7 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'userProfile.leaveUsergroup') {
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.user.uri + '/usergroup/' + params.groupid + '/leave',
                 headers: { '----jwt----': params.jwt },
                 json: true,
@@ -127,12 +122,10 @@ export default {
     },
 
     read: (req, resource, params, config, callback) => {
-        req.reqId = req.reqId ? req.reqId : -1;
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         if(resource !== 'userProfile.fetchUserDecks') {
             if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
                 rp({
-                    Method: 'GET',
+                    method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
                     headers: { '----jwt----': params.params.jwt },
                     json: true
@@ -159,7 +152,7 @@ export default {
                 .catch((err) => callback(err));
             } else {
                 rp({
-                    Method: 'GET',
+                    method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.username,
                     json: true
                 })
@@ -184,7 +177,7 @@ export default {
             //TODO get id of a user
             if(!isEmpty(params.params.jwt) && params.params.loggedInUser === params.params.username){
                 rp({
-                    Method: 'GET',
+                    method: 'GET',
                     uri: Microservices.deck.uri + '/alldecks/' + params.params.id,
                     json: true
                 })
@@ -206,7 +199,7 @@ export default {
             } else if(params.params.loggedInUser !== params.params.username) {
                 //get id of username
                 rp({
-                    Method: 'GET',
+                    method: 'GET',
                     uri: Microservices.deck.uri + '/alldecks/' + params.params.id2,
                     json: true
                 })

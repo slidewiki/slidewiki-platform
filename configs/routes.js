@@ -41,7 +41,10 @@ export default {
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
             async.series([
-                (callback) => {context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: fullTitle});
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: fullTitle
+                    });
                     callback();
                 },
                 (callback) => {
@@ -142,7 +145,9 @@ export default {
         title: 'SlideWiki -- Sign up',
         handler: require('../components/User/UserRegistration/UserRegistration'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Sign up'});
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Sign up'
+            });
             done();
         }
     },
@@ -384,7 +389,7 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Add Deck'
             });
-            context.executeAction(loadAddDeck, payload, done);
+            context.executeAction(loadAddDeck, null, done);
         }
     },
     socialLogin: {

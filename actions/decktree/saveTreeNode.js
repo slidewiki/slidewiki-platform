@@ -1,19 +1,14 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
-import serviceUnavailable from '../error/serviceUnavailable';
-const log = require('../log/clog');
 
 export default function saveTreeNode(context, payload, done) {
-    log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         //enrich with user id
         payload.userid = userid;
         context.service.update('decktree.nodeTitle', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
-                context.executeAction(serviceUnavailable, payload, done);
-                //context.dispatch('SAVE_TREE_NODE_FAILURE', err);
+                context.dispatch('SAVE_TREE_NODE_FAILURE', err);
             } else {
                 let newSid = payload.selector.sid, newPath = payload.selector.spath;
                 if (payload.selector.stype === 'slide') {
