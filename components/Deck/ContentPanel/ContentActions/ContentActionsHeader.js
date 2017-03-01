@@ -52,8 +52,9 @@ class ContentActionsHeader extends React.Component {
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
         let buttonStyle = {
-            classNames : 'item small',
-            iconSize : 'large'
+            classNames : 'item small attached left',
+            iconSize : 'large',
+            attached : 'left'
         } ;
         return (
             <div className="ui top attached tabular menu" role="tablist">

@@ -150,7 +150,8 @@ class TreeNode extends React.Component {
         });
         let buttonStyle = {
             classNames : 'ui',
-            iconSize : 'medium'
+            iconSize : 'medium',
+            attached : ''
         };
         let actionBtns = (
             <div className={actionBtnsClass}>

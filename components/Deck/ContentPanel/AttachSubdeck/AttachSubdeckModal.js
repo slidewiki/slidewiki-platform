@@ -15,8 +15,13 @@ class AttachSubdeckModal extends React.Component{
         this.state = {modalOpen:false};
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        /*Props expected:
+          buttonStyle = {
+            classNames : string ->additional clases for the trigger button
+            iconSize:  enum {large | medium |small} -> final size for displaying the icon of the button
 
-
+         }*/
+       
 
     }
 
@@ -34,12 +39,13 @@ class AttachSubdeckModal extends React.Component{
 
     }
     render() {
+
         return (
-            <Modal trigger={
+          <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
                       type="button" aria-label="Attach Slide" data-tooltip="Attach Slide"
-                      icon basic attached="left" open={this.state.modalOpen} onClick={this.handleOpen}>
-                        <Icon.Group size="large">
+                      basic icon open={this.state.modalOpen} onClick={this.handleOpen}>
+                        <Icon.Group size={this.props.buttonStyle.iconSize}>
                             <Icon className="yellow" name="folder" />
                             <Icon className="corner" name="attach" />
                         </Icon.Group>
@@ -48,7 +54,6 @@ class AttachSubdeckModal extends React.Component{
                 open={this.modalOpen}
                 onClose={this.handleClose}
                 size="large" >
-
                 <Modal.Header as="h1">
                      Attach Deck
                 </Modal.Header>
@@ -60,7 +65,8 @@ class AttachSubdeckModal extends React.Component{
                     <Icon name='checkmark' /> Got it
                     </Button>
                 </Modal.Actions>
-            </Modal>
+              </Modal>
+
         );
     }
 
