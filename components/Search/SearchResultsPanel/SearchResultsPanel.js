@@ -68,10 +68,11 @@ class SearchResultsPanel extends React.Component {
         </div>;
 
         let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
-
+        let spellcheckDiv = (this.props.spellcheck) ? <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} /> : '';
+        
         return (
             <div ref="searchResultsPanel">
-                <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />
+                {spellcheckDiv}
                 {resultsPanel}
             </div>
         );

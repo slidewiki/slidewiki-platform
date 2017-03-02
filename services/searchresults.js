@@ -4,6 +4,8 @@ import customDate from '../components/Deck/util/CustomDate';
 
 function extractSpellcheckSuggestion(spellcheck){
 
+    if(!spellcheck) return '';      // spellcheck is not defined
+
     if(spellcheck.collations && spellcheck.collations.length > 0){
         // collations are returned in an array with the term 'collation' in odd cells
         // and the actual collations in even cells

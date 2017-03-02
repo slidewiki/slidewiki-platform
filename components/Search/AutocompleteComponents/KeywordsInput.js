@@ -55,9 +55,11 @@ class KeywordsInput extends React.Component {
             'fluid': true
         });
 
+        let value = (this.props.value !== '*:*') ? this.props.value : '';
+        
         return (
             <div className={classes} id="keywords_search_div">
-                <input name='keywords' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={this.props.value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref='keywords'></input>
+                <input name='keywords' onChange={this.props.onChange} onKeyPress={this.props.onKeyPress} value={value} id='SearchTerm' placeholder={this.props.placeholder} type='text' className="prompt" ref='keywords'></input>
                 <div className="results"></div>
             </div>
         );

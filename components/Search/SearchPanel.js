@@ -63,7 +63,9 @@ class SearchPanel extends React.Component {
     }
     getEncodedParams(params){
         let queryparams = {
-            keywords: (params && params.keywords) ? params.keywords : this.refs.keywords.getSelected().trim(),    //
+            keywords: (params && params.keywords)
+                        ? params.keywords       // if keywords are set from redirection
+                        : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
             field: this.refs.field.value.trim(),
             kind: this.refs.kind.value.trim(),
             language: this.refs.language.value.trim(),
@@ -97,9 +99,6 @@ class SearchPanel extends React.Component {
                 + encodeURIComponent(key) + '=' + encodeURIComponent(value);
     }
     handleRedirect(params){
-        if(this.refs.keywords.getSelected().trim() === ''){
-            return;
-        }
         this.context.executeAction(navigateAction, {
             url:  '/search/' + this.getEncodedParams(params)
         });

@@ -7,14 +7,14 @@ class SpellcheckPanel extends React.Component {
 
         const suggestion = this.props.spellcheckData;
 
-        return <div className="row">
-            <h4>Do you mean <a href="#" key={suggestion} onClick={this.props.handleRedirect.bind(this, {keywords: suggestion})}>{suggestion}</a>?</h4>
-        </div>;
+        return <h4>Do you mean <a href="#" key={suggestion} onClick={this.props.handleRedirect.bind(this, {keywords: suggestion})}>{suggestion}</a>?</h4>;
     }
     render() {
         return (
-            <div ref="spellcheckDiv">
-                <h4>{this.renderSpellcheckCollations()}</h4>
+            <div ref="spellcheckDiv" className="ui grid">
+                <div className="column">
+                    {this.renderSpellcheckCollations()}
+                </div>
             </div>
         );
     }
