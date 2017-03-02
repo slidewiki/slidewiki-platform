@@ -176,7 +176,7 @@ class SearchPanel extends React.Component {
                                       <option value='de_DE'>German</option>
                                       <option value='el_GR'>Greek</option>
                                       <option value='it_IT'>Italian</option>
-                                      <option value='pt_PT'>Portugese</option>
+                                      <option value='pt_PT'>Portuguese</option>
                                       <option value='sr_RS'>Serbian</option>
                                       <option value='es_ES'>Spanish</option>
                                     </select>
