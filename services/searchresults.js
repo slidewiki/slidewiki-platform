@@ -45,8 +45,11 @@ export default {
 
         if(resource === 'searchresults.list'){
 
+            // get start results in defined in params (needed for lazy loading results)
+            params.start = (params.start) ? params.start : 0;
+
             // fetch results from search-microservice
-            rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams}).then((results) => {
+            rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams + '&start=' + params.start}).then((results) => {
 
                 // console.log(JSON.stringify(JSON.parse(results), null, 2));
 
@@ -168,12 +171,10 @@ export default {
                         }
                     });
 
-                    // console.log(JSON.stringify(returnData, null, 2));
-                    // console.log(JSON.stringify(searchResults.spellcheck));
-
                     callback(null, {
-                        numFound: searchResults.response.docs.length,
+                        numFound: searchResults.response.numFound,
                         docs: searchResults.response.docs,
+                        start: params.start + 50,
                         spellcheck: extractSpellcheckSuggestion(searchResults.spellcheck)
                     });
                 });

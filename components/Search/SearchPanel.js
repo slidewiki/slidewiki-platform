@@ -131,6 +131,10 @@ class SearchPanel extends React.Component {
                 numFound={this.props.SearchResultsStore.numFound}
                 sort={this.props.SearchParamsStore.sort}
                 handleRedirect={this.handleRedirect.bind(this)}
+                queryparams={this.props.SearchParamsStore.queryparams}
+                loadMore={this.props.SearchResultsStore.loadMore}
+                loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
+                start={this.props.SearchResultsStore.start}
             />;
         }
         return (
