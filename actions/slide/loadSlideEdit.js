@@ -2,6 +2,8 @@ import {shortTitle} from '../../configs/general';
 import slideIdTypeError from '../error/slideIdTypeError';
 import { AllowedPattern } from '../error/util/allowedPattern';
 import expandContentPanel from '../deckpagelayout/expandContentPanel';
+import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
 
 export default function loadSlideEdit(context, payload, done) {
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
@@ -11,7 +13,9 @@ export default function loadSlideEdit(context, payload, done) {
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('LOAD_SLIDE_EDIT_FAILURE', err);
+            log.error(context, {filepath: __filename, err: err});
+            context.executeAction(serviceUnavailable, payload, done);
+            //context.dispatch('LOAD_SLIDE_EDIT_FAILURE', err);
         } else {
             //expand edit view collapsing TreeNode. Then dispatch LOAD_SLIDE_EDIT_SUCCESS
             context.executeAction(expandContentPanel,{}, () => {
