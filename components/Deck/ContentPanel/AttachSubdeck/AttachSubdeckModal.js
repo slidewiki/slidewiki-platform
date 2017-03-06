@@ -93,8 +93,8 @@ class AttachSubdeckModal extends React.Component{
                   <Container>
                     <Segment color="blue" textAlign="center" padded>
                       <Menu attached='top' tabular>
-                        <Menu.Item name='From My Decks' active={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick} />
-                        <Menu.Item name='From SlideWiki' active={this.state.activeItem === 'SlideWiki'} onClick={this.handleSlideWikiClick} />
+                        <Menu.Item name='From My Decks' active={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick} role="tab" tabIndex="0" />
+                        <Menu.Item name='From SlideWiki' active={this.state.activeItem === 'SlideWiki'} onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                       </Menu>
                       <Segment attached='bottom'>
                         {segmentPanelContent}
