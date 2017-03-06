@@ -12,6 +12,8 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
+import notFoundError from './error/notFoundError';
+import DeckTreeStore from '../stores/DeckTreeStore';
 
 export default function loadDeck(context, payload, done) {
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
@@ -99,10 +101,13 @@ export default function loadDeck(context, payload, done) {
         }
     ],
     // final callback
-
     (err, results) => {
         if (err){
             context.executeAction(serviceUnavailable, payload, done);
+            return;
+        }
+        if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
+            context.executeAction(notFoundError, payload, done);
             return;
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
