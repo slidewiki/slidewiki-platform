@@ -14,8 +14,11 @@ import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
+const log = require('./log/clog');
+
 
 export default function loadDeck(context, payload, done) {
+    log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -102,7 +105,8 @@ export default function loadDeck(context, payload, done) {
     ],
     // final callback
     (err, results) => {
-        if (err){
+        if (err) {
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }
