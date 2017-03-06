@@ -83,8 +83,10 @@ class AttachSubdeckModal extends React.Component{
                    }
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
-                size="large">
-                <Modal.Header className="ui center aligned" as="h1">
+                size="large"
+                role="dialog"
+                aria-labelledby="attachSubdeckModal">
+                <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModal">
                      Attach Deck
                 </Modal.Header>
                 <Modal.Content>
@@ -101,13 +103,13 @@ class AttachSubdeckModal extends React.Component{
                   </Container>
                 </Modal.Content>
                 <Modal.Actions>
-                     <Button color="green" icon>
+                     <Button color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
                       <Icon name="attach"/>
                        Attach
                        <Icon name="attach"/>
                      </Button>
 
-                    <Button color='red' tabIndex="0" onClick={this.handleClose} >
+                    <Button color='red' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                       Cancel
                     </Button>
                 </Modal.Actions>
