@@ -19,7 +19,7 @@ export default {
         },
         'import': {
             uri: '${SERVICE_URL_IMPORT}',
-            protocol: 'https:',
+            protocol: '${SERVICE_PROTOCOL_IMPORT}',
             host: '${SERVICE_VAR_IMPORT_HOST}',
             path: '/importPPTX',
             port: 443
