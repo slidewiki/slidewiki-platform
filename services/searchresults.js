@@ -149,7 +149,7 @@ export default {
                                 return {
                                     id: rev.id,
                                     title: rev.title,
-                                    link: '/deck/' + returnItem.id + '-' + rev.id
+                                    link: '/deck/' + returnItem.db_id + '-' + rev.id
                                 };
                             }).reverse();
                         }
@@ -161,7 +161,7 @@ export default {
                                 return {
                                     id: usageItem,
                                     title: deckRevisions[usageItem].title,
-                                    link: '/deck/' + usageItem + '/slide/' + returnItem.id + '-' + returnItem.revisionId
+                                    link: '/deck/' + usageItem + '/slide/' + returnItem.db_id + '-' + returnItem.db_revision_id
                                 };
                             });
 
