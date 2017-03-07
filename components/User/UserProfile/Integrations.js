@@ -9,6 +9,7 @@ import updateProviderAction from '../../../actions/user/userprofile/updateProvid
 import UserProfileStore from '../../../stores/UserProfileStore';
 import common from '../../../common';
 import {Microservices} from '../../../configs/microservices';
+import swal from 'sweetalert2';
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';

@@ -4,6 +4,7 @@ import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import saveTreeNode from './saveTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
 import undoRenameTreeNode from './undoRenameTreeNode';
+import swal from 'sweetalert2';
 const log = require('../log/clog');
 
 export default function saveTreeNodeWithRevisionCheck(context, payload, done) {

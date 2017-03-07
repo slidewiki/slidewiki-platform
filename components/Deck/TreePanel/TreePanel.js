@@ -13,6 +13,7 @@ import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeA
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
+import swal from 'sweetalert2';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -131,7 +132,7 @@ class TreePanel extends React.Component {
                             <div className="ui basic attached button" aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
                                 <i className="fork black icon"></i>
                             </div>
-                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate" 
+                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate"
                                  onClick={this.handleTranslation.bind(this)}>
                                 <i className="translate black icon"></i>
                             </div>

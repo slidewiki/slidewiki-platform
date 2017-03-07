@@ -3,6 +3,7 @@ import {NavLink, navigateAction} from 'fluxible-router';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import deleteUsergroup from '../../../actions/user/userprofile/deleteUsergroup';
 import leaveUsergroup from '../../../actions/user/userprofile/leaveUsergroup';
+import swal from 'sweetalert2';
 
 class UserGroups extends React.Component {
     constructor(props){

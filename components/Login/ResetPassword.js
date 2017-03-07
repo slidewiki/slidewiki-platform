@@ -9,6 +9,7 @@ import resetPasswordResetStore from '../../actions/user/resetPasswordResetStore'
 import ResetPasswordStore from '../../stores/ResetPasswordStore';
 import ReCAPTCHA from 'react-google-recaptcha';
 import common from '../../common';
+import swal from 'sweetalert2';
 
 class ResetPassword extends React.Component {
     componentDidMount() {

@@ -7,6 +7,7 @@ import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
+import swal from 'sweetalert2';
 
 
 class DeckPropertiesEditor extends React.Component {

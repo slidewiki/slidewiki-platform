@@ -11,6 +11,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile';
 import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
+import swal from 'sweetalert2';
 
 class UserProfile extends React.Component {
     componentDidMount() {}

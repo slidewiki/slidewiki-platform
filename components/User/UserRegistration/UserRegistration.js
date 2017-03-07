@@ -15,6 +15,7 @@ import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
 import common from '../../../common';
+import swal from 'sweetalert2';
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';

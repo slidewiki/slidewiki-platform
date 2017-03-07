@@ -15,6 +15,7 @@ import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
+import swal from 'sweetalert2';
 
 let ReactDOM = require('react-dom');
 

@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
+import swal from 'sweetalert2';
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 

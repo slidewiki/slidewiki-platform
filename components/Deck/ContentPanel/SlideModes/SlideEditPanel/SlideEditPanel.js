@@ -5,6 +5,7 @@ import RevisioningStore from '../../../../../stores/RevisioningStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import SlideContentEditor from './SlideContentEditor';
 import restoreDeckPageLayout from '../../../../../actions/deckpagelayout/restoreDeckPageLayout';
+import swal from 'sweetalert2';
 
 
 

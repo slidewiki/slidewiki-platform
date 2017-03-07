@@ -3,6 +3,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import addTreeNode from './addTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
+import swal from 'sweetalert2';
 
 export default function addTreeNodeWithRevisionCheck(context, payload, done) {
     log.info(context);

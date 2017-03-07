@@ -3,6 +3,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import moveTreeNode from './moveTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
+import swal from 'sweetalert2';
 const log = require('../log/clog');
 
 export default function moveTreeNodeWithRevisionCheck(context, payload, done) {

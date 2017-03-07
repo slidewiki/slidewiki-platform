@@ -6,6 +6,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import { timeSince } from '../../../common';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import saveUsergroup from '../../../actions/user/userprofile/saveUsergroup';
+import swal from 'sweetalert2';
 
 class UserGroupEdit extends React.Component {
     constructor(props){

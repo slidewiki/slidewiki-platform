@@ -1,4 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import swal from 'sweetalert2';
 const log = require('../log/clog');
 
 export default function moveTreeNode(context, payload, done) {
