@@ -46,7 +46,7 @@ class LanguageDropdown extends React.Component {
                 Italian
             </div>
             <div className="item" data-value="pt_PT" >
-                Portugese
+                Portuguese
             </div>
             <div className="item" data-value="sr_RS" >
                 Serbian

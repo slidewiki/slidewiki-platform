@@ -136,7 +136,7 @@ class SearchPanel extends React.Component {
         });
 
         this.refs.keywords.blur();
-        
+
         return false;
     }
     render() {
@@ -203,7 +203,7 @@ class SearchPanel extends React.Component {
                                       <option value='de'>German</option>
                                       <option value='el'>Greek</option>
                                       <option value='it'>Italian</option>
-                                      <option value='pt'>Portugese</option>
+                                      <option value='pt'>Portuguese</option>
                                       <option value='sr'>Serbian</option>
                                       <option value='es'>Spanish</option>
                                     </select>

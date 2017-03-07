@@ -13,6 +13,7 @@
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
+CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
 
 
 CKEDITOR.disableAutoInline = true;
@@ -26,7 +27,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.line_height=';0.5;0.75;0.9;1;1.2;1.5;2.0;3.0;';
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
         '/',
@@ -70,6 +71,11 @@ CKEDITOR.editorConfig = function( config ) {
     //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
     config.removePlugins = 'magicline';
     CKEDITOR.config.magicline_color = '#0000FF';
+
+    //limit Copy Formatting to only allow basic text styles (bold, italic, underline, strikethrough) to be copied:
+    //config.copyFormatting_allowRules = 'b s u i em a strong ul li em p h1 h2 h3; span{text-decoration,font-weight}';
+    config.copyFormatting_disallowRules = 'div';
+
 
     //configuration to prevent lay-out change onload
     config.forcePasteAsPlainText = false; // default so content won't be manipulated on load
@@ -157,7 +163,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
@@ -191,7 +197,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.mathJaxClass = 'my-math';
     //config.mathJaxClass = 'math-tex';
     //config.mathJaxClass = 'equation';
-    
+
     //config.filebrowserUploadUrl = 'http://localhost:8880/importImage'; //make importservice.manfredfris.ch/importImage when finished
     /*
     //config.uploadUrl = '../';

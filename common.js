@@ -42,5 +42,16 @@ export default {
         }
 
         return language;
-    }
+    },
+
+    isLocalStorageOn: function() {
+        let mod = 'react-count';
+        try {
+            localStorage.setItem(mod, mod);
+            localStorage.removeItem(mod);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }    
 };
