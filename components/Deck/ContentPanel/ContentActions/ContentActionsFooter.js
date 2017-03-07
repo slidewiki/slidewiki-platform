@@ -58,6 +58,10 @@ class ContentActionsFooter extends React.Component {
 
     }
 
+    handleReportClick(){
+        // Insert Modal and so on...
+    }
+
     getExportHref(type){
         if (type !== 'EPub' && type !== 'PDF') {
             return;
@@ -101,7 +105,6 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
-
                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
                                 <i className="print large icon"></i>
@@ -112,6 +115,11 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
+                            <div onClick={this.handleReportClick.bind(this)} target="_blank">
+                                <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
+                                    <i className="warning circle large icon"></i>
+                                </button>
+                            </div>
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
                             </button>
