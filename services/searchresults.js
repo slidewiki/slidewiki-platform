@@ -1,6 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
+const log = require('../configs/log').log;
 
 function extractSpellcheckSuggestion(spellcheck){
 
@@ -41,13 +42,18 @@ export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
 
         if(resource === 'searchresults.list'){
 
+<<<<<<< HEAD
             // get start results in defined in params (needed for lazy loading results)
             params.start = (params.start) ? params.start : 0;
 
+=======
+>>>>>>> master
             // fetch results from search-microservice
             rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams + '&start=' + params.start}).then((results) => {
 
