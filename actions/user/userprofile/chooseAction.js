@@ -2,6 +2,7 @@ import async from 'async';
 import fetchUser from './fetchUser';
 import { fetchUserDecks } from './fetchUserDecks';
 import notFoundError from '../../error/notFoundError';
+const log = require('../../log/clog');
 
 export const categories = { //Do NOT alter the order of these items! Just add your items. Used in UserProfile and CategoryBox components
     categories: ['settings', 'groups'],
@@ -10,6 +11,7 @@ export const categories = { //Do NOT alter the order of these items! Just add yo
 };
 
 export function chooseAction(context, payload, done) {
+    log.info(context);
     async.series([
         (callback) => {
             context.executeAction(fetchUser, payload, callback);

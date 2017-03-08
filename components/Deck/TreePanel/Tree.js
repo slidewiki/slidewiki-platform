@@ -31,8 +31,8 @@ class Tree extends React.Component {
 
     handleRightKey() {
         let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.selector.get('spath'));
-        if (node.get('editable')) {
-            //disable handler when editing node
+        if (node.get('editable') || this.props.username=== '') {
+            //disable handler when editing node or when user is not loggedIn
             return true;
         } else {
             if (node.get('type') === 'deck') {
@@ -65,8 +65,8 @@ class Tree extends React.Component {
 
     handleLeftKey() {
         let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.selector.get('spath'));
-        if (node.get('editable')) {
-            //disable handler when editing node
+        if (node.get('editable')  || this.props.username=== '') {
+            //disable handler when editing node or when user is not loggedIn
             return true;
         } else {
             if (node.get('type') === 'deck') {

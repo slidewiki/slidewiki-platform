@@ -4,6 +4,8 @@ import loadSlideEdit from './loadSlideEdit';
 import needsNewRevisionCheck from '../revisioning/needsNewRevisionCheck';
 import UserProfileStore from '../../stores/UserProfileStore';
 import ContentUtil from '../../components/Deck/ContentPanel/util/ContentUtil';
+import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
 
 export default function loadSlideEditWihtRevisionControl(context, payload, done) {
     let currentUserState = context.getStore(UserProfileStore).getState();
