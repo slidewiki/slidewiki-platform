@@ -48,12 +48,10 @@ export default {
 
         if(resource === 'searchresults.list'){
 
-<<<<<<< HEAD
+
             // get start results in defined in params (needed for lazy loading results)
             params.start = (params.start) ? params.start : 0;
 
-=======
->>>>>>> master
             // fetch results from search-microservice
             rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams + '&start=' + params.start}).then((results) => {
 
