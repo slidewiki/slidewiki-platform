@@ -38,8 +38,6 @@ function extractSpellcheckSuggestion(spellcheck){
 
     return '';
 }
-=======
->>>>>>> master
 
 export default {
     name: 'searchresults',
