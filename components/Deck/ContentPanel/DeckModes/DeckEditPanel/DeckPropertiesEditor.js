@@ -132,7 +132,7 @@ class DeckPropertiesEditor extends React.Component {
                 Italian
             </option>
             <option value="pt_PT" >
-                Portugese
+                Portuguese
             </option>
             <option value="sr_RS" >
                 Serbian
