@@ -4,9 +4,10 @@ import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import saveTreeNode from './saveTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
 import undoRenameTreeNode from './undoRenameTreeNode';
-
+const log = require('../log/clog');
 
 export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
+    log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
         //enrich with user id
@@ -16,7 +17,8 @@ export default function saveTreeNodeWithRevisionCheck(context, payload, done) {
             userid: userid
         }, (err, res) => {
             if (err) {
-                context.executeAction(serviceUnavailable, payload, done);
+                log.error(context, {filepath: __filename, err: err});
+                //context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {
                     swal({

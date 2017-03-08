@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
+import ServiceErrorStore from '../../stores/ServiceErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
@@ -20,6 +21,7 @@ class Deck extends React.Component {
         return false;
     }
     render() {
+        const error = this.props.ServiceErrorStore.error;
         let status = this.props.DeckPageStore.componentsStatus;
         let navigationPanelClass = classNames({
             'twelve': status.NavigationPanel.columnSize===12,
@@ -72,7 +74,16 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui vertically padded stackable grid container" ref="deck">
-
+                {error.hasOwnProperty('statusCode') ? <div className="ui error message container text left">
+                                                        <div className="row">
+                                                            <b>{error.statusCode} {error.statusText}</b>
+                                                        </div>
+                                                        <ul className="list">
+                                                            <li><b>Description&#58;</b> {error.description} {error.actionRequired}</li>
+                                                            <li><b>Navigation&#58;</b> {error.navStack}</li>
+                                                        </ul>
+                                                    </div>: ''
+                }
                 <div className="row">
                     <div className={navigationPanelClass}>
                       <NavigationPanel />
@@ -118,9 +129,10 @@ class Deck extends React.Component {
 Deck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-Deck = connectToStores(Deck, [DeckPageStore], (context, props) => {
+Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore], (context, props) => {
     return {
-        DeckPageStore: context.getStore(DeckPageStore).getState()
+        DeckPageStore: context.getStore(DeckPageStore).getState(),
+        ServiceErrorStore: context.getStore(ServiceErrorStore).getState(),
     };
 });
 export default Deck;
