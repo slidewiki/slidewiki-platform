@@ -94,7 +94,7 @@ export default {
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             let options = {
-                Method: 'DELETE',
+                method: 'DELETE',
                 uri: Microservices.deck.uri + '/decktree/node/delete',
                 body:JSON.stringify({
                     user: args.userid.toString(),
