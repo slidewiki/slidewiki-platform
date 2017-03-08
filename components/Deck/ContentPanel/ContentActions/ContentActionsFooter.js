@@ -4,15 +4,27 @@ import ContentUtil from '../util/ContentUtil';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
+import ReportModal from '../../../Report/ReportModal';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
+
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
         super(props);
         //this.state={expanded: 0};
         this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
+        this.visible = true;
+        this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
+    }
+    componentDidMount() {
+        $(window).on('modal.visible', function(ev){
+            this.visible = true;
+        });
+        $(window).on('modal.hidden', function(ev){
+            this.visible = false;
+        });
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -59,7 +71,9 @@ class ContentActionsFooter extends React.Component {
     }
 
     handleReportClick(){
-        // Insert Modal and so on...
+        // Toggle Modal and so on...
+        $('.ui.report.modal')
+            .modal('toggle');
     }
 
     getExportHref(type){
@@ -90,6 +104,11 @@ class ContentActionsFooter extends React.Component {
     }
 
     render() {
+        let reportButton = <div ref="reportButton" onClick={this.handleReportClick.bind(this)} target="_blank">
+                            <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
+                                <i className="warning circle large icon"></i>
+                            </button>
+                        </div>;
         return (
             <div className="ui">
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
@@ -115,11 +134,8 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            <div onClick={this.handleReportClick.bind(this)} target="_blank">
-                                <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
-                                    <i className="warning circle large icon"></i>
-                                </button>
-                            </div>
+                            {reportButton}
+                            <ReportModal/>
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
                             </button>
