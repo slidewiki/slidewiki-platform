@@ -1,4 +1,7 @@
+const log = require('../log/clog');
+
 export default function checkNewRevisionNeeded(context, payload, done) {
+    log.info(context);
     let selector = payload.selector;
     let tmp = selector.spath.split(';');
     let targetDeckID;

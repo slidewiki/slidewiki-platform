@@ -67,8 +67,8 @@ class UserRegistration extends React.Component {
                         type: 'empty',
                         prompt: 'Please enter your email address'
                     }, {
-                        type: 'email',
-                        prompt: 'Please enter a valid email address'
+                        type   : 'regExp[/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$/]',
+                        prompt : 'Please enter a valid email address'
                     }, {
                         type: 'uniqueEmail',
                         prompt: 'The email address is already in use'
@@ -429,6 +429,7 @@ class UserRegistration extends React.Component {
             'ui': true,
             'field': true,
             'inline': true,
+            'required': true,
             'error': (emailNotAllowed !== undefined) ? emailNotAllowed : false
         });
         let emailIconClasses = classNames({
@@ -443,6 +444,7 @@ class UserRegistration extends React.Component {
             'ui': true,
             'field': true,
             'inline': true,
+            'required': true,
             'error': (usernameNotAllowed !== undefined) ? usernameNotAllowed : false
         });
         let usernameIconClasses = classNames({
@@ -457,43 +459,59 @@ class UserRegistration extends React.Component {
         return (
           <div>
             <div className="ui page centered grid" >
-                <div className="eight wide column">
+                <div className="ten wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
+            <div id="signupwelcome" className="ui message">
+            <h3 className="header">Welcome to SlideWiki beta</h3>
+            <p>This is the beta site for organisations involved with trialling SlideWiki. If you wish to add or edit decks on SlideWiki, use this form to sign up for an account. You will receive an email if your account is authorised.</p>
+            </div>
+
+                        <h3 className="ui dividing header">Sign Up with a Social Provider</h3>
+
+                           <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>
+
+                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label="Sign up with Google"><i className="big google plus lnk icon"></i></button>
+                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label="Sign up with Github"><i className="big github icon"></i></button>
+
+                        <p>By clicking on a Social Provider, you agree to our <a href="" title="Sign-up terms and conditions">Terms</a>.</p>
+                        <div className="ui dividing header" ></div>
+
+                    <h3 className="ui dividing header">Or complete the registration form</h3>
                         <form className="ui form" ref="UserRegistration_form" >
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>First name * </label>
-                                <div className="ui icon input"><input type="text" id="firstname" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} id="FirstName">First name </label>
+                                <div className="ui icon input"><input type="text" aria-labelledby="FirstName" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                             </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Last name * </label>
-                                <div className="ui icon input"><input type="text" id="lastname" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                            <div className="ui inline required field">
+                               <label style={signUpLabelStyle} id="LastName">Last name</label>
+                                <div className="ui icon input"><input type="text" aria-labelledby="LastName" name="lastname" ref="lastname" aria-required="true" placeholder="Last name" /></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                                <label style={signUpLabelStyle}>Username * </label>
-                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="username_label">User name </label>
+                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" aria-labelledby="username_label" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                             </div>
                             <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                                <label style={signUpLabelStyle}>Email * </label>
-                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" id="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="email_label">Email</label>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="text" aria-labelledby="email_label" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                            </div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} id="reenteremail_label">Re-enter email</label>
+                                <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-labelledby="reenteremail_label" aria-required="true"/></div>
+                            </div>
+                            <div className="ui inline required field">
+                                <label style={signUpLabelStyle} id="password_label">Password</label>
+                                <div className="ui icon input"><input type="password" aria-labelledby="password_label" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Re-enter email * </label>
-                                <div className="ui icon input"><input type="email" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true" aria-required="true"/></div>
-                            </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Password * </label>
-                                <div className="ui icon input"><input type="password" id="password" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
-                            </div>
-                            <div className="ui inline field">
-                                <label style={signUpLabelStyle}>Re-enter password * </label>
-                                <div className="ui icon input"><input type="password" id="reenterpassword" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} id="reenterpassword_label">Re-enter password</label>
+                                <div className="ui icon input"><input type="password" aria-labelledby="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
                                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
-                            <div className="ui error message"></div>
+                            <div className="ui error message" ></div>
                             <br/>
                             <button type="submit" className="ui blue labeled submit icon button" >
                                 <i className="icon add user"/> Sign Up
@@ -505,21 +523,7 @@ class UserRegistration extends React.Component {
                         <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                     </div>
                 </div>
-                <div className="seven wide column">
-                    <div className="ui blue padded center aligned segment">
-                        <h2 className="ui dividing header">Sign Up with a Social Provider</h2>
 
-                        <div className="container">
-                            <i className="big circular facebook square link icon" onClick={this.socialRegister.bind(this, 'facebook')} ></i>
-                            <i className="big circular google plus link icon" onClick={this.socialRegister.bind(this, 'google')} ></i>
-                            <i className="big circular github link icon" onClick={this.socialRegister.bind(this, 'github')} ></i>
-                        </div>
-                        <div className="ui dividing header" ></div>
-                        By clicking on a Social Provider, you agree to our <a href="">Terms</a>.
-                        <br/><br/>
-                        <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
-                    </div>
-                </div>
             </div>
 
             <UserRegistrationSocial ref="modal_social"/>
