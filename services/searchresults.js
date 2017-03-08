@@ -2,7 +2,6 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import customDate from '../components/Deck/util/CustomDate';
 const log = require('../configs/log').log;
-<<<<<<< HEAD
 
 function extractSpellcheckSuggestion(spellcheck){
 
