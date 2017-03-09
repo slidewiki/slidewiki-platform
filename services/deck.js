@@ -164,7 +164,7 @@ export default {
                 license: params.license
             };
             rp({
-                Method: 'POST',
+                method: 'POST',
                 uri: Microservices.deck.uri + '/deck/new',
                 json: true,
                 body: toSend
@@ -189,7 +189,7 @@ export default {
                 new_revision: false
             };
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,
                 json: true,
                 body: toSend
@@ -222,7 +222,7 @@ export default {
                 toSend.root_deck = params.root_deck;
             }
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,
                 json: true,
                 body: toSend
@@ -231,7 +231,7 @@ export default {
         } else if (resource === 'deck.fork') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             rp({
-                Method: 'PUT',
+                method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId + '/fork',
                 json: true,
                 body: {
