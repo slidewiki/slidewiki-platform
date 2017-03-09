@@ -14,9 +14,13 @@ import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
 import fetchUser from './user/userprofile/fetchUser';
 import UserProfileStore from '../stores/UserProfileStore';
+import notFoundError from './error/notFoundError';
+import DeckTreeStore from '../stores/DeckTreeStore';
+const log = require('./log/clog');
+
 
 export default function loadDeck(context, payload, done) {
-    // console.log('Action loadDeck');
+    log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
 
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
@@ -113,11 +117,14 @@ export default function loadDeck(context, payload, done) {
         }
     ],
     // final callback
-
     (err, results) => {
-        if (err){
-            console.log('Error: ', err);
+        if (err) {
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
+            return;
+        }
+        if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
+            context.executeAction(notFoundError, payload, done);
             return;
         }
         context.dispatch('UPDATE_PAGE_TITLE', {

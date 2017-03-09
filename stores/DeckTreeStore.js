@@ -5,32 +5,42 @@ class DeckTreeStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         //keeps the status of currently selected node
-        this.selector = Immutable.fromJS({});;
+        this.selector = Immutable.fromJS({});
         this.prevSelector = Immutable.fromJS({});
         this.nextSelector = Immutable.fromJS({});
         this.deckTree = Immutable.fromJS({});
         this.flatTree = Immutable.fromJS({});
         this.error = 0;
         this.isForkingPossible = false;
+
+        //used to check if the selector is valid and refers to a node that belongs to this deck tree
+        this.isSelectorValid = true;
     }
     updateDeckTree(payload) {
+        this.isSelectorValid = true;
         this.selector = Immutable.fromJS(payload.selector);
         //add path to tree nodes
         this.deckTree = Immutable.fromJS(this.makePathForTree(payload.deckTree, []));
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
-        //set a default path in case of no path
-        if(!payload.selector.spath){
-            this.selector = this.selector.setIn(['spath'], this.generateASelectorPath(this.flatTree, this.selector));
-        }
-        //update the selected node in tree
         let selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
-        //in case the path does not exist anymore, try to make  a new one
-        try {
-            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
-        }
-        catch (e) {
+
+        //set a default path in case of no path or when path does not exist
+        if(!payload.selector.spath || !this.deckTree.hasIn(selectedNodeIndex)){
             this.selector = this.selector.setIn(['spath'], this.generateASelectorPath(this.flatTree, this.selector));
         }
+        //update the selected node index
+        selectedNodeIndex = this.makeImmSelectorFromPath(this.selector.get('spath'));
+
+        //update the selected node in tree
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
+
+        //check that the spath (actually only the positions specified in the spath are used) corresponds to the node specified
+        // by stype and sid
+        let selectedNode = this.getImmNodeFromImmSelector(selectedNodeIndex);
+        if (selectedNode.get('type') !== this.selector.get('stype') || selectedNode.get('id').split('-')[0] !== this.selector.get('sid').split('-')[0]){
+            this.isSelectorValid = false;
+        }
+
         //prepare next and prev node selector
         this.updatePrevNextSelectors();
         //reset error state
@@ -480,7 +490,8 @@ class DeckTreeStore extends BaseStore {
             prevSelector: this.prevSelector,
             nextSelector: this.nextSelector,
             error: this.error,
-            isForkingPossible: this.isForkingPossible
+            isForkingPossible: this.isForkingPossible,
+            isSelectorValid: this.isSelectorValid
         };
     }
     dehydrate() {
@@ -494,6 +505,7 @@ class DeckTreeStore extends BaseStore {
         this.nextSelector = Immutable.fromJS(state.nextSelector);
         this.error  = state.error;
         this.isForkingPossible = state.isForkingPossible;
+        this.isSelectorValid = state.isSelectorValid;
     }
     handleDeckTreeError(err){
         this.error = err;

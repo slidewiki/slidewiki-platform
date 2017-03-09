@@ -1,8 +1,11 @@
 import UserProfileStore from '../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
+import serviceUnavailable from './error/serviceUnavailable';
+const log = require('./log/clog');
 
 export default function saveDeckEdit(context, payload, done) {
+    log.info(context);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -19,11 +22,12 @@ export default function saveDeckEdit(context, payload, done) {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
-                console.log('Error saving deck:', err);
+                log.error(context, {filepath: __filename, err: err});
+                // context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
                 context.dispatch('SAVE_DECK_EDIT_SUCCESS', res);
-                console.log(payload.selector);
+                //console.log(payload.selector);
                 context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
                     selector: payload.selector,
                     nodeSpec: {

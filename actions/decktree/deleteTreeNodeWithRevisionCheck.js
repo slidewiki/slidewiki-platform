@@ -3,8 +3,10 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import deleteTreeNode from './deleteTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
 
 export default function deleteTreeNodeWithRevisionCheck(context, payload, done) {
+    log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     let args = payload.params ? payload.params : payload;
     let selector = {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
@@ -16,8 +18,8 @@ export default function deleteTreeNodeWithRevisionCheck(context, payload, done) 
             userid: userid
         }, (err, res) => {
             if (err) {
-                console.log('deleteTreeNodeWithRevisionCheck: Error:', err);
-                context.executeAction(serviceUnavailable, payload, done);
+                log.error(context, {filepath: __filename, err: err});
+                //context.executeAction(serviceUnavailable, payload, done);
             } else {
                 if (res.status.needs_revision) {
                     swal({
