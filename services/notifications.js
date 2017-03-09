@@ -106,7 +106,7 @@ export default {
             /*********connect to microservices*************/
             const nid = args.newNotificationId;
             let options = {
-                Method: 'DELETE',
+                method: 'DELETE',
                 uri: Microservices.notification.uri + '/notification/delete',
                 body:JSON.stringify({
                     id: nid
@@ -123,7 +123,7 @@ export default {
             let uid = String(args.uid);
             uid = (!uid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - uid.length) + uid) : uid;//TODO solve these ID issues
             let options = {
-                Method: 'DELETE',
+                method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',
                 body:JSON.stringify({
                     subscribed_user_id: uid
