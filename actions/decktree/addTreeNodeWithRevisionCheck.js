@@ -3,6 +3,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import checkNewRevisionNeeded from './checkNewRevisionNeeded';
 import addTreeNode from './addTreeNode';
 import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
 
 export default function addTreeNodeWithRevisionCheck(context, payload, done) {
     log.info(context);
