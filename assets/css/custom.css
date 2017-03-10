@@ -34,3 +34,21 @@
 	padding-bottom: 0.21428571em;
 }
 
+.diff-view {
+  padding-top: 50px;
+}
+
+.diff-view .added, .modified, .deleted {
+  padding: 5px; margin: 2px;
+}
+
+.diff-view .added {border: 2px solid #93ca3b;}
+.diff-view .modified {border: 2px solid #FFCC00;}
+.diff-view .deleted {border: 2px solid #ff0030;}
+
+.diff-view .txtadded, .txtdeleted {
+  padding: 2px;
+}
+
+.diff-view .txtadded {background-color: #eaffea;}
+.diff-view .txtdeleted {background-color: #ffecec; text-decoration: line-through;}

@@ -27,29 +27,18 @@ export default class ContentDiffviewPanel extends Component {
     }
 
     markText = (oldt, newt) => {
-        return `<span style="background-color:red; text-decoration: line-through;">${oldt}</span>
-                <span style="background-color:green;">${newt}</span>`;
+        return `<span class="txtdeleted">${oldt}</span>
+                <span class="txtadded">${newt}</span>`;
     }
 
     diff = (e) => {
         e.preventDefault();
         //FETCH 2 html strings to DIFF
-        let src = '<div class="wrap"><div id="some-id" class="foo"><span>THEN text</span><p>Static</p><p style="color:red; font-size: 14px;">Red</p><p>Red</p></div></div>';
-        let src2 = '<div class="wrap"><div id="some-id" class="bar"><span>NOW text</span><p>Static</p><p style="color:yellow; font-size: 14px;">Yellow</p></div><div class="slide_1"><h1>Title</h1></div></div>';
-        let src2html = $.parseHTML(src2);
+        let src = '<div class="wrap"><div id="some-id" class="foo"><p>Static text part 1</p><span>THEN text</span><p>Static</p><p style="color:red; font-size: 14px;">Colored in red</p><p>Red</p></div></div>';
+        let src2 = '<div class="wrap"><div id="some-id" class="bar"><p>Static text part 1</p><span>NOW text</span><p>Static</p><p style="color:yellow; font-size: 14px;">Colorized in yellow</p></div><div class="slide_1"><h1>Title</h1></div></div>';
 
         //CONVERT html into hyperscript
         const vTree = convertHTML(src);
-        // let counter = 0
-        // var convertHTMLWithKey = convertHTML.bind(null, {
-        //     getVNodeKey: function(object) {
-        //         console.log(object);
-        //         return object.id || ++counter;
-        //     }
-        // });
-        //
-        // const keyTree = convertHTMLWithKey(src);
-        // console.log(keyTree);
         const vTree2 = convertHTML(src2);
 
         //DIFF 2 vTrees
@@ -64,7 +53,7 @@ export default class ContentDiffviewPanel extends Component {
         //elements.map((e) => console.log('%c node:', 'color: red', e));
         console.groupEnd();
 
-        let elem;
+        let elem, root;
 
         console.group();
         console.info('Changes');
@@ -80,11 +69,8 @@ export default class ContentDiffviewPanel extends Component {
                     let oldtext = el.vNode.text;
                     let newtext = el.patch.text;
                     let newtt = this.markText(oldtext, newtext);
+                    //TODO regex replace all &nbsp; to white space + other occurings
                     src = src.replace(oldtext, newtt);
-                    //SAVE CHANGES
-                    //USE REGEX TO Traverse it as a string and change the text
-                    //Maybe add promise to do it at the end
-                    //check is modified class is there || add one
                     break;
 
                 case 2:
@@ -121,7 +107,7 @@ export default class ContentDiffviewPanel extends Component {
                     console.warn('INSERTED');
                     elem = createElement(el.patch);
                     $(elem).addClass('added');
-                    let root = createElement(convertHTML(src));
+                    root = createElement(convertHTML(src));
                     $(root).append(elem);
                     src = root.outerHTML;
 
@@ -129,16 +115,17 @@ export default class ContentDiffviewPanel extends Component {
 
                 case 7:
                     console.warn('REMOVE');
-                    elem = createElement(el.vNode);
-                    $(elem).addClass('deleted');
-                    console.log(elem);
-                    // const tag = el.vNode.tagName;
-                    // const text = el.vNode.children[0].text;
-                    // console.log(tag);
-                    // console.log(text);
-                    // $( "div:contains('John')" ).addClass
 
+                    // elem = createElement(el.vNode);
+                    // $(elem).addClass('deleted');
                     // console.log(elem);
+
+                    const tag = el.vNode.tagName;
+                    const text = el.vNode.children[0].text;
+                    root = createElement(convertHTML(src));
+                    $(root).find(`${tag}:contains('${text}')`).addClass('deleted');
+                    src = root.outerHTML;
+
                     break;
 
                 default:
@@ -149,8 +136,8 @@ export default class ContentDiffviewPanel extends Component {
 
         console.groupEnd();
 
-        // console.log(createElement(convertHTML(src)));
-        //this.setState({renderedDiff: root});
+        // console.log(src);
+        this.setState({defaultTxt: src});
     }
 
     render() {
@@ -163,9 +150,8 @@ export default class ContentDiffviewPanel extends Component {
         //
         return (
             <div>
-                <h1>Diff View</h1>
-                <button onClick={this.diff}>DIFF</button>
-                {this.state.defaultTxt}
+                <h1>Diff View --> <button className="ui blue icon button" onClick={this.diff}>DIFF</button></h1>
+                <div className='diff-view' dangerouslySetInnerHTML={{__html:this.state.defaultTxt}}></div>
             </div>
         );
     }
