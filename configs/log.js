@@ -4,9 +4,9 @@ const logDir = 'logs';
 const obj = {};
 
 // Create the log directory if it does not exist
-if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir);
-}
+//if (!fs.existsSync(logDir)) {
+//    fs.mkdirSync(logDir);
+//}
 
 // winston.setLevels(winston.config.npm.levels);
 //winston.setLevels(winston.config.syslog.levels);
@@ -23,7 +23,9 @@ if (!obj.log) {
                 handleExceptions: true,
                 humanReadableUnhandledException: true
             }),
-            // file transport
+            // file transport; If you uncomment below lines, pls also uncomment line 6 (if condition) in this file,
+            // that is about creating log directory if it doesn't exist.
+            /*
             new (require('winston-daily-rotate-file'))({
                 label: 'slidewiki-platform',
                 filename: `${logDir}/-platform.log`,
@@ -36,10 +38,11 @@ if (!obj.log) {
                 maxsize: 1024 * 1024 * 10, // in bytes, 10 MB
                 json: true,
             }),
+            */
         ],
         exitOnError: false
     });
-    
+
     obj.log.setLevels(winston.config.syslog.levels);
 }
 
