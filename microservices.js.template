@@ -19,10 +19,10 @@ export default {
         },
         'import': {
             uri: '${SERVICE_URL_IMPORT}',
-            protocol: '${SERVICE_PROTOCOL_IMPORT}',
+            protocol: '${SERVICE_PROTOCOL_IMPORT}:',
+	    port: ${SERVICE_PORT_IMPORT},
             host: '${SERVICE_VAR_IMPORT_HOST}',
-            path: '/importPPTX',
-            port: 443
+            path: '/importPPTX'
         },
         'search': {
             uri: '${SERVICE_URL_SEARCH}'
