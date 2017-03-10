@@ -35,7 +35,7 @@ class AttachSubdeckModal extends React.Component{
         this.setState({
             modalOpen:true,
         });
-
+        $('#app').attr('aria-hidden','true');
     }
 
     handleClose(){
@@ -109,6 +109,7 @@ class AttachSubdeckModal extends React.Component{
                 size="large"
                 role="dialog"
                 aria-labelledby="attachSubdeckModal"
+                aria-hidden = "false"
                 tabIndex="0">
                 <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModal">
                      Attach Deck
