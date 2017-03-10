@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider} from 'semantic-ui-react';
+import FocusTrap from 'focus-trap-react';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -20,14 +21,16 @@ class AttachSubdeckModal extends React.Component{
         super(props);
         this.state = {
             modalOpen:false,
-            activeItem:'MyDecks'
+            activeItem:'MyDecks',
+            activeTrap:false
         };
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
-        this.catchModalFocus = this.catchModalFocus.bind(this);
+      //  this.catchModalFocus = this.catchModalFocus.bind(this);
         this.avoidLostFocus = this.avoidLostFocus.bind(this);
+        this.umountTrap = this.umountTrap.bind(this);
     }
 
 
@@ -55,16 +58,21 @@ class AttachSubdeckModal extends React.Component{
             activeItem:'SlideWiki'
         });
 
-    }
+    }/*
     catchModalFocus(){
 
         $('#selectedDeckTitleId').focus();
 
 
-    }
+    }*/
     avoidLostFocus(){
         $('#tabMyDecksId').focus();
 
+    }
+    umountTrap(){
+        this.setState({
+            activeTrap: false
+        });
     }
     render() {
         //Selected Deck addTreeNodeAndNavigate
@@ -93,9 +101,10 @@ class AttachSubdeckModal extends React.Component{
         }
 
         return (
-          <Modal trigger={
+
+           <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button" aria-label="Attach Slide" data-tooltip="Attach Slide"
+                      type="button" aria-label="Attach Slide" data-tooltip="Attach Slide" aria-hidden="false"
                       basic icon open={this.state.modalOpen} onClick={this.handleOpen} >
                         <Icon.Group size={this.props.buttonStyle.iconSize}>
                             <Icon className="yellow" name="folder" />
@@ -105,16 +114,18 @@ class AttachSubdeckModal extends React.Component{
                    }
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
-                onOpen={this.catchModalFocus}
                 size="large"
                 role="dialog"
                 aria-labelledby="attachSubdeckModal"
                 aria-hidden = "false"
                 tabIndex="0">
+
                 <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModal">
                      Attach Deck
                 </Modal.Header>
                 <Modal.Content>
+                <FocusTrap  className='trap' focusTrapOptions={{onDeactivate: this.unmountTrap, initialFocus: '#tabMyDecksId',escapeDeactivates: false}} >
+
                   <Container>
                     <Segment color="blue" textAlign="center" padded>
                       <Menu attached='top' tabular>
@@ -129,6 +140,7 @@ class AttachSubdeckModal extends React.Component{
                       </Segment>
                     </Segment>
                   </Container>
+                </FocusTrap>
                 </Modal.Content>
                 <Modal.Actions>
                      <Button id='attachAttachDeckModal' color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
@@ -142,7 +154,9 @@ class AttachSubdeckModal extends React.Component{
                       Cancel
                     </Button>
                 </Modal.Actions>
-           </Modal>
+
+            </Modal>
+
 
         );
     }
