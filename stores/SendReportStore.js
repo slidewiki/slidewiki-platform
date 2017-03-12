@@ -46,11 +46,12 @@ class SendReportStore extends BaseStore {
     }
 }
 
-SendReportStore.storeName = 'AddDeckStore';
+SendReportStore.storeName = 'SendReportStore';
 SendReportStore.handlers = {
     'REPORT_SHOW_WRONG_FIELDS': 'showWrongFields',
     'CREATION_FAILURE': 'creationFailure',
     'CREATION_SUCCESS': 'creationSuccess',
 };
+
 
 export default SendReportStore;
