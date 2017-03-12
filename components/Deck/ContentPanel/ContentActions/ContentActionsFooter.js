@@ -8,6 +8,7 @@ import ReportModal from '../../../Report/ReportModal';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
+import UserProfileStore from '../../../../stores/UserProfileStore';
 
 
 class ContentActionsFooter extends React.Component {
@@ -16,15 +17,7 @@ class ContentActionsFooter extends React.Component {
         //this.state={expanded: 0};
         this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
         this.visible = true;
-        this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
-    }
-    componentDidMount() {
-        $(window).on('modal.visible', function(ev){
-            this.visible = true;
-        });
-        $(window).on('modal.hidden', function(ev){
-            this.visible = false;
-        });
+        // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -134,7 +127,7 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            {reportButton}
+                            {(this.props.UserProfileStore.userid !== '') ? reportButton : ''}
                             <ReportModal/>
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
@@ -159,9 +152,10 @@ ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore], (context, props) => {
     return {
-        ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState()
+        ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default ContentActionsFooter;
