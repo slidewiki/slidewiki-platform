@@ -107,7 +107,6 @@ export default {
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license,
-                    accessLevel: revision.accessLevel || 'public',
                     editors: revision.editors || {
                         users: [],
                         groups: []
@@ -221,7 +220,6 @@ export default {
                 user: params.userid.toString(),
                 license: params.license,
                 new_revision: false,
-                accessLevel: params.accessLevel,
                 editors: {
                     users: params.users,
                     groups: params.groups
@@ -256,7 +254,6 @@ export default {
                 license: params.license,
                 new_revision: true,
                 top_root_deck: selector.id,
-                accessLevel: params.accessLevel,
                 editors: {
                     users: params.users,
                     groups: params.groups

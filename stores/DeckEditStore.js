@@ -26,7 +26,7 @@ class DeckEditStore extends BaseStore {
         this.editors = payload.editors;
         this.selector = payload.selector;
 
-        //accessLevel adoptions
+        //edit rights adoptions
         this.authorizedUsers = payload.deckProps.editors.users;
         this.authorizedGroups = payload.deckProps.editors.groups;
 

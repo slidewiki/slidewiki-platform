@@ -39,7 +39,6 @@ class DeckPropertiesEditor extends React.Component {
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
             license: props.deckProps.license || '',
-            accessLevel: props.deckProps.accessLevel || 'public',
             users: editors.users,
             groups: editors.groups
         };
@@ -234,16 +233,9 @@ class DeckPropertiesEditor extends React.Component {
         }
 
         let users = [], groups = [];
-        if (this.state.accessLevel === 'restricted') {
-            users = this.props.DeckEditStore.authorizedUsers;
-            groups = this.props.DeckEditStore.authorizedGroups;
-
-            if (users.length === 0 && (groups.length === 0)) {
-                validationErrors.accessLevel = 'The access level needs at minimum one selected group or user.';
-                isValid = false;
-            }
-        }
-        // console.log('handleSave', this.state.accessLevel, users, groups, isValid);
+        users = this.props.DeckEditStore.authorizedUsers;
+        groups = this.props.DeckEditStore.authorizedGroups;
+        // console.log('handleSave', users, groups, isValid);
 
         this.setState({validationErrors: validationErrors});
         if (isValid) {
@@ -257,7 +249,6 @@ class DeckPropertiesEditor extends React.Component {
                 license: this.state.license,
                 tags: [],
                 selector: this.props.selector,
-                accessLevel: this.state.accessLevel,
                 users: users,
                 groups: groups
             });
@@ -401,16 +392,9 @@ class DeckPropertiesEditor extends React.Component {
             'error': this.state.validationErrors.license != null
         });
         //TODO update it for deck edit rights version 2
-        let isUserAllowedToChangeEditRights = this.state.accessLevel === 'public' || (this.props.DeckEditStore.deckProps.deckOwner === this.props.UserProfileStore.userid);
-        let accessLevelFieldClass = classNames({
-            'required': isUserAllowedToChangeEditRights,
-            'field': true,
-            'disabled': !isUserAllowedToChangeEditRights,
-            'error': this.state.validationErrors.accessLevel != null
-        });
+        let isUserAllowedToChangeEditRights = this.props.DeckEditStore.deckProps.deckOwner === this.props.UserProfileStore.userid;
         let groupsFieldClass = classNames({
             'field': true,
-            'disabled': this.state.accessLevel !== 'restricted'
         });
 
         //content elements
@@ -454,14 +438,6 @@ class DeckPropertiesEditor extends React.Component {
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>
             <option value="CC BY-SA">CC BY-SA</option>
-        </select>;
-
-        let visibilityOptions = <select className="ui search dropdown" id="accessLevel" aria-labelledby="accessLevel"
-                                     value={this.state.accessLevel}
-                                     onChange={this.handleChange.bind(this, 'accessLevel')}>
-            <option value="public">public</option>
-            <option value="restricted">restricted</option>
-            <option value="private">private</option>
         </select>;
 
         let groupsArray = [];
@@ -527,12 +503,8 @@ class DeckPropertiesEditor extends React.Component {
                                 {licenseOptions}
                             </div>
                         </div>
-                        <div className={accessLevelFieldClass} data-tooltip={this.state.validationErrors.accessLevel}>
-                            <label id="accessLevel">Choose general access level</label>
-                            {visibilityOptions}
-                        </div>
 
-                        {(this.state.accessLevel === 'restricted' && isUserAllowedToChangeEditRights) ? (<div>
+                        <div>
                           <div className="two fields">
                               <div className={groupsFieldClass}>
                                   <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
@@ -555,7 +527,7 @@ class DeckPropertiesEditor extends React.Component {
                               </div>
                               <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
                           </div>
-                        </div>) : ''}
+                        </div>
 
                         {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
