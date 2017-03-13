@@ -86,52 +86,106 @@ class DeckPropertiesEditor extends React.Component {
             }
         }
 
-        if (!this.props.DeckEditStore.allowedToEditTheDeck && newProps.DeckEditStore.allowedToEditTheDeck) {
-            swal({
-                title: 'Warning',
-                text: 'You are not allowed to edit this deck.',
-                type: 'warning',
-                showCloseButton: false,
-                showCancelButton: false,
-                confirmButtonText: 'Go back',
-                confirmButtonClass: 'ui button',
-                buttonsStyling: false
-            })
-            .then((dismiss) => {
-                history.back();
+        console.log('willUpdate:', this.props.DeckEditStore.permissions, 'to', newProps.DeckEditStore.permissions);
+        if (!(newProps.DeckEditStore.permissions.edit || newProps.DeckEditStore.permissions.admin) && ((this.props.DeckEditStore.permissions.edit && !newProps.DeckEditStore.permissions.edit) || (this.props.DeckEditStore.permissions.admin && !newProps.DeckEditStore.permissions.admin))) {
+            if (newProps.DeckEditStore.permissions.fork) {
+                swal({
+                    title: 'Warning',
+                    text: 'You are not allowed to edit this deck, but you are able to fork it. Do you do so?',
+                    type: 'warning',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: 'Create a fork',
+                    confirmButtonClass: 'ui olive button',
+                    cancelButtonText: 'Go back',
+                    cancelButtonClass: 'ui pink button',
+                    buttonsStyling: false
+                })
+                .then((dismiss) => {
+                    //TODO call action for creating a fork and then direct to this one
 
-                return true;
-            })
-            .catch(() => {
-                history.back();
+                    return true;
+                })
+                .catch((action) => {
+                    console.log('user clicked on', action);
+                    history.back();
+                    return true;
+                });
+            }
+            else {
+                swal({
+                    title: 'Warning',
+                    text: 'You are not allowed to edit this deck.',
+                    type: 'warning',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: 'Go back',
+                    confirmButtonClass: 'ui button',
+                    buttonsStyling: false
+                })
+                .then((dismiss) => {
+                    history.back();
 
-                return true;
-            });
+                    return true;
+                })
+                .catch(() => {
+                    history.back();
+
+                    return true;
+                });
+            }
         }
     }
 
     componentDidMount () {
-        if (!this.props.DeckEditStore.allowedToEditTheDeck) {
-            swal({
-                title: 'Warning',
-                text: 'You are not allowed to edit this deck.',
-                type: 'warning',
-                showCloseButton: false,
-                showCancelButton: false,
-                confirmButtonText: 'Go back',
-                confirmButtonClass: 'ui button',
-                buttonsStyling: false
-            })
-            .then((dismiss) => {
-                history.back();
+        console.log('didMount:', this.props.DeckEditStore.permissions);
+        if (!(this.props.DeckEditStore.permissions.edit || this.props.DeckEditStore.permissions.admin)) {
+            if (this.props.DeckEditStore.permissions.fork) {
+                swal({
+                    title: 'Warning',
+                    text: 'You are not allowed to edit this deck, but you are able to fork it. Do you do so?',
+                    type: 'warning',
+                    showCloseButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Create a fork',
+                    confirmButtonClass: 'ui olive button',
+                    cancelButtonText: 'Go back',
+                    cancelButtonClass: 'ui button',
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    //TODO call action for creating a fork and then direct to this one
 
-                return true;
-            })
-            .catch(() => {
-                history.back();
+                    return true;
+                })
+                .catch((action) => {
+                    console.log('user clicked on', action);
+                    history.back();
+                    return true;
+                });
+            }
+            else {
+                swal({
+                    title: 'Warning',
+                    text: 'You are not allowed to edit this deck.',
+                    type: 'warning',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: 'Go back',
+                    confirmButtonClass: 'ui button',
+                    buttonsStyling: false
+                })
+                .then((dismiss) => {
+                    history.back();
 
-                return true;
-            });
+                    return true;
+                })
+                .catch(() => {
+                    history.back();
+
+                    return true;
+                });
+            }
         }
     }
 
@@ -212,7 +266,7 @@ class DeckPropertiesEditor extends React.Component {
         });
     }
 
-    handleSave(withNewRevision, event) {
+    handleSave(withNewRevision = false, event) {
         event.preventDefault();
         const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
@@ -249,8 +303,13 @@ class DeckPropertiesEditor extends React.Component {
                 license: this.state.license,
                 tags: [],
                 selector: this.props.selector,
-                users: users,
-                groups: groups
+                editors: {
+                    old: this.props.DeckEditStore.originalEditors,
+                    new: {
+                        users: users,
+                        groups: groups
+                    }
+                }
             });
         }
     }
@@ -391,8 +450,6 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.license != null
         });
-        //TODO update it for deck edit rights version 2
-        let isUserAllowedToChangeEditRights = this.props.DeckEditStore.deckProps.deckOwner === this.props.UserProfileStore.userid;
         let groupsFieldClass = classNames({
             'field': true,
         });
@@ -461,10 +518,6 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         </div>;
 
-        let saveDeckButton = this.props.DeckEditStore.savingWithoutCreatingRevision ?
-        <button className='ui primary button'
-             onClick={this.handleSave.bind(this, false)}>Save</button> : '';
-
         return (
         <div className="ui container">
             <div className="ui grid">
@@ -504,34 +557,38 @@ class DeckPropertiesEditor extends React.Component {
                             </div>
                         </div>
 
-                        <div>
-                          <div className="two fields">
-                              <div className={groupsFieldClass}>
-                                  <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
-                                  {groupsOptions}
-                              </div>
-                              <div className={groupsFieldClass}>
-                                  <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
-                                  <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
-                                  </select>
-                              </div>
+                        {(this.props.DeckEditStore.permissions.admin) ? (
+                          <div>
+                            <div className="two fields">
+                                <div className={groupsFieldClass}>
+                                    <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
+                                    {groupsOptions}
+                                </div>
+                                <div className={groupsFieldClass}>
+                                    <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
+                                    <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="field">
+                                <div className="ui tiny header">
+                                    Authorized:
+                                </div>
+                                <div className="ui very relaxed  list">
+                                    {this.getListOfAuthorized()}
+                                </div>
+                                <div className="ui hidden divider">
+                                </div>
+                                <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
+                            </div>
                           </div>
-                          <div className="field">
-                              <div className="ui tiny header">
-                                  Authorized:
-                              </div>
-                              <div className="ui very relaxed  list">
-                                  {this.getListOfAuthorized()}
-                              </div>
-                              <div className="ui hidden divider">
-                              </div>
-                              <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
-                          </div>
-                        </div>
+                        ) : ''}
 
                         {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
-                        {saveDeckButton}
+                        <button className='ui primary button'
+                             onClick={this.handleSave.bind(this, false)}>Save
+                        </button>
                         <button className='ui primary button'
                              onClick={this.handleSave.bind(this, true)}>
                             Save as new revision

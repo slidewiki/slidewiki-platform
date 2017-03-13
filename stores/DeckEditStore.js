@@ -5,7 +5,6 @@ class DeckEditStore extends BaseStore {
         super(dispatcher);
         this.deckProps = {};
         this.editors = [];
-        this.selector = {};
         this.authorizedUsers = [];
         this.authorizedGroups = [];
         this.viewstate = '';
@@ -17,21 +16,40 @@ class DeckEditStore extends BaseStore {
             },
             members: []
         };
-        this.allowedToEditTheDeck = true;
-        this.savingWithoutCreatingRevision = false;
+        this.permissions = {
+            fork: false,
+            edit: false,
+            admin: false
+        };
+        this.originalEditors = {
+            users: [],
+            groups: []
+        };
     }
 
     updateProperties(payload) {
         this.deckProps = payload.deckProps;
         this.editors = payload.editors;
-        this.selector = payload.selector;
+        this.permissions = payload.permissions;
 
         //edit rights adoptions
         this.authorizedUsers = payload.deckProps.editors.users;
         this.authorizedGroups = payload.deckProps.editors.groups;
+        this.originalEditors = payload.deckProps.editors;
 
-        //reset value
-        this.allowedToEditTheDeck = true;
+        this.emitChange();
+    }
+
+    resetProperties() {
+        this.permissions = {
+            fork: false,
+            edit: false,
+            admin: false
+        };
+        this.originalEditors = {
+            users: [],
+            groups: []
+        };
 
         this.emitChange();
     }
@@ -40,13 +58,12 @@ class DeckEditStore extends BaseStore {
         return {
             deckProps: this.deckProps,
             editors: this.editors,
-            selector: this.selector,
             authorizedUsers: this.authorizedUsers,
             authorizedGroups: this.authorizedGroups,
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
-            allowedToEditTheDeck: this.allowedToEditTheDeck,
-            savingWithoutCreatingRevision: this.savingWithoutCreatingRevision
+            permissions: this.permissions,
+            originalEditors: this.originalEditors
         };
     }
 
@@ -57,13 +74,12 @@ class DeckEditStore extends BaseStore {
     rehydrate(state) {
         this.deckProps = state.deckProps;
         this.editors = state.editors;
-        this.selector = state.selector;
         this.authorizedUsers = state.authorizedUsers;
         this.viewstate = state.viewstate;
         this.authorizedGroups = state.authorizedGroups;
         this.detailedGroup = state.detailedGroup;
-        this.allowedToEditTheDeck = state.allowedToEditTheDeck;
-        this.savingWithoutCreatingRevision = state.savingWithoutCreatingRevision;
+        this.permissions = state.permissions;
+        this.originalEditors = state.originalEditors;
     }
 
     updateAuthorizedUsers(users) {
@@ -85,16 +101,6 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = group;
         this.emitChange();
     }
-
-    editDeckNotAllowed() {
-        this.allowedToEditTheDeck = false;
-        this.emitChange();
-    }
-
-    updateNeedsNewRevision(needs_revision) {
-        this.savingWithoutCreatingRevision = !needs_revision;
-        this.emitChange();
-    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -104,8 +110,8 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'EDIT_DECK_NOT_ALLOWED': 'editDeckNotAllowed',
-    'UPDATE_NEEDS_NEW_REVISION': 'updateNeedsNewRevision'
+    'UPDATE_NEEDS_NEW_REVISION': 'updateNeedsNewRevision',
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
 };
 
 export default DeckEditStore;

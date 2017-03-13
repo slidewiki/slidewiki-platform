@@ -86,13 +86,16 @@ export default {
                 //console.log(err);
                 callback({msg: 'Error in resolving promises', content: err}, {});
             });
-        } else if (resource === 'deck.properties') {
+        } else if (resource === 'deck.properties') { //this is only used for deck edit - thus we call all the api routes with one service call
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
-            Promise.all([deckPromise, editorsPromise]).then((res) => {
-                let deck = JSON.parse(res[0]), editors = JSON.parse(res[1]);
-                let revision;
+            let permissionsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/permissions', headers: {'----jwt----': args.jwt }}).promise().bind(this);
+            Promise.all([deckPromise, editorsPromise, permissionsPromise]).then((res) => {
+                let revision,
+                    deck = JSON.parse(res[0]),
+                    editors = JSON.parse(res[1]),
+                    permissions = JSON.parse(res[2]);
                 //if deck's sid does not specify revision, find the active revision from the corresponding field
                 if (args.sid.split('-').length < 2) {
                     revision = deck.revisions.find((rev) => {
@@ -107,7 +110,7 @@ export default {
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license,
-                    editors: revision.editors || {
+                    editors: editors.editors || {
                         users: [],
                         groups: []
                     },
@@ -115,9 +118,11 @@ export default {
                     revisionOwner: revision.user,
                     sid: args.sid
                 };
+                let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
                 callback(null, {
                     deckProps: deckProps,
-                    editors: editors
+                    editors: contributors,
+                    permissions: permissions
                 });
             }).catch((err) => {
                 callback(err);
