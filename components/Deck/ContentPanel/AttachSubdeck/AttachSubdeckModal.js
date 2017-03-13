@@ -22,21 +22,22 @@ class AttachSubdeckModal extends React.Component{
         this.state = {
             modalOpen:false,
             activeItem:'MyDecks',
-            activeTrap:false
+            activeMenuTrap:false,
+
         };
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
-      //  this.catchModalFocus = this.catchModalFocus.bind(this);
-        this.avoidLostFocus = this.avoidLostFocus.bind(this);
-        this.umountTrap = this.umountTrap.bind(this);
+        this.umountMenuTrap = this.umountMenuTrap.bind(this);
+        this.mountMenuTrap = this.mountMenuTrap.bind(this);
     }
 
 
     handleOpen(){
         this.setState({
             modalOpen:true,
+            activeMenuTrap:true
         });
         $('#app').attr('aria-hidden','true');
     }
@@ -44,35 +45,38 @@ class AttachSubdeckModal extends React.Component{
     handleClose(){
         this.setState({
             modalOpen:false,
+            activeMenuTrap: false
         });
 
     }
+
     handleMyDecksClick(){
         this.setState({
             activeItem:'MyDecks'
         });
 
     }
+
     handleSlideWikiClick(){
         this.setState({
             activeItem:'SlideWiki'
         });
-
-    }/*
-    catchModalFocus(){
-
-        $('#selectedDeckTitleId').focus();
+    }
 
 
-    }*/
-    avoidLostFocus(){
-        $('#tabMyDecksId').focus();
+    umountMenuTrap(){
+        this.setState({
+            activeMenuTrap: false,
+        });
+        $('#attachAttachDeckModal').focus();
 
     }
-    umountTrap(){
+    mountMenuTrap(){
         this.setState({
-            activeTrap: false
+            activeMenuTrap: true,
+
         });
+        $('#tabMyDecksId').focus();
     }
     render() {
         //Selected Deck addTreeNodeAndNavigate
@@ -100,6 +104,25 @@ class AttachSubdeckModal extends React.Component{
             segmentPanelContent = slideWikiContent;
         }
 
+        let menu = <Menu attached='top' tabular>
+                    <Menu.Item as='button' name='From My Decks' id='tabMyDecksId' active={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
+                                 role="tab" tabIndex="0" />
+                    <Menu.Item as='button' name='From SlideWiki' id='tabFromSlideWikiId' active={this.state.activeItem === 'SlideWiki'}
+                                 onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" onBlur ={this.umountMenuTrap} />
+                  </Menu>;
+
+        let focusTrapMenu = <FocusTrap className='trap' focusTrapOptions={{ initialFocus: '#tabMyDecksId' }} >
+                                {menu}
+                            </FocusTrap>;
+        let tabMenu;
+        if(this.state.activeMenuTrap){
+            tabMenu = focusTrapMenu;
+        } else {
+            tabMenu = menu;
+        }
+
+
+
         return (
 
            <Modal trigger={
@@ -124,35 +147,25 @@ class AttachSubdeckModal extends React.Component{
                      Attach Deck
                 </Modal.Header>
                 <Modal.Content>
-                <FocusTrap  className='trap' focusTrapOptions={{onDeactivate: this.unmountTrap, initialFocus: '#tabMyDecksId',escapeDeactivates: false}} >
-
-                  <Container>
-                    <Segment color="blue" textAlign="center" padded>
-                      <Menu attached='top' tabular>
-                        <Menu.Item as='button' name='From My Decks' id='tabMyDecksId' active={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
-                           role="tab" tabIndex="0" />
-                        <Menu.Item as='button' name='From SlideWiki' id='tabFromSlideWikiId' active={this.state.activeItem === 'SlideWiki'}
-                           onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
-                      </Menu>
-                      <Segment attached='bottom'>
-                        {segmentPanelContent}
-                        {selectedDeckArea}
-                      </Segment>
-                    </Segment>
-                  </Container>
-                </FocusTrap>
+                    <Container>
+                         <Segment color="blue" textAlign="center" padded>
+                             {tabMenu}
+                         <Segment attached='bottom'>
+                               {segmentPanelContent}
+                               {selectedDeckArea}
+                         </Segment>
+                     </Segment>
+                   </Container>
                 </Modal.Content>
                 <Modal.Actions>
-                     <Button id='attachAttachDeckModal' color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
+                  <Button id='attachAttachDeckModal' color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
+                    <Icon name="attach"/>
+                      Attach
                       <Icon name="attach"/>
-                       Attach
-                       <Icon name="attach"/>
-                     </Button>
-
-                    <Button color='red' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Canccel"
-                        onClick={this.handleClose} onBlur={this.avoidLostFocus} >
-                      Cancel
-                    </Button>
+                  </Button>
+                  <Button color='red' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose}  onBlur={this.mountMenuTrap}>
+                    Cancel
+                  </Button>
                 </Modal.Actions>
 
             </Modal>
