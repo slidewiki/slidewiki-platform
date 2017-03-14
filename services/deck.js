@@ -287,6 +287,21 @@ export default {
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
         }
+        else if (resource === 'deck.updateEditors') {
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId + '/editors',
+                json: true,
+                body: {
+                    editors: {
+                        groups: params.groups,
+                        users: params.users
+                    }
+                },
+                headers: { '----jwt----': params.jwt }
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
+        }
     }
     // delete: (req, resource, params, config, callback) => {}
 };
