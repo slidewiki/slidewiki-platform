@@ -5,9 +5,9 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import sendReportShowWrongFields from '../../actions/report/sendReportShowWrongFields';
+import ContentStore from '../../stores/ContentStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import SendReportStore from '../../stores/SendReportStore';
-let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -21,7 +21,6 @@ const modalStyle = {
 class ReportModal extends React.Component {
     constructor(props) {
         super(props);
-        this.reasonSelected = true;
     }
 
     componentDidMount() {
@@ -56,33 +55,54 @@ class ReportModal extends React.Component {
             text: false
         };
 
+        let everythingOk = true;
         e.preventDefault();
         if(!this.refs.reason.value){
             wrongFields.reason = true;
+            everythingOk = false;
         }
 
         if( !this.refs.text.value ){
             wrongFields.text = true;
+            everythingOk = false;
         } else {
             if(this.refs.text.value.trim() === ''){
                 wrongFields.text = true;
+                everythingOk = false;
             }
         }
 
         this.context.executeAction(sendReportShowWrongFields, wrongFields);
-        /*
-        if (this.refs.reason.value !== '' && this.refs.text.value !== '') {
-            this.context.executeAction(addComment, {
-                selector: this.props.ContentDiscussionStore.selector,
-                title: this.refs.title.value,
-                text: this.refs.text.value,
-                userid: this.props.UserProfileStore.userid
-            });
+        if(everythingOk) {
 
-            this.refs.title.value = '';
-            this.refs.text.value = '';
+            let deckOrSlideReportLine = '';
+            if(this.props.ContentStore.selector.stype === 'slide') {
+                deckOrSlideReportLine = 'Report on Slide: ' + this.props.ContentStore.selector.sid + '\n'
+                    + 'From Deck: ' + this.props.ContentStore.selector.id + '\n';
+            } else {
+                deckOrSlideReportLine = 'Report on Deck: ' + this.props.ContentStore.selector.id + '\n';
+            }
+
+            let subject = '[SlideWiki] Report on Deck/Slide' ;
+            let emailBody = 'Report made by user: ' + this.props.UserProfileStore.userid + '\n'
+                + deckOrSlideReportLine
+                + 'Reason of the report: ' + this.refs.reason.value + '\n'
+                + 'Description of the report: \n\n' + this.refs.text.value + '\n\n\n';
+
+            //let toEmail = 'luis.daniel.fernandes.rotger@iais.fraunhofer.de';
+
+            let toEmail = 'sednanref2004@gmail.com';
+
+            let link = "mailto:" + toEmail
+                // + "?cc=myCCaddress@example.com"
+                + "&subject=" + escape(subject)
+                + "&body=" + escape(emailBody);
+            window.location.href = link;
+
+            $('.ui.report.modal')
+                .modal('toggle');
         }
-        */
+
         return false;
     }
 
@@ -107,7 +127,7 @@ class ReportModal extends React.Component {
             <div>
                 <div className="ui report modal" id='reportModal' style={modalStyle}>
                     <div className="header">
-                        <h1 style={headerStyle}>Report legal or spam issue with deck/slide content</h1>
+                        <h1 style={headerStyle}>Report legal or spam issue with {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' } content</h1>
                     </div>
                     <div className="content">
                         <div className="ui container">
@@ -118,8 +138,8 @@ class ReportModal extends React.Component {
                                             <i className="dropdown icon"/>
                                             <div className="default text">Reason</div>
                                             <div className="menu">
-                                                <div className="item" data-value="spam">Spam</div>
                                                 <div className="item" data-value="copyright">Copyright</div>
+                                                <div className="item" data-value="spam">Spam</div>
                                             </div>
                                     </div>
                                     <br/>
@@ -155,10 +175,11 @@ ReportModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-ReportModal = connectToStores(ReportModal, [UserProfileStore, SendReportStore], (context, props) => {
+ReportModal = connectToStores(ReportModal, [ContentStore, UserProfileStore, SendReportStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        SendReportStore: context.getStore(SendReportStore).getState()
+        SendReportStore: context.getStore(SendReportStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 
