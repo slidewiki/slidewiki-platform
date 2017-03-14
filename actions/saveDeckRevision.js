@@ -9,7 +9,44 @@ const log = require('./log/clog');
 export default function saveDeckRevision(context, payload, done) {
     log.info(context);
     //enrich with user id
-    let userid = context.getStore(UserProfileStore).userid;
+    const userid = context.getStore(UserProfileStore).userid;
+
+    let success = (res, payload) => {
+        context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
+        context.dispatch('SAVE_DECK_REVISION_SUCCESS', res);
+        let newSid = res._id + '-' + res.revisions[0].id;
+        let newPath = '';
+        //root deck case
+        if (payload.selector.id === payload.selector.sid) {
+            context.executeAction(navigateAction, {
+                url: '/deck/' + newSid
+            });
+        } else {
+            if (payload.selector.spath !== '') {
+                let pathArr = payload.selector.spath.split(';');
+                let lastPath = pathArr[pathArr.length - 1];
+                let lastPathPosition = lastPath.split(':')[1];
+                pathArr[pathArr.length - 1] = newSid + ':' + lastPathPosition;
+                newPath = pathArr.join(';');
+            }
+            // if deck edited is subdeck update the corresponding tree node
+            if (payload.selector.id !== payload.selector.sid) {
+                context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
+                    selector: payload.selector,
+                    nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
+                });
+            }
+            context.executeAction(handleRevisionChangesAndNavigate, {
+                selector: {
+                    id: payload.selector.id,
+                    stype: payload.selector.stype,
+                    sid: newSid,
+                    spath: newPath
+                },
+                changeset: res.changeset
+            });
+        }
+    };
 
     if (userid == null || userid === '') {
         context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', '');
@@ -29,43 +66,33 @@ export default function saveDeckRevision(context, payload, done) {
                 context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
                 log.error(context, {filepath: __filename, err: err});
                 // context.executeAction(serviceUnavailable, payload, done);
+                done();
             } else {
-                context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
-                context.dispatch('SAVE_DECK_REVISION_SUCCESS', res);
-                let newSid = res._id + '-' + res.revisions[0].id;
-                let newPath = '';
-                //root deck case
-                if (payload.selector.id === payload.selector.sid) {
-                    context.executeAction(navigateAction, {
-                        url: '/deck/' + newSid
-                    });
-                } else {
-                    if (payload.selector.spath !== '') {
-                        let pathArr = payload.selector.spath.split(';');
-                        let lastPath = pathArr[pathArr.length - 1];
-                        let lastPathPosition = lastPath.split(':')[1];
-                        pathArr[pathArr.length - 1] = newSid + ':' + lastPathPosition;
-                        newPath = pathArr.join(';');
-                    }
-                    // if deck edited is subdeck update the corresponding tree node
-                    if (payload.selector.id !== payload.selector.sid) {
-                        context.dispatch('UPDATE_TREE_NODE_SUCCESS', {
-                            selector: payload.selector,
-                            nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
-                        });
-                    }
-                    context.executeAction(handleRevisionChangesAndNavigate, {
-                        selector: {
-                            id: payload.selector.id,
-                            stype: payload.selector.stype,
-                            sid: newSid,
-                            spath: newPath
-                        },
-                        changeset: res.changeset
+                if (payload.editors.old.users !== payload.editors.new.users || payload.editors.old.groups !== payload.editors.new.groups) {
+                    let payload2 = {
+                        jwt: context.getStore(UserProfileStore).jwt,
+                        editors: payload.editors.new,
+                        deckId: res._id + '-' + res.revisions[0].id
+                    };
+                    context.service.update('deck.updateEditors', payload2, null, {timeout: 30 * 1000}, (err, res2) => {
+                        if (err) {
+                            context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', '');
+                            context.executeAction(navigateAction, {
+                                url: '/'
+                            });
+                            done();
+                        }
+                        else {
+                            success(res, payload);
+                            done();
+                        }
                     });
                 }
+                else {
+                    success(res, payload);
+                    done();
+                }
             }
-            done();
         });
     }
 }

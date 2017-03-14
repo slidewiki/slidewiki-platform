@@ -16,6 +16,7 @@ import GroupDetailsModal from './GroupDetailsModal';
 import { timeSince } from '../../../../../common';
 import UserPicture from '../../../../common/UserPicture';
 import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
+import fork from '../../../../../actions/deckedit/fork';
 
 
 class DeckPropertiesEditor extends React.Component {
@@ -79,112 +80,9 @@ class DeckPropertiesEditor extends React.Component {
                     buttonsStyling: false
                 })
                 .then(() => {
-                    location.reload();
                     return true;
                 })
                 .catch();
-            }
-        }
-
-        console.log('willUpdate:', this.props.DeckEditStore.permissions, 'to', newProps.DeckEditStore.permissions);
-        if (!(newProps.DeckEditStore.permissions.edit || newProps.DeckEditStore.permissions.admin) && ((this.props.DeckEditStore.permissions.edit && !newProps.DeckEditStore.permissions.edit) || (this.props.DeckEditStore.permissions.admin && !newProps.DeckEditStore.permissions.admin))) {
-            if (newProps.DeckEditStore.permissions.fork) {
-                swal({
-                    title: 'Warning',
-                    text: 'You are not allowed to edit this deck, but you are able to fork it. Do you do so?',
-                    type: 'warning',
-                    showCloseButton: false,
-                    showCancelButton: false,
-                    confirmButtonText: 'Create a fork',
-                    confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'Go back',
-                    cancelButtonClass: 'ui pink button',
-                    buttonsStyling: false
-                })
-                .then((dismiss) => {
-                    //TODO call action for creating a fork and then direct to this one
-
-                    return true;
-                })
-                .catch((action) => {
-                    console.log('user clicked on', action);
-                    history.back();
-                    return true;
-                });
-            }
-            else {
-                swal({
-                    title: 'Warning',
-                    text: 'You are not allowed to edit this deck.',
-                    type: 'warning',
-                    showCloseButton: false,
-                    showCancelButton: false,
-                    confirmButtonText: 'Go back',
-                    confirmButtonClass: 'ui button',
-                    buttonsStyling: false
-                })
-                .then((dismiss) => {
-                    history.back();
-
-                    return true;
-                })
-                .catch(() => {
-                    history.back();
-
-                    return true;
-                });
-            }
-        }
-    }
-
-    componentDidMount () {
-        console.log('didMount:', this.props.DeckEditStore.permissions);
-        if (!(this.props.DeckEditStore.permissions.edit || this.props.DeckEditStore.permissions.admin)) {
-            if (this.props.DeckEditStore.permissions.fork) {
-                swal({
-                    title: 'Warning',
-                    text: 'You are not allowed to edit this deck, but you are able to fork it. Do you do so?',
-                    type: 'warning',
-                    showCloseButton: false,
-                    showCancelButton: true,
-                    confirmButtonText: 'Create a fork',
-                    confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'Go back',
-                    cancelButtonClass: 'ui button',
-                    buttonsStyling: false
-                })
-                .then(() => {
-                    //TODO call action for creating a fork and then direct to this one
-
-                    return true;
-                })
-                .catch((action) => {
-                    console.log('user clicked on', action);
-                    history.back();
-                    return true;
-                });
-            }
-            else {
-                swal({
-                    title: 'Warning',
-                    text: 'You are not allowed to edit this deck.',
-                    type: 'warning',
-                    showCloseButton: false,
-                    showCancelButton: false,
-                    confirmButtonText: 'Go back',
-                    confirmButtonClass: 'ui button',
-                    buttonsStyling: false
-                })
-                .then((dismiss) => {
-                    history.back();
-
-                    return true;
-                })
-                .catch(() => {
-                    history.back();
-
-                    return true;
-                });
             }
         }
     }
@@ -230,7 +128,7 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
-                    // console.log('user dropdown select', name, value);
+                    console.log('user dropdown select', name, value);
 
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
@@ -239,14 +137,14 @@ class DeckPropertiesEditor extends React.Component {
                     if (users === undefined || users === null)
                         users = [];
 
-                    // console.log('trying to add', name, 'to', group.members);
+                    console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
-                        return member.username === name && member.userid === parseInt(value);
+                        return member.username === name && member.id === parseInt(value);
                     }) === -1 && name !== this.props.UserProfileStore.username) {
                         let data = JSON.parse(decodeURIComponent(value));
                         users.push({
                             username: name,
-                            userid: parseInt(data.userid),
+                            id: parseInt(data.userid),
                             joined: (new Date()).toISOString(),
                             picture: data.picture
                         });
@@ -314,6 +212,15 @@ class DeckPropertiesEditor extends React.Component {
         }
     }
 
+    handleFork(event) {
+        event.preventDefault();
+
+        this.context.executeAction(fork, {
+            deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
+            selector: this.props.selector
+        });
+    }
+
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
@@ -322,12 +229,12 @@ class DeckPropertiesEditor extends React.Component {
 
     handleClickRemoveUser(member, event) {
         event.preventDefault();
-        // console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
+        console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
 
         let users = this.props.DeckEditStore.authorizedUsers;
 
         let newMembers = users.filter((member2) => {
-            return !(member2.username === member.username && member2.userid === parseInt(member.userid));
+            return !(member2.username === member.username && member2.id === parseInt(member.id));
         });
 
         this.context.executeAction(updateAuthorizedUsers, newMembers);
@@ -363,9 +270,10 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
+                let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago      ') : '';
                 list_authorized.push(
                   (
-                    <div className="item" key={user.username + user.userid} >
+                    <div className="item" key={user.username + user.id} >
                       <div className="ui grid">
                         <div className="one wide column">
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
@@ -373,8 +281,8 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="fifteen wide column">
                           <a className="header" href={'/user/' + user.username}>{user.username}</a>
                           <div className="description">
-                            Access granted {timeSince((new Date(user.joined)))} ago&nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" key={user.userid} onClick={fct}>
+                            {optionalText}
+                            <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
                               Remove
                             </button>
                           </div>
@@ -518,6 +426,43 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         </div>;
 
+        let buttons = (
+          <button className="ui secondary button"
+               onClick={this.handleCancel.bind(this)}>
+              Cancel
+          </button>
+        );
+        if (this.props.DeckEditStore.permissions.admin || this.props.DeckEditStore.permissions.edit) {
+            buttons = (
+              <div>
+                <button className='ui primary button'
+                     onClick={this.handleSave.bind(this, false)}>Save
+                </button>
+                <button className='ui primary button'
+                     onClick={this.handleSave.bind(this, true)}>
+                    Save as new revision
+                </button>
+                <button className="ui secondary button"
+                     onClick={this.handleCancel.bind(this)}>
+                    Cancel
+                </button>
+              </div>
+            );
+        }
+        else if (this.props.DeckEditStore.permissions.fork) {
+            buttons = (
+              <div>
+                <button className='ui primary button'
+                     onClick={this.handleFork.bind(this)}>Fork
+                </button>
+                <button className="ui secondary button"
+                     onClick={this.handleCancel.bind(this)}>
+                    Cancel
+                </button>
+              </div>
+            );
+        }
+
         return (
         <div className="ui container">
             <div className="ui grid">
@@ -586,17 +531,7 @@ class DeckPropertiesEditor extends React.Component {
 
                         {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
-                        <button className='ui primary button'
-                             onClick={this.handleSave.bind(this, false)}>Save
-                        </button>
-                        <button className='ui primary button'
-                             onClick={this.handleSave.bind(this, true)}>
-                            Save as new revision
-                        </button>
-                        <button className="ui secondary button"
-                             onClick={this.handleCancel.bind(this)}>
-                            Cancel
-                        </button>
+                        {buttons}
                     </form>
                 </div>
 

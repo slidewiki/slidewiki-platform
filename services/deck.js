@@ -224,11 +224,7 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
-                new_revision: false,
-                editors: {
-                    users: params.users,
-                    groups: params.groups
-                }
+                new_revision: false
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
@@ -259,10 +255,6 @@ export default {
                 license: params.license,
                 new_revision: true,
                 top_root_deck: selector.id,
-                editors: {
-                    users: params.users,
-                    groups: params.groups
-                }
 
             };
             if (params.root_deck != null) {
@@ -294,8 +286,8 @@ export default {
                 json: true,
                 body: {
                     editors: {
-                        groups: params.groups,
-                        users: params.users
+                        groups: params.editors.groups,
+                        users: params.editors.users
                     }
                 },
                 headers: { '----jwt----': params.jwt }
