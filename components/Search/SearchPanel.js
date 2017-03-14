@@ -15,19 +15,19 @@ class SearchPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            searchstring: this.props.SearchParamsStore.searchstring,
-            entity: this.props.SearchParamsStore.entity,
+            keywords: this.props.SearchParamsStore.keywords,
+            kind: this.props.SearchParamsStore.kind,
             language: this.props.SearchParamsStore.language,
-            fields: this.props.SearchParamsStore.fields,
-            users: this.props.SearchParamsStore.users,
-            tags: this.props.SearchParamsStore.tags,
+            field: this.props.SearchParamsStore.field,
+            user: this.props.SearchParamsStore.user,
+            tag: this.props.SearchParamsStore.tag,
             revisions: this.props.SearchParamsStore.revisions,
             license: this.props.SearchParamsStore.license
         };
     }
     initDropdown(){
-        $('#fields').dropdown();
-        $('#entity').dropdown();
+        $('#field').dropdown();
+        $('#kind').dropdown();
         $('#language').dropdown();
         $('#license').dropdown();
     }
@@ -43,6 +43,7 @@ class SearchPanel extends React.Component {
         this.setState(nextProps.SearchParamsStore);
     }
     onChange(event) {
+        // console.log(event.target.name + ' -> ' + event.target.value);
         let curstate = {};
         curstate[event.target.name] = event.target.value;
         this.setState(curstate);
@@ -52,85 +53,52 @@ class SearchPanel extends React.Component {
         this.refs.keywords.focus();
     }
     onSelect(searchstring){
-        this.setState({searchstring: searchstring});
+        this.setState({keywords: searchstring});
         this.handleRedirect();
     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return (nextProps.searchstring != this.state.searchstring);
-    // }
     handleKeyPress(event){
         if(event.key === 'Enter'){
             this.handleRedirect();
         }
     }
     getEncodedParams(params){
-        let queryparams = {};
+        let queryparams = {
+            keywords: (params && params.keywords)
+                        ? params.keywords       // if keywords are set from redirection
+                        : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
+            field: this.refs.field.value.trim(),
+            kind: this.refs.kind.value.trim(),
+            language: this.refs.language.value.trim(),
+            license: this.refs.license.value.trim(),
+            user: this.refs.user.getSelected().split(','),
+            tag: this.refs.tag.value.trim(),
+            // revisions: $('.ui.checkbox.revisions').checkbox('is checked')
+            sort: (params && params.sort) ? params.sort : ''
+        };
 
-        // determine given params
-        if(this.refs.keywords && this.refs.keywords.getSelected().trim()){
-            queryparams.q = this.refs.keywords.getSelected().trim();
-        }
-        else{
-            queryparams.q = encodeURIComponent('*:*');
-        }
-
-        if(this.refs.entity && this.refs.entity.value){
-            queryparams.entity = this.refs.entity.value;
-        }
-
-        if(this.refs.language && this.refs.language.value){
-            queryparams.language = this.refs.language.value;
-        }
-
-        // if(this.refs.group && this.refs.group.value){
-        //     queryparams.group = this.refs.group.value;
-        // }
-
-        if(this.refs.fields && this.refs.fields.value){
-            queryparams.fields = this.refs.fields.value;
-        }
-
-        if(this.refs.users && this.refs.users.getSelected()){
-            queryparams.users = this.refs.users.getSelected();
-        }
-
-        if(this.refs.tags && this.refs.tags.value){
-            queryparams.tags = this.refs.tags.value.trim();
-        }
-
-        if(this.refs.license && this.refs.license.value){
-            queryparams.license = this.refs.license.value.trim();
-        }
-
-        if(this.refs.revisions && this.refs.revisions.value){
-            queryparams.revisions = $('.ui.checkbox.revisions').checkbox('is checked');
-        }
-
-        // encode extra parameters paased as arguments e.g. sort param
-        if(params && params.sort){
-            queryparams.sort = params.sort;
-        }
-
-        return this.encodeParams(queryparams);
-    }
-    encodeParams(queryparams){
+        // encode params
         let encodedParams = '';
-        for (let key in queryparams) {
-            if(queryparams[key].trim() === ''){
-                continue;
+        for(let key in queryparams){
+            if(queryparams[key] instanceof Array){
+                for(let el in queryparams[key]){
+                    encodedParams += this.encodeParam(encodedParams, key, queryparams[key][el]);
+                }
             }
-            if(encodedParams){
-                encodedParams += '&';
+            else{
+                encodedParams += this.encodeParam(encodedParams, key, queryparams[key]);
             }
-            encodedParams += encodeURIComponent(key) + '=' + encodeURIComponent(queryparams[key]);
         }
 
         return encodedParams;
     }
+    encodeParam(encodedParams, key, value){
+        if(value.trim() === '')
+            return '';
+
+        return ((encodedParams) ? '&' : '')
+                + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+    }
     handleRedirect(params){
-        if(this.refs.keywords.getSelected().trim() === ''){
-            return;
-        }
         this.context.executeAction(navigateAction, {
             url:  '/search/' + this.getEncodedParams(params)
         });
@@ -159,9 +127,14 @@ class SearchPanel extends React.Component {
         else if(this.props.SearchParamsStore.queryparams){
             searchResultsDiv = <SearchResultsPanel
                 results={this.props.SearchResultsStore.docs}
+                spellcheck={this.props.SearchResultsStore.spellcheck}
                 numFound={this.props.SearchResultsStore.numFound}
                 sort={this.props.SearchParamsStore.sort}
                 handleRedirect={this.handleRedirect.bind(this)}
+                queryparams={this.props.SearchParamsStore.queryparams}
+                loadMore={this.props.SearchResultsStore.loadMore}
+                loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
+                start={this.props.SearchResultsStore.start}
             />;
         }
         return (
@@ -172,12 +145,12 @@ class SearchPanel extends React.Component {
                         <form className="ui form success">
                             <div className="field">
                                 <label htmlFor="SearchTerm">Search Term</label>
-                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.searchstring)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
+                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                             </div>
                             <div className="four fields">
                                 <div className="field">
-                                    <label htmlFor="fields">Search field</label>
-                                    <select name='fields' id='fields' onChange={this.onChange.bind(this)} value={this.state.fields} multiple='' className='ui fluid search dropdown' ref='fields'>
+                                    <label htmlFor="field">Search field</label>
+                                    <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
                                       <option value=' '>Select Search field</option>
                                       <option value='title'>Title</option>
                                       <option value='description'>Description</option>
@@ -187,8 +160,8 @@ class SearchPanel extends React.Component {
                                 </div>
 
                                 <div className="field">
-                                    <label htmlFor="entity">Entity</label>
-                                    <select name='entity' id='entity' onChange={this.onChange.bind(this)} value={this.state.entity} multiple='' className='ui fluid search dropdown' ref='entity'>
+                                    <label htmlFor="kind">Entity</label>
+                                    <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
                                       <option value=' '>Select Entity</option>
                                       <option value='slide'>Slide</option>
                                       <option value='deck'>Deck</option>
@@ -199,13 +172,13 @@ class SearchPanel extends React.Component {
                                     <label htmlFor="language">Language</label>
                                     <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                       <option value=' '>Select Language</option>
-                                      <option value='en'>English</option>
-                                      <option value='de'>German</option>
-                                      <option value='el'>Greek</option>
-                                      <option value='it'>Italian</option>
-                                      <option value='pt'>Portuguese</option>
-                                      <option value='sr'>Serbian</option>
-                                      <option value='es'>Spanish</option>
+                                      <option value='en_GB'>English</option>
+                                      <option value='de_DE'>German</option>
+                                      <option value='el_GR'>Greek</option>
+                                      <option value='it_IT'>Italian</option>
+                                      <option value='pt_PT'>Portuguese</option>
+                                      <option value='sr_RS'>Serbian</option>
+                                      <option value='es_ES'>Spanish</option>
                                     </select>
                                 </div>
 
@@ -224,12 +197,12 @@ class SearchPanel extends React.Component {
                             <div className="two fields">
                                 <div className="field">
                                     <label htmlFor="users_input_field">User</label>
-                                    <UsersInput ref='users' placeholder='Select Users' />
+                                    <UsersInput ref='user' placeholder='Select Users' />
                                 </div>
 
                                 <div className="field disabled">
-                                    <label htmlFor="tags">Tags</label>
-                                    <input name='tags' id='tags' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tags} placeholder="Tags" type="text" ref='tags' tabIndex="-1"></input>
+                                    <label htmlFor="tag">Tags</label>
+                                    <input name='tag' id='tag' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tag} placeholder="Tags" type="text" ref='tag' tabIndex="-1"></input>
                                 </div>
 
                             </div>
