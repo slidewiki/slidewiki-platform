@@ -91,7 +91,7 @@ class ReportModal extends React.Component {
 
             //let toEmail = 'luis.daniel.fernandes.rotger@iais.fraunhofer.de';
 
-            let toEmail = 'sednanref2004@gmail.com';
+            let toEmail = 'ka.de.graaf@vu.nl';
 
             let link = "mailto:" + toEmail
                 // + "?cc=myCCaddress@example.com"
