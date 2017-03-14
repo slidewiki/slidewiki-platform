@@ -21,9 +21,10 @@ export default function forkDeck(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('FORK_DECK_FAILURE', err);
             } else {
+                console.log(payload);
                 context.dispatch('FORK_DECK_SUCCESS', res);
-                let newSid = res._id + '-' + res.revisions[0].id;
-                let newURL = '/deck/' + newSid;
+                let newId = res.root_deck;
+                let newURL = '/deck/' + newId;
                 //update the URL
                 context.executeAction(navigateAction, {
                     url: newURL
