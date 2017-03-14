@@ -59,9 +59,6 @@ export default {
         'search': {
             uri: 'https://searchservice.experimental.slidewiki.org'
         },
-        'image': {
-            uri: 'https://imageservice.experimental.slidewiki.org'
-        },
         'file': {
             uri: 'https://fileservice.experimental.slidewiki.org'
         },

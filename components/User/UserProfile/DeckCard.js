@@ -12,7 +12,7 @@ class DeckCard extends React.Component {
     render() {
         // console.log('DeckCard: cardContent', this.props);
 
-        let thumbnailURL = Microservices.file.uri + '/' + (this.props.userid || 0) + '/thumbnails/';
+        let thumbnailURL = Microservices.file.uri + '/slideThumbnail/';
         if (this.props.cardContent.firstSlide)
             thumbnailURL += this.props.cardContent.firstSlide + '.png';
         else
