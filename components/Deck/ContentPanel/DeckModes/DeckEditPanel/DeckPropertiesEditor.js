@@ -17,7 +17,7 @@ import { timeSince } from '../../../../../common';
 import UserPicture from '../../../../common/UserPicture';
 import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import fork from '../../../../../actions/deckedit/fork';
-
+import TagsStore from '../../../../../stores/TagsStore';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -199,7 +199,6 @@ class DeckPropertiesEditor extends React.Component {
                 description: this.state.description,
                 theme: this.state.theme,
                 license: this.state.license,
-                tags: [],
                 selector: this.props.selector,
                 editors: {
                     old: this.props.DeckEditStore.originalEditors,
@@ -207,7 +206,8 @@ class DeckPropertiesEditor extends React.Component {
                         users: users,
                         groups: groups
                     }
-                }
+                },
+                tags: TagsStore.tags
             });
         }
     }
@@ -559,7 +559,8 @@ DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, Use
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
+        TagsStore: context.getStore(TagsStore).getState()
     };
 });
 

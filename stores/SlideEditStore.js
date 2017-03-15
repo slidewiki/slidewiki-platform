@@ -17,18 +17,11 @@ class SlideEditStore extends BaseStore {
         if (payload.slide.revisions !== undefined)
         {
             this.id = payload.slide.id;
-            this.title = payload.slide.revisions[payload.slide.revisions.length-1].title;
-            if(!this.title){
-                this.title = ' ';
-            }
-            this.content = payload.slide.revisions[payload.slide.revisions.length-1].content;
-            if(!this.content){
-                this.content = ' ';
-            }
-            this.speakernotes = payload.slide.revisions[payload.slide.revisions.length-1].speakernotes;
-            if(!this.speakernotes){
-                this.speakernotes = ' ';
-            }
+            let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
+            this.title = lastRevision.title? lastRevision.title: ' ';
+            this.content = lastRevision.content? lastRevision.content: ' ';
+            this.speakernotes = lastRevision.speakernotes? lastRevision.speakernotes: ' ';
+
             this.emitChange();
         }
         else
