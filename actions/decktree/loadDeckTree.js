@@ -37,7 +37,7 @@ export default function loadDeckTree(context, payload, done) {
         };
         if (res && res.fork !== undefined)
             permissions = JSON.parse(JSON.stringify(res));
-        console.log('action loadDeckTree:', payload);
+        // console.log('action loadDeckTree:', payload);
         log.info(context, 'Got permissions for '+payload2.sid+' which are '+JSON.stringify(permissions));
         payload.params.permissions = permissions;
         //runFetchTree flag may be passed through the navigate action to force deck tree fetch

@@ -9,7 +9,7 @@ const common = require('../common.js');
 
 export default function saveDeckRevision(context, payload, done) {
     log.info(context);
-    console.log('action saveDeckRevision: got payload', payload);
+    // console.log('action saveDeckRevision: got payload', payload);
     //enrich with user id
     const userid = context.getStore(UserProfileStore).userid;
 

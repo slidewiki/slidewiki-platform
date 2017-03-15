@@ -7,7 +7,7 @@ const common = require('../common.js');
 
 export default function saveDeckEdit(context, payload, done) {
     log.info(context);
-    console.log('action saveDeckEdit: got payload', payload);
+    // console.log('action saveDeckEdit: got payload', payload);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 

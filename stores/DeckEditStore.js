@@ -38,7 +38,7 @@ class DeckEditStore extends BaseStore {
         this.authorizedGroups = JSON.parse(JSON.stringify(payload.deckProps.editors.groups));
         // this.originalEditors = common.clone(payload.deckProps.editors);
         this.originalEditors = JSON.parse(JSON.stringify(payload.deckProps.editors));
-        console.log('Now we have new origin editors:', this.originalEditors);
+        // console.log('Now we have new origin editors:', this.originalEditors);
 
         this.emitChange();
     }

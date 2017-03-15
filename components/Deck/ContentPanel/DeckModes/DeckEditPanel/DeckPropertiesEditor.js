@@ -227,7 +227,7 @@ class DeckPropertiesEditor extends React.Component {
 
     handleClickRemoveUser(member, event) {
         event.preventDefault();
-        console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
+        // console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
 
         let users = this.props.DeckEditStore.authorizedUsers;
 
