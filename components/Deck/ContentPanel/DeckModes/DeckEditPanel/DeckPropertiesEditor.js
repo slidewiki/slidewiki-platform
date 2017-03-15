@@ -346,6 +346,8 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
+        let readonly = (this.props.DeckEditStore.permissions.fork && !this.props.DeckEditStore.permissions.edit && !this.props.DeckEditStore.permissions.admin);
+
         //CSS
         let titleFieldClass = classNames({
             'required': true,
@@ -403,7 +405,8 @@ class DeckPropertiesEditor extends React.Component {
         </select>;
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
-                                     onChange={this.handleChange.bind(this, 'license')}>
+                                     onChange={this.handleChange.bind(this, 'license')}
+                                     readOnly={readonly}>
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>
             <option value="CC BY-SA">CC BY-SA</option>
@@ -480,7 +483,7 @@ class DeckPropertiesEditor extends React.Component {
                                 </label>
                                 <input type="text" name="deck-title" value={this.state.title}
                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                       aria-required="true"/>
+                                       aria-required="true" readOnly={readonly}/>
 
                             </div>
                             <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
@@ -494,7 +497,8 @@ class DeckPropertiesEditor extends React.Component {
                             <label id="deck-description">Description</label>
                             <textarea rows="4" aria-labelledby="deck-description"
                                       value={this.state.description}
-                                      onChange={this.handleChange.bind(this, 'description')}/>
+                                      onChange={this.handleChange.bind(this, 'description')}
+                                      readOnly={readonly}/>
                         </div>
                         <div className="two fields">
                             <div className="field disabled">
