@@ -237,7 +237,7 @@ export default {
                 body: {
                     user: params.userid.toString()
                 }
-            }).then((deck) => callback(false, deck))
+            }).then((res) => callback(false, res))
             .catch((err) => callback(err));
         }
     }
