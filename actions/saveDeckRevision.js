@@ -5,9 +5,11 @@ import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from './error/serviceUnavailable';
 const log = require('./log/clog');
+const common = require('../common.js');
 
 export default function saveDeckRevision(context, payload, done) {
     log.info(context);
+    console.log('action saveDeckRevision: got payload', payload);
     //enrich with user id
     const userid = context.getStore(UserProfileStore).userid;
 
@@ -68,18 +70,30 @@ export default function saveDeckRevision(context, payload, done) {
                 // context.executeAction(serviceUnavailable, payload, done);
                 done();
             } else {
-                if (payload.editors.old.users !== payload.editors.new.users || payload.editors.old.groups !== payload.editors.new.groups) {
+                if (!common.arraysEqual(payload.editors.old.users, payload.editors.new.users) || !common.arraysEqual(payload.editors.old.groups, payload.editors.new.groups)) {
                     let payload2 = {
                         jwt: context.getStore(UserProfileStore).jwt,
-                        editors: payload.editors.new,
+                        editors: {},
                         deckId: res._id + '-' + res.revisions[0].id
                     };
+                    payload2.editors.users = payload.editors.new.users.reduce((array, user) => {
+                        let userCopy = JSON.parse(JSON.stringify(user));
+                        delete userCopy.username;
+                        delete userCopy.picture;
+                        array.push(userCopy);
+                        return array;
+                    }, []);
+                    payload2.editors.groups = payload.editors.new.groups.reduce((array, group) => {
+                        let groupCopy = JSON.parse(JSON.stringify(group));
+                        delete groupCopy.name;
+                        array.push(groupCopy);
+                        return array;
+                    }, []);
                     context.service.update('deck.updateEditors', payload2, null, {timeout: 30 * 1000}, (err, res2) => {
                         if (err) {
-                            context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', '');
-                            context.executeAction(navigateAction, {
-                                url: '/'
-                            });
+                            context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
+                            context.dispatch('SAVE_DECK_REVISION_FAILURE', err);
+                            log.error(context, {filepath: __filename, err: err});
                             done();
                         }
                         else {

@@ -128,7 +128,8 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
-                    console.log('user dropdown select', name, value);
+                    let data = JSON.parse(decodeURIComponent(value));
+                    // console.log('user dropdown select', name, value, data);
 
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
@@ -137,11 +138,10 @@ class DeckPropertiesEditor extends React.Component {
                     if (users === undefined || users === null)
                         users = [];
 
-                    console.log('trying to add', name, 'to', users);
+                    // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
-                        return member.username === name && member.id === parseInt(value);
-                    }) === -1 && name !== this.props.UserProfileStore.username) {
-                        let data = JSON.parse(decodeURIComponent(value));
+                        return member.id === parseInt(data.userid);
+                    }) === -1 && parseInt(value) !== this.props.UserProfileStore.userid) {
                         users.push({
                             username: name,
                             id: parseInt(data.userid),
@@ -266,14 +266,17 @@ class DeckPropertiesEditor extends React.Component {
     getListOfAuthorized() {
         let list_authorized = [];
         if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
+            let counter = 1;
             this.props.DeckEditStore.authorizedUsers.forEach((user) => {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
                 let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago      ') : '';
+                const key = 'user_' + counter + user.username + user.id;
+                // console.log('New key for authorized user:', key, user);
                 list_authorized.push(
                   (
-                    <div className="item" key={user.username + user.id} >
+                    <div className="item" key={key} >
                       <div className="ui grid">
                         <div className="one wide column">
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
@@ -291,6 +294,7 @@ class DeckPropertiesEditor extends React.Component {
                     </div>
                   )
                 );
+                counter++;
             });
         }
         list_authorized.sort((a, b) => {
@@ -308,7 +312,7 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 temp_list.push(
                   (
-                    <div className="item" key={group.id + group.name} >
+                    <div className="item" key={'group_' + group.id + group.name} >
                       <div className="ui grid">
                         <div className="one wide column">
                           <i className="large group middle aligned icon"></i>
@@ -406,7 +410,7 @@ class DeckPropertiesEditor extends React.Component {
         </select>;
 
         let groupsArray = [];
-        if (this.props.UserProfileStore.user.groups)
+        if (this.props.UserProfileStore.user.groups) {
             this.props.UserProfileStore.user.groups.forEach((group) => {
                 let data = {
                     id: group._id,
@@ -416,6 +420,7 @@ class DeckPropertiesEditor extends React.Component {
                     <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
                 ));
             });
+        }
         let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
                                      ref="AddGroups">
                                      <input type="hidden" name="groups" />

@@ -1,4 +1,5 @@
 import {BaseStore} from 'fluxible/addons';
+const common = require('../common.js');
 
 class DeckEditStore extends BaseStore {
     constructor(dispatcher) {
@@ -33,9 +34,11 @@ class DeckEditStore extends BaseStore {
         this.permissions = payload.permissions;
 
         //edit rights adoptions
-        this.authorizedUsers = payload.deckProps.editors.users;
-        this.authorizedGroups = payload.deckProps.editors.groups;
-        this.originalEditors = payload.deckProps.editors;
+        this.authorizedUsers = JSON.parse(JSON.stringify(payload.deckProps.editors.users));
+        this.authorizedGroups = JSON.parse(JSON.stringify(payload.deckProps.editors.groups));
+        // this.originalEditors = common.clone(payload.deckProps.editors);
+        this.originalEditors = JSON.parse(JSON.stringify(payload.deckProps.editors));
+        console.log('Now we have new origin editors:', this.originalEditors);
 
         this.emitChange();
     }
