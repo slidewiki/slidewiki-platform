@@ -9,7 +9,7 @@ export default function setLocale(req, res, next) {
     console.log('Detected locale (from browser) is %s', req.locale);
 
     try {
-        require('../intl/' + req.locale);
+        require('../intl/' + req.locale +'.json');
 
     }
     catch (err){
@@ -21,7 +21,7 @@ export default function setLocale(req, res, next) {
 
     if (req.query.locale) {
         try {
-            require('../intl/' + req.query.locale);
+            require('../intl/' + req.query.locale +'.json');
             // But only the supported ones!
             if (locales.indexOf(req.query.locale) > -1) {
                 req.locale = req.query.locale;
@@ -37,7 +37,7 @@ export default function setLocale(req, res, next) {
     // Or by setting a `locale` cookie
     else if (req.cookies.locale) {
         try {
-            require('../intl/' + req.cookies.locale);
+            require('../intl/' + req.cookies.locale +'.json');
             if (locales.indexOf(req.cookies.locale) > -1) {
                 req.locale = req.cookies.locale;
                 console.log('Locale has been set from cookie: %s', req.locale);

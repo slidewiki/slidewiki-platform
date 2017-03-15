@@ -25,7 +25,7 @@ let renderApp = function(req, res, context){
 
     const Root = app.getComponent();
 
-    const messages = require('../intl/'+req.locale).messages;
+    const messages = require('../intl/'+req.locale +'.json');
 
     // Render the Root to string
     const content = ReactDOM.renderToString(
@@ -57,17 +57,11 @@ export default function handleServerRendering(req, res, next){
 
     const context =  app.createContext({
         req: req,
-        res: res  //for userStoragePlugin
-        //, // The fetchr plugin depends on this
-        // xhrContext: {
-        //     _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
-        // }
+        res: res
     });
 
     debug('Executing loadIntl action');
-    context.getActionContext().executeAction(loadIntlMessages, {
-        locale: req.locale
-    }, (err) => {
+    context.getActionContext().executeAction(loadIntlMessages, req.locale, (err) => {
         if (err) {
             err.statusCode = 503;
             let html = '<h1>Not found locale</h1>';

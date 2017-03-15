@@ -145,7 +145,7 @@ function renderApp(locale) {
         const mountNode = document.getElementById('app');
 
         const Root = app.getComponent();
-        const messages = require('./intl/'+locale).messages;
+        const messages = require('./intl/'+locale+'.json');
         ReactDOM.render(
             <IntlProvider locale={ locale } messages={messages}>
             <Root context={ context.getComponentContext() } />

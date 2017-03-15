@@ -10,7 +10,7 @@ class IntlStore extends BaseStore {
         this.currentLocale = '';
     }
 
-    handleLoad(payload) {
+    handleLoad(payload) {        
         this.messages = payload.messages;
         this.locales = payload.locales;
         this.currentLocale = payload.locales[0];

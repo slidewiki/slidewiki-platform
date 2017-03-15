@@ -3,6 +3,7 @@ let path = require('path');
 let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 let Visualizer = require('webpack-visualizer-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let ReactIntlPlugin = require('react-intl-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
@@ -13,7 +14,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react', 'react-dom', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
+            'react-intl', 'react', 'react-dom', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
         ]
     },
     output: {
@@ -26,8 +27,8 @@ let webpackConfig = {
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules\/(?!identicons)/ ,
-                loader: 'babel-loader',
-                
+                loader: 'babel-loader'
+
             },
             {
                 test: /\.css$/,
@@ -45,6 +46,8 @@ let webpackConfig = {
         setImmediate: false
     },
     plugins: [
+        //collect all messages into one json
+        new ReactIntlPlugin(),
         // css files from the extract-text-plugin loader
         new ExtractTextPlugin({
             filename: '../css/vendor.bundle.css',
