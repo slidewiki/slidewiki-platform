@@ -12,6 +12,11 @@ class DeckTreeStore extends BaseStore {
         this.flatTree = Immutable.fromJS({});
         this.error = 0;
         this.isForkingPossible = false;
+        this.permissions = {
+            fork: false,
+            edit: false,
+            admin: false
+        };
 
         //used to check if the selector is valid and refers to a node that belongs to this deck tree
         this.isSelectorValid = true;
@@ -45,6 +50,9 @@ class DeckTreeStore extends BaseStore {
         this.updatePrevNextSelectors();
         //reset error state
         this.error = 0;
+
+        this.permissions = payload.permissions || this.permissions;
+
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -240,6 +248,9 @@ class DeckTreeStore extends BaseStore {
         let oldSelector = this.selector;
         this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
         this.switchSelector(oldSelector, this.selector);
+
+        this.permissions = args.permissions || this.permissions;
+
         this.emitChange();
     }
     toggleTreeNode(selector) {
@@ -491,7 +502,8 @@ class DeckTreeStore extends BaseStore {
             nextSelector: this.nextSelector,
             error: this.error,
             isForkingPossible: this.isForkingPossible,
-            isSelectorValid: this.isSelectorValid
+            isSelectorValid: this.isSelectorValid,
+            permissions: this.permissions
         };
     }
     dehydrate() {
@@ -506,6 +518,7 @@ class DeckTreeStore extends BaseStore {
         this.error  = state.error;
         this.isForkingPossible = state.isForkingPossible;
         this.isSelectorValid = state.isSelectorValid;
+        this.permissions = state.permissions;
     }
     handleDeckTreeError(err){
         this.error = err;

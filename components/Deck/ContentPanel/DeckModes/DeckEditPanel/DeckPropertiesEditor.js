@@ -6,8 +6,6 @@ import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
-import UserProfileStore from '../../../../../stores/UserProfileStore';
-import ContentStore from '../../../../../stores/ContentStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
@@ -141,7 +139,7 @@ class DeckPropertiesEditor extends React.Component {
                     // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
                         return member.id === parseInt(data.userid);
-                    }) === -1 && parseInt(value) !== this.props.UserProfileStore.userid) {
+                    }) === -1 && parseInt(value) !== this.props.userid) {
                         users.push({
                             username: name,
                             id: parseInt(data.userid),
@@ -413,8 +411,8 @@ class DeckPropertiesEditor extends React.Component {
         </select>;
 
         let groupsArray = [];
-        if (this.props.UserProfileStore.user.groups) {
-            this.props.UserProfileStore.user.groups.forEach((group) => {
+        if (this.props.groups) {
+            this.props.groups.forEach((group) => {
                 let data = {
                     id: group._id,
                     name: group.name
@@ -555,11 +553,9 @@ DeckPropertiesEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, UserProfileStore], (context, props) => {
+DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore], (context, props) => {
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState(),
         TagsStore: context.getStore(TagsStore).getState()
     };
 });

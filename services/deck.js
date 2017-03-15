@@ -86,6 +86,19 @@ export default {
                 //console.log(err);
                 callback({msg: 'Error in resolving promises', content: err}, {});
             });
+        } else if (resource === 'deck.permissions') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.sid + '/permissions',
+                headers: { '----jwt----': args.jwt },
+                json: true
+            })
+            .then((body) => {
+                console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/permissions', body);
+
+                callback(null, body);
+            })
+            .catch((err) => callback(err));
         } else if (resource === 'deck.properties') { //this is only used for deck edit - thus we call all the api routes with one service call
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
@@ -215,8 +228,12 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'deck.update') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            if (params.tags.length === 1 && params.tags[0].length === 0)
-                params.tags = undefined;
+            try {
+                if (params.tags.length === 1 && params.tags[0].length === 0)
+                    params.tags = undefined;
+            } catch (e) {
+
+            }
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
@@ -244,8 +261,12 @@ export default {
                 'stype': params.selector.stype
             };
 
-            if (params.tags.length === 1 && params.tags[0].length === 0)
-                params.tags = undefined;
+            try {
+                if (params.tags.length === 1 && params.tags[0].length === 0)
+                    params.tags = undefined;
+            } catch (e) {
+
+            }
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,

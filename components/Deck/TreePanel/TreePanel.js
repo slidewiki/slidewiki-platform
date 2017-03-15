@@ -13,7 +13,6 @@ import saveTreeNodeWithRevisionCheck from '../../../actions/decktree/saveTreeNod
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
-import checkForkingRights from '../../../actions/decktree/checkForkingRights';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 
 class TreePanel extends React.Component {
@@ -119,10 +118,9 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            'disabled': (!this.props.DeckTreeStore.isForkingPossible),
+            'disabled': (!this.props.DeckTreeStore.permissions.fork),
             'button': true
         });
-        this.context.executeAction(checkForkingRights, this.props.DeckTreeStore.isForkingPossible);
 
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
@@ -168,7 +166,8 @@ class TreePanel extends React.Component {
                               onSave={this.handleSaveNode.bind(this)}
                               onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                               onMoveNode={this.handleMoveNode.bind(this)}
-                              username={this.props.UserProfileStore.username}/>
+                              username={this.props.UserProfileStore.username}
+                              permissions={this.props.DeckTreeStore.permissions}/>
                     </div>
                 </div>
             </div>
