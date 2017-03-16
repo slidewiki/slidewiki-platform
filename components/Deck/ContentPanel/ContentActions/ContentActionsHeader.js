@@ -35,18 +35,20 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const addSlideClass = classNames({
-            'item ui small basic left attached button': true
+            'item ui small basic left attached button': true,
+            'disabled': !(this.props.DeckTreeStore.permissions.admin || this.props.DeckTreeStore.permissions.edit)
         });
         const addDeckClass = classNames({
-            'item ui small basic left attached button': true
+            'item ui small basic left attached button': true,
+            'disabled': !(this.props.DeckTreeStore.permissions.admin || this.props.DeckTreeStore.permissions.edit)
         });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck'
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || !(this.props.DeckTreeStore.permissions.admin || this.props.DeckTreeStore.permissions.edit)
         });
-        const dueleteItemClass = classNames({
+        const deleteItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || !(this.props.DeckTreeStore.permissions.admin || this.props.DeckTreeStore.permissions.edit)
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
@@ -80,7 +82,7 @@ class ContentActionsHeader extends React.Component {
                             <i className="grey large copy icon"></i>
 
                         </button>
-                        <button className={dueleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)} type="button" aria-label="Delete" data-tooltip="Delete">
+                        <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)} type="button" aria-label="Delete" data-tooltip="Delete">
                             <i className="red large trash icon"></i>
                         </button>
                         {/*

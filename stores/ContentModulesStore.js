@@ -5,7 +5,7 @@ class ContentModulesStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.moduleType = 'questions';
-        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0};
+        this.moduleCount = {'questions': 0, 'datasource': 0, 'comments': 0, 'tags': 0};
         this.selector = {};
     }
     updateContentModules(payload) {
@@ -21,12 +21,25 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount.datasource = payload.count;
         this.emitChange();
     }
+    updateTagCount(payload) {
+        let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
+        this.moduleCount.tags = lastRevision.tags? 
+            lastRevision.tags.length : 0;
+
+        this.emitChange();
+    }
+    updateTagCountDeck(payload) {
+        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
+        this.moduleCount.tags = lastRevision.tags?
+            lastRevision.tags.length : 0;
+
+        this.emitChange();
+    }
     updateQuestionsCount(payload){
         this.moduleCount.questions = payload.count;
         this.emitChange();
     }
     updateCommentsCount(payload) {
-        console.log('updateCommentsCount');
         this.moduleCount.comments = payload.count;
         this.emitChange();
     }
@@ -35,6 +48,14 @@ class ContentModulesStore extends BaseStore {
         if (isLocalStorageOn()) {
             localStorage.setItem('commentsCount', this.moduleCount.comments);// save this to compare it later with rehydrated data
         }
+        this.emitChange();
+    }
+    addTagSuccess() {
+        this.moduleCount.tags++;
+        this.emitChange();
+    }
+    removeTagSuccess() {
+        this.moduleCount.tags--;
         this.emitChange();
     }
     updateDataSourcesSuccess(payload) {
@@ -70,7 +91,11 @@ ContentModulesStore.handlers = {
     'LOAD_AMOUNT_OF_DATA_SOURCES_SUCCESS': 'updateDataSourceCount',
     'LOAD_AMOUNT_OF_QUESTIONS_SUCCESS': 'updateQuestionsCount',
     'LOAD_AMOUNT_OF_COMMENTS_SUCCESS': 'updateCommentsCount',
+    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateTagCount',
+    'LOAD_DECK_CONTENT_SUCCESS': 'updateTagCountDeck',
     'ADD_REPLY_SUCCESS': 'addCommentSuccess',
+    'REMOVE_TAG': 'removeTagSuccess',
+    'NEW_TAG': 'addTagSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
     'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess'

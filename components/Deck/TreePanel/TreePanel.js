@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import Tree from './Tree';
@@ -112,6 +113,15 @@ class TreePanel extends React.Component {
             overflowY: 'auto',
             padding: 5
         };
+
+        let classes_forksbtn = classNames({
+            'ui': true,
+            'basic': true,
+            'attached': true,
+            'disabled': (!this.props.DeckTreeStore.permissions.fork),
+            'button': true
+        });
+
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
@@ -128,10 +138,10 @@ class TreePanel extends React.Component {
                                  onClick={this.handleTheme.bind(this)}>
                                 <i className="theme black icon"></i>
                             </div>
-                            <div className="ui basic attached button" aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
+                            <div className={classes_forksbtn} aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
                                 <i className="fork black icon"></i>
                             </div>
-                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate" 
+                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate"
                                  onClick={this.handleTranslation.bind(this)}>
                                 <i className="translate black icon"></i>
                             </div>
@@ -156,7 +166,8 @@ class TreePanel extends React.Component {
                               onSave={this.handleSaveNode.bind(this)}
                               onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                               onMoveNode={this.handleMoveNode.bind(this)}
-                              username={this.props.UserProfileStore.username}/>
+                              username={this.props.UserProfileStore.username}
+                              permissions={this.props.DeckTreeStore.permissions}/>
                     </div>
                 </div>
             </div>

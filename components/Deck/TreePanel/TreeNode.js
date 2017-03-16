@@ -71,7 +71,7 @@ class TreeNode extends React.Component {
 
     handleRenameClick(selector, e) {
         //only if user is logged in
-        if (this.props.username !== '') {
+        if (this.props.username !== '' || !(this.props.permissions.admin || this.props.permissions.edit)) {
             this.props.onRename(selector);
             e.stopPropagation();
         }
@@ -131,7 +131,7 @@ class TreeNode extends React.Component {
                                           onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
                                           onMoveNode={self.props.onMoveNode} mode={self.props.mode}
                                           page={self.props.page} rootNode={self.props.rootNode}
-                                          username={self.props.username}/>;
+                                          username={self.props.username} permissions={self.props.permissions}/>;
         }
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
@@ -226,7 +226,7 @@ class TreeNode extends React.Component {
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}>  </i>
                     {nodeDIV}
-                    {this.props.username === '' ? '' : actionSignifier}
+                    {(this.props.username === '' || !(this.props.permissions.admin || this.props.permissions.edit)) ? '' : actionSignifier}
                 </div>
                 {actionBtns}
                 {childNodesDIV}

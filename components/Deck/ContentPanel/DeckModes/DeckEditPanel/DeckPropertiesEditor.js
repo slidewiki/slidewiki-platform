@@ -1,13 +1,21 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
-import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
-
+import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
+import updateDeckEditViewState from '../../../../../actions/updateDeckEditViewState';
+import GroupDetailsModal from './GroupDetailsModal';
+import { timeSince } from '../../../../../common';
+import UserPicture from '../../../../common/UserPicture';
+import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
+import fork from '../../../../../actions/deckedit/fork';
+import TagsStore from '../../../../../stores/TagsStore';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -16,13 +24,22 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     getStateFromProps(props) {
+        let editors = props.deckProps.editors;
+        if (editors === undefined)
+            editors = {
+                users: [],
+                groups: []
+            };
+
         return {
             validationErrors: {},
             title: props.deckProps.title || '',
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            license: props.deckProps.license || ''
+            license: props.deckProps.license || '',
+            users: editors.users,
+            groups: editors.groups
         };
     }
 
@@ -31,15 +48,122 @@ class DeckPropertiesEditor extends React.Component {
         if (newProps.deckProps !== this.props.deckProps) {
             this.setState(this.getStateFromProps(newProps));
         }
+
+        if (this.props.DeckEditStore.viewstate === 'loading') {
+            if (newProps.DeckEditStore.viewstate === 'error') {
+                swal({
+                    title: 'Error',
+                    text: 'Unknown error while saving.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                })
+                .catch();
+            }
+            else if (newProps.DeckEditStore.viewstate === 'success') {
+                swal({
+                    title: 'Success',
+                    text: 'The deck was saved.',
+                    type: 'success',
+                    confirmButtonText: 'Confirm',
+                    confirmButtonClass: 'positive ui button',
+                    allowEscapeKey: true,
+                    allowOutsideClick: true,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                })
+                .catch();
+            }
+        }
     }
 
-    handleCancel() {
+    componentDidUpdate() {
+        this.handleDropboxes();
+    }
+
+    handleDropboxes() {
+        $(ReactDOM.findDOMNode(this.refs.AddGroups))
+            .dropdown({
+                action: (someText, dataValue, source) => {
+                    // console.log('group dropdown select', dataValue);
+
+                    $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('clear');
+                    $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('hide');
+
+                    let groups = this.props.DeckEditStore.authorizedGroups;
+                    if (groups === undefined || groups === null)
+                        groups = [];
+
+                    let data = JSON.parse(decodeURIComponent(dataValue));
+                    if (groups.findIndex((group) => {
+                        return group.id === parseInt(data.id);
+                    }) === -1) {
+                        groups.push({
+                            name: data.name,
+                            id: parseInt(data.id),
+                            joined: (new Date()).toISOString()
+                        });
+                    }
+
+                    this.context.executeAction(updateAuthorizedGroups, groups);
+
+                    return true;
+                }
+            });
+
+        $(ReactDOM.findDOMNode(this.refs.AddUser))
+            .dropdown({
+                apiSettings: {
+                    url: Microservices.user.uri + '/information/username/search/{query}'
+                },
+                saveRemoteData: false,
+                action: (name, value, source) => {
+                    let data = JSON.parse(decodeURIComponent(value));
+                    // console.log('user dropdown select', name, value, data);
+
+                    $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
+                    $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
+
+                    let users = this.props.DeckEditStore.authorizedUsers;
+                    if (users === undefined || users === null)
+                        users = [];
+
+                    // console.log('trying to add', name, 'to', users);
+                    if (users.findIndex((member) => {
+                        return member.id === parseInt(data.userid);
+                    }) === -1 && parseInt(value) !== this.props.userid) {
+                        users.push({
+                            username: name,
+                            id: parseInt(data.userid),
+                            joined: (new Date()).toISOString(),
+                            picture: data.picture
+                        });
+                    }
+
+                    this.context.executeAction(updateAuthorizedUsers, users);
+
+                    return true;
+                }
+            });
+    }
+
+    handleCancel(event) {
+        event.preventDefault();
         this.context.executeAction(navigateAction, {
             url: ContentUtil.makeNodeURL(this.props.selector, 'view')
         });
     }
 
-    handleSave(withNewRevision) {
+    handleSave(withNewRevision = false, event) {
+        event.preventDefault();
         const saveAction = withNewRevision ? saveDeckRevision : saveDeckEdit;
         let validationErrors = {}, isValid = true;
 
@@ -58,18 +182,14 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
+        let users = [], groups = [];
+        users = this.props.DeckEditStore.authorizedUsers;
+        groups = this.props.DeckEditStore.authorizedGroups;
+        // console.log('handleSave', users, groups, isValid);
+
         this.setState({validationErrors: validationErrors});
         if (isValid) {
-            swal({
-                title: 'Saving Deck Properties...',
-                text: '',
-                type: 'success',
-                timer: 1000,
-                showCloseButton: false,
-                showCancelButton: false,
-                allowEscapeKey: false,
-                showConfirmButton: false
-            });
+            this.context.executeAction(updateDeckEditViewState, 'loading');
             this.context.executeAction(saveAction, {
                 deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
                 title: this.state.title,
@@ -77,10 +197,26 @@ class DeckPropertiesEditor extends React.Component {
                 description: this.state.description,
                 theme: this.state.theme,
                 license: this.state.license,
-                tags: [],
-                selector: this.props.selector
+                selector: this.props.selector,
+                editors: {
+                    old: this.props.DeckEditStore.originalEditors,
+                    new: {
+                        users: users,
+                        groups: groups
+                    }
+                },
+                tags: TagsStore.tags
             });
         }
+    }
+
+    handleFork(event) {
+        event.preventDefault();
+
+        this.context.executeAction(fork, {
+            deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
+            selector: this.props.selector
+        });
     }
 
     handleChange(fieldName, event) {
@@ -89,13 +225,128 @@ class DeckPropertiesEditor extends React.Component {
         this.setState(stateChange);
     }
 
-    render() {
-        let userid = this.props.UserProfileStore.userid;
-        let isUserEditor = false;
-        if (userid != null && userid !== '' && this.props.DeckEditStore.editors.includes(userid)) {
-            isUserEditor = true;
-        }
+    handleClickRemoveUser(member, event) {
+        event.preventDefault();
+        // console.log('handleClickRemoveUser', member, this.props.DeckEditStore.authorizedUsers);
 
+        let users = this.props.DeckEditStore.authorizedUsers;
+
+        let newMembers = users.filter((member2) => {
+            return !(member2.username === member.username && member2.id === parseInt(member.id));
+        });
+
+        this.context.executeAction(updateAuthorizedUsers, newMembers);
+    }
+
+    handleClickRemoveGroup(group, event) {
+        event.preventDefault();
+        // console.log('handleClickRemoveGroup', group, this.props.DeckEditStore.authorizedGroups);
+
+        let groups = this.props.DeckEditStore.authorizedGroups;
+
+        let newGroups = groups.filter((group2) => {
+            return !(group2.name === group.name && group2.id === parseInt(group.id));
+        });
+
+        this.context.executeAction(updateAuthorizedGroups, newGroups);
+    }
+
+    handleClickShowGroupDetails(groupid, event) {
+        event.preventDefault();
+        // console.log('handleClickShowGroupDetails', groupid, this.props.DeckEditStore.authorizedGroups);
+
+        //call service
+        this.context.executeAction(loadUsergroup, {groupid: groupid});
+
+        $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
+    }
+
+    getListOfAuthorized() {
+        let list_authorized = [];
+        if (this.props.DeckEditStore.authorizedUsers !== undefined && this.props.DeckEditStore.authorizedUsers.length > 0) {
+            let counter = 1;
+            this.props.DeckEditStore.authorizedUsers.forEach((user) => {
+                let fct = (event) => {
+                    this.handleClickRemoveUser(user, event);
+                };
+                let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago      ') : '';
+                const key = 'user_' + counter + user.username + user.id;
+                // console.log('New key for authorized user:', key, user);
+                list_authorized.push(
+                  (
+                    <div className="item" key={key} >
+                      <div className="ui grid">
+                        <div className="one wide column">
+                          <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
+                        </div>
+                        <div className="fifteen wide column">
+                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                          <div className="description">
+                            {optionalText}
+                            <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+                counter++;
+            });
+        }
+        list_authorized.sort((a, b) => {
+            return (a.key < b.key) ? -1 : 1;
+        });
+
+        let temp_list = [];
+        if (this.props.DeckEditStore.authorizedGroups !== undefined && this.props.DeckEditStore.authorizedGroups.length > 0) {
+            this.props.DeckEditStore.authorizedGroups.forEach((group) => {
+                let fct = (event) => {
+                    this.handleClickRemoveGroup(group, event);
+                };
+                let fct2 = (event) => {
+                    this.handleClickShowGroupDetails(group.id, event);
+                };
+                temp_list.push(
+                  (
+                    <div className="item" key={'group_' + group.id + group.name} >
+                      <div className="ui grid">
+                        <div className="one wide column">
+                          <i className="large group middle aligned icon"></i>
+                        </div>
+                        <div className="fifteen wide column">
+                          <a className="header">{group.name}</a>
+                          <div className="description">
+                            Access granted {timeSince((new Date(group.joined)))} ago&nbsp;&nbsp;&nbsp;
+                            <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                              Remove
+                            </button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
+                              Show details
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                );
+            });
+        }
+        temp_list.sort((a, b) => {
+            return (a.key < b.key) ? -1 : 1;
+        });
+
+        list_authorized = list_authorized.concat(temp_list);
+
+        return list_authorized;
+    }
+
+    render() {
+        let readonly = (this.props.DeckEditStore.permissions.fork && !this.props.DeckEditStore.permissions.edit && !this.props.DeckEditStore.permissions.admin);
+
+        //CSS
         let titleFieldClass = classNames({
             'required': true,
             'field': true,
@@ -111,6 +362,11 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.license != null
         });
+        let groupsFieldClass = classNames({
+            'field': true,
+        });
+
+        //content elements
         let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language"
                                       aria-required="true"
                                       value={this.state.language}
@@ -147,15 +403,71 @@ class DeckPropertiesEditor extends React.Component {
         </select>;
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
-                                     onChange={this.handleChange.bind(this, 'license')}>
+                                     onChange={this.handleChange.bind(this, 'license')}
+                                     readOnly={readonly}>
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>
             <option value="CC BY-SA">CC BY-SA</option>
         </select>;
 
-        let saveDeckButton = isUserEditor ?
-        <button className='ui primary button'
-             onClick={this.handleSave.bind(this, false)}>Save</button> : '';
+        let groupsArray = [];
+        if (this.props.groups) {
+            this.props.groups.forEach((group) => {
+                let data = {
+                    id: group._id,
+                    name: group.name
+                };
+                groupsArray.push((
+                    <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
+                ));
+            });
+        }
+        let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
+                                     ref="AddGroups">
+                                     <input type="hidden" name="groups" />
+            <i className="dropdown icon"></i>
+            <div className="default text">Select Groups</div>
+            <div className="menu">
+              {groupsArray}
+            </div>
+        </div>;
+
+        let buttons = (
+          <button className="ui secondary button"
+               onClick={this.handleCancel.bind(this)}>
+              Cancel
+          </button>
+        );
+        if (this.props.DeckEditStore.permissions.admin || this.props.DeckEditStore.permissions.edit) {
+            buttons = (
+              <div>
+                <button className='ui primary button'
+                     onClick={this.handleSave.bind(this, false)}>Save
+                </button>
+                <button className='ui primary button'
+                     onClick={this.handleSave.bind(this, true)}>
+                    Save as new revision
+                </button>
+                <button className="ui secondary button"
+                     onClick={this.handleCancel.bind(this)}>
+                    Cancel
+                </button>
+              </div>
+            );
+        }
+        else if (this.props.DeckEditStore.permissions.fork) {
+            buttons = (
+              <div>
+                <button className='ui primary button'
+                     onClick={this.handleFork.bind(this)}>Fork
+                </button>
+                <button className="ui secondary button"
+                     onClick={this.handleCancel.bind(this)}>
+                    Cancel
+                </button>
+              </div>
+            );
+        }
 
         return (
         <div className="ui container">
@@ -169,7 +481,7 @@ class DeckPropertiesEditor extends React.Component {
                                 </label>
                                 <input type="text" name="deck-title" value={this.state.title}
                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                       aria-required="true"/>
+                                       aria-required="true" readOnly={readonly}/>
 
                             </div>
                             <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
@@ -183,7 +495,8 @@ class DeckPropertiesEditor extends React.Component {
                             <label id="deck-description">Description</label>
                             <textarea rows="4" aria-labelledby="deck-description"
                                       value={this.state.description}
-                                      onChange={this.handleChange.bind(this, 'description')}/>
+                                      onChange={this.handleChange.bind(this, 'description')}
+                                      readOnly={readonly}/>
                         </div>
                         <div className="two fields">
                             <div className="field disabled">
@@ -195,15 +508,37 @@ class DeckPropertiesEditor extends React.Component {
                                 {licenseOptions}
                             </div>
                         </div>
-                        {saveDeckButton}
-                        <button className='ui primary button'
-                             onClick={this.handleSave.bind(this, true)}>
-                            Save as new revision
-                        </button>
-                        <button className="ui secondary button"
-                             onClick={this.handleCancel.bind(this)}>
-                            Cancel
-                        </button>
+
+                        {(this.props.DeckEditStore.permissions.admin) ? (
+                          <div>
+                            <div className="two fields">
+                                <div className={groupsFieldClass}>
+                                    <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
+                                    {groupsOptions}
+                                </div>
+                                <div className={groupsFieldClass}>
+                                    <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
+                                    <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="field">
+                                <div className="ui tiny header">
+                                    Authorized:
+                                </div>
+                                <div className="ui very relaxed  list">
+                                    {this.getListOfAuthorized()}
+                                </div>
+                                <div className="ui hidden divider">
+                                </div>
+                                <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
+                            </div>
+                          </div>
+                        ) : ''}
+
+                        {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+
+                        {buttons}
                     </form>
                 </div>
 
@@ -218,10 +553,10 @@ DeckPropertiesEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, UserProfileStore], (context, props) => {
+DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore], (context, props) => {
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        TagsStore: context.getStore(TagsStore).getState()
     };
 });
 

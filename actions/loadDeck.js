@@ -12,6 +12,8 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
+import fetchUser from './user/userprofile/fetchUser';
+import UserProfileStore from '../stores/UserProfileStore';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
 const log = require('./log/clog');
@@ -19,6 +21,7 @@ const log = require('./log/clog');
 
 export default function loadDeck(context, payload, done) {
     log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
+
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -76,8 +79,18 @@ export default function loadDeck(context, payload, done) {
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
         runNonContentActions = 0;
     }
+
+    // console.log('payload', payloadCustom);
+
     //load all required actions in parallel
     async.parallel([
+        (callback) => {
+            context.executeAction(fetchUser, {
+                params: {
+                    username: context.getStore(UserProfileStore).getState().username
+                }
+            }, callback);
+        },
         (callback) => {
             context.executeAction(loadContent, payloadCustom, callback);
         },
