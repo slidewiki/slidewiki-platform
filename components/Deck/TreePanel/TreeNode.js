@@ -131,7 +131,7 @@ class TreeNode extends React.Component {
                                           onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
                                           onMoveNode={self.props.onMoveNode} mode={self.props.mode}
                                           page={self.props.page} rootNode={self.props.rootNode}
-                                          username={self.props.username}/>;
+                                          username={self.props.username} permissions={self.props.permissions}/>;
         }
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
