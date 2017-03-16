@@ -14,12 +14,12 @@ class DeckCard extends React.Component {
 
         let thumbnailURL = Microservices.file.uri + '/slideThumbnail/';
         if (this.props.cardContent.firstSlide)
-            thumbnailURL += this.props.cardContent.firstSlide + '.png';
+            thumbnailURL += this.props.cardContent.firstSlide + '.jpeg';
         else
             thumbnailURL = this.props.cardContent.picture;
         return (
             <div className='card'>
-                <NavLink className="ui medium centered image" href={'/deck/' + this.props.cardContent.deckID}>
+                <NavLink className="ui medium centered spaced image" href={'/deck/' + this.props.cardContent.deckID}>
                     <Thumbnail url={thumbnailURL}
                         slideId={this.props.cardContent.deckID} />
                 </NavLink>
