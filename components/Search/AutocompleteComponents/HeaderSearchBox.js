@@ -42,21 +42,14 @@ class HeaderSearchBox extends React.Component {
     handleRedirect(searchstring){
         let querystring = (searchstring) ? searchstring : this.refs.searchstring.value;
 
-        let searchstr = 'q=';
-        if(querystring.trim() === ''){
-            // searchstr += encodeURIComponent('*:*');
-            return;
+        let searchstr = '*:*';
+        if(querystring.trim() !== ''){
+            searchstr = querystring;
         }
-        else{
-            searchstr += encodeURIComponent(querystring);
-        }
-        // searchstr += '&revisions=false';
 
         this.context.executeAction(navigateAction, {
-            url: '/search/' + searchstr
+            url: '/search/keywords=' + encodeURIComponent(searchstr)
         });
-
-        // this.refs.searchstring.value = '';
 
         // unfocus input element
         this.refs.searchstring.blur();
