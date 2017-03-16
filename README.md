@@ -33,14 +33,3 @@ add the config for your microservices:
 `npm run dev`
 
 check server at `localhost:3000`
-
-
-## Migrate thumbnails ##
-```
-cd /data/files
-find ./ -name thumbnails -type d -exec find {} -name *.png \; > list
-while read in; do cp "$in" /data/files/slideThumbnails/ ; done < list
-cd slideThumbnails
-for i in *.png ; do convert "$i" "${i%.*}.jpeg" ; done
-find . -name "*.png" -type f -delete
-```
