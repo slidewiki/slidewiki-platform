@@ -1,5 +1,4 @@
 import UserProfileStore from '../stores/UserProfileStore';
-import handleRevisionChangesAndNavigate from './revisioning/handleRevisionChangesAndNavigate';
 import striptags from 'striptags';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
@@ -38,14 +37,11 @@ export default function saveDeckRevision(context, payload, done) {
                     nodeSpec: {title: striptags(res.revisions[0].title), id: newSid, path: newPath}
                 });
             }
-            context.executeAction(handleRevisionChangesAndNavigate, {
-                selector: {
-                    id: payload.selector.id,
-                    stype: payload.selector.stype,
-                    sid: newSid,
-                    spath: newPath
-                },
-                changeset: res.changeset
+
+            //update the URL: redirect to view after edit
+            let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + newSid + '/' + newPath;
+            context.executeAction(navigateAction, {
+                url: newURL
             });
         }
     };
