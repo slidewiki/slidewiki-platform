@@ -248,9 +248,6 @@ class DeckTreeStore extends BaseStore {
         let oldSelector = this.selector;
         this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
         this.switchSelector(oldSelector, this.selector);
-
-        this.permissions = args.permissions || this.permissions;
-
         this.emitChange();
     }
     toggleTreeNode(selector) {
