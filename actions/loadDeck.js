@@ -16,6 +16,12 @@ import fetchUser from './user/userprofile/fetchUser';
 import UserProfileStore from '../stores/UserProfileStore';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
+import loadPermissions from './permissions/loadPermissions';
+import PermissionsStore from '../stores/PermissionsStore';
+import {navigateAction} from 'fluxible-router';
+import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
+
+
 const log = require('./log/clog');
 
 
@@ -92,7 +98,13 @@ export default function loadDeck(context, payload, done) {
             }, callback);
         },
         (callback) => {
-            context.executeAction(loadContent, payloadCustom, callback);
+            let permissionsPromise = runNonContentActions ? context.executeAction(loadPermissions, payloadCustom) : Promise.resolve(context.getStore(PermissionsStore).permissions);
+            permissionsPromise.then((permissions) => {
+                if (payloadCustom.params.mode === 'edit' && !permissions.edit && !permissions.admin){
+                    payloadCustom.params.mode = 'view';
+                }
+                context.executeAction(loadContent, payloadCustom, callback);
+            });
         },
         (callback) => {
             if(runNonContentActions){

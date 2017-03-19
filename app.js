@@ -36,6 +36,8 @@ import ResetPasswordStore from './stores/ResetPasswordStore';
 import DeckListStore from './stores/DeckListStore';
 import ContentActionsFooterStore from './stores/ContentActionsFooterStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
+import PermissionsStore from './stores/PermissionsStore';
+
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -74,7 +76,8 @@ const app = new Fluxible({
         ResetPasswordStore,
         DeckListStore,
         ContentActionsFooterStore,
-	    ServiceErrorStore
+	    ServiceErrorStore,
+        PermissionsStore
     ]
 });
 
