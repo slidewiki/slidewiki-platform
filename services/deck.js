@@ -140,32 +140,6 @@ export default {
             }).catch((err) => {
                 callback(err);
             });
-        } else if (resource === 'deck.editAllowed') {
-            rp({
-                method: 'GET',
-                uri: Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed',
-                headers: { '----jwt----': args.jwt },
-                json: true
-            })
-            .then((body) => {
-                console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/editAllowed', body);
-
-                callback(null, body.allowed);
-            })
-            .catch((err) => callback(err));
-        } else if (resource === 'deck.forkAllowed') {
-            rp({
-                method: 'GET',
-                uri: Microservices.deck.uri + '/deck/' + args.sid + '/forkAllowed',
-                headers: { '----jwt----': args.jwt },
-                json: true
-            })
-            .then((body) => {
-                console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/forkAllowed', body);
-
-                callback(null, body);
-            })
-            .catch((err) => callback(err));
         } else if (resource === 'deck.numberofslides') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let args = params.params ? params.params : params;
@@ -174,24 +148,6 @@ export default {
             }).catch((err) => {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
-            });
-        } else if (resource === 'deck.needsNewRevision') {
-            //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            let args = params.params ? params.params : params;
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/needsNewRevision?user=' + args.userID, headers: {'----jwt----': args.jwt }}).then((res) => {
-                callback(null, {status: JSON.parse(res)});
-            }).catch((err) => {
-                console.log('serviceErr', err);
-                callback(null, {status: {}, err: err});
-            });
-        } else if (resource === 'deck.handleRevisionChanges') {
-            //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            let args = params.params ? params.params : params;
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckID + '/handleChange?user=' + args.userID + '&root_deck=' + args.rootDeckID}).then((res) => {
-                callback(null, {result: JSON.parse(res)});
-            }).catch((err) => {
-                console.log('serviceErr', err);
-                callback(null, {result: {}});
             });
         }
     },
