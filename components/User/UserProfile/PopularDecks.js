@@ -1,7 +1,6 @@
 import React from 'react';
 import DeckCard from './DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
-import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from './../../../common';
 
 class PublicUserDecks extends React.Component {
@@ -26,7 +25,7 @@ class PublicUserDecks extends React.Component {
             else
                 size = content.length < 3 ? content.length : this.props.size;
             return (<div className="ui three doubling cards">
-                {[...Array(size).keys()].map( (i) => <DeckCard userid={this.props.UserProfileStore.user.id} key={i} cardContent={content[i]}/>)}
+                {[...Array(size).keys()].map( (i) => <DeckCard userid={this.props.userid} key={i} cardContent={content[i]}/>)}
                     </div>);
         } else {
             return <h3>No decks available</h3>;
@@ -37,10 +36,5 @@ class PublicUserDecks extends React.Component {
 PublicUserDecks.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-PublicUserDecks = connectToStores(PublicUserDecks, [UserProfileStore], (context, props) => {
-    return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
-    };
-});
 
 export default PublicUserDecks;

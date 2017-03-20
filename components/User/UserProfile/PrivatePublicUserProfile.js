@@ -40,7 +40,7 @@ class PrivatePublicUserProfile extends React.Component {
                           </div>
                       </div>
                       <div className="ui segment">
-                          <PopularDecks size={0} decks={this.props.decks} sort={this.sortBy}/>
+                          <PopularDecks size={0} decks={this.props.decks} sort={this.sortBy} userid={this.props.user.id}/>
                       </div>
                   </div>
               </div>
