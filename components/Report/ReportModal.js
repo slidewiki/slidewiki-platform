@@ -93,9 +93,9 @@ class ReportModal extends React.Component {
 
             let toEmail = 'ka.de.graaf@vu.nl';
 
-            let link = 'mailto:' + toEmail
+            let link = 'mailto:' + escape(toEmail)
                 // + "?cc=myCCaddress@example.com"
-                + '&subject=' + escape(subject)
+                + '?subject=' + escape(subject)
                 + '&body=' + escape(emailBody);
             window.location.href = link;
 
