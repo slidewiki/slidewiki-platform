@@ -8,9 +8,19 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
 //import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-let MediaQuery = require ('react-responsive');
+import CookieBanner from 'react-cookie-banner';
+import BannerContent from 'react-cookie-banner';
+import cookie from 'react-cookie';
 
+
+
+let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state =  {user_cookies: cookie.load('user-has-accepted-cookies')};
+    }
     componentDidMount() {
         $(this.refs.menubar)
             .sidebar({ 'silent': true, 'transition': 'overlay', 'mobileTransition': 'overlay' });
@@ -41,6 +51,7 @@ class Header extends React.Component {
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/> Sign in</a>;
         let notification_locale = '';
+        let cookieBanner = '';
 
         if (this.props.UserProfileStore.username !== '') {
             loginButton = <HeaderDropdown/>;
@@ -56,8 +67,19 @@ class Header extends React.Component {
 
         }
 
+        if (!this.state.user_cookies) {
+            cookieBanner = <CookieBanner
+            message='This website uses cookies to ensure you get the best experience on our website.'
+            cookie='user-has-accepted-cookies'
+            dismissOnScroll={false}
+            onAccept={() => {}}
+            />;
+        }
+
+
         return (
             <div>
+            {cookieBanner}
               <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui container">

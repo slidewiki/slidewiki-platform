@@ -11,3 +11,4 @@ configs/microservices.js
 configs/version.js
 slidewiki
 migrate
+.idea/

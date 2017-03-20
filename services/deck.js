@@ -182,7 +182,7 @@ export default {
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
-                tags: params.tags,
+                tags: params.tags? params.tags: [],
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
@@ -237,7 +237,7 @@ export default {
                 body: {
                     user: params.userid.toString()
                 }
-            }).then((deck) => callback(false, deck))
+            }).then((res) => callback(false, res))
             .catch((err) => callback(err));
         }
     }

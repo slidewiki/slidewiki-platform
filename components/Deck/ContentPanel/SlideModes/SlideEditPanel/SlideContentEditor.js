@@ -8,6 +8,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
+import SlideViewStore from '../../../../../stores/SlideViewStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -76,9 +77,18 @@ class SlideContentEditor extends React.Component {
             //TEST - create slide (before can be saved (=updated))
             //console.log(speakernotes);
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
-            this.context.executeAction(saveSlide,
-              {id: currentSelector.sid, deckID: deckID, title: title, content: content, speakernotes: speakernotes, dataSources: dataSources, selector: currentSelector});
-            //console.log('saving slide');
+            let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
+
+            this.context.executeAction(saveSlide, {
+                id: currentSelector.sid,
+                deckID: deckID,
+                title: title,
+                content: content,
+                speakernotes: speakernotes,
+                dataSources: dataSources,
+                selector: currentSelector,
+                tags: tags
+            });
             this.resize();
         }
         return false;
@@ -444,9 +454,10 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore], (context, props) => {
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
+        SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState()
     };
