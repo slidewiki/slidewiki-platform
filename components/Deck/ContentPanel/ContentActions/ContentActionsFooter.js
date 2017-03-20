@@ -4,15 +4,20 @@ import ContentUtil from '../util/ContentUtil';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
+import ReportModal from '../../../Report/ReportModal';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
+import UserProfileStore from '../../../../stores/UserProfileStore';
+
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
         super(props);
         //this.state={expanded: 0};
         this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
+        this.visible = true;
+        // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -58,6 +63,12 @@ class ContentActionsFooter extends React.Component {
 
     }
 
+    handleReportClick(){
+        // Toggle Modal and so on...
+        $('.ui.report.modal')
+            .modal('toggle');
+    }
+
     getExportHref(type){
         if (type !== 'EPub' && type !== 'PDF') {
             return;
@@ -86,6 +97,11 @@ class ContentActionsFooter extends React.Component {
     }
 
     render() {
+        let reportButton = <div ref="reportButton" onClick={this.handleReportClick.bind(this)} target="_blank">
+                            <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
+                                <i className="warning circle large icon"></i>
+                            </button>
+                        </div>;
         return (
             <div className="ui">
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
@@ -101,7 +117,6 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
-
                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
                                 <i className="print large icon"></i>
@@ -112,6 +127,8 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
+                            {(this.props.UserProfileStore.userid !== '') ? reportButton : ''}
+                            <ReportModal/>
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
                             </button>
@@ -135,9 +152,10 @@ ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore], (context, props) => {
     return {
-        ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState()
+        ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default ContentActionsFooter;
