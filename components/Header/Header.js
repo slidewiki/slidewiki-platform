@@ -54,7 +54,7 @@ class Header extends React.Component {
         let cookieBanner = '';
 
         if (this.props.UserProfileStore.username !== '') {
-            loginButton = <HeaderDropdown/>;
+            loginButton = <HeaderDropdown username={this.props.UserProfileStore.username} userpicture={this.props.UserProfileStore.userpicture}/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>My Decks</NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>My Settings</NavLink>
