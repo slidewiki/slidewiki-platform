@@ -32,6 +32,11 @@ class ContentActionsHeader extends React.Component {
             });
         }
     }
+    handleOpenModalAttachSubdeck(){
+        $('#app').attr('aria-hidden','true');
+        $('#attachSubDeckModal').attr('aria-hidden','false');
+        $('#attachSubDeckModal').modal('show');
+    }
     render() {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
@@ -52,8 +57,8 @@ class ContentActionsHeader extends React.Component {
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
         let buttonStyle = {
-            classNames : 'item small attached left',
-            iconSize : 'large',
+            classNames : 'item ui small basic left attached button',
+            iconSize : 'medium icons',
             attached : 'left'
         } ;
         return (
@@ -81,7 +86,12 @@ class ContentActionsHeader extends React.Component {
                               <i className="inverted corner plus icon"></i>
                             </i>
                         </button>
-                        <AttachSubdeck buttonStyle={buttonStyle}/>
+                        <button className={addDeckClass} onClick={this.handleOpenModalAttachSubdeck.bind(this)}  type="button" aria-label="Attach Slide" data-tooltip="Attach Slide" >
+                            <i className="medium icons">
+                                <i className="yellow large folder icon"></i>
+                                <i className="corner attach icon"></i>
+                            </i>
+                        </button>
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 
@@ -96,6 +106,7 @@ class ContentActionsHeader extends React.Component {
                             </a>
                         </button>
                         */}
+                        <AttachSubdeck />
                     </div>
                 }
             </div>

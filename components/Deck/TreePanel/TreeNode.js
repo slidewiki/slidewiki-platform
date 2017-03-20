@@ -110,7 +110,11 @@ class TreeNode extends React.Component {
                 break;
         }
     }
-
+    handleOpenModalAttachSubdeck(){
+        $('#app').attr('aria-hidden','true');
+        $('#attachSubDeckModal').attr('aria-hidden','false');
+        $('#attachSubDeckModal').modal('show');
+    }
     render() {
         let self = this;
         const {isDragging, connectDragSource, nodeIndex} = this.props;
@@ -149,8 +153,8 @@ class TreeNode extends React.Component {
             'disabled': this.props.item.get('type') === 'deck'
         });
         let buttonStyle = {
-            classNames : 'ui',
-            iconSize : 'small',
+            classNames : 'ui button',
+            iconSize : 'medium icons',
             attached : ''
         };
         let actionBtns = (
@@ -174,7 +178,15 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <AttachSubdeck buttonStyle={buttonStyle}/>
+                    <button className="ui button"
+                            onClick={this.handleOpenModalAttachSubdeck.bind(this)}
+                            aria-label="Attach Slide"
+                            data-tooltip="Attach Slide">
+                        <i className="medium icons">
+                            <i className="yellow folder icon"></i>
+                            <i className="corner attach icon"></i>
+                        </i>
+                    </button>
                     <button className={duplicateItemClass} title="Duplicate"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),
