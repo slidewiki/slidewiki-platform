@@ -48,9 +48,9 @@ class SendReportStore extends BaseStore {
 
 SendReportStore.storeName = 'SendReportStore';
 SendReportStore.handlers = {
-    'REPORT_SHOW_WRONG_FIELDS': 'showWrongFields',
-    'CREATION_FAILURE': 'creationFailure',
-    'CREATION_SUCCESS': 'creationSuccess',
+    'REPORT_SHOW_WRONG_FIELDS': 'showWrongFields'
+    //'CREATION_FAILURE': 'creationFailure',
+    //'CREATION_SUCCESS': 'creationSuccess',
 };
 
 
