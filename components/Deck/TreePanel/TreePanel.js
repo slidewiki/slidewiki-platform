@@ -57,8 +57,8 @@ class TreePanel extends React.Component {
 
     handleFork() {
         swal({
-            title: 'New Revision',
-            text: 'We are creating a new revision of the deck...',
+            title: 'New Fork',
+            text: 'We are forking the deck...',
             type: 'success',
             timer: 2000,
             showCloseButton: false,

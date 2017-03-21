@@ -12,6 +12,7 @@ import DeckEditStore from './stores/DeckEditStore';
 import SlideViewStore from './stores/SlideViewStore';
 import SlideEditStore from './stores/SlideEditStore';
 import DataSourceStore from './stores/DataSourceStore';
+import TagsStore from './stores/TagsStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
 import TranslationStore from './stores/TranslationStore';
@@ -52,6 +53,7 @@ const app = new Fluxible({
         SlideViewStore,
         SlideEditStore,
         DataSourceStore,
+        TagsStore,
         ActivityFeedStore,
         DeckTreeStore,
         TranslationStore,
