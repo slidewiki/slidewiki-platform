@@ -18,6 +18,16 @@ class PermissionsStore extends BaseStore {
         this.emitChange();
     }
 
+    resetPermissions(payload) {
+        this.permissions = {
+            fork: false,
+            edit: false,
+            admin: false
+        };
+        this.deckId = payload.deckId;
+        this.emitChange();
+    }
+
     showNoPermissionsModal(payload) {
         this.isNoPermissionsModalShown = true;
         this.emitChange();
@@ -50,6 +60,7 @@ class PermissionsStore extends BaseStore {
 PermissionsStore.storeName = 'PermissionsStore';
 PermissionsStore.handlers = {
     'LOAD_PERMISSIONS_SUCCESS': 'loadPermissions',
+    'RESET_PERMISSIONS': 'resetPermissions',
     'SHOW_NO_PERMISSIONS_MODAL': 'showNoPermissionsModal',
     'HIDE_NO_PERMISSIONS_MODAL': 'hideNoPermissionsModal',
 

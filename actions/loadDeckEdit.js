@@ -23,9 +23,6 @@ export default function loadDeckEdit(context, payload, done) {
             return;
         }
 
-        // console.log('got deck properties:', res.deckProps);
-        // console.log('got deck contributors:', res.editors);
-        // console.log('got deck permissions:', res.permissions);
         context.dispatch('LOAD_DECK_PROPS_SUCCESS', res);
         let pageTitle = shortTitle + ' | Deck Edit | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {

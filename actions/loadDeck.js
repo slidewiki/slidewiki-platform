@@ -17,6 +17,8 @@ import UserProfileStore from '../stores/UserProfileStore';
 import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
 import loadPermissions from './permissions/loadPermissions';
+import resetPermissions from './permissions/resetPermissions';
+
 import PermissionsStore from '../stores/PermissionsStore';
 
 const log = require('./log/clog');
@@ -55,6 +57,8 @@ export default function loadDeck(context, payload, done) {
     let runNonContentActions = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
+
+
     //if no specific content selector is given, use the deck type, view mode and root deck id as default selector
     if(!payload.params.stype) {
         payloadCustom.params.stype = 'deck';
@@ -77,6 +81,18 @@ export default function loadDeck(context, payload, done) {
         payloadCustom.params.spath = '';
         payloadCustom.params.mode = 'view';
     }
+
+    payload.params.jwt = context.getStore(UserProfileStore).getState().jwt;
+
+    let permissionsPromise;
+    //if user is not logged in, only allow view mode and reset permissions, else load this user's permissions on the selected root deck
+    if (!payload.params.jwt){
+        payloadCustom.params.mode = 'view';
+        permissionsPromise = context.executeAction(resetPermissions, payloadCustom);
+    } else {
+        permissionsPromise = context.executeAction(loadPermissions, payloadCustom);
+    }
+
     context.dispatch('UPDATE_DECK_PAGE_CONTENT', payloadCustom);
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
@@ -93,8 +109,7 @@ export default function loadDeck(context, payload, done) {
             }, callback);
         },
         (callback) => {
-            context.executeAction(loadPermissions, payloadCustom, (err, res) => {
-                console.log(context.getStore(PermissionsStore).getState());
+            permissionsPromise.then(() => {
                 let permissions = context.getStore(PermissionsStore).getState().permissions;
                 if (payloadCustom.params.mode === 'edit' && !permissions.edit && !permissions.admin){
                     payloadCustom.params.mode = 'view';
