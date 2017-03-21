@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connectToStores } from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider} from 'semantic-ui-react';
+import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
+import closeAttachModal from '../../../../actions/attachSubDeck/closeAttachModal';
+
 
 const headerStyle = {
     'textAlign': 'center'
@@ -15,29 +19,35 @@ class AttachSubdeckModal extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-
-            activeItem:'MyDecks'
-
-
+            activeItem: this.props.AttachSubdeckModalStore.activeItem,
+            activeTrap: this.props.AttachSubdeckModalStore.activeTrap
         };
 
         this.handleClose = this.handleClose.bind(this);
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
-
+        this.unmountTrap = this.unmountTrap.bind(this);
 
 
     }
 
 
+    componentWillReceiveProps(nextProps){
+
+        if (nextProps.AttachSubdeckModalStore.activeTrap !== this.props.AttachSubdeckModalStore.activeTrap){
+            this.setState({
+                activeTrap: nextProps.AttachSubdeckModalStore.activeTrap
+            });
+        }
+
+    }
 
     handleClose(){
-        
+        this.context.executeAction(closeAttachModal);
+
         $('#app').attr('aria-hidden','false');
         $('#attachSubDeckModal').attr('aria-hidden','true');
         $('#attachSubDeckModal').modal('hide');
-
-
 
     }
 
@@ -53,6 +63,12 @@ class AttachSubdeckModal extends React.Component{
             activeItem:'SlideWiki'
         });
     }
+    unmountTrap(){
+        if(this.state.activeTrap){
+            this.setState({ activeTrap: false });          
+        }
+    }
+
 
 
 
@@ -82,20 +98,27 @@ class AttachSubdeckModal extends React.Component{
             segmentPanelContent = slideWikiContent;
         }
 
-
-
-
         return (
+
 
                 <div className="ui modal" id='attachSubDeckModal' style={modalStyle}
                     role="dialog"
                     aria-labelledby="attachSubdeckHeader"
                     aria-hidden = "false">
-                    <div className="header">
+                    <FocusTrap
+                          id='focus-trap-attachSubdeckModal'
+                          className = "header"
+                          active={this.state.activeTrap}
+                          focusTrapOptions={{
+                              onDeactivate: this.unmountTrap,
+                              clickOutsideDeactivates: true,
+                              initialFocus: '#tabMyDecksId',
+                          }}>
+                  <div className="header">
                         <h1 style={headerStyle} id="attachSubdeckHeader">Attach Deck</h1>
                     </div>
                     <div className="content">
-                    <div className="ui container">
+                      <div className="ui container">
                         <div className="ui blue padded center aligned segment">
                             <div className="ui segment top atttached">
                                 <div className="ui top attached tabular menu" role="tablist">
@@ -111,21 +134,24 @@ class AttachSubdeckModal extends React.Component{
 
                             {segmentPanelContent}
                             {selectedDeckArea}
+                            <div className='actions'>
+                                <button id='attachAttachDeckModal' className="ui green button" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
+                                    <i className="attach icon"/>
+                                    Attach
+                                    <i className="attach icon"/>
+                                </button>
+                                <button className='ui red button'  tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                                Cancel
+                                </button>
+                            </div>
                             </div>
                         </div>
+                     </div>
                     </div>
-                    </div>
-                    <div className='actions'>
-                        <button id='attachAttachDeckModal' className="ui green button" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
-                            <i className="attach icon"/>
-                            Attach
-                            <i className="attach icon"/>
-                        </button>
-                        <button className='ui red button' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose}  >
-                        Cancel
-                        </button>
-                    </div>
+
+                      </FocusTrap>
                 </div>
+
         );
     }
 
@@ -134,6 +160,12 @@ class AttachSubdeckModal extends React.Component{
 AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[AttachSubdeckModalStore],(context,props) => {
+    return {
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
+    };
+});
 
 
 export default AttachSubdeckModal;

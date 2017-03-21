@@ -8,6 +8,9 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
 import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
+import openAttachModal from '../../../../actions/attachSubDeck/openAttachModal';
+import closeAttachModal from '../../../../actions/attachSubDeck/closeAttachModal';
+
 
 class ContentActionsHeader extends React.Component {
     componentDidUpdate(){
@@ -33,9 +36,16 @@ class ContentActionsHeader extends React.Component {
         }
     }
     handleOpenModalAttachSubdeck(){
+        this.context.executeAction(openAttachModal);
         $('#app').attr('aria-hidden','true');
         $('#attachSubDeckModal').attr('aria-hidden','false');
-        $('#attachSubDeckModal').modal('show');
+        $('#attachSubDeckModal').modal({
+            onHide: () => {
+                $('#app').attr('aria-hidden','false');
+                $('#attachSubDeckModal').attr('aria-hidden','true');
+                this.context.executeAction(closeAttachModal);
+            }}).modal('show');
+
     }
     render() {
         const contentDetails = this.props.ContentStore;
