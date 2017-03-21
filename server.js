@@ -19,6 +19,7 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
+import cookie from 'react-cookie';
 
 const uuidV4 = require('uuid/v4');
 const log = require('./configs/log').log;
@@ -104,6 +105,7 @@ server.use((req, res, next) => {
     });
 
     log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
+    cookie.plugToRequest(req,res);
     debug('Executing navigate action');
     context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
         if (err) {
