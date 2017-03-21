@@ -266,7 +266,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     resize() {
-        console.log('resize_all');
+        //console.log('resize_all');
         //do not put borders around empty divs containing SVG elements
         if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
             $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
