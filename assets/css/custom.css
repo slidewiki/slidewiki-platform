@@ -38,16 +38,21 @@
   padding-top: 50px;
 }
 
-.diff-view .added, .modified, .deleted {
-  padding: 5px; margin: 2px;
+.diff-view .pptx2html {
+  box-shadow: none !important;
+  border: none !important;
 }
 
-.diff-view .added {border: 2px solid #93ca3b;}
-.diff-view .modified {border: 2px solid #FFCC00;}
-.diff-view .deleted {border: 2px solid #ff0030;}
+.diff-view .added, .modified, .deleted {
+  padding: 5px; margin: 2px; display: block;
+}
+
+.diff-view .added {border: 5px solid #93ca3b;}
+.diff-view .modified {border: 5px solid #FFCC00;}
+.diff-view .deleted {border: 5px solid #ff0030;}
 
 .diff-view .txtadded, .txtdeleted {
-  padding: 2px;
+  padding: 2px; color: #000; margin: 0;
 }
 
 .diff-view .txtadded {background-color: #eaffea;}
