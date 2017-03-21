@@ -1,4 +1,5 @@
 import UserProfileStore from '../stores/UserProfileStore';
+import PermissionsStore from '../stores/PermissionsStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from './error/serviceUnavailable';
@@ -46,6 +47,13 @@ export default function saveDeckEdit(context, payload, done) {
                 // context.executeAction(serviceUnavailable, payload, done);
                 done();
             } else {
+                // TODO properly decouple editors forms from properties forms
+                // for now we skip this if current user is not admin
+                if (!context.getStore(PermissionsStore).permissions.admin) {
+                    success(res, payload);
+                    return done();
+                }
+
                 if (!common.arraysEqual(payload.editors.old.users, payload.editors.new.users) || !common.arraysEqual(payload.editors.old.groups, payload.editors.new.groups)) {
                     let payload2 = {
                         jwt: context.getStore(UserProfileStore).jwt,
