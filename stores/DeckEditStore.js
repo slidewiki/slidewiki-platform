@@ -17,11 +17,6 @@ class DeckEditStore extends BaseStore {
             },
             members: []
         };
-        this.permissions = {
-            fork: false,
-            edit: false,
-            admin: false
-        };
         this.originalEditors = {
             users: [],
             groups: []
@@ -31,7 +26,6 @@ class DeckEditStore extends BaseStore {
     updateProperties(payload) {
         this.deckProps = payload.deckProps;
         this.editors = payload.editors;
-        this.permissions = payload.permissions;
 
         //edit rights adoptions
         this.authorizedUsers = JSON.parse(JSON.stringify(payload.deckProps.editors.users));
@@ -44,11 +38,6 @@ class DeckEditStore extends BaseStore {
     }
 
     resetProperties() {
-        this.permissions = {
-            fork: false,
-            edit: false,
-            admin: false
-        };
         this.originalEditors = {
             users: [],
             groups: []
@@ -65,7 +54,6 @@ class DeckEditStore extends BaseStore {
             authorizedGroups: this.authorizedGroups,
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
-            permissions: this.permissions,
             originalEditors: this.originalEditors
         };
     }
@@ -81,7 +69,6 @@ class DeckEditStore extends BaseStore {
         this.viewstate = state.viewstate;
         this.authorizedGroups = state.authorizedGroups;
         this.detailedGroup = state.detailedGroup;
-        this.permissions = state.permissions;
         this.originalEditors = state.originalEditors;
     }
 

@@ -103,12 +103,10 @@ export default {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
-            let permissionsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/permissions', headers: {'----jwt----': args.jwt }}).promise().bind(this);
-            Promise.all([deckPromise, editorsPromise, permissionsPromise]).then((res) => {
+            Promise.all([deckPromise, editorsPromise]).then((res) => {
                 let revision,
                     deck = JSON.parse(res[0]),
-                    editors = JSON.parse(res[1]),
-                    permissions = JSON.parse(res[2]);
+                    editors = JSON.parse(res[1])
                 //if deck's sid does not specify revision, find the active revision from the corresponding field
                 if (args.sid.split('-').length < 2) {
                     revision = deck.revisions.find((rev) => {
@@ -134,8 +132,7 @@ export default {
                 let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
                 callback(null, {
                     deckProps: deckProps,
-                    editors: contributors,
-                    permissions: permissions
+                    editors: contributors
                 });
             }).catch((err) => {
                 callback(err);

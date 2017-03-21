@@ -12,14 +12,8 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
-            let permissionsPromise = !isEmpty(args.jwt) ? rp.get({uri: Microservices.deck.uri + '/deck/' + selector.id + '/permissions', headers: {'----jwt----': args.jwt }}).promise().bind(this) : Promise.resolve({
-                fork: false,
-                edit: false,
-                admin: false
-            });
-            let deckTreePromise = rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).promise().bind(this);
-            Promise.all([deckTreePromise, permissionsPromise]).then((res) => {
-                callback(null, {deckTree: JSON.parse(res[0]), permissions: JSON.parse(res[1]), selector: selector, 'page': params.page, 'mode': args.mode});
+            rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).then((res) => {
+                callback(null, {deckTree: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 //we should report the error to the action creator
                 callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', details: err});

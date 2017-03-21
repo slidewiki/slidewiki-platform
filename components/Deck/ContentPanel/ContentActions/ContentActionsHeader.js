@@ -34,8 +34,6 @@ class ContentActionsHeader extends React.Component {
     }
     render() {
         const contentDetails = this.props.ContentStore;
-        console.log('\n\n\n\n');
-        console.log(contentDetails);
         //config buttons based on the selected item
         const addSlideClass = classNames({
             'item ui small basic left attached button': true,
