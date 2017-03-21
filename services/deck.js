@@ -89,13 +89,11 @@ export default {
         } else if (resource === 'deck.permissions') {
             rp({
                 method: 'GET',
-                uri: Microservices.deck.uri + '/deck/' + args.sid + '/permissions',
+                uri: Microservices.deck.uri + '/deck/' + args.id + '/permissions',
                 headers: { '----jwt----': args.jwt },
                 json: true
             })
             .then((body) => {
-                console.log('Got response from ' + Microservices.deck.uri + '/deck/' + args.sid + '/permissions', body);
-
                 callback(null, body);
             })
             .catch((err) => callback(err));
@@ -106,7 +104,7 @@ export default {
             Promise.all([deckPromise, editorsPromise]).then((res) => {
                 let revision,
                     deck = JSON.parse(res[0]),
-                    editors = JSON.parse(res[1])
+                    editors = JSON.parse(res[1]);
                 //if deck's sid does not specify revision, find the active revision from the corresponding field
                 if (args.sid.split('-').length < 2) {
                     revision = deck.revisions.find((rev) => {
