@@ -1,14 +1,22 @@
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
+import PermissionsStore from '../../stores/PermissionsStore';
 
 export default function loadPermissions(context, payload, done) {
-    context.service.read('deck.permissions', payload, {}, (err, res) => {
-        if (err) {
-            log.error(context, {filepath: __filename, err: err});
-            context.executeAction(serviceUnavailable, payload, done);
-        } else {
-            context.dispatch('UPDATE_PERMISSIONS', {permissions: res});
-            done(null, res);
-        }
-    });
+    let currentDeckId = context.getStore(PermissionsStore).getState().deckId;
+
+    if (currentDeckId !== payload.params.id) {
+        //load permissions only if root deck changed
+        context.service.read('deck.permissions', payload, {}, (err, res) => {
+            if (err) {
+                log.error(context, {filepath: __filename, err: err});
+                context.executeAction(serviceUnavailable, payload, done);
+            } else {
+                context.dispatch('LOAD_PERMISSIONS_SUCCESS', {permissions: res, deckId: payload.params.id});
+                done();
+            }
+        });
+    } else {
+        done();
+    }
 }

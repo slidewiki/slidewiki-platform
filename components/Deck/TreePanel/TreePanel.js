@@ -14,6 +14,7 @@ import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeA
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
+import PermissionsStore from '../../../stores/PermissionsStore';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -118,7 +119,7 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            'disabled': (!this.props.DeckTreeStore.permissions.fork),
+            'disabled': (!this.props.PermissionsStore.permissions.fork),
             'button': true
         });
 
@@ -167,7 +168,7 @@ class TreePanel extends React.Component {
                               onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                               onMoveNode={this.handleMoveNode.bind(this)}
                               username={this.props.UserProfileStore.username}
-                              permissions={this.props.DeckTreeStore.permissions}/>
+                              permissions={this.props.PermissionsStore.permissions}/>
                     </div>
                 </div>
             </div>
@@ -178,10 +179,11 @@ class TreePanel extends React.Component {
 TreePanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore], (context, props) => {
+TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 export default TreePanel;
