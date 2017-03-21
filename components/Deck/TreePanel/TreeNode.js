@@ -8,6 +8,8 @@ import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
 import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
+import openAttachModal from '../../../actions/attachSubDeck/openAttachModal';
+import closeAttachModal from '../../../actions/attachSubDeck/closeAttachModal';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -111,9 +113,15 @@ class TreeNode extends React.Component {
         }
     }
     handleOpenModalAttachSubdeck(){
+        this.context.executeAction(openAttachModal);
         $('#app').attr('aria-hidden','true');
         $('#attachSubDeckModal').attr('aria-hidden','false');
-        $('#attachSubDeckModal').modal('show');
+        $('#attachSubDeckModal').modal({
+            onHide: () => {
+                $('#app').attr('aria-hidden','false');
+                $('#attachSubDeckModal').attr('aria-hidden','true');
+                this.context.executeAction(closeAttachModal);
+            }}).modal('show');
     }
     render() {
         let self = this;
@@ -256,9 +264,15 @@ class TreeNode extends React.Component {
     }
 }
 
+TreeNode.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
 let TreeNodeWrapped = DragSource('tree-node', treeNodeSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
 }))(TreeNode);
+
+
 
 export default TreeNodeWrapped;
