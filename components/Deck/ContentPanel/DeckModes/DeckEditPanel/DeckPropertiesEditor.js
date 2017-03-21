@@ -14,8 +14,8 @@ import GroupDetailsModal from './GroupDetailsModal';
 import { timeSince } from '../../../../../common';
 import UserPicture from '../../../../common/UserPicture';
 import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
-import fork from '../../../../../actions/deckedit/fork';
 import TagsStore from '../../../../../stores/TagsStore';
+import PermissionsStore from '../../../../../stores/PermissionsStore';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -210,15 +210,6 @@ class DeckPropertiesEditor extends React.Component {
         }
     }
 
-    handleFork(event) {
-        event.preventDefault();
-
-        this.context.executeAction(fork, {
-            deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
-            selector: this.props.selector
-        });
-    }
-
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
@@ -344,8 +335,6 @@ class DeckPropertiesEditor extends React.Component {
     }
 
     render() {
-        let readonly = (this.props.DeckEditStore.permissions.fork && !this.props.DeckEditStore.permissions.edit && !this.props.DeckEditStore.permissions.admin);
-
         //CSS
         let titleFieldClass = classNames({
             'required': true,
@@ -403,8 +392,7 @@ class DeckPropertiesEditor extends React.Component {
         </select>;
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
-                                     onChange={this.handleChange.bind(this, 'license')}
-                                     readOnly={readonly}>
+                                     onChange={this.handleChange.bind(this, 'license')}>
             <option value="CC0">CC0</option>
             <option value="CC BY">CC BY</option>
             <option value="CC BY-SA">CC BY-SA</option>
@@ -433,41 +421,16 @@ class DeckPropertiesEditor extends React.Component {
         </div>;
 
         let buttons = (
-          <button className="ui secondary button"
-               onClick={this.handleCancel.bind(this)}>
-              Cancel
-          </button>
+            <div>
+                <button className='ui primary button'
+                        onClick={this.handleSave.bind(this, false)}>Save
+                </button>
+                <button className="ui secondary button"
+                        onClick={this.handleCancel.bind(this)}>
+                    Cancel
+                </button>
+            </div>
         );
-        if (this.props.DeckEditStore.permissions.admin || this.props.DeckEditStore.permissions.edit) {
-            buttons = (
-              <div>
-                <button className='ui primary button'
-                     onClick={this.handleSave.bind(this, false)}>Save
-                </button>
-                <button className='ui primary button'
-                     onClick={this.handleSave.bind(this, true)}>
-                    Save as new revision
-                </button>
-                <button className="ui secondary button"
-                     onClick={this.handleCancel.bind(this)}>
-                    Cancel
-                </button>
-              </div>
-            );
-        }
-        else if (this.props.DeckEditStore.permissions.fork) {
-            buttons = (
-              <div>
-                <button className='ui primary button'
-                     onClick={this.handleFork.bind(this)}>Fork
-                </button>
-                <button className="ui secondary button"
-                     onClick={this.handleCancel.bind(this)}>
-                    Cancel
-                </button>
-              </div>
-            );
-        }
 
         return (
         <div className="ui container">
@@ -481,7 +444,7 @@ class DeckPropertiesEditor extends React.Component {
                                 </label>
                                 <input type="text" name="deck-title" value={this.state.title}
                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                       aria-required="true" readOnly={readonly}/>
+                                       aria-required="true"/>
 
                             </div>
                             <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
@@ -495,8 +458,7 @@ class DeckPropertiesEditor extends React.Component {
                             <label id="deck-description">Description</label>
                             <textarea rows="4" aria-labelledby="deck-description"
                                       value={this.state.description}
-                                      onChange={this.handleChange.bind(this, 'description')}
-                                      readOnly={readonly}/>
+                                      onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
                             <div className="field disabled">
@@ -509,7 +471,7 @@ class DeckPropertiesEditor extends React.Component {
                             </div>
                         </div>
 
-                        {(this.props.DeckEditStore.permissions.admin) ? (
+                        {(this.props.PermissionsStore.permissions.admin) ? (
                           <div>
                             <div className="two fields">
                                 <div className={groupsFieldClass}>
@@ -553,10 +515,11 @@ DeckPropertiesEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore], (context, props) => {
+DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore], (context, props) => {
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
-        TagsStore: context.getStore(TagsStore).getState()
+        TagsStore: context.getStore(TagsStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 

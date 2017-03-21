@@ -18,9 +18,6 @@ import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
 import loadPermissions from './permissions/loadPermissions';
 import PermissionsStore from '../stores/PermissionsStore';
-import {navigateAction} from 'fluxible-router';
-import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
-
 
 const log = require('./log/clog');
 
@@ -86,8 +83,6 @@ export default function loadDeck(context, payload, done) {
         runNonContentActions = 0;
     }
 
-    // console.log('payload', payloadCustom);
-
     //load all required actions in parallel
     async.parallel([
         (callback) => {
@@ -98,10 +93,14 @@ export default function loadDeck(context, payload, done) {
             }, callback);
         },
         (callback) => {
-            let permissionsPromise = runNonContentActions ? context.executeAction(loadPermissions, payloadCustom) : Promise.resolve(context.getStore(PermissionsStore).permissions);
-            permissionsPromise.then((permissions) => {
+            context.executeAction(loadPermissions, payloadCustom, (err, res) => {
+                console.log(context.getStore(PermissionsStore).getState());
+                let permissions = context.getStore(PermissionsStore).getState().permissions;
                 if (payloadCustom.params.mode === 'edit' && !permissions.edit && !permissions.admin){
                     payloadCustom.params.mode = 'view';
+                    context.dispatch('SHOW_NO_PERMISSIONS_MODAL');
+                } else {
+                    context.dispatch('HIDE_NO_PERMISSIONS_MODAL');
                 }
                 context.executeAction(loadContent, payloadCustom, callback);
             });
