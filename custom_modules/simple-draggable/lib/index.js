@@ -342,7 +342,7 @@
                     cEl.movetofrontdiv.style.width = buttonsize+"px";
                     cEl.movetofrontdiv.style.height = buttonsize+"px";
                     //assign to bottom left of parent div
-                    cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75) )  +"px";
+                    cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*2*0.75))  +"px";
                     cEl.movetofrontdiv.style.left = "-" + (buttonsize*0.5)+"px";
                     //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     //cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
@@ -380,11 +380,19 @@
                     //===============KLAAS -> for resize button
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
+                    cEl.resizediv.style.zIndex = "9000000";
                     cEl.resizediv.id = "resizediv";
                     cEl.resizediv.className = "resizediv";
-                    cEl.resizediv.style.width = "50px";
-                    cEl.resizediv.style.height = "50px";
-                    cEl.resizediv.style.zIndex = "9000000";
+                    //cEl.resizediv.style.width = "50px";
+                    //cEl.resizediv.style.height = "50px";
+                    cEl.resizediv.style.width = buttonsize+"px";
+                    cEl.resizediv.style.height = buttonsize+"px";
+                    //assign to bottom right of parent div
+                    cEl.resizediv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75))+"px";
+                    cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
+                    //cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                    //cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
                     imgresize.style.zIndex = "9000000";
@@ -401,13 +409,6 @@
                     //position resize icon to bottom right of parent element
                     cEl.appendChild(cEl.resizediv);
                     //cEl.resizediv.style.left = parseInt(cEl.style.left) + parseInt(cEl.style.width) + "px";
-                    //assign to bottom right of parent div
-                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
-                    cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
-                    //alert(cEl.resizediv.style);
-                    //cEl.resizediv.style.right = (cEl.style.right) + "px";
-                    //alert(cEl.style.right + "px");
-                    //alert(temp + "px");
 
                     //resize mousehandlers
                     cEl.resizediv.addEventListener("mousedown", function (e) {
@@ -550,12 +551,22 @@
                             }
                             //cEl.style.transform = 'scale(0.5)';
                             //move resize button with resized borders of element
-                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
-                            cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+                            cEl.dragdiv.style.top = "-"+(buttonsize*0.75)+"px";
+                            cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
+                            cEl.removediv.style.top = "-"+ (buttonsize*0.75) +"px";
+                            cEl.removediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
+                            cEl.sendtobackdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75)) +"px";
+                            cEl.sendtobackdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                            cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*2*0.75))  +"px";
+                            cEl.movetofrontdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                            cEl.resizediv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75))+"px";
+                            cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
+                            //cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                            //cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
                             //move remove button with resized borders of absolute element
-                            cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
-                            cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
-                            cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
+                            //cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
+                            //cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
+                            //cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
                         }
                         else
                         { return; }
