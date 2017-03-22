@@ -26,9 +26,9 @@ class AttachSubdeckModal extends React.Component{
 
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
-        this.unmountTrap = this.unmountTrap.bind(this);
     }
 
     handleOpen(){
@@ -38,12 +38,12 @@ class AttachSubdeckModal extends React.Component{
             activeTrap:true
         });
 
-      //  this.context.executeAction(openAttachModal);
+
 
     }
 
     handleClose(){
-        //this.context.executeAction(closeAttachModal);
+
         $('#app').attr('aria-hidden','false');
 
         this.setState({
@@ -118,8 +118,9 @@ class AttachSubdeckModal extends React.Component{
                 onClose={this.handleClose}
                 size="large"
                 role="dialog"
-                id="attachSubDeckModa"
-                aria-labelledby="attachSubdeckModalHeader"
+                id="attachSubDeckModal"
+                aria-labelledby="attachSubdeckHeader"
+                aria-describedby="attachSubdeckModalDescription"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
@@ -144,6 +145,7 @@ class AttachSubdeckModal extends React.Component{
                                                   onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                             </Menu>
                             <Segment attached='bottom'>
+                               <div className="sr-only" id="attachSubdeckModalDescription">Select deck to attach from your  My Decks list or search SlideWikiy</div>
                                {segmentPanelContent}
                                {selectedDeckArea}
                             </Segment>
