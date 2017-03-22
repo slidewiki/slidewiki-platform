@@ -4,7 +4,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider} from 'semantic-ui-react';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
-import closeAttachModal from '../../../../actions/attachSubDeck/closeAttachModal';
+
 
 
 
@@ -17,10 +17,11 @@ class AttachSubdeckModal extends React.Component{
    }*/
     constructor(props) {
         super(props);
+
         this.state = {
-            openModal: this.props.AttachSubdeckModalStore.openModal,
-            activeItem: this.props.AttachSubdeckModalStore.activeItem,
-            activeTrap: this.props.AttachSubdeckModalStore.activeTrap
+            openModal: false,
+            activeItem: 'MyDecks',
+            activeTrap: false
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -28,20 +29,6 @@ class AttachSubdeckModal extends React.Component{
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
-    }
-    componentWillReceiveProps(nextProps){
-
-        if (nextProps.AttachSubdeckModalStore.activeTrap !== this.props.AttachSubdeckModalStore.activeTrap){
-            this.setState({
-                activeTrap: nextProps.AttachSubdeckModalStore.activeTrap
-            });
-        }
-        if (nextProps.AttachSubdeckModalStore.openModal !== this.props.AttachSubdeckModalStore.openModal){
-            this.setState({
-                openModal: nextProps.AttachSubdeckModalStore.openModal
-            });
-        }
-
     }
 
     handleOpen(){
@@ -51,12 +38,12 @@ class AttachSubdeckModal extends React.Component{
             activeTrap:true
         });
 
-        this.context.executeAction(openAttachModal);
+      //  this.context.executeAction(openAttachModal);
 
     }
 
     handleClose(){
-        this.context.executeAction(closeAttachModal);
+        //this.context.executeAction(closeAttachModal);
         $('#app').attr('aria-hidden','false');
 
         this.setState({
@@ -166,7 +153,7 @@ class AttachSubdeckModal extends React.Component{
                                   Attach
                                   <Icon name="attach"/>
                               </Button>
-                              <Button color='red' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose}  onBlur={this.mountMenuTrap}>
+                              <Button color='red' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>
@@ -187,11 +174,11 @@ class AttachSubdeckModal extends React.Component{
 AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+/*
 AttachSubdeckModal = connectToStores(AttachSubdeckModal,[AttachSubdeckModalStore],(context,props) => {
     return {
         AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
     };
 });
-
+*/
 export default AttachSubdeckModal;
