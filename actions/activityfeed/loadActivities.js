@@ -1,4 +1,4 @@
-import { shortTitle } from '../../configs/general';
+// import { shortTitle } from '../../configs/general';
 import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError  from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';

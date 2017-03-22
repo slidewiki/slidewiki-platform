@@ -1,5 +1,5 @@
 import async from 'async';
-import { shortTitle } from '../configs/general';
+// import { shortTitle } from '../configs/general';
 // import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
 import loadDataSources from './datasource/loadDataSources';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
