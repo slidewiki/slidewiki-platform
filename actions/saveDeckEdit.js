@@ -58,7 +58,7 @@ export default function saveDeckEdit(context, payload, done) {
                     let payload2 = {
                         jwt: context.getStore(UserProfileStore).jwt,
                         editors: {},
-                        deckId: res._id + '-' + res.revisions[0].id
+                        deckId: payload.deckId,
                     };
                     payload2.editors.users = payload.editors.new.users.reduce((array, user) => {
                         let userCopy = JSON.parse(JSON.stringify(user));
