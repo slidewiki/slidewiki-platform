@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { connectToStores } from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider} from 'semantic-ui-react';
-import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
+//import ReactDOM from 'react-dom';
+//import { connectToStores } from 'fluxible-addons-react';
+import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
+//import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
 
 
@@ -37,9 +37,6 @@ class AttachSubdeckModal extends React.Component{
             modalOpen:true,
             activeTrap:true
         });
-
-
-
     }
 
     handleClose(){
@@ -106,8 +103,8 @@ class AttachSubdeckModal extends React.Component{
 
            <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button" aria-label="Attach Slide" data-tooltip="Attach Slide" aria-hidden="false"
-                      basic icon open={this.state.openModal} onClick={this.handleOpen} >
+                      type="button" aria-label="Attach Slide" data-tooltip="Attach Slide" aria-hidden={this.state.modalOpen}
+                      basic icon onClick={this.handleOpen} >
                         <Icon.Group size={this.props.buttonStyle.iconSize}>
                             <Icon className="yellow" name="folder" />
                             <Icon className="corner" name="attach" />
@@ -145,7 +142,7 @@ class AttachSubdeckModal extends React.Component{
                                                   onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                             </Menu>
                             <Segment attached='bottom'>
-                               <div className="sr-only" id="attachSubdeckModalDescription">Select deck to attach from your  My Decks list or search SlideWikiy</div>
+                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
                                {segmentPanelContent}
                                {selectedDeckArea}
                             </Segment>
