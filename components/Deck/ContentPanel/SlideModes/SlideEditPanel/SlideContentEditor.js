@@ -251,8 +251,37 @@ class SlideContentEditor extends React.Component {
             }
         });
 
-
-
+        //alert('svg style');
+        //Remove height and width from underlying SVG elements in divs - will cause SVG to scale default 100% size of top level input box
+        //alert('svg style' + $('.pptx2html > [style*="absolute"] > [style*="absolute"]').css());
+        //alert('svg style' + $('.pptx2html > [style*="absolute"] > [style*="absolute"] > [style*="absolute"]').css());
+        //$('.pptx2html > [style*="absolute"] > [style*="absolute"]').css('width': '', 'height': '');
+        //$('.pptx2html > [style*="absolute"] > [style*="absolute"] > [style*="absolute"]').css('width': '');
+        //alert('test' + $('.drawing-container').children().html());
+        //alert('test' +
+        //width $('.drawing-container').css('width');
+        //alert($('.drawing-container').css('width'));
+        //$("#mySVG").attr("width",  window.innerWidth);
+        //$("#mySVG").attr("height", window.innerHeight);
+        //console.log($(".svg").attr("width"));
+        //var mySVG = document.getElementById("mySVG");
+        //mySVG.setAttribute("width",  "100%");
+        //mySVG.setAttribute("height", "100%");
+        //$("svg").attr("width",  "100%");
+        //$("svg").attr("height", "100%");
+        //$("svg").child().attr("width",  "100%");
+        //$("svg").child().attr("height", "100%");
+        /*$('.drawing-container').each(function( index ) {
+            var html = $(this).html();
+            console.log(html);
+            html = html.replace(html.substr(html.indexOf('width:'), 26), 'width: 100%; ');
+            html = html.replace(html.substr(html.indexOf('height:'), 27), 'height: 100%; ');
+            html = html.replace(html.substr(html.indexOf('width="'), 27), 'width=" 100%" ');
+            html = html.replace(html.substr(html.indexOf('height=":'), 28), 'height=" 100%" ');
+            //html = html.replace(containerwidth.substring(-2), '100%')
+            $(this).html(html);
+            console.log($(this).html());
+        });*/
         //setTimeout(this.forceUpdate(), 500);
         //alert('componentdidmount');
         //this.forceUpdate();
@@ -288,11 +317,21 @@ class SlideContentEditor extends React.Component {
           , onlyY: false
           , ratio: this.scaleratio
         });
+        //fix for making SVG graphics resizable/draggable
         SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
+        //SimpleDraggable('.drawing-container', {
             onlyX: false
           , onlyY: false
           , ratio: this.scaleratio
         });
+        //disable firefox resizing
+        //document.designMode = "on";
+        //document.execCommand("enableObjectResizing", false, "false");
+        //document.execCommand("enableInlineTableEditing", false, "false");
+        //$('.pptx2html').css('resize', 'both');
+        //$('.pptx2html > [style*="absolute"] ').css('resize', 'both');
+        //$('.pptx2html > [style*="absolute"] > [style*="absolute"]').css('resize', 'both');
+
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';

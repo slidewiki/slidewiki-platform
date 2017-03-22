@@ -96,6 +96,7 @@
                     //disable firefox resize and drag
                     //this is an DOM element property -> is different from internal class variable -> cEl._simpleDraggable.resize
                     cEl.resize = 'none';
+                    //e.preventDefault ? e.preventDefault() : e.returnValue = false
                     // fetch our section element
                     //var section = document.querySelector("section");
 
