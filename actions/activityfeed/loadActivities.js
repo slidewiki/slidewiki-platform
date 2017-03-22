@@ -26,10 +26,10 @@ export default function loadActivities(context, payload, done) {
             context.dispatch('LOAD_ACTIVITIES_SUCCESS', res);
             context.dispatch('UPDATE_ACTIVITY_TYPE_SUCCESS', {activityType: 'all'});
         }
-        let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        // let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;
+        // context.dispatch('UPDATE_PAGE_TITLE', {
+        //     pageTitle: pageTitle
+        // });
         done();
     });
 }
