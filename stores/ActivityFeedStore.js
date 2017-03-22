@@ -83,7 +83,12 @@ ActivityFeedStore.handlers = {
     'UPDATE_ACTIVITY_TYPE_SUCCESS': 'updateActivityType',
     'LIKE_ACTIVITY_SUCCESS': 'incrementLikes',
     'ADD_COMMENT_SUCCESS': 'addCommentActivity',
-    'ADD_REPLY_SUCCESS': 'addCommentActivity'
+    'ADD_REPLY_SUCCESS': 'addCommentActivity',
+
+
+
+
+    'ADD_ACTIVITY_SUCCESS': 'addActivity'
 };
 
 export default ActivityFeedStore;

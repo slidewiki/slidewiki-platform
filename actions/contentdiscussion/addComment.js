@@ -1,4 +1,5 @@
 import serviceUnavailable from '../error/serviceUnavailable';
+import addActivity from '../activityFeed/addActivity';
 const log = require('../log/clog');
 
 export default function addComment(context, payload, done) {
@@ -12,6 +13,16 @@ export default function addComment(context, payload, done) {
             // context.dispatch('ADD_COMMENT_FAILURE', err);
         } else {
             context.dispatch('ADD_COMMENT_SUCCESS', res);
+
+
+
+
+            // make payload
+
+
+
+
+            context.executeAction(addActivity, payload);
         }
 
         done();
