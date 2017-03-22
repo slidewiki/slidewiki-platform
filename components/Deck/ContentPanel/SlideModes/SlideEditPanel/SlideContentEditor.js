@@ -16,6 +16,7 @@ import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
+import TemplateDropdown from '../../../../common/TemplateDropdown';
 
 let ReactDOM = require('react-dom');
 
@@ -28,8 +29,26 @@ class SlideContentEditor extends React.Component {
         //this.props.scaleratio = 1;
         this.scaleratio = 1;
         this.addBoxButtonHTML = '';
+        this.refs.template;
+        this.showTemplates = false;
     }
 
+    handleTemplatechange(){
+        if (this.showTemplates === false){
+            this.refs.template.showOptions();
+            this.showTemplates = true;
+        }
+        else{
+            let template = this.refs.template.getSelected();
+            if (this.refs.template.getSelected() !== '')
+            {
+                //const template = this.refs.templates.getSelected();
+                console.log('selected template:' + template);
+
+                this.forceUpdate();
+            }
+        }
+    }
 
     handleSaveButton(){
         if (this.props.UserProfileStore.username !== '') {
@@ -414,6 +433,11 @@ class SlideContentEditor extends React.Component {
                  Save
                 </button>
                 {this.addBoxButtonHTML}
+                <TemplateDropdown name="template" ref="template" id="template" />
+                <button tabIndex="0" ref="templatebutton" className="ui icon button" onClick={this.handleTemplatechange.bind(this)} >
+                    <i className="browser icon green"></i>
+                    Use template
+                </button>
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className="reveal">
