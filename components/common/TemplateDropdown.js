@@ -41,6 +41,9 @@ class TemplateDropdown extends React.Component {
         });
 
         let templateOptions = <div className="menu">
+            <div className="item" data-value="1" >
+                Title and bullets
+            </div>
             <div className="item" data-value="11" >
                 1 row 1 column
             </div>
