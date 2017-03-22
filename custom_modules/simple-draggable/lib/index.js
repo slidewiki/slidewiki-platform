@@ -385,10 +385,11 @@
                     cEl.resizediv.style.width = buttonsize+"px";
                     cEl.resizediv.style.height = buttonsize+"px";
                     //assign to bottom right of parent div
-                    //cEl.resizediv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75))+"px";
-                    cEl.resizediv.style.top = (parseInt(cEl.style.height) - (buttonsize+(10*options.ratio)))+"px";
-                    //cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
-                    cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize))+"px";
+                    if (options.ratio >= 1){cEl.resizediv.style.top = (((parseInt(cEl.style.height)) - 50) - ((buttonsize-50)*options.ratio)) +"px";}
+                    else {cEl.resizediv.style.top = ((parseInt(cEl.style.height) - buttonsize) - ((50-buttonsize)*options.ratio)) +"px";}
+                    if (options.ratio >= 1){cEl.resizediv.style.left = (((parseInt(cEl.style.width)) - 50) + ((buttonsize-50)*options.ratio)) +"px";}
+                    else {cEl.resizediv.style.left = ((parseInt(cEl.style.width) - 50) + (50-buttonsize)) +"px";}
+
 
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
@@ -556,10 +557,10 @@
                             //cEl.sendtobackdiv.style.left = "-" + (buttonsize*0.5)+"px";
                             cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*2*0.75))  +"px";
                             //cEl.movetofrontdiv.style.left = "-" + (buttonsize*0.5)+"px";
-                            //cEl.resizediv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75))+"px";
-                            cEl.resizediv.style.top = (parseInt(cEl.style.height) - (buttonsize+(10*options.ratio)))+"px";
-                            //cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
-                            cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize))+"px";
+                            if (options.ratio >= 1){cEl.resizediv.style.top = (((parseInt(cEl.style.height)) - 50) - ((buttonsize-50)*options.ratio)) +"px";}
+                            else {cEl.resizediv.style.top = ((parseInt(cEl.style.height) - buttonsize) - ((50-buttonsize)*options.ratio)) +"px";}
+                            if (options.ratio >= 1){cEl.resizediv.style.left = (((parseInt(cEl.style.width)) - 50) + ((buttonsize-50)*options.ratio)) +"px";}
+                            else {cEl.resizediv.style.left = ((parseInt(cEl.style.width) - 50) + (50-buttonsize)) +"px";}
                         }
                         else
                         { return; }
