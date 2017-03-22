@@ -111,11 +111,18 @@
                     //cEl.dragdiv.style.height = "50px";
                     cEl.dragdiv.style.width = buttonsize+"px";
                     cEl.dragdiv.style.height = buttonsize+"px";
+<<<<<<< HEAD
                     cEl.dragdiv.style.top = "-"+(buttonsize*0.75)+"px";
                     cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
                     //div.style.top = cEl.style.top - 20 ;
                     //div.style.top = "-20" ;
                     //div.style.left = cEl.style.left - 20 ;
+=======
+                    //cEl.dragdiv.style.top = "-"+(buttonsize*0.75)+"px";
+                    cEl.dragdiv.style.top = "-"+(buttonsize*0.3)+"px";
+                    //cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
+                    cEl.dragdiv.style.left = "-3px";
+>>>>>>> master
                     /*
                     var textnode = document.createTextNode("##");         // Create a text node
                     //textnode.style.position = "absolute";
@@ -165,9 +172,9 @@
                         };
 
                         //fix to prevent scrolling
-                        $('.pptx2html').css('overflow', 'hidden');
+                        //$('.pptx2html').css('overflow', 'hidden');
                         //$('.pptx2html').css('height', '100%');
-                        $('body').css('overflow', 'hidden');
+                        ////$('body').css('overflowY', 'hidden');
                         //$('body').css('height', '100%');
 
                         //cEl.style.overflow = 'hidden';
@@ -208,7 +215,7 @@
                         //restore fix to prevent scrolling
                         $('.pptx2html').css('overflow', '');
                         //$('.pptx2html').css('height', '');
-                        $('body').css('overflow', '');
+                        $('body').css('overflowY', '');
                         //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -383,6 +390,7 @@
                     cEl.resizediv.style.zIndex = "9000000";
                     cEl.resizediv.id = "resizediv";
                     cEl.resizediv.className = "resizediv";
+<<<<<<< HEAD
                     //cEl.resizediv.style.width = "50px";
                     //cEl.resizediv.style.height = "50px";
                     cEl.resizediv.style.width = buttonsize+"px";
@@ -392,6 +400,16 @@
                     cEl.resizediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
                     //cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
                     //cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
+=======
+                    cEl.resizediv.style.width = buttonsize+"px";
+                    cEl.resizediv.style.height = buttonsize+"px";
+                    //assign to bottom right of parent div
+                    if (options.ratio >= 1){cEl.resizediv.style.top = (((parseInt(cEl.style.height)) - 50) - ((buttonsize-50)*options.ratio)) +"px";}
+                    else {cEl.resizediv.style.top = ((parseInt(cEl.style.height) - buttonsize) - ((50-buttonsize)*options.ratio)) +"px";}
+                    if (options.ratio >= 1){cEl.resizediv.style.left = (((parseInt(cEl.style.width)) - 50) + ((buttonsize-50)*options.ratio)) +"px";}
+                    else {cEl.resizediv.style.left = ((parseInt(cEl.style.width) - 50) + (50-buttonsize)) +"px";}
+
+>>>>>>> master
 
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
@@ -419,9 +437,9 @@
                         };
 
                         //fix to prevent scrolling
-                        $('.pptx2html').css('overflow', 'hidden');
+                        ////$('.pptx2html').css('overflow', 'hidden');
                         //$('.pptx2html').css('height', '100%');
-                        $('body').css('overflow', 'hidden');
+                        //$('body').css('overflowY', 'hidden');
                         //$('body').css('height', '100%');
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -465,7 +483,7 @@
                         //restore fix to prevent scrolling
                         $('.pptx2html').css('overflow', '');
                         //$('.pptx2html').css('height', '');
-                        $('body').css('overflow', '');
+                        $('body').css('overflowY', '');
                         //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -551,6 +569,7 @@
                             }
                             //cEl.style.transform = 'scale(0.5)';
                             //move resize button with resized borders of element
+<<<<<<< HEAD
                             cEl.dragdiv.style.top = "-"+(buttonsize*0.75)+"px";
                             cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
                             cEl.removediv.style.top = "-"+ (buttonsize*0.75) +"px";
@@ -567,6 +586,20 @@
                             //cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
                             //cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
                             //cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
+=======
+                            cEl.dragdiv.style.top = "-"+(buttonsize*0.3)+"px";
+                            //cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
+                            //cEl.removediv.style.top = "-"+ (buttonsize*0.75) +"px";
+                            cEl.removediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
+                            cEl.sendtobackdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75)) +"px";
+                            //cEl.sendtobackdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                            cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*2*0.75))  +"px";
+                            //cEl.movetofrontdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                            if (options.ratio >= 1){cEl.resizediv.style.top = (((parseInt(cEl.style.height)) - 50) - ((buttonsize-50)*options.ratio)) +"px";}
+                            else {cEl.resizediv.style.top = ((parseInt(cEl.style.height) - buttonsize) - ((50-buttonsize)*options.ratio)) +"px";}
+                            if (options.ratio >= 1){cEl.resizediv.style.left = (((parseInt(cEl.style.width)) - 50) + ((buttonsize-50)*options.ratio)) +"px";}
+                            else {cEl.resizediv.style.left = ((parseInt(cEl.style.width) - 50) + (50-buttonsize)) +"px";}
+>>>>>>> master
                         }
                         else
                         { return; }
