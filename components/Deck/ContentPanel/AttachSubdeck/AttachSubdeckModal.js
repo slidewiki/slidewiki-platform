@@ -65,7 +65,7 @@ class AttachSubdeckModal extends React.Component{
     }
     unmountTrap(){
         if(this.state.activeTrap){
-            this.setState({ activeTrap: false });          
+            this.setState({ activeTrap: false });
         }
     }
 
@@ -123,10 +123,12 @@ class AttachSubdeckModal extends React.Component{
                             <div className="ui segment top atttached">
                                 <div className="ui top attached tabular menu" role="tablist">
                                     <button id='tabMyDecksId' className={(this.state.activeItem === 'MyDecks')?'active item':'item'}
+                                        aria-selected={this.state.activeItem === 'MyDecks'}
                                         onClick={this.handleMyDecksClick} role="tab" tabIndex="0">
                                     From My Decks
                                     </button>
                                     <button id='tabFromSlideWikiId' className={(this.state.activeItem === 'SlideWiki')?'active item':'item'}
+                                        aria-selected={this.state.activeItem === 'SlideWiki'}
                                         onClick={this.handleSlideWikiClick} role="tab" tabIndex="0">
                                         From SlideWiki
                                     </button>
