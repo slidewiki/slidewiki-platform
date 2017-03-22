@@ -44,13 +44,19 @@ class SlideContentEditor extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             });
-            //remove editing borders:
+            //remove editing borders input boxes:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
             $('.pptx2html')
             .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
             //reset scaling of pptx2html element to get original size
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            //SWIK 107 - remove input box edit buttons
+            $('.dragdiv').remove();
+            $('.removediv').remove();
+            $('.resizediv').remove();
+            $('.movetofrontdiv').remove();
+            $('.sendtobackdiv').remove();
 
             //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
             //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
