@@ -93,12 +93,12 @@ class AttachSubdeckModal extends React.Component{
                                   <Input type="text" id="selectedDeckTitleId" placeholder="You should select one deck.." tabIndex="0" />
                               </Segment>;
         //From my Decks option content
-        let myDecksContent = <Segment>
+        let myDecksContent = <Segment id="panelMyDecksContent">
                                   <img src="http://semantic-ui.com/images/wireframe/paragraph.png" />
                              </Segment>;
 
         //From SlideWiki content
-        let slideWikiContent = <Segment>
+        let slideWikiContent = <Segment id="panelSlideWikiContent">
                                 <img src="http://semantic-ui.com/images/wireframe/media-paragraph.png"/>
                               </Segment>;
 
@@ -151,9 +151,9 @@ class AttachSubdeckModal extends React.Component{
                     <Container>
                          <Segment color="blue" textAlign="center" padded>
                             <Menu attached='top' tabular role="tablist">
-                                     <Menu.Item as='button' name='From My Decks' id='tabMyDecksId' active={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
+                                     <Menu.Item as='button' name='From My Decks' id='tabMyDecksId' active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
                                                   role="tab" tabIndex="0" />
-                                     <Menu.Item as='button' name='From SlideWiki' id='tabFromSlideWikiId' active={this.state.activeItem === 'SlideWiki'}
+                                     <Menu.Item as='button' name='From SlideWiki' id='tabFromSlideWikiId' active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
                                                   onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                             </Menu>
                             <Segment attached='bottom'>
