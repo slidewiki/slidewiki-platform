@@ -288,11 +288,21 @@ class SlideContentEditor extends React.Component {
           , onlyY: false
           , ratio: this.scaleratio
         });
-        SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
+        //fix for making SVG graphics resizable/draggable
+        //SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
+        SimpleDraggable('.drawing-container', {
             onlyX: false
           , onlyY: false
           , ratio: this.scaleratio
         });
+        //alert('svg style');
+        //Remove height and width from underlying SVG elements in divs - will cause SVG to scale default 100% size of top level input box
+        //alert('svg style' + $('.pptx2html > [style*="absolute"] > [style*="absolute"]').css());
+        //alert('svg style' + $('.pptx2html > [style*="absolute"] > [style*="absolute"] > [style*="absolute"]').css());
+        //$('.pptx2html > [style*="absolute"] > [style*="absolute"]').css('width': '', 'height': '');
+        //$('.pptx2html > [style*="absolute"] > [style*="absolute"] > [style*="absolute"]').css('width': '');
+        //$('.drawing-container')
+
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
