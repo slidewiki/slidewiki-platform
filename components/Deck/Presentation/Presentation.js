@@ -46,8 +46,8 @@ class Presentation extends React.Component{
             // $('html.ios, html.ios body').css('height': '100% !important');
 
 
-            // let styleName = this.props.PresentationStore.theme;
-            let styleName = 'black';
+            let styleName = this.props.PresentationStore.theme;
+            // let styleName = 'black';
             // let path = '../../../custom_modules/reveal.js/css/theme/black.css';
             require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 

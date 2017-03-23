@@ -77,7 +77,7 @@ class SlideViewPanel extends React.Component {
         if(process.env.BROWSER){
             // Get the theme information, and download the stylesheet
             let styleName = this.props.PresentationStore.theme;
-            styleName = 'black';
+            // styleName = 'black';
 
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
