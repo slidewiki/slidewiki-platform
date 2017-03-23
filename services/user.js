@@ -1,11 +1,14 @@
 import { Microservices } from '../configs/microservices';
 import { resetPasswordAPIKey } from '../configs/general';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 export default {
     name: 'user',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         // let selector = {
         //     'id': parseInt(args.id),
@@ -70,7 +73,7 @@ export default {
                     callback(err, null);
                 });
         } else if (resource === 'user.checkemail') {
-            let regExp = /\S+@\S+\.\S+/;
+            let regExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$/;
             if (args.email === '' || !regExp.test(args.email)) {//Do not call microservice with invalid email
                 callback(null, {taken: undefined});
             } else {
@@ -97,6 +100,8 @@ export default {
     },
 
     create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
             const hashedPassword = args.password;
@@ -199,6 +204,8 @@ export default {
 
     // other methods
     update: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'user.resetPassword') {
             rp.put({
                 uri: Microservices.user.uri + '/resetPassword',

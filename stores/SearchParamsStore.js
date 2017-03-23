@@ -7,12 +7,12 @@ class SearchParamsStore extends BaseStore {
 
         this.queryparams = '';
         this.searchstring = '';
-        this.entity = '';
+        this.kind = '';
         this.language = '';
         // this.group = '';
-        this.fields = '';
-        this.users = '';
-        this.tags = '';
+        this.field = '';
+        this.user = '';
+        this.tag = '';
         this.revisions = false;
         this.license = '';
         this.fetch = false;
@@ -42,13 +42,13 @@ class SearchParamsStore extends BaseStore {
 
         // fetch results
         this.queryparams = payload.params.queryparams;
-        this.searchstring = (params.q || '');
-        this.entity = (params.entity || '');
+        this.keywords = (params.keywords || '');
+        this.kind = (params.kind || '');
         this.language = (params.language || '');
         // this.group = params.group;
-        this.fields = (params.fields || '');
-        this.users = (params.users || '');
-        this.tags = (params.tags || '');
+        this.field = (params.field || '');
+        this.user = (params.user || '');
+        this.tag = (params.tag || '');
         this.revisions = params.revisions;
         this.license = params.license;
         this.sort = params.sort;
@@ -58,13 +58,13 @@ class SearchParamsStore extends BaseStore {
     }
     resetParams(payload){
         this.queryparams = '';
-        this.searchstring = '';
-        this.entity = '';
+        this.keywords = '';
+        this.kind = '';
         this.language = '';
         // this.group = '';
-        this.fields = '';
-        this.users = '';
-        this.tags = '';
+        this.field = '';
+        this.user = '';
+        this.tag = '';
         this.revisions = false;
         this.license = '';
         this.sort = '';
@@ -75,13 +75,13 @@ class SearchParamsStore extends BaseStore {
     getState() {
         return {
             queryparams: this.queryparams,
-            searchstring: this.searchstring,
-            entity: this.entity,
+            keywords: this.keywords,
+            kind: this.kind,
             language: this.language,
             // group: this.group,
-            fields: this.fields,
-            users: this.users,
-            tags: this.tags,
+            field: this.field,
+            user: this.user,
+            tag: this.tag,
             revisions: this.revisions,
             license: this.license,
             sort: this.sort,
@@ -93,13 +93,13 @@ class SearchParamsStore extends BaseStore {
     }
     rehydrate(state) {
         this.queryparams = state.queryparams;
-        this.searchstring = state.searchstring;
-        this.entity = state.entity;
+        this.keywords = state.keywords;
+        this.kind = state.kind;
         this.language = state.language;
         // this.group = state.group;
-        this.fields = state.fields;
-        this.users = state.users;
-        this.tags = state.tags;
+        this.field = state.field;
+        this.user = state.user;
+        this.tag = state.tag;
         this.revisions = state.revisions;
         this.license = state.license;
         this.sort = state.sort;

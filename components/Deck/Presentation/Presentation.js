@@ -63,7 +63,8 @@ class Presentation extends React.Component{
                 backgroundTransition: 'none',
                 history: true,
                 dependencies: [
-                    { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true }
+                    { src: '/custom_modules/reveal.js/plugin/notes/notes.js', async: true },
+                    { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
                 ]
             });
 

@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
 import loadSearchResults from '../../../actions/search/loadSearchResults';
+import SpellcheckPanel from './SpellcheckPanel';
+import loadMoreResults from '../../../actions/search/loadMoreResults';
 
 class SearchResultsPanel extends React.Component {
 
@@ -38,14 +40,21 @@ class SearchResultsPanel extends React.Component {
             </div>;
         }
     }
+    loadMore(){
+        context.executeAction(loadMoreResults, {
+            queryparams: this.props.queryparams,
+            start: this.props.start
+        });
+    }
     render() {
         const results = this.props.results;
         const numFound = this.props.numFound;
 
+        // define results div
         let resultsDiv = <div ref="resultsDiv">
             <div className="ui grid" key="resultsHeader">
                 <div className="eight wide left floated column" key="resultsTitleDiv">
-                    <h2 className="ui header">Search Results</h2>
+                    <h2 className="ui header">Search Results</h2> Showing {results.length} out of {numFound} results
                 </div>
                 <div className="eight wide right floated column" key="resultsSortDropdown">
                     <div className="ui right floated pointing labeled icon dropdown button" role="button" aria-haspopup="true" aria-label="Sort by" ref="sortDropdown" id="sortDropdown">
@@ -62,17 +71,32 @@ class SearchResultsPanel extends React.Component {
             </div>
         </div>;
 
-        let noResultsDiv = <div key="noResiltsDiv">
-            <div className="ui grid centered">
-                <h3>No results found for the specified input parameters.</h3>
-            </div>
+        // define no results div
+        let noResultsDiv = <div key="noResultsDiv" className="ui basic segment center aligned">
+            <h3>No results found for the specified input parameters.</h3>
         </div>;
 
+        // define load more results div
+        let loadMoreDiv = '';
+
+        if(this.props.loadMore){
+            let loadMoreContent = <button className="ui button" onClick={this.loadMore.bind(this, this.props.start)}>Load More</button>;
+            if(this.props.loadMoreLoading){
+                loadMoreContent = <div className="ui active text loader">Loading</div>;
+            }
+            loadMoreDiv = <div key="loadMoreDiv" className="ui basic segment center aligned">
+                {loadMoreContent}
+            </div>;
+        }
+
         let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
+        let spellcheckDiv = (this.props.spellcheck) ? <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} /> : '';
 
         return (
             <div ref="searchResultsPanel">
+                {spellcheckDiv}
                 {resultsPanel}
+                {loadMoreDiv}
             </div>
         );
     }

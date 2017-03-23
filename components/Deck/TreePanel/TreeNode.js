@@ -202,7 +202,7 @@ class TreeNode extends React.Component {
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
             actionSignifier = '';
         } else {
-            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} aria-label="Double Click to Rename">
+            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
                 {nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
@@ -224,7 +224,7 @@ class TreeNode extends React.Component {
                 {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
                                                onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
+                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}>  </i>
                     {nodeDIV}
                     {this.props.username === '' ? '' : actionSignifier}
                 </div>

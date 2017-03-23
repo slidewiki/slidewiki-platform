@@ -7,7 +7,7 @@ import DeckEditStore from '../../../../../stores/DeckEditStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
-
+import TagsStore from '../../../../../stores/TagsStore';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -70,6 +70,7 @@ class DeckPropertiesEditor extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             });
+
             this.context.executeAction(saveAction, {
                 deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
                 title: this.state.title,
@@ -77,7 +78,7 @@ class DeckPropertiesEditor extends React.Component {
                 description: this.state.description,
                 theme: this.state.theme,
                 license: this.state.license,
-                tags: [],
+                tags: TagsStore.tags,
                 selector: this.props.selector
             });
         }
@@ -131,7 +132,7 @@ class DeckPropertiesEditor extends React.Component {
                 Italian
             </option>
             <option value="pt_PT" >
-                Portugese
+                Portuguese
             </option>
             <option value="sr_RS" >
                 Serbian
@@ -196,7 +197,7 @@ class DeckPropertiesEditor extends React.Component {
                             </div>
                         </div>
                         {saveDeckButton}
-                        <button className='ui primary button'                     
+                        <button className='ui primary button'
                              onClick={this.handleSave.bind(this, true)}>
                             Save as new revision
                         </button>
@@ -221,7 +222,8 @@ DeckPropertiesEditor.contextTypes = {
 DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, UserProfileStore], (context, props) => {
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        TagsStore: context.getStore(TagsStore).getState()
     };
 });
 
