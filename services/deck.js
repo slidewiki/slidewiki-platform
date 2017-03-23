@@ -150,8 +150,8 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         if (resource === 'deck.create') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            if (params.tags.length === 1 && params.tags[0].length === 0)
-                params.tags = undefined;
+//            if (params.tags.length === 1 && params.tags[0].length === 0)
+//                params.tags = undefined;
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
@@ -177,8 +177,8 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'deck.update') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-            if (params.tags.length === 1 && params.tags[0].length === 0)
-                params.tags = undefined;
+//            if (params.tags.length === 1 && params.tags[0].length === 0)
+//                params.tags = undefined;
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
@@ -205,8 +205,8 @@ export default {
                 'stype': params.selector.stype
             };
 
-            if (params.tags.length === 1 && params.tags[0].length === 0)
-                params.tags = undefined;
+//            if (params.tags.length === 1 && params.tags[0].length === 0)
+//                params.tags = undefined;
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
