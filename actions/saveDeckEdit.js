@@ -2,6 +2,7 @@ import UserProfileStore from '../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from './error/serviceUnavailable';
+import addActivity from './activityfeed/addActivity';
 const log = require('./log/clog');
 
 export default function saveDeckEdit(context, payload, done) {
@@ -36,6 +37,14 @@ export default function saveDeckEdit(context, payload, done) {
                 context.executeAction(navigateAction, {
                     url: newURL
                 });
+
+                let activity = {
+                    activity_type: 'edit',
+                    user_id: String(context.getStore(UserProfileStore).userid),
+                    content_id: String(payload.selector.sid),
+                    content_kind: 'deck'
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
             done();
         });

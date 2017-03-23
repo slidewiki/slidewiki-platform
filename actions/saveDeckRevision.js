@@ -4,6 +4,7 @@ import striptags from 'striptags';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from './error/serviceUnavailable';
+import addActivity from './activityfeed/addActivity';
 const log = require('./log/clog');
 
 export default function saveDeckRevision(context, payload, done) {
@@ -59,6 +60,14 @@ export default function saveDeckRevision(context, payload, done) {
                         },
                         changeset: res.changeset
                     });
+
+                    let activity = {
+                        activity_type: 'edit',
+                        user_id: String(context.getStore(UserProfileStore).userid),
+                        content_id: String(newSid),
+                        content_kind: 'deck'
+                    };
+                    context.executeAction(addActivity, {activity: activity});
                 }
             }
             done();

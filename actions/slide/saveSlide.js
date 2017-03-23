@@ -6,6 +6,7 @@ import striptags from 'striptags';
 import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
+import addActivity from '../activityfeed/addActivity';
 
 export default function saveSlide(context, payload, done) {
     //enrich with user id
@@ -44,7 +45,13 @@ export default function saveSlide(context, payload, done) {
                     changeset: res.changeset
                 });
 
-
+                let activity = {
+                    activity_type: 'edit',
+                    user_id: String(context.getStore(UserProfileStore).userid),
+                    content_id: String(res.slide.id),
+                    content_kind: 'slide'
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
             //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
             let pageTitle = shortTitle + ' | Slide Edit | ';

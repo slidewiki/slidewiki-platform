@@ -76,74 +76,48 @@ export default {
                 break;
         }
     },
-
-
-
-
-
-
-
-
-    // create: (req, resource, params, body, config, callback) => {
-    // req.reqId = req.reqId ? req.reqId : -1;
-    // log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-    // let args = params.params? params.params : params;
-
-//activity.new
-
-
-
-    create: (activity_type, user_id, content_id, content_kind, additional_info, content_name, content_owner_id) => {
-        let data = JSON.stringify({
-            activity_type: activity_type,
-            user_id: user_id,
-            content_id: content_id,
-            content_kind: content_kind
-        });
-        switch (activity_type) {
-            case 'comment':
-            case 'reply':
-                data.comment_info = additional_info;
-                break;
-            case 'translate':
-                data.translation_info = additional_info;
-                break;
-            case 'share':
-                data.share_info = additional_info;
-                break;
-            case 'use':
-                data.use_info = additional_info;
-                break;
-            case 'react':
-                data.react_type = additional_info;
-                break;
-            case 'rate':
-                data.rate_type = additional_info;
-                break;
-        }
-        if (!co.isEmpty(contentName)) {
-            data.content_name = content_name;
-        }
-        if (!co.isEmpty(content_owner_id)) {
-            data.content_owner_id = content_owner_id;
-        }
-
-        rp.post({
-            uri: Microservices.activities.uri + '/activity/new',
-            body: data
-        });
-    },
-    update: (req, resource, params, body, config, callback) => {
+    create: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
-        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-        if(resource === 'activities.like'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            callback(null, {id: args.id});
+    // create: (activity_type, user_id, content_id, content_kind, additional_info, content_name, content_owner_id) => {
+
+        switch (resource) {
+            case 'activities.new':
+                rp.post({
+                    uri: Microservices.activities.uri + '/activity/new',
+                    body: JSON.stringify(args.activity)
+                }).then((res) => {
+                    callback(null, {activity: JSON.parse(res)});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(err, {activity: {}});
+                });
+                break;
+            case 'activities.newarray':
+                rp.post({
+                    uri: Microservices.activities.uri + '/activities/new',
+                    body: JSON.stringify(args.activities)
+                }).then((res) => {
+                    callback(null, {activities: JSON.parse(res)});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(err, {activities: {}});
+                });
+                break;
         }
     }
+    // update: (req, resource, params, body, config, callback) => {
+    //     req.reqId = req.reqId ? req.reqId : -1;
+    //     log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
+    //     let args = params.params? params.params : params;
+    //     if(resource === 'activities.like'){
+    //         /*********connect to microservices*************/
+    //         //todo
+    //         /*********received data from microservices*************/
+    //         callback(null, {id: args.id});
+    //     }
+    // }
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
     // update: (req, resource, params, body, config, callback) => {}
