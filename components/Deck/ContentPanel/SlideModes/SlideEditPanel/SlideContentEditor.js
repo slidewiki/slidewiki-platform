@@ -15,6 +15,7 @@ import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
+import PresentationStore from '../../../../../stores/PresentationStore';
 
 let ReactDOM = require('react-dom');
 
@@ -246,6 +247,13 @@ class SlideContentEditor extends React.Component {
 
         if(process.env.BROWSER){
             this.resize();
+
+            // Get the theme information, and download the stylesheet
+            let styleName = this.props.PresentationStore.theme;
+            styleName = 'black';
+
+            require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
         }
     }
     resize() {
@@ -461,7 +469,8 @@ SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserPr
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        DataSourceStore: context.getStore(DataSourceStore).getState()
+        DataSourceStore: context.getStore(DataSourceStore).getState(),
+        PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
 export default SlideContentEditor;

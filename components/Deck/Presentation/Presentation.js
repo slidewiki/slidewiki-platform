@@ -6,9 +6,9 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
-//if(process.env.BROWSER){
+// if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
-//}
+// }
 
 let playerCss = {
     height: '100%',
@@ -43,8 +43,13 @@ class Presentation extends React.Component{
             $('.ui.horizontal.segments.footer').css({'display': 'none'});
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
-            let styleName = this.props.PresentationStore.theme;
+            // $('html.ios, html.ios body').css('height': '100% !important');
 
+
+            // let styleName = this.props.PresentationStore.theme;
+            let styleName = 'black';
+            // let path = '../../../custom_modules/reveal.js/css/theme/black.css';
+            require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';
 
@@ -63,6 +68,7 @@ class Presentation extends React.Component{
             });
 
         }
+
     }
 
     componentDidUpdate(){

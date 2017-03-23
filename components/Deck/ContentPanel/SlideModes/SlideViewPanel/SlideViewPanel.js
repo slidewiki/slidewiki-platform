@@ -3,6 +3,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import ResizeAware from 'react-resize-aware';
+import PresentationStore from '../../../../../stores/PresentationStore';
 import { findDOMNode } from 'react-dom';
 const ReactDOM = require('react-dom');
 
@@ -29,7 +30,7 @@ class SlideViewPanel extends React.Component {
             overflowY: 'hidden',
             overflowX: 'auto',
             height: '100%'
-        };        
+        };
         const compSpeakerStyle = {
             maxHeight: 50,
             minHeight: 50,
@@ -65,6 +66,12 @@ class SlideViewPanel extends React.Component {
     }
     componentDidMount(){
         if(process.env.BROWSER){
+            // Get the theme information, and download the stylesheet
+            let styleName = this.props.PresentationStore.theme;
+            styleName = 'black';
+
+            require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
             //$(".pptx2html [style*='absolute']").addClass('schaal');
@@ -136,7 +143,8 @@ class SlideViewPanel extends React.Component {
 
 SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore], (context, props) => {
     return {
-        SlideViewStore: context.getStore(SlideViewStore).getState()
+        SlideViewStore: context.getStore(SlideViewStore).getState(),
+        PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
 export default SlideViewPanel;
