@@ -144,7 +144,8 @@ class DeckPropertiesEditor extends React.Component {
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"
                                    selected={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
-            <option value="DefaultTheme">Default</option>
+            <option value="DefaultTheme">Default - Reveal.js White</option>
+            <option value="Solarized">Reveal.js Solarized</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
@@ -187,7 +188,7 @@ class DeckPropertiesEditor extends React.Component {
                                       onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
-                            <div className="field disabled">
+                            <div className="field">
                                 <label id="themes">Choose deck theme</label>
                                 {themeOptions}
                             </div>

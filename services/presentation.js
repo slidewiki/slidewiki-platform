@@ -34,5 +34,6 @@ function get_sample_theme(){
     let themes = ['beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white'];
     let index = Math.floor(Math.random() * (themes.length - 1));
     // Just hardcode this for now.  Change to themes[index] if we really want it random.
-    return themes[1];
+    //return themes[1];
+    return themes[9];
 }
