@@ -31,7 +31,7 @@ class NoPermissionsModal extends React.Component {
                 <Header icon='warning sign' content='No Edit Rights'/>
                 <Modal.Content>
                     <p>You can only view this deck. To make changes, you may ask the owner to grant you edit rights
-                        or fork the deck.</p>
+                        or fork the deck. Forking a deck means creating your copy of the deck.</p>
                 </Modal.Content>
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={isModalShown}>

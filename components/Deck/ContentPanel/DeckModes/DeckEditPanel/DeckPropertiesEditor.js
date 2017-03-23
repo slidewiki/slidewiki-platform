@@ -260,7 +260,7 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
-                let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago      ') : '';
+                let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
                 // console.log('New key for authorized user:', key, user);
                 list_authorized.push(
@@ -273,7 +273,7 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="fifteen wide column">
                           <a className="header" href={'/user/' + user.username}>{user.username}</a>
                           <div className="description">
-                            {optionalText}
+                            {optionalText}&nbsp;&nbsp;&nbsp;
                             <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
                               Remove
                             </button>
@@ -299,6 +299,7 @@ class DeckPropertiesEditor extends React.Component {
                 let fct2 = (event) => {
                     this.handleClickShowGroupDetails(group.id, event);
                 };
+                let optionalText = (group.joined) ? ('Access granted '+timeSince((new Date(group.joined)))+' ago') : '';
                 temp_list.push(
                   (
                     <div className="item" key={'group_' + group.id + group.name} >
@@ -309,7 +310,7 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="fifteen wide column">
                           <a className="header">{group.name}</a>
                           <div className="description">
-                            Access granted {timeSince((new Date(group.joined)))} ago&nbsp;&nbsp;&nbsp;
+                            {optionalText}&nbsp;&nbsp;&nbsp;
                             <button className="ui tiny compact borderless black basic button" onClick={fct}>
                               Remove
                             </button>
