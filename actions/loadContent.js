@@ -14,6 +14,7 @@ const log = require('./log/clog');
 
 export default function loadContent(context, payload, done) {
     log.info(context);
+    console.log('action loadContent:', payload);
     if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
         return;

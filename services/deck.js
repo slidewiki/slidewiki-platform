@@ -125,7 +125,8 @@ export default {
                     },
                     deckOwner: deck.user,
                     revisionOwner: revision.user,
-                    sid: args.sid
+                    sid: args.sid,
+                    localRootDeck: args.id
                 };
                 let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
                 callback(null, {

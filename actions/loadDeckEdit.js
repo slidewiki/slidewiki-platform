@@ -7,6 +7,7 @@ const log = require('./log/clog');
 
 export default function loadDeckEdit(context, payload, done) {
     log.info(context);
+    // console.log('action loadDeckEdit:', payload);
 
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);

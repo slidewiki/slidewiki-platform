@@ -472,7 +472,7 @@ class DeckPropertiesEditor extends React.Component {
                             </div>
                         </div>
 
-                        {(this.props.PermissionsStore.permissions.admin) ? (
+                        {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
                           <div>
                             <div className="two fields">
                                 <div className={groupsFieldClass}>
