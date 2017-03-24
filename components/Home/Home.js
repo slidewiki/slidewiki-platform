@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import DeckList from './DeckList';
 import {NavLink} from 'fluxible-router';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 
 class Home extends React.Component {
@@ -10,8 +10,16 @@ class Home extends React.Component {
             height: '100px'
         };
 
-        const message_welcome_12 = 'As the new SlideWiki platform is still under development, we will be regularly adding new featurses. If you are interested in finding out more about the SlideWiki project follow us on {link_1} or visit the {link_2}.';
-
+        const messages = defineMessages({
+            slogan:{
+                id: 'home.slogan',
+                defaultMessage: 'SlideWiki revolutionises how educational material is authored, shared and used.'
+            },
+            logo_alt: {
+                id: 'home.logo_alt',
+                defaultMessage: 'SlideWiki beta logo',
+            }
+        });
 
         return (
 
@@ -22,15 +30,14 @@ class Home extends React.Component {
                         <div className="item">
                             <div className="middle aligned content">
                                 <h2 className="ui center aligned grey header">
-                                    <FormattedMessage id='home.slogan' defaultMessage='SlideWiki revolutionises how educational material is authored, shared and used.'/>
+                                    <FormattedMessage {...messages.slogan} />
                                 </h2>
                             </div>
                         </div>
                     </div>
                     <div className="ten wide column">
-
-                        <div className="ui top right attached large blue label"><FormattedMessage id='home.beta' defaultMessage='beta'/></div>
-                        <img className="ui centered image" src="/assets/images/logo_full.png" alt="SlideWiki beta logo" />
+                        <div className="ui top right attached large blue label">beta</div>
+                        <img className="ui centered image" src="/assets/images/logo_full.png" alt={this.context.intl.formatMessage(messages.logo_alt)} />
                     </div>
                 </div>
             </div>
@@ -47,6 +54,7 @@ class Home extends React.Component {
                     </div>
                     <p><FormattedMessage id='home.welcome5' defaultMessage='Many people in the world lack access to educational material.
                         Help us to create great educational material covering as many domains and as many languages as possible:'/></p>
+
                     <div className="ui bulleted list">
                         <div className="item"><FormattedMessage id='home.welcome6' defaultMessage='Sign in SlideWiki'/></div>
                         <div className="item"><FormattedMessage id='home.welcome7' defaultMessage='Search for decks at SlideWiki, whose domain you know'/></div>
@@ -55,13 +63,18 @@ class Home extends React.Component {
                         <div className="item"><FormattedMessage id='home.welcome10' defaultMessage='Translate decks covering topics you know well into your mother tongue (in development)'/></div>
                         <div className="item"><FormattedMessage id='home.welcome11' defaultMessage='Look for existing presentations and e-learning material, which could be imported into SlideWiki'/></div>
                     </div>
+
                     <p><FormattedMessage
                         id='home.welcome12'
                         values={{
                             link_1: <a target="_blank" href="https://twitter.com/SlideWiki">Twitter</a>,
-                            link_2: <a href="https://slidewiki.eu">SlideWiki project website</a>
+                            link_2: <a href="https://slidewiki.eu">
+                                        <FormattedMessage
+                                            id="home.welcome12.1"
+                                            defaultMessage="SlideWiki project website"/>
+                                    </a>
                         }}
-                        defaultMessage={message_welcome_12}/></p>
+                        defaultMessage={'As the new SlideWiki platform is still under development, we will be regularly adding new featurses. If you are interested in finding out more about the SlideWiki project follow us on {link_1} or visit the {link_2}.'}/></p>
                     <p><FormattedMessage id='home.welcome13' defaultMessage='This project has received funding from the EU Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095.'/></p>
                 </div>
 
@@ -83,5 +96,13 @@ class Home extends React.Component {
     }
 }
 
+Home.contextTypes = {
+    intl: React.PropTypes.object.isRequired
+};
+
 
 export default Home;
+
+
+
+//export default Home;
