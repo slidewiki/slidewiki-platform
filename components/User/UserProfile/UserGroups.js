@@ -27,7 +27,7 @@ class UserGroups extends React.Component {
                 buttonsStyling: false
             })
             .then(() => {
-                this.context.executeAction(updateUsergroup, {});
+                this.context.executeAction(updateUsergroup, {group: {}, offline: true});
 
                 return true;
             })
@@ -49,7 +49,7 @@ class UserGroups extends React.Component {
 
         console.log('handleClickOnEditGroup: use group', group);
 
-        this.context.executeAction(updateUsergroup, group);
+        this.context.executeAction(updateUsergroup, {group: group, offline: false});
 
         this.context.executeAction(navigateAction, {
             url: '/user/' + this.props.username + '/groups/edit'
@@ -78,7 +78,7 @@ class UserGroups extends React.Component {
 
     handleCLickNewGroup(e) {
         e.preventDefault();
-        this.context.executeAction(updateUsergroup, {});
+        this.context.executeAction(updateUsergroup, {group: {}, offline: true});
         this.context.executeAction(navigateAction, {
             url: '/user/' + this.props.username + '/groups/edit'
         });
@@ -86,7 +86,7 @@ class UserGroups extends React.Component {
 
     render() {
         let items = [];
-        //TODO groups where not creator -> leave button instead of edit button
+        // console.log('render userGroups:', this.props.userid, this.props.groups);
         this.props.groups.forEach((group) => {
             items.push( (
                 <div key={group._id} className="ui vertical segment" >
@@ -99,7 +99,7 @@ class UserGroups extends React.Component {
                         </div>
 
                         <div className="right aligned column">
-                            {this.props.userid === group.creator ? (
+                            {((this.props.userid === group.creator) || (this.props.userid === group.creator.userid)) ? (
                               <div>
                                   <button className="ui large basic icon button" data-tooltip="Group deletion" aria-label="Group deletion" name={'deleteGroup_' + group._id} onClick={this.handleClickOnRemoveGroup.bind(this)} >
                                       <i className="remove icon" name={'deleteGroup_' + group._id} ></i>
