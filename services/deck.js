@@ -193,7 +193,8 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
-                new_revision: false
+                new_revision: false,
+                top_root_deck: String(params.selector.id),
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
