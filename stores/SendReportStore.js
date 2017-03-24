@@ -12,6 +12,9 @@ class SendReportStore extends BaseStore {
             text: false
         };
         this.error = null;
+
+        this.openModal = false;
+        this.activeTrap = false;
     }
 
     destructor() {
@@ -20,12 +23,16 @@ class SendReportStore extends BaseStore {
             text: false
         };
         this.error = null;
+        this.openModal = false;
+        this.activeTrap = false;
     }
 
     getState() {
         return {
             wrongFields: this.wrongFields,
-            error: this.error
+            error: this.error,
+            openModal: this.openModal,
+            activeTrap: this.activeTrap
         };
     }
 
@@ -36,6 +43,20 @@ class SendReportStore extends BaseStore {
     rehydrate(state) {
         this.wrongFields = state.wrongFields;
         this.error = state.error;
+        this.openModal = state.openModal;
+        this.activeTrap = state.activeTrap;
+    }
+
+    openReportModal(payload){
+        this.openModal = true;
+        this.activeTrap = true;
+        this.emitChange();
+    }
+
+    closeReportModal(payload){
+        this.openModal = false;
+        this.activeTrap = false;
+        this.emitChange();
     }
 
     showWrongFields(wF) {
@@ -48,7 +69,9 @@ class SendReportStore extends BaseStore {
 
 SendReportStore.storeName = 'SendReportStore';
 SendReportStore.handlers = {
-    'REPORT_SHOW_WRONG_FIELDS': 'showWrongFields'
+    'REPORT_SHOW_WRONG_FIELDS': 'showWrongFields',
+    'REPORT_MODAL_OPEN': 'openReportModal',
+    'REPORT_MODAL_CLOSE': 'closeReportModal'
     //'CREATION_FAILURE': 'creationFailure',
     //'CREATION_SUCCESS': 'creationSuccess',
 };
