@@ -53,7 +53,7 @@ export default function saveDeckEdit(context, payload, done) {
                     success(res, payload);
                     return done();
                 }
-                console.log('old versus new:', payload.editors.old, payload.editors.new);
+                // console.log('old versus new:', payload.editors.old, payload.editors.new);
                 if (!common.arraysContainTheSameIdsInTheirObjects(payload.editors.old.users, payload.editors.new.users) || !common.arraysContainTheSameIdsInTheirObjects(payload.editors.old.groups, payload.editors.new.groups)) {
                     let payload2 = {
                         jwt: context.getStore(UserProfileStore).jwt,
