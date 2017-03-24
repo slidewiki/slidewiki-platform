@@ -8,8 +8,8 @@ exports.error = function(context, message='') {
         logFields.message = message;
 
     context.service.update('log.error', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };
@@ -24,8 +24,8 @@ exports.warning = function(context, msg='') {
         logFields.message = message;
 
     context.service.update('log.warning', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };
@@ -40,8 +40,8 @@ exports.info = function(context, message='') {
         logFields.message = message;
 
     context.service.update('log.info', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //console.log(err);
     });
     return;
 };
@@ -56,8 +56,8 @@ exports.crit = function(context, msg='') {
         logFields.message = message;
 
     context.service.update('log.crit', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };
@@ -72,8 +72,8 @@ exports.debug = function(context, msg='') {
         logFields.message = message;
 
     context.service.update('log.debug', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };
@@ -88,8 +88,8 @@ exports.notice = function(context, msg='') {
         logFields.message = message;
 
     context.service.update('log.notice', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };
@@ -104,8 +104,8 @@ exports.emerg = function(context, msg='') {
         logFields.message = message;
 
     context.service.update('log.emerg', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };
@@ -120,8 +120,8 @@ exports.alert = function(context, msg='') {
         logFields.message = message;
 
     context.service.update('log.alert', '', logFields, (err, res) => {
-        if (err)
-            console.log(err);
+        //if (err)
+        //    console.log(err);
     });
     return;
 };

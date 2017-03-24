@@ -190,7 +190,7 @@ class AddDeck extends React.Component {
             this.context.executeAction(uploadFile, payload);
         }
         else {
-            console.error('Submission not possible - no file or not pptx');
+            console.error('Submission not possible - no file or not pptx/odp');
         }
     }
 
@@ -309,7 +309,7 @@ class AddDeck extends React.Component {
                       </div>
 
                         <div className="ui message" id="uploadDesc">
-                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx files are supported.</p>
+                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.</p>
                           </div>
                      <div className="ui grid">
                          <div className="two column row">

@@ -1,5 +1,5 @@
 import async from 'async';
-import { shortTitle } from '../configs/general';
+// import { shortTitle } from '../configs/general';
 // import loadContentDiscussion from './contentdiscussion/loadContentDiscussion';
 import loadDataSources from './datasource/loadDataSources';
 import loadDataSourceCount from './datasource/loadDataSourceCount';
@@ -51,10 +51,10 @@ export default function loadContentModules(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
         }
         context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {selector: payload.params, moduleType: 'datasource'});
-        let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
+        // let pageTitle = shortTitle + ' | Activities | ' + payload.params.stype + ' | ' + payload.params.sid;
+        // context.dispatch('UPDATE_PAGE_TITLE', {
+        //     pageTitle: pageTitle
+        // });
         done();
     });
 }

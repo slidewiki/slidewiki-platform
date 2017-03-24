@@ -273,7 +273,21 @@ export default {
         page: 'activities',
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadActivities, payload, done);
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Activities'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadActivities, payload, done);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
         }
     },
     translations: {
