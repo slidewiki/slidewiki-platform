@@ -56,13 +56,31 @@ export default {
     },
 
     arraysEqual: (arr1, arr2) => {
-        if(arr1.length !== arr2.length)
+        if (arr1.length !== arr2.length)
             return false;
         for(let i = arr1.length; i--;) {
             if(arr1[i] !== arr2[i])
                 return false;
         }
 
+        return true;
+    },
+
+    arraysContainTheSameIdsInTheirObjects: (a, b) => {
+        if (a.length !== b.length)
+            return false;
+        for (let key in a) {
+            const element = a[key];
+            const found = b.findIndex((e) => {return e.id === element.id;}) !== -1;
+            if (!found)
+                return false;
+        }
+        for (let key in b) {
+            const element = b[key];
+            const found = a.findIndex((e) => {return e.id === element.id;}) !== -1;
+            if (!found)
+                return false;
+        }
         return true;
     }
 };

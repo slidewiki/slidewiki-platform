@@ -66,7 +66,7 @@ export default function saveDeckRevision(context, payload, done) {
                 // context.executeAction(serviceUnavailable, payload, done);
                 done();
             } else {
-                if (!common.arraysEqual(payload.editors.old.users, payload.editors.new.users) || !common.arraysEqual(payload.editors.old.groups, payload.editors.new.groups)) {
+                if (!common.arraysContainTheSameIdsInTheirObjects(payload.editors.old.users, payload.editors.new.users) || !common.arraysContainTheSameIdsInTheirObjects(payload.editors.old.groups, payload.editors.new.groups)) {
                     let payload2 = {
                         jwt: context.getStore(UserProfileStore).jwt,
                         editors: {},
