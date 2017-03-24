@@ -303,7 +303,8 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             CKEDITOR.inline('inlineContent', {
                 customConfig: '/assets/ckeditor_config.js',
-                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId}); //leave all buttons
+                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
+                uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
 
         }
         this.currentcontent = this.props.content;
