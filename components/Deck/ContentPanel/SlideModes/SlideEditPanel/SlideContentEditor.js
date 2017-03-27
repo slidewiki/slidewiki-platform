@@ -382,16 +382,19 @@ class SlideContentEditor extends React.Component {
 
         if(process.env.BROWSER){
             this.resize();
-
-            // Get the theme information, and download the stylesheet
-            let styleName = this.props.PresentationStore.theme;
-            // print(styleName);
-            // styleName = 'black';
-
-            require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-
         }
     }
+    componentWillReceiveProps(nextProps){
+        if (nextProps.PresentationStore.theme !== this.props.PresentationStore.theme){
+            if(process.env.BROWSER){
+                let styleName = this.props.PresentationStore.theme;
+                require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+            }
+
+
+        }
+   }
+
     resize() {
         //console.log('resize_all');
         //do not put borders around empty divs containing SVG elements

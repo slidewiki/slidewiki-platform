@@ -47,8 +47,10 @@ class Presentation extends React.Component{
 
 
             let styleName = this.props.PresentationStore.theme;
-            // let styleName = 'black';
-            // let path = '../../../custom_modules/reveal.js/css/theme/black.css';
+            console.log('styleName: ' + styleName);
+            console.log('PresentationStore.theme: ' + this.props.PresentationStore.theme);
+            // // let styleName = 'black';
+            // // let path = '../../../custom_modules/reveal.js/css/theme/black.css';
             require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';

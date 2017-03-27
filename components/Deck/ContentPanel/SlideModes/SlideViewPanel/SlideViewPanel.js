@@ -77,7 +77,9 @@ class SlideViewPanel extends React.Component {
         if(process.env.BROWSER){
             // Get the theme information, and download the stylesheet
             let styleName = this.props.PresentationStore.theme;
-            // styleName = 'black';
+            console.log(this.props.PresentationStore);
+            console.log('styleName ' + styleName);
+            styleName = 'beige';
 
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
@@ -113,6 +115,17 @@ class SlideViewPanel extends React.Component {
 
         this.resize();
     }
+    componentWillReceiveProps(nextProps){
+        // alert('styleName in componentWillReceiveProps: ' + styleName);
+        // console.log(this.props.PresentationStore);
+        if (nextProps.PresentationStore.theme !== this.props.PresentationStore.theme){
+            if(process.env.BROWSER){
+                let styleName = this.props.PresentationStore.theme;
+                alert('styleName in componentWillReceiveProps: ' + styleName);
+                require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+            }
+        }
+   }
     resize()
     {
         let containerwidth = document.getElementById('container').offsetWidth;
