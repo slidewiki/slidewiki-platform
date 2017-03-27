@@ -13,8 +13,9 @@ class ContentHistoryItem extends React.Component {
     }
 
     render() {
+        console.log('ContentHistoryItem render()', this.props.permissions);
         const revision = this.props.revision;
-        const revertIcon = this.props.userid !== '' ? (
+        const revertIcon = (this.props.userid !== '' && (this.props.permissions.admin || this.props.permissions.edit)) ? (
         <a className="like" onClick={this.handleRevertClick.bind(this)}>
             <i className="undo icon"/>
         </a>
