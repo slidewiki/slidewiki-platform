@@ -13,8 +13,8 @@ export default function loadPermissions(context, payload, done) {
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('LOAD_PERMISSIONS_SUCCESS', {permissions: res, deckId: payload.params.id});
-                done();
             }
+            done();
         });
     } else {
         done();
