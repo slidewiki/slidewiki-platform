@@ -70,8 +70,8 @@ class TreeNode extends React.Component {
     }
 
     handleRenameClick(selector, e) {
-        //only if user is logged in
-        if (this.props.username !== '' || !(this.props.permissions.admin || this.props.permissions.edit)) {
+        //only if user is logged in and has the rights
+        if (this.props.username !== '' && (this.props.permissions.admin || this.props.permissions.edit)) {
             this.props.onRename(selector);
             e.stopPropagation();
         }

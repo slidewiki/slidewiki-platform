@@ -96,12 +96,14 @@ class TreePanel extends React.Component {
     }
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
-        this.context.executeAction(moveTreeNodeAndNavigate, {
-            selector: this.props.DeckTreeStore.selector.toJS(),
-            sourceNode: sourceNode,
-            targetNode: targetNode,
-            targetIndex: targetIndex
-        });
+        //only when logged in and having rights
+        if (this.props.UserProfileStore.username !== '' && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit))
+            this.context.executeAction(moveTreeNodeAndNavigate, {
+                selector: this.props.DeckTreeStore.selector.toJS(),
+                sourceNode: sourceNode,
+                targetNode: targetNode,
+                targetIndex: targetIndex
+            });
     }
 
     render() {
