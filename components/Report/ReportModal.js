@@ -9,7 +9,7 @@ import closeReportModal from '../../actions/report/closeReportModal';
 import ContentStore from '../../stores/ContentStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import SendReportStore from '../../stores/SendReportStore';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider} from 'semantic-ui-react';
+import { Button, Container, Modal } from 'semantic-ui-react';
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -109,8 +109,10 @@ class ReportModal extends React.Component {
                 + '&body=' + escape(emailBody);
             window.location.href = link;
 
+            /*
             $('.ui.report.modal')
                 .modal('toggle');
+            */
         }
 
         return false;
@@ -129,6 +131,7 @@ class ReportModal extends React.Component {
                 openModal: nextProps.SendReportStore.openModal
             });
         }
+
     }
 
 
@@ -156,12 +159,12 @@ class ReportModal extends React.Component {
 
         return(
             <div>
-                <div className="ui report modal" id='reportModal' style={modalStyle}>
-                    <div className="header">
+                <Modal id='reportModal' style={modalStyle}>
+                    <Modal.Header>
                         <h1 style={headerStyle}>Report legal or spam issue with {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' } content</h1>
-                    </div>
-                    <div className="content">
-                        <div className="ui container">
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Container>
                             <div className="ui blue padded center aligned segment">
                                 <form className="ui form report">
                                     <div className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
@@ -194,14 +197,14 @@ class ReportModal extends React.Component {
                                 </form>
                                 <br/>
                             </div>
-                        </div>
-                    </div>
+                        </Container>
+                    </Modal.Content>
                     <div className="actions">
                         <Button color='red' type="button" onClick={this.handleClose.bind(this)}>
                             <i className="remove icon"/>Close
                         </Button>
                     </div>
-                </div>
+                </Modal>
             </div>
         );
     }

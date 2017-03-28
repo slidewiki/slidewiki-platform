@@ -73,10 +73,13 @@ class ContentActionsFooter extends React.Component {
     handleReportClick(){
         // Toggle Modal and so on...
 
-        $('.ui.report.modal')
+        $('#reportModal')
             .modal('toggle');
+
+
         this.context.executeAction(openReportModal);
-        //$('#reportModal').attr('aria-hidden', 'true');
+        $('#reportModal').attr('aria-hidden', 'false');
+
     }
 
     getExportHref(type){
