@@ -79,7 +79,7 @@ class SlideViewPanel extends React.Component {
             let styleName = this.props.PresentationStore.theme;
             console.log(this.props.PresentationStore);
             console.log('styleName ' + styleName);
-            styleName = 'beige';
+            styleName = 'white';
 
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
@@ -167,7 +167,7 @@ class SlideViewPanel extends React.Component {
     }
 }
 
-SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore], (context, props) => {
+SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, PresentationStore], (context, props) => {
     return {
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         PresentationStore: context.getStore(PresentationStore).getState()

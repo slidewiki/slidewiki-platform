@@ -379,13 +379,16 @@ class SlideContentEditor extends React.Component {
     }
     componentDidUpdate() {
         //alert('update');
-
+        console.log('componentDidUpdate');
+        console.log(this.props.PresentationStore);
         if(process.env.BROWSER){
             this.resize();
         }
     }
     componentWillReceiveProps(nextProps){
+        console.log('hello?');
         if (nextProps.PresentationStore.theme !== this.props.PresentationStore.theme){
+            console.log('hello inside?');
             if(process.env.BROWSER){
                 let styleName = this.props.PresentationStore.theme;
                 require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
@@ -594,7 +597,8 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
+    print('context', context);
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
