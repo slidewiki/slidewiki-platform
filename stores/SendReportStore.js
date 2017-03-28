@@ -45,6 +45,7 @@ class SendReportStore extends BaseStore {
         this.error = state.error;
         this.openModal = state.openModal;
         this.activeTrap = state.activeTrap;
+        this.emitChange();
     }
 
     openReportModal(payload){

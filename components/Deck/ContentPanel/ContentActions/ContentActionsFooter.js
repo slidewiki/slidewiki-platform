@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import ReportModal from '../../../Report/ReportModal';
+import openReportModal from '../../../../actions/report/openReportModal';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
@@ -16,8 +17,14 @@ class ContentActionsFooter extends React.Component {
         super(props);
         //this.state={expanded: 0};
         this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
-        this.visible = true;
-        // this.modal_classes = (this.visible) ? 'ui small modal transition visible active' : 'ui small modal transition hidden';
+
+        this.state = {
+            openModal: false
+        };
+
+        this.handleReportClick = this.handleReportClick.bind(this);
+        //this.handleCloseReportModal = this.handleClose.bind(this);
+        //this.unmountTrapReportModal = this.unmountTrap.bind(this);
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -65,8 +72,11 @@ class ContentActionsFooter extends React.Component {
 
     handleReportClick(){
         // Toggle Modal and so on...
+
         $('.ui.report.modal')
             .modal('toggle');
+        this.context.executeAction(openReportModal);
+        //$('#reportModal').attr('aria-hidden', 'true');
     }
 
     getExportHref(type){
@@ -98,7 +108,7 @@ class ContentActionsFooter extends React.Component {
 
     render() {
         let reportButton = <div ref="reportButton" onClick={this.handleReportClick.bind(this)} target="_blank">
-                            <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
+                            <button id="reportButton" aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
                                 <i className="warning circle large icon"></i>
                             </button>
                         </div>;

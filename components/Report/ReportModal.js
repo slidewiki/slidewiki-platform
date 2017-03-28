@@ -5,9 +5,11 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import sendReportShowWrongFields from '../../actions/report/sendReportShowWrongFields';
+import closeReportModal from '../../actions/report/closeReportModal';
 import ContentStore from '../../stores/ContentStore';
 import UserProfileStore from '../../stores/UserProfileStore';
 import SendReportStore from '../../stores/SendReportStore';
+import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider} from 'semantic-ui-react';
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -21,6 +23,14 @@ const modalStyle = {
 class ReportModal extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            openModal: false,
+            activeTrap: false
+        };
+
+        this.handleClose = this.handleClose.bind(this);
+        // this.unmountTrap = this.unmountTrap.bind(this);
     }
 
     componentDidMount() {
@@ -106,6 +116,27 @@ class ReportModal extends React.Component {
         return false;
     }
 
+
+    componentWillReceiveProps(nextProps){
+        if (nextProps.SendReportStore.activeTrap !== this.props.SendReportStore.activeTrap){
+            this.setState({
+                activeTrap: nextProps.SendReportStore.activeTrap
+            });
+        }
+
+        if (nextProps.SendReportStore.openModal !== this.props.SendReportStore.openModal){
+            this.setState({
+                openModal: nextProps.SendReportStore.openModal
+            });
+        }
+    }
+
+
+    handleClose(){
+        this.context.executeAction(closeReportModal);
+        $('#reportModal').attr('aria-hidden','false');
+    }
+
     render() {
         let fieldClass_reason = classNames({
             'ui': true,
@@ -150,7 +181,12 @@ class ReportModal extends React.Component {
                                     </div>
                                     <br/>
                                     <div className="ui center aligned">
-                                        <button type="submit" className="ui blue labeled submit icon button" ><i className="icon warning circle"/>Send</button>
+                                        <Button
+                                            color='blue'
+                                            type="submit"
+                                            content='Send'
+                                            icon='warning circle'
+                                        />
                                     </div>
                                     <br/>
 
@@ -161,9 +197,9 @@ class ReportModal extends React.Component {
                         </div>
                     </div>
                     <div className="actions">
-                        <button type="cancel" className="ui cancel button">
+                        <Button color='red' type="button" onClick={this.handleClose.bind(this)}>
                             <i className="remove icon"/>Close
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>
