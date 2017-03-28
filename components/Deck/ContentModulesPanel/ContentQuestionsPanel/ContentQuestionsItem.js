@@ -19,24 +19,44 @@ class ContentQuestionsItem extends React.Component {
             <ContentQuestionAnswersList items={question.answers} />
         );
 
-        const editIcon = (
-            <a className="like" onClick={this.handleEditClick.bind(this)}>
-                <i className="edit icon" />
-            </a>
-        );
+        // const editIcon = (
+        //     <a className="like" onClick={this.handleEditClick.bind(this)}>
+        //         <i className="edit icon" />
+        //     </a>
+        // );
 
-        let difficultyClass = '';
-        switch (question.difficulty) {
-            case 1:
-                difficultyClass = 'empty star icon orange';
-                break;
-            case 2:
-                difficultyClass = 'star half empty icon orange';
-                break;
-            case 3:
-                difficultyClass = 'star icon orange';
-                break;
-        }
+        // let difficultyClass = '';
+        // switch (question.difficulty) {
+        //     case 1:
+        //         difficultyClass = 'empty star icon orange';
+        //         break;
+        //     case 2:
+        //         difficultyClass = 'star half empty icon orange';
+        //         break;
+        //     case 3:
+        //         difficultyClass = 'star icon orange';
+        //         break;
+        // }
+
+        let difficultyStars = (difficulty) => {
+            let difficultyClass = '';
+            switch (difficulty) {
+                case 1:
+                    difficultyClass = 'ui small yellow star icon';
+                    break;
+                case 2:
+                    difficultyClass = 'ui small orange star icon';
+                    break;
+                case 3:
+                    difficultyClass = 'ui small red star icon';
+                    break;
+            }
+            let difficultyStars = [];
+            for(let i = 0; i < difficulty; i++){
+                difficultyStars.push(<i key={i} className={difficultyClass} />);
+            }
+            return difficultyStars;
+        };
 
         return (
             // <div className="item">
@@ -61,10 +81,10 @@ class ContentQuestionsItem extends React.Component {
               {question.title}
               <div
                 className="ui star rating"
-                data-rating={3}
-                aria-label="difficulty level {{question.difficulty}}"
+                data-rating={question.difficulty}
+                aria-label={'difficulty level ' + question.difficulty}
                 tabIndex={0} />
-              <i className="ui small yellow star icon" />
+              {difficultyStars(question.difficulty)}
             </div>
             <div
               className="active content"
