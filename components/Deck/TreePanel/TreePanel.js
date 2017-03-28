@@ -67,7 +67,8 @@ class TreePanel extends React.Component {
             showCancelButton: false,
             allowEscapeKey: false,
             showConfirmButton: false
-        });
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
 
@@ -79,7 +80,8 @@ class TreePanel extends React.Component {
             confirmButtonText: 'Confirmed',
             confirmButtonClass: 'positive ui button',
             buttonsStyling: false
-        });
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
 
