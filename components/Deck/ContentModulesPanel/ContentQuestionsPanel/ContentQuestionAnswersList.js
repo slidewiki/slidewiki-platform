@@ -2,6 +2,21 @@ import React from 'react';
 import ContentQuestionAnswersItem from './ContentQuestionAnswersItem';
 
 class ContentQuestionAnswersList extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            showCorrect: false,
+        };
+        this.handleButtonClick = this.handleButtonClick.bind(this);
+    }
+
+    handleButtonClick() {
+        this.setState({
+            showCorrect: !this.state.showCorrect,
+        });
+    }
+
     render() {
         let list = this.props.items.map((node, index) => {
             return (
@@ -34,13 +49,15 @@ class ContentQuestionAnswersList extends React.Component {
                   </div>
                 </div>
                 <div className="column">
-                  <button className="ui compact button primary">
+                  <button className="ui compact button primary"
+                    onClick={this.handleButtonClick}
+                    >
                     <i className=" help circle icon" />
                     Show answer
                   </button>
                   <div className="ui item">
                     <div className="content">
-                      {correctAnswers}
+                      {this.state.showCorrect ? correctAnswers : null}
                     </div>
                   </div>
                 </div>
