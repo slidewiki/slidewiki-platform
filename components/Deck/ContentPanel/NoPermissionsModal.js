@@ -26,22 +26,22 @@ class NoPermissionsModal extends React.Component {
     render() {
         let isModalShown = this.props.PermissionsStore.isNoPermissionsModalShown;
         return (
-            <Modal dimmer="blurring" size='small' open={isModalShown}
+            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='permissionsModalHeader' aria-describedby='permissionsModalDesc'  open={isModalShown}
                    onClose={this.handleClose.bind(this)}>
-                <Header icon='warning sign' content='No Edit Rights'/>
+                <Header icon='warning sign' content='No Edit Rights' id='permissionsModalHeader'/>
                 <Modal.Content>
-                    <p>You can only view this deck. To make changes, you may ask the owner to grant you edit rights
+                    <p id='permissionsModalDesc'>You can only view this deck. To make changes, you may ask the owner to grant you edit rights
                         or fork the deck. Forking a deck means creating your copy of the deck.</p>
                 </Modal.Content>
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={isModalShown}>
-                        <Button disabled>
+                        <Button as='button' disabled>
                             <Icon name='edit'/> Request edit access
                         </Button>
-                        <Button onClick={this.handleFork.bind(this)} tabIndex="0">
+                        <Button as='button' onClick={this.handleFork.bind(this)}>
                             <Icon name='fork'/> Fork this deck
                         </Button>
-                        <Button onClick={this.handleClose.bind(this)} tabIndex="0">
+                        <Button as='button' onClick={this.handleClose.bind(this)}>
                             <Icon name='close'/> Close
                         </Button>
                     </FocusTrap>
