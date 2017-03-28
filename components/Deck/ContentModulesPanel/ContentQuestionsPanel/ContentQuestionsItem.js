@@ -58,6 +58,9 @@ class ContentQuestionsItem extends React.Component {
             return difficultyStars;
         };
 
+        let activeIfFirst = this.props.index === 0 ? 'active' : ''; // something wrong with accordion - doesn't expand
+        console.log(activeIfFirst);
+
         return (
             // <div className="item">
             // <i className={difficultyClass}></i>
@@ -76,7 +79,7 @@ class ContentQuestionsItem extends React.Component {
             // </div>
             // </div>
             <div>
-            <div className="active title">
+            <div className={activeIfFirst + ' title'}>
               <i className="dropdown icon" />
               {question.title}
               <div
@@ -87,7 +90,7 @@ class ContentQuestionsItem extends React.Component {
               {difficultyStars(question.difficulty)}
             </div>
             <div
-              className="active content"
+              className={activeIfFirst + ' content'}
               data-reactid={653}>
               {answers}
             </div>
