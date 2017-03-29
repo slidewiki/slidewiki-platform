@@ -2,7 +2,6 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import restoreDeckPageLayout from '../../../actions/deckpagelayout/restoreDeckPageLayout';
-import loadActivities from '../../../actions/activityfeed/loadActivities';
 import loadContentDiscussion from '../../../actions/contentdiscussion/loadContentDiscussion';
 import loadCommentsCount from '../../../actions/contentdiscussion/loadCommentsCount';
 import loadContentHistory from '../../../actions/history/loadContentHistory';
@@ -35,8 +34,6 @@ class ContentModulesPanel extends React.Component {
                 localStorage.removeItem('sourcesCount');// reset the state in localStorage
             }
             const commentsCountFromLocalStorage = localStorage.getItem('commentsCount');
-            console.log('commentsCountFromLocalStorage', commentsCountFromLocalStorage);
-            console.log('this.props.ContentModulesStore.moduleCount.comments', this.props.ContentModulesStore.moduleCount.comments);
             if (commentsCountFromLocalStorage !== undefined && commentsCountFromLocalStorage !== null) {
                 if (String(commentsCountFromLocalStorage) !== String(this.props.ContentModulesStore.moduleCount.comments)) {// wrong data read from browser cache
                     let date = new Date().getTime();
