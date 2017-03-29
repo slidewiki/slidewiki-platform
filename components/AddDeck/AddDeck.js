@@ -255,12 +255,6 @@ class AddDeck extends React.Component {
             <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
-        let errorView = '';
-        if (this.props.AddDeckStore.error !== null)
-            errorView = <Error error={this.props.AddDeckStore.error} />;
-        else
-            errorView = '';
-
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
         let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
@@ -347,7 +341,6 @@ class AddDeck extends React.Component {
 
                   </form>
               </div>
-              {errorView}
             </div>
         );
     }
