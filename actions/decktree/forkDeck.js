@@ -19,7 +19,11 @@ export default function forkDeck(context, payload, done) {
             if (err) {
                 log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
-                //context.dispatch('FORK_DECK_FAILURE', err);
+
+                if (err.statusCode === 401) {
+                    context.dispatch('FORK_DECK_FAILURE', err);
+                    //TODO detect if not authorized - special message
+                }
             } else {
                 console.log(payload);
                 context.dispatch('FORK_DECK_SUCCESS', res);

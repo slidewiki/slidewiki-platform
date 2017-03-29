@@ -83,14 +83,25 @@ export default {
               .then((body) => callback(null, body))
               .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
+            //prepare data
+            let members = params.members.reduce((prev, curr) => {
+                let member = {
+                    userid: curr.userid,
+                    joined: curr.joined || ''
+                };
+                prev.push(member);
+                return prev;
+            }, []);
             let tosend = {
                 id: params.id,
                 name: params.name,
                 description: !isEmpty(params.description) ? params.description : '',
                 isActive: !isEmpty(params.isActive) ? params.isActive : true,
-                timestamp: !isEmpty(params.timestamp) ? params.timestamp : (new Date()).toISOString(),
-                members: params.members
+                timestamp: !isEmpty(params.timestamp) ? params.timestamp : '',
+                members: members,
+                referenceDateTime: (new Date()).toISOString()
             };
+            // console.log('sending:', tosend, params.jwt);
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/usergroup/createorupdate',

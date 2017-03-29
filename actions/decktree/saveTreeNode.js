@@ -1,6 +1,6 @@
 import UserProfileStore from '../../stores/UserProfileStore';
-import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import serviceUnavailable from '../error/serviceUnavailable';
+import {navigateAction} from 'fluxible-router';
 const log = require('../log/clog');
 
 export default function saveTreeNode(context, payload, done) {
@@ -13,7 +13,7 @@ export default function saveTreeNode(context, payload, done) {
             if (err) {
                 log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
-                //context.dispatch('SAVE_TREE_NODE_FAILURE', err);
+                context.dispatch('SAVE_TREE_NODE_FAILURE', err);
             } else {
                 let newSid = payload.selector.sid, newPath = payload.selector.spath;
                 if (payload.selector.stype === 'slide') {
@@ -26,16 +26,13 @@ export default function saveTreeNode(context, payload, done) {
                         newPath = pathArr.join(';');
                     }
                 }
+
                 context.dispatch('SAVE_TREE_NODE_SUCCESS', {selector: payload.selector, newValue: payload.newValue, newSid: newSid, newPath: newPath});
-                let selector = {
-                    id: payload.selector.id,
-                    stype: payload.selector.stype,
-                    sid: newSid,
-                    spath: newPath
-                };
-                context.executeAction(handleRevisionChangesAndNavigate, {
-                    selector: selector,
-                    changeset: res.changeset
+
+                //update the URL
+                let newURL = '/deck/' + payload.selector.id + '/' + payload.selector.stype + '/' + newSid + '/' + newPath;
+                context.executeAction(navigateAction, {
+                    url: newURL
                 });
             }
             done();

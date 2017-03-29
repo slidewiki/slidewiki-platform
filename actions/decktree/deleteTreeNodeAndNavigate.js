@@ -1,8 +1,9 @@
 import async from 'async';
-import handleRevisionChangesAndNavigate from '../revisioning/handleRevisionChangesAndNavigate';
 import DeckTreeStore from '../../stores/DeckTreeStore';
-import deleteTreeNodeWithRevisionCheck from './deleteTreeNodeWithRevisionCheck';
+import deleteTreeNode from './deleteTreeNode';
 const log = require('../log/clog');
+import {navigateAction} from 'fluxible-router';
+import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNodeAndNavigate(context, payload, done) {
@@ -10,7 +11,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
     //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(deleteTreeNodeWithRevisionCheck, payload, callback);
+            context.executeAction(deleteTreeNode, payload, callback);
         }
     ],
     // final callback
@@ -25,9 +26,8 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
                 sid: currentState.selector.get('sid'),
                 spath: currentState.selector.get('spath')
             };
-            context.executeAction(handleRevisionChangesAndNavigate, {
-                selector: selector,
-                changeset: results[0].changeset
+            context.executeAction(navigateAction, {
+                url: TreeUtil.makeNodeURL(selector, 'deck', 'view')
             });
         }
         else {
