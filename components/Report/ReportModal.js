@@ -155,7 +155,7 @@ class ReportModal extends React.Component {
             'field': true,
             'error': this.props.SendReportStore.wrongFields.text
         });
-        
+
         return(
             <div>
                 <Modal style={modalStyle}
@@ -181,8 +181,8 @@ class ReportModal extends React.Component {
                         focusTrapOptions={{
                             onDeactivate: this.unmountTrap,
                             clickOutsideDeactivates: true,
-                            initialFocus: "#reason"
-                    }}>
+                            initialFocus: '#reason'
+                        }}>
                         <Modal.Header className="ui center aligned" id="reportModalHeader">
                             <h1 style={headerStyle}>Report legal or spam issue with {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' } content</h1>
                         </Modal.Header>
