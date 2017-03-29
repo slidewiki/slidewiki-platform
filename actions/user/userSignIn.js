@@ -15,20 +15,6 @@ export default function userSignIn(context, payload, done) {
             } catch (e) {
                 //nothing - server side
             }
-            // async.series([ //outcommented due to location.reload() (see above). Not deleted because it might be needed in the future.
-            //     (callback) => {
-            //         context.dispatch('SIGNIN_SUCCESS', res);
-            //         callback();
-            //     },
-            //     (callback) => {
-            //         context.executeAction(fetchUser, { params: { username: res.username } });
-            //         callback();
-            //     }
-            // ],
-            //     (err, result) => {
-            //         if (err) console.log(err);
-            //         done();
-            //     });
         }
     });
 }
