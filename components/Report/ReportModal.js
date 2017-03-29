@@ -31,7 +31,7 @@ class ReportModal extends React.Component {
         };
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.uT = this.uT.bind(this);
+        this.unmountTrap = this.unmountTrap.bind(this);
     }
 
     componentDidMount() {
@@ -132,7 +132,7 @@ class ReportModal extends React.Component {
     }
 
 
-    uT() {
+    unmountTrap() {
         if(this.state.activeTrap){
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
@@ -155,10 +155,8 @@ class ReportModal extends React.Component {
             'field': true,
             'error': this.props.SendReportStore.wrongFields.text
         });
-
-
+        
         return(
-
             <div>
                 <Modal style={modalStyle}
                     trigger={
@@ -176,8 +174,16 @@ class ReportModal extends React.Component {
                     aria-describedby="reportModalDescription"
                     tabindex="0"
                 >
-
-                        <Modal.Header className="ui center aligned" as="h1" id="reportModalHeader">
+                    <FocusTrap
+                        id="focus-trap-reportModal"
+                        className = "header"
+                        active={this.state.activeTrap}
+                        focusTrapOptions={{
+                            onDeactivate: this.unmountTrap,
+                            clickOutsideDeactivates: true,
+                            initialFocus: "#reason"
+                    }}>
+                        <Modal.Header className="ui center aligned" id="reportModalHeader">
                             <h1 style={headerStyle}>Report legal or spam issue with {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' } content</h1>
                         </Modal.Header>
                         <Modal.Content>
@@ -222,6 +228,7 @@ class ReportModal extends React.Component {
                                 <i className="remove icon"/>Close
                             </Button>
                         </div>
+                    </FocusTrap>
                 </Modal>
             </div>
         );
