@@ -17,14 +17,6 @@ class ContentActionsFooter extends React.Component {
         super(props);
         //this.state={expanded: 0};
         this.state = this.props.ContentActionsFooterStore.state; //expanded: 0
-
-        this.state = {
-            openModal: false
-        };
-
-        this.handleReportClick = this.handleReportClick.bind(this);
-        //this.handleCloseReportModal = this.handleClose.bind(this);
-        //this.unmountTrapReportModal = this.unmountTrap.bind(this);
     }
     handleExpandClick(){
         this.context.executeAction(expandContentPanel, {});
@@ -70,18 +62,6 @@ class ContentActionsFooter extends React.Component {
 
     }
 
-    handleReportClick(){
-        // Toggle Modal and so on...
-
-        $('#reportModal')
-            .modal('toggle');
-
-
-        this.context.executeAction(openReportModal);
-        $('#reportModal').attr('aria-hidden', 'false');
-
-    }
-
     getExportHref(type){
         if (type !== 'EPub' && type !== 'PDF') {
             return;
@@ -110,11 +90,6 @@ class ContentActionsFooter extends React.Component {
     }
 
     render() {
-        let reportButton = <div ref="reportButton" onClick={this.handleReportClick.bind(this)} target="_blank">
-                            <button id="reportButton" aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
-                                <i className="warning circle large icon"></i>
-                            </button>
-                        </div>;
         return (
             <div className="ui">
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
@@ -140,8 +115,7 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            {(this.props.UserProfileStore.userid !== '') ? reportButton : ''}
-                            <ReportModal/>
+                            {(this.props.UserProfileStore.userid !== '') ? <ReportModal/> : ''}
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
                             </button>
