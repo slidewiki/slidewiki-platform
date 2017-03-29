@@ -23,6 +23,11 @@ export default function userSignOut(context, payload, done) {
         },
         (callback) => {
             context.deleteUser(); //clear user (is cookie) via userStoragePlugin
+            try {
+                location.reload();
+            } catch (e) {
+                //nothing - server side
+            }
             callback();
         }
     ], (err, result) => {

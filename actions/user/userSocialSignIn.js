@@ -9,6 +9,11 @@ export default function userSocialSignIn(context, payload, done) {
         } else {
             context.setUser(res); //save user as cookie via userStoragePlugin
             context.dispatch('SOCIAL_SIGNIN_SUCCESS', res);
+            try {
+                location.reload();
+            } catch (e) {
+                //nothing - server side
+            }
             done();
         }
     });
