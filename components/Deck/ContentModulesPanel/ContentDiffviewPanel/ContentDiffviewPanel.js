@@ -1,10 +1,13 @@
 import React, {Component, PropTypes} from 'react';
-
+import {Dropdown} from 'semantic-ui-react';
 import diff from 'virtual-dom/diff';
+import {connectToStores} from 'fluxible-addons-react';
+
+import ContentHistoryStore from '../../../../stores/ContentHistoryStore';
 
 import diff_fns from './diff_funcs';
 
-export default class ContentDiffviewPanel extends Component {
+class ContentDiffviewPanel extends Component {
 
     static propTypes = {
         defaultTxt: PropTypes.string
@@ -60,3 +63,9 @@ export default class ContentDiffviewPanel extends Component {
         );
     }
 }
+
+ContentDiffviewPanel = connectToStores(ContentDiffviewPanel, [ContentHistoryStore], (context, props) => {
+    return {ContentHistoryStore: context.getStore(ContentHistoryStore).getState()};
+});
+
+export default ContentDiffviewPanel;
