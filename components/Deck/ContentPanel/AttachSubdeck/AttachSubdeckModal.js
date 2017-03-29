@@ -1,11 +1,9 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
-//import { connectToStores } from 'fluxible-addons-react';
+import {connectToStores} from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
-//import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
+import UserProfileStore from '../../../../stores/UserProfileStore';
 import FocusTrap from 'focus-trap-react';
-
-
+import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
 
 
 class AttachSubdeckModal extends React.Component{
@@ -15,13 +13,15 @@ class AttachSubdeckModal extends React.Component{
       iconSize:  enum {large|small} -> final size for displaying the icon of the button. Medium is not accepted by react-semantic-ui component
 
    }*/
+
     constructor(props) {
         super(props);
 
         this.state = {
             openModal: false,
             activeItem: 'MyDecks',
-            activeTrap: false
+            activeTrap: false,
+            decks: undefined,
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -29,14 +29,27 @@ class AttachSubdeckModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
+
+
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.UserProfileStore.userDecks!==this.props.UserProfileStore.userDecks){
+            this.setState({
+                decks: nextProps.UserProfileStore.userDecks
+            });
+
+        }
     }
 
     handleOpen(){
+
         $('#app').attr('aria-hidden','true');
         this.setState({
             modalOpen:true,
             activeTrap:true
         });
+
     }
 
     handleClose(){
@@ -96,11 +109,7 @@ class AttachSubdeckModal extends React.Component{
             segmentPanelContent = slideWikiContent;
         }
 
-
-
-
         return (
-
            <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
                       type="button" aria-label="Attach Slide" data-tooltip="Attach Slide" aria-hidden={this.state.modalOpen}
@@ -136,48 +145,46 @@ class AttachSubdeckModal extends React.Component{
                     <Container>
                          <Segment color="blue" textAlign="center" padded>
                             <Menu attached='top' tabular role="tablist">
-                                     <Menu.Item as='button' name='From My Decks' id='tabMyDecksId' active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
+                                     <Menu.Item as="button" name="From My Decks" id="tabMyDecksId" active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
                                                   role="tab" tabIndex="0" />
-                                     <Menu.Item as='button' name='From SlideWiki' id='tabFromSlideWikiId' active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
+                                     <Menu.Item as="button" name="From SlideWiki" id="tabFromSlideWikiId" active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
                                                   onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                             </Menu>
-                            <Segment attached='bottom'>
+                            <Segment attached="bottom">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
                                {segmentPanelContent}
                                {selectedDeckArea}
                             </Segment>
                             <Modal.Actions>
-                              <Button id='attachAttachDeckModal' color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
+                              <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
                                 <Icon name="attach"/>
                                   Attach
                                   <Icon name="attach"/>
                               </Button>
-                              <Button color='red' tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                              <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>
-
-                     </Segment>
+                         </Segment>
                    </Container>
-
                 </Modal.Content>
-
                 </FocusTrap>
             </Modal>
-
 
         );
     }
 
 }
+
+
 AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-/*
-AttachSubdeckModal = connectToStores(AttachSubdeckModal,[AttachSubdeckModalStore],(context,props) => {
+
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore],(context,props) => {
     return {
-        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
-*/
+
 export default AttachSubdeckModal;

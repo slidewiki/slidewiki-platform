@@ -3,44 +3,34 @@ import {BaseStore} from 'fluxible/addons';
 class AttachSubdeckModalStore extends BaseStore{
     constructor(dispatcher) {
         super(dispatcher);
-        this.openModal = false;
-        this.activeItem = 'MyDecks';
-        this.activeTrap = false;
+        this.userDecks = [];
     }
 
     getState(){
         return {
-            openModal : this.openModal,
-            activeItem : this.activeItem,
-            activeTrap : this.activeTrap
+            userDecks : this.userDecks
         };
     }
     dehydrate() {
         return this.getState();
     }
     rehydrate(state) {
-        this.openModal = state.openModal;
+        this.userDecks = state.userDecks;
 
     }
-    openSubDeckModal(payload){
-        this.openModal = true;
-        this.activeTrap = true;
-        this.emitChange();
 
+    updateUserDecks(payload){
+        this.userDecks = payload.userDecks;
     }
-    closeSubDeckModal(payload){
-        this.openModal = false;
-        this.activeTrap = false;
-        this.emitChange();
-    }
+
 
 
 
 }
 AttachSubdeckModalStore.storeName = 'AttachSubdeckModalStore';
 AttachSubdeckModalStore.handlers = {
-    'ATTACHSUBDECKMODAL_OPEN' : 'openSubDeckModal',
-    'ATTACHSUBDECKMODAL_CLOSE': 'closeSubDeckModal'
+    'ATTACHSUBDECK_LOAD_USERDECKS' : 'updateUserDecks',
+
 
 };
 
