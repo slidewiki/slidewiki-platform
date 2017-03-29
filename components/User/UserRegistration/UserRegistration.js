@@ -458,7 +458,7 @@ class UserRegistration extends React.Component {
         }
         return (
           <div>
-            <div className="ui page centered grid" >
+            <div className="ui vertically padded centered grid container" >
                 <div className="ten wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>

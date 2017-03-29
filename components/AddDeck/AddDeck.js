@@ -276,10 +276,10 @@ class AddDeck extends React.Component {
         }
 
         return (
-          <div className="ui container">
-          <h3>Add a deck to SlideWiki</h3>
-
-          <div className="ui grid">
+          <div className="ui vertically padded grid container">
+              <div className="sixteen wide column">
+                <h3>Add a deck to SlideWiki</h3>
+              </div>
               <div className="sixteen wide column">
                   <form className="ui form upload">
                           <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
@@ -347,9 +347,8 @@ class AddDeck extends React.Component {
 
                   </form>
               </div>
+              {errorView}
             </div>
-          {errorView}
-      </div>
         );
     }
 }
