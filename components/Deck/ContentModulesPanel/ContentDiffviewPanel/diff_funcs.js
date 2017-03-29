@@ -15,6 +15,7 @@ const markText = (oldt, newt, mode) => {
     return mode ? uploaded : created;
 };
 
+//TODO ADD HEAVY PROPS CHECK
 const handleTEXT = (el, source, mode) => {
     console.warn('TEXT');
 
@@ -45,7 +46,6 @@ const handleREMOVE = (el, source) => {
     // elem = createElement(el.vNode);
     // $(elem).addClass('deleted');
     // console.log(elem);
-
     const tag = el.vNode.tagName;
     const text = el.vNode.children[0].text;
     let root = createElement(convertHTML(source));
@@ -95,6 +95,9 @@ const handlePROPS = (el, source) => {
 
 const preprocessSrc = (source, mode) => {
 
+    source = source.replace(/&nbsp;/g, ' ')
+                   .replace(/(?:\r\n|\r|\n)/g, '');
+
     if (mode) {
         //uploaded slide
 
@@ -107,8 +110,14 @@ const preprocessSrc = (source, mode) => {
     } else {
         //created slide
 
+        //wrap in a root node
+        source = `<div class='root'>${source}</div>`;
     }
 
+    return source;
+};
+
+const setKeys = (source) => {
     //apply keys for proper change detection
     source = convertHTML({
         getVNodeKey: function(attributes) {
@@ -169,5 +178,6 @@ const detectnPatch = (list, initSrc, mode) => {
 
 module.exports = {
     preprocess: preprocessSrc,
-    construct: detectnPatch
+    construct: detectnPatch,
+    setKeys: setKeys
 };
