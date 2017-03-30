@@ -69,13 +69,16 @@ class ContentDiffviewPanel extends Component {
 
     render() {
         const revisions = this.state.revisionsList.map((el) => {
-            const disable = el.id === parseInt(this.state.currentRevision ? true : false);
+            const disable = el.id === parseInt(this.state.currentRevision) ? true : false;
             return {key: el.id, text: `Revision ${el.id}`, value: el.id, disabled: disable};
         });
 
+        const diffType = this.props.selector.stype;
+        //TODO load 2 different sub-components DECK / SLIDE_ID
+
         return (
             <div ref="ContentDiffviewPanel" className="ui">
-                <h1>Diff View</h1>
+                <h1><span>{diffType}</span> – Diff View</h1>
                 <p>Diff the current revision against:</p>
                 <Dropdown placeholder='Select Revision' ref="dropdown" selection options={revisions}/>
                 <button className="ui blue icon button" onClick={this.diff}>DIFF</button>

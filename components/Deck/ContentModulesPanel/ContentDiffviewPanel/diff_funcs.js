@@ -34,14 +34,11 @@ const markText = (oldt, newt, mode) => {
 };
 
 //TODO ADD HEAVY PROPS CHECK
-const handleTEXT = (el, source, mode) => {
+const handleTEXT = (oldText, newText, source, mode) => {
     console.warn('TEXT');
 
-    const oldText = el.vNode.text;
-    const newText = el.patch.text;
-    const markedText = markText(oldText, newText, mode);
-
-    source = source.replace(oldText, markedText);
+    const markedText = markText(oldText.text, newText.text, mode);
+    source = source.replace(oldText.text, markedText);
 
     return source;
 };
@@ -75,10 +72,10 @@ const handlePROPS = (el, source) => {
     console.warn('PROPS');
 
     const tag = el.vNode.tagName;
+    //TODO Detect not only attrs change, but style [1] as well
     const patchType = Object.keys(el.patch)[0];
     const patch = Object.keys(el.patch[`${patchType}`])[0];
     const vals = Object.values(el.patch[`${patchType}`])[0];
-
 
     // console.log(`Patch type: ${patchType}, Patch: ${patch}, Value: ${vals}`);
 
@@ -116,11 +113,11 @@ const preprocessSrc = (source, mode) => {
 
     if (mode) {
         //uploaded slide
-
         let root = createElement(convertHTML(source));
         $(root).find('.drawing-container').remove();
         $(root).find('span:empty').remove();
-        //$(root).find('div:empty').remove();
+        //remove first emply div
+        $(root).find('div').first().remove();
         source = root.outerHTML;
 
     } else {
@@ -165,7 +162,9 @@ const detectnPatch = (list, initSrc, mode) => {
                 break;
             case 2:
                 console.warn('VNODE');
-                elem = createElement(el.vNode);
+                const type = el.vNode.constructor.name;
+                if(type === 'VirtualText') initSrc = handleTEXT(el.vNode, el.patch.children[0], initSrc, mode);
+                // elem = createElement(el);
                 break;
             case 3:
                 console.warn('WIDGET');

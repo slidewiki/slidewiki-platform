@@ -36,11 +36,15 @@
 
 .diff-view {
   padding-top: 50px;
+  display: flex;
 }
 
 .diff-view .pptx2html {
   box-shadow: none !important;
   border: none !important;
+  transform: scale(0.5);
+  top: -260px;
+  left: -215px;
 }
 
 .diff-view .added, .modified, .deleted {
