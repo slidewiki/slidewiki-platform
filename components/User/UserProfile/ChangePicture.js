@@ -22,7 +22,17 @@ class ChangePicture extends React.Component {
 
     openCropPictureModal(e) {
         this.filePath = URL.createObjectURL(e.target.files[0]);
-        $(this.refs.cropModal).modal('show');
+        let toCheck = e.target.files[0].name.toLowerCase().trim();
+        if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png'))
+            $(this.refs.cropModal).modal('show');
+        else
+            swal({
+                title: 'Wrong file type',
+                text: 'You have selected a file type that we currently do not support',
+                type: 'error',
+                confirmButtonClass: 'ui primary button',
+                buttonsStyling: false
+            });
     }
 
     uploadCroppedPicture(e) {
@@ -56,7 +66,7 @@ class ChangePicture extends React.Component {
                     </div>
                     <div className="eight wide column">
                         <div className="ui vertical buttons">
-                            <input type="file" accept="image/*" style={{display: 'none'}} onChange={ this.openCropPictureModal.bind(this) } ref="fileDialog"/>
+                            <input type="file" accept="image/jpg, image/jpeg, image/png" style={{display: 'none'}} onChange={ this.openCropPictureModal.bind(this) } ref="fileDialog"/>
                             <button tabIndex="-1" className="ui primary labeled icon button" onClick={ this.openFileDialog.bind(this) }>
                                 <i className="icon upload"/>Upload new Image
                             </button>
