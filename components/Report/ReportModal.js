@@ -10,7 +10,7 @@ import ContentStore from '../../stores/ContentStore';
 import FocusTrap from 'focus-trap-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import SendReportStore from '../../stores/SendReportStore';
-import { Button, Container, Modal, TextArea, Icon,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Segment } from 'semantic-ui-react';
+import { Button, Container, Form, Modal, TextArea, Icon, Segment } from 'semantic-ui-react';
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -29,6 +29,7 @@ class ReportModal extends React.Component {
             modalOpen: false,
             activeTrap: false
         };
+        this.handleSendReport= this.handleSendReport.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
@@ -107,9 +108,9 @@ class ReportModal extends React.Component {
                 + '?subject=' + escape(subject)
                 + '&body=' + escape(emailBody);
             window.location.href = link;
+            this.handleClose();
         }
 
-        return false;
     }
 
     handleOpen(){
@@ -186,10 +187,10 @@ class ReportModal extends React.Component {
                         </Modal.Header>
                         <Modal.Content>
                             <Container>
-                                <Segment color="blue" testAlign="center" padded>
+                                <Segment color="blue" textAlign="center" padded>
                                    <Segment>
-                                    <TextArea className="sr-only" id="reportModalDescription" hidden="true" value="This is a modal to report decks or slides." />
-                                    <form className="ui form report">
+                                       <div className="sr-only" id="reportModalDescription">Select the reason of the report and give a brief description about it.</div>
+                                    <Form id="reportForm">
                                         <div className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
                                             <input type="hidden" id="reason" name="reason" ref="reason" />
                                                 <i className="dropdown icon"/>
@@ -200,32 +201,26 @@ class ReportModal extends React.Component {
                                                 </div>
                                         </div>
                                         <br/>
-                                        <br/>
                                         <div className={fieldClass_text}>
                                             <label>Explanation</label>
                                             <textarea ref="text" id="reportComment" name="text" style={{width:'50%', minHeight: '6em', height: '6em'}} placeholder="Please give a short explanation about your report"></textarea>
                                         </div>
-                                        <br/>
-                                        <div className="ui center aligned">
-                                            <Button
-                                                color='blue'
-                                                type="submit"
-                                                content='Send'
-                                                icon='warning circle'
-                                            />
-                                        </div>
-                                        <br/>
-
+                                        <Button
+                                            color="blue"
+                                            type="submit"
+                                            content="Send"
+                                            icon='warning circle'
+                                            onClick={this.handleSendReport}
+                                        />
+                                        <Button
+                                            icon="remove"
+                                            color="red"
+                                            type="button"
+                                            onClick={this.handleClose}
+                                            content="Cancel"
+                                        />
                                         <div className="ui error message"/>
-                                    </form>
-                                    <br/>
-                                    </Segment>
-                                    <Segment>
-                                      <Modal.Actions>
-                                        <Button icon color='red' type="button" onClick={this.handleClose}>
-                                            <Icon name="remove"/>Close
-                                        </Button>
-                                    </Modal.Actions>
+                                    </Form>
                                     </Segment>
                                 </Segment>
                             </Container>
