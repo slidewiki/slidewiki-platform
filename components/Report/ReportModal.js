@@ -10,7 +10,7 @@ import ContentStore from '../../stores/ContentStore';
 import FocusTrap from 'focus-trap-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import SendReportStore from '../../stores/SendReportStore';
-import { Button, Container, Modal, TextArea } from 'semantic-ui-react';
+import { Button, Container, Modal, TextArea, Icon,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Segment } from 'semantic-ui-react';
 let classNames = require('classnames');
 
 const headerStyle = {
@@ -157,14 +157,13 @@ class ReportModal extends React.Component {
         });
 
         return(
-            <div>
+
                 <Modal style={modalStyle}
                     trigger={
-                        <div onClick={this.handleOpen} target="_blank">
-                            <button aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
-                                <i className="warning circle large icon"></i>
-                            </button>
-                        </div>
+                          <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+                                <Icon name="warning circle" size='large' />
+                          </Button>
+
                         }
                     open={this.state.modalOpen}
                     onOpen={this.handleOpen}
@@ -172,7 +171,7 @@ class ReportModal extends React.Component {
                     id="reportModal"
                     aria-labelledby="reportModalHeader"
                     aria-describedby="reportModalDescription"
-                    tabindex="0"
+                    tabIndex="0"
                 >
                     <FocusTrap
                         id="focus-trap-reportModal"
@@ -188,7 +187,8 @@ class ReportModal extends React.Component {
                         </Modal.Header>
                         <Modal.Content>
                             <Container>
-                                <div className="ui blue padded center aligned segment">
+                                <Segment color="blue" testAlign="center" padded>
+                                   <Segment>
                                     <TextArea className="sr-only" id="reportModalDescription" hidden="true" value="This is a modal to report decks or slides." />
                                     <form className="ui form report">
                                         <div className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
@@ -220,17 +220,22 @@ class ReportModal extends React.Component {
                                         <div className="ui error message"/>
                                     </form>
                                     <br/>
-                                </div>
+                                    </Segment>
+                                    <Segment>
+                                      <Modal.Actions>
+                                        <Button icon color='red' type="button" onClick={this.handleClose}>
+                                            <Icon name="remove"/>Close
+                                        </Button>
+                                    </Modal.Actions>
+                                    </Segment>
+                                </Segment>
                             </Container>
+
                         </Modal.Content>
-                        <div className="actions">
-                            <Button color='red' type="button" onClick={this.handleClose}>
-                                <i className="remove icon"/>Close
-                            </Button>
-                        </div>
+
                     </FocusTrap>
                 </Modal>
-            </div>
+
         );
     }
 }
