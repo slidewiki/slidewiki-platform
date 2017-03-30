@@ -1,7 +1,7 @@
 import async from 'async';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import {navigateAction} from 'fluxible-router';
-import moveTreeNodeWithRevisionCheck from './moveTreeNodeWithRevisionCheck';
+import moveTreeNode from './moveTreeNode';
 const log = require('../log/clog');
 
 export default function moveTreeNodeAndNavigate(context, payload, done) {
@@ -9,25 +9,14 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
     //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(moveTreeNodeWithRevisionCheck, payload, callback);
+            context.executeAction(moveTreeNode, payload, callback);
         }],
         // final callback
         (err, results) => {
             if (!err) {
                 let newURL;
                 let {selector, sourceNode, targetNode} = payload;
-                let removedChangeset = results[0].removed_changeset || results[0].changeset, insertedChangeset = results[0].inserted_changeset;
-                let hasRevisionChanges = removedChangeset || insertedChangeset;
-                if (hasRevisionChanges) {
-                    let rootId = selector.id;
-                    // a new revision for the root deck may have been created
-                    if (removedChangeset && removedChangeset.new_deck_id != null){
-                        rootId = removedChangeset.new_deck_id;
-                    } else if (insertedChangeset && insertedChangeset.new_deck_id != null){
-                        rootId = insertedChangeset.new_deck_id;
-                    }
-                    newURL = '/deck/' + rootId;
-                } else if (selector.stype === 'deck' && selector.sid === selector.id) {
+                if (selector.stype === 'deck' && selector.sid === selector.id) {
                     // if we were at the root deck stay there
                     newURL = '/deck/' + selector.id;
                 } else if (selector.stype === 'deck' && selector.sid === targetNode.get('id') && selector.spath === targetNode.get('path') && targetNode.get('children').includes(sourceNode)){
@@ -39,10 +28,9 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
                     let newSelector = context.getStore(DeckTreeStore).getState().selector;
                     newURL = '/deck/' + newSelector.get('id') + '/' + newSelector.get('stype') + '/' + newSelector.get('sid') + '/' + newSelector.get('spath');
                 }
-                //navigate to new url and force deck tree refetch in case of revisioning changes
+                //navigate to new url
                 context.executeAction(navigateAction, {
-                    url: newURL,
-                    runFetchTree: hasRevisionChanges
+                    url: newURL
                 });
             }
             else {

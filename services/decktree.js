@@ -1,6 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
+import { isEmpty } from '../common.js';
 
 export default {
     name: 'decktree',
@@ -11,13 +12,11 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'decktree.nodes'){
-            /*********connect to microservices*************/
             rp.get({uri: Microservices.deck.uri + '/decktree/' + selector.id}).then((res) => {
                 callback(null, {deckTree: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
-                //console.log(err);
                 //we should report the error to the action creator
-                callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', details: err}, {});
+                callback({msg: 'Error in retrieving data from ' + Microservices.deck.uri + ' service! Please try again later...', details: err});
             });
         }
     },

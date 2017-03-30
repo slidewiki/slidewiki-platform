@@ -26,7 +26,7 @@ export default {
             rp.get({uri: Microservices.discussion.uri + '/discussion/count/' + content_kind + '/' + content_id}).then((res) => {
                 callback(null, {count: res, selector: selector});
             }).catch((err) => {
-                console.log(err);
+                console.log('Error while getting discussion count of deck:', err.StatusCodeError, err.message, err.options);
                 callback(null, {count: 0, selector: selector});
             });
         }
