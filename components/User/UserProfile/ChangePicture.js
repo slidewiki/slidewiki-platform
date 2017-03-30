@@ -39,8 +39,19 @@ class ChangePicture extends React.Component {
         let payload = {};
         Object.assign(payload, this.props.user);
         payload.picture = this.refs.cropper.crop({ maxWidth: 170 });
-        this.context.executeAction(changeUserData, payload);
-        $(this.refs.cropModal).modal('hide');
+        if(payload.picture.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
+            this.context.executeAction(changeUserData, payload);
+            $(this.refs.cropModal).modal('hide');
+        } else {
+            $(this.refs.cropModal).modal('hide');
+            swal({
+                title: 'A wild error has been spotted!',
+                text: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
+                type: 'error',
+                confirmButtonClass: 'ui primary button',
+                buttonsStyling: false
+            });
+        }
     }
 
     useGravatar(e) {
