@@ -6,8 +6,26 @@ const convertHTML = require('html-to-vdom')({
     VText: VText
 });
 import $ from 'jquery';
+import _ from 'lodash';
 
 //TODO FUnction that takes a string and returns a FUnction applying createElement(convertHTML());
+
+const deepSearch = (obj, key) => {
+    if (_.has(obj, key)) // or just (key in obj)
+        return [obj];
+    // elegant:
+    // return _.flatten(_.map(obj, function(v) {
+    //     return typeof v == "object" ? fn(v, key) : [];
+    // }), true);
+
+    // or efficient:
+    let res = [];
+    _.forEach(obj, (v) => {
+        if (typeof v == 'object' && (v = deepSearch(v, key)).length)
+            res.push.apply(res, v);
+    });
+    return res;
+};
 
 const markText = (oldt, newt, mode) => {
     const uploaded = `<p class="txtdeleted">${oldt}</p><p class="txtadded">${newt}</p>`;
@@ -43,11 +61,9 @@ const handleINSERT = (el, source) => {
 const handleREMOVE = (el, source) => {
     console.warn('REMOVE');
 
-    // elem = createElement(el.vNode);
-    // $(elem).addClass('deleted');
-    // console.log(elem);
     const tag = el.vNode.tagName;
-    const text = el.vNode.children[0].text;
+    const textArray = deepSearch(el.vNode, 'text');
+    const text = textArray[0].text;
     let root = createElement(convertHTML(source));
     $(root).find(`${tag}:contains('${text}')`).addClass('deleted');
     source = root.outerHTML;
@@ -144,7 +160,8 @@ const detectnPatch = (list, initSrc, mode) => {
                 console.warn('NONE');
                 break;
             case 1:
-                initSrc = handleTEXT(el, initSrc, mode);
+                const textArray = deepSearch(el, 'text');
+                initSrc = handleTEXT(textArray[0], textArray[1], initSrc, mode);
                 break;
             case 2:
                 console.warn('VNODE');
