@@ -20,7 +20,7 @@ class PrivatePublicUserProfile extends React.Component {
 
     render() {
         return (
-          <div className = "ui stackable grid page" >
+          <div className = "ui vertically padded stackable grid container" >
               <div className = "four wide column" >
                   <PublicUserData user={ this.props.user } loggedinuser= { this.props.loggedinuser }/>
               </div>
