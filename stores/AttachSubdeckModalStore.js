@@ -20,7 +20,9 @@ class AttachSubdeckModalStore extends BaseStore{
     }
 
     updateUserDecks(payload){
-        this.userDecks = payload.userDecks;
+
+        Object.assign(this.userDecks, payload);
+        this.emitChange();
     }
 
 

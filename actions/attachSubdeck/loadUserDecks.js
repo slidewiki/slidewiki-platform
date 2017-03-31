@@ -1,5 +1,5 @@
-import notFoundError from '../../error/notFoundError';
-import methodNotAllowedError  from '../../error/methodNotAllowedError';
+import notFoundError from '../error/notFoundError';
+import methodNotAllowedError  from '../error/methodNotAllowedError';
 
 export default function loadUserDecks(context,payload,done){
     context.service.read('userProfile.fetchUserDecks', payload, { timeout: 20 * 1000 }, (err, res) => {
@@ -11,10 +11,11 @@ export default function loadUserDecks(context,payload,done){
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
-            } else
-                context.dispatch('ATTACHSUBDECK_LOAD_USERDECKS', err);
+            } else{
+                context.dispatch('ATTACHSUBDECK_LOAD_USERDECKS', []);
+            }
         } else { //Normal action
-            context.dispatch('NEW_USER_DECKS', res);
+            context.dispatch('ATTACHSUBDECK_LOAD_USERDECKS', res);
         }
         done();
     });

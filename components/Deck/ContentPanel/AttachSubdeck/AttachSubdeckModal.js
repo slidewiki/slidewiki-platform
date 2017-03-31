@@ -1,9 +1,13 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
+import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea, Image,Dimmer} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
+import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
-import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
+import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
+import AttachDeckList from './AttachDeckList';
+
+//import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
 
 
 class AttachSubdeckModal extends React.Component{
@@ -21,7 +25,7 @@ class AttachSubdeckModal extends React.Component{
             openModal: false,
             activeItem: 'MyDecks',
             activeTrap: false,
-            decks: undefined,
+            userDecks: [],
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -31,18 +35,30 @@ class AttachSubdeckModal extends React.Component{
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
 
 
+
     }
 
     componentWillReceiveProps(nextProps){
-        if(nextProps.UserProfileStore.userDecks!==this.props.UserProfileStore.userDecks){
-            this.setState({
-                decks: nextProps.UserProfileStore.userDecks
-            });
 
+        if(nextProps.AttachSubdeckModalStore.userDecks !== this.state.decks){
+            this.setState({
+                userDecks: nextProps.AttachSubdeckModalStore.userDecks
+            });
         }
+
     }
 
     handleOpen(){
+
+      //fETCH USER DECKS
+        let payload = {params:{
+            id2:this.props.UserProfileStore.userid,
+            id:this.props.UserProfileStore.userid,
+            jwt:this.props.UserProfileStore.jwt,
+            loggedInUser:this.props.UserProfileStore.username,
+            username:this.props.UserProfileStore.username
+        }};
+        this.context.executeAction(loadUserDecks, payload,null);
 
         $('#app').attr('aria-hidden','true');
         this.setState({
@@ -55,7 +71,6 @@ class AttachSubdeckModal extends React.Component{
     handleClose(){
 
         $('#app').attr('aria-hidden','false');
-
         this.setState({
             modalOpen:false,
             activeTrap: false
@@ -81,6 +96,29 @@ class AttachSubdeckModal extends React.Component{
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
         }
+
+    }
+    loadMyDecksContent(){
+        let userInfo ={
+            userId: this.props.UserProfileStore.userid,
+            username: this.props.UserProfileStore.username
+
+        };
+        let myDecksContent;
+        if(this.state.userDecks ===[]){
+            myDecksContent = <Segment id="panelMyDecksContent">
+                                <Dimmer active inverted>
+                                    <Loader inverted>Loading</Loader>
+                                </Dimmer>
+                                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+                            </Segment>;
+        } else{
+            myDecksContent = <Segment id="panelMyDecksContent">
+                                <AttachDeckList user={userInfo} decks={this.state.userDecks} />
+                            </Segment>;
+        }
+
+        return myDecksContent;
     }
 
     render() {
@@ -90,9 +128,7 @@ class AttachSubdeckModal extends React.Component{
                                   <Input type="text" id="selectedDeckTitleId" placeholder="You should select one deck.." tabIndex="0" />
                               </Segment>;
         //From my Decks option content
-        let myDecksContent = <Segment id="panelMyDecksContent">
-                                  <img src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                             </Segment>;
+        let myDecksContent = this.loadMyDecksContent();
 
         //From SlideWiki content
         let slideWikiContent = <Segment id="panelSlideWikiContent">
@@ -130,14 +166,15 @@ class AttachSubdeckModal extends React.Component{
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
-                        id='focus-trap-attachSubdeckModal'
-                        className = "header"
-                        active={this.state.activeTrap}
+                        id="focus-trap-attachSubdeckModal"
                         focusTrapOptions={{
                             onDeactivate: this.unmountTrap,
                             clickOutsideDeactivates: true,
-                            initialFocus: '#tabMyDecksId',
-                        }}>
+                            initialFocus: '#tabMyDecksId'
+                        }}
+                        active={this.state.activeTrap}
+                        className = "header">
+
                 <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModalHeader">
                      Attach Deck
                 </Modal.Header>
@@ -168,6 +205,7 @@ class AttachSubdeckModal extends React.Component{
                          </Segment>
                    </Container>
                 </Modal.Content>
+
                 </FocusTrap>
             </Modal>
 
@@ -181,9 +219,10 @@ AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore],(context,props) => {
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
     return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
     };
 });
 
