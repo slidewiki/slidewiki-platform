@@ -45,10 +45,12 @@ class Presentation extends React.Component{
 
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
+            console.log('store theme: ', this.props.PresentationStore.theme);
             let styleName = 'white';
-            if(this.props.PresentationStore.theme){
-                let styleName = this.props.PresentationStore.theme;
+            if(this.props.PresentationStore.theme !== ''){
+                styleName = this.props.PresentationStore.theme;
             }
+            console.log('styleName', styleName);
             require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';
