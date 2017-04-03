@@ -3,6 +3,7 @@ import PermissionsStore from '../stores/PermissionsStore';
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from './error/serviceUnavailable';
+import addActivity from './activityfeed/addActivity';
 const log = require('./log/clog');
 const common = require('../common.js');
 
@@ -28,6 +29,15 @@ export default function saveDeckEdit(context, payload, done) {
         context.executeAction(navigateAction, {
             url: newURL
         });
+
+        //create new activity
+        let activity = {
+            activity_type: 'edit',
+            user_id: String(context.getStore(UserProfileStore).userid),
+            content_id: String(payload.selector.sid),
+            content_kind: 'deck'
+        };
+        context.executeAction(addActivity, {activity: activity});
     };
 
     if (userid == null || userid === '') {

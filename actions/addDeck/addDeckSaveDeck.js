@@ -2,6 +2,7 @@ import {shortTitle} from '../../configs/general';
 import UserProfileStore from '../../stores/UserProfileStore';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
+import addActivity from '../activityfeed/addActivity';
 
 export default function addDeckSaveDeck(context, payload, done) {
     log.info(context);
@@ -19,6 +20,7 @@ export default function addDeckSaveDeck(context, payload, done) {
                 context.dispatch('CREATION_FAILURE', err);
             } else {
                 context.dispatch('CREATION_SUCCESS', res);
+                createAction(res);
             }
             done();
         });
@@ -32,8 +34,19 @@ export default function addDeckSaveDeck(context, payload, done) {
                 context.dispatch('CREATION_FAILURE', err);
             } else {
                 context.dispatch('CREATION_SUCCESS', res);
+                createAction(res);
             }
             done();
         });
     }
+}
+
+function createAction(deck) {
+    let activity = {
+        activity_type: 'add',
+        user_id: String(deck.user),
+        content_id: deck.id ? String(deck.id) : String(deck._id),
+        content_kind: 'deck'
+    };
+    context.executeAction(addActivity, {activity: activity});
 }
