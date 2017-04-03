@@ -2,18 +2,17 @@ import React from 'react';
 import UserPicture from '../../common/UserPicture';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import {Cropper} from 'react-image-cropper';
+import ChangePictureModal from './ChangePictureModal';
 
 class ChangePicture extends React.Component {
 
     constructor(){
         super();
-        this.open = false;
-        this.fielPath = '';
+        this.filePath = '';
     }
 
     componentDidMount() {
         let that = this;
-        $(this.refs.cropModal).modal({ observeChanges: true, closable: false, onVisible: function() {that.open = true; that.forceUpdate();}, onHidden:  function() {that.open = false; that.filePath = ''; that.forceUpdate();}});
     }
 
     openFileDialog() {
@@ -23,9 +22,10 @@ class ChangePicture extends React.Component {
     openCropPictureModal(e) {
         this.filePath = URL.createObjectURL(e.target.files[0]);
         let toCheck = e.target.files[0].name.toLowerCase().trim();
-        if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png'))
-            $(this.refs.cropModal).modal('show');
-        else
+        if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png')) {
+            this.forceUpdate();
+            $('#ChangePictureModalOpenButton').click();
+        } else
             swal({
                 title: 'Wrong file type',
                 text: 'You have selected a file type that we currently do not support',
@@ -33,25 +33,7 @@ class ChangePicture extends React.Component {
                 confirmButtonClass: 'ui primary button',
                 buttonsStyling: false
             });
-    }
-
-    uploadCroppedPicture(e) {
-        let payload = {};
-        Object.assign(payload, this.props.user);
-        payload.picture = this.refs.cropper.crop({ maxWidth: 170 });
-        if(payload.picture.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
-            this.context.executeAction(changeUserData, payload);
-            $(this.refs.cropModal).modal('hide');
-        } else {
-            $(this.refs.cropModal).modal('hide');
-            swal({
-                title: 'A wild error has been spotted!',
-                text: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
-                type: 'error',
-                confirmButtonClass: 'ui primary button',
-                buttonsStyling: false
-            });
-        }
+        //The actual processing of the picture is implemented in the modal
     }
 
     useGravatar(e) {
@@ -92,27 +74,7 @@ class ChangePicture extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="ui modal" ref="cropModal">
-                    <div className="header">
-                        <h1>Crop your image</h1>
-                    </div>
-                    <div className="image content">
-                        <div className="ui grid">
-                            <div className="sixteen wide column">
-                            {(this.open) ? <Cropper src={this.filePath} ref="cropper" fixedRatio={true} rate={1}/> : <div/>}
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="actions">
-                        <button className="ui red right labeled icon deny button">
-                            <i className="minus circle icon"></i> Cancel
-                        </button>
-                        <button className="ui green right labeled icon button" onClick={this.uploadCroppedPicture.bind(this)}>
-                          <i className="save icon"></i> Save
-                        </button>
-                    </div>
-                </div>
+                <ChangePictureModal ref='ChangePictureModal' filePath={this.filePath} user={this.props.user}/>
             </div>
         );
     }
