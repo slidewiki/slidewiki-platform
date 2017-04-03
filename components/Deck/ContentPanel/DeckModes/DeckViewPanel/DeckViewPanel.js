@@ -56,7 +56,7 @@ class DeckViewPanel extends React.Component {
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
-        const thumbnailURL = Microservices.file.uri + '/';
+        const thumbnailURL = Microservices.file.uri;
         const deckURL = '/deck/' + this.props.selector.id;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
@@ -119,7 +119,7 @@ class DeckViewPanel extends React.Component {
                                         <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
                                            tabIndex="-1">
                                             <Thumbnail key={index}
-                                                       url={thumbnailURL + slide.user + '/thumbnails/' + slide.id + '.png'}
+                                                       url={thumbnailURL + '/slideThumbnail/' + slide.id + '.jpeg'}
                                                        slideId={slide.id}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}

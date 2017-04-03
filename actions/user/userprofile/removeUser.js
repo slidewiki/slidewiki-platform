@@ -37,7 +37,11 @@ export default function removeUser(context, payload, done) {
                     callback(null, '');
                 },
                 (callback) => {
-                    location.reload();
+                    try {
+                        location.reload();
+                    } catch (e) {
+                        //nothing - server side
+                    }
                     callback(null, '');
                 }
             ],

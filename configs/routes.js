@@ -7,8 +7,7 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 // import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
-//import loadSlideEdit from '../actions/slide/loadSlideEdit';
-import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
+import loadSlideEdit from '../actions/slide/loadSlideEdit';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
@@ -238,8 +237,7 @@ export default {
         page: 'slideedit',
         handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            //context.executeAction(loadSlideEdit, payload, done);
-            context.executeAction(loadSlideEditWihtRevisionControl, payload, done);
+            context.executeAction(loadSlideEdit, payload, done);
         }
     },
     deckview: {
@@ -275,7 +273,21 @@ export default {
         page: 'activities',
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadActivities, payload, done);
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Activities'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadActivities, payload, done);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
         }
     },
     translations: {

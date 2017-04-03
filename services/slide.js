@@ -12,7 +12,6 @@ export default {
         let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         if(resource === 'slide.content'){
             /*********connect to microservices*************/
-            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
             //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
                 //console.log('From slide Service:', res);
@@ -24,10 +23,7 @@ export default {
         }
         if(resource === 'slide.all'){
             /*********connect to microservices*************/
-            //console.log(Microservices.deck.uri + '/slide/' + selector.sid);
             rp.get({uri: Microservices.deck.uri + '/allslide'}).then((res) => {
-                //console.log(JSON.parse(res));
-                //console.log(res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
@@ -57,10 +53,11 @@ export default {
                     //id: args.id,
                     title: args.title,
                     //args.title
-                    content: args.content,
+                    content: args.content? args.content: ' ',
                     //content: slidetemplate,
                     //TODO
-                    speakernotes: args.speakernotes,
+                    speakernotes: args.speakernotes?
+                        args.speakernotes: ' ',
                     //args.content
                     //TODO: speaker notes + in object model database in deck microservice
                     user: args.userid.toString(),
@@ -71,8 +68,8 @@ export default {
                     },
                     position: content_id,
                     language: 'EN',
-                    position: content_id,
-                    license: 'CC BY-SA'
+                    license: 'CC BY-SA',
+                    tags: []
                 })
             }).then((res) => {
                 //console.log(JSON.parse(res));
@@ -116,21 +113,23 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
-        //console.log('sending update');
+
         if(resource === 'slide.content'){
           //TODO get real content_id
           //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
             /*********connect to microservices*************/
+            let url = Microservices.deck.uri + '/slide/' + args.id;
+
             rp.put({
-                uri: Microservices.deck.uri + '/slide/' + args.id,
+                uri: url,
                 body:JSON.stringify({
                     //id: args.id,
                     title: args.title,
                     //args.title
-                    content: args.content,
+                    content: args.content? args.content: ' ',
                     //TODO
-                    speakernotes: args.speakernotes,
+                    speakernotes: args.speakernotes? args.speakernotes: ' ',
                     //args.content
                     //TODO: speaker notes + in object model database in deck microservice
                     user: args.userid.toString(),
@@ -143,7 +142,8 @@ export default {
                     position: content_id,
                     language: 'EN',
                     dataSources: args.dataSources,
-                    license: 'CC BY-SA'
+                    license: 'CC BY-SA',
+                    tags: args.tags && (args.tags instanceof Array)? args.tags: []
                 })
             }).then((res) => {
                 let resParse = JSON.parse(res);
