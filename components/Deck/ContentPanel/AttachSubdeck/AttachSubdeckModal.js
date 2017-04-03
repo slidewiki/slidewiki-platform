@@ -125,7 +125,7 @@ class AttachSubdeckModal extends React.Component{
         //Selected Deck addTreeNodeAndNavigate
         let selectedDeckArea = <Segment textAlign="left" >
                                   <Label htmlFor="selectedDeckTitleId" as="label" basic color="blue" pointing="right">Selected Deck</Label>
-                                  <Input type="text" id="selectedDeckTitleId" placeholder="You should select one deck.." tabIndex="0" />
+                                  <Input type="text" id="selectedDeckTitleId" placeholder="Select one deck.." tabIndex="0"/>
                               </Segment>;
         //From my Decks option content
         let myDecksContent = this.loadMyDecksContent();
@@ -158,7 +158,6 @@ class AttachSubdeckModal extends React.Component{
                    }
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
-                size="large"
                 role="dialog"
                 id="attachSubDeckModal"
                 aria-labelledby="attachSubdeckHeader"
@@ -179,7 +178,7 @@ class AttachSubdeckModal extends React.Component{
                      Attach Deck
                 </Modal.Header>
                 <Modal.Content>
-                    <Container>
+                    <Container text>
                          <Segment color="blue" textAlign="center" padded>
                             <Menu attached='top' tabular role="tablist">
                                      <Menu.Item as="button" name="From My Decks" id="tabMyDecksId" active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
@@ -187,10 +186,11 @@ class AttachSubdeckModal extends React.Component{
                                      <Menu.Item as="button" name="From SlideWiki" id="tabFromSlideWikiId" active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
                                                   onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                             </Menu>
-                            <Segment attached="bottom">
+                            <Segment attached="bottom" textAlign="left">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
-                               {segmentPanelContent}
                                {selectedDeckArea}
+                               {segmentPanelContent}
+
                             </Segment>
                             <Modal.Actions>
                               <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">

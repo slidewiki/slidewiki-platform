@@ -2,16 +2,38 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import CustomDate from '../../util/CustomDate';
-import { Segment,Grid,Icon,Label} from 'semantic-ui-react';
+import { Segment,Item,Icon,Label,Image} from 'semantic-ui-react';
 import ISO6391 from 'iso-639-1';
+import {Microservices} from '../../../../configs/microservices';
+
 
 
 class AttachDeckList extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            selectedItem :-1
+        };
+
+
+    }
+
+    handleOnclick(keyIndex){
+
+        this.setState({
+            selectedItem:keyIndex
+        });
+        console.log(this.state.selectedItem);
+    }
 
     render() {
 
         let decks_to_show = this.props.decks;
         let deck_list;
+        let activeItemStyle = {
+            backgroundColor:'#f8ffff',
+            color:'#2185d0'
+        };
         if (decks_to_show.length){
             deck_list =
                 decks_to_show.map((deck, index) => {
@@ -27,39 +49,44 @@ class AttachDeckList extends React.Component {
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
 
                     return (
-                           <Grid.Row key={index}>
-                                <Grid.Column>
-                                    <h3 className="ui header"><a href={'./' + deck.deckID+'-'+deck.countRevisions}>{deck.title}</a></h3>
-                                </Grid.Column>
-                                <Grid.Column>
-                                  <div>
-                                    <div className="meta">Creator: <a href={'/user/' + deckCreatorid} >{deckCreator}</a></div>
-                                    <div className="meta">Date: {deckDate}</div>
-                                  </div>
-                                </Grid.Column>
-                                <Grid.Column>
-                                  <div>
+                           <Item key={index} onClick={this.handleOnclick.bind(this,index)} style ={this.state.selectedItem === index ?activeItemStyle:{}} >
+                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="tiny" />
+                                <Item.Content verticalAlign="top" >
+                                  <Item.Header style ={this.state.selectedItem === index ?activeItemStyle:{}}>
+                                    {/*<h3 className="ui header"><a href={'./' + deck.deckID+'-'+deck.countRevisions}>{deck.title}</a></h3>*/}
+                                      {deck.title}
+                                  </Item.Header>
+
+                                  <Item.Meta>
+                                    <span className='meta'>Creator: {deckCreator}</span>
+                                    <br/>
+                                    <span className='meta'>Date: {deckDate}</span>
+                                  </Item.Meta>
+
+
+                                 <Item.Extra>
                                    <Label  size="small">
-                                      <Icon name="comments outline"/>
+                                      <Icon name="comments outline" aria-label="Language"/>
                                       {deckLanguage}
                                     </Label>
                                     <Label size="small">
-                                       <Icon name="fork"/>
+                                       <Icon name="fork" aria-label="Number of versions"/>
                                        {deck.countRevisions}
                                      </Label>
-                                  </div>
-                                </Grid.Column>
-                            </Grid.Row>
+
+                                 </Item.Extra>
+                                </Item.Content>
+                            </Item>
 
                     );
                 });
         }
 
         return (
-          <Grid columns={3} stackable stretched verticalAlign='top' divided>
+          <Item.Group divided>
                 {deck_list}
 
-          </Grid>
+          </Item.Group>
 
         );
     }
