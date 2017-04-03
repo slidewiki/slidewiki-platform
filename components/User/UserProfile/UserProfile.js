@@ -88,7 +88,7 @@ class UserProfile extends React.Component {
 
     addScaffold(toInsert){
         return (
-            <div className = "ui stackable grid page" >
+            <div className = "ui vertically padded stackable grid container" >
                 <div className = "four wide column" >
                     <CategoryBox highlight = { this.props.UserProfileStore.categoryItem } username = { this.props.UserProfileStore.username } />
                     <div className = "ui hidden divider" />
