@@ -11,6 +11,7 @@ const ReactDOM = require('react-dom');
 class SlideViewPanel extends React.Component {
     constructor(props){
         super(props);
+        console.log('props', props);
 
     }
     render() {
@@ -96,7 +97,10 @@ class SlideViewPanel extends React.Component {
         // }
         if(process.env.BROWSER){
             let styleName = 'white';
-            if(this.props.PresentationStore.theme !== ''){
+            if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+                styleName = this.props.selector.theme;
+            }
+            else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
                 styleName = this.props.PresentationStore.theme;
             }
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
