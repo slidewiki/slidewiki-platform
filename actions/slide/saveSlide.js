@@ -3,6 +3,7 @@ import {shortTitle} from '../../configs/general';
 import striptags from 'striptags';
 import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../log/clog');
+import addActivity from '../activityfeed/addActivity';
 import {navigateAction} from 'fluxible-router';
 
 export default function saveSlide(context, payload, done) {
@@ -32,8 +33,17 @@ export default function saveSlide(context, payload, done) {
                 context.executeAction(navigateAction, {
                     url: newURL
                 });
+
+                //add new activity
+                let activity = {
+                    activity_type: 'edit',
+                    user_id: String(context.getStore(UserProfileStore).userid),
+                    content_id: String(res.slide.id),
+                    content_kind: 'slide'
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
-            
+
             //let pageTitle = shortTitle + ' | Slide Edit | ' + payload.params.sid;
             let pageTitle = shortTitle + ' | Slide Edit | ';
             context.dispatch('UPDATE_PAGE_TITLE', {
