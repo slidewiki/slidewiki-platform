@@ -4,6 +4,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { timeSince } from '../../../common';
+import UserPicture from '../../common/UserPicture';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import saveUsergroup from '../../../actions/user/userprofile/saveUsergroup';
 
@@ -161,18 +162,18 @@ class UserGroupEdit extends React.Component {
                     <br/>
                   </div>
                 ) : '';
-                let optionalText2 = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
+                let optionalText = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
                 userlist.push(
                   (
                     <div className="item" key={member.userid}>
                       <div className="ui grid">
                         <div className="one wide column middle aligned">
-                          <i className="large user middle aligned icon"></i>
+                          <UserPicture picture={ member.picture } username={ member.username } avatar={ true } width= { 24 } />
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + member.username}>{member.surname} {member.forename} ({member.username})</a>
-                              <div className="description">{optionalElement}{optionalText2}</div>
+                              <a className="header" href={'/user/' + member.username}>{member.forename} {member.surname} ({member.username})</a>
+                              <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
                         <div className="one wide column middle aligned">

@@ -144,7 +144,10 @@ class DeckPropertiesEditor extends React.Component {
                             username: name,
                             id: parseInt(data.userid),
                             joined: (new Date()).toISOString(),
-                            picture: data.picture
+                            picture: data.picture,
+                            surname: data.surname,
+                            forename: data.forename,
+                            organization: data.organization
                         });
                     }
 
@@ -260,6 +263,12 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
+                let optionalElement = (user.organization) ?  (
+                  <div>
+                    {user.organization}
+                    <br/>
+                  </div>
+                ) : '';
                 let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
                 // console.log('New key for authorized user:', key, user);
@@ -271,9 +280,9 @@ class DeckPropertiesEditor extends React.Component {
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
                         <div className="fifteen wide column">
-                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                          <a className="header" href={'/user/' + user.username}>{user.forename} {user.surname} ({user.username})</a>
                           <div className="description">
-                            {optionalText}&nbsp;&nbsp;&nbsp;
+                            {optionalElement}{optionalText}&nbsp;&nbsp;&nbsp;
                             <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
                               Remove
                             </button>
