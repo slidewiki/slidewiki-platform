@@ -480,32 +480,32 @@ class UserRegistration extends React.Component {
                     <h3 className="ui dividing header">Or complete the registration form</h3>
                         <form className="ui form" ref="UserRegistration_form" >
                             <div className="ui inline required field">
-                                <label style={signUpLabelStyle} id="FirstName">First name </label>
-                                <div className="ui icon input"><input type="text" aria-labelledby="FirstName" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
+                                <label style={signUpLabelStyle} htmlFor="FirstName_label">First name </label>
+                                <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
                             </div>
                             <div className="ui inline required field">
-                               <label style={signUpLabelStyle} id="LastName">Last name</label>
-                                <div className="ui icon input"><input type="text" aria-labelledby="LastName" name="lastname" ref="lastname" aria-required="true" placeholder="Last name" /></div>
+                               <label style={signUpLabelStyle} htmlFor="LastName_label">Last name</label>
+                                <div className="ui icon input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" placeholder="Last name" /></div>
                             </div>
                             <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                                <label style={signUpLabelStyle} id="username_label">User name </label>
-                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" aria-labelledby="username_label" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} htmlFor="username_label">User name </label>
+                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username_label" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
                             </div>
                             <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                                <label style={signUpLabelStyle} id="email_label">Email</label>
-                                <div className="ui icon input"><i className={emailIconClasses}/><input type="text" aria-labelledby="email_label" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} htmlFor="email_label">Email</label>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email_label" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline required field">
-                                <label style={signUpLabelStyle} id="reenteremail_label">Re-enter email</label>
-                                <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-labelledby="reenteremail_label" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} htmlFor="reenteremail">Re-enter email</label>
+                                <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true"/></div>
                             </div>
                             <div className="ui inline required field">
-                                <label style={signUpLabelStyle} id="password_label">Password</label>
-                                <div className="ui icon input"><input type="password" aria-labelledby="password_label" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} htmlFor="password_label">Password</label>
+                                <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
                             </div>
                             <div className="ui inline field">
-                                <label style={signUpLabelStyle} id="reenterpassword_label">Re-enter password</label>
-                                <div className="ui icon input"><input type="password" aria-labelledby="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
+                                <label style={signUpLabelStyle} htmlFor="reenterpassword_label">Re-enter password</label>
+                                <div className="ui icon input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
                             </div>
                             <div >
                                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
