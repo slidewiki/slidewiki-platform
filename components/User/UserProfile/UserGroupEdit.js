@@ -61,7 +61,10 @@ class UserGroupEdit extends React.Component {
                             username: name,
                             userid: parseInt(data.userid),
                             joined: data.joined || undefined,
-                            picture: data.picture
+                            picture: data.picture,
+                            surname: data.surname,
+                            forename: data.forename,
+                            organization: data.organization
                         });
                     }
 
@@ -152,7 +155,13 @@ class UserGroupEdit extends React.Component {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
-                let optionalText = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
+                let optionalElement = (member.organization) ?  (
+                  <div>
+                    {member.organization}
+                    <br/>
+                  </div>
+                ) : '';
+                let optionalText2 = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
                 userlist.push(
                   (
                     <div className="item" key={member.userid}>
@@ -162,8 +171,8 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + member.username}>{member.username} ({member.userid})</a>
-                              <div className="description">{optionalText}</div>
+                              <a className="header" href={'/user/' + member.username}>{member.surname} {member.forename} ({member.username})</a>
+                              <div className="description">{optionalElement}{optionalText2}</div>
                           </div>
                         </div>
                         <div className="one wide column middle aligned">
