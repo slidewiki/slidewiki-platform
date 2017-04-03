@@ -44,13 +44,11 @@ class Presentation extends React.Component{
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
             // $('html.ios, html.ios body').css('height': '100% !important');
-
-
-            let styleName = this.props.PresentationStore.theme;
-            console.log('styleName: ' + styleName);
-            console.log('PresentationStore.theme: ' + this.props.PresentationStore.theme);
-            // // let styleName = 'black';
-            // // let path = '../../../custom_modules/reveal.js/css/theme/black.css';
+            // Get the theme information, and download the stylesheet
+            let styleName = 'white';
+            if(this.props.PresentationStore.theme){
+                let styleName = this.props.PresentationStore.theme;
+            }
             require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';

@@ -4,11 +4,24 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import ResizeAware from 'react-resize-aware';
 import PresentationStore from '../../../../../stores/PresentationStore';
+import loadPresentation from '../../../../../actions/loadPresentation';
 import { findDOMNode } from 'react-dom';
 const ReactDOM = require('react-dom');
 
 class SlideViewPanel extends React.Component {
+    constructor(props){
+        super(props);
+
+    }
     render() {
+            // if(process.env.BROWSER){
+            //     let styleName = this.props.PresentationStore.theme;
+            //     console.log('styleName inside function', styleName);
+            //     if(styleName){
+            //         require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+            //     }
+            // }
+
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
             minWidth: '100%',
@@ -74,14 +87,20 @@ class SlideViewPanel extends React.Component {
         );
     }
     componentDidMount(){
+        // if(process.env.BROWSER){
+        //     let styleName = this.props.PresentationStore.theme;
+        //     console.log('styleName ', styleName);
+        //     if(styleName){
+        //         require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        //     }
+        // }
         if(process.env.BROWSER){
-            // Get the theme information, and download the stylesheet
-            let styleName = this.props.PresentationStore.theme;
-            console.log(this.props.PresentationStore);
-            console.log('styleName ' + styleName);
-            styleName = 'white';
-
+            let styleName = 'white';
+            if(this.props.PresentationStore.theme){
+                styleName = this.props.PresentationStore.theme;
+            }
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
 
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
@@ -118,12 +137,8 @@ class SlideViewPanel extends React.Component {
     componentWillReceiveProps(nextProps){
         // alert('styleName in componentWillReceiveProps: ' + styleName);
         // console.log(this.props.PresentationStore);
-        if (nextProps.PresentationStore.theme !== this.props.PresentationStore.theme){
-            if(process.env.BROWSER){
-                let styleName = this.props.PresentationStore.theme;
-                alert('styleName in componentWillReceiveProps: ' + styleName);
-                require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-            }
+        if (nextProps.PresentationStore.theme === this.props.PresentationStore.theme){
+
         }
    }
     resize()
@@ -166,6 +181,10 @@ class SlideViewPanel extends React.Component {
         }
     }
 }
+
+SlideViewPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, PresentationStore], (context, props) => {
     return {

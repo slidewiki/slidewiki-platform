@@ -236,6 +236,16 @@ class SlideContentEditor extends React.Component {
         return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-left"><span class="text-block" font-weight: initial; font-style: normal; ">New content</span></div></div>';
     }
     componentDidMount() {
+        if(process.env.BROWSER){
+            // Get the theme information, and download the stylesheet
+            let styleName = 'white';
+            if(this.props.PresentationStore.theme){
+                styleName = this.props.PresentationStore.theme;
+            }
+            require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
+
+        }
         //alert('remount');
         const userId = this.props.UserProfileStore.userid;
 
@@ -379,24 +389,10 @@ class SlideContentEditor extends React.Component {
     }
     componentDidUpdate() {
         //alert('update');
-        console.log('componentDidUpdate');
-        console.log(this.props.PresentationStore);
         if(process.env.BROWSER){
             this.resize();
         }
     }
-    componentWillReceiveProps(nextProps){
-        console.log('hello?');
-        if (nextProps.PresentationStore.theme !== this.props.PresentationStore.theme){
-            console.log('hello inside?');
-            if(process.env.BROWSER){
-                let styleName = this.props.PresentationStore.theme;
-                require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-            }
-
-
-        }
-   }
 
     resize() {
         //console.log('resize_all');
@@ -598,7 +594,7 @@ SlideContentEditor.contextTypes = {
 };
 
 SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
-    print('context', context);
+
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
