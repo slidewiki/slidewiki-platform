@@ -239,7 +239,7 @@ class SlideContentEditor extends React.Component {
         if(process.env.BROWSER){
             // Get the theme information, and download the stylesheet
             let styleName = 'white';
-            if(this.props.PresentationStore.theme){
+            if(this.props.PresentationStore.theme !== ''){
                 styleName = this.props.PresentationStore.theme;
             }
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
