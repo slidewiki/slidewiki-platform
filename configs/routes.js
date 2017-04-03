@@ -193,7 +193,21 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadPresentation, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+
+
+
         }
     },
     contributors: {
