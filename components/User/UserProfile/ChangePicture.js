@@ -78,7 +78,7 @@ class ChangePicture extends React.Component {
                     <div className="eight wide column">
                         <div className="ui vertical buttons">
                             <input type="file" accept="image/jpg, image/jpeg, image/png" style={{display: 'none'}} onChange={ this.openCropPictureModal.bind(this) } ref="fileDialog"/>
-                            <button tabIndex="-1" className="ui primary labeled icon button" onClick={ this.openFileDialog.bind(this) }>
+                            <button className="ui primary labeled icon button" onClick={ this.openFileDialog.bind(this) }>
                                 <i className="icon upload"/>Upload new Image
                             </button>
                             <div className="ui hidden divider"/>
@@ -105,12 +105,12 @@ class ChangePicture extends React.Component {
 
                     </div>
                     <div className="actions">
-                        <div className="ui red right labeled icon deny button">
-                            <i className="minus circle icon"></i> Abort
-                        </div>
-                        <div className="ui green right labeled icon button" onClick={this.uploadCroppedPicture.bind(this)}>
+                        <button className="ui red right labeled icon deny button">
+                            <i className="minus circle icon"></i> Cancel
+                        </button>
+                        <button className="ui green right labeled icon button" onClick={this.uploadCroppedPicture.bind(this)}>
                           <i className="save icon"></i> Save
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>
