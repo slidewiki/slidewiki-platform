@@ -7,8 +7,7 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 // import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
-//import loadSlideEdit from '../actions/slide/loadSlideEdit';
-import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
+import loadSlideEdit from '../actions/slide/loadSlideEdit';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
@@ -41,10 +40,7 @@ export default {
         handler: require('../components/Home/Home'),
         action: (context, payload, done) => {
             async.series([
-                (callback) => {
-                    context.dispatch('UPDATE_PAGE_TITLE', {
-                        pageTitle: fullTitle
-                    });
+                (callback) => {context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: fullTitle});
                     callback();
                 },
                 (callback) => {
@@ -145,9 +141,7 @@ export default {
         title: 'SlideWiki -- Sign up',
         handler: require('../components/User/UserRegistration/UserRegistration'),
         action: (context, payload, done) => {
-            context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Sign up'
-            });
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | Sign up'});
             done();
         }
     },
@@ -243,8 +237,7 @@ export default {
         page: 'slideedit',
         handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            //context.executeAction(loadSlideEdit, payload, done);
-            context.executeAction(loadSlideEditWihtRevisionControl, payload, done);
+            context.executeAction(loadSlideEdit, payload, done);
         }
     },
     deckview: {
@@ -280,7 +273,21 @@ export default {
         page: 'activities',
         handler: require('../components/Deck/ActivityFeedPanel/ActivityFeedPanel'),
         action: (context, payload, done) => {
-            context.executeAction(loadActivities, payload, done);
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Activities'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadActivities, payload, done);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
         }
     },
     translations: {
@@ -389,7 +396,7 @@ export default {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Add Deck'
             });
-            context.executeAction(loadAddDeck, null, done);
+            context.executeAction(loadAddDeck, payload, done);
         }
     },
     socialLogin: {

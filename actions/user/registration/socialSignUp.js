@@ -6,6 +6,11 @@ export default function socialSignUp(context, payload, done) {
             res.picture = payload.picture || '';
             context.setUser(res); //save user as cookie via userStoragePlugin
             context.dispatch('SOCIAL_SIGNIN_SUCCESS', res);
+            try {
+                location.reload();
+            } catch (e) {
+                //nothing - server side
+            }
         }
         done();
     });

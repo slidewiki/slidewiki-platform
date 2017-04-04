@@ -37,6 +37,7 @@
 
         // Query the elements
         var allElms = document.querySelectorAll (selector);
+        var buttonsize = 50*options.ratio;
 
         // Each element
         for (var i = 0; i < allElms.length; ++i) {
@@ -108,11 +109,12 @@
                     //cEl.dragdiv.class = "content";
                     //cEl.dragdiv.style.width = "50px";
                     //cEl.dragdiv.style.height = "50px";
-                    cEl.dragdiv.style.width = "50px";
-                    cEl.dragdiv.style.height = "50px";
-                    //div.style.top = cEl.style.top - 20 ;
-                    //div.style.top = "-20" ;
-                    //div.style.left = cEl.style.left - 20 ;
+                    cEl.dragdiv.style.width = buttonsize+"px";
+                    cEl.dragdiv.style.height = buttonsize+"px";
+                    //cEl.dragdiv.style.top = "-"+(buttonsize*0.75)+"px";
+                    cEl.dragdiv.style.top = "-"+(buttonsize*0.3)+"px";
+                    //cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
+                    cEl.dragdiv.style.left = "-3px";
                     /*
                     var textnode = document.createTextNode("##");         // Create a text node
                     //textnode.style.position = "absolute";
@@ -162,9 +164,9 @@
                         };
 
                         //fix to prevent scrolling
-                        $('.pptx2html').css('overflow', 'hidden');
+                        //$('.pptx2html').css('overflow', 'hidden');
                         //$('.pptx2html').css('height', '100%');
-                        $('body').css('overflow', 'hidden');
+                        ////$('body').css('overflowY', 'hidden');
                         //$('body').css('height', '100%');
 
                         //cEl.style.overflow = 'hidden';
@@ -205,7 +207,7 @@
                         //restore fix to prevent scrolling
                         $('.pptx2html').css('overflow', '');
                         //$('.pptx2html').css('height', '');
-                        $('body').css('overflow', '');
+                        $('body').css('overflowY', '');
                         //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -240,8 +242,11 @@
                     cEl.removediv.style.zIndex = "9000000";
                     cEl.removediv.id = "removediv";
                     cEl.removediv.className = "removediv";
-                    cEl.removediv.style.width = "50px";
-                    cEl.removediv.style.height = "50px";
+                    cEl.removediv.style.width = buttonsize+"px";
+                    cEl.removediv.style.height = buttonsize+"px";
+                    //assign to top right of parent div
+                    cEl.removediv.style.top = "-"+ (buttonsize*0.75) +"px";
+                    cEl.removediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
 
                     let imgremove = document.createElement("IMG");
                     imgremove.style.zIndex = "9000000";
@@ -251,9 +256,6 @@
                     imgremove.draggable = false;
                     cEl.removediv.appendChild(imgremove);
                     cEl.removediv.contentEditable = false;
-                    //assign to top right of parent div
-                    cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
-                    //cEl.removediv.style.top = parseInt(cEl.style.height) - 50 + "px";
 
                     cEl.insertBefore( cEl.removediv, cEl.firstChild );
                     //cEl.appendChild(cEl.removediv);
@@ -292,8 +294,13 @@
                     cEl.sendtobackdiv.style.zIndex = "9000000";
                     cEl.sendtobackdiv.id = "sendtobackdiv";
                     cEl.sendtobackdiv.className = "sendtobackdiv";
-                    cEl.sendtobackdiv.style.width = "50px";
-                    cEl.sendtobackdiv.style.height = "50px";
+                    cEl.sendtobackdiv.style.width = buttonsize+"px";
+                    cEl.sendtobackdiv.style.height = buttonsize+"px";
+                    //assign to bottom left of parent div
+                    cEl.sendtobackdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75)) +"px";
+                    cEl.sendtobackdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                    //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                    //cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
 
                     let imgsendtoback = document.createElement("IMG");
                     imgsendtoback.style.zIndex = "9000000";
@@ -304,9 +311,6 @@
                     imgsendtoback.contentEditable = false;
                     cEl.sendtobackdiv.appendChild(imgsendtoback);
                     cEl.sendtobackdiv.contentEditable = false;
-                    //assign to bottom left of parent div
-                    //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
-                    cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
 
                     cEl.insertBefore( cEl.sendtobackdiv, cEl.firstChild );
                     //cEl.appendChild(cEl.removediv);
@@ -334,8 +338,13 @@
                     cEl.movetofrontdiv.style.zIndex = "9000000";
                     cEl.movetofrontdiv.id = "movetofrontdiv";
                     cEl.movetofrontdiv.className = "movetofrontdiv";
-                    cEl.movetofrontdiv.style.width = "50px";
-                    cEl.movetofrontdiv.style.height = "50px";
+                    cEl.movetofrontdiv.style.width = buttonsize+"px";
+                    cEl.movetofrontdiv.style.height = buttonsize+"px";
+                    //assign to bottom left of parent div
+                    cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*2*0.75))  +"px";
+                    cEl.movetofrontdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                    //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
+                    //cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
 
                     let imgmovetofront = document.createElement("IMG");
                     imgmovetofront.style.zIndex = "9000000";
@@ -346,9 +355,6 @@
                     imgmovetofront.contentEditable = false;
                     cEl.movetofrontdiv.appendChild(imgmovetofront);
                     cEl.movetofrontdiv.contentEditable = false;
-                    //assign to bottom left of parent div
-                    //cEl.movetofrontdiv.style.left = parseInt(cEl.style.width) - 70 + "px";
-                    cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
 
                     cEl.insertBefore( cEl.movetofrontdiv, cEl.firstChild );
                     //cEl.appendChild(cEl.removediv);
@@ -373,11 +379,18 @@
                     //===============KLAAS -> for resize button
                     cEl.resizediv = document.createElement("div");
                     cEl.resizediv.style.position = "absolute";
+                    cEl.resizediv.style.zIndex = "9000000";
                     cEl.resizediv.id = "resizediv";
                     cEl.resizediv.className = "resizediv";
-                    cEl.resizediv.style.width = "50px";
-                    cEl.resizediv.style.height = "50px";
-                    cEl.resizediv.style.zIndex = "9000000";
+                    cEl.resizediv.style.width = buttonsize+"px";
+                    cEl.resizediv.style.height = buttonsize+"px";
+                    //assign to bottom right of parent div
+                    if (options.ratio >= 1){cEl.resizediv.style.top = (((parseInt(cEl.style.height)) - 50) - ((buttonsize-50)*options.ratio)) +"px";}
+                    else {cEl.resizediv.style.top = ((parseInt(cEl.style.height) - buttonsize) - ((50-buttonsize)*options.ratio)) +"px";}
+                    if (options.ratio >= 1){cEl.resizediv.style.left = (((parseInt(cEl.style.width)) - 50) + ((buttonsize-50)*options.ratio)) +"px";}
+                    else {cEl.resizediv.style.left = ((parseInt(cEl.style.width) - 50) + (50-buttonsize)) +"px";}
+
+
                     let imgresize = document.createElement("IMG");
                     imgresize.style.position = "absolute";
                     imgresize.style.zIndex = "9000000";
@@ -394,13 +407,6 @@
                     //position resize icon to bottom right of parent element
                     cEl.appendChild(cEl.resizediv);
                     //cEl.resizediv.style.left = parseInt(cEl.style.left) + parseInt(cEl.style.width) + "px";
-                    //assign to bottom right of parent div
-                    cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
-                    cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
-                    //alert(cEl.resizediv.style);
-                    //cEl.resizediv.style.right = (cEl.style.right) + "px";
-                    //alert(cEl.style.right + "px");
-                    //alert(temp + "px");
 
                     //resize mousehandlers
                     cEl.resizediv.addEventListener("mousedown", function (e) {
@@ -411,9 +417,9 @@
                         };
 
                         //fix to prevent scrolling
-                        $('.pptx2html').css('overflow', 'hidden');
+                        ////$('.pptx2html').css('overflow', 'hidden');
                         //$('.pptx2html').css('height', '100%');
-                        $('body').css('overflow', 'hidden');
+                        //$('body').css('overflowY', 'hidden');
                         //$('body').css('height', '100%');
 
                         //move element to front to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -457,7 +463,7 @@
                         //restore fix to prevent scrolling
                         $('.pptx2html').css('overflow', '');
                         //$('.pptx2html').css('height', '');
-                        $('body').css('overflow', '');
+                        $('body').css('overflowY', '');
                         //$('body').css('height', '');
 
                         //restore z-index - element was moved to front - to prevent conflict with handlers on elements with larger z-index (which then trigger)
@@ -543,12 +549,18 @@
                             }
                             //cEl.style.transform = 'scale(0.5)';
                             //move resize button with resized borders of element
-                            cEl.resizediv.style.left = parseInt(cEl.style.width) - 70 + "px";
-                            cEl.resizediv.style.top = parseInt(cEl.style.height) - 50 + "px";
-                            //move remove button with resized borders of absolute element
-                            cEl.removediv.style.left = parseInt(cEl.style.width) - 50 + "px";
-                            cEl.sendtobackdiv.style.top = parseInt(cEl.style.height) - 50 + "px"; //bottomleft
-                            cEl.movetofrontdiv.style.top = parseInt(cEl.style.height) - 100 + "px"; //bottomleft
+                            cEl.dragdiv.style.top = "-"+(buttonsize*0.3)+"px";
+                            //cEl.dragdiv.style.left = "-"+(buttonsize*0.5)+"px";
+                            //cEl.removediv.style.top = "-"+ (buttonsize*0.75) +"px";
+                            cEl.removediv.style.left = (parseInt(cEl.style.width) - (buttonsize*0.5))+"px";
+                            cEl.sendtobackdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*0.75)) +"px";
+                            //cEl.sendtobackdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                            cEl.movetofrontdiv.style.top = (parseInt(cEl.style.height) - (buttonsize*2*0.75))  +"px";
+                            //cEl.movetofrontdiv.style.left = "-" + (buttonsize*0.5)+"px";
+                            if (options.ratio >= 1){cEl.resizediv.style.top = (((parseInt(cEl.style.height)) - 50) - ((buttonsize-50)*options.ratio)) +"px";}
+                            else {cEl.resizediv.style.top = ((parseInt(cEl.style.height) - buttonsize) - ((50-buttonsize)*options.ratio)) +"px";}
+                            if (options.ratio >= 1){cEl.resizediv.style.left = (((parseInt(cEl.style.width)) - 50) + ((buttonsize-50)*options.ratio)) +"px";}
+                            else {cEl.resizediv.style.left = ((parseInt(cEl.style.width) - 50) + (50-buttonsize)) +"px";}
                         }
                         else
                         { return; }

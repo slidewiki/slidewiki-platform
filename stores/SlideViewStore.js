@@ -8,20 +8,24 @@ class SlideViewStore extends BaseStore {
         this.title = '';
         this.content = '';
         this.speakernotes = '';
+        this.tags = [];
     }
     updateContent(payload) {
         if (payload.slide.revisions !== undefined)
         {
             //this.id = payload.slide.id;
-            this.title = payload.slide.revisions[payload.slide.revisions.length-1].title;
-            this.content = payload.slide.revisions[payload.slide.revisions.length-1].content;
-            this.speakernotes = payload.slide.revisions[payload.slide.revisions.length-1].speakernotes;
+            let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
+            this.title = lastRevision.title;
+            this.content = lastRevision.content;
+            this.speakernotes = lastRevision.speakernotes;
+            this.tags = lastRevision.tags? lastRevision.tags: [];
             this.emitChange();
         }
         else
         {
             this.title = 'title not found';
             this.content = 'content not found';
+            this.tags = [];
             this.emitChange();
         }
     }
@@ -30,6 +34,7 @@ class SlideViewStore extends BaseStore {
             id: this.id,
             title: this.title,
             content: this.content,
+            tags: this.tags,
             speakernotes: this.speakernotes,
         };
     }
@@ -40,6 +45,7 @@ class SlideViewStore extends BaseStore {
         this.id = state.id;
         this.title = state.title;
         this.content = state.content;
+        this.tags = state.tags;
         this.speakernotes = state.speakernotes;
     }
 }

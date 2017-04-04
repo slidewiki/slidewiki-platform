@@ -121,13 +121,6 @@ module.exports = function userStoragePlugin(options) {
                                 domain: location.hostname
                             });
                         }
-
-                        //SWIK-493 refresh page
-                        try {
-                            location.reload();
-                        } catch (e) {
-                            //nothing - server side
-                        }
                     };
                 },
                 /**

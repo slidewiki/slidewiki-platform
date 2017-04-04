@@ -25,7 +25,10 @@ class DeckEditPanel extends React.Component {
 
         return (
         <div ref="deckEditPanel" className="ui bottom attached segment">
-            <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps} selector={this.props.selector}/>
+            <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps}
+              selector={this.props.selector}
+              userid={this.props.UserProfileStore.userid}
+              groups={this.props.UserProfileStore.user.groups}/>
         </div>
         );
     }

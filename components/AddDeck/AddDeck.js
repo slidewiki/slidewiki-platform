@@ -190,7 +190,7 @@ class AddDeck extends React.Component {
             this.context.executeAction(uploadFile, payload);
         }
         else {
-            console.error('Submission not possible - no file or not pptx');
+            console.error('Submission not possible - no file or not pptx/odp');
         }
     }
 
@@ -255,12 +255,6 @@ class AddDeck extends React.Component {
             <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
-        let errorView = '';
-        if (this.props.AddDeckStore.error !== null)
-            errorView = <Error error={this.props.AddDeckStore.error} />;
-        else
-            errorView = '';
-
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
         let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
@@ -276,10 +270,10 @@ class AddDeck extends React.Component {
         }
 
         return (
-          <div className="ui container">
-          <h3>Add a deck to SlideWiki</h3>
-
-          <div className="ui grid">
+          <div className="ui vertically padded grid container">
+              <div className="sixteen wide column">
+                <h3>Add a deck to SlideWiki</h3>
+              </div>
               <div className="sixteen wide column">
                   <form className="ui form upload">
                           <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
@@ -309,7 +303,7 @@ class AddDeck extends React.Component {
                       </div>
 
                         <div className="ui message" id="uploadDesc">
-                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx files are supported.</p>
+                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.</p>
                           </div>
                      <div className="ui grid">
                          <div className="two column row">
@@ -348,8 +342,6 @@ class AddDeck extends React.Component {
                   </form>
               </div>
             </div>
-          {errorView}
-      </div>
         );
     }
 }

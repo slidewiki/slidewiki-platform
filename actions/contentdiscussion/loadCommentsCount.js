@@ -1,7 +1,13 @@
+import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
+
 export default function loadCommentsCount(context, payload, done) {
+    log.info(context);
     context.service.read('discussion.count', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            context.dispatch('LOAD_AMOUNT_OF_COMMENTS_FAILURE', err);
+            log.error(context, {filepath: __filename, err: err});
+            context.executeAction(serviceUnavailable, payload, done);
+            //context.dispatch('LOAD_AMOUNT_OF_COMMENTS_FAILURE', err);
         } else {
             context.dispatch('LOAD_AMOUNT_OF_COMMENTS_SUCCESS', res);
         }

@@ -43,7 +43,7 @@ class UserGroupEdit extends React.Component {
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
-                    console.log('dropdown select', name, value, source);
+                    // console.log('dropdown select', name, value, source);
 
                     $('#usergoup_edit_dropdown_usernames_remote').dropdown('clear');
                     $('#usergoup_edit_dropdown_usernames_remote').dropdown('hide');
@@ -52,18 +52,20 @@ class UserGroupEdit extends React.Component {
                     if (group.members === undefined || group.members === null)
                         group.members = [];
 
-                    // console.log('trying to add', name, 'to', group.members);
+                    let data = JSON.parse(decodeURIComponent(value));
+                    // console.log('trying to add', name, 'to', group.members, ' with ', data);
                     if (group.members.findIndex((member) => {
-                        return member.username === name && member.userid === parseInt(value);
+                        return member.userid === parseInt(data.userid);
                     }) === -1 && name !== this.props.UserProfileStore.username) {
                         group.members.push({
                             username: name,
-                            userid: parseInt(value),
-                            joined: (new Date()).toISOString()
+                            userid: parseInt(data.userid),
+                            joined: data.joined || undefined,
+                            picture: data.picture
                         });
                     }
 
-                    this.context.executeAction(updateUsergroup, group);
+                    this.context.executeAction(updateUsergroup, {group: group, offline: true});
 
                     return true;
                 }
@@ -76,7 +78,7 @@ class UserGroupEdit extends React.Component {
             name: this.refs.GroupName.value,
             description: this.refs.GroupDescription.value,
             members: members,
-            timestamp: this.props.UserProfileStore.currentUsergroup.timestamp || (new Date()).toISOString(),
+            timestamp: this.props.UserProfileStore.currentUsergroup.timestamp || '',
             creator: this.props.UserProfileStore.currentUsergroup.creator || this.props.UserProfileStore.userid
         };
 
@@ -127,7 +129,7 @@ class UserGroupEdit extends React.Component {
 
         group.members.pop(member);
 
-        this.context.executeAction(updateUsergroup, group);
+        this.context.executeAction(updateUsergroup, {group: group, offline: true});
     }
 
     render() {
@@ -144,11 +146,13 @@ class UserGroupEdit extends React.Component {
             header = 'Edit Group';
         }
 
+        // console.log('render UserGroupEdit:', this.props.UserProfileStore.currentUsergroup.members);
         if (this.props.UserProfileStore.currentUsergroup.members !== undefined && this.props.UserProfileStore.currentUsergroup.members.length > 0) {
             this.props.UserProfileStore.currentUsergroup.members.forEach((member) => {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
+                let optionalText = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
                 userlist.push(
                   (
                     <div className="item" key={member.userid}>
@@ -159,7 +163,7 @@ class UserGroupEdit extends React.Component {
                         <div className="fourteen wide column">
                           <div className="content">
                               <a className="header" href={'/user/' + member.username}>{member.username} ({member.userid})</a>
-                              <div className="description">Joined {timeSince((new Date(member.joined)))}  ago</div>
+                              <div className="description">{optionalText}</div>
                           </div>
                         </div>
                         <div className="one wide column middle aligned">

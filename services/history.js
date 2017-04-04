@@ -1,6 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
+const log = require('../configs/log').log;
 
 //extracts the position from path string
 function getRelPositionFromPath(spath) {
@@ -13,6 +14,8 @@ export default {
 
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         let selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         let isRootDeck = selector.stype === 'deck' && selector.id === selector.sid;
@@ -89,6 +92,8 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'history.revert') {
             let parentId = TreeUtil.getParentId(args.selector);
@@ -98,9 +103,11 @@ export default {
             if (parentId != null) {
                 requestBody.root_deck = parentId;
             }
+            requestBody.top_root_deck = args.selector.id;
             rp.post({
                 uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(requestBody),
+                headers: { '----jwt----': args.jwt }
             }).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {

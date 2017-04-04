@@ -12,8 +12,21 @@ import deckIdTypeError from './error/deckIdTypeError';
 import deckModeError from './error/deckModeError';
 import serviceUnavailable from './error/serviceUnavailable';
 import { AllowedPattern } from './error/util/allowedPattern';
+import fetchUser from './user/userprofile/fetchUser';
+import UserProfileStore from '../stores/UserProfileStore';
+import notFoundError from './error/notFoundError';
+import DeckTreeStore from '../stores/DeckTreeStore';
+import loadPermissions from './permissions/loadPermissions';
+import resetPermissions from './permissions/resetPermissions';
+
+import PermissionsStore from '../stores/PermissionsStore';
+
+const log = require('./log/clog');
+
 
 export default function loadDeck(context, payload, done) {
+    log.info(context); // do not remove such log messages. If you don't want to see them, change log level in config
+
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -44,6 +57,8 @@ export default function loadDeck(context, payload, done) {
     let runNonContentActions = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
+
+
     //if no specific content selector is given, use the deck type, view mode and root deck id as default selector
     if(!payload.params.stype) {
         payloadCustom.params.stype = 'deck';
@@ -66,15 +81,44 @@ export default function loadDeck(context, payload, done) {
         payloadCustom.params.spath = '';
         payloadCustom.params.mode = 'view';
     }
+
+    payload.params.jwt = context.getStore(UserProfileStore).getState().jwt;
+
+    let permissionsPromise;
+    //if user is not logged in, only allow view mode and reset permissions, else load this user's permissions on the selected root deck
+    if (!payload.params.jwt){
+        payloadCustom.params.mode = 'view';
+        permissionsPromise = context.executeAction(resetPermissions, payloadCustom);
+    } else {
+        permissionsPromise = context.executeAction(loadPermissions, payloadCustom);
+    }
+
     context.dispatch('UPDATE_DECK_PAGE_CONTENT', payloadCustom);
     pageTitle = pageTitle + ' | ' + payloadCustom.params.stype + ' | ' + payloadCustom.params.sid + ' | ' + payloadCustom.params.mode;
     if((currentState.selector.id === payloadCustom.params.id) && (currentState.selector.spath === payloadCustom.params.spath)){
         runNonContentActions = 0;
     }
+
     //load all required actions in parallel
     async.parallel([
         (callback) => {
-            context.executeAction(loadContent, payloadCustom, callback);
+            context.executeAction(fetchUser, {
+                params: {
+                    username: context.getStore(UserProfileStore).getState().username
+                }
+            }, callback);
+        },
+        (callback) => {
+            permissionsPromise.then(() => {
+                let permissions = context.getStore(PermissionsStore).getState().permissions;
+                if (payloadCustom.params.mode === 'edit' && !permissions.edit && !permissions.admin){
+                    payloadCustom.params.mode = 'view';
+                    context.dispatch('SHOW_NO_PERMISSIONS_MODAL');
+                } else {
+                    context.dispatch('HIDE_NO_PERMISSIONS_MODAL');
+                }
+                context.executeAction(loadContent, payloadCustom, callback);
+            });
         },
         (callback) => {
             if(runNonContentActions){
@@ -99,10 +143,14 @@ export default function loadDeck(context, payload, done) {
         }
     ],
     // final callback
-
     (err, results) => {
-        if (err){
+        if (err) {
+            log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
+            return;
+        }
+        if (!context.getStore(DeckTreeStore).getState().isSelectorValid){
+            context.executeAction(notFoundError, payload, done);
             return;
         }
         context.dispatch('UPDATE_PAGE_TITLE', {
