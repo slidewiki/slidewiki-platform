@@ -5,6 +5,7 @@ import CustomDate from '../../util/CustomDate';
 import { Segment,Item,Icon,Label,Image} from 'semantic-ui-react';
 import ISO6391 from 'iso-639-1';
 import {Microservices} from '../../../../configs/microservices';
+import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
 
 
 
@@ -18,12 +19,17 @@ class AttachDeckList extends React.Component {
 
     }
 
-    handleOnclick(keyIndex){
+    handleOnclick(selectedDeck){
 
         this.setState({
-            selectedItem:keyIndex
+            selectedItem:selectedDeck.keyIndex
         });
-        console.log(this.state.selectedItem);
+        let payload ={
+            selectedDeckId:selectedDeck.selectedDeckId,
+            selectedDeckTitle:selectedDeck.selectedDeckTitle
+        };
+        this.context.executeAction(updateSelectedDeck,payload,null);
+
     }
 
     render() {
@@ -49,7 +55,7 @@ class AttachDeckList extends React.Component {
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
 
                     return (
-                           <Item key={index} onClick={this.handleOnclick.bind(this,index)} style ={this.state.selectedItem === index ?activeItemStyle:{}} >
+                           <Item key={index} onClick={this.handleOnclick.bind(this,{keyIndex:index,selectedDeckTitle:deck.title,selectedDeckId: deck.deckID+'-'+deck.countRevisions})} style ={this.state.selectedItem === index ?activeItemStyle:{}} tabIndex="0">
                                 <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="tiny" />
                                 <Item.Content verticalAlign="top" >
                                   <Item.Header style ={this.state.selectedItem === index ?activeItemStyle:{}}>
@@ -85,11 +91,14 @@ class AttachDeckList extends React.Component {
         return (
           <Item.Group divided>
                 {deck_list}
-
           </Item.Group>
 
         );
     }
 }
+
+AttachDeckList.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default AttachDeckList;

@@ -5,6 +5,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
+import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
 
 //import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
@@ -26,6 +27,7 @@ class AttachSubdeckModal extends React.Component{
             activeItem: 'MyDecks',
             activeTrap: false,
             userDecks: [],
+            selectedDeckTitle: 'Select one deck...'
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -33,9 +35,7 @@ class AttachSubdeckModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
-
-
-
+        this.handleAttachButton = this.handleAttachButton.bind(this);
     }
 
     componentWillReceiveProps(nextProps){
@@ -46,6 +46,12 @@ class AttachSubdeckModal extends React.Component{
             });
         }
 
+        if(nextProps.AttachSubdeckModalStore.selectedDeckId !== this.state.selectedDeckId){
+            this.setState({
+                selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
+                selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle
+            });
+        }
     }
 
     handleOpen(){
@@ -120,12 +126,20 @@ class AttachSubdeckModal extends React.Component{
 
         return myDecksContent;
     }
+    handleAttachButton() {
+        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
+        //nodeSec: Object {type: "deck", id: 1245-2}
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
+        this.handleClose();
+
+    }
 
     render() {
+
         //Selected Deck addTreeNodeAndNavigate
         let selectedDeckArea = <Segment textAlign="left" >
-                                  <Label htmlFor="selectedDeckTitleId" as="label" basic color="blue" pointing="right">Selected Deck</Label>
-                                  <Input type="text" id="selectedDeckTitleId" placeholder="Select one deck.." tabIndex="0"/>
+                                  <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+                                  <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
                               </Segment>;
         //From my Decks option content
         let myDecksContent = this.loadMyDecksContent();
@@ -193,7 +207,8 @@ class AttachSubdeckModal extends React.Component{
 
                             </Segment>
                             <Modal.Actions>
-                              <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach" data-tooltip="Attach">
+                              <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
+                                  data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleAttachButton}>
                                 <Icon name="attach"/>
                                   Attach
                                   <Icon name="attach"/>
