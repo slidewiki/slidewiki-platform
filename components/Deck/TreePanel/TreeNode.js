@@ -174,7 +174,7 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
-                    <AttachSubdeck buttonStyle={buttonStyle}/>
+                    <AttachSubdeck buttonStyle={buttonStyle} selector={nodeSelector}/>
                     <button className={duplicateItemClass} title="Duplicate"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),
