@@ -92,7 +92,7 @@ class ChangePictureModal extends React.Component {
                       <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
                       <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1}/>
                       <Divider />
-                      <Modal.Actions className="ui center aligned" as="div" style={{'text-align': 'right'}}>
+                      <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                         <Button id="ChangePictureModalCancelButton" color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
                         <Button color="green" tabIndex="0" type="button" aria-label="Save" onClick={this.uploadCroppedPicture} icon="save" labelPosition='left' content="Save"/>
                       </Modal.Actions>
