@@ -7,6 +7,7 @@ import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
+import {NavLink} from 'fluxible-router';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -45,6 +46,8 @@ class DeckViewPanel extends React.Component {
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
+        const originCreator = this.props.DeckViewStore.originCreatorData.username;
+
         let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
         // default English
@@ -61,6 +64,10 @@ class DeckViewPanel extends React.Component {
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
+        let originInfo = deckData.origin != null ? <div className="meta">Origin:&nbsp;
+                <NavLink href={'/deck/' + deckData.origin.id + '-' + deckData.origin.revision}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
+        </div> : '';
+
         return (
         <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
             <div className="ui segment" style={heightStyle}>
@@ -71,6 +78,7 @@ class DeckViewPanel extends React.Component {
                             <div className="meta">Creator:&nbsp;
                                 <a href={creatorProfileURL}>{deckCreator}</a>
                             </div>
+                            {originInfo}
                             <div className="meta">Revision Owner:&nbsp;
                                 <a href={ownerProfileURL}>{deckOwner}</a>
                             </div>
