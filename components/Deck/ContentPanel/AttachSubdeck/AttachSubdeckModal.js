@@ -120,7 +120,7 @@ class AttachSubdeckModal extends React.Component{
                             </Segment>;
         } else{
             myDecksContent = <Segment id="panelMyDecksContent">
-                                <AttachDeckList user={userInfo} decks={this.state.userDecks} />
+                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} />
                             </Segment>;
         }
 

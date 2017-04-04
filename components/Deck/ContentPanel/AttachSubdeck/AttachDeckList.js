@@ -13,7 +13,8 @@ class AttachDeckList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selectedItem :-1
+            
+            selectedDeckId: this.props.selectedDeckId
         };
 
 
@@ -22,7 +23,8 @@ class AttachDeckList extends React.Component {
     handleOnclick(selectedDeck){
 
         this.setState({
-            selectedItem:selectedDeck.keyIndex
+            selectedItem:selectedDeck.keyIndex,
+            selectedDeckId:selectedDeck.selectedDeckId
         });
         let payload ={
             selectedDeckId:selectedDeck.selectedDeckId,
@@ -32,6 +34,7 @@ class AttachDeckList extends React.Component {
 
     }
 
+
     render() {
 
         let decks_to_show = this.props.decks;
@@ -39,6 +42,7 @@ class AttachDeckList extends React.Component {
         let activeItemStyle = {
             backgroundColor:'#f8ffff',
             color:'#2185d0'
+
         };
         if (decks_to_show.length){
             deck_list =
@@ -53,12 +57,18 @@ class AttachDeckList extends React.Component {
                     deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
                     //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
                     let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
+                    let selectedDeck = {
 
+                        selectedDeckTitle:deck.title,
+                        selectedDeckId: deck.deckID+'-'+deck.countRevisions
+                    };
                     return (
-                           <Item key={index} onClick={this.handleOnclick.bind(this,{keyIndex:index,selectedDeckTitle:deck.title,selectedDeckId: deck.deckID+'-'+deck.countRevisions})} style ={this.state.selectedItem === index ?activeItemStyle:{}} tabIndex="0">
+                           <Item key={index}
+                                  onFocus={this.handleOnclick.bind(this,selectedDeck)}
+                                  style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}} tabIndex="0">
                                 <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="tiny" />
-                                <Item.Content verticalAlign="top" >
-                                  <Item.Header style ={this.state.selectedItem === index ?activeItemStyle:{}}>
+                                <Item.Content verticalAlign="middle" >
+                                  <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
                                     {/*<h3 className="ui header"><a href={'./' + deck.deckID+'-'+deck.countRevisions}>{deck.title}</a></h3>*/}
                                       {deck.title}
                                   </Item.Header>
@@ -89,7 +99,8 @@ class AttachDeckList extends React.Component {
         }
 
         return (
-          <Item.Group divided>
+          <Item.Group divided relaxed style={{overflowY: 'auto'}}>
+                <br/>
                 {deck_list}
           </Item.Group>
 
