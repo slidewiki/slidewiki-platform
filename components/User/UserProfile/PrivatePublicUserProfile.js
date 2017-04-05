@@ -28,7 +28,7 @@ class PrivatePublicUserProfile extends React.Component {
                   <div className="ui segments">
                       {(this.props.decks === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                       <div className="ui secondary clearing segment">
-                          <h2 className="ui left floated header">My Decks</h2>
+                          <h2 className="ui left floated header">{(this.props.loggedinuser === this.props.user.uname) ? 'My Decks' : 'Owned Decks' }</h2>
                           <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                               <i className="icon exchange"/>
                               <div className="text">Title</div>
