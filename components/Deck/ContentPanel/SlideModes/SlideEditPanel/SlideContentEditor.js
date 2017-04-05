@@ -81,6 +81,15 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-left">&nbsp;</div>'+
                     '</div></div>');
                 break;
+            case '2':
+                CKEDITOR.instances.inlineContent.setData(''+
+                    '');
+                break;
+            case '3':
+                CKEDITOR.instances.inlineContent.setData(''+
+                    '<h1 style="text-align: center;">Title</h1>'+
+                    '<p>text</p>');
+                break;
             case '11':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: none none double; border-color: rgb(51, 102, 255); box-shadow: 0px 100px 1000px rgb(255, 135, 135); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Heading</div>'+
