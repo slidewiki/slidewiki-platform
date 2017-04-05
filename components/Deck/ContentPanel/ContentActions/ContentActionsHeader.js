@@ -55,8 +55,12 @@ class ContentActionsHeader extends React.Component {
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+
         let buttonStyle = {
-            classNames : 'item small attached left',
+            classNames : classNames({
+                'item small attached left':true,
+                'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            }),
             iconSize : 'large',
             attached : 'left'
         } ;
@@ -85,7 +89,7 @@ class ContentActionsHeader extends React.Component {
                               <i className="inverted corner plus icon"></i>
                             </i>
                         </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector}/>
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} disabled={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)}/>
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 
