@@ -1,0 +1,20 @@
+slidewikiplatform:
+  image: slidewiki/platform
+  restart: on-failure:5
+  expose:
+    - "80"
+  environment:
+    - PORT=80
+    - VIRTUAL_HOST=platform.experimental.slidewiki.org
+    - LETSENCRYPT_HOST=platform.experimental.slidewiki.org
+    - LETSENCRYPT_EMAIL=meissner@informatik.uni-leipzig.de
+    - SERVICE_URL_DECK=https://deckservice.experimental.slidewiki.org
+    - SERVICE_URL_DISCUSSION=https://discussionservice.experimental.slidewiki.org
+    - SERVICE_URL_ACTIVITIES=https://activitiesservice.experimental.slidewiki.org
+    - SERVICE_URL_NOTIFICATION=https://notificationservice.experimental.slidewiki.org
+    - SERVICE_URL_USER=https://userservice.experimental.slidewiki.org
+    - SERVICE_URL_IMPORT=https://importservice.experimental.slidewiki.org
+    - SERVICE_URL_FILE=https://fileservice.experimental.slidewiki.org
+    - SERVICE_URL_SEARCH=https://searchservice.experimental.slidewiki.org
+    - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org
+#    - SERVICE_USER_APIKEY=

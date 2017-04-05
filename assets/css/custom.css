@@ -1,0 +1,36 @@
+.hide-element {
+    display: none;
+}
+
+.inline-div{
+	display: inline-block;
+}
+
+.padding15{
+	padding: 15px;
+}
+
+.bold{
+	font-weight: bold;
+}
+
+.colored-blue{
+	color: #4183C4;
+}
+
+.translation-item{
+	padding-left: 5px;
+}
+
+.translation-div{
+	display: inline-block;
+}
+
+.sw-tree .ui.list>.item:first-child {
+	padding-top: 0.21428571em;
+}
+
+.sw-tree .ui.list>.item:last-child {
+	padding-bottom: 0.21428571em;
+}
+
