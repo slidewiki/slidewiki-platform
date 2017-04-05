@@ -9,6 +9,7 @@ import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks'
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
+import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
 //import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
 
 
@@ -32,7 +33,10 @@ class AttachSubdeckModal extends React.Component{
             selectedDeckTitle: 'Select one deck...',
             fromDecksTitle:'Recent decks',
             keywords:'',
-            searchstring:''
+            searchstring:'',
+            field:' ',
+            language:' ',
+            licence:' '
 
         };
 
@@ -42,7 +46,7 @@ class AttachSubdeckModal extends React.Component{
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
         this.handleAttachButton = this.handleAttachButton.bind(this);
-      
+
     }
 
     componentWillReceiveProps(nextProps){
@@ -141,7 +145,7 @@ class AttachSubdeckModal extends React.Component{
                                 <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                 <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
 
-                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} />
+                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} maxHeight='400px'/>
                             </Segment>;
         }
 
@@ -169,7 +173,7 @@ class AttachSubdeckModal extends React.Component{
                                   <Header as="h3">{this.state.fromDecksTitle}</Header>
                                   <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                   <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-                                  <AttachDeckList user={userInfo} decks={this.state.recentDecks} selectedDeckId={this.state.selectedDeckId} />
+                                  <AttachDeckList user={userInfo} decks={this.state.recentDecks} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
                                 </Segment>;
         }
 
@@ -202,6 +206,9 @@ class AttachSubdeckModal extends React.Component{
     }
     handleRedirect(params){
         console.log(params);
+        this.setState({
+            fromDecksTitle:'Search results'
+        });
         return false;
 
     }
@@ -212,12 +219,59 @@ class AttachSubdeckModal extends React.Component{
         if (this.state.activeItem === 'SlideWiki'){
 
             searchForm = <Segment className='advancedSearch'>
-                            <Header as="h3">Search for a deck</Header>
+                            <Header as="h3">Search for decks</Header>
                             <Form success>
-                              <Form.Field>
-                              <label htmlFor="SearchTerm">Search Term</label>
-                              <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this) } onKeyPress={this.handleKeyPress.bind(this)}/>
-                              </Form.Field>
+                              <Form.Group>
+
+                                <Form.Field width="11" >
+                                  <label htmlFor="SearchTerm"  className="sr-only">Search Term</label>
+                                  <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this) } onKeyPress={this.handleKeyPress.bind(this)}/>
+                                </Form.Field>
+                                <Form.Field>
+                                 <label htmlFor="field" className="sr-only">Search field</label>
+                                 <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
+                                   <option value=' '>Select Search field</option>
+                                   <option value='title'>Title</option>
+                                   <option value='description'>Description</option>
+                                   <option value='content'>Content</option>
+                                   <option value='speakernotes'>Speakernotes</option>
+                                 </select>
+                                </Form.Field>
+                              </Form.Group>
+                              <Form.Group widths="equal" >
+                                <div className="field">
+                                  <label htmlFor="users_input_field"  className="sr-only">User</label>
+                                  <UsersInput ref='user' placeholder='Select Users' />
+                                </div>
+
+                                <Form.Field>
+                                <label htmlFor="language" className="sr-only">Language</label>
+                                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
+                                  <option value=' '>Select Language</option>
+                                  <option value='en_GB'>English</option>
+                                  <option value='de_DE'>German</option>
+                                  <option value='el_GR'>Greek</option>
+                                  <option value='it_IT'>Italian</option>
+                                  <option value='pt_PT'>Portuguese</option>
+                                  <option value='sr_RS'>Serbian</option>
+                                  <option value='es_ES'>Spanish</option>
+                                </select>
+                                </Form.Field>
+                                <Form.Field>
+                                  <label htmlFor="license" className="sr-only">License</label>
+                                  <select name='license' id='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
+                                  <option value=' '>Select Licence</option>
+                                  <option value='CC0'>CC0</option>
+                                  <option value='CC BY'>CC BY</option>
+                                  <option value='CC BY-SA'>CC BY-SA</option>
+                                </select>
+                                </Form.Field>
+                              </Form.Group>
+                              <Button  color="blue" icon tabIndex="0" role="button" type="button" aria-label="Search for Decks"
+                                  data-tooltip="Search for Decks" onClick={this.handleRedirect.bind(this)}>
+                                <Icon name="search"/>
+                                  Search
+                              </Button>
                             </Form>
 
                          </Segment>;

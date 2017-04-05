@@ -105,9 +105,9 @@ class AttachDeckList extends React.Component {
         }
 
         return (
-          <Item.Group divided relaxed style={{maxHeight:'400px',minHeight:'320px',overflowY:'auto'}}
+          <Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
              role="listbox" aria-expanded="true">
-                <br/>
+                
                 {deck_list}
           </Item.Group>
         );
