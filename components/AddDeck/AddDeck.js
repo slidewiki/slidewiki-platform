@@ -245,18 +245,9 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
+        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
+          <option value="DefaultTheme" >Default</option>
+          <option value="DefaultTheme" >Default</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
@@ -297,7 +288,7 @@ class AddDeck extends React.Component {
                           <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
                       </div>
                       <div className="three fields">
-                          <div ref="div_themes" >
+                          <div className="field disabled" ref="div_themes" >
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
