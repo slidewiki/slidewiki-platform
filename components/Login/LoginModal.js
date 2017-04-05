@@ -32,6 +32,7 @@ class LoginModal extends React.Component {
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
         this.signin = this.signin.bind(this);
         this.provider = '';
+        this.isLoading = false;
     }
 
     isModalShown() {
@@ -58,8 +59,8 @@ class LoginModal extends React.Component {
                 password: hashPassword(this.refs.password1.value)
             });
 
-            this.refs.email1.value = '';
-            this.refs.password1.value = '';
+            this.isLoading = true;
+            this.forceUpdate();
         }
         return false;
     }
@@ -67,12 +68,17 @@ class LoginModal extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.UserProfileStore.errorMessage !== '') {
             $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
+            this.isLoading = false;
+            this.forceUpdate();
         }
         if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
             localStorage.setItem(MODI, 'login_success');
+            this.isLoading = false;
             $('.ui.login.modal').modal('hide');
         }
         if (localStorage.getItem(MODI) === 'login'&& nextProps.UserProfileStore.socialLoginError){
+            this.isLoading = false;
+            this.forceUpdate();
             swal({
                 title: 'Information',
                 text: 'You haven\'t logged in before with these credentials. Either choose another provider to log in or try to register a new account.',
@@ -255,6 +261,16 @@ class LoginModal extends React.Component {
     }
 
     render() {
+        let inputField_classes = classNames({
+            'ui': true,
+            'five': true,
+            'wide': true,
+            'icon': true,
+            'disabled': this.isLoading,
+            'input': true,
+            'loading': this.isLoading,
+            'field': true
+        });
 
         return(
           <div>
@@ -267,12 +283,12 @@ class LoginModal extends React.Component {
 
                     <div className="ui blue padded center aligned segment">
                       <form className="ui form signin">
-                        <div className="ui five wide icon input field">
+                        <div className={inputField_classes}>
                           <div><label htmlFor="email1" hidden>E-Mail</label></div>
                           <input type="text" id="email1" name="email1" ref="email1" placeholder="E-Mail" autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
                         </div>
                         <br/>
-                        <div className="ui five wide icon input field">
+                        <div className={inputField_classes}>
                           <div><label htmlFor="password1" hidden>Password</label></div>
                           <input type="password" id="password1" name="password1" ref="password1" placeholder="Password" tabIndex="0" aria-required="true" required/><i className="lock icon"/>
                         </div>
