@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea, Image,Dimmer} from 'semantic-ui-react';
+import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea, Image,Dimmer, Header,Form} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
@@ -8,7 +8,7 @@ import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
-
+import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 //import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
 
 
@@ -29,7 +29,11 @@ class AttachSubdeckModal extends React.Component{
             activeTrap: false,
             userDecks: [],
             recentDecks:[],
-            selectedDeckTitle: 'Select one deck...'
+            selectedDeckTitle: 'Select one deck...',
+            fromDecksTitle:'Recent decks',
+            keywords:'',
+            searchstring:''
+
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -38,6 +42,7 @@ class AttachSubdeckModal extends React.Component{
         this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
         this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
         this.handleAttachButton = this.handleAttachButton.bind(this);
+      
     }
 
     componentWillReceiveProps(nextProps){
@@ -135,14 +140,17 @@ class AttachSubdeckModal extends React.Component{
             myDecksContent = <Segment id="panelMyDecksContent">
                                 <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                 <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
+
                                 <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} />
                             </Segment>;
         }
 
         return myDecksContent;
     }
+
     loadSlideWikiContent(){
         let slideWikiContent;
+
         let userInfo ={
             userId: this.props.UserProfileStore.userid,
             username: this.props.UserProfileStore.username
@@ -156,16 +164,69 @@ class AttachSubdeckModal extends React.Component{
                                 <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
                             </Segment>;
         } else{
-            slideWikiContent = <Segment id="panelMyDecksContent">
-                                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-                                <AttachDeckList user={userInfo} decks={this.state.recentDecks} selectedDeckId={this.state.selectedDeckId} />
+
+            slideWikiContent =  <Segment id="panelMyDecksContent">
+                                  <Header as="h3">{this.state.fromDecksTitle}</Header>
+                                  <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+                                  <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
+                                  <AttachDeckList user={userInfo} decks={this.state.recentDecks} selectedDeckId={this.state.selectedDeckId} />
                                 </Segment>;
         }
 
         return slideWikiContent;
 
     }
+    onSelect(searchstring){
+        this.setState({keywords: searchstring});
+        this.handleRedirect();
+    }
+    onChange(event) {
+
+        let curstate = {};
+        curstate[event.target.name] = event.target.value;
+        this.setState(curstate);
+    }
+    clearInput(){
+        this.setState({searchstring: ''});
+        this.refs.keywords.focus();
+    }
+
+    handleKeyPress(event){
+
+        if(event.key === 'Enter'){
+            event.preventDefault();
+            handleRedirect(params);
+
+        }
+
+    }
+    handleRedirect(params){
+        console.log(params);
+        return false;
+
+    }
+
+
+    loadSearchForm(){
+        let searchForm = '';
+        if (this.state.activeItem === 'SlideWiki'){
+
+            searchForm = <Segment className='advancedSearch'>
+                            <Header as="h3">Search for a deck</Header>
+                            <Form success>
+                              <Form.Field>
+                              <label htmlFor="SearchTerm">Search Term</label>
+                              <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this) } onKeyPress={this.handleKeyPress.bind(this)}/>
+                              </Form.Field>
+                            </Form>
+
+                         </Segment>;
+        }
+
+
+        return searchForm;
+    }
+
     handleAttachButton() {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "deck", id: 1245-2}
@@ -183,6 +244,7 @@ class AttachSubdeckModal extends React.Component{
                                   <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
                               </Segment>;
                         */
+        let searchForm = this.loadSearchForm();
         //From my Decks option content
         let myDecksContent = this.loadMyDecksContent();
 
@@ -202,7 +264,7 @@ class AttachSubdeckModal extends React.Component{
         return (
            <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button" aria-label="Attach Slide" data-tooltip="Attach Slide" aria-hidden={this.state.modalOpen}
+                      type="button" aria-label="Attach Deck" data-tooltip="Attach Deck" aria-hidden={this.state.modalOpen}
                       basic icon onClick={this.handleOpen} >
                         <Icon.Group size={this.props.buttonStyle.iconSize}>
                             <Icon className="yellow" name="folder" />
@@ -243,6 +305,7 @@ class AttachSubdeckModal extends React.Component{
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
                                {/*selectedDeckArea*/}
+                               {searchForm}
                                {segmentPanelContent}
 
                             </Segment>

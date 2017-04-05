@@ -73,7 +73,7 @@ class AttachDeckList extends React.Component {
                                   style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
                                   role="listitem"
                                   tabIndex="0">
-                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="tiny" />
+                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="small"/>
                                 <Item.Content verticalAlign="middle" >
                                   <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
                                       {deck.title}
