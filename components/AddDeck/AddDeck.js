@@ -245,10 +245,6 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
-          <option value="DefaultTheme" >Default</option>
-          <option value="DefaultTheme" >Default</option>
-        </select>;
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
           <option value="CC BY" >Creative Commons Attribution</option>
