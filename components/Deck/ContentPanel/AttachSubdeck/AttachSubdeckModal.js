@@ -200,7 +200,7 @@ class AttachSubdeckModal extends React.Component{
                                      <Menu.Item as="button" name="From SlideWiki" id="tabFromSlideWikiId" active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
                                                   onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
                             </Menu>
-                            <Segment attached="bottom" textAlign="left">
+                            <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
                                {selectedDeckArea}
                                {segmentPanelContent}
