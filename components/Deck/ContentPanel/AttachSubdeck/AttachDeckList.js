@@ -13,9 +13,10 @@ class AttachDeckList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            
-            selectedDeckId: this.props.selectedDeckId
+            selectedDeckId: this.props.selectedDeckId,
+
         };
+
 
 
     }
@@ -34,7 +35,6 @@ class AttachDeckList extends React.Component {
 
     }
 
-
     render() {
 
         let decks_to_show = this.props.decks;
@@ -44,6 +44,10 @@ class AttachDeckList extends React.Component {
             color:'#2185d0'
 
         };
+       //Order decks by updated data
+        decks_to_show = decks_to_show.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+
+
         if (decks_to_show.length){
             deck_list =
                 decks_to_show.map((deck, index) => {
@@ -65,11 +69,12 @@ class AttachDeckList extends React.Component {
                     return (
                            <Item key={index}
                                   onFocus={this.handleOnclick.bind(this,selectedDeck)}
-                                  style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}} tabIndex="0">
+                                  style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
+                                  role="listitem"
+                                  tabIndex="0">
                                 <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="tiny" />
                                 <Item.Content verticalAlign="middle" >
                                   <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
-                                    {/*<h3 className="ui header"><a href={'./' + deck.deckID+'-'+deck.countRevisions}>{deck.title}</a></h3>*/}
                                       {deck.title}
                                   </Item.Header>
 
@@ -99,11 +104,11 @@ class AttachDeckList extends React.Component {
         }
 
         return (
-          <Item.Group divided relaxed style={{overflowY: 'auto'}}>
+          <Item.Group divided relaxed style={{maxHeight:'400px',minHeight:'320px',overflowY:'auto'}}
+             role="listbox" aria-expanded="true">
                 <br/>
                 {deck_list}
           </Item.Group>
-
         );
     }
 }
