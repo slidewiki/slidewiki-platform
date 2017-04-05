@@ -44,6 +44,9 @@ class TemplateDropdown extends React.Component {
             <div className="item" data-value="1" >
                 Title and bullets
             </div>
+            <div className="item" data-value="2" >
+                Empty document
+            </div>
             <div className="item" data-value="11" >
                 1 row 1 column
             </div>
@@ -58,6 +61,9 @@ class TemplateDropdown extends React.Component {
             </div>
             <div className="item" data-value="11img" >
                 1 row 1 column image
+            </div>
+            <div className="item" data-value="3" >
+                Document with title
             </div>
         </div>;
 
