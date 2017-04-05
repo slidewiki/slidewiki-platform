@@ -17,33 +17,33 @@ export default {
         const content_id = selector.sid;
         switch (resource) {
             case 'like.loadLikes':
-                if (params.selector.stype == "deck") {
+                if (params.selector.stype === 'deck') {
                     targetDeckID = params.selector.sid;
-                } else if (params.selector.stype == "slide") {
+                } else if (params.selector.stype === 'slide') {
                     let tmp = params.selector.spath.split(';');
                     if (tmp.length > 1) {
-                      targetDeckID = tmp[tmp.length - 2];
-                      tmp = targetDeckID.split(':');
-                      targetDeckID = tmp[0];
+                        targetDeckID = tmp[tmp.length - 2];
+                        tmp = targetDeckID.split(':');
+                        targetDeckID = tmp[0];
                     } else {
-                      targetDeckID = params.selector.id;
+                        targetDeckID = params.selector.id;
                     }
                 }
                 //console.log("LOAD Deck id: " + targetDeckID);
                   /*********connect to microservices*************/
-                  rp.get({uri: Microservices.activities.uri + '/activities/allrevisions/react/' + params.selector.stype + '/' + targetDeckID}).then((res) => {
-                      let activities = JSON.parse(res);
-                      let listOfUserIDs = [];
+                rp.get({uri: Microservices.activities.uri + '/activities/allrevisions/react/' + params.selector.stype + '/' + targetDeckID}).then((res) => {
+                    let activities = JSON.parse(res);
+                    let listOfUserIDs = [];
 
-                      activities.forEach((activity) => listOfUserIDs.push(activity.user_id));
+                    activities.forEach((activity) => listOfUserIDs.push(activity.user_id));
 
-                      callback(null, {usersWhoLikedDeck: listOfUserIDs});
-                  }).catch((err) => {
-                      console.log(err);
-                      callback(null, {usersWhoLikedDeck: []});
-                  });
-                  //callback(null, {usersWhoLikedDeck: [1, 2, 3, 4, 5]});
-            break;
+                    callback(null, {usersWhoLikedDeck: listOfUserIDs});
+                }).catch((err) => {
+                    console.log(err);
+                    callback(null, {usersWhoLikedDeck: []});
+                });
+                //callback(null, {usersWhoLikedDeck: [1, 2, 3, 4, 5]});
+                break;
         }
     },
 
@@ -55,16 +55,16 @@ export default {
 
         switch (resource) {
             case 'like.likeActivity':
-                if (params.selector.stype == "deck") {
+                if (params.selector.stype === 'deck') {
                     targetDeckID = params.selector.sid;
-                } else if (params.selector.stype == "slide") {
+                } else if (params.selector.stype === 'slide') {
                     let tmp = params.selector.spath.split(';');
                     if (tmp.length > 1) {
-                      targetDeckID = tmp[tmp.length - 2];
-                      tmp = targetDeckID.split(':');
-                      targetDeckID = tmp[0];
+                        targetDeckID = tmp[tmp.length - 2];
+                        tmp = targetDeckID.split(':');
+                        targetDeckID = tmp[0];
                     } else {
-                      targetDeckID = params.selector.id;
+                        targetDeckID = params.selector.id;
                     }
                 }
                 //console.log("LIKE Deck id: " + targetDeckID + "  User id: " + params.userid);
@@ -88,9 +88,9 @@ export default {
                 //callback(null, {userid:  params.userid});
                 break;
             case 'like.dislikeActivity':
-                if (params.selector.stype == "deck") {
+                if (params.selector.stype === 'deck') {
                     targetDeckID = params.selector.sid;
-                } else if (params.selector.stype == "slide") {
+                } else if (params.selector.stype === 'slide') {
                     let tmp = params.selector.spath.split(';');
                     if (tmp.length > 1) {
                         targetDeckID = tmp[tmp.length - 2];
@@ -119,7 +119,7 @@ export default {
                     callback(null, {userid:  null});
                 });
                 //callback(null, {userid: params.userid});
-            break;
+                break;
         }
     }
 };

@@ -8,8 +8,8 @@ class ContentLikeStore extends BaseStore {
     }
     updateLike(payload) {
         //payload with user ID
-        if (this.usersWhoLikedDeck.indexOf(payload.userid) == -1) {
-          this.usersWhoLikedDeck.push(String(payload.userid));
+        if (this.usersWhoLikedDeck.indexOf(payload.userid) === -1) {
+            this.usersWhoLikedDeck.push(String(payload.userid));
         }
 
         this.emitChange();
@@ -17,8 +17,8 @@ class ContentLikeStore extends BaseStore {
 
     updateDislike(payload) {
         //payload with user ID
-        if (this.usersWhoLikedDeck.indexOf(payload.userid) != -1) {
-          this.usersWhoLikedDeck.splice(this.usersWhoLikedDeck.indexOf(String(payload.userid)),1);
+        if (this.usersWhoLikedDeck.indexOf(payload.userid) !== -1) {
+            this.usersWhoLikedDeck.splice(this.usersWhoLikedDeck.indexOf(String(payload.userid)),1);
         }
 
         this.emitChange();

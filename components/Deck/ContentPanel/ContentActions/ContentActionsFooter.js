@@ -100,18 +100,18 @@ class ContentActionsFooter extends React.Component {
     }
 
     handleLikeClick(e){
-      if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) != -1) {
-        // dislike activity
-        this.context.executeAction(dislikeActivity, {
-            selector: this.props.ContentStore.selector,
-            userid: this.props.UserProfileStore.userid
-        });
-      } else {
-        this.context.executeAction(likeActivity, {
-            selector: this.props.ContentStore.selector,
-            userid: this.props.UserProfileStore.userid
-        });
-      }
+        if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
+            // dislike activity
+            this.context.executeAction(dislikeActivity, {
+                selector: this.props.ContentStore.selector,
+                userid: this.props.UserProfileStore.userid
+            });
+        } else {
+            this.context.executeAction(likeActivity, {
+                selector: this.props.ContentStore.selector,
+                userid: this.props.UserProfileStore.userid
+            });
+        }
     }
 
     render() {
@@ -121,16 +121,16 @@ class ContentActionsFooter extends React.Component {
                             </button>
                         </div>;
 
-        let likeButton = "ui button";
-        let classNameLikeButton = "thumbs up alternate large icon";
-        let tooltipLikeButton = "Like this deck";
-        if (this.props.UserProfileStore.userid == "") {
+        let likeButton = 'ui button';
+        let classNameLikeButton = '"thumbs up alternate large icon';
+        let tooltipLikeButton = '"Like this deck';
+        if (this.props.UserProfileStore.userid === '') {
             //undefined user
-            likeButton = "ui disabled button";
-        } else if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) != -1) {
+            likeButton = '"ui disabled button';
+        } else if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
             //already liked
-            classNameLikeButton = "thumbs up alternate large blue icon";
-            tooltipLikeButton = "Dislike this deck";
+            classNameLikeButton = 'thumbs up alternate large blue icon';
+            tooltipLikeButton = 'Dislike this deck';
         }
 
         return (
