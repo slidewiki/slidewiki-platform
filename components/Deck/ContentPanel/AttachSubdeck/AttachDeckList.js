@@ -51,8 +51,9 @@ class AttachDeckList extends React.Component {
         if (decks_to_show.length){
             deck_list =
                 decks_to_show.map((deck, index) => {
-                    let deckCreatorid = this.props.user.userId;
-                    let deckCreator = this.props.user.username;
+                    //From deck users, data is in props.user. From slideWiki, data is in the deck
+                    let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
+                    let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
 
                     let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
                     let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;

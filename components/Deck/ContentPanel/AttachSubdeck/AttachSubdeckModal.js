@@ -5,6 +5,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
+import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
 
@@ -27,6 +28,7 @@ class AttachSubdeckModal extends React.Component{
             activeItem: 'MyDecks',
             activeTrap: false,
             userDecks: [],
+            recentDecks:[],
             selectedDeckTitle: 'Select one deck...'
         };
 
@@ -40,11 +42,17 @@ class AttachSubdeckModal extends React.Component{
 
     componentWillReceiveProps(nextProps){
 
-        if(nextProps.AttachSubdeckModalStore.userDecks !== this.state.decks){
+        if(nextProps.AttachSubdeckModalStore.userDecks !== this.state.userDecks){
             this.setState({
                 userDecks: nextProps.AttachSubdeckModalStore.userDecks
             });
         }
+        if(nextProps.AttachSubdeckModalStore.recentDecks !== this.state.recentDecks){
+            this.setState({
+                recentDecks: nextProps.AttachSubdeckModalStore.recentDecks
+            });
+        }
+
 
         if(nextProps.AttachSubdeckModalStore.selectedDeckId !== this.state.selectedDeckId){
             this.setState({
@@ -64,7 +72,12 @@ class AttachSubdeckModal extends React.Component{
             loggedInUser:this.props.UserProfileStore.username,
             username:this.props.UserProfileStore.username
         }};
+        let payload2 ={params: {
+            limit: 5,
+            offset: 0
+        }};
         this.context.executeAction(loadUserDecks, payload,null);
+        this.context.executeAction(loadRecentDecks, payload2,null);
 
         $('#app').attr('aria-hidden','true');
         this.setState({
@@ -120,11 +133,38 @@ class AttachSubdeckModal extends React.Component{
                             </Segment>;
         } else{
             myDecksContent = <Segment id="panelMyDecksContent">
+                                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
                                 <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} />
                             </Segment>;
         }
 
         return myDecksContent;
+    }
+    loadSlideWikiContent(){
+        let slideWikiContent;
+        let userInfo ={
+            userId: this.props.UserProfileStore.userid,
+            username: this.props.UserProfileStore.username
+
+        };
+        if(this.state.recentDecks ===[]){
+            slideWikiContent = <Segment id="panelMyDecksContent">
+                                <Dimmer active inverted>
+                                    <Loader inverted>Loading</Loader>
+                                </Dimmer>
+                                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+                            </Segment>;
+        } else{
+            slideWikiContent = <Segment id="panelMyDecksContent">
+                                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
+                                <AttachDeckList user={userInfo} decks={this.state.recentDecks} selectedDeckId={this.state.selectedDeckId} />
+                                </Segment>;
+        }
+
+        return slideWikiContent;
+
     }
     handleAttachButton() {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
@@ -136,18 +176,18 @@ class AttachSubdeckModal extends React.Component{
 
     render() {
 
-        //Selected Deck addTreeNodeAndNavigate
+
+        /*
         let selectedDeckArea = <Segment textAlign="left" >
                                   <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                   <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
                               </Segment>;
+                        */
         //From my Decks option content
         let myDecksContent = this.loadMyDecksContent();
 
         //From SlideWiki content
-        let slideWikiContent = <Segment id="panelSlideWikiContent">
-                                <img src="http://semantic-ui.com/images/wireframe/media-paragraph.png"/>
-                              </Segment>;
+        let slideWikiContent = this.loadSlideWikiContent();
 
         //Default Content
         let segmentPanelContent = myDecksContent;
@@ -202,7 +242,7 @@ class AttachSubdeckModal extends React.Component{
                             </Menu>
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
-                               {selectedDeckArea}
+                               {/*selectedDeckArea*/}
                                {segmentPanelContent}
 
                             </Segment>
