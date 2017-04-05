@@ -1,6 +1,7 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'react-image-cropper';
+import ReactCrop from 'react-image-crop';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
 
@@ -69,7 +70,7 @@ class ChangePictureModal extends React.Component {
                  }
               open={this.state.modalOpen}
               onClose={this.handleClose}
-              size="large"
+              size="small"
               role="dialog"
               id="ChangePictureModal"
               aria-labelledby="ChangePictureModalHeader"
@@ -90,7 +91,7 @@ class ChangePictureModal extends React.Component {
                   <Modal.Content>
                       <Divider />
                       <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
-                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1}/>
+                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}}/>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                         <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
