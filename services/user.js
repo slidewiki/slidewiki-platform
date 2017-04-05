@@ -106,7 +106,7 @@ export default {
         if (resource === 'user.registration') {
             const hashedPassword = args.password;
             const PRIVATE_KEY = '6LdNLyYTAAAAAFMC0J_zuVI1b9lXWZjPH6WLe-vJ';
-            rp.post({
+            rp.post({ //TODO increase timeout
                 uri: 'https://www.google.com/recaptcha/api/siteverify',
                 form: {
                     secret: PRIVATE_KEY,

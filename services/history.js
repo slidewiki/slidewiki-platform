@@ -103,9 +103,11 @@ export default {
             if (parentId != null) {
                 requestBody.root_deck = parentId;
             }
+            requestBody.top_root_deck = args.selector.id;
             rp.post({
                 uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(requestBody),
+                headers: { '----jwt----': args.jwt }
             }).then((res) => {
                 callback(null, JSON.parse(res));
             }).catch((err) => {
