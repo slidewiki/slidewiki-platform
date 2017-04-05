@@ -109,7 +109,8 @@ class ContentActionsFooter extends React.Component {
         } else {
             this.context.executeAction(likeActivity, {
                 selector: this.props.ContentStore.selector,
-                userid: this.props.UserProfileStore.userid
+                userid: this.props.UserProfileStore.userid,
+                username: this.props.UserProfileStore.username
             });
         }
     }
