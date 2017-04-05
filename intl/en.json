@@ -1,5 +1,6 @@
 {
   "home.slogan": "SlideWiki revolutionises how educational material is authored, shared and used.",
+  "home.logo_alt": "SlideWiki beta logo",
   "home.welcome": "Welcome to SlideWiki",
   "home.welcome1": "Create, edit and share slide decks and other open educational materials. The latest version of SlideWiki includes:",
   "home.welcome2": "upload and edit existing PowerPoint or create new decks",
@@ -13,5 +14,9 @@
   "home.welcome10": "Translate decks covering topics you know well into your mother tongue (in development)",
   "home.welcome11": "Look for existing presentations and e-learning material, which could be imported into SlideWiki",
   "home.welcome12": "As the new SlideWiki platform is still under development, we will be regularly adding new featurses. If you are interested in finding out more about the SlideWiki project follow us on {link_1} or visit the {link_2}.",
-  "home.welcome13": "This project has received funding from the EU Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095."
+  "home.welcome12.1": "SlideWiki project website",
+  "home.welcome13": "This project has received funding from the EU Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095.",
+  "home.featured": "Featured decks",
+  "home.recent": "Recent decks",
+  "home.view_all": "View all"
 }
