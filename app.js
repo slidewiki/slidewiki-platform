@@ -38,6 +38,7 @@ import DeckListStore from './stores/DeckListStore';
 import ContentActionsFooterStore from './stores/ContentActionsFooterStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
+import ContentLikeStore from './stores/ContentLikeStore';
 
 
 // create new fluxible instance & register all stores
@@ -79,7 +80,8 @@ const app = new Fluxible({
         DeckListStore,
         ContentActionsFooterStore,
 	    ServiceErrorStore,
-        PermissionsStore
+        PermissionsStore,
+        ContentLikeStore
     ]
 });
 

@@ -8,6 +8,11 @@ import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 
+import ContentLikeStore from '../../../../../stores/ContentLikeStore';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
+import ContentStore from '../../../../../stores/ContentStore';
+import loadLikes from '../../../../../actions/activityfeed/loadLikes';
+
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();
@@ -56,6 +61,8 @@ class DeckViewPanel extends React.Component {
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
+        const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
+
         const thumbnailURL = Microservices.file.uri;
         const deckURL = '/deck/' + this.props.selector.id;
         const creatorProfileURL = '/user/' + deckCreator;
@@ -97,6 +104,8 @@ class DeckViewPanel extends React.Component {
                                     <i className="theme icon" aria-label="Theme"></i>{deckTheme}</div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
+                                <div className="ui large label" tabIndex="0">
+                                    <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
                             </div>
                             {tags.length > 0 ? <div className="ui divider"></div> : ''}
                             <div className="ui tag labels large meta">
@@ -138,9 +147,12 @@ class DeckViewPanel extends React.Component {
     }
 }
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore], (context, props) => {
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {
     return {
-        DeckViewStore: context.getStore(DeckViewStore).getState()
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
+        ContentLikeStore: context.getStore(ContentLikeStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 export default DeckViewPanel;
