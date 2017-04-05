@@ -10,6 +10,8 @@ import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndN
 import AttachDeckList from './AttachDeckList';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
+import loadSearchResults from '../../../../actions/search/loadSearchResults';
+import SearchResultsStore from '../../../../stores/SearchResultsStore';
 //import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
 
 
@@ -194,26 +196,64 @@ class AttachSubdeckModal extends React.Component{
         this.setState({searchstring: ''});
         this.refs.keywords.focus();
     }
+    getEncodedParams(params){
+        let queryparams = {
+            keywords: (params && params.keywords)
+                        ? params.keywords       // if keywords are set from redirection
+                        : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
+            field: this.refs.field.value.trim(),
+            kind: 'deck',
+            language: this.refs.language.value.trim(),
+            license: this.refs.license.value.trim(),
+            user: this.refs.user.getSelected().split(','),
+            // tag: this.refs.tag.value.trim(),
+            sort: (params && params.sort) ? params.sort : ''
+        };
 
+        // encode params
+        let encodedParams = '';
+        for(let key in queryparams){
+            if(queryparams[key] instanceof Array){
+                for(let el in queryparams[key]){
+                    encodedParams += this.encodeParam(encodedParams, key, queryparams[key][el]);
+                }
+            }
+            else{
+                encodedParams += this.encodeParam(encodedParams, key, queryparams[key]);
+            }
+        }
+
+        return encodedParams;
+    }
+    encodeParam(encodedParams, key, value){
+        if(value.trim() === '')
+            return '';
+
+        return ((encodedParams) ? '&' : '')
+                + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+    }
     handleKeyPress(event){
 
         if(event.key === 'Enter'){
             event.preventDefault();
-            handleRedirect(params);
-
+            this.handleRedirect();
         }
 
     }
     handleRedirect(params){
-        console.log(params);
         this.setState({
             fromDecksTitle:'Search results'
         });
+
+        this.context.executeAction(loadSearchResults, {
+            params: {
+                queryparams: this.getEncodedParams(params)
+            }
+        });
+
         return false;
 
     }
-
-
     loadSearchForm(){
         let searchForm = '';
         if (this.state.activeItem === 'SlideWiki'){
@@ -361,7 +401,7 @@ class AttachSubdeckModal extends React.Component{
                                {/*selectedDeckArea*/}
                                {searchForm}
                                {segmentPanelContent}
-
+                               {JSON.stringify(this.props.SearchResultsStore.docs)}
                             </Segment>
                             <Modal.Actions>
                               <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
@@ -391,10 +431,11 @@ AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore, SearchResultsStore],(context,props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState(),
+        SearchResultsStore: context.getStore(SearchResultsStore).getState()
     };
 });
 
