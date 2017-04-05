@@ -1,7 +1,6 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'react-image-cropper';
-import ReactCrop from 'react-image-crop';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
 
