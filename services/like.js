@@ -103,7 +103,8 @@ export default {
                 //console.log("DISLIKE Deck id: " + targetDeckID + "  User id: " + params.userid);
                 /*********connect to microservices*************/
                 //update (remove id) backend store
-                rp.post({
+                let options = {
+                    method: 'DELETE',
                     uri: Microservices.activities.uri + '/activities/delete',
                     body:JSON.stringify({
                         content_kind: 'deck',
@@ -112,7 +113,8 @@ export default {
                         user_id: String(params.userid),
                         all_revisions: true
                     })
-                }).then((res) => {
+                };
+                rp(options).then((res) => {                
                     callback(null, {userid:  String(params.userid)});
                 }).catch((err) => {
                     console.log(err);

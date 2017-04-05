@@ -122,11 +122,11 @@ class ContentActionsFooter extends React.Component {
                         </div>;
 
         let likeButton = 'ui button';
-        let classNameLikeButton = '"thumbs up alternate large icon';
-        let tooltipLikeButton = '"Like this deck';
+        let classNameLikeButton = 'thumbs up alternate large icon';
+        let tooltipLikeButton = 'Like this deck';
         if (this.props.UserProfileStore.userid === '') {
             //undefined user
-            likeButton = '"ui disabled button';
+            likeButton = 'ui disabled button';
         } else if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
             //already liked
             classNameLikeButton = 'thumbs up alternate large blue icon';
