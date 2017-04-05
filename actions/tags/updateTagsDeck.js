@@ -10,7 +10,7 @@ export default function onDeckExecute(context, payload, done) {
     let { selector, tags } = payload;
     const { id, sid } = selector;
     let { license, description, revisions } = deckStore.deckData;
-    let { title, theme, language } = revisions[revisions.length - 1];
+    let { title, language } = revisions[revisions.length - 1];
 
     context.executeAction(saveDeckEdit, {
         deckId: sid? sid : id,
@@ -18,7 +18,7 @@ export default function onDeckExecute(context, payload, done) {
         language: language,
         description: description,
         // TODO: get from Presentation Store when it is implemented
-        theme: theme,
+        theme: '',
         license: license,
         tags: tags,
         selector: selector

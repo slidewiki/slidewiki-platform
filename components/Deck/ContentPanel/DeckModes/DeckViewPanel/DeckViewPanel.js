@@ -38,9 +38,8 @@ class DeckViewPanel extends React.Component {
         }
 
         const totalRevisions = deckData.revisionCount;
-        //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
-        const deckTheme = currentRevision.theme;
-        const deckLicense = deckData.license;
+        // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
+        const deckTheme = lodash.get(deckData, 'theme', 'Simple');
         const deckTitle = currentRevision.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
@@ -76,8 +75,10 @@ class DeckViewPanel extends React.Component {
                                 <a href={ownerProfileURL}>{deckOwner}</a>
                             </div>
                             <div className="meta">Date: {deckDate}</div>
-                            <div className="meta">License: {deckLicense}</div>
-                            <div className="description">Description: {deckDescription}</div>
+                            <div className="description">
+                                <p></p>
+                                <p>{deckDescription}</p>
+                            </div>
                         </div>
                     </div>
 

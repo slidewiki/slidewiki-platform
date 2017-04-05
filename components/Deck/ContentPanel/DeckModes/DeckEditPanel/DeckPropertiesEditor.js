@@ -36,8 +36,8 @@ class DeckPropertiesEditor extends React.Component {
             title: props.deckProps.title || '',
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
-            license: props.deckProps.license || '',
             theme: props.deckProps.theme || '',
+            license: props.deckProps.license || '',
             users: editors.users,
             groups: editors.groups
         };
@@ -195,8 +195,8 @@ class DeckPropertiesEditor extends React.Component {
                 title: this.state.title,
                 language: this.state.language,
                 description: this.state.description,
-                license: this.state.license,
                 theme: this.state.theme,
+                license: this.state.license,
                 selector: this.props.selector,
                 editors: {
                     old: this.props.DeckEditStore.originalEditors,
@@ -386,20 +386,10 @@ class DeckPropertiesEditor extends React.Component {
                 Spanish
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
-                                   value={this.state.theme}
+        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"
+                                   selected={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
+            <option value="DefaultTheme">Default</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
@@ -472,8 +462,8 @@ class DeckPropertiesEditor extends React.Component {
                                       onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
-                            <div className="field">
-                                <label id="theme">Choose deck theme</label>
+                            <div className="field disabled">
+                                <label id="themes">Choose deck theme</label>
                                 {themeOptions}
                             </div>
                             <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
