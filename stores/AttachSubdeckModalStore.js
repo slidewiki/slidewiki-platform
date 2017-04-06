@@ -70,7 +70,7 @@ class AttachSubdeckModalStore extends BaseStore{
 
     updateSearchDecks(payload){
         Object.assign(this.recentDecks, payload.docs);
-
+        this.emitChange();
     }
 
 

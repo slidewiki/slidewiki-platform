@@ -242,12 +242,15 @@ class AttachSubdeckModal extends React.Component{
     handleKeyPress(event){
 
         if(event.key === 'Enter'){
-            event.preventDefault();
-            this.handleRedirect();
+            this.handleRedirect(event);
         }
 
     }
-    handleRedirect(params){
+    handleRedirect(event, params){
+        if(event){
+            event.preventDefault();
+        }
+
         this.setState({
             fromDecksTitle:'Search results'
         });
