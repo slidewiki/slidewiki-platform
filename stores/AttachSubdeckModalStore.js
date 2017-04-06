@@ -50,6 +50,7 @@ class AttachSubdeckModalStore extends BaseStore{
             this.recentDecks =[];
         } else{
             let recentDecks = payload.recent.map((deck) => {
+
                 return({
                     title: !isEmpty(deck.title) ? deck.title : 'No Title',
                     picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
