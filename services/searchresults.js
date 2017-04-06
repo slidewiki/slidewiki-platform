@@ -48,7 +48,6 @@ export default {
 
         if(resource === 'searchresults.list'){
 
-
             // get start results in defined in params (needed for lazy loading results)
             params.start = (params.start) ? params.start : 0;
 
@@ -138,12 +137,15 @@ export default {
 
                 Promise.all(allPromises).then( () => {
                     searchResults.response.docs.forEach( (returnItem) => {
-                        // console.log(returnItem);
+
                         // fill extra user info
                         returnItem.user.username = usernames[returnItem.user.id];
                         returnItem.user.link = '/user/' + returnItem.user.username;
 
                         if(returnItem.kind === 'Deck'){
+
+                            returnItem.revisionsCount = decks[returnItem.db_id].revisions.length;
+                            returnItem.firstSlide = deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide;
 
                             // fill deck subitems (revisions of the deck)
                             returnItem.subItems = decks[returnItem.db_id].revisions.filter( (rev) => {
