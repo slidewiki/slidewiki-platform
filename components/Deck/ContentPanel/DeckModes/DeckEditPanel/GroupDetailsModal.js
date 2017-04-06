@@ -26,6 +26,7 @@ class GroupDetailsModal extends React.Component {
                   <div className="description">
                     Group leader
                   </div>
+                  {this.props.group.creator.organization}, {this.props.group.creator.country}
                 </div>
               </div>
             </div>
@@ -42,6 +43,7 @@ class GroupDetailsModal extends React.Component {
                         </div>
                         <div className="fifteen wide column">
                           <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                          {user.organization}, {user.country}
                         </div>
                       </div>
                     </div>

@@ -143,10 +143,9 @@ class DeckPropertiesEditor extends React.Component {
                         users.push({
                             username: name,
                             id: parseInt(data.userid),
-                            joined: (new Date()).toISOString(),
+                            joined: data.joined || undefined,
                             picture: data.picture,
-                            surname: data.surname,
-                            forename: data.forename,
+                            country: data.country,
                             organization: data.organization
                         });
                     }
@@ -265,7 +264,7 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 let optionalElement = (user.organization) ?  (
                   <div>
-                    {user.organization}
+                    {user.organization}, {user.country}
                     <br/>
                   </div>
                 ) : '';
@@ -279,14 +278,18 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="one wide column">
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
-                        <div className="fifteen wide column">
-                          <a className="header" href={'/user/' + user.username}>{user.forename} {user.surname} ({user.username})</a>
-                          <div className="description">
-                            {optionalElement}{optionalText}&nbsp;&nbsp;&nbsp;
+                        <div className="ten wide column">
+                          <div className="content">
+                            <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                            <div className="description">
+                              {optionalElement}{optionalText}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="four wide column middle aligned">
                             <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
                               Remove
                             </button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -316,18 +319,21 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="one wide column">
                           <i className="large group middle aligned icon"></i>
                         </div>
-                        <div className="fifteen wide column">
-                          <a className="header">{group.name}</a>
-                          <div className="description">
-                            {optionalText}&nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" onClick={fct}>
-                              Remove
-                            </button>
-                            &nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
-                              Show details
-                            </button>
+                        <div className="ten wide column">
+                          <div className="content">
+                            <a className="header">{group.name}</a>
+                            <div className="description">
+                              {optionalText}
+                            </div>
                           </div>
+                        </div>
+                        <div className="four wide column middle aligned">
+                          <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                            Remove
+                          </button>
+                          <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
+                            Show details
+                          </button>
                         </div>
                       </div>
                     </div>

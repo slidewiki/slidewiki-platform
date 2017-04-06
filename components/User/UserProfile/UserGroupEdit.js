@@ -54,7 +54,7 @@ class UserGroupEdit extends React.Component {
                         group.members = [];
 
                     let data = JSON.parse(decodeURIComponent(value));
-                    // console.log('trying to add', name, 'to', group.members, ' with ', data);
+                    console.log('trying to add', name, 'to', group.members, ' with ', data);
                     if (group.members.findIndex((member) => {
                         return member.userid === parseInt(data.userid);
                     }) === -1 && name !== this.props.UserProfileStore.username) {
@@ -63,8 +63,7 @@ class UserGroupEdit extends React.Component {
                             userid: parseInt(data.userid),
                             joined: data.joined || undefined,
                             picture: data.picture,
-                            surname: data.surname,
-                            forename: data.forename,
+                            country: data.country,
                             organization: data.organization
                         });
                     }
@@ -158,7 +157,7 @@ class UserGroupEdit extends React.Component {
                 };
                 let optionalElement = (member.organization) ?  (
                   <div>
-                    {member.organization}
+                    {member.organization}, {member.country}
                     <br/>
                   </div>
                 ) : '';
@@ -172,7 +171,7 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + member.username}>{member.forename} {member.surname} ({member.username})</a>
+                              <a className="header" href={'/user/' + member.username}>{member.username}</a>
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
