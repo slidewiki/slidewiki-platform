@@ -255,6 +255,8 @@ class AttachSubdeckModal extends React.Component{
             }
         });
 
+        this.refs.keywords.blur();
+
         return false;
 
     }
