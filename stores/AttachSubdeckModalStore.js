@@ -6,6 +6,7 @@ class AttachSubdeckModalStore extends BaseStore{
         super(dispatcher);
         this.userDecks = [];
         this.recentDecks = [];
+        this.searchDecks =[];
         this.selectedDeckTitle='Select one deck...';
         this.selectedDeckId =-1;
     }
@@ -67,6 +68,10 @@ class AttachSubdeckModalStore extends BaseStore{
         this.emitChange();
     }
 
+    updateSearchDecks(payload){
+        Object.assign(this.recentDecks, payload.docs);
+
+    }
 
 
 
@@ -75,7 +80,8 @@ AttachSubdeckModalStore.storeName = 'AttachSubdeckModalStore';
 AttachSubdeckModalStore.handlers = {
     'ATTACHSUBDECK_LOAD_USERDECKS' : 'updateUserDecks',
     'ATTACHSUBDECK_SELECTED_DECK' : 'updateSelectedDeck',
-    'ATTACHSUBDECK_LOAD_RECENTDECKS': 'updateRecentDecks'
+    'ATTACHSUBDECK_LOAD_RECENTDECKS': 'updateRecentDecks',
+    'ATTACHSUBDECK_LOAD_SEARCHDECKS' : 'updateSearchDecks'
 
 };
 

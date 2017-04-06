@@ -12,13 +12,14 @@ export default function loadRecentDecks(context,payload,done){
                 return;
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}, done);
+                context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
                 return;
             } else{
                 log.error(context, {filepath: __filename, err: err});
                 context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
             }
         } else { //Normal action
-
+            log.info(context,res);
             context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', res);
         }
         done();

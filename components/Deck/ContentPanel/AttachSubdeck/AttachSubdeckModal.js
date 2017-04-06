@@ -6,13 +6,13 @@ import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore'
 import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
+import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
-import loadSearchResults from '../../../../actions/search/loadSearchResults';
-import SearchResultsStore from '../../../../stores/SearchResultsStore';
-//import fetchUserDecks  from '../../../../actions/user/userprofile/fetchUser.js';
+
+
 
 
 class AttachSubdeckModal extends React.Component{
@@ -32,6 +32,7 @@ class AttachSubdeckModal extends React.Component{
             activeTrap: false,
             userDecks: [],
             recentDecks:[],
+            searchDecks:[],
             selectedDeckTitle: 'Select one deck...',
             fromDecksTitle:'Recent decks',
             keywords:'',
@@ -71,6 +72,12 @@ class AttachSubdeckModal extends React.Component{
                 selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle
             });
         }
+        if(nextProps.AttachSubdeckModalStore.searchDecks !== this.state.searchDecks){
+            this.setState({
+                searchDecks: nextProps.AttachSubdeckModalStore.searchDecks
+            });
+        }
+
     }
 
     handleOpen(){
@@ -245,7 +252,7 @@ class AttachSubdeckModal extends React.Component{
             fromDecksTitle:'Search results'
         });
 
-        this.context.executeAction(loadSearchResults, {
+        this.context.executeAction(loadSearchedDecks, {
             params: {
                 queryparams: this.getEncodedParams(params)
             }
@@ -401,7 +408,7 @@ class AttachSubdeckModal extends React.Component{
                                {/*selectedDeckArea*/}
                                {searchForm}
                                {segmentPanelContent}
-                               {JSON.stringify(this.props.SearchResultsStore.docs)}
+                               {JSON.stringify(this.state.searchDecks)}
                             </Segment>
                             <Modal.Actions>
                               <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
@@ -431,11 +438,10 @@ AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore, SearchResultsStore],(context,props) => {
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState(),
-        SearchResultsStore: context.getStore(SearchResultsStore).getState()
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
     };
 });
 
