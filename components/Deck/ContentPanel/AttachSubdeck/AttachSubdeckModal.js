@@ -34,7 +34,7 @@ class AttachSubdeckModal extends React.Component{
             recentDecks:[],
             searchDecks:[],
             selectedDeckTitle: 'Select one deck...',
-            fromDecksTitle:'Recent decks',
+            showSearchResults: false
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -48,31 +48,14 @@ class AttachSubdeckModal extends React.Component{
 
     componentWillReceiveProps(nextProps){
 
-        if(nextProps.AttachSubdeckModalStore.userDecks !== this.state.userDecks){
-            this.setState({
-                userDecks: nextProps.AttachSubdeckModalStore.userDecks
-            });
-        }
-        if(nextProps.AttachSubdeckModalStore.recentDecks !== this.state.recentDecks){
-            this.setState({
-                recentDecks: nextProps.AttachSubdeckModalStore.recentDecks
-            });
-        }
-
-
-        if(nextProps.AttachSubdeckModalStore.selectedDeckId !== this.state.selectedDeckId){
-            this.setState({
-                selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
-                selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle
-            });
-        }
-        if(nextProps.AttachSubdeckModalStore.searchDecks !== this.state.searchDecks){
-            this.setState({
-                searchDecks: nextProps.AttachSubdeckModalStore.searchDecks
-            });
-        }
-        console.log('props');
-        console.log(this.state.searchDecks);
+        this.setState({
+            userDecks: nextProps.AttachSubdeckModalStore.userDecks,
+            recentDecks: nextProps.AttachSubdeckModalStore.recentDecks,
+            selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
+            selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
+            searchDecks: nextProps.AttachSubdeckModalStore.searchDecks,
+            showSearchResults: nextProps.AttachSubdeckModalStore.showSearchResults
+        });
 
     }
 
@@ -173,12 +156,20 @@ class AttachSubdeckModal extends React.Component{
                                 <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
                             </Segment>;
         } else{
-
+            let slides_to_show;
+            let fromDecksTitle;
+            if(!this.state.showSearchResults){
+                slides_to_show=this.state.recentDecks;
+                fromDecksTitle='Recent decks';
+            } else {
+                slides_to_show=this.state.searchDecks;
+                fromDecksTitle=slides_to_show.length>0 ? 'Found decks' : 'No results found';
+            }
             slideWikiContent =  <Segment id="panelMyDecksContent">
                                   <Header as="h3">{this.state.fromDecksTitle}</Header>
                                   <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                   <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-                                  <AttachDeckList user={userInfo} decks={this.state.recentDecks} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
+                                  <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
                                 </Segment>;
         }
 
@@ -407,7 +398,6 @@ class AttachSubdeckModal extends React.Component{
                                {/*selectedDeckArea*/}
                                {searchForm}
                                {segmentPanelContent}
-                               {'Results: '+this.state.searchDecks}
                             </Segment>
                             <Modal.Actions>
                               <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"

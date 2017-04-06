@@ -9,6 +9,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.searchDecks =[];
         this.selectedDeckTitle='Select one deck...';
         this.selectedDeckId =-1;
+        this.showSearchResults = false;
     }
 
     getState(){
@@ -17,7 +18,8 @@ class AttachSubdeckModalStore extends BaseStore{
             recentDecks: this.recentDecks,
             searchDecks: this.searchDecks,
             selectedDeckTitle: this.selectedDeckTitle,
-            selectedDeckId: this.selectedDeckId
+            selectedDeckId: this.selectedDeckId,
+            showSearchResults: this.showSearchResults
         };
     }
     dehydrate() {
@@ -29,6 +31,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.searchDecks = state.searchDecks;
         this.selectedDeckTitle = state.selectedDeckTitle;
         this.selectedDeckId = state.selectedDeckId;
+        this.showSearchResults = state.showSearchResults;
     }
 
     updateUserDecks(payload){
@@ -71,24 +74,28 @@ class AttachSubdeckModalStore extends BaseStore{
     }
 
     updateSearchDecks(payload){
+        if(payload.docs===[]){
+            this.searchDecks =[];
+        }else{
+            let searchDecks = payload.docs.map((deck) => {
+                return({
+                    title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                    picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                    description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                    updated:deck.lastUpdate,
+                    creationDate: deck.timestamp,
+                    deckID: deck.db_id,
+                    firstSlide: deck.firstSlide,
+                    language:deck.language,
+                    countRevisions:deck.countRevisions,
+                    deckCreatorid:deck.creator,
+                    deckCreator:deck.user.username
+                });
+            });//map
 
-        let searchDecks = payload.docs.map((deck) => {
-            return({
-                title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                description: !isEmpty(deck.description) ? deck.description : 'No Description',
-                updated:deck.lastUpdate,
-                creationDate: deck.timestamp,
-                deckID: deck.db_id,
-                firstSlide: deck.firstSlide,
-                language:deck.language,
-                countRevisions:deck.countRevisions,
-                deckCreatorid:deck.creator,
-                deckCreator:deck.user.username
-
-            });
-        });
-        
+            Object.assign(this.searchDecks, searchDecks);
+            this.showSearchResults = true;
+        }
         this.emitChange();
     }
 
