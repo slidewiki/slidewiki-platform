@@ -2,28 +2,27 @@ import log from '../log/clog';
 import notFoundError from '../error/notFoundError';
 import methodNotAllowedError  from '../error/methodNotAllowedError';
 
-export default function loadRecentDecks(context,payload,done){
+export default function loadSearchedDecks(context,payload,done){
     log.info(context);
-    context.service.read('deck.recent', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log('error');
             if (err.statusCode === 404) {
                 context.executeAction(notFoundError, {}, done);
-                context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
+                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', []);
                 return;
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}, done);
-                context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
+                ontext.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', []);
                 return;
             } else{
                 log.error(context, {filepath: __filename, err: err});
-                context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
+                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', []);
+                return;
             }
         } else { //Normal action
-
-            console.log('normal action');
-            context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', res);
+            context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
+
         done();
     });
 
