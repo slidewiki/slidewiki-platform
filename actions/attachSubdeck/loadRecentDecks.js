@@ -6,7 +6,7 @@ export default function loadRecentDecks(context,payload,done){
     log.info(context);
     context.service.read('deck.recent', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log('error');
+            
             if (err.statusCode === 404) {
                 context.executeAction(notFoundError, {}, done);
                 context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
@@ -21,7 +21,6 @@ export default function loadRecentDecks(context,payload,done){
             }
         } else { //Normal action
 
-            console.log('normal action');
             context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', res);
         }
         done();

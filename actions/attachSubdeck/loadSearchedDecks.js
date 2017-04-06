@@ -20,6 +20,8 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
+            console.log('loasSearchedDEcks result');
+            log.info(context,res);
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
 

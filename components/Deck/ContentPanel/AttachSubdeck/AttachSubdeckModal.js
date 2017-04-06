@@ -293,7 +293,7 @@ class AttachSubdeckModal extends React.Component{
 
                                 <Form.Field>
                                 <label htmlFor="language" className="sr-only">Language</label>
-                                <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
+                                <select name='language' onChange={this.onChange.bind(this)}   value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                   <option value=' '>Select Language</option>
                                   <option value='en_GB'>English</option>
                                   <option value='de_DE'>German</option>
@@ -408,7 +408,7 @@ class AttachSubdeckModal extends React.Component{
                                {/*selectedDeckArea*/}
                                {searchForm}
                                {segmentPanelContent}
-                               {JSON.stringify(this.state.searchDecks)}
+                               {'Results: '+this.state.searchDecks}
                             </Segment>
                             <Modal.Actions>
                               <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
