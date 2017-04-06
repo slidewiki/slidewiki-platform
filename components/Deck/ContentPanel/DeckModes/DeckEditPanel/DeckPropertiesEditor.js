@@ -386,10 +386,20 @@ class DeckPropertiesEditor extends React.Component {
                 Spanish
             </option>
         </select>;
-        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"
-                                   selected={this.state.theme}
+        let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
+                                   value={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
-            <option value="DefaultTheme">Default</option>
+            <option value="default">Default - Reveal.js White</option>
+            <option value="beige">Reveal.js Beige</option>
+            <option value="black">Reveal.js Black</option>
+            <option value="blood">Reveal.js Blood</option>
+            <option value="league">Reveal.js League</option>
+            <option value="moon">Reveal.js Moon</option>
+            <option value="night">Reveal.js Night</option>
+            <option value="serif">Reveal.js Serif</option>
+            <option value="simple">Reveal.js Simple</option>
+            <option value="sky">Reveal.js Sky</option>
+            <option value="solarized">Reveal.js Solarized</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
@@ -462,8 +472,8 @@ class DeckPropertiesEditor extends React.Component {
                                       onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
-                            <div className="field disabled">
-                                <label id="themes">Choose deck theme</label>
+                            <div className="field">
+                                <label id="theme">Choose deck theme</label>
                                 {themeOptions}
                             </div>
                             <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>

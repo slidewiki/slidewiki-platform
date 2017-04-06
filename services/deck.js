@@ -119,6 +119,7 @@ export default {
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license,
+                    theme: revision.theme != null ? revision.theme : deck.theme,
                     editors: editors.editors || {
                         users: [],
                         groups: []
@@ -173,7 +174,8 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.license
+                license: params.license,
+                theme: params.theme
             };
             rp({
                 method: 'POST',
@@ -202,6 +204,7 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
+                theme: params.theme,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
             };
@@ -236,6 +239,7 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
+                theme: params.theme,
                 new_revision: true,
                 top_root_deck: selector.id,
 
