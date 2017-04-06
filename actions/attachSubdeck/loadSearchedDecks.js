@@ -12,7 +12,7 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             } else if (err.statusCode === 401) {
                 context.executeAction(methodNotAllowedError, {}, done);
-                ontext.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', []);
+                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', []);
                 return;
             } else{
                 log.error(context, {filepath: __filename, err: err});
@@ -20,7 +20,7 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
-            console.log('loasSearchedDEcks result');
+            
             log.info(context,res);
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }
