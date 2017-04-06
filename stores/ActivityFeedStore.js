@@ -28,28 +28,48 @@ class ActivityFeedStore extends BaseStore {
         this.activityType = payload.activityType;
         this.emitChange();
     }
-    incrementLikes(payload) {
-        this.activities.forEach((activity) => {
-            if (activity.id === payload.id) activity.likesNo++;
-        });
+    // incrementLikes(payload) {
+    //     this.activities.forEach((activity) => {
+    //         if (activity.id === payload.id) activity.likesNo++;
+    //     });
+    //     this.emitChange();
+    // }
+    // addCommentActivity(payload) {
+    //     const comment = payload.comment;
+    //     const activityType = (comment.parent_comment === undefined) ? 'comment' : 'reply';
+    //     const newActivity = {
+    //         activity_type: activityType,
+    //         user_id: comment.user_id,
+    //         content_id: comment.content_id,
+    //         content_kind: comment.content_kind,
+    //         content_name: comment.content_name,
+    //         comment_info: {
+    //             comment_id: comment.id,
+    //             text: comment.title
+    //         },
+    //         author: comment.author
+    //     };
+    //     this.activities.unshift(newActivity);//add to the beginning
+    //     if (isLocalStorageOn()) {
+    //         localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
+    //     }
+    //
+    //     this.emitChange();
+    // }
+    addActivity(payload) {
+        this.activities.unshift(payload.activity);//add to the beginning
+        if (isLocalStorageOn()) {
+            localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
+        }
+
         this.emitChange();
     }
-    addCommentActivity(payload) {
-        const comment = payload.comment;
-        const activityType = (comment.parent_comment === undefined) ? 'comment' : 'reply';
-        const newActivity = {
-            activity_type: activityType,
-            user_id: comment.user_id,
-            content_id: comment.content_id,
-            content_kind: comment.content_kind,
-            content_name: comment.content_name,
-            comment_info: {
-                comment_id: comment.id,
-                text: comment.title
-            },
-            author: comment.author
-        };
-        this.activities.unshift(newActivity);//add to the beginning
+    addActivities(payload) {
+        payload.activities.forEach((activity) => {
+            if (activity.content_id === this.selector.id) {
+                this.activities.unshift(activity);//add to the beginning
+            }
+        });
         if (isLocalStorageOn()) {
             localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
         }
@@ -81,9 +101,11 @@ ActivityFeedStore.handlers = {
     'LOAD_ACTIVITIES_SUCCESS': 'updateActivities',
     'LOAD_MORE_ACTIVITIES_SUCCESS': 'loadMoreActivities',
     'UPDATE_ACTIVITY_TYPE_SUCCESS': 'updateActivityType',
-    'LIKE_ACTIVITY_SUCCESS': 'incrementLikes',
-    'ADD_COMMENT_SUCCESS': 'addCommentActivity',
-    'ADD_REPLY_SUCCESS': 'addCommentActivity'
+    // 'LIKE_ACTIVITY_SUCCESS': 'incrementLikes',
+    // 'ADD_COMMENT_SUCCESS': 'addCommentActivity',
+    // 'ADD_REPLY_SUCCESS': 'addCommentActivity',
+    'ADD_ACTIVITY_SUCCESS': 'addActivity',
+    'ADD_ACTIVITIES_SUCCESS': 'addActivities'
 };
 
 export default ActivityFeedStore;

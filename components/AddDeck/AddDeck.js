@@ -245,21 +245,24 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes" tabIndex="-1" >
-          <option value="DefaultTheme" >Default</option>
-          <option value="DefaultTheme" >Default</option>
+        let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
+            <option value="default">Default - Reveal.js White</option>
+            <option value="beige">Reveal.js Beige</option>
+            <option value="black">Reveal.js Black</option>
+            <option value="blood">Reveal.js Blood</option>
+            <option value="league">Reveal.js League</option>
+            <option value="moon">Reveal.js Moon</option>
+            <option value="night">Reveal.js Night</option>
+            <option value="serif">Reveal.js Serif</option>
+            <option value="simple">Reveal.js Simple</option>
+            <option value="sky">Reveal.js Sky</option>
+            <option value="solarized">Reveal.js Solarized</option>
         </select>;
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
           <option value="CC BY" >Creative Commons Attribution</option>
-            <option value="CC0" >Creative Commons CC0 Public Domain</option>
+          <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
-
-        let errorView = '';
-        if (this.props.AddDeckStore.error !== null)
-            errorView = <Error error={this.props.AddDeckStore.error} />;
-        else
-            errorView = '';
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
@@ -276,10 +279,10 @@ class AddDeck extends React.Component {
         }
 
         return (
-          <div className="ui container">
-          <h3>Add a deck to SlideWiki</h3>
-
-          <div className="ui grid">
+          <div className="ui vertically padded grid container">
+              <div className="sixteen wide column">
+                <h3>Add a deck to SlideWiki</h3>
+              </div>
               <div className="sixteen wide column">
                   <form className="ui form upload">
                           <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
@@ -348,8 +351,6 @@ class AddDeck extends React.Component {
                   </form>
               </div>
             </div>
-          {errorView}
-      </div>
         );
     }
 }
