@@ -184,7 +184,8 @@ class SlideContentEditor extends React.Component {
             //let slide.content = 'test';
             //this.context.executeAction(saveSlide, {slide});
             //let slide = 'test';
-            let title = CKEDITOR.instances.inlineHeader.getData();
+            // let title = CKEDITOR.instances.inlineHeader.getData();
+            let title = this.props.SlideEditStore.title;
             //let title = this.refs.inlineHeader.value;
             //let title = this.refs.title.value;
             let content = CKEDITOR.instances.inlineContent.getData();
