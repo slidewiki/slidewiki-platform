@@ -16,13 +16,10 @@ class AttachDeckList extends React.Component {
             selectedDeckId: this.props.selectedDeckId,
 
         };
-
-
-
     }
 
     handleOnclick(selectedDeck){
-
+        console.log('handleOnclick');
         this.setState({
             selectedItem:selectedDeck.keyIndex,
             selectedDeckId:selectedDeck.selectedDeckId
@@ -38,12 +35,8 @@ class AttachDeckList extends React.Component {
         console.log('keyPress');
         if(event.key === 'Enter'){
             event.preventDefault();
-            console.log(selectedDeck);
-            console.log(this);
-
-
+            this.handleOnclick(selectedDeck);
         }
-
     }
 
     render() {
