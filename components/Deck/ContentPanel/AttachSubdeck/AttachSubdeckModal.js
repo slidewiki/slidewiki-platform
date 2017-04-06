@@ -35,12 +35,6 @@ class AttachSubdeckModal extends React.Component{
             searchDecks:[],
             selectedDeckTitle: 'Select one deck...',
             fromDecksTitle:'Recent decks',
-            keywords:'',
-            searchstring:'',
-            field:' ',
-            language:' ',
-            licence:' '
-
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -193,12 +187,12 @@ class AttachSubdeckModal extends React.Component{
         this.setState({keywords: searchstring});
         this.handleRedirect();
     }
-    onChange(event) {
-
-        let curstate = {};
-        curstate[event.target.name] = event.target.value;
-        this.setState(curstate);
-    }
+    // onChange(event) {
+    //
+    //     let curstate = {};
+    //     curstate[event.target.name] = event.target.value;
+    //     this.setState(curstate);
+    // }
     clearInput(){
         this.setState({searchstring: ''});
         this.refs.keywords.focus();
@@ -275,11 +269,11 @@ class AttachSubdeckModal extends React.Component{
 
                                 <Form.Field width="11" >
                                   <label htmlFor="SearchTerm"  className="sr-only">Search Term</label>
-                                  <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this) } onKeyPress={this.handleKeyPress.bind(this)}/>
+                                  <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)}/>
                                 </Form.Field>
                                 <Form.Field>
                                  <label htmlFor="field" className="sr-only">Search field</label>
-                                 <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
+                                 <select name='field' id='field' multiple='' className='ui fluid search dropdown' ref='field'>
                                    <option value=' '>Select Search field</option>
                                    <option value='title'>Title</option>
                                    <option value='description'>Description</option>
@@ -296,7 +290,7 @@ class AttachSubdeckModal extends React.Component{
 
                                 <Form.Field>
                                 <label htmlFor="language" className="sr-only">Language</label>
-                                <select name='language' onChange={this.onChange.bind(this)}   value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
+                                <select name='language' multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                   <option value=' '>Select Language</option>
                                   <option value='en_GB'>English</option>
                                   <option value='de_DE'>German</option>
@@ -309,7 +303,7 @@ class AttachSubdeckModal extends React.Component{
                                 </Form.Field>
                                 <Form.Field>
                                   <label htmlFor="license" className="sr-only">License</label>
-                                  <select name='license' id='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
+                                  <select name='license' id='license' multiple='' className='ui fluid search dropdown' ref='license'>
                                   <option value=' '>Select Licence</option>
                                   <option value='CC0'>CC0</option>
                                   <option value='CC BY'>CC BY</option>
