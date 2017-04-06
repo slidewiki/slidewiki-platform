@@ -34,6 +34,17 @@ class AttachDeckList extends React.Component {
         this.context.executeAction(updateSelectedDeck,payload,null);
 
     }
+    handleKeyPress(event,selectedDeck){
+        console.log('keyPress');
+        if(event.key === 'Enter'){
+            event.preventDefault();
+            console.log(selectedDeck);
+            console.log(this);
+
+
+        }
+
+    }
 
     render() {
 
@@ -69,7 +80,8 @@ class AttachDeckList extends React.Component {
                     };
                     return (
                            <Item key={index}
-                                  onFocus={this.handleOnclick.bind(this,selectedDeck)}
+                                  onClick={this.handleOnclick.bind(this,selectedDeck)}
+                                  onKeyPress={(e) => { this.handleKeyPress(e,selectedDeck);}}
                                   style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
                                   role="listitem"
                                   tabIndex="0">
@@ -107,7 +119,7 @@ class AttachDeckList extends React.Component {
         return (
           <Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
              role="listbox" aria-expanded="true">
-                
+
                 {deck_list}
           </Item.Group>
         );
