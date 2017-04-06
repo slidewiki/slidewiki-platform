@@ -15,6 +15,7 @@ class AttachSubdeckModalStore extends BaseStore{
         return {
             userDecks : this.userDecks,
             recentDecks: this.recentDecks,
+            searchDecks: this.searchDecks,
             selectedDeckTitle: this.selectedDeckTitle,
             selectedDeckId: this.selectedDeckId
         };
@@ -25,6 +26,7 @@ class AttachSubdeckModalStore extends BaseStore{
     rehydrate(state) {
         this.userDecks = state.userDecks;
         this.recentDecks = state.recentDecks;
+        this.searchDecks = state.searchDecks;
         this.selectedDeckTitle = state.selectedDeckTitle;
         this.selectedDeckId = state.selectedDeckId;
     }
@@ -69,9 +71,24 @@ class AttachSubdeckModalStore extends BaseStore{
     }
 
     updateSearchDecks(payload){
-        console.log('updateSearchDecks called at the store');
-        console.log(payload);
-        Object.assign(this.recentDecks, payload.docs);
+
+        let searchDecks = payload.docs.map((deck) => {
+            return({
+                title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                updated:deck.lastUpdate,
+                creationDate: deck.timestamp,
+                deckID: deck.db_id,
+                firstSlide: deck.firstSlide,
+                language:deck.language,
+                countRevisions:deck.countRevisions,
+                deckCreatorid:deck.creator,
+                deckCreator:deck.user.username
+
+            });
+        });
+        
         this.emitChange();
     }
 

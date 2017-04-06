@@ -71,6 +71,8 @@ class AttachSubdeckModal extends React.Component{
                 searchDecks: nextProps.AttachSubdeckModalStore.searchDecks
             });
         }
+        console.log('props');
+        console.log(this.state.searchDecks);
 
     }
 
