@@ -267,7 +267,7 @@ class AttachSubdeckModal extends React.Component{
                                 </select>
                                 </Form.Field>
                               </Form.Group>
-                              <Button  color="blue" icon tabIndex="0" role="button" type="button" aria-label="Search for Decks"
+                              <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"
                                   data-tooltip="Search for Decks" onClick={this.handleRedirect.bind(this)}>
                                 <Icon name="search"/>
                                   Search
