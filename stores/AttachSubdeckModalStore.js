@@ -88,7 +88,7 @@ class AttachSubdeckModalStore extends BaseStore{
                     deckID: deck.db_id,
                     firstSlide: deck.firstSlide,
                     language:deck.language,
-                    countRevisions:deck.countRevisions,
+                    countRevisions:deck.revisionsCount,
                     deckCreatorid:deck.creator,
                     deckCreator:deck.user.username
                 });
