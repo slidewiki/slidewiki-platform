@@ -6,14 +6,14 @@ import loadContentDiscussion from '../../../actions/contentdiscussion/loadConten
 import loadCommentsCount from '../../../actions/contentdiscussion/loadCommentsCount';
 import loadContentHistory from '../../../actions/history/loadContentHistory';
 import loadContentUsage from '../../../actions/loadContentUsage';
-//import loadContentQuestions from '../../../actions/loadContentQuestions';
+import loadContentQuestions from '../../../actions/loadContentQuestions';
 import loadDataSources from '../../../actions/datasource/loadDataSources';
 import loadTags from '../../../actions/tags/loadTags';
 import loadContributors from '../../../actions/loadContributors';
 import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
 import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
 import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
-//import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
+import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
 import TagsPanel from './TagsPanel/TagsPanel';
 import ContributorsPanel from './ContributorsPanel/ContributorsPanel';
@@ -46,11 +46,9 @@ class ContentModulesPanel extends React.Component {
 
     handleTabClick(type, e) {
         switch (type) {
-            /*
             case 'questions':
                 this.context.executeAction(loadContentQuestions, {params: this.props.ContentModulesStore.selector});
                 break;
-            */
             case 'datasource':
                 this.context.executeAction(loadDataSources, {params: this.props.ContentModulesStore.selector});
                 break;
@@ -90,11 +88,9 @@ class ContentModulesPanel extends React.Component {
             case 'contributors':
                 activityDIV = <ContributorsPanel selector={this.props.ContentModulesStore.selector} />;
                 break;
-            /*
             case 'questions':
                 activityDIV = <ContentQuestionsPanel selector={this.props.ContentModulesStore.selector} />;
                 break;
-            */
             case 'datasource':
                 activityDIV = <DataSourcePanel selector={this.props.ContentModulesStore.selector} />;
                 break;
@@ -117,12 +113,10 @@ class ContentModulesPanel extends React.Component {
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'discussion')
         });
-        /*
         let questionsTabClass = classNames({
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'questions')
         });
-        */
         let datasourceTabClass = classNames({
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'datasource')
@@ -141,9 +135,7 @@ class ContentModulesPanel extends React.Component {
         };
         pointingMenu = (
             <div className="ui top attached pointing menu">
-                {/*
                 <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
-                */}
                 <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span></a>
                 {/*TODO add correct moduleCount*/}
