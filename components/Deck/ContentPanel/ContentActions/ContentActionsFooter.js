@@ -101,12 +101,14 @@ class ContentActionsFooter extends React.Component {
 
     handleLikeClick(e){
         if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
+            this.props.ContentLikeStore.usersWhoLikedDeck.splice(this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)),1);
             // dislike activity
             this.context.executeAction(dislikeActivity, {
                 selector: this.props.ContentStore.selector,
                 userid: this.props.UserProfileStore.userid
             });
         } else {
+            this.props.ContentLikeStore.usersWhoLikedDeck.push(String(this.props.UserProfileStore.userid));
             this.context.executeAction(likeActivity, {
                 selector: this.props.ContentStore.selector,
                 userid: this.props.UserProfileStore.userid,
