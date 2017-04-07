@@ -99,6 +99,23 @@ class AttachSubdeckModalStore extends BaseStore{
         }
         this.emitChange();
     }
+    resetModalStore(){
+        this.userDecks = [];
+        this.recentDecks = [];
+        this.searchDecks = [];
+        this.selectedDeckTitle = 'Select one deck...';
+        this.selectedDeckId = -1;
+        this.showSearchResults = false;
+
+        this.emitChange();
+    }
+    initModal(){
+        this.selectedDeckTitle = 'Select one deck...';
+        this.selectedDeckId = -1;
+        this.showSearchResults = false;
+
+        this.emitChange();
+    }
 
 
 
@@ -108,8 +125,9 @@ AttachSubdeckModalStore.handlers = {
     'ATTACHSUBDECK_LOAD_USERDECKS' : 'updateUserDecks',
     'ATTACHSUBDECK_SELECTED_DECK' : 'updateSelectedDeck',
     'ATTACHSUBDECK_LOAD_RECENTDECKS': 'updateRecentDecks',
-    'ATTACHSUBDECK_LOAD_SEARCHDECKS' : 'updateSearchDecks'
-
+    'ATTACHSUBDECK_LOAD_SEARCHDECKS' : 'updateSearchDecks',
+    'ATTACHSUBDECK_RESET':'resetModalStore',
+    'ATTACHSUBDECK_INIT' :'initModal'
 };
 
 export default AttachSubdeckModalStore;

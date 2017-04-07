@@ -7,6 +7,8 @@ import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
 import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
+import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
+import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
@@ -58,6 +60,10 @@ class AttachSubdeckModal extends React.Component{
         });
 
     }
+    componentWillUnmount(){
+        this.context.executeAction(resetModalStore,[]);
+
+    }
 
     handleOpen(){
 
@@ -89,9 +95,14 @@ class AttachSubdeckModal extends React.Component{
         $('#app').attr('aria-hidden','false');
         this.setState({
             modalOpen:false,
-            activeTrap: false
+            activeTrap: false,
+            activeItem: 'MyDecks',
+            selectedDeckTitle: 'Select one deck...',
+            showSearchResults: false
         });
+        this.context.executeAction(initModal,[]);
     }
+
 
     handleMyDecksClick(){
         this.setState({
@@ -166,7 +177,7 @@ class AttachSubdeckModal extends React.Component{
                 fromDecksTitle=slides_to_show.length>0 ? 'Found decks' : 'No results found';
             }
             slideWikiContent =  <Segment id="panelMyDecksContent">
-                                  <Header as="h3">{this.state.fromDecksTitle}</Header>
+                                  <Header as="h3">{fromDecksTitle}</Header>
                                   <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                   <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
                                   <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
@@ -328,6 +339,7 @@ class AttachSubdeckModal extends React.Component{
 
     }
 
+
     render() {
 
 
@@ -397,7 +409,7 @@ class AttachSubdeckModal extends React.Component{
                             </Menu>
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
-                               {/*selectedDeckArea*/}
+
                                {searchForm}
                                {segmentPanelContent}
                             </Segment>
