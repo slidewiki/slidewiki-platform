@@ -89,7 +89,7 @@ class ContentActionsHeader extends React.Component {
                               <i className="inverted corner plus icon"></i>
                             </i>
                         </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} disabled={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)}/>
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 

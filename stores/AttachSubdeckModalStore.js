@@ -79,6 +79,7 @@ class AttachSubdeckModalStore extends BaseStore{
             this.searchDecks =[];
         }else{
             let searchDecks = payload.docs.map((deck) => {
+                console.log(deck);
                 return({
                     title: !isEmpty(deck.title) ? deck.title : 'No Title',
                     picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',

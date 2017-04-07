@@ -149,9 +149,13 @@ class TreeNode extends React.Component {
             'disabled': this.props.item.get('type') === 'deck'
         });
         let buttonStyle = {
-            classNames : 'ui',
+            classNames : classNames({
+                'ui':true,
+                'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            }),            
             iconSize : 'small',
-            attached : ''
+            attached : '',
+            disabled: this.props.item.get('type') === 'deck'
         };
         let actionBtns = (
             <div className={actionBtnsClass}>
