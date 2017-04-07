@@ -262,9 +262,9 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
-                let optionalElement = (user.organization) ?  (
+                let optionalElement = (user.organization || user.country) ?  (
                   <div>
-                    {user.organization}, {user.country}
+                    {user.organization || 'Unknown organization'}, {user.country || 'unknown country'}
                     <br/>
                   </div>
                 ) : '';

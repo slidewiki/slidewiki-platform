@@ -155,9 +155,9 @@ class UserGroupEdit extends React.Component {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
-                let optionalElement = (member.organization) ?  (
+                let optionalElement = (member.organization || member.country) ?  (
                   <div>
-                    {member.organization}, {member.country}
+                    {member.organization || 'Unknown organization'}, {member.country || 'unknown country'}
                     <br/>
                   </div>
                 ) : '';
