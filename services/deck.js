@@ -129,6 +129,7 @@ export default {
                     localRootDeck: args.id
                 };
                 let contributors = (editors.contributors) ? editors.contributors.reduce((array, element) => {array.push(element.id);return array;}, []) : [];
+                // console.log('Returned editors of deck:', editors.editors);
                 callback(null, {
                     deckProps: deckProps,
                     editors: contributors

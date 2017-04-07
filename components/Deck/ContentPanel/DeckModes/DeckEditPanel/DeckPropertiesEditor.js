@@ -143,7 +143,7 @@ class DeckPropertiesEditor extends React.Component {
                         users.push({
                             username: name,
                             id: parseInt(data.userid),
-                            joined: data.joined || undefined,
+                            joined: data.joined || (new Date()).toISOString(),
                             picture: data.picture,
                             country: data.country,
                             organization: data.organization
@@ -270,6 +270,7 @@ class DeckPropertiesEditor extends React.Component {
                 ) : '';
                 let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
+                // console.log('new authorized user:', user);
                 // console.log('New key for authorized user:', key, user);
                 list_authorized.push(
                   (

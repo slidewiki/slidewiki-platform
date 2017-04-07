@@ -14,11 +14,14 @@ class GroupDetailsModal extends React.Component {
     render() {
         let members = [];
         //first the creator
+        let optionalText = (this.props.group.creator.organization || this.props.group.creator.country) ?
+            (this.props.group.creator.organization || 'Unknown organization') + ', ' + (this.props.group.creator.country || 'unknown country') :
+            '';
         members.push(
           (
             <div className="item" key={this.props.group.creator.userid}>
               <div className="ui grid">
-                <div className="one wide column">
+                <div className="one wide column middle aligned">
                   <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
                 </div>
                 <div className="fifteen wide column">
@@ -26,7 +29,7 @@ class GroupDetailsModal extends React.Component {
                   <div className="description">
                     Group leader
                   </div>
-                  {this.props.group.creator.organization}, {this.props.group.creator.country}
+                  {optionalText}
                 </div>
               </div>
             </div>
@@ -34,6 +37,9 @@ class GroupDetailsModal extends React.Component {
         );
         if (this.props.group.members !== undefined && this.props.group.members.length > 0) {
             this.props.group.members.forEach((user) => {
+                optionalText = (user.organization || user.country) ?
+                    (user.organization || 'Unknown organization') + ', ' + (user.country || 'unknown country') :
+                    '';
                 members.push(
                   (
                     <div className="item" key={user.userid}>
@@ -43,7 +49,7 @@ class GroupDetailsModal extends React.Component {
                         </div>
                         <div className="fifteen wide column">
                           <a className="header" href={'/user/' + user.username}>{user.username}</a>
-                          {user.organization}, {user.country}
+                          {optionalText}
                         </div>
                       </div>
                     </div>
