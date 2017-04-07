@@ -80,7 +80,7 @@ export default {
                         react_type: 'like'
                     })
                 }).then((res) => {
-                    callback(null, {userid:  String(params.userid)});
+                    callback(null, {userid:  String(params.userid), username: params.username, selector: args.selector});
                 }).catch((err) => {
                     console.log(err);
                     callback(null, {userid:  null});
@@ -114,8 +114,8 @@ export default {
                         all_revisions: true
                     })
                 };
-                rp(options).then((res) => {                
-                    callback(null, {userid:  String(params.userid)});
+                rp(options).then((res) => {
+                    callback(null, {userid:  String(params.userid), selector: args.selector});
                 }).catch((err) => {
                     console.log(err);
                     callback(null, {userid:  null});
