@@ -151,7 +151,7 @@ class TreeNode extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'ui':true,
-                'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+                'disabled': !(this.props.permissions.admin || this.props.permissions.edit)
             }),            
             iconSize : 'small',
             attached : '',
