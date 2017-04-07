@@ -22,7 +22,7 @@ class ContentDiscussionPanel extends React.Component {
             </div>
         );
         let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
-            (<AddComment/>)
+            (<AddComment userid={this.props.UserProfileStore.userid}/>)
             :
             (<button tabIndex="0" className="ui blue labeled icon button" onClick={this.handleInvertCommentBox.bind(this)}>
                 <i className="icon plus"></i> Add comment
