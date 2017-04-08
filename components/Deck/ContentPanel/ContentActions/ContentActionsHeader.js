@@ -7,7 +7,9 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
+import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+
 
 class ContentActionsHeader extends React.Component {
     componentDidUpdate(){
@@ -53,6 +55,15 @@ class ContentActionsHeader extends React.Component {
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+
+        let buttonStyle = {
+            classNames : classNames({
+                'item small attached left':true,
+                'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            }),
+            iconSize : 'large',
+            attached : 'left'
+        } ;
         return (
             <div className="ui top attached tabular menu" role="tablist">
                 <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
@@ -77,8 +88,8 @@ class ContentActionsHeader extends React.Component {
                               <i className="yellow large folder icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-
                         </button>
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 
