@@ -6,6 +6,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
+import PresentationStore from '../../../../../stores/PresentationStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
 import saveDeckRevision from '../../../../../actions/saveDeckRevision';
 import {updateAuthorizedUsers, updateAuthorizedGroups} from '../../../../../actions/updateDeckAuthorizations';
@@ -16,6 +17,7 @@ import UserPicture from '../../../../common/UserPicture';
 import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
+import updateTheme from '../../../../../actions/updateTheme';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -207,6 +209,7 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 tags: TagsStore.tags
             });
+            this.context.executeAction(updateTheme, this.state.theme);
         }
     }
 
@@ -526,11 +529,12 @@ DeckPropertiesEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore], (context, props) => {
+DeckPropertiesEditor = connectToStores(DeckPropertiesEditor, [DeckEditStore, TagsStore, PermissionsStore, PresentationStore], (context, props) => {
     return {
         DeckEditStore: context.getStore(DeckEditStore).getState(),
         TagsStore: context.getStore(TagsStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
+        PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
 
