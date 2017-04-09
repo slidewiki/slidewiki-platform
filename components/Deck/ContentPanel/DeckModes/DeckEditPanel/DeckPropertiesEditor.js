@@ -36,8 +36,8 @@ class DeckPropertiesEditor extends React.Component {
             title: props.deckProps.title || '',
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
-            license: props.deckProps.license || '',
             theme: props.deckProps.theme || '',
+            license: props.deckProps.license || '',
             users: editors.users,
             groups: editors.groups
         };
@@ -195,8 +195,8 @@ class DeckPropertiesEditor extends React.Component {
                 title: this.state.title,
                 language: this.state.language,
                 description: this.state.description,
-                license: this.state.license,
                 theme: this.state.theme,
+                license: this.state.license,
                 selector: this.props.selector,
                 editors: {
                     old: this.props.DeckEditStore.originalEditors,

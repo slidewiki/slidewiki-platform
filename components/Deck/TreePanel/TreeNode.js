@@ -7,6 +7,7 @@ import {DragSource, DropTarget} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
+import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -147,6 +148,15 @@ class TreeNode extends React.Component {
             'ui button': true,
             'disabled': this.props.item.get('type') === 'deck'
         });
+        let buttonStyle = {
+            classNames : classNames({
+                'ui':true,
+                'disabled': !(this.props.permissions.admin || this.props.permissions.edit)
+            }),            
+            iconSize : 'small',
+            attached : '',
+            disabled: this.props.item.get('type') === 'deck'
+        };
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
@@ -168,6 +178,7 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
+                    <AttachSubdeck buttonStyle={buttonStyle} selector={nodeSelector}/>
                     <button className={duplicateItemClass} title="Duplicate"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),

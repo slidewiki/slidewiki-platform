@@ -261,7 +261,7 @@ class AddDeck extends React.Component {
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
           <option value="CC BY" >Creative Commons Attribution</option>
-            <option value="CC0" >Creative Commons CC0 Public Domain</option>
+          <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
@@ -297,7 +297,7 @@ class AddDeck extends React.Component {
                           <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
                       </div>
                       <div className="three fields">
-                          <div ref="div_themes" >
+                          <div className="field disabled" ref="div_themes" >
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
