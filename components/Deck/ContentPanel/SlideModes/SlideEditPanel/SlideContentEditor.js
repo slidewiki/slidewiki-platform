@@ -18,6 +18,7 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import TemplateDropdown from '../../../../common/TemplateDropdown';
+import DeckViewStore from '../../../../../stores/DeckViewStore';
 
 let ReactDOM = require('react-dom');
 
@@ -247,13 +248,40 @@ class SlideContentEditor extends React.Component {
     componentDidMount() {
         if(process.env.BROWSER){
             // Get the theme information, and download the stylesheet
-            let styleName = 'white';
+
+            let styleName = '';
+            //optimization: get directly from route https://deckservice.experimental.slidewiki.org/deck/{deck-id}/slides
+
+            //get theme from route (for preview/testing)
             if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
                 styleName = this.props.selector.theme;
             }
-            else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-                styleName = this.props.PresentationStore.theme;
+            else
+            {
+                //get theme from deckstore
+                const deckData = this.props.DeckViewStore.deckData;
+
+                let currentRevision = 1;
+                if(deckData.revisions){
+                    currentRevision = deckData.revisions.length === 1 ? deckData.revisions[0] : deckData.revisions.find((rev) => {
+                        return rev.id === deckData.active;
+                    });
+                }
+                if(currentRevision.theme && typeof currentRevision.theme !== 'undefined'){
+                    styleName = currentRevision.theme;
+                }
+                //else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+                //    styleName = this.props.PresentationStore.theme;
+                //}
             }
+            console.log('theme' + styleName);
+            if (styleName === '' || typeof styleName === 'undefined')
+            {
+                //if none of above yield a theme:
+                styleName = 'white';
+            }
+            console.log('theme' + styleName);            
+
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         }
         //alert('remount');
@@ -604,14 +632,15 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore, DeckViewStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        PresentationStore: context.getStore(PresentationStore).getState()
+        PresentationStore: context.getStore(PresentationStore).getState(),
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
     };
 });
 export default SlideContentEditor;
