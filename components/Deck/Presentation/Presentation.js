@@ -45,12 +45,17 @@ class Presentation extends React.Component{
 
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
-            console.log('store theme: ', this.props.PresentationStore.theme);
+            //console.log('store theme: ', this.props.PresentationStore.theme);
             let styleName = 'white';
-            if(this.props.PresentationStore.theme !== ''){
+            if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
                 styleName = this.props.PresentationStore.theme;
             }
-            console.log('styleName', styleName);
+            //console.log('styleName', styleName);
+            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'default')
+            {
+                //if none of above yield a theme:
+                styleName = 'white';
+            }
             require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';

@@ -103,6 +103,11 @@ class SlideViewPanel extends React.Component {
             else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
                 styleName = this.props.PresentationStore.theme;
             }
+            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'default')
+            {
+                //if none of above yield a theme:
+                styleName = 'white';
+            }
             require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
 
