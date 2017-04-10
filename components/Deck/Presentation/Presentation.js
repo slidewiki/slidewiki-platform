@@ -51,7 +51,7 @@ class Presentation extends React.Component{
                 styleName = this.props.PresentationStore.theme;
             }
             //console.log('styleName', styleName);
-            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
+            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'default')
             {
                 //if none of above yield a theme:
                 styleName = 'white';
