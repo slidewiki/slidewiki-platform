@@ -16,6 +16,11 @@ class PresentationStore extends BaseStore {
         this.selector = payload.selector;
         this.emitChange();
     }
+    updateTheme(theme) {
+        //console.log('theme' + theme);
+        this.theme = theme;
+        this.emitChange();
+    }
 
     getState() {
         return {
@@ -41,7 +46,8 @@ class PresentationStore extends BaseStore {
 
 PresentationStore.storeName = 'PresentationStore';
 PresentationStore.handlers = {
-    'LOAD_PRESENTATION_SUCCESS': 'updatePresentation'
+    'LOAD_PRESENTATION_SUCCESS': 'updatePresentation',
+    'UPDATE_THEME': 'updateTheme'
 };
 
 export default PresentationStore;
