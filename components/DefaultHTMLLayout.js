@@ -13,7 +13,6 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
-                <link href="/custom_modules/reveal.js/css/theme/white.css" rel="stylesheet" type="text/css" />
                 {/* Vendors css bundle */
                     this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
                 }
@@ -23,7 +22,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
             </head>
             <body>
-                <div id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
+                <div id="app" aria-hidden = "false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>
                 <script src="/es5-shim/es5-sham.min.js"></script>
