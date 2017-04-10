@@ -16,7 +16,6 @@ import UserPicture from '../../../../common/UserPicture';
 import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
-import updateTheme from '../../../../../actions/updateTheme';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -208,7 +207,6 @@ class DeckPropertiesEditor extends React.Component {
                 },
                 tags: TagsStore.tags
             });
-            this.context.executeAction(updateTheme, this.state.theme);
         }
     }
 
