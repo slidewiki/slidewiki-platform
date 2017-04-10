@@ -6,9 +6,9 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
-// if(process.env.BROWSER){
+//if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
-// }
+//}
 
 let playerCss = {
     height: '100%',
@@ -43,21 +43,6 @@ class Presentation extends React.Component{
             $('.ui.horizontal.segments.footer').css({'display': 'none'});
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
-            // $('html.ios, html.ios body').css('height': '100% !important');
-            // Get the theme information, and download the stylesheet
-            //console.log('store theme: ', this.props.PresentationStore.theme);
-            let styleName = 'white';
-            if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-                styleName = this.props.PresentationStore.theme;
-            }
-            //console.log('styleName', styleName);
-            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
-            {
-                //if none of above yield a theme:
-                styleName = 'white';
-            }
-            require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-
             this.revealDiv.style.display = 'inline';
 
             let pptxwidth = $('.pptx2html').width();
@@ -76,7 +61,6 @@ class Presentation extends React.Component{
             });
 
         }
-
     }
 
     componentDidUpdate(){
