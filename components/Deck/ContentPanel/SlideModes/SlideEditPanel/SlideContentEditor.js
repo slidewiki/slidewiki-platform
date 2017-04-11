@@ -33,15 +33,20 @@ class SlideContentEditor extends React.Component {
         this.refs.template;
         this.showTemplates = false;
         // Add the CSS dependency for the theme
-        let styleName = 'white';
+        // Get the theme information, and download the stylesheet
+        let styleName = '';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
         else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
             styleName = this.props.PresentationStore.theme;
         }
-        let req = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
+        {
+            //if none of above yield a theme:
+            styleName = 'white';
+        }
+        require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
     }
 
