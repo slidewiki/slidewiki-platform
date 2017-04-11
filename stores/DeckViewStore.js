@@ -7,6 +7,7 @@ class DeckViewStore extends BaseStore {
         this.slidesData = {};
         this.creatorData = {};
         this.ownerData = {};
+        this.originCreatorData = {};
 	    this.deckViewPanelHeight = 450;
 
     }
@@ -15,6 +16,7 @@ class DeckViewStore extends BaseStore {
         this.slidesData = payload.slidesData;
         this.creatorData = payload.creatorData;
         this.ownerData = payload.ownerData;
+        this.originCreatorData = payload.originCreatorData;
 	    this.deckViewPanelHeight = this.deckViewPanelHeight;
         this.emitChange();
     }
@@ -29,6 +31,7 @@ class DeckViewStore extends BaseStore {
             slidesData: this.slidesData,
             creatorData: this.creatorData,
             ownerData: this.ownerData,
+            originCreatorData: this.originCreatorData,
 	        deckViewPanelHeight: this.deckViewPanelHeight
         };
     }
@@ -40,6 +43,7 @@ class DeckViewStore extends BaseStore {
         this.slidesData = state.slidesData;
         this.creatorData = state.creatorData;
         this.ownerData = state.ownerData;
+        this.originCreatorData = state.originCreatorData;
 	    this.deckViewPanelHeight = state.deckViewPanelHeight;
     }
 }
