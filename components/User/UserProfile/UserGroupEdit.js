@@ -40,7 +40,8 @@ class UserGroupEdit extends React.Component {
         $('#usergoup_edit_dropdown_usernames_remote')
             .dropdown({
                 apiSettings: {
-                    url: Microservices.user.uri + '/information/username/search/{query}'
+                    url: Microservices.user.uri + '/information/username/search/{query}',
+                    cache: false
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
@@ -57,9 +58,9 @@ class UserGroupEdit extends React.Component {
                     console.log('trying to add', name, 'to', group.members, ' with ', data);
                     if (group.members.findIndex((member) => {
                         return member.userid === parseInt(data.userid);
-                    }) === -1 && name !== this.props.UserProfileStore.username) {
+                    }) === -1 && data.username !== this.props.UserProfileStore.username) {
                         group.members.push({
-                            username: name,
+                            username: data.username,
                             userid: parseInt(data.userid),
                             joined: data.joined || undefined,
                             picture: data.picture,

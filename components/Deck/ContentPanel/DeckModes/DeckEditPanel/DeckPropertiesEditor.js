@@ -90,6 +90,10 @@ class DeckPropertiesEditor extends React.Component {
         this.handleDropboxes();
     }
 
+    componentDidMount() {
+        this.handleDropboxes();
+    }
+
     handleDropboxes() {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown({
@@ -123,7 +127,8 @@ class DeckPropertiesEditor extends React.Component {
         $(ReactDOM.findDOMNode(this.refs.AddUser))
             .dropdown({
                 apiSettings: {
-                    url: Microservices.user.uri + '/information/username/search/{query}'
+                    url: Microservices.user.uri + '/information/username/search/{query}',
+                    cache: false
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
@@ -140,9 +145,9 @@ class DeckPropertiesEditor extends React.Component {
                     // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
                         return member.id === parseInt(data.userid);
-                    }) === -1 && parseInt(value) !== this.props.userid) {
+                    }) === -1 && parseInt(data.userid) !== this.props.userid) {
                         users.push({
-                            username: name,
+                            username: data.username,
                             id: parseInt(data.userid),
                             joined: data.joined || (new Date()).toISOString(),
                             picture: data.picture,
