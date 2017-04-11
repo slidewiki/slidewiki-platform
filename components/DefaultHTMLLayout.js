@@ -22,7 +22,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
             </head>
             <body>
-                <div id="app" aria-hidden = "false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
+                <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
                 {/* Following are added only to support IE browser */}
                 <script src="/es5-shim/es5-shim.min.js"></script>
                 <script src="/es5-shim/es5-sham.min.js"></script>
