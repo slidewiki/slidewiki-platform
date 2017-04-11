@@ -30,8 +30,11 @@ class Presentation extends React.Component{
         this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
         // Load the theme stylesheet
-        let styleName = 'white';
-        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+        let styleName = '';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
             styleName = this.props.PresentationStore.theme;
         }
         //console.log('styleName', styleName);

@@ -12,12 +12,11 @@ class SlideViewPanel extends React.Component {
     constructor(props){
         super(props);
 
-        let styleName = 'white';
-        let theme = this.props.PresentationStore.theme;
+        let styleName = '';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
-        else if(theme && typeof theme !== 'undefined' && theme !== 'undefined'){
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
             styleName = this.props.PresentationStore.theme;
         }
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
