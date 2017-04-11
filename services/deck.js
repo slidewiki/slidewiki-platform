@@ -153,6 +153,15 @@ export default {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
             });
+        } else if (resource === 'deck.forks') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.id.split('-')[0] + '/forks',
+                qs: args.user != null ? {user: args.user} : {},
+                json: true
+            }).then((body) => {
+                callback(null, body);
+            }).catch((err) => callback(err));
         }
     },
     // other methods

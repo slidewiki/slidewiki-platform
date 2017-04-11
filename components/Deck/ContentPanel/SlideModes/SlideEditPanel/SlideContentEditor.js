@@ -32,6 +32,22 @@ class SlideContentEditor extends React.Component {
         this.addBoxButtonHTML = '';
         this.refs.template;
         this.showTemplates = false;
+        // Add the CSS dependency for the theme
+        // Get the theme information, and download the stylesheet
+        let styleName = '';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
+        {
+            //if none of above yield a theme:
+            styleName = 'white';
+        }
+        require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
     }
 
     handleTemplatechange(){
@@ -246,22 +262,7 @@ class SlideContentEditor extends React.Component {
         return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-left"><span class="text-block" font-weight: initial; font-style: normal; ">New content</span></div></div>';
     }
     componentDidMount() {
-        if(process.env.BROWSER){
-            // Get the theme information, and download the stylesheet
-            let styleName = '';
-            if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-                styleName = this.props.selector.theme;
-            }
-            else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-                styleName = this.props.PresentationStore.theme;
-            }
-            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
-            {
-                //if none of above yield a theme:
-                styleName = 'white';
-            }
-            require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        }
+
         //alert('remount');
         const userId = this.props.UserProfileStore.userid;
 
