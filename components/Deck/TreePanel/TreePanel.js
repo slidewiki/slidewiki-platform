@@ -69,7 +69,7 @@ class TreePanel extends React.Component {
             showConfirmButton: false
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+        this.context.executeAction(forkDeck, {selector: this.props.DeckTreeStore.selector.toJS(), navigateToRoot: true});
     }
 
     handleTheme() {
