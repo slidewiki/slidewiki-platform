@@ -6,22 +6,26 @@ import ResizeAware from 'react-resize-aware';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import loadPresentation from '../../../../../actions/loadPresentation';
 import { findDOMNode } from 'react-dom';
+
+
 const ReactDOM = require('react-dom');
 
 class SlideViewPanel extends React.Component {
     constructor(props){
         super(props);
-        console.log('props', props);
 
+        let styleName = 'white';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        let req = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
     }
     render() {
-            // if(process.env.BROWSER){
-            //     let styleName = this.props.PresentationStore.theme;
-            //     console.log('styleName inside function', styleName);
-            //     if(styleName){
-            //         require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-            //     }
-            // }
+
+
 
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
@@ -88,22 +92,8 @@ class SlideViewPanel extends React.Component {
         );
     }
     componentDidMount(){
-        // if(process.env.BROWSER){
-        //     let styleName = this.props.PresentationStore.theme;
-        //     console.log('styleName ', styleName);
-        //     if(styleName){
-        //         require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        //     }
-        // }
+
         if(process.env.BROWSER){
-            let styleName = 'white';
-            if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-                styleName = this.props.selector.theme;
-            }
-            else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-                styleName = this.props.PresentationStore.theme;
-            }
-            require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
 
             //Function toi fit contents in edit and view component
