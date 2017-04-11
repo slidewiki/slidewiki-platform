@@ -76,6 +76,42 @@ class ActivityFeedStore extends BaseStore {
 
         this.emitChange();
     }
+    addLikeActivity(payload) {
+        if (payload.selector.stype === 'deck') {
+            let activity = {
+                activity_type: 'react',
+                user_id: payload.userid,
+                author: {
+                    username: payload.username
+                },
+                content_id:  payload.selector.sid,
+                content_kind: 'deck',
+                react_type: 'like'
+            };
+            this.activities.unshift(activity);//add to the beginning
+            if (isLocalStorageOn()) {
+                localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
+            }
+
+            this.emitChange();
+        }
+    }
+    removeLikeActivity(payload) {
+        //find like activity and remove it
+        if (payload.selector.stype === 'deck') {
+            let i = 0;
+            for(i = 0; i < this.activities.length; i++) {
+                const activity = this.activities[i];
+                if (activity.activity_type === 'react' && activity.user_id === payload.userid && activity.content_id === payload.selector.sid && activity.content_kind === 'deck') {
+                    break;
+                }
+            }
+            if (i < this.activities.length) {
+                this.activities.splice(i, 1);
+                this.emitChange();
+            }
+        }
+    }
     getState() {
         return {
             activities: this.activities,
@@ -105,7 +141,9 @@ ActivityFeedStore.handlers = {
     // 'ADD_COMMENT_SUCCESS': 'addCommentActivity',
     // 'ADD_REPLY_SUCCESS': 'addCommentActivity',
     'ADD_ACTIVITY_SUCCESS': 'addActivity',
-    'ADD_ACTIVITIES_SUCCESS': 'addActivities'
+    'ADD_ACTIVITIES_SUCCESS': 'addActivities',
+    'LIKE_ACTIVITY_SUCCESS': 'addLikeActivity',
+    'DISLIKE_ACTIVITY_SUCCESS': 'removeLikeActivity'
 };
 
 export default ActivityFeedStore;

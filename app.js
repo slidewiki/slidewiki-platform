@@ -39,6 +39,7 @@ import ContentActionsFooterStore from './stores/ContentActionsFooterStore';
 import AttachSubdeckModalStore from './stores/AttachSubdeckModalStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
+import ContentLikeStore from './stores/ContentLikeStore';
 
 
 
@@ -82,8 +83,8 @@ const app = new Fluxible({
         ContentActionsFooterStore,
         AttachSubdeckModalStore,
 	      ServiceErrorStore,
-        PermissionsStore
-
+        PermissionsStore,
+        ContentLikeStore
     ]
 });
 
