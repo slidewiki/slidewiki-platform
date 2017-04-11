@@ -1,15 +1,15 @@
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 
-export default function likeActivity(context, payload, done) {
+export default function loadLikes(context, payload, done) {
     log.info(context);
-    context.service.create('like.likeActivity', payload, {}, {timeout: 20 * 1000}, (err, res) => {
+    context.service.read('like.loadLikes', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('LIKE_ACTIVITY_FAILURE', err);
+            //context.dispatch('LIKE_LOAD_FAILURE', err);
         } else {
-            context.dispatch('LIKE_ACTIVITY_SUCCESS', res);
+            context.dispatch('LIKE_LOAD_SUCCESS', res);
         }
         done();
     });

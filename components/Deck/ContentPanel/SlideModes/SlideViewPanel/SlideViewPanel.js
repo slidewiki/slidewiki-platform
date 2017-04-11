@@ -6,8 +6,6 @@ import ResizeAware from 'react-resize-aware';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import loadPresentation from '../../../../../actions/loadPresentation';
 import { findDOMNode } from 'react-dom';
-
-
 const ReactDOM = require('react-dom');
 
 class SlideViewPanel extends React.Component {

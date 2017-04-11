@@ -18,6 +18,7 @@ import notFoundError from './error/notFoundError';
 import DeckTreeStore from '../stores/DeckTreeStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
+import loadLikes from './activityfeed/loadLikes';
 
 import PermissionsStore from '../stores/PermissionsStore';
 
@@ -137,6 +138,13 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             if(runNonContentActions){
                 context.executeAction(loadContentModules, payloadCustom, callback);
+            }else{
+                callback();
+            }
+        },
+        (callback) => {
+            if(runNonContentActions){
+                context.executeAction(loadLikes, {selector: payload.params}, callback);
             }else{
                 callback();
             }
