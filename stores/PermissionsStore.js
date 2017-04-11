@@ -10,6 +10,7 @@ class PermissionsStore extends BaseStore {
             edit: false,
             admin: false
         };
+        this.ownedForks = [];
     }
 
     loadPermissions(payload) {
@@ -25,11 +26,13 @@ class PermissionsStore extends BaseStore {
             admin: false
         };
         this.deckId = payload.deckId;
+        this.ownedForks = [];
         this.emitChange();
     }
 
     showNoPermissionsModal(payload) {
         this.isNoPermissionsModalShown = true;
+        this.ownedForks = payload.ownedForks;
         this.emitChange();
     }
 
@@ -42,7 +45,8 @@ class PermissionsStore extends BaseStore {
         return {
             permissions: this.permissions,
             deckId: this.deckId,
-            isNoPermissionsModalShown: this.isNoPermissionsModalShown
+            isNoPermissionsModalShown: this.isNoPermissionsModalShown,
+            ownedForks: this.ownedForks
         };
     }
 
@@ -54,6 +58,7 @@ class PermissionsStore extends BaseStore {
         this.permissions = state.permissions;
         this.isNoPermissionsModalShown = state.isNoPermissionsModalShown;
         this.deckId = state.deckId;
+        this.ownedForks = state.ownedForks;
     }
 }
 
