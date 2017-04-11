@@ -31,18 +31,16 @@ class Presentation extends React.Component{
         this.revealDiv = null;
         // Load the theme stylesheet
         let styleName = 'white';
-        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-            styleName = this.props.selector.theme;
-        }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
             styleName = this.props.PresentationStore.theme;
         }
+        //console.log('styleName', styleName);
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
         {
             //if none of above yield a theme:
             styleName = 'white';
         }
-        require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
     }
 
     componentDidMount(){
