@@ -134,7 +134,7 @@ class SlideViewPanel extends React.Component {
         if (nextProps.PresentationStore.theme === this.props.PresentationStore.theme){
 
         }
-   }
+    }
     resize()
     {
         let containerwidth = document.getElementById('container').offsetWidth;

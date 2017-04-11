@@ -208,7 +208,10 @@ export default {
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
-                            firstSlide: deck.firstSlide
+                            firstSlide: deck.firstSlide,
+                            language:deck.language,
+                            countRevisions:deck.countRevisions
+
                         };
                     }).sort((a,b) => a.creationDate < b.creationDate);
                     callback(null, converted);
@@ -223,6 +226,7 @@ export default {
                 })
                 .then((body) => {
                     let converted = body.map((deck) => {
+                        console.log(deck);
                         return {
                             title: !isEmpty(deck.title) ? deck.title : 'No Title',
                             picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
@@ -230,7 +234,9 @@ export default {
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
-                            firstSlide: deck.firstSlide
+                            firstSlide: deck.firstSlide,
+                            language:deck.language,
+                            countRevisions:deck.countRevisions
                         };
                     });
                     callback(null, converted);

@@ -46,13 +46,6 @@ class Presentation extends React.Component{
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
 
-            let styleName = 'white';
-            if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-                styleName = this.props.PresentationStore.theme;
-            }
-            console.log('styleName', styleName);
-            require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-
             this.revealDiv.style.display = 'inline';
 
             let pptxwidth = $('.pptx2html').width();
