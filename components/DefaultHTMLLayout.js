@@ -1,8 +1,10 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
+require('css-modules-require-hook/preset');
 
 class DefaultHTMLLayout extends React.Component {
     render() {
+
         return (
             <html>
             <head>
@@ -14,7 +16,7 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 {/* Vendors css bundle */
-                    this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
+                    // this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
                 }
                 {/*<link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />*/}
                 {/* we add this config option for mathjax so we can better control when the typesetting will occur */}
