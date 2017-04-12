@@ -112,7 +112,7 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             permissionsPromise.then(() => {
                 let permissions = context.getStore(PermissionsStore).getState().permissions;
-                if (payloadCustom.params.mode === 'edit' && !permissions.edit && !permissions.admin){
+                if (payloadCustom.params.mode === 'edit' && (!permissions.edit || permissions.readOnly)){
                     payloadCustom.params.mode = 'view';
                     payload.params.user = context.getStore(UserProfileStore).getState().userid;
                     context.executeAction(showNoPermissionsModal, payloadCustom);

@@ -39,19 +39,19 @@ class ContentActionsHeader extends React.Component {
         //config buttons based on the selected item
         const addSlideClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         const addDeckClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         const deleteItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
@@ -59,7 +59,7 @@ class ContentActionsHeader extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'item small attached left':true,
-                'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
             }),
             iconSize : 'large',
             attached : 'left'
