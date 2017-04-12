@@ -51,7 +51,7 @@ export default {
             rp.post({
                 uri: Microservices.user.uri + '/social/login',
                 body: JSON.stringify({
-                    identifier: args.identifier,
+                    identifier: args.identifier.toString(),
                     provider: args.provider,
                     token: args.token,
                     scope: args.scope,
@@ -174,7 +174,7 @@ export default {
             rp.post({
                 uri: Microservices.user.uri + '/social/register',
                 body: JSON.stringify({
-                    identifier: args.identifier,
+                    identifier: args.identifier.toString(),
                     provider: args.provider,
                     token: args.token,
                     scope: args.scope,
