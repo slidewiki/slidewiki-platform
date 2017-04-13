@@ -13,7 +13,7 @@ class TagList extends React.Component {
         return (
             <div ref="tagList">
                 <div className="ui basic segment">
-                    { this.props.items.map((tag) => (<a className="ui large tag label" tabIndex="0" role="link">
+                    { this.props.items.map((tag) => (<a key={tag} className="ui large tag label" tabIndex="0" role="link">
                         { tag }
                         {
                             this.props.isEditMode?
