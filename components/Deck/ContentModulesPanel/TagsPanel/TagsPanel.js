@@ -1,10 +1,13 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
+import classNames from 'classnames';
 import TagsStore from '../../../../stores/TagsStore';
+import PermissionsStore from '../../../../stores/PermissionsStore';
 import TagList from './TagList';
 import newTag from '../../../../actions/tags/newTag';
 import changeEditMode from '../../../../actions/tags/changeEditMode';
 import removeTag from '../../../../actions/tags/removeTag';
+import saveTags from '../../../../actions/tags/saveTags';
 
 class TagsPanel extends React.Component {
     constructor(props) {
@@ -14,15 +17,13 @@ class TagsPanel extends React.Component {
     onAddTag(e) {
         e.preventDefault();
         const val = this.refs.taginp.value;
-        const { selector } = this.props;
         if (!val) {
             return false;
         }
         this.refs.taginp.value = '';
 
         this.context.executeAction(newTag, {
-            'tag': val,
-            'selector': selector
+            tag: val
         });
     }
 
@@ -35,14 +36,22 @@ class TagsPanel extends React.Component {
         const { selector } = this.props;
 
         this.context.executeAction(removeTag, {
-            'tag': tag,
-            'selector': selector
+            tag: tag
         });
     }
 
     handleShowMore(e) {
         e.preventDefault();
         //this.context.executeAction(showMoreTags);
+    }
+
+    handleSave(e) {
+        e.preventDefault();
+
+        this.context.executeAction(saveTags, {
+            tags: this.props.TagsStore.tags,
+            selector: this.props.selector
+        });
     }
 
     render() {
@@ -66,23 +75,28 @@ class TagsPanel extends React.Component {
             </div>
             ;
 
-        let editBtn = <div className="column right aligned">
-            <button className="ui right floated button blue" onClick={this.onShowEditForm.bind(this)}>
-                <i className="edit icon" data-reactid="640"></i>Edit Tags
-            </button>
-        </div>;
-
+        let saveBtn_classes = classNames({
+            'ui': true,
+            'right': true,
+            'primary': true,
+            'disabled': !this.props.TagsStore.tagsHaveChanged,
+            'button': true
+        });
         let editForm = <div className="column right aligned">
-            <div className="ui right labeled left icon input">
-                <label id="EnterTags">
+            <div className="ui right labeled icon input">
+                <label id="EnterTag">
                 </label>
-                <input ref="taginp" type="text" placeholder="Enter tags" aria-labelledby="EnterTags"/>
+                <input ref="taginp" type="text" maxLength="60" placeholder="Enter tag" aria-labelledby="EnterTag"/>
                     <a className="ui tag label" role="button" tabIndex="0" onClick={this.onAddTag.bind(this)}>
                         Add Tag
                     </a>
             </div>
+            &nbsp;
+            <button className={saveBtn_classes}
+                    onClick={this.handleSave.bind(this)}>Save all tags
+            </button>
         </div>;
-        let editSection = this.props.TagsStore.isEditMode? editForm : editBtn;
+        let editSection = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit) ? editForm : '';
 
         return (
             <div className="ui bottom attached" ref="dataSourcePanel">
@@ -102,9 +116,10 @@ TagsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-TagsPanel = connectToStores(TagsPanel, [TagsStore], (context, props) => {
+TagsPanel = connectToStores(TagsPanel, [TagsStore, PermissionsStore], (context, props) => {
     return {
-        TagsStore: context.getStore(TagsStore).getState()
+        TagsStore: context.getStore(TagsStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 

@@ -9,11 +9,15 @@ class TagsStore extends BaseStore {
         this.selectedIndex = -1;
         this.contentOwner = 0;
         this.selector = {};
+        this.oldTags = [];
+        this.tagsHaveChanged = false;
     }
     loadTagsSlide(payload) {
         this.tags = [];
         let lastRevision = payload.slide.revisions[payload.slide.revisions.length-1];
         this.tags = lastRevision.tags? lastRevision.tags: [];
+        this.oldTags = JSON.parse(JSON.stringify(this.tags));
+        this.tagsHaveChanged = false;
         this.selector = payload.selector;
         this.selectedIndex = -1;
         this.contentOwner = payload.owner;
@@ -23,6 +27,8 @@ class TagsStore extends BaseStore {
         this.tags = [];
         let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
         this.tags = lastRevision.tags? lastRevision.tags: [];
+        this.oldTags = JSON.parse(JSON.stringify(this.tags));
+        this.tagsHaveChanged = false;
         this.selector = {
             'id': payload.deckData._id,
             'stype': 'deck'
@@ -33,19 +39,23 @@ class TagsStore extends BaseStore {
     }
     loadTagsFail(err) {
         this.tagError = err? err: 'Cannot load tags';
+        this.tagsHaveChanged = false;
         this.emitChange();
     }
     updateTags(payload) {
         this.tags = payload.tags;
         this.selectedIndex = -1;
+        this.tagsHaveChanged = false;
         this.emitChange();
     }
     newTag(payload) {
         this.tags.push({tagName: payload.tag});
+        this.tagsHaveChanged = this.doHaveTagsChanged();
         this.emitChange();
     }
     removeTag(payload) {
         this.tags = this.tags.filter((item) => item.tagName !== payload.tag.tagName);
+        this.tagsHaveChanged = this.doHaveTagsChanged();
         this.emitChange();
     }
     cancelEditTag() {
@@ -60,6 +70,20 @@ class TagsStore extends BaseStore {
         this.isEditMode = payload.isEditMode;
         this.emitChange();
     }
+
+    doHaveTagsChanged() {
+        if (this.tags.length !== this.oldTags.length)
+            return true;
+        for (let key in this.tags) {
+            const tag = this.tags[key];
+            const found = this.oldTags.findIndex((e) => {return e.tagName === tag.tagName;}) !== -1;
+            if (!found)
+                return true;
+        }
+
+        return false;
+    }
+
     getState() {
         return {
             tags: this.tags,
@@ -68,7 +92,9 @@ class TagsStore extends BaseStore {
             selectedIndex: this.selectedIndex,
             contentOwner: this.contentOwner,
             selector: this.selector,
-            isEditMode: this.isEditMode
+            isEditMode: this.isEditMode,
+            oldTags: this.oldTags,
+            tagsHaveChanged: this.tagsHaveChanged
         };
     }
     dehydrate() {
@@ -81,6 +107,8 @@ class TagsStore extends BaseStore {
         this.contentOwner = state.contentOwner;
         this.selector = state.selector;
         this.isEditMode = state.isEditMode;
+        this.oldTags = state.oldTags;
+        this.tagsHaveChanged = state.tagsHaveChanged;
     }
 }
 

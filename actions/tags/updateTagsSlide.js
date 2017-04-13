@@ -29,4 +29,6 @@ export default function updateTagsSlide(context, payload, done) {
         selector: selector,
         tags: tags
     });
+
+    done();
 }

@@ -25,4 +25,6 @@ export default function updateTagsDeck(context, payload, done) {
         tags: tags,
         selector: selector
     });
+
+    done();
 }
