@@ -7,6 +7,8 @@ import addActivity from '../activityfeed/addActivity';
 import {navigateAction} from 'fluxible-router';
 
 export default function saveSlide(context, payload, done) {
+    log.info(context);
+    
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
 
@@ -52,4 +54,6 @@ export default function saveSlide(context, payload, done) {
             done();
         });
     }
+    else
+        done();
 }

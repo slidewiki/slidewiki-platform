@@ -41,11 +41,11 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     newTag(payload) {
-        this.tags.push(payload.tag);
+        this.tags.push({tagName: payload.tag});
         this.emitChange();
     }
     removeTag(payload) {
-        this.tags = this.tags.filter((item) => item !== payload.tag);
+        this.tags = this.tags.filter((item) => item.tagName !== payload.tag.tagName);
         this.emitChange();
     }
     cancelEditTag() {
