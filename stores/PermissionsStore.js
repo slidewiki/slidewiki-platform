@@ -35,6 +35,7 @@ class PermissionsStore extends BaseStore {
     }
 
     showNoPermissionsModal(payload) {
+        payload = payload || {};
         this.isNoPermissionsModalShown = true;
         this.ownedForks = payload.ownedForks;
         this.emitChange();

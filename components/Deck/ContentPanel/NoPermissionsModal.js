@@ -2,11 +2,12 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import forkDeck from '../../../actions/decktree/forkDeck';
-import ContentUtil from './util/ContentUtil';
-import {navigateAction, NavLink} from 'fluxible-router';
+import {NavLink} from 'fluxible-router';
 import {Button, Icon, Modal, Header} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import _ from 'lodash';
+import hideNoPermissionsModal from '../../../actions/permissions/hideNoPermissionsModal';
+
 class NoPermissionsModal extends React.Component {
 
     constructor(props) {
@@ -18,35 +19,44 @@ class NoPermissionsModal extends React.Component {
     }
 
     handleClose() {
-        this.context.executeAction(navigateAction, {
-            url: ContentUtil.makeNodeURL(this.props.selector, 'view')
-        });
+        this.context.executeAction(hideNoPermissionsModal);
     }
 
     render() {
-        let isModalShown = this.props.PermissionsStore.isNoPermissionsModalShown;
-        let ownedForks = this.props.PermissionsStore.ownedForks;
-        let lastUpdatedFork = _.maxBy(ownedForks, (fork) => new Date(fork.lastUpdate));
-        let modalDescription = lastUpdatedFork != null ? <span>You can only view this deck, however you have already forked it. You can either edit your <NavLink href={'/deck/' + lastUpdatedFork.id}>version</NavLink>, otherwise you may ask the owner to grant you edit rights. You can also create yet another fork of the deck.</span> :
-            <span>You can only view this deck. To make changes, you may ask the owner to grant you edit rights or fork the deck. Forking a deck means creating your copy of the deck.</span>;
+        let {isNoPermissionsModalShown, ownedForks, permissions} = this.props.PermissionsStore;
+        let headerText, modalDescription, buttons;
+        let closeButton = <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>;
+        if (permissions.edit) {
+            headerText = 'View-only version';
+            modalDescription = 'You are viewing an older version of this deck, which is not available for editing. You can visit the most recent version so you can edit the deck.';
+            buttons = <div>
+                <NavLink className="ui button" href="/">Go to the latest version</NavLink>
+                {closeButton}
+            </div>;
+        } else {
+            headerText = 'No Edit Rights';
+            let lastUpdatedFork = _.maxBy(ownedForks, (fork) => new Date(fork.lastUpdate));
+            modalDescription = lastUpdatedFork != null ?
+                <span>You can only view this deck, however you have already forked it. You can either edit your <NavLink
+                    href={'/deck/' + lastUpdatedFork.id}>version</NavLink>, otherwise you may ask the owner to grant you edit rights. You can also create yet another fork of the deck.</span> :
+                <span>You can only view this deck. To make changes, you may ask the owner to grant you edit rights or fork the deck. Forking a deck means creating your copy of the deck.</span>;
+            buttons = <div>
+                <Button as='button' disabled><Icon name='edit'/> Request edit access</Button>
+                <Button as='button' onClick={this.handleFork.bind(this)}><Icon name='fork'/> Fork this deck</Button>
+                {closeButton}
+            </div>;
+        }
         return (
-            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='permissionsModalHeader' aria-describedby='permissionsModalDesc'  open={isModalShown}
+            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='permissionsModalHeader'
+                   aria-describedby='permissionsModalDesc' open={isNoPermissionsModalShown}
                    onClose={this.handleClose.bind(this)}>
-                <Header icon='warning sign' content='No Edit Rights' id='permissionsModalHeader'/>
+                <Header icon='warning sign' content={headerText} id='permissionsModalHeader'/>
                 <Modal.Content>
                     <p id='permissionsModalDesc'>{modalDescription}</p>
                 </Modal.Content>
                 <Modal.Actions>
-                    <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={isModalShown}>
-                        <Button as='button' disabled>
-                            <Icon name='edit'/> Request edit access
-                        </Button>
-                        <Button as='button' onClick={this.handleFork.bind(this)}>
-                            <Icon name='fork'/> Fork this deck
-                        </Button>
-                        <Button as='button' onClick={this.handleClose.bind(this)}>
-                            <Icon name='close'/> Close
-                        </Button>
+                    <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={isNoPermissionsModalShown}>
+                        {buttons}
                     </FocusTrap>
                 </Modal.Actions>
             </Modal>
