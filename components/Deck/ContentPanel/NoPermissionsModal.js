@@ -2,11 +2,13 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import forkDeck from '../../../actions/decktree/forkDeck';
-import {NavLink} from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import _ from 'lodash';
 import hideNoPermissionsModal from '../../../actions/permissions/hideNoPermissionsModal';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
+
 
 class NoPermissionsModal extends React.Component {
 
@@ -22,6 +24,13 @@ class NoPermissionsModal extends React.Component {
         this.context.executeAction(hideNoPermissionsModal);
     }
 
+    navigateToLatestRevision() {
+        this.context.executeAction(navigateAction, {
+            url: '/deck/' + this.props.DeckTreeStore.selector.get('id').split('-')[0] + '-' + this.props.DeckTreeStore.latestRevisionId
+        });
+        this.context.executeAction(hideNoPermissionsModal);
+    }
+
     render() {
         let {isNoPermissionsModalShown, ownedForks, permissions} = this.props.PermissionsStore;
         let headerText, modalDescription, buttons;
@@ -29,8 +38,9 @@ class NoPermissionsModal extends React.Component {
         if (permissions.edit) {
             headerText = 'View-only version';
             modalDescription = 'You are viewing an older version of this deck, which is not available for editing. You can visit the most recent version so you can edit the deck.';
+
             buttons = <div>
-                <NavLink className="ui button" href="/">Go to the latest version</NavLink>
+                <Button as='button' onClick={this.navigateToLatestRevision.bind(this)}>Go to the latest version</Button>
                 {closeButton}
             </div>;
         } else {
@@ -68,9 +78,10 @@ NoPermissionsModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-NoPermissionsModal = connectToStores(NoPermissionsModal, [PermissionsStore], (context, props) => {
+NoPermissionsModal = connectToStores(NoPermissionsModal, [PermissionsStore, DeckTreeStore], (context, props) => {
     return {
-        PermissionsStore: context.getStore(PermissionsStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default NoPermissionsModal;
