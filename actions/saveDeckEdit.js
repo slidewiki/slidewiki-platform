@@ -53,7 +53,7 @@ export default function saveDeckEdit(context, payload, done) {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename, err: JSON.stringify(err).substr(0, 75)});
                 // context.executeAction(serviceUnavailable, payload, done);
                 done();
             } else {
@@ -87,7 +87,7 @@ export default function saveDeckEdit(context, payload, done) {
                         if (err) {
                             context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                             context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
-                            log.error(context, {filepath: __filename, err: err});
+                            log.error(context, {filepath: __filename, err: JSON.stringify(err).substr(0, 75)});
                             // context.executeAction(serviceUnavailable, payload, done);
                             done();
                         }

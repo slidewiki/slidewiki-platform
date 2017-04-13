@@ -19,7 +19,7 @@ export default function loadContentUsage(context, payload, done) {
 
     context.service.read('usage.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: JSON.stringify(err).substr(0, 75)});
             context.dispatch('LOAD_CONTENT_USAGE_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_USAGE_SUCCESS', res);

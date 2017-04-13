@@ -19,7 +19,7 @@ export default function loadContentQuestions(context, payload, done) {
 
     context.service.read('questions.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: JSON.stringify(err).substr(0, 75)});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_CONTENT_QUESTIONS_FAILURE', err);
         } else {

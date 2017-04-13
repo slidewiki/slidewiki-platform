@@ -6,7 +6,7 @@ export default function loadPresentation(context, payload, done) {
     context.service.read('presentation.content', payload, {timeout: 20 * 1000}, (err, res) => {
       //  console.log('Executing loadPresentation action');
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename, err: JSON.stringify(err).substr(0, 75)});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_PRESENTATION_FAILURE', err);
         } else {
