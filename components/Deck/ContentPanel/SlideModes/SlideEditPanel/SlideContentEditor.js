@@ -272,8 +272,8 @@ class SlideContentEditor extends React.Component {
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             //console.log('canvas');
             swal({
-                title: 'Switch to canvast-style',
-                text: 'This action will switch the slide to a canvas-style on which input boxes can be moved and resized. Any existing content in this slide is added to a large input box that can be moved and resized on the slide. More input boxes can be added. Existing content, for example, images, can be copied and pasted in to additional separate input boxes. Do you want to continue?',
+                title: 'Switch to canvas style layout',
+                text: 'This will add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -288,7 +288,6 @@ class SlideContentEditor extends React.Component {
                 '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">' +
                 '<div class="h-left">' + currentContent + '</div>' +
                 '</div>' +
-                this.getAbsoluteDiv(2138483657) +
                 '</div>';
                 //update content
                 CKEDITOR.instances.inlineContent.setData(newContent);
