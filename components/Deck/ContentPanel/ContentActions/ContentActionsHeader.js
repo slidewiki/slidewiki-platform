@@ -31,7 +31,7 @@ class ContentActionsHeader extends React.Component {
     handleEditNode(selector) {
         const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
-            this.context.executeAction(showNoPermissionsModal, {selector: selector.id, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+            this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
         } else {
             this.context.executeAction(navigateAction, {
                 url: nodeURL
