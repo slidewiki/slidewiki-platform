@@ -41,16 +41,16 @@ class SlideContentEditor extends React.Component {
         this.showTemplates = false;
         // Add the CSS dependency for the theme
         // Get the theme information, and download the stylesheet
-        let styleName = '';
+        let styleName = 'default';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
         else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
             styleName = this.props.PresentationStore.theme;
         }
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {
-            //if none of above yield a theme:
+            //if none of above yield a theme they will be legacy decks:
             styleName = 'white';
         }
         require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
