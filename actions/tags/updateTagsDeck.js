@@ -1,10 +1,12 @@
 import DeckViewStore from '../../stores/DeckViewStore';
 import saveDeckEdit from '../../actions/saveDeckEdit';
+const log = require('../log/clog');
 
 /**
  * Created by akorovin on 26.02.2017.
  */
-export default function onDeckExecute(context, payload, done) {
+export default function updateTagsDeck(context, payload, done) {
+    log.info(context);
     const deckStore = context.getStore(DeckViewStore).getState();
 
     let { selector, tags } = payload;
@@ -23,4 +25,6 @@ export default function onDeckExecute(context, payload, done) {
         tags: tags,
         selector: selector
     });
+
+    done();
 }

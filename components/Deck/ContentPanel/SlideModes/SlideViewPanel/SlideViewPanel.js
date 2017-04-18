@@ -40,7 +40,7 @@ class SlideViewPanel extends React.Component {
         const compStyle = {
             //minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 450,
+            minHeight: 600,
             //minHeight: '100%',
             overflowY: 'auto',
             overflowX: 'auto',
@@ -51,7 +51,7 @@ class SlideViewPanel extends React.Component {
         const contentStyle = {
             minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 450,
+            minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
             //borderStyle: 'dashed',
@@ -153,7 +153,9 @@ class SlideViewPanel extends React.Component {
         let pptxheight = $('.pptx2html').height();
 
         //only calculate scaleration for width for now
-        this.scaleratio = containerwidth / pptxwidth;
+        this.scaleratio = containerwidth / (pptxwidth+50);
+        //console.log(containerwidth);
+        //console.log(pptxwidth);
 
         if ($('.pptx2html').length)
         {
@@ -172,8 +174,9 @@ class SlideViewPanel extends React.Component {
             this.refs.slideViewPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
 
-            //show that content is outside of pptx2html box
-            $('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            //show that content is outside of pptx2html box (alternative to ridge: groove)
+            //$('.pptx2html').css({'borderStyle': 'ridge ridge ridge ridge', 'borderColor': '#7AB0D7', 'box-shadow': '0px 0px 1000px #E28447'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
             //all borders
             //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }

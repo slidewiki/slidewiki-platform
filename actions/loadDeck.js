@@ -19,7 +19,6 @@ import DeckTreeStore from '../stores/DeckTreeStore';
 import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
-
 import PermissionsStore from '../stores/PermissionsStore';
 
 const log = require('./log/clog');
@@ -112,11 +111,8 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             permissionsPromise.then(() => {
                 let permissions = context.getStore(PermissionsStore).getState().permissions;
-                if (payloadCustom.params.mode === 'edit' && !permissions.edit && !permissions.admin){
+                if (payloadCustom.params.mode === 'edit' && (!permissions.edit || permissions.readOnly)){
                     payloadCustom.params.mode = 'view';
-                    context.dispatch('SHOW_NO_PERMISSIONS_MODAL');
-                } else {
-                    context.dispatch('HIDE_NO_PERMISSIONS_MODAL');
                 }
                 context.executeAction(loadContent, payloadCustom, callback);
             });

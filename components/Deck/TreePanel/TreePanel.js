@@ -69,7 +69,7 @@ class TreePanel extends React.Component {
             showConfirmButton: false
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+        this.context.executeAction(forkDeck, {selector: this.props.DeckTreeStore.selector.toJS(), navigateToRoot: true});
     }
 
     handleTheme() {
@@ -99,7 +99,7 @@ class TreePanel extends React.Component {
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
         //only when logged in and having rights
-        if (this.props.UserProfileStore.username !== '' && (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit))
+        if (this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly)
             this.context.executeAction(moveTreeNodeAndNavigate, {
                 selector: this.props.DeckTreeStore.selector.toJS(),
                 sourceNode: sourceNode,
