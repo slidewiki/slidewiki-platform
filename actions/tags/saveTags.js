@@ -4,6 +4,7 @@ const log = require('../log/clog');
 
 export default function saveTags(context, payload, done) {
     log.info(context);
+    context.dispatch('TAGSAVING_PENDING', {});
     let { selector, tags } = payload;
 
     if (selector.stype === 'slide') {

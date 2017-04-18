@@ -11,6 +11,7 @@ class TagsStore extends BaseStore {
         this.selector = {};
         this.oldTags = [];
         this.tagsHaveChanged = false;
+        this.isLoading = false;
     }
     loadTagsSlide(payload) {
         this.tags = [];
@@ -21,6 +22,7 @@ class TagsStore extends BaseStore {
         this.selector = payload.selector;
         this.selectedIndex = -1;
         this.contentOwner = payload.owner;
+        this.isLoading = false;
         this.emitChange();
     }
     loadTagsDeck(payload) {
@@ -35,17 +37,20 @@ class TagsStore extends BaseStore {
         };
         this.selectedIndex = -1;
         this.contentOwner = payload.owner;
+        this.isLoading = false;
         this.emitChange();
     }
     loadTagsFail(err) {
         this.tagError = err? err: 'Cannot load tags';
         this.tagsHaveChanged = false;
+        this.isLoading = false;
         this.emitChange();
     }
     updateTags(payload) {
         this.tags = payload.tags;
         this.selectedIndex = -1;
         this.tagsHaveChanged = false;
+        this.isLoading = false;
         this.emitChange();
     }
     newTag(payload) {
@@ -68,6 +73,10 @@ class TagsStore extends BaseStore {
     }
     changeMode(payload) {
         this.isEditMode = payload.isEditMode;
+        this.emitChange();
+    }
+    tagSavingPending() {
+        this.isLoading = true;
         this.emitChange();
     }
 
@@ -94,7 +103,8 @@ class TagsStore extends BaseStore {
             selector: this.selector,
             isEditMode: this.isEditMode,
             oldTags: this.oldTags,
-            tagsHaveChanged: this.tagsHaveChanged
+            tagsHaveChanged: this.tagsHaveChanged,
+            isLoading: this.isLoading
         };
     }
     dehydrate() {
@@ -109,6 +119,7 @@ class TagsStore extends BaseStore {
         this.isEditMode = state.isEditMode;
         this.oldTags = state.oldTags;
         this.tagsHaveChanged = state.tagsHaveChanged;
+        this.isLoading = state.isLoading;
     }
 }
 
@@ -122,7 +133,8 @@ TagsStore.handlers = {
     'UPDATE_TAGS_SUCCESS': 'updateTags',
     'CANCEL_EDIT_TAGS': 'cancelEditTag',
     'CHANGE_EDIT_MODE': 'changeMode',
-    'REMOVE_TAG': 'removeTag'
+    'REMOVE_TAG': 'removeTag',
+    'TAGSAVING_PENDING': 'tagSavingPending'
 };
 
 export default TagsStore;

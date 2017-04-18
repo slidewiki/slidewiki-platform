@@ -20,6 +20,21 @@ class TagsPanel extends React.Component {
         if (!val) {
             return false;
         }
+        if (this.props.TagsStore.tags.findIndex((tag) => {return tag.tagName === val;}) !== -1) {
+            //found duplicate tag
+            swal({
+                type: 'info',
+                title: 'Information',
+                text: 'This tag is already existing.',
+                timer: 4000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            })
+            .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
+            return false;
+        }
         this.refs.taginp.value = '';
 
         this.context.executeAction(newTag, {
@@ -68,7 +83,7 @@ class TagsPanel extends React.Component {
             <div>
                 <TagList items={displayTags}
                          editable={true}
-                         isEditMode={this.props.TagsStore.isEditMode}
+                         isEditMode={(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)}
                          onTagDelete={this.onRemoveTag.bind(this)}
                 />
                 {showMoreLink}
@@ -107,6 +122,7 @@ class TagsPanel extends React.Component {
                     { editSection }
                 </div>
                 { tagList }<br/>
+                {(this.props.TagsStore.isLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
             </div>
         );
     }
