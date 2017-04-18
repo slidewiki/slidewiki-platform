@@ -1,11 +1,13 @@
 import DataSourceStore from '../../stores/DataSourceStore';
 import saveSlide from '../../actions/slide/saveSlide';
 import SlideViewStore from '../../stores/SlideViewStore';
+const log = require('../log/clog');
 
 /**
  * Created by akorovin on 26.02.2017.
  */
-export default function onSlideExecute(context, payload, done) {
+export default function updateTagsSlide(context, payload, done) {
+    log.info(context);
     let { selector, tags } = payload;
 
     const dataStore = context.getStore(DataSourceStore).getState();
@@ -27,4 +29,6 @@ export default function onSlideExecute(context, payload, done) {
         selector: selector,
         tags: tags
     });
+
+    done();
 }
