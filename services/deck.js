@@ -214,6 +214,7 @@ export default {
                 theme: params.theme,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
+                tags: params.tags
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
