@@ -14,7 +14,7 @@ class SlideViewPanel extends React.Component {
 
         // Add the CSS dependency for the theme
         // Get the theme information, and download the stylesheet
-        let styleName = '';
+        let styleName = 'default';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
