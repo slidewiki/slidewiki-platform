@@ -30,14 +30,14 @@ class Presentation extends React.Component{
         this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
         // Load the theme stylesheet
-        let styleName = 'white';
+        let styleName = 'default';
         if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
             styleName = this.props.PresentationStore.theme;
         }
         //console.log('styleName', styleName);
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {
-            //if none of above yield a theme:
+            //if none of above yield a theme they will be legacy decks:
             styleName = 'white';
         }
         require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
