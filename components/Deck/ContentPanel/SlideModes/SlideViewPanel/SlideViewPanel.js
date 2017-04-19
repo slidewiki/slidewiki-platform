@@ -82,8 +82,8 @@ class SlideViewPanel extends React.Component {
           <div className="ui bottom attached segment">
               <ResizeAware ref='container' id='container'>
                   <div ref="slideViewPanel" className="ui" style={compStyle}>
-                      <div className={["reveal", style.reveal].join(" ")}>
-                          <div className={["slides", style.slides].join(" ")}>
+                      <div className={['reveal', style.reveal].join(' ')}>
+                          <div className={['slides', style.slides].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                               <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}}></div>
                             </section>

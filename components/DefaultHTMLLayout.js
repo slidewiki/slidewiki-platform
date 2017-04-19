@@ -3,7 +3,7 @@ import ApplicationStore from '../stores/ApplicationStore';
 let hook = require('css-modules-require-hook');
 
 hook({
-  generateScopedName: '[hash:base64:5]',
+    generateScopedName: '[hash:base64:5]',
 });
 
 class DefaultHTMLLayout extends React.Component {

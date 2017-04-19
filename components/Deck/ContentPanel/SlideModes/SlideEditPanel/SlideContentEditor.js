@@ -634,8 +634,8 @@ class SlideContentEditor extends React.Component {
                 </button>
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className={[style.reveal, "reveal"]}>
-                        <div className={[style.slides, "slides"]}>
+                    <div className={[style.reveal, 'reveal'].join(' ')}>
+                        <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                             </section>

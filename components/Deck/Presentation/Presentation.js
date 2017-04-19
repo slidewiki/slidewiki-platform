@@ -88,8 +88,8 @@ class Presentation extends React.Component{
         this.slides = this.getSlides();
         return(
             <div>
-                <div className={["reveal", style.reveal].join(" ")} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                    <div className={["slides", style.slides].join(" ")}>
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                    <div className={['slides', style.slides].join(' ')}>
         			     	{this.slides}
         			      </div>
                 </div>
