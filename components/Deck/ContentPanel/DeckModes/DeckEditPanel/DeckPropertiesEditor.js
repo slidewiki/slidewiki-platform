@@ -403,13 +403,6 @@ class DeckPropertiesEditor extends React.Component {
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
-        /*<option value="blood">Reveal.js Blood</option>
-        <option value="league">Reveal.js League</option>
-        <option value="moon">Reveal.js Moon</option>
-        <option value="night">Reveal.js Night</option>
-        <option value="serif">Reveal.js Serif</option>
-        <option value="simple">Reveal.js Simple</option>
-        <option value="sky">Reveal.js Sky</option> */
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
                                      onChange={this.handleChange.bind(this, 'license')}>
