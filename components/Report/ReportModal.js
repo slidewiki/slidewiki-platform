@@ -17,10 +17,6 @@ const headerStyle = {
     'textAlign': 'center'
 };
 
-const modalStyle = {
-    top: '15%'
-};
-
 class ReportModal extends React.Component {
     constructor(props) {
         super(props);
@@ -159,7 +155,7 @@ class ReportModal extends React.Component {
 
         return(
 
-                <Modal style={modalStyle}
+                <Modal
                     trigger={
                           <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
                                 <Icon name="warning circle" size='large' />
