@@ -39,21 +39,7 @@ class SlideContentEditor extends React.Component {
         }
         this.refs.template;
         this.showTemplates = false;
-        // Add the CSS dependency for the theme
-        // Get the theme information, and download the stylesheet
-        let styleName = 'default';
-        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-            styleName = this.props.selector.theme;
-        }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
-        }
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme they will be legacy decks:
-            styleName = 'white';
-        }
-        require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
 
     }
 
@@ -615,6 +601,22 @@ class SlideContentEditor extends React.Component {
             <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
                     */
 
+        // Add the CSS dependency for the theme
+        // Get the theme information, and download the stylesheet
+        let styleName = 'default';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+        }
+        let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
                 <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
@@ -632,8 +634,8 @@ class SlideContentEditor extends React.Component {
                 </button>
                 <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className="reveal">
-                        <div className="slides">
+                    <div className={[style.reveal, 'reveal'].join(' ')}>
+                        <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                             </section>
