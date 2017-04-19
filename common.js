@@ -67,6 +67,10 @@ export default {
     },
 
     arraysContainTheSameIdsInTheirObjects: (a, b) => {
+        if (a === undefined && b === undefined)
+            return true;
+        if ((a === undefined && b !== undefined) || (a !== undefined && b === undefined))
+            return false;
         if (a.length !== b.length)
             return false;
         for (let key in a) {

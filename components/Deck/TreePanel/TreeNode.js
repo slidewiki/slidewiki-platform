@@ -72,7 +72,7 @@ class TreeNode extends React.Component {
 
     handleRenameClick(selector, e) {
         //only if user is logged in and has the rights
-        if (this.props.username !== '' && (this.props.permissions.admin || this.props.permissions.edit)) {
+        if (this.props.username !== '' && this.props.permissions.edit && !this.props.permissions.readOnly) {
             this.props.onRename(selector);
             e.stopPropagation();
         }
@@ -151,7 +151,7 @@ class TreeNode extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'ui':true,
-                'disabled': !(this.props.permissions.admin || this.props.permissions.edit)
+                'disabled': this.props.permissions.readOnly || !this.props.permissions.edit
             }),            
             iconSize : 'small',
             attached : '',
@@ -237,7 +237,7 @@ class TreeNode extends React.Component {
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}>  </i>
                     {nodeDIV}
-                    {(this.props.username === '' || !(this.props.permissions.admin || this.props.permissions.edit)) ? '' : actionSignifier}
+                    {(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier}
                 </div>
                 {actionBtns}
                 {childNodesDIV}

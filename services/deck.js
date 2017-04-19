@@ -154,6 +154,15 @@ export default {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
             });
+        } else if (resource === 'deck.forks') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.id.split('-')[0] + '/forks',
+                qs: args.user != null ? {user: args.user} : {},
+                json: true
+            }).then((body) => {
+                callback(null, body);
+            }).catch((err) => callback(err));
         }
     },
     // other methods
@@ -206,6 +215,7 @@ export default {
                 theme: params.theme,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
+                tags: params.tags
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({

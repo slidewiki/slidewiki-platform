@@ -29,7 +29,18 @@ class Presentation extends React.Component{
         this.startingSlide = this.props.PresentationStore.selector.sid;
         this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
-
+        // Load the theme stylesheet
+        let styleName = 'default';
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        //console.log('styleName', styleName);
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+        }
+        require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
     }
 
     componentDidMount(){
@@ -45,18 +56,6 @@ class Presentation extends React.Component{
 
             // $('html.ios, html.ios body').css('height': '100% !important');
             // Get the theme information, and download the stylesheet
-            //console.log('store theme: ', this.props.PresentationStore.theme);
-            let styleName = 'white';
-            if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-                styleName = this.props.PresentationStore.theme;
-            }
-            //console.log('styleName', styleName);
-            if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined' || styleName === 'default')
-            {
-                //if none of above yield a theme:
-                styleName = 'white';
-            }
-            require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
 
             this.revealDiv.style.display = 'inline';
 
