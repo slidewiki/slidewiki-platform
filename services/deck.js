@@ -51,9 +51,9 @@ export default {
                 }, {});
             });
 
-            let revisionCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/revisionCount'}).catch((err) => {
+            let forkCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/forkCount'}).catch((err) => {
                 callback({
-                    msg: 'Error in retrieving revisions count',
+                    msg: 'Error in retrieving fork count',
                     content: err
                 }, {});
             });
@@ -79,9 +79,9 @@ export default {
             });
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, revisionCountPromise, usersPromise]).then((data) => {
+            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise]).then((data) => {
                 let deckData = JSON.parse(data[0]);
-                deckData.revisionCount = JSON.parse(data[2]);
+                deckData.forkCount = JSON.parse(data[2]);
                 callback(null, {
                     deckData: deckData,
                     slidesData: JSON.parse(data[1]),
