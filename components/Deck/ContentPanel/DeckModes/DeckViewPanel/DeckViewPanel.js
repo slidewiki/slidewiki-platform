@@ -43,7 +43,7 @@ class DeckViewPanel extends React.Component {
             });
         }
 
-        const totalRevisions = deckData.revisionCount;
+        const forkCount = deckData.forkCount;
         //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
         const deckTheme = currentRevision.theme;
         const deckLicense = deckData.license;
@@ -110,7 +110,7 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui large label" tabIndex="0">
                                     <i className="theme icon" aria-label="Theme"></i>{deckTheme}</div>
                                 <div className="ui large label" tabIndex="0">
-                                    <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
+                                    <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
                             </div>
