@@ -33,26 +33,32 @@ let webpackConfig = {
                     ]
                 }
             },
-            // {
-            //     test: /\.css$/,
-            //     loader: ExtractTextPlugin.extract({
-            //         fallback: 'style-loader',
-            //         use: 'css-loader',
-            //         publicPath: '/public/css/'
-            //     })
-            // },
-            { test: /\.css$/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader'
-                    }
-                ]
-            },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'file-loader'},// 'url-loader?limit=100000'},
+            {
+                test: /\.css$/,
+                exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    loader: [
+                        'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]'
+                    ],
+                    // use: 'css-loader',
+                    // options: {importLoaders: 1, modules: true},
+                    publicPath: '/public/css/'
+                })
+            },
+            // { test: /\.css$/,
+            //     use: [
+            //         {
+            //             loader: 'style-loader'
+            //         },
+            //         {
+            //             loader: 'css-loader'
+            //         }
+            //     ]
+            // },
+
         ]
     },
     node: {
@@ -60,11 +66,11 @@ let webpackConfig = {
     },
     plugins: [
         // css files from the extract-text-plugin loader
-        // new ExtractTextPlugin({
-        //     filename: '../css/vendor.bundle.css',
-        //     disable: false,
-        //     allChunks: true
-        // }),
+        new ExtractTextPlugin({
+            filename: '../css/vendor.bundle.css',
+            disable: false,
+            allChunks: true
+        }),
 
         new webpack.DefinePlugin({
             'process.env': {

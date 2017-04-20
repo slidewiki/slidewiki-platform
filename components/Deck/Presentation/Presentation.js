@@ -29,18 +29,7 @@ class Presentation extends React.Component{
         this.startingSlide = this.props.PresentationStore.selector.sid;
         this.deck = this.props.PresentationStore.selector.id;
         this.revealDiv = null;
-        // Load the theme stylesheet
-        let styleName = 'default';
-        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
-        }
-        //console.log('styleName', styleName);
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme they will be legacy decks:
-            styleName = 'white';
-        }
-        require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
     }
 
     componentDidMount(){
@@ -82,11 +71,25 @@ class Presentation extends React.Component{
 
     }
     render(){
+
+        // Load the theme stylesheet
+        let styleName = 'default';
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        //console.log('styleName', styleName);
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+        }
+        let style = require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        console.log(style);
         this.slides = this.getSlides();
         return(
             <div>
-                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                    <div className="slides">
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                    <div className={['slides', style.slides].join(' ')}>
         			     	{this.slides}
         			      </div>
                 </div>
