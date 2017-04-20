@@ -25,7 +25,10 @@ class ActivityFeedPanel extends React.Component {
     render() {
         let pointingMenu = '';
         let activityDIV = '';
-        const hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
+        let hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
+        if (this.props.ActivityFeedStore.selector.stype === undefined || this.props.ActivityFeedStore.selector.sid === undefined) {
+            hrefPath = '';
+        }
 
         activityDIV = <ActivityList />;
 
