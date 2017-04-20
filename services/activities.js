@@ -17,6 +17,7 @@ export default {
         const content_id = selector.sid;
 
         if (content_kind === undefined || content_id === undefined) {//prevent calls with invalid values
+            log.error({Id: req.reqId, Selector: selector, Message: 'Invalid selector values in activities service'});
             callback(null, {activities: [], selector: selector, hasMore: false});
         } else {
             switch (resource) {
