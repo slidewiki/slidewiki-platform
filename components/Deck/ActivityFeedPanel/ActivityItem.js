@@ -21,7 +21,7 @@ class ActivityItem extends React.Component {
             if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
-                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', this.props.selector.mode);
+                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
 
                 return nodeURL;
             }
