@@ -116,7 +116,8 @@ class AddDeck extends React.Component {
             license: license,
             tags: tags,
             userid: this.props.UserProfileStore.userid,
-            deckId: this.props.ImportStore.deckId
+            deckId: this.props.ImportStore.deckId,
+            selector: {id: this.props.ImportStore.deckId}
         });
     }
     handleCancel(x) {
