@@ -406,9 +406,9 @@ class DeckPropertiesEditor extends React.Component {
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
                                      onChange={this.handleChange.bind(this, 'license')}>
-            <option value="CC0">CC0</option>
-            <option value="CC BY">CC BY</option>
-            <option value="CC BY-SA">CC BY-SA</option>
+           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+           <option value="CC BY" >Creative Commons Attribution</option>
+           <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
         let groupsArray = [];
