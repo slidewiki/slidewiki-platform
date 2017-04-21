@@ -7,11 +7,14 @@ import classNames from 'classnames';
  *   ?country:  language short code, like en_EN or de_AT
  *   type: spoken/ui defines which languages are available
  *   tooltip
+ *   onChange: Action which should be called on the change event
+ *   arialabel: aria-labelledby attribute
+ *   value: selected value of the dropdown
  */
 
 class LanguageDropdown extends React.Component {
     componentDidMount() {
-        $(this.refs.languageDropdown).dropdown();
+        $(this.refs.languageDropdown).dropdown({onChange: this.onChange.bind(this)});
     }
 
     componentDidUpdate() {
@@ -20,6 +23,12 @@ class LanguageDropdown extends React.Component {
 
     getSelected() {
         return this.refs.language.value;
+    }
+
+    onChange(value) {
+        if (this.props.onChange) {
+            this.props.onChange({target: {value: value}});
+        }
     }
 
     render() {
@@ -64,8 +73,11 @@ class LanguageDropdown extends React.Component {
             tooltip = 'There will be more in the future';
 
         return (
-            <div className={classes} data-tooltip={tooltip} data-position="top center" data-inverted="" ref="languageDropdown">
-                {this.props.required ? <input type="hidden" id="language" name="language" ref="language" defaultValue={this.props.language} required/> : <input type="hidden" name="language" id="language" ref="language" defaultValue={this.props.language}/>}
+            <div className={classes} aria-labelledby={this.props.arialabel} data-tooltip={tooltip} data-position="top center" data-inverted="" ref="languageDropdown">
+                {this.props.required ?
+                    <input type="hidden" value={this.props.value} id="language" name="language" ref="language" defaultValue={this.props.language} aria-required="true" required/>
+                    :
+                    <input type="hidden" value={this.props.value} name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
                 <div className="default text">Select your language</div>
                 {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}

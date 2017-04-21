@@ -17,6 +17,7 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
+import LanguageDropdown from '../../../../common/LanguageDropdown';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -359,35 +360,6 @@ class DeckPropertiesEditor extends React.Component {
         });
 
         //content elements
-        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language"
-                                      aria-required="true"
-                                      value={this.state.language}
-                                      onChange={this.handleChange.bind(this, 'language')}>
-            <option>
-                Select Language
-            </option>
-            <option value="en_GB" >
-                English
-            </option>
-            <option value="de_DE" >
-                German
-            </option>
-            <option value="el_GR" >
-                Greek
-            </option>
-            <option value="it_IT" >
-                Italian
-            </option>
-            <option value="pt_PT" >
-                Portuguese
-            </option>
-            <option value="sr_RS" >
-                Serbian
-            </option>
-            <option value="es_ES" >
-                Spanish
-            </option>
-        </select>;
         let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
                                    value={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
@@ -464,7 +436,7 @@ class DeckPropertiesEditor extends React.Component {
                                 <label id="language">
                                     Language
                                 </label>
-                                {languageOptions}
+                                <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
                             </div>
                         </div>
                         <div className="field">
