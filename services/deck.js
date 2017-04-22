@@ -51,7 +51,9 @@ export default {
                 }, {});
             });
 
-            let forkCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/forkCount'}).catch((err) => {
+            // the forkCount API requires just the deck id, not the revision (a deck may be a fork of any revision)
+            let deckId = parseInt(args.sid); // we rely on parseInt
+            let forkCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + deckId + '/forkCount'}).catch((err) => {
                 callback({
                     msg: 'Error in retrieving fork count',
                     content: err
