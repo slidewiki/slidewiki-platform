@@ -47,6 +47,7 @@
   left: -215px;
 }
 
+/* HTML DOM Node related */
 .diff-view .added, .modified, .deleted {
   padding: 5px; margin: 2px; display: block;
 }
@@ -55,9 +56,15 @@
 .diff-view .modified {border: 5px solid #FFCC00;}
 .diff-view .deleted {border: 5px solid #ff0030;}
 
-.diff-view .txtadded, .txtdeleted {
-  padding: 2px; color: #000; margin: 0;
+/* Text related */
+.diff-view .ins {
+  background-color: #eaf2c2;
+  color: #406619;
+  text-decoration: none;
 }
 
-.diff-view .txtadded {background-color: #eaffea;}
-.diff-view .txtdeleted {background-color: #ffecec; text-decoration: line-through;}
+.diff-view .del {
+  background-color: #fadad7;
+  color: #b30000;
+  text-decoration: line-through;
+}

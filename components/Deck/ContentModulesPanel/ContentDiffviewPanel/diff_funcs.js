@@ -7,6 +7,9 @@ const convertHTML = require('html-to-vdom')({
 });
 import $ from 'jquery';
 import _ from 'lodash';
+import * as jsdiff from 'diff'
+
+
 
 //TODO FUnction that takes a string and returns a FUnction applying createElement(convertHTML());
 
@@ -27,18 +30,31 @@ const deepSearch = (obj, key) => {
     return res;
 };
 
-const markText = (oldt, newt, mode) => {
-    const uploaded = `<p class="txtdeleted">${oldt}</p><p class="txtadded">${newt}</p>`;
-    const created = `<span class="txtdeleted">${oldt}</span><span class="txtadded">${newt}</span>`;
-    return mode ? uploaded : created;
-};
-
 //TODO ADD HEAVY PROPS CHECK
-const handleTEXT = (oldText, newText, source, mode) => {
+const handleTEXT = (oldText, newText, source) => {
     console.warn('TEXT');
 
-    const markedText = markText(oldText.text, newText.text, mode);
-    source = source.replace(oldText.text, markedText);
+    const oldStr = oldText.text,
+          newStr = newText.text;
+
+    let color = '',
+        container = null,
+        diff = jsdiff.diffWords(oldStr, newStr),
+        temp = document.createElement('div');
+
+
+    diff.forEach((part) => {
+        // green for additions, red for deletions
+        // grey for common parts
+        color = part.added ? 'ins' : part.removed ? 'del' : '';
+        container = document.createElement('span');
+        container.className = color;
+        container.appendChild(document.createTextNode(part.value));
+        temp.appendChild(container);
+    });
+
+    const markedText = temp.innerHTML;
+    source = source.replace(oldStr, markedText);
 
     return source;
 };
@@ -108,8 +124,9 @@ const handlePROPS = (el, source) => {
 
 const preprocessSrc = (source, mode) => {
 
-    source = source.replace(/&nbsp;/g, ' ')
-                   .replace(/(?:\r\n|\r|\n)/g, '');
+    source = source
+                .replace(/&nbsp;/g, ' ')
+                .replace(/(?:\r\n|\r|\n)/g, '');
 
     if (mode) {
         //uploaded slide
@@ -158,7 +175,7 @@ const detectnPatch = (list, initSrc, mode) => {
                 break;
             case 1:
                 const textArray = deepSearch(el, 'text');
-                initSrc = handleTEXT(textArray[0], textArray[1], initSrc, mode);
+                initSrc = handleTEXT(textArray[0], textArray[1], initSrc);
                 break;
             case 2:
                 console.warn('VNODE');
