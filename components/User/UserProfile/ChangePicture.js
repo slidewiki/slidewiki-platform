@@ -1,10 +1,40 @@
 import React from 'react';
 import UserPicture from '../../common/UserPicture';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
+import {Cropper} from 'react-image-cropper';
+import ChangePictureModal from './ChangePictureModal';
 
 class ChangePicture extends React.Component {
 
-    uploadNewPicture(e) {}
+    constructor(){
+        super();
+        this.filePath = '';
+    }
+
+    componentDidMount() {
+        let that = this;
+    }
+
+    openFileDialog() {
+        $(this.refs.fileDialog).click();
+    }
+
+    openCropPictureModal(e) {
+        this.filePath = URL.createObjectURL(e.target.files[0]);
+        let toCheck = e.target.files[0].name.toLowerCase().trim();
+        if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png')) {
+            this.forceUpdate();
+            $('#ChangePictureModalOpenButton').click();
+        } else
+            swal({
+                title: 'Wrong file type',
+                text: 'You have selected a file type that we currently do not support',
+                type: 'error',
+                confirmButtonClass: 'ui primary button',
+                buttonsStyling: false
+            });
+        //The actual processing of the picture is implemented in the modal
+    }
 
     useGravatar(e) {
         let payload = {};
@@ -29,13 +59,12 @@ class ChangePicture extends React.Component {
                     </div>
                     <div className="eight wide column">
                         <div className="ui vertical buttons">
-                            <div data-tooltip="This is currently not supported" data-position="right center" data-inverted="">
-                                <button tabIndex="-1" className="ui lightgrey labeled icon button disabled" onClick={ this.uploadNewPicture.bind(this) }>
-                                    <i className="icon upload"/>Upload new Image
-                                </button>
-                            </div>
+                            <input type="file" accept="image/jpg, image/jpeg, image/png" style={{display: 'none'}} onChange={ this.openCropPictureModal.bind(this) } ref="fileDialog"/>
+                            <button className="ui primary labeled icon button" onClick={ this.openFileDialog.bind(this) }>
+                                <i className="icon upload"/>Upload new Image
+                            </button>
                             <div className="ui hidden divider"/>
-                            <button className="ui primary labeled icon button" onClick={ this.useGravatar.bind(this) }>
+                            <button className="ui teal labeled icon button" onClick={ this.useGravatar.bind(this) }>
                                 <i className="icon user"/>Use Gravatar Image
                             </button>
                             <div className="ui hidden divider"/>
@@ -45,6 +74,7 @@ class ChangePicture extends React.Component {
                         </div>
                     </div>
                 </div>
+                <ChangePictureModal ref='ChangePictureModal' filePath={this.filePath} user={this.props.user}/>
             </div>
         );
     }

@@ -1,16 +1,18 @@
 import DeckViewStore from '../../stores/DeckViewStore';
 import saveDeckEdit from '../../actions/saveDeckEdit';
+const log = require('../log/clog');
 
 /**
  * Created by akorovin on 26.02.2017.
  */
-export default function onDeckExecute(context, payload, done) {
+export default function updateTagsDeck(context, payload, done) {
+    log.info(context);
     const deckStore = context.getStore(DeckViewStore).getState();
 
     let { selector, tags } = payload;
     const { id, sid } = selector;
     let { license, description, revisions } = deckStore.deckData;
-    let { title, language } = revisions[revisions.length - 1];
+    let { title, theme, language } = revisions[revisions.length - 1];
 
     context.executeAction(saveDeckEdit, {
         deckId: sid? sid : id,
@@ -18,9 +20,11 @@ export default function onDeckExecute(context, payload, done) {
         language: language,
         description: description,
         // TODO: get from Presentation Store when it is implemented
-        theme: '',
+        theme: theme,
         license: license,
         tags: tags,
         selector: selector
     });
+
+    done();
 }

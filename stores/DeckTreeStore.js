@@ -13,6 +13,7 @@ class DeckTreeStore extends BaseStore {
         this.error = 0;
         //used to check if the selector is valid and refers to a node that belongs to this deck tree
         this.isSelectorValid = true;
+        this.latestRevisionId = null;
     }
     updateDeckTree(payload) {
         this.isSelectorValid = true;
@@ -43,6 +44,7 @@ class DeckTreeStore extends BaseStore {
         this.updatePrevNextSelectors();
         //reset error state
         this.error = 0;
+        this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -488,7 +490,8 @@ class DeckTreeStore extends BaseStore {
             prevSelector: this.prevSelector,
             nextSelector: this.nextSelector,
             error: this.error,
-            isSelectorValid: this.isSelectorValid
+            isSelectorValid: this.isSelectorValid,
+            latestRevisionId: this.latestRevisionId
         };
     }
     dehydrate() {
@@ -502,6 +505,7 @@ class DeckTreeStore extends BaseStore {
         this.nextSelector = Immutable.fromJS(state.nextSelector);
         this.error  = state.error;
         this.isSelectorValid = state.isSelectorValid;
+        this.latestRevisionId = state.latestRevisionId;
     }
     handleDeckTreeError(err){
         this.error = err;
@@ -565,7 +569,6 @@ DeckTreeStore.handlers = {
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
-    //error handling msges
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
 };
 

@@ -43,6 +43,7 @@ export default {
         //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
         if(resource === 'slide.content'){
+            //TODO check if the attributes where content_id is used could be removed here (seems to be not regarded in deckservice 17/4/13)
             //TODO get real content_id
             //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
@@ -115,8 +116,9 @@ export default {
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
 
         if(resource === 'slide.content'){
-          //TODO get real content_id
-          //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
+            //TODO check if the attributes where content_id is used could be removed here (seems to be not regarded in deckservice 17/4/13)
+            //TODO get real content_id
+            //const content_id = '112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid;
             const content_id = '112233445566778899000000';
             /*********connect to microservices*************/
             let url = Microservices.deck.uri + '/slide/' + args.id;
@@ -143,7 +145,7 @@ export default {
                     language: 'EN',
                     dataSources: args.dataSources,
                     license: 'CC BY-SA',
-                    tags: args.tags && (args.tags instanceof Array)? args.tags: []
+                    tags: (args.tags && (args.tags instanceof Array)) ? args.tags : []
                 })
             }).then((res) => {
                 let resParse = JSON.parse(res);

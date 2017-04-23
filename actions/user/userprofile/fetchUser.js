@@ -32,9 +32,11 @@ export default function fetchUser(context, payload, done) {
             } else if (err.statusCode === 403) {
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
-            } else
+            } else {
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('FETCH_USER_FAILED', err);
+                return;
+            }
         } else {
             if(!isEmpty(payload.params.category)){
                 if(context.getStore(UserProfileStore).username === payload.params.username)

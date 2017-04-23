@@ -33,11 +33,15 @@ import UserProfileStore from './stores/UserProfileStore';
 import ErrorStore from './stores/ErrorStore';
 import AddDeckStore from './stores/AddDeckStore';
 import ResetPasswordStore from './stores/ResetPasswordStore';
-import RevisioningStore from './stores/RevisioningStore';
 import SendReportStore from './stores/SendReportStore';
 import DeckListStore from './stores/DeckListStore';
 import ContentActionsFooterStore from './stores/ContentActionsFooterStore';
+import AttachSubdeckModalStore from './stores/AttachSubdeckModalStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
+import PermissionsStore from './stores/PermissionsStore';
+import ContentLikeStore from './stores/ContentLikeStore';
+
+
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -74,11 +78,13 @@ const app = new Fluxible({
         ErrorStore,
         AddDeckStore,
         ResetPasswordStore,
-        RevisioningStore,
         SendReportStore,
         DeckListStore,
         ContentActionsFooterStore,
-	    ServiceErrorStore
+        AttachSubdeckModalStore,
+	      ServiceErrorStore,
+        PermissionsStore,
+        ContentLikeStore
     ]
 });
 

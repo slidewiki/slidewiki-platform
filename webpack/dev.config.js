@@ -36,18 +36,21 @@ let webpackConfig = {
                     }
                 ]
             },
-            { test: /\.css$/,
+            {
+                test: /\.css$/,
+                exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
                 use: [
                     {
                         loader: 'style-loader'
                     },
                     {
-                        loader: 'css-loader'
+                        loader: 'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]',
+                        // options: {import: false}
                     }
                 ]
             },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'},
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'file-loader'},// 'url-loader?limit=100000'},
         ]
     },
     node: {

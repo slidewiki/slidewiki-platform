@@ -1,10 +1,12 @@
 import {navigateAction} from 'fluxible-router';
 import striptags from 'striptags';
 import serviceUnavailable from '../error/serviceUnavailable';
+import UserProfileStore from '../../stores/UserProfileStore';
 const log = require('../log/clog');
 
 export default function revertRevision(context, payload, done) {
     log.info(context);
+    payload.jwt = context.getStore(UserProfileStore).jwt;
     context.service.update('history.revert', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename, err: err});

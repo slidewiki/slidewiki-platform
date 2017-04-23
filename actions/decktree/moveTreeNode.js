@@ -27,7 +27,8 @@ export default function moveTreeNode(context, payload, done) {
             showCancelButton: false,
             allowEscapeKey: false,
             showConfirmButton: false
-        });
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
         context.service.update('decktree.move', {
             userid,
             selector,

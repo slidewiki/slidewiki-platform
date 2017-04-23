@@ -7,8 +7,7 @@ import loadSearchResults from '../actions/search/loadSearchResults';
 // import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
-//import loadSlideEdit from '../actions/slide/loadSlideEdit';
-import loadSlideEditWihtRevisionControl from '../actions/slide/loadSlideEditWithRevisionControl';
+import loadSlideEdit from '../actions/slide/loadSlideEdit';
 import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
@@ -187,13 +186,28 @@ export default {
     // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
     // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
+    // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
+        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadPresentation, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+
+
+
         }
     },
     contributors: {
@@ -215,7 +229,7 @@ export default {
         }
     },
     content: {
-        path: '/content/:stype/:sid/:mode?',
+        path: '/content/:stype/:sid/:mode?/:theme?',
         method: 'get',
         page: 'content',
         handler: require('../components/Deck/ContentPanel/ContentPanel'),
@@ -238,8 +252,7 @@ export default {
         page: 'slideedit',
         handler: require('../components/Deck/ContentPanel/SlideModes/SlideEditPanel/SlideEditPanel'),
         action: (context, payload, done) => {
-            //context.executeAction(loadSlideEdit, payload, done);
-            context.executeAction(loadSlideEditWihtRevisionControl, payload, done);
+            context.executeAction(loadSlideEdit, payload, done);
         }
     },
     deckview: {

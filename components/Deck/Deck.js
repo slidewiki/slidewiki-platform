@@ -10,6 +10,7 @@ import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
+import ServiceUnavailable from '../Error/ServiceUnavailable';
 
 class Deck extends React.Component {
     handleExpandClick(){
@@ -74,16 +75,7 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui vertically padded stackable grid container" ref="deck">
-                {error.hasOwnProperty('statusCode') ? <div className="ui error message container text left">
-                                                        <div className="row">
-                                                            <b>{error.statusCode} {error.statusText}</b>
-                                                        </div>
-                                                        <ul className="list">
-                                                            <li><b>Description&#58;</b> {error.description} {error.actionRequired}</li>
-                                                            <li><b>Navigation&#58;</b> {error.navStack}</li>
-                                                        </ul>
-                                                    </div>: ''
-                }
+                {error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''}
                 <div className="row">
                     <div className={navigationPanelClass}>
                       <NavigationPanel />
