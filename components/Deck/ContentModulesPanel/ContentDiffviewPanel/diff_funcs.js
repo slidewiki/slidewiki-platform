@@ -7,9 +7,7 @@ const convertHTML = require('html-to-vdom')({
 });
 import $ from 'jquery';
 import _ from 'lodash';
-import * as jsdiff from 'diff'
-
-
+import * as jsdiff from 'diff';
 
 //TODO FUnction that takes a string and returns a FUnction applying createElement(convertHTML());
 
@@ -31,11 +29,12 @@ const deepSearch = (obj, key) => {
 };
 
 //TODO ADD HEAVY PROPS CHECK
+// Color + | Size ? | Font ? | Decoration ?
 const handleTEXT = (oldText, newText, source) => {
     console.warn('TEXT');
 
     const oldStr = oldText.text,
-          newStr = newText.text;
+        newStr = newText.text;
 
     let color = '',
         container = null,
@@ -45,7 +44,6 @@ const handleTEXT = (oldText, newText, source) => {
 
     diff.forEach((part) => {
         // green for additions, red for deletions
-        // grey for common parts
         color = part.added ? 'ins' : part.removed ? 'del' : '';
         container = document.createElement('span');
         container.className = color;
