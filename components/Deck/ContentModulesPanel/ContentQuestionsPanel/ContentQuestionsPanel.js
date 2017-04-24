@@ -53,7 +53,8 @@ class ContentQuestionsPanel extends React.Component {
             <div className="ui vertical segment">
               <div className="ui two column stackable grid">
                 <div className="column">
-                  <h3 className="ui  header">Questions</h3>
+                  <h3 className="ui  header">Qestions
+            <div className="ui label red">Prototype interface - not functional</div></h3>
                 </div>
                 <div className="column right aligned">
                   <button className="ui right floated compact button primary">
