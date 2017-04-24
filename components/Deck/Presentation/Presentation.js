@@ -64,6 +64,9 @@ class Presentation extends React.Component{
             });
 
         }
+        // update mathjax rendering
+        // add to the mathjax rendering queue the command to type-set the slide content
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
 
     }
 
