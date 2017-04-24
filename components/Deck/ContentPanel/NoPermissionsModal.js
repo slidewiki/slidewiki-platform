@@ -18,6 +18,7 @@ class NoPermissionsModal extends React.Component {
 
     handleFork() {
         this.context.executeAction(forkDeck, {selector: this.props.selector, mode: 'edit'});
+        this.context.executeAction(hideNoPermissionsModal);
     }
 
     handleClose() {
