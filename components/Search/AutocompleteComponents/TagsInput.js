@@ -4,7 +4,6 @@ import suggestUsers from '../../../actions/search/suggestTags';
 /**
  * Properties:
  *  placeholder: placeholder text
- *  returnType: username if specified else user _id
  */
 
 class TagsInput extends React.Component {

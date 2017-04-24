@@ -4,7 +4,7 @@ import searchStringEmptyError  from '../error/searchStringEmptyError';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 
-export default function suggestUsers(context, payload, done) {
+export default function suggestTags(context, payload, done) {
 
     context.service.read('suggester.tags', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
