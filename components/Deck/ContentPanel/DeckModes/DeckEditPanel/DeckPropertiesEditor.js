@@ -424,34 +424,34 @@ class DeckPropertiesEditor extends React.Component {
                     <form className="ui form">
                         <div className="two fields">
                             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
-                                <label>
+                                <label htmlFor="title_input">
                                     Title
                                 </label>
                                 <input type="text" name="deck-title" value={this.state.title}
                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                       aria-required="true"/>
+                                       aria-required="true" id="title_input"/>
 
                             </div>
                             <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
-                                <label id="language">
+                                <label htmlFor="language" id="language_label">
                                     Language
                                 </label>
                                 <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
                             </div>
                         </div>
                         <div className="field">
-                            <label id="deck-description">Description</label>
-                            <textarea rows="4" aria-labelledby="deck-description"
+                            <label htmlFor="description_input" id="deck-description">Description</label>
+                            <textarea rows="4" aria-labelledby="deck-description" id="description_input"
                                       value={this.state.description}
                                       onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
                             <div className="field">
-                                <label id="theme">Choose deck theme</label>
+                                <label htmlFor="theme" id="theme">Choose deck theme</label>
                                 {themeOptions}
                             </div>
                             <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
-                                <label id="license">License</label>
+                                <label htmlFor="license" id="license_label">License</label>
                                 {licenseOptions}
                             </div>
                         </div>

@@ -260,7 +260,7 @@ class AddDeck extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
         */
-        let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"  ref="select_themes">
+        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
             <option value="default">Default - Reveal.js White</option>
             <option value="beige">Reveal.js Beige</option>
             <option value="black">Reveal.js Black</option>
@@ -308,7 +308,7 @@ class AddDeck extends React.Component {
                             <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
                         </div>
                         <div className={fieldClass_language}>
-                            <label>Language</label>
+                            <label htmlFor="language">Language</label>
                             <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
                         </div>
                       </div>
