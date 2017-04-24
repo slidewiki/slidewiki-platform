@@ -18,7 +18,7 @@ class LanguageDropdown extends React.Component {
     }
 
     componentDidUpdate() {
-        $(this.refs.languageDropdown).dropdown();
+        $(this.refs.languageDropdown).dropdown({onChange: this.onChange.bind(this)});
     }
 
     getSelected() {
