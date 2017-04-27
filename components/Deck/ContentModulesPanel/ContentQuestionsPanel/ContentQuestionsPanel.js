@@ -5,11 +5,45 @@ import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import ContentQuestionsList from './ContentQuestionsList';
 // import ContentQuestionForm from './ContentQuestionForm';
 
+const itemsPerPage = 5; //variable for changing pagination behaviour
 class ContentQuestionsPanel extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            pageNo: 0,
+        };
+        this.handlePageClick = this.handlePageClick.bind(this);
+        this.handlePreviousClick = this.handlePreviousClick.bind(this);
+
+    }
+
+    handlePageClick(pageNo) {
+        this.setState({
+            pageNo: pageNo,
+        });
+    }
+
+    handlePreviousClick(){
+        if(this.state.pageNo !== 0){
+            this.setState({
+                pageNo: this.state.pageNo - 1,
+            });
+        }
+    }
+
+    handleNextClick(lastPageNo){
+        if(this.state.pageNo < lastPageNo)
+            this.setState({
+                pageNo: this.state.pageNo + 1,
+            });
+    }
+
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
+
 
     // Button bar differs for Slide and Folder
         let buttonBar = '';
@@ -73,11 +107,75 @@ class ContentQuestionsPanel extends React.Component {
 
     );
 
+        class PaginationItem extends React.Component
+        {
+            constructor(props){
+                super(props);
+                this._onClick = this._onClick.bind(this);
+            }
+            _onClick() {
+                this.props.onItemClick(this.props.pageNo);
+            }
+
+            render() {
+                let className = 'item';
+                if(this.props.isActiveItem){
+                    className += ' active';
+                }
+                return (
+                  <a
+                    className={className}
+                    onClick={this._onClick}
+                  >
+                  {this.props.pageNo+1}
+                  </a>
+                );
+            }
+        }
+
+        let getItems = () => {
+            let noOfQuestions = questions.length;
+            let items = [];
+            let pageNo = 0;
+            for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
+                items.push(
+                  <PaginationItem
+                    key={pageNo}
+                    isActiveItem={this.state.pageNo === pageNo}
+                    pageNo={pageNo++}
+                    onItemClick={this.handlePageClick}
+                    />
+                  );
+            }
+            return items;
+        };
+
+        let lastPageNo = parseInt(questions.length / itemsPerPage);
+        let pagination = (
+          <div className="ui centered pagination menu">
+            <a className="icon item" onClick={this.handlePreviousClick}>
+              <i className="left chevron icon" />
+            </a>
+            {getItems()}
+            <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
+              <i className="right chevron icon" />
+            </a>
+          </div>
+
+    );
+
+        let lowerBound = this.state.pageNo * itemsPerPage;
+        let upperBound = lowerBound + itemsPerPage;
+        if (upperBound > questions.length){
+            upperBound = questions.length;
+        }
+
         let content = (
       <div>
         {buttonBar}
         {questionsHeader}
-        <ContentQuestionsList items={questions} />
+        <ContentQuestionsList items={questions.slice(lowerBound, upperBound)} />
+        {pagination}
       </div>
     );
 
