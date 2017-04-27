@@ -2,6 +2,8 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
+import ContributorsStore from '../../../../stores/ContributorsStore';
+import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsList from './ContentQuestionsList';
 // import ContentQuestionForm from './ContentQuestionForm';
 
@@ -10,6 +12,8 @@ class ContentQuestionsPanel extends React.Component {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
+        const creators = this.props.ContributorsStore.creator;
+        const user = this.props.UserProfileStore.user.userid;
 
     // Button bar differs for Slide and Folder
         let buttonBar = '';
@@ -42,6 +46,28 @@ class ContentQuestionsPanel extends React.Component {
                 break;
         }
 
+        let addQuestionButton = (
+          <div className="column right aligned">
+            <button className="ui right floated compact button primary">
+              <i
+                className="small plus icon"
+                data-reactid={640} />
+              {/* react-text: 641 */}Add question{/* /react-text */}
+            </button>
+          </div>
+        );
+
+        const getUserButton = () => {
+            console.log('creators: ', creators);
+            console.log('user: ', user);
+            if(creators.length > 0){
+                if(creators[0].id === user){
+                    return addQuestionButton;
+                }
+            }
+            return null;
+        };
+
         let questionsHeader = (
       <div
         className="ui segment attached"
@@ -56,14 +82,7 @@ class ContentQuestionsPanel extends React.Component {
                   <h3 className="ui  header">Questions
             <div className="ui label red">Prototype interface - not functional</div></h3>
                 </div>
-                <div className="column right aligned">
-                  <button className="ui right floated compact button primary">
-                    <i
-                      className="small plus icon"
-                      data-reactid={640} />
-                    {/* react-text: 641 */}Add question{/* /react-text */}
-                  </button>
-                </div>
+                {getUserButton()}
               </div>
             </div>
             {content}
@@ -100,9 +119,11 @@ class ContentQuestionsPanel extends React.Component {
     }
 }
 
-ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore], (context, props) => {
+ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, ContributorsStore, UserProfileStore], (context, props) => {
     return {
-        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState()
+        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
+        ContributorsStore: context.getStore(ContributorsStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
     };
 });
 export default ContentQuestionsPanel;
