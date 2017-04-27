@@ -58,7 +58,6 @@ const handleTEXT = (oldText, newText, source) => {
 };
 
 const handleINSERT = (el, source) => {
-    console.warn('INSERTED');
 
     let elem = createElement(el.patch);
     $(elem).addClass('added');
@@ -70,7 +69,6 @@ const handleINSERT = (el, source) => {
 };
 
 const handleREMOVE = (el, source) => {
-    console.warn('REMOVE');
 
     const tag = el.vNode.tagName;
     const textArray = deepSearch(el.vNode, 'text');
@@ -82,39 +80,46 @@ const handleREMOVE = (el, source) => {
     return source;
 };
 
-const handlePROPS = (el, source) => {
+const handlePROPS = (node, patch, source) => {
     console.warn('PROPS');
 
-    const tag = el.vNode.tagName;
-    //TODO Detect not only attrs change, but style [1] as well
-    const patchType = Object.keys(el.patch)[0];
-    const patch = Object.keys(el.patch[`${patchType}`])[0];
-    const vals = Object.values(el.patch[`${patchType}`])[0];
+    const tag = node.tagName;
 
-    // console.log(`Patch type: ${patchType}, Patch: ${patch}, Value: ${vals}`);
+    let styles = patch.style;
+    if(styles) Object.keys(styles).forEach((key) => styles[key] === undefined ? delete styles[key] : '');
+    let attrs = patch.attributes;
+    if(attrs) Object.keys(attrs).forEach((key) => attrs[key] === undefined ? delete attrs[key] : '');
 
-    // elem = createElement(el.vNode);
-    // $(elem).addClass('modified');
+
+    let change = (_.isEmpty(styles)) ? attrs : styles;
+    let key = Object.keys(change)[0];
+    let vals = Object.values(change)[0];
+    // console.log(`Patch obj: ${change}, Key: ${key}, Value: ${vals}`);
 
     let root = createElement(convertHTML(source));
 
     //TODO. UPDATE SEARCH. TEXT ONLY FINDS IF FIRST CHILD AND NOT DEEPLY NESTED. BY ID IS GOOD
-    if (patchType === 'style' && vals) {
-        let text = el.vNode.children[0].text;
-        let _id = el.vNode.properties.attributes._id;
+    if (key && vals) {
+        const textArray = deepSearch(node, 'text');
+        const text = textArray[0].text;
+        const _id = node.properties.attributes._id;
 
         if (_id) {
             let targetElement = $(root).find(`${tag}[_id='${_id}']`);
             targetElement.addClass('modified');
         } else if (tag) {
+            //[Problem] if node tags are changed. span -> h2
             let targetElement = $(root).find(`${tag}:contains('${text}')`);
             targetElement.addClass('modified');
-            // targetElement.css(`${patch}`, `${vals}`);
+            //TODO add attributes to the node
+            //[QA] use old styles or apply new styles ?
+            // targetElement.css(`${key}`, `${vals}`);
         }
-    } else if (patchType === 'attributes') {
-        el.vNode.properties[`${patchType}`][`${patch}`] = vals;
-        //$(root).find(`${tag}.${vals}`).addClass('modified');
     }
+    /*else if (patch === 'attributes') {
+        node.properties[`${change}`][`${key}`] = vals;
+        //$(root).find(`${tag}.${vals}`).addClass('modified');
+    }*/
     source = root.outerHTML;
 
     return source;
@@ -178,24 +183,26 @@ const detectnPatch = (list, initSrc, mode) => {
             case 2:
                 console.warn('VNODE');
                 const type = el.vNode.constructor.name;
-                if(type === 'VirtualText') initSrc = handleTEXT(el.vNode, el.patch.children[0], initSrc, mode);
-                // elem = createElement(el);
+                if(type === 'VirtualText') initSrc = handleTEXT(el.vNode, el.patch.children[0], initSrc);
+                if(type === 'VirtualNode') initSrc = handlePROPS(el.patch, el.patch.properties, initSrc);
                 break;
             case 3:
                 console.warn('WIDGET');
                 elem = createElement(el.vNode);
                 break;
             case 4:
-                initSrc = handlePROPS(el, initSrc);
+                initSrc = handlePROPS(el.vNode, el.patch, initSrc);
                 break;
             case 5:
                 console.warn('ORDER');
                 elem = createElement(el.patch);
                 break;
             case 6:
+                console.warn('INSERTED');
                 initSrc = handleINSERT(el, initSrc);
                 break;
             case 7:
+                console.warn('REMOVE');
                 initSrc = handleREMOVE(el, initSrc);
                 break;
             default:
