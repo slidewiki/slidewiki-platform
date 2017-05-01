@@ -17,6 +17,7 @@ import loadUsergroup from '../../../../../actions/deckedit/loadUsergroup';
 import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
+import LanguageDropdown from '../../../../common/LanguageDropdown';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -359,35 +360,6 @@ class DeckPropertiesEditor extends React.Component {
         });
 
         //content elements
-        let languageOptions = <select className="ui search dropdown" id="language" aria-labelledby="language"
-                                      aria-required="true"
-                                      value={this.state.language}
-                                      onChange={this.handleChange.bind(this, 'language')}>
-            <option>
-                Select Language
-            </option>
-            <option value="en_GB" >
-                English
-            </option>
-            <option value="de_DE" >
-                German
-            </option>
-            <option value="el_GR" >
-                Greek
-            </option>
-            <option value="it_IT" >
-                Italian
-            </option>
-            <option value="pt_PT" >
-                Portuguese
-            </option>
-            <option value="sr_RS" >
-                Serbian
-            </option>
-            <option value="es_ES" >
-                Spanish
-            </option>
-        </select>;
         let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
                                    value={this.state.theme}
                                    onChange={this.handleChange.bind(this, 'theme')}>
@@ -406,9 +378,9 @@ class DeckPropertiesEditor extends React.Component {
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
                                      onChange={this.handleChange.bind(this, 'license')}>
-            <option value="CC0">CC0</option>
-            <option value="CC BY">CC BY</option>
-            <option value="CC BY-SA">CC BY-SA</option>
+           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+           <option value="CC BY" >Creative Commons Attribution</option>
+           <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
 
         let groupsArray = [];
@@ -452,34 +424,34 @@ class DeckPropertiesEditor extends React.Component {
                     <form className="ui form">
                         <div className="two fields">
                             <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
-                                <label>
+                                <label htmlFor="title_input">
                                     Title
                                 </label>
                                 <input type="text" name="deck-title" value={this.state.title}
                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                       aria-required="true"/>
+                                       aria-required="true" id="title_input"/>
 
                             </div>
                             <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
-                                <label id="language">
+                                <label htmlFor="language" id="language_label">
                                     Language
                                 </label>
-                                {languageOptions}
+                                <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
                             </div>
                         </div>
                         <div className="field">
-                            <label id="deck-description">Description</label>
-                            <textarea rows="4" aria-labelledby="deck-description"
+                            <label htmlFor="description_input" id="deck-description">Description</label>
+                            <textarea rows="4" aria-labelledby="deck-description" id="description_input"
                                       value={this.state.description}
                                       onChange={this.handleChange.bind(this, 'description')}/>
                         </div>
                         <div className="two fields">
                             <div className="field">
-                                <label id="theme">Choose deck theme</label>
+                                <label htmlFor="theme" id="theme">Choose deck theme</label>
                                 {themeOptions}
                             </div>
                             <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
-                                <label id="license">License</label>
+                                <label htmlFor="license" id="license_label">License</label>
                                 {licenseOptions}
                             </div>
                         </div>
