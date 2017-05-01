@@ -379,9 +379,9 @@ class DeckPropertiesEditor extends React.Component {
                                      value={this.state.license}
                                      onChange={this.handleChange.bind(this, 'license')}>
            <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-           <option value="CC BY" >Creative Commons Attribution</option>
-           <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
+        //           <option value="CC BY" >Creative Commons Attribution</option>
+        //           <option value="CC0" >Creative Commons CC0 Public Domain</option>
 
         let groupsArray = [];
         if (this.props.groups) {

@@ -275,9 +275,10 @@ class AddDeck extends React.Component {
         </select>;
         let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
           <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-          <option value="CC BY" >Creative Commons Attribution</option>
-          <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
+        //          <option value="CC BY" >Creative Commons Attribution</option>
+        //          <option value="CC0" >Creative Commons CC0 Public Domain</option>
+
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
