@@ -7,12 +7,10 @@ import HeaderDropdown from '../Login/HeaderDropdown.js';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
-//import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
+import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
-
-
 
 let MediaQuery = require ('react-responsive');
 class Header extends React.Component {
@@ -63,8 +61,7 @@ class Header extends React.Component {
             notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
 
         } else{
-            notification_locale = '';
-
+            notification_locale = <div className="item"><LocaleSwitcher mode ='icon' className = 'ui item'/></div>;
         }
 
         if (!this.state.user_cookies) {

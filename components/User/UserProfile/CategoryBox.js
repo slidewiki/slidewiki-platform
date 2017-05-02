@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
+import LocaleSwitcher from '../../LocaleSwitcher/LocaleSwitcher';
 
 class CategoryBox extends React.Component {
     constructor(props){
@@ -12,7 +13,7 @@ class CategoryBox extends React.Component {
         return (
           <div ref="menus">
 
-              <div className="ui vertical menu">
+              <div className="ui vertical menu secondary">
                   <div className="item" style={ this.headerStyle }><h3>Personal settings</h3></div>
                   <NavLink className="item" href={'/user/' + this.props.username + '/settings/profile'} activeStyle={this.styles}>
                       <p><i className="icon user"/> Profile</p>
@@ -23,6 +24,7 @@ class CategoryBox extends React.Component {
                   <NavLink className="item" href={'/user/' + this.props.username + '/settings/integrations'} activeStyle={this.styles}>
                       <p><i className="icon cloud"/> Authorized Accounts</p>
                   </NavLink>
+                    <LocaleSwitcher mode='menu' className='item'/>
               </div>
 
               <div className="ui vertical pointing menu">
