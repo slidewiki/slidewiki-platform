@@ -56,7 +56,7 @@ export default provideContext(handleHistory(connectToStores(
         let appStore = context.getStore(ApplicationStore);
         return {
             pageTitle: appStore.getPageTitle(),
-            ErrorStore: context.getStore(ErrorStore).getState()
+            ErrorStore: context.getStore(ErrorStore).getState(),
         };
     }
 )));

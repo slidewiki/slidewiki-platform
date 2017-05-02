@@ -7,6 +7,12 @@ import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
+import {NavLink} from 'fluxible-router';
+
+import ContentLikeStore from '../../../../../stores/ContentLikeStore';
+import UserProfileStore from '../../../../../stores/UserProfileStore';
+import ContentStore from '../../../../../stores/ContentStore';
+import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -37,14 +43,17 @@ class DeckViewPanel extends React.Component {
             });
         }
 
-        const totalRevisions = deckData.revisionCount;
-        // Theme information is not available in deck service yet. Remove hard coded 'Simple' when it becomes available.
-        const deckTheme = lodash.get(deckData, 'theme', 'Simple');
+        const forkCount = deckData.forkCount;
+        //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
+        const deckTheme = currentRevision.theme;
+        const deckLicense = deckData.license;
         const deckTitle = currentRevision.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
         const deckDescription = lodash.get(deckData, 'description', '');
         const deckCreator = this.props.DeckViewStore.creatorData.username;
         const deckOwner = this.props.DeckViewStore.ownerData.username;
+        const originCreator = this.props.DeckViewStore.originCreatorData.username;
+
         let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
         // default English
@@ -56,10 +65,16 @@ class DeckViewPanel extends React.Component {
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
-        const thumbnailURL = Microservices.file.uri + '/';
+        const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
+
+        const thumbnailURL = Microservices.file.uri;
         const deckURL = '/deck/' + this.props.selector.id;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
+
+        let originInfo = deckData.origin != null ? <div className="meta">Origin:&nbsp;
+                <NavLink href={'/deck/' + deckData.origin.id + '-' + deckData.origin.revision}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
+        </div> : '';
 
         return (
         <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
@@ -71,14 +86,13 @@ class DeckViewPanel extends React.Component {
                             <div className="meta">Creator:&nbsp;
                                 <a href={creatorProfileURL}>{deckCreator}</a>
                             </div>
+                            {originInfo}
                             <div className="meta">Revision Owner:&nbsp;
                                 <a href={ownerProfileURL}>{deckOwner}</a>
                             </div>
                             <div className="meta">Date: {deckDate}</div>
-                            <div className="description">
-                                <p></p>
-                                <p>{deckDescription}</p>
-                            </div>
+                            <div className="meta">License: {deckLicense}</div>
+                            <div className="description">Description: {deckDescription}</div>
                         </div>
                     </div>
 
@@ -96,7 +110,9 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui large label" tabIndex="0">
                                     <i className="theme icon" aria-label="Theme"></i>{deckTheme}</div>
                                 <div className="ui large label" tabIndex="0">
-                                    <i className="fork icon" aria-label="Number of versions"></i>{totalRevisions}</div>
+                                    <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
+                                <div className="ui large label" tabIndex="0">
+                                    <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
                             </div>
                             {tags.length > 0 ? <div className="ui divider"></div> : ''}
                             <div className="ui tag labels large meta">
@@ -119,7 +135,7 @@ class DeckViewPanel extends React.Component {
                                         <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
                                            tabIndex="-1">
                                             <Thumbnail key={index}
-                                                       url={thumbnailURL + slide.user + '/thumbnails/' + slide.id + '.png'}
+                                                       url={thumbnailURL + '/slideThumbnail/' + slide.id + '.jpeg'}
                                                        slideId={slide.id}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
@@ -138,9 +154,12 @@ class DeckViewPanel extends React.Component {
     }
 }
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore], (context, props) => {
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {
     return {
-        DeckViewStore: context.getStore(DeckViewStore).getState()
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
+        ContentLikeStore: context.getStore(ContentLikeStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 export default DeckViewPanel;

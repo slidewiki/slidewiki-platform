@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import Tree from './Tree';
@@ -8,11 +9,12 @@ import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
-import saveTreeNodeWithRevisionCheck from '../../../actions/decktree/saveTreeNodeWithRevisionCheck';
+import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import forkDeck from '../../../actions/decktree/forkDeck';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
+import PermissionsStore from '../../../stores/PermissionsStore';
 
 class TreePanel extends React.Component {
     handleFocus() {
@@ -40,7 +42,7 @@ class TreePanel extends React.Component {
     }
 
     handleSaveNode(selector, oldValue, newValue) {
-        this.context.executeAction(saveTreeNodeWithRevisionCheck, {
+        this.context.executeAction(saveTreeNode, {
             selector: selector,
             oldValue: oldValue,
             newValue: newValue
@@ -57,16 +59,17 @@ class TreePanel extends React.Component {
 
     handleFork() {
         swal({
-            title: 'New Revision',
-            text: 'We are creating a new revision of the deck...',
+            title: 'New Fork',
+            text: 'We are forking the deck...',
             type: 'success',
             timer: 2000,
             showCloseButton: false,
             showCancelButton: false,
             allowEscapeKey: false,
             showConfirmButton: false
-        });
-        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
+        this.context.executeAction(forkDeck, {selector: this.props.DeckTreeStore.selector.toJS(), navigateToRoot: true});
     }
 
     handleTheme() {
@@ -77,7 +80,8 @@ class TreePanel extends React.Component {
             confirmButtonText: 'Confirmed',
             confirmButtonClass: 'positive ui button',
             buttonsStyling: false
-        });
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
         this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
 
@@ -94,12 +98,14 @@ class TreePanel extends React.Component {
     }
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
-        this.context.executeAction(moveTreeNodeAndNavigate, {
-            selector: this.props.DeckTreeStore.selector.toJS(),
-            sourceNode: sourceNode,
-            targetNode: targetNode,
-            targetIndex: targetIndex
-        });
+        //only when logged in and having rights
+        if (this.props.UserProfileStore.username !== '' && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly)
+            this.context.executeAction(moveTreeNodeAndNavigate, {
+                selector: this.props.DeckTreeStore.selector.toJS(),
+                sourceNode: sourceNode,
+                targetNode: targetNode,
+                targetIndex: targetIndex
+            });
     }
 
     render() {
@@ -112,6 +118,15 @@ class TreePanel extends React.Component {
             overflowY: 'auto',
             padding: 5
         };
+
+        let classes_forksbtn = classNames({
+            'ui': true,
+            'basic': true,
+            'attached': true,
+            'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'button': true
+        });
+
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
@@ -128,10 +143,10 @@ class TreePanel extends React.Component {
                                  onClick={this.handleTheme.bind(this)}>
                                 <i className="theme black icon"></i>
                             </div>
-                            <div className="ui basic attached button" aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
+                            <div className={classes_forksbtn} aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
                                 <i className="fork black icon"></i>
                             </div>
-                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate" 
+                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate"
                                  onClick={this.handleTranslation.bind(this)}>
                                 <i className="translate black icon"></i>
                             </div>
@@ -156,7 +171,8 @@ class TreePanel extends React.Component {
                               onSave={this.handleSaveNode.bind(this)}
                               onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
                               onMoveNode={this.handleMoveNode.bind(this)}
-                              username={this.props.UserProfileStore.username}/>
+                              username={this.props.UserProfileStore.username}
+                              permissions={this.props.PermissionsStore.permissions}/>
                     </div>
                 </div>
             </div>
@@ -167,10 +183,11 @@ class TreePanel extends React.Component {
 TreePanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore], (context, props) => {
+TreePanel = connectToStores(TreePanel, [DeckTreeStore, UserProfileStore, PermissionsStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 export default TreePanel;

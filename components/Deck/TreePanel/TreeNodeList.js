@@ -21,7 +21,8 @@ class TreeNodeList extends React.Component {
                               key={index} nodeIndex={index}
                               rootNode={self.props.rootNode}
                               page={self.props.page} mode={self.props.mode}
-                              username={self.props.username}/>
+                              username={self.props.username}
+                              permissions={self.props.permissions}/>
                 );
             });
             //show/hide sub nodes based on the expanded state

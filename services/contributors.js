@@ -1,10 +1,13 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 export default {
     name: 'contributors',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         let selector = {'sid': args.sid, 'stype': args.stype, 'spath': args.spath};
         if (resource === 'contributors.list') {

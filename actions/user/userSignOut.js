@@ -1,7 +1,9 @@
 import async from 'async';
 import {navigateAction} from 'fluxible-router';
+const log = require('../log/clog');
 
 export default function userSignOut(context, payload, done) {
+    log.info(context);
     async.series([
         // (callback) => {
         //     context.dispatch('USER_SIGNOUT', payload);
@@ -21,6 +23,11 @@ export default function userSignOut(context, payload, done) {
         },
         (callback) => {
             context.deleteUser(); //clear user (is cookie) via userStoragePlugin
+            try {
+                location.reload();
+            } catch (e) {
+                //nothing - server side
+            }
             callback();
         }
     ], (err, result) => {

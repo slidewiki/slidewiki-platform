@@ -7,6 +7,7 @@ import DeckViewPanel from './DeckModes/DeckViewPanel/DeckViewPanel';
 import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
+import NoPermissionsModal from './NoPermissionsModal';
 
 class ContentPanel extends React.Component {
     render() {
@@ -48,6 +49,7 @@ class ContentPanel extends React.Component {
                 <div className="ui bottom attached">
                     <ContentActionsFooter ContentStore={this.props.ContentStore} />
                 </div>
+                <NoPermissionsModal selector={this.props.ContentStore.selector} />
              </div>
         );
     }

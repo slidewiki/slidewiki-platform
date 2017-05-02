@@ -3,9 +3,12 @@ import DeckTreeStore from '../../stores/DeckTreeStore';
 import serviceUnavailable from '../error/serviceUnavailable';
 import deckIdTypeError from '../error/deckIdTypeError';
 import deckContentPathError from '../error/deckContentPathError';
-import { AllowedPattern } from '../error/util/allowedPattern';
+import {AllowedPattern} from '../error/util/allowedPattern';
+import UserProfileStore from '../../stores/UserProfileStore';
+const log = require('../log/clog');
 
 export default function loadDeckTree(context, payload, done) {
+    log.info(context);
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
@@ -27,17 +30,18 @@ export default function loadDeckTree(context, payload, done) {
     }
     if (runFetchTree) {
         //we need to load the whole tree for the first time
+        payload.params.jwt = context.getStore(UserProfileStore).jwt;
         context.service.read('decktree.nodes', payload, {}, (err, res) => {
             if (err) {
+                log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
-                return;
             } else {
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);
                 context.dispatch('UPDATE_PAGE_TITLE', {
                     pageTitle: pageTitle
                 });
+                done();
             }
-            done();
         });
     } else {
         //when we only select the node in tree, there is no need to call the external service

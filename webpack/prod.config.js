@@ -30,16 +30,32 @@ let webpackConfig = {
                 loader: 'babel-loader'
 
             },
+            // Getting URLs for font files otherwise we get encoding errors in css-loader
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'file-loader'},// 'url-loader?limit=100000'},
             {
                 test: /\.css$/,
+                exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: 'css-loader',
+                    loader: [
+                        'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]'
+                    ],
+                    // use: 'css-loader',
+                    // options: {importLoaders: 1, modules: true},
                     publicPath: '/public/css/'
                 })
             },
-            // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'}
+            // { test: /\.css$/,
+            //     use: [
+            //         {
+            //             loader: 'style-loader'
+            //         },
+            //         {
+            //             loader: 'css-loader'
+            //         }
+            //     ]
+            // },
+
         ]
     },
     node: {

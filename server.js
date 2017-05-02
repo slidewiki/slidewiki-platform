@@ -129,10 +129,6 @@ server.use(setLocale);
 
 //render the server, as previous but from a separate file
 server.use(handleServerRendering);
-
-//server.use();
-
-
 server.listen(port);
 if(env === 'production'){
     console.log('[production environment] Check your application on http://%s:%s', host, port);

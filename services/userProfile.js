@@ -1,11 +1,14 @@
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
+const log = require('../configs/log').log;
 
 export default {
     name: 'userProfile',
 
     delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         rp({
             method: 'DELETE',
             uri: Microservices.user.uri + '/user/' + params.params.id,
@@ -16,6 +19,8 @@ export default {
     },
 
     update: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'userProfile.updatePassword') {
             let tosend = {
                 oldPassword: params.oldpw,
@@ -78,14 +83,25 @@ export default {
               .then((body) => callback(null, body))
               .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
+            //prepare data
+            let members = params.members.reduce((prev, curr) => {
+                let member = {
+                    userid: curr.userid,
+                    joined: curr.joined || ''
+                };
+                prev.push(member);
+                return prev;
+            }, []);
             let tosend = {
                 id: params.id,
                 name: params.name,
                 description: !isEmpty(params.description) ? params.description : '',
                 isActive: !isEmpty(params.isActive) ? params.isActive : true,
-                timestamp: !isEmpty(params.timestamp) ? params.timestamp : (new Date()).toISOString(),
-                members: params.members
+                timestamp: !isEmpty(params.timestamp) ? params.timestamp : '',
+                members: members,
+                referenceDateTime: (new Date()).toISOString()
             };
+            // console.log('sending:', tosend, params.jwt);
             rp({
                 method: 'PUT',
                 uri: Microservices.user.uri + '/usergroup/createorupdate',
@@ -122,6 +138,8 @@ export default {
     },
 
     read: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         if(resource !== 'userProfile.fetchUserDecks') {
             if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
                 rp({
@@ -190,7 +208,10 @@ export default {
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
-                            firstSlide: deck.firstSlide
+                            firstSlide: deck.firstSlide,
+                            language:deck.language,
+                            countRevisions:deck.countRevisions
+
                         };
                     }).sort((a,b) => a.creationDate < b.creationDate);
                     callback(null, converted);
@@ -205,6 +226,7 @@ export default {
                 })
                 .then((body) => {
                     let converted = body.map((deck) => {
+                        console.log(deck);
                         return {
                             title: !isEmpty(deck.title) ? deck.title : 'No Title',
                             picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
@@ -212,7 +234,9 @@ export default {
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
-                            firstSlide: deck.firstSlide
+                            firstSlide: deck.firstSlide,
+                            language:deck.language,
+                            countRevisions:deck.countRevisions
                         };
                     });
                     callback(null, converted);

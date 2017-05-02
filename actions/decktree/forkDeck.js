@@ -1,8 +1,10 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import {navigateAction} from 'fluxible-router';
-
+import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
 
 export default function forkDeck(context, payload, done) {
+    log.info(context);
     //enrich with user id
     let userid = context.getStore(UserProfileStore).userid;
     if (userid == null || userid === '') {
@@ -10,16 +12,41 @@ export default function forkDeck(context, payload, done) {
             url: '/'
         });
     } else {
-        //enrich with user id
-        payload.userid = userid;
-
-        context.service.update('deck.fork', payload, null, {timeout: 30 * 1000}, (err, res) => {
+        let selector = payload.selector;
+        context.service.update('deck.fork', {deckId: selector.id, userid: userid}, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                context.dispatch('FORK_DECK_FAILURE', err);
+                log.error(context, {filepath: __filename, err: err});
+                context.executeAction(serviceUnavailable, payload, done);
+                if (err.statusCode === 401) {
+                    context.dispatch('FORK_DECK_FAILURE', err);
+                }
             } else {
                 context.dispatch('FORK_DECK_SUCCESS', res);
-                let newSid = res._id + '-' + res.revisions[0].id;
-                let newURL = '/deck/' + newSid;
+                let newURL, newId = res.root_deck;
+                // by default after forking a deck, navigate to the same position that was shown before
+                // unless the navigateToRoot parameter is set
+                newURL = '/deck/' + newId;
+                if (!payload.navigateToRoot){
+                    let newSid = selector.stype === 'deck' ? res.id_map[selector.sid] : selector.sid;
+                    if (newSid != null){
+                        let pathArr = selector.spath.split(';');
+                        let newSpath = pathArr.map((node, index) => {
+                            if (index === pathArr.length - 1 && selector.stype === 'slide'){
+                                return node;
+                            }
+                            let splitNode = node.split(':');
+                            splitNode[0] = res.id_map[splitNode[0]] || splitNode[0];
+                            return splitNode.join(':');
+                        }).join(';');
+                        newURL = '/deck/' + newId + '/' + selector.stype + '/' + newSid;
+                        if (newSpath !== ''){
+                            newURL += '/' + newSpath;
+                        }
+                        if (payload.mode === 'edit'){
+                            newURL += '/edit';
+                        }
+                    }
+                }
                 //update the URL
                 context.executeAction(navigateAction, {
                     url: newURL

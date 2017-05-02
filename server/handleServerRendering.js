@@ -15,6 +15,10 @@ const debug = debugLib('slidewiki-platform');
 import { navigateAction } from 'fluxible-router';
 import {loadIntlMessages} from '../actions/loadIntl'; //feeds the store with default messages
 import { IntlProvider } from 'react-intl';
+import cookie from 'react-cookie';
+
+const uuidV4 = require('uuid/v4');
+const log = require('../configs/log').log;
 
 
 const env = process.env.NODE_ENV;
@@ -52,14 +56,16 @@ let renderApp = function(req, res, context){
     return html;
 };
 
-
 export default function handleServerRendering(req, res, next){
-
+    req.reqId = uuidV4().replace(/-/g, '');
+    res.reqId = req.reqId.replace(/-/g, '');
     const context =  app.createContext({
         req: req,
         res: res
     });
 
+    log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
+    cookie.plugToRequest(req,res);
     debug('Executing loadIntl action');
     context.getActionContext().executeAction(loadIntlMessages, req.locale, (err) => {
         if (err) {
@@ -72,28 +78,26 @@ export default function handleServerRendering(req, res, next){
         else{
             debug('Executing navigate action');
             context.getActionContext().executeAction(navigateAction, {
-                url: req.url
+                url: req.url,
+                reqId: req.reqId
             }, (err) => {
                 if (err) {
-                    console.log(req.url, err);//, err);
-                    if (err.statusCode) {
-                        let html = renderApp(req, res, context);
-                        debug('Sending markup');
-                        res.type('html');
-                        res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                    } else {
+                    if (!err.statusCode) {
                         err.statusCode = 503;
-                        let html = renderApp(req, res, context);
-                        debug('Sending markup');
-                        res.type('html');
-                        res.status(err.statusCode).send('<!DOCTYPE html>' + html);
                     }
+                    let html = renderApp(req, res, context);
+                    debug('Sending markup');
+                    res.type('html');
+                    res.status(err.statusCode).send('<!DOCTYPE html>' + html);
+                    log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                    res.end();
                     return;
                 } else {
                     let html = renderApp(req, res, context);
                     debug('Sending markup');
                     res.type('html');
                     res.write('<!DOCTYPE html>' + html);
+                    log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
                     res.end();
                 }
             });

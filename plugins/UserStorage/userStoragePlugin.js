@@ -69,9 +69,16 @@ module.exports = function userStoragePlugin(options) {
                         if (typeof newUser !== 'object')
                             return;
 
+                        //prepare user object
+                        let preparedUser = {
+                            username: newUser.username,
+                            userid: newUser.userid,
+                            jwt: newUser.jwt
+                        };
+
                         // console.log('userStoragePlugin actionContext setUser:', newUser);
 
-                        user = newUser;
+                        user = preparedUser;
 
                         if (res) {
                             let host = req.headers.host;
@@ -79,7 +86,7 @@ module.exports = function userStoragePlugin(options) {
                             if (dpIndex !== -1) {
                                 host = host.substring(0, dpIndex);
                             }
-                            let servercookie = cookieParser.serialize(user_cookieName, newUser, {
+                            let servercookie = cookieParser.serialize(user_cookieName, preparedUser, {
                                 expires: createExpire(),
                                 maxAge: secondsCookieShouldBeValid,
                                 sameSite: true,
@@ -89,7 +96,7 @@ module.exports = function userStoragePlugin(options) {
                             // console.log('userStoragePlugin actionContext setUser() on server', servercookie);
                         }
                         else {
-                            cookie.set(user_cookieName, newUser,{
+                            cookie.set(user_cookieName, preparedUser,{
                                 expires: createExpire(),
                                 maxAge: secondsCookieShouldBeValid,
                                 domain: location.hostname,
@@ -120,13 +127,6 @@ module.exports = function userStoragePlugin(options) {
                             cookie.remove(user_cookieName, {
                                 domain: location.hostname
                             });
-                        }
-
-                        //SWIK-493 refresh page
-                        try {
-                            location.reload();
-                        } catch (e) {
-                            //nothing - server side
                         }
                     };
                 },

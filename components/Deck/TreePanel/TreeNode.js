@@ -7,6 +7,7 @@ import {DragSource, DropTarget} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
+import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -70,8 +71,8 @@ class TreeNode extends React.Component {
     }
 
     handleRenameClick(selector, e) {
-        //only if user is logged in
-        if (this.props.username !== '') {
+        //only if user is logged in and has the rights
+        if (this.props.username !== '' && this.props.permissions.edit && !this.props.permissions.readOnly) {
             this.props.onRename(selector);
             e.stopPropagation();
         }
@@ -131,7 +132,7 @@ class TreeNode extends React.Component {
                                           onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
                                           onMoveNode={self.props.onMoveNode} mode={self.props.mode}
                                           page={self.props.page} rootNode={self.props.rootNode}
-                                          username={self.props.username}/>;
+                                          username={self.props.username} permissions={self.props.permissions}/>;
         }
         actionSigClass = classNames({
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
@@ -147,6 +148,15 @@ class TreeNode extends React.Component {
             'ui button': true,
             'disabled': this.props.item.get('type') === 'deck'
         });
+        let buttonStyle = {
+            classNames : classNames({
+                'ui':true,
+                'disabled': this.props.permissions.readOnly || !this.props.permissions.edit
+            }),            
+            iconSize : 'small',
+            attached : '',
+            disabled: this.props.item.get('type') === 'deck'
+        };
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
@@ -168,6 +178,7 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
+                    <AttachSubdeck buttonStyle={buttonStyle} selector={nodeSelector}/>
                     <button className={duplicateItemClass} title="Duplicate"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {
                                 type: this.props.item.get('type'),
@@ -202,7 +213,7 @@ class TreeNode extends React.Component {
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
             actionSignifier = '';
         } else {
-            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} aria-label="Double Click to Rename">
+            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
                 {nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
@@ -224,9 +235,9 @@ class TreeNode extends React.Component {
                 {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
                                                onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}></i>
+                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}>  </i>
                     {nodeDIV}
-                    {this.props.username === '' ? '' : actionSignifier}
+                    {(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier}
                 </div>
                 {actionBtns}
                 {childNodesDIV}

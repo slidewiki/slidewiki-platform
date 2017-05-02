@@ -3,38 +3,35 @@ const co = require('../common');
 export default {
     Microservices: {
         'deck': {
-            uri: '${SLIDEWIKI_URL_DECK}'
+            uri: '${SERVICE_URL_DECK}'
         },
         'discussion': {
-            uri: '${SLIDEWIKI_URL_DISCUSSION}'
+            uri: '${SERVICE_URL_DISCUSSION}'
         },
         'activities': {
-            uri: '${SLIDEWIKI_URL_ACTIVITIES}'
+            uri: '${SERVICE_URL_ACTIVITIES}'
         },
         'notification': {
-            uri: '${SLIDEWIKI_URL_NOTIFICATION}'
+            uri: '${SERVICE_URL_NOTIFICATION}'
         },
         'user': {
-            uri: '${SLIDEWIKI_URL_USER}'
+            uri: '${SERVICE_URL_USER}'
         },
         'import': {
-            uri: '${SLIDEWIKI_URL_IMPORT}',
-            protocol: 'http:',
-            host: '${SLIDEWIKI_VAR_IMPORT_HOST}',
+            uri: '${SERVICE_URL_IMPORT}',
+            protocol: 'https:',
+            host: '${SERVICE_VAR_IMPORT_HOST}',
             path: '/importPPTX',
-            port: 80
+            port: 443
         },
         'search': {
-            uri: '${SLIDEWIKI_URL_SEARCH}'
-        },
-        'image': {
-            uri: '${SLIDEWIKI_URL_IMAGE}'
+            uri: '${SERVICE_URL_SEARCH}'
         },
         'file': {
-            uri: '${SLIDEWIKI_URL_FILE}'
+            uri: '${SERVICE_URL_FILE}'
         },
         'pdf': {
-            uri : '${SLIDEWIKI_URL_PDF}'
+            uri : '${SERVICE_URL_PDF}'
         }
     }
 };

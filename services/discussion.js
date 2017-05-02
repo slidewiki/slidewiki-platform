@@ -1,11 +1,13 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+const log = require('../configs/log').log;
 
 export default {
     name: 'discussion',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype, 'mode': args.mode};
 
@@ -24,13 +26,15 @@ export default {
             rp.get({uri: Microservices.discussion.uri + '/discussion/count/' + content_kind + '/' + content_id}).then((res) => {
                 callback(null, {count: res, selector: selector});
             }).catch((err) => {
-                console.log(err);
+                console.log('Error while getting discussion count of deck:', err.StatusCodeError, err.message, err.options);
                 callback(null, {count: 0, selector: selector});
             });
         }
     },
 
     create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
         let selector= args.selector;
         if(resource === 'discussion.comment'){
@@ -43,7 +47,8 @@ export default {
                     text: args.text,
                     user_id: String(args.userid),
                     content_id: content_id,
-                    content_kind: selector.stype
+                    content_kind: selector.stype,
+                    is_activity: false //Added this for backward compatibility - prevents discussion-service to create activity; will remove it once the discussion-service branch which no longer creates activities is merged
                 })
             }).then((res) => {
                 callback(null, {comment: JSON.parse(res), selector: args.selector});
