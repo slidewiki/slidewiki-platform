@@ -15,4 +15,5 @@ export default {
     //Public reCAPTCHA key
     publicRecaptchaKey: '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET',
     locales: ['en', 'de', 'es', 'nl', 'ru', 'ca', 'gd']
+    //locales: ['en', 'ru']
 };

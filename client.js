@@ -96,7 +96,7 @@ function loadLocaleData(locale) {
                 break;
 
 
-            // english
+            // russian
             case 'ru':
 
                 if (!hasIntl) {
@@ -122,7 +122,185 @@ function loadLocaleData(locale) {
                 }
                 break;
 
+                // german
+            case 'de':
 
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/de',
+                        'react-intl/locale-data/de'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/de');
+                        addLocaleData(require('react-intl/locale-data/de'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-de');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/de'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/de'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-de-no-intl');
+                }
+                break;
+
+                // russian
+            case 'nl':
+
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/nl',
+                        'react-intl/locale-data/nl'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/nl');
+                        addLocaleData(require('react-intl/locale-data/nl'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-nl');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/nl'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/nl'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-nl-no-intl');
+                }
+                break;
+
+            //spanish - yes, before the catalonian =)
+            case 'es':
+
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/es',
+                        'react-intl/locale-data/es'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/es');
+                        addLocaleData(require('react-intl/locale-data/es'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-es');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/es'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/es'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-es-no-intl');
+                }
+                break;
+
+            //catalonian
+            case 'ca':
+
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/ca',
+                        'react-intl/locale-data/ca'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/ca');
+                        addLocaleData(require('react-intl/locale-data/ca'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-ca');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/ca'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/ca'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-ca-no-intl');
+                }
+                break;
+
+            //gaelic - let's see if we can involve external users to help us with the gaelic as well ;
+            case 'gd':
+
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/gd',
+                        'react-intl/locale-data/gd'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/gd');
+                        addLocaleData(require('react-intl/locale-data/gd'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-gd');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/gd'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/gd'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-gd-no-intl');
+                }
+                break;
+
+            //greek
+            case 'el':
+
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/el',
+                        'react-intl/locale-data/el'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/el');
+                        addLocaleData(require('react-intl/locale-data/el'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-el');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/el'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/el'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-el-no-intl');
+                }
+                break;
+
+            default:
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/en',
+                        'react-intl/locale-data/en'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/en');
+                        addLocaleData(require('react-intl/locale-data/en'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-en');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/en'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/en'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-en-no-intl');
+                }
+                break;
 
         }
 
