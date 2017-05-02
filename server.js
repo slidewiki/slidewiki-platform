@@ -103,8 +103,14 @@ import fr from 'react-intl/locale-data/fr';
 import es from 'react-intl/locale-data/es';
 import ru from 'react-intl/locale-data/ru';
 import de from 'react-intl/locale-data/de';
+import ca from 'react-intl/locale-data/ca';
+import gd from 'react-intl/locale-data/gd';
+import nl from 'react-intl/locale-data/nl';
+import el from 'react-intl/locale-data/el';
+import it from 'react-intl/locale-data/it';
+import cy from 'react-intl/locale-data/cy';
 
-addLocaleData([...en, ...fr, ...es, ...ru, ...de]);
+addLocaleData([...en, ...fr, ...es, ...ru, ...de, ...ca, ...gd, ...nl, ...el, ...it, ...cy]);
 
 
 // Set the default locale
