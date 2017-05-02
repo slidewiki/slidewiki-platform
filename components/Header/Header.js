@@ -8,7 +8,6 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-//import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import CookieBanner from 'react-cookie-banner';
 import BannerContent from 'react-cookie-banner';
 import cookie from 'react-cookie';
