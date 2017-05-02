@@ -68,7 +68,7 @@ export default function handleServerRendering(req, res, next){
     cookie.plugToRequest(req,res);
     debug('Executing loadIntl action');
     context.getActionContext().executeAction(loadIntlMessages, req.locale, (err) => {
-        if (err) {
+        if (err) { //Hello, Vinay =) 
             err.statusCode = 503;
             let html = '<h1>Not found locale</h1>';
             debug('Sending markup');
