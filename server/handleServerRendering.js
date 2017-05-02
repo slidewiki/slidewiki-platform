@@ -82,16 +82,24 @@ export default function handleServerRendering(req, res, next){
                 reqId: req.reqId
             }, (err) => {
                 if (err) {
-                    if (!err.statusCode) {
-                        err.statusCode = 503;
+                    if (err.statusCode && err.statusCode === '404') {
+                        let html = renderApp(req, res, context);
+                        debug('Sending markup');
+                        res.type('html');
+                        res.status(err.statusCode);
+                        log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                        res.end();
+                        return;
+                    }else{
+                        let html = renderApp(req, res, context);
+                        debug('Sending markup');
+                        res.type('html');
+                        res.write('<!DOCTYPE html>' + html);
+                        log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
+                        res.end();
+                        return;
                     }
-                    let html = renderApp(req, res, context);
-                    debug('Sending markup');
-                    res.type('html');
-                    res.status(err.statusCode).send('<!DOCTYPE html>' + html);
-                    log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
-                    res.end();
-                    return;
+
                 } else {
                     let html = renderApp(req, res, context);
                     debug('Sending markup');
