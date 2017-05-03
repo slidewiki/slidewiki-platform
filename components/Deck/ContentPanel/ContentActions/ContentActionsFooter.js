@@ -150,7 +150,7 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            {(this.props.UserProfileStore.userid !== '') ? <ReportModal/> : ''}
+                            <ReportModal/>
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
                             </button>

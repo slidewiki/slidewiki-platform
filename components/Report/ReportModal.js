@@ -187,6 +187,9 @@ class ReportModal extends React.Component {
                                    <Segment>
                                        <div className="sr-only" id="reportModalDescription">Select the reason of the report and give a brief description about it.</div>
                                     <Form id="reportForm">
+                                        <div className="ui inline required field">
+                                            <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
+                                        </div>
                                         <div className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
                                             <input type="hidden" id="reason" name="reason" ref="reason" />
                                                 <i className="dropdown icon"/>
