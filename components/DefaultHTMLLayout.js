@@ -38,6 +38,8 @@ class DefaultHTMLLayout extends React.Component {
                 {/* Above are added only to support IE browser */}
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
+                <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/cupertino/jquery-ui.css" />
                 <script src="/custom_modules/custom-semantic-ui/dist/components/progress.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js"></script>
