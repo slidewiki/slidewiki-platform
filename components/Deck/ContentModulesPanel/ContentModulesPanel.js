@@ -135,7 +135,6 @@ class ContentModulesPanel extends React.Component {
         };
         pointingMenu = (
             <div className="ui top attached pointing menu">
-                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
                 <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
                 <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span></a>
                 {/*TODO add correct moduleCount*/}
@@ -143,6 +142,7 @@ class ContentModulesPanel extends React.Component {
                 <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
                 <a tabIndex="0" className={usageTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'usage')}>Usage</a>
                 <a tabIndex="0" className={contributorsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'contributors')}>Contributors</a>
+                <a tabIndex="0" className={questionsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'questions')}>Questions<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.questions}</span></a>
                 {/*
                 <a className="item">
                     <img src="/assets/images/mock-avatars/helen.jpg" className="ui mini image circular"/>
