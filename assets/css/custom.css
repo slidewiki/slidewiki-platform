@@ -40,16 +40,18 @@
 }
 
 .diff-view .pptx2html {
-  box-shadow: none !important;
-  border: none !important;
-  transform: scale(0.5);
-  top: -260px;
-  left: -215px;
+  transform: scale(0.8);
+  top: -190px;
+  left: -75px;
 }
 
 /* HTML DOM Node related */
 .diff-view .added, .modified, .deleted {
-  padding: 5px; margin: 2px; display: block;
+  padding: 5px; margin: 2px;
+}
+
+.diff-view p {
+  margin: 1em;
 }
 
 .diff-view .added {border: 5px solid #93ca3b;}
