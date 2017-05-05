@@ -472,8 +472,8 @@ class SlideContentEditor extends React.Component {
     addBorders() {
         //console.log('resize_all');
         //do not put borders around empty divs containing SVG elements
-        //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'solid') {
-        if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
+        //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
+        if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'solid') {
             //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(0,0,255,0.5)'});
         }
@@ -495,6 +495,14 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
         require('../../../../../custom_modules/simple-draggable/lib/index.js');
         //remove previous event listeners!
+
+        /*
+        SimpleDraggable('.pptx2html > [style*="absolute"]', {
+            onlyX: false
+          , onlyY: false
+          , ratio: this.scaleratio
+        });
+        */
 
         /*
         SimpleDraggable('.pptx2html [style*="absolute"]', {
