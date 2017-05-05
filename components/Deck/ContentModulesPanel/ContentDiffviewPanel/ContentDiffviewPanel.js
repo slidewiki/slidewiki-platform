@@ -34,25 +34,23 @@ class ContentDiffviewPanel extends Component {
             return;
         }
 
+        //FETCH 2 html strings to DIFF
         let baseSRC = this.state.revisionsList.find((el) => el.id === parseInt(this.state.currentRevision)).content;
         let diffSRC = this.state.revisionsList.find((el) => el.id === parseInt(this.refs.dropdown.state.value)).content;
-
-        //FETCH 2 html strings to DIFF
-        // let diffSRC = '<h1 id="h1-1">STatic text part 1</h1><p id="p-1">THEN text</p><p id="p-2">Static</p><p id="p-3"><span id="sp-1" style="color:#e74c3c;">Color in red</span></p><p id="p-4">To delete</p><h2 id="h2-1">Title 1</h2>';
-        // let baseSRC = '<h1 id="h1-1">STatic text part 1</h1><p id="p-1">NOW text</p><p id="p-2">Static</p><p id="p-3"><span id="sp-1" style="color:#f1c40f;">Color in yellow</span></p><h2 id="h2-1">Title 1</h2><p id="p-5">New paragraph</p><h1 id="h1-2">NEWEST TITLE</h1>';
 
         const isUploaded = diffSRC.indexOf('pptx2html') !== -1;
         //PRE-PROCESS & CONVERT html into hyperscript
         diffSRC = diff_fns.preprocess(diffSRC, isUploaded);
         baseSRC = diff_fns.preprocess(baseSRC, isUploaded);
 
+        //ADD ID as key per element
         const vTree = diff_fns.setKeys(diffSRC);
         const vTree2 = diff_fns.setKeys(baseSRC);
 
         //DIFF 2 vTrees
         const diff_results = diff(vTree, vTree2);
 
-        //Reduce complex Object into flat Array
+        //REDUCE complex Object into flat Array
         const elements = Object.keys(diff_results).reduce((arr, key) => arr.concat(diff_results[key]), []);
 
         //LOG
@@ -60,10 +58,10 @@ class ContentDiffviewPanel extends Component {
         // elements.map((e) => console.log('%c node:', 'color: red', e));
         // console.groupEnd();
 
-        //Construct Diff VIEW Slide
+        //CONSTRUCT Diff view Slide
         diffSRC = diff_fns.construct(elements, diffSRC, isUploaded);
 
-        //Update state
+        //UPDATE state
         this.setState({content: diffSRC});
     }
 

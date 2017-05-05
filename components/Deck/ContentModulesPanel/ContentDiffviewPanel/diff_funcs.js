@@ -31,7 +31,6 @@ const deepSearch = (obj, key) => {
 //TODO ADD HEAVY PROPS CHECK
 // Color + | Size ? | Font ? | Decoration ?
 const handleTEXT = (oldText, newText, source) => {
-    console.warn('TEXT');
 
     const oldStr = oldText.text,
         newStr = newText.text;
@@ -60,7 +59,9 @@ const handleTEXT = (oldText, newText, source) => {
 const handleINSERT = (el, source) => {
 
     let elem = createElement(el.patch);
-    $(elem).addClass('added');
+    let targetElement = $(elem);
+    // let targetElement = $(elem).children().first();
+    targetElement.addClass('added');
     let root = createElement(convertHTML(source));
     $(root).append(elem);
     source = root.outerHTML;
@@ -69,19 +70,22 @@ const handleINSERT = (el, source) => {
 };
 
 const handleREMOVE = (el, source) => {
-
-    const tag = el.vNode.tagName;
-    const textArray = deepSearch(el.vNode, 'text');
-    const text = textArray[0].text;
+    const _id = el.vNode.key;
     let root = createElement(convertHTML(source));
-    $(root).find(`${tag}:contains('${text}')`).addClass('deleted');
+
+    if(_id){
+        let targetElement = $(root).find(`#${_id}`);
+      // let targetElement = $(root).find(`#${_id}`).children().first();
+        targetElement.addClass('deleted');
+    }
+
     source = root.outerHTML;
 
     return source;
 };
 
 const handlePROPS = (node, patch, source) => {
-    console.warn('PROPS');
+    console.log(node);
 
     const tag = node.tagName;
 
@@ -100,19 +104,16 @@ const handlePROPS = (node, patch, source) => {
 
     //TODO. UPDATE SEARCH. TEXT ONLY FINDS IF FIRST CHILD AND NOT DEEPLY NESTED. BY ID IS GOOD
     if (key && vals) {
-        const textArray = deepSearch(node, 'text');
-        const text = textArray[0].text;
-        const _id = node.properties.attributes._id;
+        const _id = node.key;
 
         if (_id) {
-            let targetElement = $(root).find(`${tag}[_id='${_id}']`);
-            targetElement.addClass('modified');
-        } else if (tag) {
             //[Problem] if node tags are changed. span -> h2
-            let targetElement = $(root).find(`${tag}:contains('${text}')`);
+            // let targetElement = $(root).find(`${tag}[_id='${_id}']`);
+            let targetElement = $(root).find(`#${_id}`);
+            // let targetElement = $(root).find(`#${_id}`).children().first();
             targetElement.addClass('modified');
-            //TODO add attributes to the node
-            //[QA] use old styles or apply new styles ?
+
+            //TODO add attributes to the node [QA] use old styles or apply new styles ?
             // targetElement.css(`${key}`, `${vals}`);
         }
     }
@@ -129,11 +130,14 @@ const preprocessSrc = (source, mode) => {
 
     source = source
                 .replace(/&nbsp;/g, ' ')
-                .replace(/(?:\r\n|\r|\n)/g, '');
+                .replace(/(?:\r\n|\r|\n)/g, '')
+                .replace(/&#8203;/g, '');
 
     if (mode) {
-        //uploaded slide
+        //canvas slide
         let root = createElement(convertHTML(source));
+        //delete brs ?
+        $(root).find('br').remove();
         $(root).find('.drawing-container').remove();
         $(root).find('span:empty').remove();
         //remove first emply div
@@ -172,17 +176,19 @@ const detectnPatch = (list, initSrc, mode) => {
     console.group();
     console.info('Changes');
     list.map((el) => {
+        let type;
         switch (el.type) {
             case 0:
                 console.warn('NONE');
                 break;
             case 1:
+                console.warn('TEXT');
                 const textArray = deepSearch(el, 'text');
                 initSrc = handleTEXT(textArray[0], textArray[1], initSrc);
                 break;
             case 2:
                 console.warn('VNODE');
-                const type = el.vNode.constructor.name;
+                type = el.vNode.constructor.name;
                 if(type === 'VirtualText') initSrc = handleTEXT(el.vNode, el.patch.children[0], initSrc);
                 if(type === 'VirtualNode') initSrc = handlePROPS(el.patch, el.patch.properties, initSrc);
                 break;
@@ -191,6 +197,7 @@ const detectnPatch = (list, initSrc, mode) => {
                 elem = createElement(el.vNode);
                 break;
             case 4:
+                console.warn('PROPS');
                 initSrc = handlePROPS(el.vNode, el.patch, initSrc);
                 break;
             case 5:
@@ -203,7 +210,8 @@ const detectnPatch = (list, initSrc, mode) => {
                 break;
             case 7:
                 console.warn('REMOVE');
-                initSrc = handleREMOVE(el, initSrc);
+                type = el.vNode.constructor.name;
+                if(type === 'VirtualNode') initSrc = handleREMOVE(el, initSrc);
                 break;
             default:
                 console.warn('default');
