@@ -1,10 +1,20 @@
-'use strict';
+require('babel-register')();
 
-let jsdom = require('jsdom');
+const jsdom = require('jsdom').jsdom;
 
-const DEFAULT_HTML = '<!DOCTYPE html><html><body></body></html>';
-global.document = jsdom.jsdom(DEFAULT_HTML);
+let exposedProperties = ['window', 'navigator', 'document'];
 
+global.document = jsdom('');
 global.window = document.defaultView;
+Object.keys(document.defaultView).forEach((property) => {
+    if (typeof global[property] === 'undefined') {
+        exposedProperties.push(property);
+        global[property] = document.defaultView[property];
+    }
+});
 
-global.navigator = window.navigator;
+global.navigator = {
+    userAgent: 'node.js'
+};
+
+documentRef = document;
