@@ -160,8 +160,9 @@ class ReportModal extends React.Component {
             'error': this.props.SendReportStore.wrongFields.text
         });
 
-        let nameField = <div className="ui inline field" style={{width:'50%'}} >
-                    <div className="ui icon input"><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
+        let nameField =
+                <div className="ui inline field" style={{width:'auto'}} >
+                    <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
                 </div>;
 
         return(
