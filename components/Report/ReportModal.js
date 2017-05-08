@@ -60,15 +60,22 @@ class ReportModal extends React.Component {
     handleSendReport(e) {
         let wrongFields = {
             reason: false,
-            text: false
+            text: false,
+            name: false
         };
 
+        console.log('////////////////////////////////////userProfile');
+        console.log(this.props.UserProfileStore);
+        console.log(this.props.ContentStore);
+        console.log('////////////////////////////////////userProfile');
         let everythingOk = true;
         e.preventDefault();
         if(!this.refs.reason.value){
             wrongFields.reason = true;
             everythingOk = false;
         }
+
+
 
         if( !this.refs.text.value ){
             wrongFields.text = true;
@@ -153,6 +160,10 @@ class ReportModal extends React.Component {
             'error': this.props.SendReportStore.wrongFields.text
         });
 
+        let nameField = <div className="ui inline field" style={{width:'50%'}} >
+                    <div className="ui icon input"><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
+                </div>;
+
         return(
 
                 <Modal
@@ -187,11 +198,9 @@ class ReportModal extends React.Component {
                                    <Segment>
                                        <div className="sr-only" id="reportModalDescription">Select the reason of the report and give a brief description about it.</div>
                                     <Form id="reportForm">
-                                        <div className="ui inline required field">
-                                            <div className="ui icon input"><input style={{width:'50%'}} type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
-                                        </div>
-                                        <div className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
-                                            <input style={{width:'50%'}} type="hidden" id="reason" name="reason" ref="reason" />
+                                        {(this.props.UserProfileStore.userid === '') ?  nameField: ''}
+                                        <div style={{width:'50%'}} className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
+                                            <input type="hidden" id="reason" name="reason" ref="reason" />
                                                 <i className="dropdown icon"/>
                                                 <div className="default text">Reason</div>
                                                 <div className="menu">
