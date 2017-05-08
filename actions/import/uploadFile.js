@@ -14,7 +14,7 @@ export default function uploadFile(context, payload, done) {
     const timeout = 60;
     const remainingProgress = 55;
     let currentProgress = 0;
-    const updatePeriod = payload.base64.length / 20 / 1000 / 1024 ; // progress bar speed depends on file length
+    const updatePeriod = payload.base64.length / 30 / 1000 / 1024 ; // progress bar speed depends on file length
     const progressStep = 1;
     const timer = () => {
         setTimeout(() => {

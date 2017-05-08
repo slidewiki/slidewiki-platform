@@ -346,7 +346,7 @@ class AddDeck extends React.Component {
                   </div>
                   <div className="ui progress" ref="div_progress" id="progressbar_addDeck_upload" >
                       <div className="bar">
-                          <div className="progress"></div>
+                          <div className="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                       <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
                   </div>
