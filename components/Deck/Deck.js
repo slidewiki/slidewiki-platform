@@ -74,7 +74,8 @@ class Deck extends React.Component {
             dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
         return (
-            <div className="ui vertically padded stackable grid container" ref="deck">
+            <div className="ui fluid container" ref="deck">
+                <div className="ui vertically padded stackable grid ">
                 {error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''}
                 <div className="row">
                     <div className={navigationPanelClass}>
@@ -112,7 +113,7 @@ class Deck extends React.Component {
                         </div>
                     </div>
                 </div>
-
+                </div>
             </div>
         );
     }
