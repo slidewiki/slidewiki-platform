@@ -1,8 +1,9 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import fetchUser from '../../../../actions/user/userprofile/fetchUser';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
-import ContributorsStore from '../../../../stores/ContributorsStore';
+import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsList from './ContentQuestionsList';
 // import ContentQuestionForm from './ContentQuestionForm';
@@ -12,8 +13,8 @@ class ContentQuestionsPanel extends React.Component {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
-        const creators = this.props.ContributorsStore.creator;
-        const user = this.props.UserProfileStore.user.userid;
+        const creatorId = this.props.DeckViewStore.creatorData._id;
+        const userId = this.props.UserProfileStore.userid;
 
     // Button bar differs for Slide and Folder
         let buttonBar = '';
@@ -58,12 +59,8 @@ class ContentQuestionsPanel extends React.Component {
         );
 
         const getUserButton = () => {
-            console.log('creators: ', creators);
-            console.log('user: ', user);
-            if(creators.length > 0){
-                if(creators[0].id === user){
-                    return addQuestionButton;
-                }
+            if(userId && creatorId === userId){
+                return addQuestionButton;
             }
             return null;
         };
@@ -118,11 +115,13 @@ class ContentQuestionsPanel extends React.Component {
         );
     }
 }
-
-ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, ContributorsStore, UserProfileStore], (context, props) => {
+ContentQuestionsPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {
     return {
         ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
-        ContributorsStore: context.getStore(ContributorsStore).getState(),
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
     };
 });
