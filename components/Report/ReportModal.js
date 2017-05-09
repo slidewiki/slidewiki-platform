@@ -64,18 +64,12 @@ class ReportModal extends React.Component {
             name: false
         };
 
-        console.log('////////////////////////////////////userProfile');
-        console.log(this.props.UserProfileStore);
-        console.log(this.props.ContentStore);
-        console.log('////////////////////////////////////userProfile');
         let everythingOk = true;
         e.preventDefault();
         if(!this.refs.reason.value){
             wrongFields.reason = true;
             everythingOk = false;
         }
-
-
 
         if( !this.refs.text.value ){
             wrongFields.text = true;
@@ -85,6 +79,11 @@ class ReportModal extends React.Component {
                 wrongFields.text = true;
                 everythingOk = false;
             }
+        }
+
+        if(!this.refs.name.value && (this.refs.text.value.trim() === '') && (this.props.UserProfileStore.userid === '')) {
+            wrongFields.name = true;
+            everythingOk = false;
         }
 
         this.context.executeAction(sendReportShowWrongFields, wrongFields);
@@ -144,6 +143,7 @@ class ReportModal extends React.Component {
     }
 
     render() {
+
         let fieldClass_reason = classNames({
             'ui': true,
             'selection': true,
@@ -160,8 +160,17 @@ class ReportModal extends React.Component {
             'error': this.props.SendReportStore.wrongFields.text
         });
 
+        let fieldClass_name = classNames({
+            'ui': true,
+            'center': true,
+            'aligned': true,
+            'field': true,
+            'error': this.props.SendReportStore.wrongFields.name
+        });
+
+
         let nameField =
-                <div className="ui inline field" style={{width:'auto'}} >
+                <div className={fieldClass_name} style={{width:'auto'}} >
                     <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
                 </div>;
 
