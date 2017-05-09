@@ -59,7 +59,7 @@ class ContentDiffviewPanel extends Component {
         // console.groupEnd();
 
         //CONSTRUCT Diff view Slide
-        diffSRC = diff_fns.construct(elements, diffSRC, isUploaded);
+        diffSRC = diff_fns.construct(elements, diffSRC, isUploaded, baseSRC);
 
         //UPDATE state
         this.setState({content: diffSRC});

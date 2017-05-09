@@ -56,14 +56,31 @@ const handleTEXT = (oldText, newText, source) => {
     return source;
 };
 
-const handleINSERT = (el, source) => {
+const getParentId = (finalsource, id) => {
+    const finalRoot = createElement(convertHTML(finalsource));
+    const parent = $(finalRoot).find(`#${id}`).parent();
 
-    let elem = createElement(el.patch);
+    return parent[0].id;
+};
+
+const handleINSERT = (el, source, finalsource) => {
+
+    const elem = createElement(el.patch);
+    const tag = el.patch.tagName;
+    const _id = el.patch.key;
+
     let targetElement = $(elem);
     // let targetElement = $(elem).children().first();
     targetElement.addClass('added');
     let root = createElement(convertHTML(source));
-    $(root).append(elem);
+
+    if(tag === 'li'){
+        let parent = getParentId(finalsource, _id);
+        $(root).find(`#${parent}`).append(elem);
+    } else {
+        $(root).append(elem);
+    }
+
     source = root.outerHTML;
 
     return source;
@@ -171,7 +188,7 @@ const setKeys = (source) => {
 @ string:initSrc - apply changes on top of this source string
 @ string:mode: uploaded/created
 */
-const detectnPatch = (list, initSrc, mode) => {
+const detectnPatch = (list, initSrc, mode, finalSrc) => {
     let elem;
     console.group();
     console.info('Changes');
@@ -206,7 +223,7 @@ const detectnPatch = (list, initSrc, mode) => {
                 break;
             case 6:
                 console.warn('INSERTED');
-                initSrc = handleINSERT(el, initSrc);
+                initSrc = handleINSERT(el, initSrc, finalSrc);
                 break;
             case 7:
                 console.warn('REMOVE');

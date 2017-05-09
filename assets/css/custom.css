@@ -40,14 +40,15 @@
 }
 
 .diff-view .pptx2html {
-  transform: scale(0.8);
-  top: -190px;
+  /*transform: scale(0.8);
+  top: -190px;*/
   left: -75px;
 }
 
 /* HTML DOM Node related */
 .diff-view .added, .modified, .deleted {
   padding: 5px; margin: 2px;
+  display: inline-block;
 }
 
 .diff-view p {
