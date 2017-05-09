@@ -26,9 +26,11 @@ class ContentQuestionsPanel extends React.Component {
     }
 
     handlePageClick(pageNo) {
-        this.setState({
-            pageNo: pageNo,
-        }, this.updateQuestionsList);
+        if(pageNo !== this.state.pageNo){
+            this.setState({
+                pageNo: pageNo,
+            }, this.updateQuestionsList);
+        }
     }
 
     handlePreviousClick(){
