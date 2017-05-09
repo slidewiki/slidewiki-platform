@@ -10,7 +10,7 @@ class DefaultHTMLLayout extends React.Component {
     render() {
 
         return (
-            <html>
+            <html lang={ this.props.lang }>
             <head>
                 <meta charSet="utf-8" />
                 <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
