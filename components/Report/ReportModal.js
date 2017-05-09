@@ -81,7 +81,8 @@ class ReportModal extends React.Component {
             }
         }
 
-        if(!this.refs.name.value && (this.refs.text.value.trim() === '') && (this.props.UserProfileStore.userid === '')) {
+
+        if((!this.refs.name || !this.refs.name.value || (this.refs.text.value.trim() === '')) && (this.props.UserProfileStore.userid === '')) {
             wrongFields.name = true;
             everythingOk = false;
         }
@@ -97,8 +98,15 @@ class ReportModal extends React.Component {
                 deckOrSlideReportLine = 'Report on Deck: ' + this.props.ContentStore.selector.id + '\n';
             }
 
+            let userId = '';
+            // If user is not logged in, use the name provided
+            if(this.props.UserProfileStore.userid === '') {
+                userId = this.refs.name.value;
+            } else {
+                userId = this.props.UserProfileStore.userid;
+            }
             let subject = '[SlideWiki] Report on Deck/Slide' ;
-            let emailBody = 'Report made by user: ' + this.props.UserProfileStore.userid + '\n'
+            let emailBody = 'Report made by user: ' + userId + '\n'
                 + deckOrSlideReportLine
                 + 'Reason of the report: ' + this.refs.reason.value + '\n'
                 + 'Description of the report: \n\n' + this.refs.text.value + '\n\n\n';
