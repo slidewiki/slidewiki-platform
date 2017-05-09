@@ -66,6 +66,8 @@ class ContentDiffviewPanel extends Component {
     }
 
     render() {
+        const { currentRevision } = this.state;
+
         const revisions = this.state.revisionsList.map((el) => {
             const disable = el.id === parseInt(this.state.currentRevision) ? true : false;
             return {key: el.id, text: `Revision ${el.id}`, value: el.id, disabled: disable};
@@ -77,7 +79,7 @@ class ContentDiffviewPanel extends Component {
         return (
             <div ref="ContentDiffviewPanel" className="ui">
                 <h1><span>{diffType}</span> – Diff View</h1>
-                <p>Diff the current revision against:</p>
+                <p>Diff the current revision [{currentRevision}] against:</p>
                 <Dropdown placeholder='Select Revision' ref="dropdown" selection options={revisions}/>
                 <button className="ui blue icon button" onClick={this.diff}>DIFF</button>
                 <div className='diff-view' dangerouslySetInnerHTML={{__html: this.state.content}}></div>

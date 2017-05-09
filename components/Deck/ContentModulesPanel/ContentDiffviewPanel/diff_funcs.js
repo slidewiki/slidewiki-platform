@@ -152,13 +152,19 @@ const preprocessSrc = (source, mode) => {
 
     if (mode) {
         //canvas slide
-        let root = createElement(convertHTML(source));
-        //delete brs ?
+        const vTreeObject = convertHTML(source);
+        let root;
+
+        vTreeObject.length > 1 ? root = createElement(vTreeObject[0]) : root = createElement(vTreeObject);
+
         $(root).find('br').remove();
         $(root).find('.drawing-container').remove();
+        $(root).find('p:empty').remove();
         $(root).find('span:empty').remove();
-        //remove first emply div
-        $(root).find('div').first().remove();
+        $(root).find('div:empty').remove();
+        // CKEditor related
+        $(root).find('.cke_image_resizer, .cke_widget_drag_handler_container').remove();
+
         source = root.outerHTML;
 
     } else {
