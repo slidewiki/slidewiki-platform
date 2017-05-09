@@ -1,48 +1,58 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import loadContentQuestions from '../../../../actions/loadContentQuestions';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
+import ContentModulesStore from '../../../../stores/ContentModulesStore';
 import ContentQuestionsList from './ContentQuestionsList';
 // import ContentQuestionForm from './ContentQuestionForm';
 
-const itemsPerPage = 5; //variable for changing pagination behaviour
 class ContentQuestionsPanel extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            pageNo: 0,
+            pageNo: props.ContentModulesStore.selector.pageNum,
         };
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handlePreviousClick = this.handlePreviousClick.bind(this);
+        this.updateQuestionsList = this.updateQuestionsList.bind(this);
+    }
 
+    updateQuestionsList(){
+        let selector = this.props.ContentModulesStore.selector;
+        selector.pageNum = this.state.pageNo;
+        this.context.executeAction(loadContentQuestions, {params: selector});
     }
 
     handlePageClick(pageNo) {
         this.setState({
             pageNo: pageNo,
-        });
+        }, this.updateQuestionsList);
     }
 
     handlePreviousClick(){
-        if(this.state.pageNo !== 0){
+        if(this.state.pageNo !== 1){
             this.setState({
                 pageNo: this.state.pageNo - 1,
-            });
+            }, this.updateQuestionsList);
         }
     }
 
     handleNextClick(lastPageNo){
-        if(this.state.pageNo < lastPageNo)
+        if(this.state.pageNo < lastPageNo){
             this.setState({
                 pageNo: this.state.pageNo + 1,
-            });
+            }, this.updateQuestionsList);
+        }
     }
 
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
         const selector = this.props.ContentQuestionsStore.selector;
+        const totalLength = this.props.ContentQuestionsStore.totalLength;
+        const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
 
 
     // Button bar differs for Slide and Folder
@@ -127,16 +137,16 @@ class ContentQuestionsPanel extends React.Component {
                     className={className}
                     onClick={this._onClick}
                   >
-                  {this.props.pageNo+1}
+                  {this.props.pageNo}
                   </a>
                 );
             }
         }
 
         let getItems = () => {
-            let noOfQuestions = questions.length;
+            let noOfQuestions = totalLength;
             let items = [];
-            let pageNo = 0;
+            let pageNo = 1;
             for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
                 items.push(
                   <PaginationItem
@@ -150,7 +160,7 @@ class ContentQuestionsPanel extends React.Component {
             return items;
         };
 
-        let lastPageNo = parseInt(questions.length / itemsPerPage);
+        let lastPageNo = parseInt(totalLength / itemsPerPage) + 1;
         let pagination = (
           <div className="ui centered pagination menu">
             <a className="icon item" onClick={this.handlePreviousClick}>
@@ -164,17 +174,11 @@ class ContentQuestionsPanel extends React.Component {
 
     );
 
-        let lowerBound = this.state.pageNo * itemsPerPage;
-        let upperBound = lowerBound + itemsPerPage;
-        if (upperBound > questions.length){
-            upperBound = questions.length;
-        }
-
         let content = (
       <div>
         {buttonBar}
         {questionsHeader}
-        <ContentQuestionsList items={questions.slice(lowerBound, upperBound)} />
+        <ContentQuestionsList items={questions} />
         {pagination}
       </div>
     );
@@ -198,9 +202,14 @@ class ContentQuestionsPanel extends React.Component {
     }
 }
 
-ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore], (context, props) => {
+ContentQuestionsPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
+ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, ContentModulesStore], (context, props) => {
     return {
-        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState()
+        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
+        ContentModulesStore: context.getStore(ContentModulesStore).getState()
     };
 });
 export default ContentQuestionsPanel;
