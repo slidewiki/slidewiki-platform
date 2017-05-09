@@ -14,13 +14,16 @@ export default function uploadFile(context, payload, done) {
     const timeout = 60;
     const remainingProgress = 55;
     let currentProgress = 0;
-    const updatePeriod = payload.base64.length / 30 / 1000 / 1024 ; // progress bar speed depends on file length
-    const progressStep = 1;
+    const updatePeriod = 3; //3 seconds
+    let progressPerThreeSeconds = parseInt(40 * 1024 * 1024 / payload.base64.length) + 1;
     const timer = () => {
         setTimeout(() => {
             if (!context.myStuff.uploadFinished && currentProgress < remainingProgress) {
-                currentProgress += progressStep;
-                context.dispatch('UPLOAD_MORE_PROGRESS', progressStep);
+                currentProgress += progressPerThreeSeconds;
+                if (currentProgress > remainingProgress) {
+                    progressPerThreeSeconds -= currentProgress - remainingProgress;
+                }
+                context.dispatch('UPLOAD_MORE_PROGRESS', progressPerThreeSeconds);
                 timer();
             }
         }, updatePeriod * 1000);

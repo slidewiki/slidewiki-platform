@@ -142,12 +142,12 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
-        let progressLabel = (totalNoOfSlides === '0') ? 'Uploading file' :
-          (noOfSlides === '1' && totalNoOfSlides !== '1') ? 'Converting file' :
+        let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? 'Uploading file' :
+          (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
           (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
           (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
           'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
-        $('#progresslabel_addDeck_upload').text(progressLabel);
+        $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
     }
     initializeProgressBar() {
         $('#progressbar_addDeck_upload').progress('set active');
@@ -344,11 +344,9 @@ class AddDeck extends React.Component {
                           </div>
                       </div>
                   </div>
-                  <div className="ui progress" ref="div_progress" id="progressbar_addDeck_upload" >
-                      <div className="bar">
-                          <div className="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
+                  <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
+                      <div className="bar"></div>
+                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"></div>
                   </div>
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >

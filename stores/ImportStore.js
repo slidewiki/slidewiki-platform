@@ -86,7 +86,7 @@ class ImportStore extends BaseStore {
         console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         // this.uploadProgress = 100;
-        this.uploadProgress = 33;
+        this.uploadProgress = 65;
         this.deckId = headers.deckid;
         this.totalNoOfSlides = parseInt(headers.noofslides);
 
@@ -106,7 +106,7 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadMoreProgress(progress) {
-        console.log('ImportStore: uploadMoreProgress()', progress);
+        // console.log('ImportStore: uploadMoreProgress()', progress);
         if (this.uploadProgress === 100)
             return;
 
