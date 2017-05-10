@@ -80,8 +80,8 @@ export default {
                 rp.get({uri: Microservices.user.uri + '/information/email/' + args.email}).then((res) => {
                     callback(null, JSON.parse(res));
                 }).catch((err) => {
-                    console.log(err);
-                    callback(null, {});
+                    console.log(err.StatusCodeError, err.message, err.options);
+                    callback(null, {taken: undefined});
                 });
             }
         } else if (resource === 'user.checkusername') {
@@ -92,8 +92,8 @@ export default {
                 rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
                     callback(null, {username: args.username, res: JSON.parse(res)});
                 }).catch((err) => {
-                    console.log(err);
-                    callback(null, {});
+                    console.log(err.StatusCodeError, err.message, err.options);
+                    callback(null, {username: '', res: {taken: undefined, alsoTaken:[]}});
                 });
             }
         }
