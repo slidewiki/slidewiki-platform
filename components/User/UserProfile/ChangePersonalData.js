@@ -4,6 +4,7 @@ import CountryDropdown from '../../common/CountryDropdown.js';
 import LanguageDropdown from '../../common/LanguageDropdown.js';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 
+
 class ChangePersonalData extends React.Component {
 
     handleChangeUserdata(e) {
@@ -49,8 +50,9 @@ class ChangePersonalData extends React.Component {
                         </div>
                         <div className="ui field">
                             <div className="ui field">
-                                <label htmlFor="language">Interface language</label>
-                                <LanguageDropdown ref="language" id="language" required={true} language={this.props.user.language}/>
+                                {/**<label htmlFor="language">Interface language</label>**/}
+                                {/**<LanguageDropdown ref="language" id="language" required={true} language={this.props.user.language}/>**/}
+
                             </div>
                         </div>
                     </div>

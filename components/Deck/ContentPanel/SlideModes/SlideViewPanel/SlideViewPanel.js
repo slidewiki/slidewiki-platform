@@ -74,9 +74,9 @@ class SlideViewPanel extends React.Component {
             styleName = 'white';
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        console.log(style);
-        console.log(style.reveal);
-        console.log(style.slides);
+        //console.log(style);
+        //console.log(style.reveal);
+        //console.log(style.slides);
 
         return (
           <div className="ui bottom attached segment">
