@@ -1,9 +1,4 @@
 import React from 'react';
-//import AlloyEditor from 'alloyeditor';
-//import AlloyEditorComponent from '../../SlideModes/SlideEditPanel/AlloyEditor';
-//import CKeditorComponent from './CKeditorComponent';
-//import CKEDITOR from 'ckeditor';
-//import ckeditor from 'ckeditor';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
@@ -18,6 +13,7 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import TemplateDropdown from '../../../../common/TemplateDropdown';
+import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from 'react-contextmenu';
 
 let ReactDOM = require('react-dom');
 
@@ -27,9 +23,7 @@ class SlideContentEditor extends React.Component {
         this.currentcontent;
         this.refresh = 'false';
         this.CKEDitor_loaded = false;
-        //this.props.scaleratio = 1;
         this.scaleratio = 1;
-        //this.addBoxButtonHTML = '';
         this.inputBoxButtonTitle;
         if(this.props.content.indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
@@ -54,8 +48,6 @@ class SlideContentEditor extends React.Component {
             {
                 //overwrite content with templates from
                 //http://stable.slidewiki.org/deck/9319-3/
-                //const template = this.refs.templates.getSelected();
-                //console.log('selected template:' + template);
                 swal({
                     title: 'Apply template',
                     text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
@@ -191,8 +183,6 @@ class SlideContentEditor extends React.Component {
             if (el.id) { allIds.push(el.id); }
             else {el.id = random;}
         }
-        //console.log('allIds ' + allIds);
-        //console.log('this.refs.inlineContent.innerHTML ' + this.refs.inlineContent.innerHTML);
     }
     handleSaveButton(){
         if (this.props.UserProfileStore.username !== '') {
@@ -223,29 +213,15 @@ class SlideContentEditor extends React.Component {
             $('.sendtobackdiv').remove();
 
             this.uniqueIDAllElements();
-            //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
-            //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
-            //this.context.executeAction(saveSlide, {slide});
-            // let title = CKEDITOR.instances.inlineHeader.getData();
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
-            //let content = CKEDITOR.instances.inlineContent.getData();
             let content = (this.refs.inlineContent.innerHTML !== '') ? this.refs.inlineContent.innerHTML : ' ';
-            //let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
             let speakernotes = (this.refs.inlineSpeakerNotes.innerHTML !== '') ? this.refs.inlineSpeakerNotes.innerHTML : ' ';
-            //these fields should not be empty:
-            //if (title === ''){title = ' ';}
-            //if (content === ''){content = ' ';}
-            //if (speakernotes === ''){speakernotes = ' ';}
             //update store
             this.props.SlideEditStore.title = title;
             this.props.SlideEditStore.content = content;
             this.props.SlideEditStore.speakernotes = speakernotes;
             let currentSelector = this.props.selector;
-            //console.log('currentSelector: ' + currentSelector.id);
             let deckID = currentSelector.id;
-            //TODO GET subdeck from spath in currentSelector e.g. = Object {id: "56", sid: "691", stype: "slide", spath: "68:3;685:1;691:2"} = 56 is deck, 68 is subdeck
-            //TEST - create slide (before can be saved (=updated))
-            //console.log(speakernotes);
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
 
@@ -265,15 +241,10 @@ class SlideContentEditor extends React.Component {
     }
     addAbsoluteDiv() {
         //absolutediv
-        //this.props.SlideEditStore.content = CKEDITOR.instances.inlineContent.getData();
         //Check if content already has canvas/absolute positioning
-        //console.log('absolutediv');
-        //if(this.props.content.indexOf('pptx2html') !== -1 || (CKEDITOR.instances.inlineContent.getData() !== '' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1))
-        //if(this.props.content.indexOf('pptx2html') !== -1 || (CKEDITOR.instances.inlineContent.getData() !== '' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1))
         //TODO replace with this.refs.inlineContent.innerHTML
         if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            //console.log('input box');
             let index_highest = 0;
             $('.pptx2html [style*="absolute"]').each(function() {
                 let index_current = parseInt($(this).css('zIndex'), 10);
@@ -284,12 +255,10 @@ class SlideContentEditor extends React.Component {
             //cEl.style.zIndex = index_highest + 10;
 
             $('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
-            //$('.pptx2html [style*="absolute"]')
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.emitChange();
             this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
-            //console.log('canvas');
             swal({
                 title: 'Switch to canvas style layout',
                 text: 'This will add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
@@ -322,20 +291,11 @@ class SlideContentEditor extends React.Component {
 
     }
     getAbsoluteDiv(zindex){
-        //let simpledraggable = require('simple-draggable'); //remove window dependency
-        //let SimpleDraggable = require('../../../../../assets/simpledraggable');
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        /*
-            .border-100 { border-color: rgba(0,0,255,1); }
-            .border-75 { border-color: rgba(0,0,255,0.75); }
-            .border-50 { border-color: rgba(0,0,255,0.5); }
-            .border-25 { border-color: rgba(0,0,255,0.25); }
-        */
         return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
     }
     componentDidMount() {
 
-        //alert('remount');
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
 
@@ -369,16 +329,10 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
         if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
-            //alert('test');
             const userId = this.props.UserProfileStore.userid;
-            //console.log(userId);
             // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-
-            //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri +  + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //alert('test: ' + Microservices.import.uri + '/importImage/' + userId);
-            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
             CKEDITOR.inline('inlineContent', {
                 customConfig: '/assets/ckeditor_config.js',
@@ -391,73 +345,19 @@ class SlideContentEditor extends React.Component {
         ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
                 //this.resize();
-                // alert('resize');
                 this.forceUpdate();
             }
         });
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-        //needs copy of resize function == cannot find this.something in this context.
-        //tried ReactDOM.findDOMNode(this.refs.inlineContent).addEventListener('instanceReady', (evt) =>
-        //but did not work
-        //if(process.env.BROWSER){
-            //this.resize();
-            //alert('ckeditor load');
-            //this.forceUpdate();
-            //this.resize();
-        //    }
-        /*
-            //do not put borders around empty divs containing SVG elements
-            if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed'){
-                $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-            }
-            let containerwidth = document.getElementById('container').offsetWidth;
-            let containerheight = document.getElementById('container').offsetHeight;
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            let pptxwidth = $('.pptx2html').width();
-            let pptxheight = $('.pptx2html').height();
-            //remove previous event listeners!
-            let scaleratio = containerwidth / pptxwidth;
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-            require('../../../../../custom_modules/simple-draggable/lib/index.js');
-
-            SimpleDraggable('.pptx2html [style*="absolute"]', {
-                onlyX: false,
-                onlyY: false,
-                ratio: scaleratio
-            });
-            SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
-                onlyX: false
-              , onlyY: false
-              , ratio: scaleratio
-            });
-
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            //this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            //this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-            $('.slideEditPanel').height(((pptxheight + 5 + 20) * scaleratio) + 'px');
-            $('.inlineContent').height(((pptxheight + 0 + 20) * scaleratio) + 'px');
-            //show that content is outside of pptx2html box
-            $('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
-            //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-            $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});*/
             this.resize();
             if(document.domain !== 'localhost')
             {
                 document.domain = 'slidewiki.org';
             }
         });
-
-
-
-        //setTimeout(this.forceUpdate(), 500);
-        //alert('componentdidmount');
-        //this.forceUpdate();
-
     }
     componentDidUpdate() {
-        //alert('update');
         if(process.env.BROWSER){
             this.resize();
         }
@@ -493,9 +393,36 @@ class SlideContentEditor extends React.Component {
         this.scaleratio = containerwidth / (pptxwidth+50);
         $('.pptx2html').css({'transform': '', 'transform-origin': ''});
         $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-        require('../../../../../custom_modules/simple-draggable/lib/index.js');
-        //remove previous event listeners!
 
+        //http://jqueryui.com/resizable/
+        //http://interface.eyecon.ro/docs/resizable
+        /*ResizableDestroy
+        A Resizable can be destroyed at anytime.
+        Code sample:
+        $('#resizeMe').ResizableDestroy();*/
+
+        // TODO -> create SVG around draggable element with points/blocks for resize handlers
+        // OR by emulating textarea - http://stackoverflow.com/questions/18427555/jquery-textarea-draggable
+        // or: make images JQUERY draggable, and have original button for text input  - too complex
+        //<g><path fill="#000" fill-opacity="0" stroke="#000" stroke-opacity="0" stroke-width="10550.76923076923" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" pointer-events="visiblePainted" d="M 4331 28073 L 318671 28073 318671 170081 4331 170081 Z"></path></g>
+        // TODO: Make background outside slide grey!
+        // TODO: move elements based on key-up / key-down / etc..
+        // TODO: copy-paste elements based on ctrl-c / ctrl-v
+        // TODO: keyboard focus and arrows to move; enter to start editing
+
+        //http://api.jqueryui.com/resizable/
+        //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
+        let jDiv = $('.pptx2html > [style*="absolute"]');
+        jDiv.resizable({handles: 'all',  scroll: true, containment: '#inlineContent'});
+        $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
+        //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
+        //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
+        //$('.pptx2html > [type="image"]').draggable();
+
+        //$('.pptx2html').resizable({handles: 'all'});
+
+        //require('../../../../../custom_modules/slide-edit-input-controls/lib/index.js');
+        //remove previous event listeners!
         /*
         SimpleDraggable('.pptx2html > [style*="absolute"]', {
             onlyX: false
@@ -504,82 +431,32 @@ class SlideContentEditor extends React.Component {
         });
         */
 
-        /*
-        SimpleDraggable('.pptx2html [style*="absolute"]', {
-            onlyX: false
-          , onlyY: false
-          , ratio: this.scaleratio
-        });
-        SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"]', {
-            onlyX: false
-          , onlyY: false
-          , ratio: this.scaleratio
-        });
-        SimpleDraggable('.pptx2html > [style*="absolute"] > [style*="absolute"] > [style*="absolute"]', {
-            onlyX: false
-          , onlyY: false
-          , ratio: this.scaleratio
-        });
-        */
-
-        //require('../../../../../custom_modules/jquery-ui-1.12.1.custom/jquery-ui.min.js');
-        //Get NPM package, including CSS - include in DefaultHTMLLayout
-        //http://jqueryui.com/resizable/
-        //http://interface.eyecon.ro/docs/resizable
-        /*ResizableDestroy
-        A Resizable can be destroyed at anytime.
-        Code sample:
-        $('#resizeMe').ResizableDestroy();*/
-
-        //TODO: synchronous - select multiple elements http://jqueryui.com/resizable/#synchronous-resize
-        //http://jqueryui.com/selectable/ - http://jqueryui.com/selectable/#display-grid
-        //http://stackoverflow.com/questions/26823175/drag-and-drop-multiple-selected-draggables-and-revert-invalid-ones-using-jquery#26960332
-        // TODO -> create SVG around draggable element with points/blocks for resize handlers
-        // TODO -> create hidden divs together with borders which do "resizeWith" / resize together with parent element.
-        // OR by emulating textarea - http://stackoverflow.com/questions/18427555/jquery-textarea-draggable
-        // or: make images JQUERY draggable, and have original button for text input  - too complex
-        //<g><path fill="#000" fill-opacity="0" stroke="#000" stroke-opacity="0" stroke-width="10550.76923076923" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" pointer-events="visiblePainted" d="M 4331 28073 L 318671 28073 318671 170081 4331 170081 Z"></path></g>
-        // TODO: Make background outside slide grey!
-        // TODO: move elements based on key-up / key-down / etc..
-        // TODO: copy-paste elements based on ctrl-c / ctrl-v
-
-        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all'});
-        $('.pptx2html > [style*="absolute"]').draggable();
-        //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
-        //$('.pptx2html > [type="image"]').draggable();
-
-        //$('.pptx2html').resizable({handles: 'all'});
 
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
         //show that content is outside of pptx2html box
         //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
-        $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
+        $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
         $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
     }
 
+    handleClick(e, data) {
+        console.log('Clicked on menu '+ data.item);
+    }
     componentWillUnmount() {
         // Remove the warning window.
         window.onbeforeunload = () => {};
-        //TODO
-        //CKEDITOR.instances.nonInline.destroy();
-        //CKEDITOR.instances.inlineHeader.destroy();
         CKEDITOR.instances.inlineContent.destroy();
         CKEDITOR.instances.inlineSpeakerNotes.destroy();
     }
-    //handleEditorChange(e) {
-        //http://docs.ckeditor.com/#!/guide/dev_savedata
-        //console.log(e.target.getContent());
-    //}
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
         //TODO - remove use of id - Only use 'ref=' for React. Find CKeditor create function(s) that do not require id.
         //styles should match slideViewPanel for consistency
         //TODO - add zoomin button + restore button
         //TODO - center editable screen + space above + below
-
         // When the component is rendered the confirmation is configured.
 
         const headerStyle = {
@@ -599,15 +476,6 @@ class SlideContentEditor extends React.Component {
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
-        /*const speakernotesStyle = {
-            minWidth: '100%',
-            maxHeight: 120,
-            minHeight: 120,
-            overflowY: 'auto',
-            borderStyle: 'dashed',
-            borderColor: '#e7e7e7',
-            position: 'relative'
-        };*/
         const speakernotesStyle = {
             maxHeight: 50,
             minHeight: 50,
@@ -667,6 +535,8 @@ class SlideContentEditor extends React.Component {
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+        //https://github.com/vkbansal/react-contextmenu/
+        const MENU_TYPE = 'SIMPLE';
 
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
@@ -687,11 +557,29 @@ class SlideContentEditor extends React.Component {
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
-                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                <ContextMenuTrigger id={MENU_TYPE} holdToDisplay={1000} style={{zIndex: 1000000000}}>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                </ContextMenuTrigger>
                             </section>
                         </div>
                     </div>
                 </div>
+                <ContextMenu id={MENU_TYPE} style={{zIndex: 1000000000}}>
+                    <MenuItem onClick={this.handleClick} data={{ item: 'item 1' }}>Menu Item 1</MenuItem>
+                    <MenuItem onClick={this.handleClick} data={{ item: 'item 2' }}>Menu Item 2</MenuItem>
+                    <SubMenu title='A SubMenu'>
+                        <MenuItem onClick={this.handleClick} data={{ item: 'subitem 1' }}>SubItem 1</MenuItem>
+                        <SubMenu title='Another SubMenu'>
+                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 1' }}>SubSubItem 1</MenuItem>
+                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 2' }}>SubSubItem 2</MenuItem>
+                        </SubMenu>
+                        <SubMenu title='Yet Another SubMenu'>
+                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 3' }}>SubSubItem 3</MenuItem>
+                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 4' }}>SubSubItem 4</MenuItem>
+                        </SubMenu>
+                        <MenuItem onClick={this.handleClick} data={{ item: 'subitem 2' }}>SubItem 2</MenuItem>
+                    </SubMenu>
+                </ContextMenu>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
@@ -713,15 +601,6 @@ class SlideContentEditor extends React.Component {
             'Are you sure you want to exit this page?';
         };
     }
-/*
-    confirmExit() {
-
-      return 'If you don\'t save the slide the content won\'t be updated. ' +
-        'Are you sure you want to exit this page?';
-
-    }
-*/
-
 }
 
 SlideContentEditor.contextTypes = {
