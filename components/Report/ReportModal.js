@@ -25,7 +25,8 @@ class ReportModal extends React.Component {
 
         this.state = {
             modalOpen: false,
-            activeTrap: false
+            activeTrap: false,
+            'grecaptcharesponse': undefined
         };
         this.handleSendReport= this.handleSendReport.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
@@ -87,6 +88,12 @@ class ReportModal extends React.Component {
         if((!this.refs.name || !this.refs.name.value || (this.refs.text.value.trim() === '')) && (this.props.UserProfileStore.userid === '')) {
             wrongFields.name = true;
             everythingOk = false;
+        }
+
+        // Recaptcha Validation
+        if(  this.props.UserProfileStore.userid === '' &&
+            (this.state === null || this.state.grecaptcharesponse === undefined)) {
+            everythingOk= false;
         }
 
         this.context.executeAction(sendReportShowWrongFields, wrongFields);
