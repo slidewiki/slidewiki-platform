@@ -194,7 +194,7 @@ class ReportModal extends React.Component {
             <div >
                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
-            </div>
+            </div>;
 
         return(
 
