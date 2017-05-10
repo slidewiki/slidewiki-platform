@@ -20,7 +20,7 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
                 <link href="/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-                <link href="/assets/css/react-contextmenu.css" rel="stylesheet" type="text/css" />
+                <link href="/jquery-contextmenu/dist/jquery.contextMenu.min.css" rel="stylesheet" type="text/css" />
                 {/* Vendors css bundle */
                     this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
                 }
@@ -59,6 +59,7 @@ class DefaultHTMLLayout extends React.Component {
                 }
                 <script src="/ckeditor/ckeditor.js"></script>
                 <script src="/jquery-ui-dist/jquery-ui.min.js"></script>
+                <script src="/jquery-contextmenu/dist/jquery.contextMenu.min.js"></script>
                 {/*<script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script src="/custom_modules/slide-edit-input-controls/lib/index.js"></script>*/}
                 <script src="/headjs/dist/1.0.0/head.min.js"></script>

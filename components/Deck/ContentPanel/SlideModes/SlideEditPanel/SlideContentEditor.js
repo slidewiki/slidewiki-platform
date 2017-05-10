@@ -13,7 +13,6 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import TemplateDropdown from '../../../../common/TemplateDropdown';
-import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from 'react-contextmenu';
 
 let ReactDOM = require('react-dom');
 
@@ -418,19 +417,18 @@ class SlideContentEditor extends React.Component {
         //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
         //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
         //$('.pptx2html > [type="image"]').draggable();
-
         //$('.pptx2html').resizable({handles: 'all'});
 
-        //require('../../../../../custom_modules/slide-edit-input-controls/lib/index.js');
-        //remove previous event listeners!
-        /*
-        SimpleDraggable('.pptx2html > [style*="absolute"]', {
-            onlyX: false
-          , onlyY: false
-          , ratio: this.scaleratio
+        $.contextMenu({
+            // define which elements trigger this menu
+            selector: '.pptx2html > [style*="absolute"]',
+            // define the elements of the menu
+            items: {
+                foo: {name: 'Foo', callback: function(key, opt){ console.log('Foo!'); }},
+                bar: {name: 'Bar', callback: function(key, opt){ console.log('Bar!'); }}
+            }
+            // there's more, have a look at the demos and docs...
         });
-        */
-
 
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
@@ -535,8 +533,6 @@ class SlideContentEditor extends React.Component {
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
-        //https://github.com/vkbansal/react-contextmenu/
-        const MENU_TYPE = 'SIMPLE';
 
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
@@ -557,29 +553,11 @@ class SlideContentEditor extends React.Component {
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
-                                <ContextMenuTrigger id={MENU_TYPE} holdToDisplay={1000} style={{zIndex: 1000000000}}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
-                                </ContextMenuTrigger>
+                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                             </section>
                         </div>
                     </div>
                 </div>
-                <ContextMenu id={MENU_TYPE} style={{zIndex: 1000000000}}>
-                    <MenuItem onClick={this.handleClick} data={{ item: 'item 1' }}>Menu Item 1</MenuItem>
-                    <MenuItem onClick={this.handleClick} data={{ item: 'item 2' }}>Menu Item 2</MenuItem>
-                    <SubMenu title='A SubMenu'>
-                        <MenuItem onClick={this.handleClick} data={{ item: 'subitem 1' }}>SubItem 1</MenuItem>
-                        <SubMenu title='Another SubMenu'>
-                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 1' }}>SubSubItem 1</MenuItem>
-                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 2' }}>SubSubItem 2</MenuItem>
-                        </SubMenu>
-                        <SubMenu title='Yet Another SubMenu'>
-                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 3' }}>SubSubItem 3</MenuItem>
-                            <MenuItem onClick={this.handleClick} data={{ item: 'subsubitem 4' }}>SubSubItem 4</MenuItem>
-                        </SubMenu>
-                        <MenuItem onClick={this.handleClick} data={{ item: 'subitem 2' }}>SubItem 2</MenuItem>
-                    </SubMenu>
-                </ContextMenu>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
