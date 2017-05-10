@@ -12,6 +12,8 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import SendReportStore from '../../stores/SendReportStore';
 import { Button, Container, Form, Modal, TextArea, Icon, Segment } from 'semantic-ui-react';
 let classNames = require('classnames');
+import {publicRecaptchaKey} from '../../configs/general';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -150,6 +152,12 @@ class ReportModal extends React.Component {
         }
     }
 
+    onRecaptchaChange(response) {
+        this.setState({
+            'grecaptcharesponse': response
+        });
+    }
+
     render() {
 
         let fieldClass_reason = classNames({
@@ -176,11 +184,17 @@ class ReportModal extends React.Component {
             'error': this.props.SendReportStore.wrongFields.name
         });
 
+        const recaptchaStyle = {display: 'inline-block'};
 
         let nameField =
-                <div className={fieldClass_name} style={{width:'auto'}} >
-                    <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
-                </div>;
+            <div className={fieldClass_name} style={{width:'auto'}} >
+                <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
+            </div>;
+        let captchaField =
+            <div >
+                <input type="hidden" id="recaptcha" name="recaptcha"></input>
+                <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+            </div>
 
         return(
 
@@ -231,6 +245,7 @@ class ReportModal extends React.Component {
                                             <label>Explanation</label>
                                             <textarea ref="text" id="reportComment" name="text" style={{width:'50%', minHeight: '6em', height: '6em'}} placeholder="Please give a short explanation about your report"></textarea>
                                         </div>
+                                        {(this.props.UserProfileStore.userid === '') ?  captchaField: ''}
                                         <Button
                                             color="blue"
                                             type="submit"

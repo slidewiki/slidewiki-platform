@@ -9,7 +9,8 @@ class SendReportStore extends BaseStore {
         super(dispatcher);
         this.wrongFields = {
             reason: false,
-            text: false
+            text: false,
+            name: false
         };
         this.error = null;
 
@@ -20,7 +21,8 @@ class SendReportStore extends BaseStore {
     destructor() {
         this.wrongFields = {
             reason: false,
-            text: false
+            text: false,
+            name: false
         };
         this.error = null;
         this.openModal = false;
@@ -63,6 +65,7 @@ class SendReportStore extends BaseStore {
     showWrongFields(wF) {
         this.wrongFields.reason = wF.reason;
         this.wrongFields.text = wF.text;
+        this.wrongFields.name = wF.name;
 
         this.emitChange();
     }
