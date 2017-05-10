@@ -419,6 +419,8 @@ class SlideContentEditor extends React.Component {
         //$('.pptx2html > [type="image"]').draggable();
         //$('.pptx2html').resizable({handles: 'all'});
 
+        //https://github.com/swisnl/jQuery-contextMenu
+        //http://swisnl.github.io/jQuery-contextMenu/
         $.contextMenu({
             // define which elements trigger this menu
             selector: '.pptx2html > [style*="absolute"]',
