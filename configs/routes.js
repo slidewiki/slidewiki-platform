@@ -4,7 +4,6 @@ import { shortTitle, fullTitle } from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
-// import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -169,7 +168,6 @@ export default {
         }
     },
     search: {
-        // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
         path: '/search/:queryparams?',
         method: 'get',
         page: 'search',
