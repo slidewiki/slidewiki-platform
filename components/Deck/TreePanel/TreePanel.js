@@ -137,6 +137,9 @@ class TreePanel extends React.Component {
         return (
             <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
+                    <div className="ui secondary segment">
+                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
+                    </div>
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="3 fluid ui icon large buttons">
                             <div className="ui basic disabled attached button" aria-label="Theme" data-tooltip="Theme"
@@ -152,9 +155,7 @@ class TreePanel extends React.Component {
                             </div>
                         </div>
                     }
-                    <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
-                    </div>
+                    
                     <div className="ui segment" style={treeDIVStyles}>
 
                         {decktreeError ? <div className="ui error message" style={{
