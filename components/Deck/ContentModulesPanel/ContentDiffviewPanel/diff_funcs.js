@@ -9,7 +9,8 @@ import $ from 'jquery';
 import _ from 'lodash';
 import * as jsdiff from 'diff';
 
-//TODO FUnction that takes a string and returns a FUnction applying createElement(convertHTML());
+//TODO CHECK meta-date changes. Title changes -> result in new revisions
+const CKEditor_vars = ['span', 'var', 'em', 'strong', 'u'];
 
 const toHTML = (string) => (
   createElement(convertHTML(string))
@@ -48,7 +49,11 @@ const getParentId = (finalSrc, id) => {
 };
 
 const getClosestDiv = (finalSrc, id) => {
+    const finalRoot = toHTML(finalSrc);
+    const parent = $(finalRoot).find(`#${id}`).closest('div');
 
+    return parent[0].id;
+};
 
 const handleTEXT = (oldText, newText, source) => {
 
@@ -106,14 +111,20 @@ const handleINSERT = (el, source, finalsource) => {
     return source;
 };
 
-const handleREMOVE = (el, source) => {
+const handleREMOVE = (el, source, finalsource) => {
     const _id = el.vNode.key;
-    let root = createElement(convertHTML(source));
+    const tag = el.vNode.tagName;
+    let root = toHTML(source);
 
-    if(_id){
-        let targetElement = $(root).find(`#${_id}`);
-      // let targetElement = $(root).find(`#${_id}`).children().first();
-        targetElement.addClass('deleted');
+    if(_.includes(CKEditor_vars, tag)) {
+        let parent = getClosestDiv(finalsource, _id);
+        $(root).find(`#${parent}`).addClass('modified');
+    } else {
+        if(_id){
+            let targetElement = $(root).find(`#${_id}`);
+            // let targetElement = $(root).find(`#${_id}`).children().first();
+            targetElement.addClass('deleted');
+        }
     }
 
     source = root.outerHTML;
@@ -253,8 +264,8 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
                 break;
             case 7:
                 console.warn('REMOVE');
-                type = el.vNode.constructor.name;
-                if(type === 'VirtualNode') initSrc = handleREMOVE(el, initSrc);
+                nodeType = el.vNode.constructor.name;
+                if(nodeType === 'VirtualNode') initSrc = handleREMOVE(el, initSrc, finalSrc);
                 break;
             default:
                 console.warn('default');
