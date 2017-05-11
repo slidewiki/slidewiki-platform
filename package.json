@@ -45,7 +45,7 @@
     "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
   "napa": {
-    "ckeditor-lineheight-plugin": "lotusgodkk/lineheight"
+    "ckeditor-lineheight-plugin": "https://github.com/lotusgodkk/lineheight.git"
   },
   "dependencies": {
     "babel-plugin-react-intl": "^2.3.1",
@@ -75,7 +75,6 @@
     "fluxible-router": "^0.4.21",
     "focus-trap-react": "^3.0.2",
     "form-data": "^2.1.2",
-    "focus-trap-react":"^3.0.1",
     "fumble": "^0.1.3",
     "headjs": "^1.0.3",
     "identicons-react": "^0.1.0",
