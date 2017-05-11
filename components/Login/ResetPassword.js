@@ -73,7 +73,7 @@ class ResetPassword extends React.Component {
         } else if (this.props.ResetPasswordStore.componentStatus === 'error') {
             swal({
                 title: 'Error',
-                text: this.props.UserRegistrationStore.errorMessage,
+                text: this.props.ResetPasswordStore.errorMessage,
                 type: 'error',
                 confirmButtonText: 'Close',
                 confirmButtonClass: 'negative ui button',
