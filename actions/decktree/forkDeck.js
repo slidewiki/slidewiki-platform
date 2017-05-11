@@ -51,6 +51,15 @@ export default function forkDeck(context, payload, done) {
                 context.executeAction(navigateAction, {
                     url: newURL
                 });
+
+                //create new activity
+                let activity = {
+                    activity_type: 'fork',
+                    user_id: userid,
+                    content_id: selector.id,
+                    content_kind: 'deck'
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
             done();
         }

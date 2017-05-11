@@ -81,6 +81,16 @@ class ContentActionsFooter extends React.Component {
             //console.log(this.props.ContentStore.selector.id);
             let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
             let pdfHref = Microservices.pdf.uri + '/export' + type + '/' + splittedId[0];
+
+            //create new activity
+            let activity = {
+                activity_type: 'download',
+                user_id: this.props.UserProfileStore.userid,
+                content_id: splittedId[0],
+                content_kind: 'deck'
+            };
+            context.executeAction(addActivity, {activity: activity}); 
+
             return pdfHref;
         }
         else
