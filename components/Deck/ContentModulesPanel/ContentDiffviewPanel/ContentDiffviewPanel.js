@@ -7,6 +7,9 @@ import ContentHistoryStore from '../../../../stores/ContentHistoryStore';
 
 import diff_fns from './diff_funcs';
 
+const MESSAGES = {
+};
+
 class ContentDiffviewPanel extends Component {
 
     static propTypes = {
@@ -46,6 +49,11 @@ class ContentDiffviewPanel extends Component {
         //ADD ID as key per element
         const vTree = diff_fns.setKeys(diffSRC);
         const vTree2 = diff_fns.setKeys(baseSRC);
+
+        if(!diff_fns.compareWrapperIds(diffSRC, baseSRC)){
+            this.setState({content: MESSAGES.Error_Version});
+            return;
+        }
 
         //DIFF 2 vTrees
         const diff_results = diff(vTree, vTree2);

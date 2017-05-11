@@ -11,6 +11,10 @@ import * as jsdiff from 'diff';
 
 //TODO FUnction that takes a string and returns a FUnction applying createElement(convertHTML());
 
+const toHTML = (string) => (
+  createElement(convertHTML(string))
+);
+
 const deepSearch = (obj, key) => {
     if (_.has(obj, key)) // or just (key in obj)
         return [obj];
@@ -28,8 +32,24 @@ const deepSearch = (obj, key) => {
     return res;
 };
 
-//TODO ADD HEAVY PROPS CHECK
-// Color + | Size ? | Font ? | Decoration ?
+// Fn resposible for comparing 2 root IDs
+const compareWrapperIds = (initSrc, finalSrc) => {
+    const finalRoot = toHTML(finalSrc);
+    const initRoot = toHTML(initSrc);
+
+    return ($(finalRoot)[0].id === $(initRoot)[0].id) ? true : false;
+};
+
+const getParentId = (finalSrc, id) => {
+    const finalRoot = toHTML(finalSrc);
+    const parent = $(finalRoot).find(`#${id}`).parent();
+
+    return parent[0].id;
+};
+
+const getClosestDiv = (finalSrc, id) => {
+
+
 const handleTEXT = (oldText, newText, source) => {
 
     const oldStr = oldText.text,
@@ -248,5 +268,6 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
 module.exports = {
     preprocess: preprocessSrc,
     construct: detectnPatch,
-    setKeys: setKeys
+    setKeys: setKeys,
+    compareWrapperIds: compareWrapperIds
 };
