@@ -185,6 +185,18 @@ class ActivityItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'fork':
+                IconNode = (<i className="ui big fork icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> {'forked '} {nodeRef}
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
             default:
                 IconNode = (<i className="ui big warning icon"></i>);
                 SummaryNode = (

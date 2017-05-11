@@ -183,6 +183,20 @@ class UserNotificationsItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'fork':
+                const forkIconClass = allIconClass.concat(' fork');
+                iconNotification = (<i className={forkIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary">
+                        <a className="user" href={'/user/' + notification.user_id}>
+                            {notification.author.username}
+                        </a> {'forked ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{notification.content_name}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
             case 'joined':
                 const joinedIconClass = allIconClass.concat(' add user');
                 iconNotification = (<i className={joinedIconClass}></i>);
