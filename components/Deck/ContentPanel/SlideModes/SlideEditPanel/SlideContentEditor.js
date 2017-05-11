@@ -341,13 +341,6 @@ class SlideContentEditor extends React.Component {
         }
         this.currentcontent = this.props.content;
 
-        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
-            if(process.env.BROWSER){
-                //this.resize();
-                this.forceUpdate();
-            }
-        });
-
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             this.resize();
             if(document.domain !== 'localhost')
@@ -355,43 +348,21 @@ class SlideContentEditor extends React.Component {
                 document.domain = 'slidewiki.org';
             }
         });
-    }
-    componentDidUpdate() {
-        if(process.env.BROWSER){
-            this.resize();
-        }
-        if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
-        { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            this.inputBoxButtonTitle = 'Add input box';
-        } else { //if slide does not have pptx2html/canvas/absolute positioning
-            this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
-        }
-    }
 
-    addBorders() {
-        //console.log('resize_all');
-        //do not put borders around empty divs containing SVG elements
-        //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
-        if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'solid') {
-            //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-            $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(0,0,255,0.5)'});
-        }
-    }
-
-    resize() {
+        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
+            if(process.env.BROWSER){
+                this.resize();
+                //this.forceUpdate();
+            }
+        });
 
         this.addBorders();
-        let containerwidth = document.getElementById('container').offsetWidth;
-        let containerheight = document.getElementById('container').offsetHeight;
-        //reset scaling of pptx2html element to get original size
-        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-        //Function to fit contents in edit and view component
-        let pptxwidth = $('.pptx2html').width();
-        let pptxheight = $('.pptx2html').height();
-        //TODO - change to get right!
-        this.scaleratio = containerwidth / (pptxwidth+50);
-        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-        $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+
+        //show that content is outside of pptx2html box
+        //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+        $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
+        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
         //http://jqueryui.com/resizable/
         //http://interface.eyecon.ro/docs/resizable
@@ -409,15 +380,40 @@ class SlideContentEditor extends React.Component {
         // TODO: copy-paste elements based on ctrl-c / ctrl-v
         // TODO: keyboard focus and arrows to move; enter to start editing
 
+
+        //***position mode - default/start***
         //http://api.jqueryui.com/resizable/
         //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
-        let jDiv = $('.pptx2html > [style*="absolute"]');
-        jDiv.resizable({handles: 'all',  scroll: true, containment: '#inlineContent'});
+        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true, containment: '#inlineContent'});
         $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
+
         //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
         //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
         //$('.pptx2html > [type="image"]').draggable();
         //$('.pptx2html').resizable({handles: 'all'});
+
+        //***content mode***
+        // TODO:  set enter-keycode-event for input box remove dragable and set cursor to auto for editing content
+
+        //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
+        $('.pptx2html > [style*="absolute"]').dblclick(function() {
+            //$(this).ResizableDestroy();
+            if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
+            $(this).css('cursor', 'auto');
+            $(this).css('background-color','rgba(0,0,255,0.3)');
+            $(this).addClass('activeContent');
+            // TODO:  restore draggable after pressing 'esc' key
+
+        });
+
+        $('.pptx2html > [style*="absolute"]').click(function() {
+            if (!$(this).hasClass('activeContent'))
+            {
+                $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
+                $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
+                $('.pptx2html > [style*="absolute"]').css('background-color','');
+            }
+        });
 
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
@@ -429,17 +425,50 @@ class SlideContentEditor extends React.Component {
                 foo: {name: 'Foo', callback: function(key, opt){ console.log('Foo!'); }},
                 bar: {name: 'Bar', callback: function(key, opt){ console.log('Bar!'); }}
             }
-            // there's more, have a look at the demos and docs...
         });
+
+        $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
+        $('.pptx2html > [style*="absolute"]').hover(function() {
+            $(this).css('background-color','rgba(0,0,255,0.05)');
+        }, function() {
+            $(this).css('background-color','');
+        });
+
+    }
+    componentDidUpdate() {
+        if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
+        { // if pptx2html element with absolute content is in slide content (underlying HTML)
+            this.inputBoxButtonTitle = 'Add input box';
+        } else { //if slide does not have pptx2html/canvas/absolute positioning
+            this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
+        }
+    }
+
+    addBorders() {
+        //do not put borders around empty divs containing SVG elements
+        //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
+        if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'solid') {
+            //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(0,0,255,0.5)'});
+        }
+    }
+
+    resize() {
+        let containerwidth = document.getElementById('container').offsetWidth;
+        let containerheight = document.getElementById('container').offsetHeight;
+        //reset scaling of pptx2html element to get original size
+        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+        //Function to fit contents in edit and view component
+        let pptxwidth = $('.pptx2html').width();
+        let pptxheight = $('.pptx2html').height();
+        //TODO - change to get right!
+        this.scaleratio = containerwidth / (pptxwidth+50);
+        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+        $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-        //show that content is outside of pptx2html box
-        //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
-        $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
-        //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
     }
 
     handleClick(e, data) {
