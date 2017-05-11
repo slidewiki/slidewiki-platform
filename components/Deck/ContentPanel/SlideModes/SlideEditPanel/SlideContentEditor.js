@@ -402,6 +402,7 @@ class SlideContentEditor extends React.Component {
             $(this).css('cursor', 'auto');
             $(this).css('background-color','rgba(0,0,255,0.3)');
             $(this).addClass('activeContent');
+            $(this).mouseleave(function(){$(this).css('background-color','rgba(0,0,255,0.3)');});
             // TODO:  restore draggable after pressing 'esc' key
 
         });
@@ -409,9 +410,15 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html > [style*="absolute"]').click(function() {
             if (!$(this).hasClass('activeContent'))
             {
-                $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
-                $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
-                $('.pptx2html > [style*="absolute"]').css('background-color','');
+                //reset cursor
+                $(this).focus();
+                //$(this).select();
+                //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
+                if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move', containment: '#inlineContent'});}
+                $('.activeContent').css('cursor', 'pointer');
+                $('.activeContent').css('background-color','');
+                $('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                $('.activeContent').removeClass('activeContent');
             }
         });
 
@@ -433,6 +440,10 @@ class SlideContentEditor extends React.Component {
         }, function() {
             $(this).css('background-color','');
         });
+
+        //give each input element a tab index
+        //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
+        $('.pptx2html > [style*="absolute"]').each(function () { $(this).attr('tabindex', 0); });
 
     }
     componentDidUpdate() {
