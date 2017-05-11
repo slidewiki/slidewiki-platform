@@ -8,6 +8,8 @@ import ContentHistoryStore from '../../../../stores/ContentHistoryStore';
 import diff_fns from './diff_funcs';
 
 const MESSAGES = {
+    'Warning_DropDown': 'PLEASE SELECT A REVISION FROM THE DROPDOWN',
+    'Error_Version': 'Sorry, the chosen revisions are incompatible to perform diff operation over. It may be cause by one of the reasons below: 1. Different templates applied. \n 2. Another reason'
 };
 
 class ContentDiffviewPanel extends Component {
@@ -33,7 +35,7 @@ class ContentDiffviewPanel extends Component {
 
         const diffID = this.refs.dropdown.state.value;
         if(!diffID){
-            this.setState({content: 'PLEASE SELECT A REVISION FROM THE DROPDOWN'});
+            this.setState({content: MESSAGES.Warning_DropDown});
             return;
         }
 
