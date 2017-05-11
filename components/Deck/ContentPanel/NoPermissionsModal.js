@@ -32,6 +32,14 @@ class NoPermissionsModal extends React.Component {
         this.context.executeAction(hideNoPermissionsModal);
     }
 
+    navigateToOwnedFork() {
+        let lastUpdatedFork = _.maxBy(this.props.PermissionsStore.ownedForks, (fork) => new Date(fork.lastUpdate));
+        this.context.executeAction(navigateAction, {
+            url: '/deck/' + lastUpdatedFork.id
+        });
+        this.context.executeAction(hideNoPermissionsModal);
+    }
+
     render() {
         let {isNoPermissionsModalShown, ownedForks, permissions} = this.props.PermissionsStore;
         let headerText, modalDescription, buttons;
@@ -46,13 +54,12 @@ class NoPermissionsModal extends React.Component {
             </div>;
         } else {
             headerText = 'No Edit Rights';
-            let lastUpdatedFork = _.maxBy(ownedForks, (fork) => new Date(fork.lastUpdate));
-            modalDescription = lastUpdatedFork != null ?
-                <span>You can only view this deck, however you have already forked it. You can either edit your <NavLink
-                    href={'/deck/' + lastUpdatedFork.id}>version</NavLink>, otherwise you may ask the owner to grant you edit rights. You can also create yet another fork of the deck.</span> :
+            modalDescription = ownedForks.length > 0 ?
+                <span>You can only view this deck, however you have already forked it. You can either edit your version, otherwise you may ask the owner to grant you edit rights. You can also create yet another fork of the deck.</span> :
                 <span>You can only view this deck. To make changes, you may ask the owner to grant you edit rights or fork the deck. Forking a deck means creating your copy of the deck.</span>;
             buttons = <div>
                 <Button as='button' disabled><Icon name='edit'/> Request edit access</Button>
+                {ownedForks.length > 0 ? <Button as='button' onClick={this.navigateToOwnedFork.bind(this)}>Go to your version</Button> : ''}
                 <Button as='button' onClick={this.handleFork.bind(this)}><Icon name='fork'/> Fork this deck</Button>
                 {closeButton}
             </div>;
