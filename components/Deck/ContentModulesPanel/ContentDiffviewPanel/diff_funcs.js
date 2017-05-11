@@ -81,29 +81,26 @@ const handleTEXT = (oldText, newText, source) => {
     return source;
 };
 
-const getParentId = (finalsource, id) => {
-    const finalRoot = createElement(convertHTML(finalsource));
-    const parent = $(finalRoot).find(`#${id}`).parent();
-
-    return parent[0].id;
-};
-
 const handleINSERT = (el, source, finalsource) => {
-
     const elem = createElement(el.patch);
-    const tag = el.patch.tagName;
     const _id = el.patch.key;
+    const tag = el.patch.tagName;
+    let root = toHTML(source);
 
-    let targetElement = $(elem);
-    // let targetElement = $(elem).children().first();
-    targetElement.addClass('added');
-    let root = createElement(convertHTML(source));
-
-    if(tag === 'li'){
-        let parent = getParentId(finalsource, _id);
-        $(root).find(`#${parent}`).append(elem);
+    if(_.includes(CKEditor_vars, tag)) {
+        let parent = getClosestDiv(finalsource, _id);
+        $(root).find(`#${parent}`).addClass('modified');
     } else {
-        $(root).append(elem);
+        let targetElement = $(elem);
+      // let targetElement = $(elem).children().first();
+        targetElement.addClass('added');
+
+        if(tag === 'li'){
+            let parent = getParentId(finalsource, _id);
+            $(root).find(`#${parent}`).append(elem);
+        } else {
+            $(root).append(elem);
+        }
     }
 
     source = root.outerHTML;
