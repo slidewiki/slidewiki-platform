@@ -3,11 +3,20 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import ResizeAware from 'react-resize-aware';
+import PresentationStore from '../../../../../stores/PresentationStore';
+import loadPresentation from '../../../../../actions/loadPresentation';
 import { findDOMNode } from 'react-dom';
 const ReactDOM = require('react-dom');
 
 class SlideViewPanel extends React.Component {
+    constructor(props){
+        super(props);
+
+
+
+    }
     render() {
+
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
             minWidth: '100%',
@@ -17,7 +26,7 @@ class SlideViewPanel extends React.Component {
         const compStyle = {
             //minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 450,
+            minHeight: 600,
             //minHeight: '100%',
             overflowY: 'auto',
             overflowX: 'auto',
@@ -28,7 +37,7 @@ class SlideViewPanel extends React.Component {
         const contentStyle = {
             minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 450,
+            minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
             //borderStyle: 'dashed',
@@ -50,13 +59,31 @@ class SlideViewPanel extends React.Component {
 
         };
 
+        // Add the CSS dependency for the theme
+        // Get the theme information, and download the stylesheet
+        let styleName = 'default';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme:
+            styleName = 'white';
+        }
+        let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        //console.log(style);
+        //console.log(style.reveal);
+        //console.log(style.slides);
 
         return (
           <div className="ui bottom attached segment">
               <ResizeAware ref='container' id='container'>
                   <div ref="slideViewPanel" className="ui" style={compStyle}>
-                      <div className="reveal">
-                          <div className="slides">
+                      <div className={['reveal', style.reveal].join(' ')}>
+                          <div className={['slides', style.slides].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                               <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}}></div>
                             </section>
@@ -73,7 +100,10 @@ class SlideViewPanel extends React.Component {
         );
     }
     componentDidMount(){
+
         if(process.env.BROWSER){
+
+
             //Function toi fit contents in edit and view component
             //$(".pptx2html").addClass('schaal');
             //$(".pptx2html [style*='absolute']").addClass('schaal');
@@ -106,6 +136,13 @@ class SlideViewPanel extends React.Component {
 
         this.resize();
     }
+    componentWillReceiveProps(nextProps){
+        // alert('styleName in componentWillReceiveProps: ' + styleName);
+        // console.log(this.props.PresentationStore);
+        if (nextProps.PresentationStore.theme === this.props.PresentationStore.theme){
+
+        }
+    }
     resize()
     {
         let containerwidth = document.getElementById('container').offsetWidth;
@@ -120,7 +157,9 @@ class SlideViewPanel extends React.Component {
         let pptxheight = $('.pptx2html').height();
 
         //only calculate scaleration for width for now
-        this.scaleratio = containerwidth / pptxwidth;
+        this.scaleratio = containerwidth / (pptxwidth+50);
+        //console.log(containerwidth);
+        //console.log(pptxwidth);
 
         if ($('.pptx2html').length)
         {
@@ -139,17 +178,23 @@ class SlideViewPanel extends React.Component {
             this.refs.slideViewPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
 
-            //show that content is outside of pptx2html box
-            $('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            //show that content is outside of pptx2html box (alternative to ridge: groove)
+            //$('.pptx2html').css({'borderStyle': 'ridge ridge ridge ridge', 'borderColor': '#7AB0D7', 'box-shadow': '0px 0px 1000px #E28447'});
+            $('.pptx2html').css({'borderStyle': 'double', 'borderColor': '#DA6619'});
             //all borders
             //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }
     }
 }
 
-SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore], (context, props) => {
+SlideViewPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
+SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore, PresentationStore], (context, props) => {
     return {
-        SlideViewStore: context.getStore(SlideViewStore).getState()
+        SlideViewStore: context.getStore(SlideViewStore).getState(),
+        PresentationStore: context.getStore(PresentationStore).getState()
     };
 });
 export default SlideViewPanel;

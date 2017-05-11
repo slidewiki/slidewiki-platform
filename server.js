@@ -4,6 +4,7 @@
  * based on the URL. Once completed, the store state is dehydrated
  * and the application is rendered via React.
  */
+
 import express from 'express';
 import favicon from 'serve-favicon';
 import serialize from 'serialize-javascript';
@@ -19,10 +20,12 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
-import cookie from 'react-cookie';
+import { locales } from './configs/general'; //a list of supported locales, defines also the localeSwitcher component
+import Cookie from 'js-cookie';
+import locale from 'locale';
+import handleServerRendering from './server/handleServerRendering'; //moved here the rendering part
+import setLocale from './server/setLocale'; //sets the locale from browser or cookies
 
-const uuidV4 = require('uuid/v4');
-const log = require('./configs/log').log;
 
 const env = process.env.NODE_ENV;
 // So we can check whether we are in the browser or not.  Required for webpack-load-css
@@ -91,96 +94,44 @@ fetchrPlugin.registerService(require('./services/usergroup'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 fetchrPlugin.registerService(require('./services/logservice'));
-
-server.use((req, res, next) => {
-    req.reqId = uuidV4().replace(/-/g, '');
-    res.reqId = req.reqId.replace(/-/g, '');
-    const context =  app.createContext({
-        req: req,
-        res: res  //for userStoragePlugin
-        //, // The fetchr plugin depends on this
-        //xhrContext: {
-        //    _csrf: req.csrfToken() // Make sure all XHR requests have the CSRF token
-        //}
-    });
-
-    log.info({Id: req.reqId, Method: req.method, URL: req.url, IP: req.ip, Message: 'New request'});
-    cookie.plugToRequest(req,res);
-    debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {url: req.url, reqId: req.reqId}, (err) => {
-        if (err) {
-            if (err.statusCode && err.statusCode === 404) {
-                // TODO refector the code in this if-else block
-                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-                debug('Rendering Application component into html');
-                const markup = ReactDOM.renderToString(createElementWithContext(context));
-                //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                const htmlElement = React.createElement(HTMLComponent, {
-                    clientFile: 'main.js',
-                    addAssets: (env === 'production'),
-                    context: context.getComponentContext(),
-                    state: exposed,
-                    markup: markup
-                });
-                const html = ReactDOM.renderToStaticMarkup(htmlElement);
-                debug('Sending markup');
-                res.type('html');
-                res.status(err.statusCode);
-                res.write('<!DOCTYPE html>' + html);
-                log.error({Id: res.reqId, URL: req.url, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
-                res.end();
-                // Pass through to next middleware
-                //next();
-            } else {
-                const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-                debug('Rendering Application component into html');
-                const markup = ReactDOM.renderToString(createElementWithContext(context));
-                //todo: for future, we can choose to not include specific scripts in some predefined layouts
-                const htmlElement = React.createElement(HTMLComponent, {
-                    clientFile: 'main.js',
-                    addAssets: (env === 'production'),
-                    context: context.getComponentContext(),
-                    state: exposed,
-                    markup: markup
-                });
-                const html = ReactDOM.renderToStaticMarkup(htmlElement);
-                debug('Sending markup');
-                res.type('html');
-                res.status(err.statusCode);
-                res.write('<!DOCTYPE html>' + html);
-                log.error({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'Sending response'});
-                res.end();
-                //next(err);
-            }
-            return;
-        }
-
-        debug('Exposing context state');
-        const exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
-
-        debug('Rendering Application component into html');
-        const markup = ReactDOM.renderToString(createElementWithContext(context));
-        //todo: for future, we can choose to not include specific scripts in some predefined layouts
-        const htmlElement = React.createElement(HTMLComponent, {
-            //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
-            clientFile: 'main.js',
-            addAssets: (env === 'production'),
-            context: context.getComponentContext(),
-            state: exposed,
-            markup: markup
-        });
-        const html = ReactDOM.renderToStaticMarkup(htmlElement);
-
-        debug('Sending markup');
-        res.type('html');
-        res.write('<!DOCTYPE html>' + html);
-        //console.log(Object.keys(res), res.statusCode, res.statusMessage, Object.keys(res.req));
-        log.info({Id: res.reqId, StatusCode: res.statusCode, StatusMessage: res.statusMessage, Message: 'sending response'});
-        res.end();
-    });
-});
+fetchrPlugin.registerService(require('./services/like'));
 
 
+// ************************** UI Internationalisation routines ***************************************
+
+// locale data from the intl library
+import {addLocaleData} from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import fr from 'react-intl/locale-data/fr';
+import es from 'react-intl/locale-data/es';
+import ru from 'react-intl/locale-data/ru';
+import de from 'react-intl/locale-data/de';
+import ca from 'react-intl/locale-data/ca';
+import gd from 'react-intl/locale-data/gd';
+import nl from 'react-intl/locale-data/nl';
+import el from 'react-intl/locale-data/el';
+import it from 'react-intl/locale-data/it';
+import cy from 'react-intl/locale-data/cy';
+
+addLocaleData([...en, ...fr, ...es, ...ru, ...de, ...ca, ...gd, ...nl, ...el, ...it, ...cy]);
+
+
+// Set the default locale
+
+locale.Locale.default = locales[0]; //the default locale is the first locale from a config
+
+// Set req.locale based on the browser settings
+
+server.use(locale(locales));
+
+// Overwrite req.locale either from cookie or querystring, if it is supported
+
+server.use(setLocale);
+
+// ************************************ Rendering ***************************************************
+
+//render the server, as previous but from a separate file
+server.use(handleServerRendering);
 server.listen(port);
 if(env === 'production'){
     console.log('[production environment] Check your application on http://%s:%s', host, port);

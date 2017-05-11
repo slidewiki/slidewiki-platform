@@ -3,11 +3,18 @@ import {BaseStore} from 'fluxible/addons';
 class ContentStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': '', page: 'content'};
+        this.selector = {'id': 0, 'spath': '', 'sid': 0, 'stype': '', page: 'content', 'theme': 'white'};
         this.mode = 'view';
     }
     updateContent(payload) {
-        this.selector= {'id': payload.params.id, 'spath': payload.params.spath, 'sid': payload.params.sid, 'stype': payload.params.stype, 'page': payload.page};
+        this.selector= {
+            'id': payload.params.id,
+            'spath': payload.params.spath,
+            'sid': payload.params.sid,
+            'stype': payload.params.stype,
+            'page': payload.page,
+            'theme': payload.params.theme
+        };
         this.mode = payload.params.mode;
         this.emitChange();
     }
@@ -16,6 +23,7 @@ class ContentStore extends BaseStore {
         this.selector.spath = selector.spath;
         this.selector.sid = selector.sid;
         this.selector.stype = selector.stype;
+        this.selector.theme = selector.theme;
         this.emitChange();
     }
     getState() {

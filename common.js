@@ -1,5 +1,35 @@
 export default {
 
+    writeCookie(name, value, days) {
+        let expires;
+
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = '; expires=' + date.toGMTString();
+        }
+        else {
+            expires = '';
+        }
+
+        document.cookie = name + '=' + value + expires + '; path=/';
+    },
+
+    getIntlMessage: function(messages, path) {
+        const pathParts = path.split('.');
+        let message;
+
+        try {
+            message = pathParts.reduce((obj, pathPart) => obj[pathPart], messages);
+        } finally {
+            if (message === undefined) {
+                throw new ReferenceError('Could not find Intl message: ' + path);
+            }
+        }
+
+        return message;
+    },
+
     isEmpty: function(toTest) {
         return (toTest === undefined ||
             toTest === null ||
@@ -67,6 +97,10 @@ export default {
     },
 
     arraysContainTheSameIdsInTheirObjects: (a, b) => {
+        if (a === undefined && b === undefined)
+            return true;
+        if ((a === undefined && b !== undefined) || (a !== undefined && b === undefined))
+            return false;
         if (a.length !== b.length)
             return false;
         for (let key in a) {

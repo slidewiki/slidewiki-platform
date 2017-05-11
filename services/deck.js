@@ -51,36 +51,45 @@ export default {
                 }, {});
             });
 
-            let revisionCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/revisionCount'}).catch((err) => {
+            // the forkCount API requires just the deck id, not the revision (a deck may be a fork of any revision)
+            let deckId = parseInt(args.sid); // we rely on parseInt
+            let forkCountPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + deckId + '/forkCount'}).catch((err) => {
                 callback({
-                    msg: 'Error in retrieving revisions count',
+                    msg: 'Error in retrieving fork count',
                     content: err
                 }, {});
             });
 
             /* Create user data promise which is dependent on deck data promise */
-            let usersPromise = deckPromise.then((deckData) => {
+            let usersPromise = deckPromise.then((deckRes) => {
                 // This should be done when deckservice and userservice data is in sync;
-                let deck = JSON.parse(deckData);
+                let deck = JSON.parse(deckRes);
                 let currentRevision = deck.revisions.length === 1 ? deck.revisions[0] : deck.revisions.find((rev) => {
                     return rev.id === deck.active;
                 });
-                let creatorRes = rp.get({uri: Microservices.user.uri + '/user/' + deck.user.toString()});
-                let ownerRes = deck.user === currentRevision.user ? creatorRes : rp.get({uri: Microservices.user.uri + '/user/' + currentRevision.user.toString()});
-                return Promise.all([creatorRes, ownerRes]);
+                let users = [deck.user, currentRevision.user];
+                if (deck.origin != null && deck.origin.user != null){
+                    users.push(deck.origin.user);
+                }
+                let userPromisesMap = {};
+                let userPromises = users.map((user) => {
+                    return userPromisesMap[user] = userPromisesMap[user] || rp.get({uri: Microservices.user.uri + '/user/' + user.toString()});
+                });
+                return Promise.all(userPromises);
             }).catch((err) => {
                 callback({msg: 'Error in retrieving user data from ' + Microservices.user.uri, content: err}, {});
             });
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, revisionCountPromise, usersPromise]).then((data) => {
+            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise]).then((data) => {
                 let deckData = JSON.parse(data[0]);
-                deckData.revisionCount = JSON.parse(data[2]);
+                deckData.forkCount = JSON.parse(data[2]);
                 callback(null, {
                     deckData: deckData,
                     slidesData: JSON.parse(data[1]),
                     creatorData: JSON.parse(data[3][0]),
-                    ownerData: JSON.parse(data[3][1])
+                    ownerData: JSON.parse(data[3][1]),
+                    originCreatorData: data[3][2] != null ? JSON.parse(data[3][2]) : {}
                 });
             }).catch((err) => {
                 //console.log(err);
@@ -119,6 +128,7 @@ export default {
                     tags: revision.tags != null ? revision.tags : deck.tags,
                     title: revision.title != null ? revision.title : deck.title,
                     license: revision.license != null ? revision.license : deck.license,
+                    theme: revision.theme != null ? revision.theme : deck.theme,
                     editors: editors.editors || {
                         users: [],
                         groups: []
@@ -145,6 +155,15 @@ export default {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
             });
+        } else if (resource === 'deck.forks') {
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.id.split('-')[0] + '/forks',
+                qs: args.user != null ? {user: args.user} : {},
+                json: true
+            }).then((body) => {
+                callback(null, body);
+            }).catch((err) => callback(err));
         }
     },
     // other methods
@@ -164,7 +183,8 @@ export default {
                 tags: params.tags,
                 title: params.title,
                 user: params.userid.toString(),
-                license: params.license
+                license: params.license,
+                theme: params.theme
             };
             rp({
                 method: 'POST',
@@ -193,8 +213,10 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
+                theme: params.theme,
                 new_revision: false,
                 top_root_deck: String(params.selector.id),
+                tags: params.tags
             };
             // console.log('send:', toSend, 'editors:', toSend.editors, 'to', Microservices.deck.uri + '/deck/' + params.deckId);
             rp({
@@ -227,6 +249,7 @@ export default {
                 title: params.title,
                 user: params.userid.toString(),
                 license: params.license,
+                theme: params.theme,
                 new_revision: true,
                 top_root_deck: selector.id,
 

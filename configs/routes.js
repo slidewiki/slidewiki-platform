@@ -4,7 +4,6 @@ import { shortTitle, fullTitle } from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
-// import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -169,7 +168,6 @@ export default {
         }
     },
     search: {
-        // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
         path: '/search/:queryparams?',
         method: 'get',
         page: 'search',
@@ -186,13 +184,28 @@ export default {
     // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
     // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
+    // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?',
+        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadPresentation, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+
+
+
         }
     },
     contributors: {
@@ -214,7 +227,7 @@ export default {
         }
     },
     content: {
-        path: '/content/:stype/:sid/:mode?',
+        path: '/content/:stype/:sid/:mode?/:theme?',
         method: 'get',
         page: 'content',
         handler: require('../components/Deck/ContentPanel/ContentPanel'),

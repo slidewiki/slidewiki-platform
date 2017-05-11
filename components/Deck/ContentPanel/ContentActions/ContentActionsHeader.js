@@ -7,9 +7,14 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
+import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
+
+
 
 class ContentActionsHeader extends React.Component {
+
     componentDidUpdate(){
 
     }
@@ -18,15 +23,16 @@ class ContentActionsHeader extends React.Component {
         //nodeSec: Object {type: "slide", id: 0}
         this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
     }
+
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
     }
+
     handleEditNode(selector) {
         const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
-        //user is not logged in
-        if (this.props.UserProfileStore.username === '') {
-            $('.ui.login.modal').modal('toggle');
-        }else{
+        if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
+            this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else {
             this.context.executeAction(navigateAction, {
                 url: nodeURL
             });
@@ -37,31 +43,41 @@ class ContentActionsHeader extends React.Component {
         //config buttons based on the selected item
         const addSlideClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         const addDeckClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         const deleteItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || !(this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit)
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
+
+        let buttonStyle = {
+            classNames : classNames({
+                'item small attached left':true,
+                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
+            }),
+            iconSize : 'large',
+            attached : 'left'
+        } ;
+
         return (
             <div className="ui top attached tabular menu" role="tablist">
-                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')}  onClick={this.handleEditNode.bind(this, selector)} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     <i></i>View
                 </NavLink>
                 {this.props.UserProfileStore.username === '' ? '' :
-                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'edit')} role={'tab'} tabIndex={'0'}>
-                    <i className="ui large blue edit icon "></i> Edit
-                </NavLink>
+                    <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
+                        <i className="ui large blue edit icon "></i> Edit
+                    </div>
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
@@ -77,8 +93,8 @@ class ContentActionsHeader extends React.Component {
                               <i className="yellow large folder icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-
                         </button>
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 

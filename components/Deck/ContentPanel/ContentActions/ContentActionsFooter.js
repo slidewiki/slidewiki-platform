@@ -5,10 +5,14 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import ReportModal from '../../../Report/ReportModal';
+import openReportModal from '../../../../actions/report/openReportModal';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
+import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
+import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
+import ContentLikeStore from '../../../../stores/ContentLikeStore';
 
 
 class ContentActionsFooter extends React.Component {
@@ -63,12 +67,6 @@ class ContentActionsFooter extends React.Component {
 
     }
 
-    handleReportClick(){
-        // Toggle Modal and so on...
-        $('.ui.report.modal')
-            .modal('toggle');
-    }
-
     getExportHref(type){
         if (type !== 'EPub' && type !== 'PDF') {
             return;
@@ -96,12 +94,37 @@ class ContentActionsFooter extends React.Component {
 
     }
 
+    handleLikeClick(e){
+        if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
+            this.props.ContentLikeStore.usersWhoLikedDeck.splice(this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)),1);
+            // dislike activity
+            this.context.executeAction(dislikeActivity, {
+                selector: this.props.ContentStore.selector,
+                userid: this.props.UserProfileStore.userid
+            });
+        } else {
+            this.props.ContentLikeStore.usersWhoLikedDeck.push(String(this.props.UserProfileStore.userid));
+            this.context.executeAction(likeActivity, {
+                selector: this.props.ContentStore.selector,
+                userid: this.props.UserProfileStore.userid,
+                username: this.props.UserProfileStore.username
+            });
+        }
+    }
+
     render() {
-        let reportButton = <div ref="reportButton" onClick={this.handleReportClick.bind(this)} target="_blank">
-                            <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
-                                <i className="warning circle large icon"></i>
-                            </button>
-                        </div>;
+        let likeButton = 'ui button';
+        let classNameLikeButton = 'thumbs up alternate large icon';
+        let tooltipLikeButton = 'Like this deck';
+        if (this.props.UserProfileStore.userid === '') {
+            //undefined user
+            likeButton = 'ui disabled button';
+        } else if (this.props.ContentLikeStore.usersWhoLikedDeck.indexOf(String(this.props.UserProfileStore.userid)) !== -1) {
+            //already liked
+            classNameLikeButton = 'thumbs up alternate large blue icon';
+            tooltipLikeButton = 'Dislike this deck';
+        }
+
         return (
             <div className="ui">
                 <div className="ui teal top attached progress slide-progress-bar" ref="slide-progressbar">
@@ -127,10 +150,12 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            {(this.props.UserProfileStore.userid !== '') ? reportButton : ''}
                             <ReportModal/>
                             <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
                                 <i className="share alternate large icon"></i>
+                            </button>
+                            <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+                                <i className={classNameLikeButton}></i>
                             </button>
                             {/* {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>} */}
                             {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)}  aria-label="Reset Layout" data-tooltip="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} aria-label="Expand Content" data-tooltip="Expand Content"><i className="large icon expand"></i></button>}
@@ -152,10 +177,11 @@ ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore], (context, props) => {
+ContentActionsFooter = connectToStores(ContentActionsFooter, [ContentActionsFooterStore, UserProfileStore, ContentLikeStore], (context, props) => {
     return {
         ContentActionsFooterStore: context.getStore(ContentActionsFooterStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        ContentLikeStore: context.getStore(ContentLikeStore).getState()
     };
 });
 export default ContentActionsFooter;

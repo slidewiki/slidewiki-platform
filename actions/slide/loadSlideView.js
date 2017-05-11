@@ -5,6 +5,7 @@ import { AllowedPattern } from '../error/util/allowedPattern';
 const log = require('../log/clog');
 
 export default function loadSlideView(context, payload, done) {
+    log.info(context);
     if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
         context.executeAction(slideIdTypeError, payload, done);
         return;

@@ -6,9 +6,9 @@ import PresentationSlide from './PresentationSlide';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import PresentationStore from '../../../stores/PresentationStore';
 import loadPresentation from '../../../actions/loadPresentation';
-//if(process.env.BROWSER){
+// if(process.env.BROWSER){
 //    require('../../../assets/css/PresentationDefaults.css');
-//}
+// }
 
 let playerCss = {
     height: '100%',
@@ -43,8 +43,8 @@ class Presentation extends React.Component{
             $('.ui.horizontal.segments.footer').css({'display': 'none'});
             $('.ui.horizontal.segments.footer').attr({'aria-hidden': 'hidden', 'hidden': 'hidden'});
 
-            let styleName = this.props.PresentationStore.theme;
-
+            // $('html.ios, html.ios body').css('height': '100% !important');
+            // Get the theme information, and download the stylesheet
 
             this.revealDiv.style.display = 'inline';
 
@@ -64,17 +64,35 @@ class Presentation extends React.Component{
             });
 
         }
+        // update mathjax rendering
+        // add to the mathjax rendering queue the command to type-set the slide content
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
+
     }
 
     componentDidUpdate(){
 
     }
     render(){
+
+        // Load the theme stylesheet
+        let styleName = 'default';
+        if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        //console.log('styleName', styleName);
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+        }
+        let style = require('../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        console.log(style);
         this.slides = this.getSlides();
         return(
             <div>
-                <div className="reveal" style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                    <div className="slides">
+                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                    <div className={['slides', style.slides].join(' ')}>
         			     	{this.slides}
         			      </div>
                 </div>

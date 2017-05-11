@@ -25,6 +25,15 @@ let webpackConfig = {
     module: {
         rules: [
             {
+                test: /\.json$/,            // Load JSON-files into code base.
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'json-loader',
+                    }
+                ]
+            },
+            {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: [
@@ -33,21 +42,25 @@ let webpackConfig = {
                     },
                     {
                         loader: 'babel-loader'
+
                     }
                 ]
             },
-            { test: /\.css$/,
+            {
+                test: /\.css$/,
+                exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
                 use: [
                     {
                         loader: 'style-loader'
                     },
                     {
-                        loader: 'css-loader'
+                        loader: 'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]',
+                        // options: {import: false}
                     }
                 ]
             },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
-            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000'},
+            { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'file-loader'},// 'url-loader?limit=100000'},
         ]
     },
     node: {
@@ -64,7 +77,7 @@ let webpackConfig = {
         }),
 
     ],
-    devtool: 'eval'
+    devtool: 'source-map'
 };
 
 module.exports = webpackConfig;

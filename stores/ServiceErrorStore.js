@@ -3,11 +3,13 @@ import {BaseStore} from 'fluxible/addons';
 class ServiceErrorStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.error = {};
+        this.error = '';
+        this.previous = false;
     }
     getState() {
         return {
             error: this.error,
+            previous: this.previous,
         };
     }
     updateContent(payload) {
@@ -18,10 +20,14 @@ class ServiceErrorStore extends BaseStore {
     }
     rehydrate(state) {
         this.error = state.error;
+        this.previous = state.previous;
     }
     handleError(err) {
-        this.error = err;
-        this.emitChange();
+        if (!this.previous) {
+            this.error = err;
+            this.previous = true;
+            this.emitChange();
+        }
     }
 }
 

@@ -64,6 +64,9 @@ export default {
         },
         'pdf': {
             uri : 'https://pdfservice.experimental.slidewiki.org'
+        },
+        'tag': {
+            uri : 'https://tagservice.experimental.slidewiki.org'
         }
     }
 };
