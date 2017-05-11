@@ -129,37 +129,37 @@ const handleREMOVE = (el, source, finalsource) => {
     return source;
 };
 
-const handlePROPS = (node, patch, source) => {
-    console.log(node);
-
+const handlePROPS = (node, patch, source, finalsource, vnode) => {
+    const _id = node.key;
     const tag = node.tagName;
+    let root = toHTML(source);
 
     let styles = patch.style;
     if(styles) Object.keys(styles).forEach((key) => styles[key] === undefined ? delete styles[key] : '');
     let attrs = patch.attributes;
     if(attrs) Object.keys(attrs).forEach((key) => attrs[key] === undefined ? delete attrs[key] : '');
 
-
     let change = (_.isEmpty(styles)) ? attrs : styles;
     let key = Object.keys(change)[0];
     let vals = Object.values(change)[0];
     // console.log(`Patch obj: ${change}, Key: ${key}, Value: ${vals}`);
 
-    let root = createElement(convertHTML(source));
-
-    //TODO. UPDATE SEARCH. TEXT ONLY FINDS IF FIRST CHILD AND NOT DEEPLY NESTED. BY ID IS GOOD
     if (key && vals) {
-        const _id = node.key;
-
         if (_id) {
             //[Problem] if node tags are changed. span -> h2
             // let targetElement = $(root).find(`${tag}[_id='${_id}']`);
-            let targetElement = $(root).find(`#${_id}`);
-            // let targetElement = $(root).find(`#${_id}`).children().first();
+            let targetElement;
+            if(!vnode){
+                targetElement = $(root).find(`#${_id}`);
+            } else {
+                let parent = getParentId(finalsource, _id);
+                targetElement = $(root).find(`#${parent}`);
+            }
             targetElement.addClass('modified');
+            // let targetElement = $(root).find(`#${_id}`).children().first();
 
             //TODO add attributes to the node [QA] use old styles or apply new styles ?
-            // targetElement.css(`${key}`, `${vals}`);
+            targetElement.css(`${key}`, `${vals}`);
         }
     }
     /*else if (patch === 'attributes') {
@@ -174,7 +174,7 @@ const handlePROPS = (node, patch, source) => {
 const preprocessSrc = (source, mode) => {
 
     source = source
-                .replace(/&nbsp;/g, ' ')
+                .replace(/&nbsp;/g, '')
                 .replace(/(?:\r\n|\r|\n)/g, '')
                 .replace(/&#8203;/g, '');
 
@@ -227,7 +227,8 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
     console.group();
     console.info('Changes');
     list.map((el) => {
-        let type;
+        let nodeType;
+        let patchType;
         switch (el.type) {
             case 0:
                 console.warn('NONE');
@@ -239,9 +240,12 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
                 break;
             case 2:
                 console.warn('VNODE');
-                type = el.vNode.constructor.name;
-                if(type === 'VirtualText') initSrc = handleTEXT(el.vNode, el.patch.children[0], initSrc);
-                if(type === 'VirtualNode') initSrc = handlePROPS(el.patch, el.patch.properties, initSrc);
+                nodeType = el.vNode.constructor.name;
+                patchType = el.patch.constructor.name;
+                if(nodeType === 'VirtualText')
+                    initSrc = handleTEXT(el.vNode, el.patch.children[0], initSrc);
+                if(nodeType === 'VirtualNode' || patchType === 'VirtualNode')
+                    initSrc = handlePROPS(el.patch, el.patch.properties, initSrc, finalSrc, true);
                 break;
             case 3:
                 console.warn('WIDGET');
