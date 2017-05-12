@@ -97,20 +97,20 @@ class SlideContentEditor extends React.Component {
                 break;
             case '11':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Heading</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">&nbsp;Row 1 - Column 1</p></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div></div>';
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '12':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Heading</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<p style="text-align:center">Row 1 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div>'+
-                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
+                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center">Row 1 - Column&nbsp;2</p>'+
                     '</div></div></div>';
@@ -118,15 +118,15 @@ class SlideContentEditor extends React.Component {
                 break;
             case '22':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<p style="text-align:center">Row 2 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
                     '<div class="h-mid" style="text-align: center;"><p>Row 1</p></div></div>'+
-                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center">Row 2 - Column&nbsp;2</p>'+
                     '</div></div></div>';
@@ -134,12 +134,12 @@ class SlideContentEditor extends React.Component {
                 break;
             case '21':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<p style="text-align:center">Row 2 - Column 1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
                     '<div class="h-mid" style="text-align: center;">Row 1 - Column 1</div>'+
                     '</div></div>';
@@ -147,12 +147,12 @@ class SlideContentEditor extends React.Component {
                 break;
             case '11img':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div>'+
-                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
+                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center"><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
                     '<p>&nbsp;</p></div></div></div>';
@@ -160,7 +160,7 @@ class SlideContentEditor extends React.Component {
                 break;
         }
         this.emitChange();
-        this.addBorders();
+        //this.addBorders();
         this.resizeDrag();
         this.forceUpdate();
     }
@@ -267,7 +267,7 @@ class SlideContentEditor extends React.Component {
                 //let currentContent = CKEDITOR.instances.inlineContent.getData();
                 //let newContent =
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1,1); transform-origin: left top 0px;">' +
-                '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">' +
+                '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">' +
                 '<div class="h-left">' + this.refs.inlineContent.innerHTML + '</div>' +
                 '</div>' +
                 '</div>';
@@ -286,7 +286,7 @@ class SlideContentEditor extends React.Component {
     }
     getAbsoluteDiv(zindex){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
+        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
     }
     componentDidMount() {
 
@@ -386,9 +386,94 @@ class SlideContentEditor extends React.Component {
             // define which elements trigger this menu
             selector: '.pptx2html > [style*="absolute"]',
             // define the elements of the menu
+            callback: function(key, options) {
+                //console.log('clicked: ' + key +  'on'  + $(this).text());
+                console.log('clicked: ' + key +  'on'  + $(this).text());
+                if(key === 'edit'){
+                    //copied from $('.pptx2html > [style*="absolute"]').dblclick(function() {
+                    //keep consistent!!
+                    if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
+                    $(this).css('cursor', 'auto');
+                    $(this).css('background-color','rgba(30,120,187,0.1)');
+                    $(this).addClass('activeContent');
+                    $(this).mouseleave(function(){$(this).css('background-color','rgba(30,120,187,0.1)');});
+                }
+                /*
+                else if(key === 'move')
+                {
+                    if (!$(this).hasClass('activeContent'))
+                    {
+                        //reset cursor
+                        $(this).focus();
+                        //$(this).select();
+                        //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
+                        if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
+                        $('.activeContent').css('cursor', 'pointer');
+                        $('.activeContent').css('background-color','');
+                        $('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                        $('.activeContent').removeClass('activeContent');
+                    }
+                }
+                */
+                else if(key === 'cut')
+                {
+                    //TODO: store in temporary variable + $(this).remove();
+
+                }
+                else if(key === 'copy')
+                {
+                    //TODO: move to different x / Y position if draggable element
+                    //this.clone().appendTo('.pptx2html');
+                    $(this).clone().appendTo('.pptx2html');
+                    //this.emitChange();
+                    //this.forceUpdate();
+                    //this.addBorders();
+                    //this.resizeDrag();
+                }
+
+                else if(key === 'paste')
+                {
+                    //TODO: get from temporary variable + .appendTo('.pptx2html');
+                }
+                else if(key === 'delete')
+                {
+                    swal({
+                        title: 'Remove element',
+                        text: 'Are you sure you want to delete this element?',
+                        type: 'question',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        confirmButtonClass: 'ui olive button',
+                        cancelButtonText: 'No',
+                        cancelButtonClass: 'ui red button',
+                        buttonsStyling: false
+                    }).then((accepted) => {
+                        //alert(cEl.parentNode.className);
+                        //if ($(this).parentNode.childNodes.length === 1)
+                        //{
+                            //add a div element to prevent empty PPTX element which gets removed by CKeditor
+                            //let emptydiv = document.createElement('div');
+                            //emptydiv.innerHTML = "";
+                            //$(this).parentNode.appendChild(emptydiv);
+                        //}
+                        //$(this).parentNode.removeChild(cEl);
+                        if (!$(this).hasClass('pptx2html')){$(this).remove();}
+                    }, (reason) => {
+                        //done(reason);
+                    });
+                }
+
+            },
             items: {
-                foo: {name: 'Foo', callback: function(key, opt){ console.log('Foo!'); }},
-                bar: {name: 'Bar', callback: function(key, opt){ console.log('Bar!'); }}
+                'edit': {name: 'Edit', icon: 'edit'},
+                'move': {move: 'Move'},
+                'cut': {name: 'Cut', icon: 'cut'},
+                'copy': {name: 'Copy', icon: 'copy'},
+                'paste': {name: 'Paste', icon: 'paste'},
+                'delete': {name: 'Delete', icon: 'delete'},
+                'sep1': '---------',
+                'quit': {name: 'Quit', icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
             }
         });
     }
@@ -433,9 +518,9 @@ class SlideContentEditor extends React.Component {
             //$(this).ResizableDestroy();
             if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
             $(this).css('cursor', 'auto');
-            $(this).css('background-color','rgba(0,0,255,0.3)');
+            $(this).css('background-color','rgba(81, 203, 238,0.1)');
             $(this).addClass('activeContent');
-            $(this).mouseleave(function(){$(this).css('background-color','rgba(0,0,255,0.3)');});
+            $(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
             // TODO:  restore draggable after pressing 'esc' key
 
         });
@@ -462,7 +547,7 @@ class SlideContentEditor extends React.Component {
             $(this).css('box-shadow','0 0 5px rgba(81, 203, 238, 1)');
             if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
                 //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-                $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(0,0,255,0.5)'});
+                $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
             }
         }, function() {
             $(this).css('box-shadow','');
@@ -490,7 +575,7 @@ class SlideContentEditor extends React.Component {
         //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
         if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'solid') {
             //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-            $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(0,0,255,0.5)'});
+            $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
         }
     }
 
