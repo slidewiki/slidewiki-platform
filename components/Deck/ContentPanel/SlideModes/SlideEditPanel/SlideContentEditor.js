@@ -504,7 +504,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
         //$('.pptx2html > [style*="absolute"]').resizable({handles: 'all'});
         //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
-        $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
+        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
 
         //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
         //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
@@ -521,10 +521,14 @@ class SlideContentEditor extends React.Component {
             //$(this).ResizableDestroy();
             if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
             $(this).css('cursor', 'auto');
-            $(this).css('background-color','rgba(81, 203, 238,0.1)');
+            //$(this).css('background-color','rgba(81, 203, 238,0.1)');
             $(this).addClass('activeContent');
-            $(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
+            //$(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
             // TODO:  restore draggable after pressing 'esc' key
+            if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
+                //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
+            }
 
         });
 
@@ -538,8 +542,9 @@ class SlideContentEditor extends React.Component {
                 //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
                 if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
                 $('.activeContent').css('cursor', 'pointer');
-                $('.activeContent').css('background-color','');
-                $('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                //$('.activeContent').css('background-color','');
+                //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                $('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
                 $('.activeContent').removeClass('activeContent');
             }
         });
@@ -547,14 +552,11 @@ class SlideContentEditor extends React.Component {
 
         $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
         $('.pptx2html > [style*="absolute"]').hover(function() {
-            $(this).css('box-shadow','0 0 5px rgba(81, 203, 238, 1)');
-            if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
-                //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-                $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
-            }
+            $(this).draggable({cursor: 'move'});
+            $(this).css({'box-shadow':'0 0 5px rgba(81, 203, 238, 1)', 'animation': 'blink .5s step-end infinite alternate'});
         }, function() {
             $(this).css('box-shadow','');
-            $(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
+            //$(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
         });
 
         //give each input element a tab index
