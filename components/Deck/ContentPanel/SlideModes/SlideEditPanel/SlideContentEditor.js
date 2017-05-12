@@ -378,7 +378,10 @@ class SlideContentEditor extends React.Component {
         this.contextMenu();
 
     }
+
     contextMenu(){
+        // TODO: https://swisnl.github.io/jQuery-contextMenu/demo/accesskeys.html
+
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $.contextMenu({
@@ -511,7 +514,7 @@ class SlideContentEditor extends React.Component {
         //***content mode***
         // TODO:  set enter-keycode-event for input box remove dragable and set cursor to auto for editing content
 
-
+        //TODO: if you select an element and starty typing: then directly switch to edit mode
 
         //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
         $('.pptx2html > [style*="absolute"]').dblclick(function() {
