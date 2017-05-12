@@ -323,22 +323,41 @@ class SlideContentEditor extends React.Component {
             removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
         });}
-        if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
-            const userId = this.props.UserProfileStore.userid;
+        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
+            //const userId = this.props.UserProfileStore.userid;
             // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
             //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
-            CKEDITOR.inline('inlineContent', {
-                customConfig: '/assets/ckeditor_config.js',
-                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
-                uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
-
-        }
+        CKEDITOR.inline('inlineContent', {
+            //CKEDITOR.replace('inlineContent', {
+            customConfig: '/assets/ckeditor_config.js',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
+        //}
         this.currentcontent = this.props.content;
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             this.resize();
+            //console.log('inlineConent CKeditor ready' + CKEDITOR.instances.inlineContent);
+            //if (!CKEDITOR.instances.inlineContent)
+            if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
+            {
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
+
+            }
+            if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
+            {
+                this.emitChange();
+                this.forceUpdate();
+                //this.addBorders();
+                this.resizeDrag();
+                //console.log('resizeDrag and borders');
+            }
             if(document.domain !== 'localhost')
             {
                 document.domain = 'slidewiki.org';
@@ -356,13 +375,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
         $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
-
-        if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
-        {
-            //this.resizeDrag();
-            //this.addBorders();
-        }
-        //this.contextMenu();
+        this.contextMenu();
 
     }
     contextMenu(){
@@ -397,13 +410,13 @@ class SlideContentEditor extends React.Component {
         // TODO: copy-paste elements based on ctrl-c / ctrl-v
         // TODO: keyboard focus and arrows to move; enter to start editing
 
-
         //***position mode - default/start***
         //http://api.jqueryui.com/resizable/
         //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
         $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
+        //$('.pptx2html > [style*="absolute"]').resizable({handles: 'all'});
         //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
-        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
+        $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
 
         //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
         //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
@@ -413,7 +426,8 @@ class SlideContentEditor extends React.Component {
         //***content mode***
         // TODO:  set enter-keycode-event for input box remove dragable and set cursor to auto for editing content
 
-        /*
+
+
         //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
         $('.pptx2html > [style*="absolute"]').dblclick(function() {
             //$(this).ResizableDestroy();
@@ -431,7 +445,7 @@ class SlideContentEditor extends React.Component {
             if (!$(this).hasClass('activeContent'))
             {
                 //reset cursor
-                $(this).focus();
+                //$(this).focus();
                 //$(this).select();
                 //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
                 if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
@@ -441,6 +455,7 @@ class SlideContentEditor extends React.Component {
                 $('.activeContent').removeClass('activeContent');
             }
         });
+
 
         $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
         $('.pptx2html > [style*="absolute"]').hover(function() {
@@ -456,8 +471,8 @@ class SlideContentEditor extends React.Component {
 
         //give each input element a tab index
         //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
-        $('.pptx2html > [style*="absolute"]').each(function () { $(this).attr('tabindex', 0); });
-        */
+        $('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+
 
     }
 
