@@ -445,7 +445,7 @@ class SlideContentEditor extends React.Component {
             if (!$(this).hasClass('activeContent'))
             {
                 //reset cursor
-                //$(this).focus();
+                $(this).focus();
                 //$(this).select();
                 //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
                 if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
