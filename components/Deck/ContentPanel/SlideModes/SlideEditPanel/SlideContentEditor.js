@@ -24,7 +24,8 @@ class SlideContentEditor extends React.Component {
         this.CKEDitor_loaded = false;
         this.scaleratio = 1;
         this.inputBoxButtonTitle;
-        if(this.props.content.indexOf('pptx2html') !== -1)
+        //if(this.props.content.indexOf('pptx2html') !== -1)
+        if (this.props.content.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             this.inputBoxButtonTitle = 'Add input box';
         } else { //if slide does not have pptx2html/canvas/absolute positioning
@@ -71,7 +72,8 @@ class SlideContentEditor extends React.Component {
         switch (template) {
             case '1':
                 //TODO replace with this.refs.inlineContent.innerHTML + cases below
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+
+                //CKEDITOR.instances.inlineContent.setData(
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+
                     '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
                     '<h3 class="h-mid"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Title</span></h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
@@ -80,34 +82,29 @@ class SlideContentEditor extends React.Component {
                     '	<li class="h-left" style="text-align: left;"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Text bullet 2</span></li>'+
                     '</ul>'+
                     '<div class="h-left">&nbsp;</div>'+
-                    '</div></div>');
+                    '</div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
             case '2':
-                CKEDITOR.instances.inlineContent.setData(''+
-                    '');
+                //CKEDITOR.instances.inlineContent.setData('');
+                this.refs.inlineContent.innerHTML = '';
                 this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
-                this.emitChange();
                 break;
             case '3':
-                CKEDITOR.instances.inlineContent.setData(''+
-                    '<h1 style="text-align: center;">Title</h1>'+
-                    '<p>text</p>');
+                this.refs.inlineContent.innerHTML = '<h1 style="text-align: center;">Title</h1>'+
+                    '<p>text</p>';
                 this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
-                this.emitChange();
                 break;
             case '11':
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
                     '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Heading</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">&nbsp;Row 1 - Column 1</p></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div></div>');
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Footer</div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
             case '12':
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
                     '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Heading</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<p style="text-align:center">Row 1 - Column&nbsp;1</p>'+
@@ -116,12 +113,11 @@ class SlideContentEditor extends React.Component {
                     '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center">Row 1 - Column&nbsp;2</p>'+
-                    '</div></div></div>');
+                    '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
             case '22':
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
                     '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Header</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<p style="text-align:center">Row 2 - Column&nbsp;1</p>'+
@@ -133,12 +129,11 @@ class SlideContentEditor extends React.Component {
                     '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center">Row 2 - Column&nbsp;2</p>'+
-                    '</div></div></div>');
+                    '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
             case '21':
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
                     '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Header</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<p style="text-align:center">Row 2 - Column 1</p>'+
@@ -147,12 +142,11 @@ class SlideContentEditor extends React.Component {
                     '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
                     '<div class="h-mid" style="text-align: center;">Row 1 - Column 1</div>'+
-                    '</div></div>');
+                    '</div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
             case '11img':
-                this.changeCKeditorData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">Header</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
@@ -161,16 +155,13 @@ class SlideContentEditor extends React.Component {
                     '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center"><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
-                    '<p>&nbsp;</p></div></div></div>', 'Add input box');
+                    '<p>&nbsp;</p></div></div></div>';
+                this.inputBoxButtonTitle = 'Add input box';
                 break;
         }
-        this.forceUpdate();
-    }
-
-    changeCKeditorData(data, title){
-        CKEDITOR.instances.inlineContent.setData(data);
-        this.inputBoxButtonTitle = title;
         this.emitChange();
+        this.addBorders();
+        this.resizeDrag();
         this.forceUpdate();
     }
     uniqueIDAllElements(){
@@ -242,7 +233,8 @@ class SlideContentEditor extends React.Component {
         //absolutediv
         //Check if content already has canvas/absolute positioning
         //TODO replace with this.refs.inlineContent.innerHTML
-        if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
+        //if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
+        if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             let index_highest = 0;
             $('.pptx2html [style*="absolute"]').each(function() {
@@ -257,6 +249,7 @@ class SlideContentEditor extends React.Component {
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.emitChange();
             this.forceUpdate();
+            this.resizeDrag();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             swal({
                 title: 'Switch to canvas style layout',
@@ -271,18 +264,20 @@ class SlideContentEditor extends React.Component {
                 buttonsStyling: false
             }).then((accepted) => {
                 //TODO replace with this.refs.inlineContent.innerHTML
-                let currentContent = CKEDITOR.instances.inlineContent.getData();
-                let newContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1,1); transform-origin: left top 0px;">' +
+                //let currentContent = CKEDITOR.instances.inlineContent.getData();
+                //let newContent =
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1,1); transform-origin: left top 0px;">' +
                 '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(0,0,255,0.5);">' +
-                '<div class="h-left">' + currentContent + '</div>' +
+                '<div class="h-left">' + this.refs.inlineContent.innerHTML + '</div>' +
                 '</div>' +
                 '</div>';
                 //update content
                 //TODO replace with this.refs.inlineContent.innerHTML
-                CKEDITOR.instances.inlineContent.setData(newContent);
+                //CKEDITOR.instances.inlineContent.setData(newContent);
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
                 this.forceUpdate();
+                this.resizeDrag();
             }, (reason) => {
                 //done(reason);
             });
@@ -303,6 +298,7 @@ class SlideContentEditor extends React.Component {
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
 
         CKEDITOR.disableAutoInline = true;
+        //CKEDITOR.disableAutoInline = false;
         //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
         //TODO - remove more buttons speakernotes
         if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
@@ -355,15 +351,36 @@ class SlideContentEditor extends React.Component {
                 //this.forceUpdate();
             }
         });
-
-        this.addBorders();
-
         //show that content is outside of pptx2html box
         //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
         $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
+        if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
+        {
+            //this.resizeDrag();
+            //this.addBorders();
+        }
+        //this.contextMenu();
+
+    }
+    contextMenu(){
+        //https://github.com/swisnl/jQuery-contextMenu
+        //http://swisnl.github.io/jQuery-contextMenu/
+        $.contextMenu({
+        //$('.pptx2html').contextMenu({
+            // define which elements trigger this menu
+            selector: '.pptx2html > [style*="absolute"]',
+            // define the elements of the menu
+            items: {
+                foo: {name: 'Foo', callback: function(key, opt){ console.log('Foo!'); }},
+                bar: {name: 'Bar', callback: function(key, opt){ console.log('Bar!'); }}
+            }
+        });
+    }
+
+    resizeDrag(){
         //http://jqueryui.com/resizable/
         //http://interface.eyecon.ro/docs/resizable
         /*ResizableDestroy
@@ -384,8 +401,9 @@ class SlideContentEditor extends React.Component {
         //***position mode - default/start***
         //http://api.jqueryui.com/resizable/
         //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
-        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true, containment: '#inlineContent'});
-        $('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
+        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
+        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
+        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
 
         //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
         //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
@@ -395,6 +413,7 @@ class SlideContentEditor extends React.Component {
         //***content mode***
         // TODO:  set enter-keycode-event for input box remove dragable and set cursor to auto for editing content
 
+        /*
         //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
         $('.pptx2html > [style*="absolute"]').dblclick(function() {
             //$(this).ResizableDestroy();
@@ -408,13 +427,14 @@ class SlideContentEditor extends React.Component {
         });
 
         $('.pptx2html > [style*="absolute"]').click(function() {
+        //$('.pptx2html').click(function() {
             if (!$(this).hasClass('activeContent'))
             {
                 //reset cursor
                 $(this).focus();
                 //$(this).select();
                 //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
-                if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move', containment: '#inlineContent'});}
+                if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
                 $('.activeContent').css('cursor', 'pointer');
                 $('.activeContent').css('background-color','');
                 $('.activeContent').mouseleave(function(){$(this).css('background-color','');});
@@ -422,30 +442,25 @@ class SlideContentEditor extends React.Component {
             }
         });
 
-        //https://github.com/swisnl/jQuery-contextMenu
-        //http://swisnl.github.io/jQuery-contextMenu/
-        $.contextMenu({
-            // define which elements trigger this menu
-            selector: '.pptx2html > [style*="absolute"]',
-            // define the elements of the menu
-            items: {
-                foo: {name: 'Foo', callback: function(key, opt){ console.log('Foo!'); }},
-                bar: {name: 'Bar', callback: function(key, opt){ console.log('Bar!'); }}
-            }
-        });
-
         $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
         $('.pptx2html > [style*="absolute"]').hover(function() {
-            $(this).css('background-color','rgba(0,0,255,0.05)');
+            $(this).css('box-shadow','0 0 5px rgba(81, 203, 238, 1)');
+            if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
+                //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+                $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(0,0,255,0.5)'});
+            }
         }, function() {
-            $(this).css('background-color','');
+            $(this).css('box-shadow','');
+            $(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
         });
 
         //give each input element a tab index
         //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         $('.pptx2html > [style*="absolute"]').each(function () { $(this).attr('tabindex', 0); });
+        */
 
     }
+
     componentDidUpdate() {
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
