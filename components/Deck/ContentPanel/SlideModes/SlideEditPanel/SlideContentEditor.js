@@ -379,6 +379,194 @@ class SlideContentEditor extends React.Component {
 
     }
 
+    resizeDrag(){
+        //http://jqueryui.com/resizable/
+        //http://interface.eyecon.ro/docs/resizable
+        /*ResizableDestroy
+        A Resizable can be destroyed at anytime.
+        Code sample:
+        $('#resizeMe').ResizableDestroy();*/
+
+        // TODO -> create SVG around draggable element with points/blocks for resize handlers
+        // OR by emulating textarea - http://stackoverflow.com/questions/18427555/jquery-textarea-draggable
+        // or: make images JQUERY draggable, and have original button for text input  - too complex
+        //<g><path fill="#000" fill-opacity="0" stroke="#000" stroke-opacity="0" stroke-width="10550.76923076923" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" pointer-events="visiblePainted" d="M 4331 28073 L 318671 28073 318671 170081 4331 170081 Z"></path></g>
+        // TODO: Make background outside slide grey!
+        // TODO: move elements based on key-up / key-down / etc..
+        // TODO: copy-paste elements based on ctrl-c / ctrl-v
+        // TODO: keyboard focus and arrows to move; enter to start editing
+
+        //***position mode - default/start***
+        //http://api.jqueryui.com/resizable/
+        //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
+        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
+        //$('.pptx2html > [style*="absolute"]').resizable({handles: 'all'});
+        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
+        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
+
+        //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
+        //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
+        //$('.pptx2html > [type="image"]').draggable();
+        //$('.pptx2html').resizable({handles: 'all'});
+
+        //***content mode***
+        // TODO:  set enter-keycode-event for input box remove dragable and set cursor to auto for editing content
+
+        //TODO: if you select an element and starty typing: then directly switch to edit mode
+
+        //TODO: on undo (ctr-l Z) - restore resize/drag elements
+        //TODO: on editing source in CKeditor - restore resize/drag elements
+
+        //TODO (maybe): auto-resize input box based on content -
+        //not supported in powerpoint, however, when you click on text outside box, the box is selected...
+        // maybe solution: click on text element - check to which input box it belongs
+
+        //TODO: caret position is reset in firefox, except for when typing
+
+        let slideEditorContext = this; //set slideEditorContext inside doubleclick context
+        //TODO: refactor/better solution
+
+        //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
+        $('.pptx2html > [style*="absolute"]').dblclick(function(evt) {
+            $(this).find('span:first').focus();
+
+            if (!$(this).hasClass('activeContent'))
+            {//if not already in input mode
+                //set caret to start of text (span) in div element
+                //slideEditorContext.placeCaretAtEnd($(this).find('span:first')[0]);
+                let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
+
+                // Set a timer to allow the selection to happen and the dust settle first
+                //window.setTimeout(function() {
+                slideEditorContext.selectRange(caretRange);
+                //}, 10);
+            }
+
+            //$(this).ResizableDestroy();
+            if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
+            $(this).css('cursor', 'auto');
+            //$(this).css('background-color','rgba(81, 203, 238,0.1)');
+            $(this).addClass('activeContent');
+            //$(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
+            // TODO:  restore draggable after pressing 'esc' key
+            //if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
+                //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            //    $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
+            $(this).css({'box-shadow':'0 0 5px rgba(218, 102, 25, 1)'});
+            //}
+
+        });
+        $('.pptx2html > [style*="absolute"]').click(function() {
+        //$('.pptx2html').click(function() {
+            //console.log($(this).attr('class'));
+            if (!$(this).hasClass('activeContent'))
+            {
+                //reset cursor
+                $(this).focus();
+                //$(this).select();
+                //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
+                if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
+                $('.activeContent').css('cursor', 'pointer');
+                //$('.activeContent').css('background-color','');
+                //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                //$('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
+                $('.activeContent').css('box-shadow','');
+                $('.activeContent').removeClass('activeContent');
+            }
+        });
+
+        $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
+
+        $('.pptx2html > [style*="absolute"]').hover(function() {
+            if (!$(this).hasClass('activeContent')) {
+                $(this).draggable({cursor: 'move'});
+                $(this).css({'box-shadow':'0 0 5px rgba(81, 203, 238, 1)'});
+            }
+            else {
+                $(this).css({'box-shadow':'0 0 5px rgba(218, 102, 25, 1)'});
+            }
+        }, function() {
+            if (!$(this).hasClass('activeContent'))
+            {
+                $(this).css('box-shadow','');
+            }
+            //$(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
+        });
+
+        //give each input element a tab index
+        //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
+        $('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+
+
+    }
+
+
+    placeCaretAtEnd(el) {
+        el.focus();
+        if (typeof window.getSelection != 'undefined'
+                && typeof document.createRange != 'undefined') {
+            let range = document.createRange();
+            range.selectNodeContents(el);
+            //range.collapse(false);
+            range.collapse(true);
+            let sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else if (typeof document.body.createTextRange != 'undefined') {
+            let textRange = document.body.createTextRange();
+            textRange.moveToElementText(el);
+            textRange.collapse(false);
+            textRange.select();
+        }
+    }
+
+    getMouseEventCaretRange(evt) {
+        let range, x = evt.clientX, y = evt.clientY;
+
+        // Try the simple IE way first
+        if (document.body.createTextRange) {
+            range = document.body.createTextRange();
+            range.moveToPoint(x, y);
+        }
+
+        else if (typeof document.createRange != 'undefined') {
+            // Try Mozilla's rangeOffset and rangeParent properties,
+            // which are exactly what we want
+            if (typeof evt.rangeParent != 'undefined') {
+                range = document.createRange();
+                range.setStart(evt.rangeParent, evt.rangeOffset);
+                range.collapse(true);
+            }
+
+            // Try the standards-based way next
+            else if (document.caretPositionFromPoint) {
+                let pos = document.caretPositionFromPoint(x, y);
+                range = document.createRange();
+                range.setStart(pos.offsetNode, pos.offset);
+                range.collapse(true);
+            }
+
+            // Next, the WebKit way
+            else if (document.caretRangeFromPoint) {
+                range = document.caretRangeFromPoint(x, y);
+            }
+        }
+
+        return range;
+    }
+
+    selectRange(range) {
+        if (range) {
+            if (typeof range.select != 'undefined') {
+                range.select();
+            } else if (typeof window.getSelection != 'undefined') {
+                let sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+    }
+
     contextMenu(){
         // TODO: https://swisnl.github.io/jQuery-contextMenu/demo/accesskeys.html
 
@@ -481,90 +669,6 @@ class SlideContentEditor extends React.Component {
         });
     }
 
-    resizeDrag(){
-        //http://jqueryui.com/resizable/
-        //http://interface.eyecon.ro/docs/resizable
-        /*ResizableDestroy
-        A Resizable can be destroyed at anytime.
-        Code sample:
-        $('#resizeMe').ResizableDestroy();*/
-
-        // TODO -> create SVG around draggable element with points/blocks for resize handlers
-        // OR by emulating textarea - http://stackoverflow.com/questions/18427555/jquery-textarea-draggable
-        // or: make images JQUERY draggable, and have original button for text input  - too complex
-        //<g><path fill="#000" fill-opacity="0" stroke="#000" stroke-opacity="0" stroke-width="10550.76923076923" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" pointer-events="visiblePainted" d="M 4331 28073 L 318671 28073 318671 170081 4331 170081 Z"></path></g>
-        // TODO: Make background outside slide grey!
-        // TODO: move elements based on key-up / key-down / etc..
-        // TODO: copy-paste elements based on ctrl-c / ctrl-v
-        // TODO: keyboard focus and arrows to move; enter to start editing
-
-        //***position mode - default/start***
-        //http://api.jqueryui.com/resizable/
-        //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
-        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
-        //$('.pptx2html > [style*="absolute"]').resizable({handles: 'all'});
-        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
-        //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
-
-        //$('.pptx2html > [type="image"]').resizable({handles: 'all'});
-        //$('.pptx2html > [type="image"]').resizable({handles: 'all',  scroll: true, containment: "#inlineContent", aspectRatio: true });
-        //$('.pptx2html > [type="image"]').draggable();
-        //$('.pptx2html').resizable({handles: 'all'});
-
-        //***content mode***
-        // TODO:  set enter-keycode-event for input box remove dragable and set cursor to auto for editing content
-
-        //TODO: if you select an element and starty typing: then directly switch to edit mode
-
-        //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
-        $('.pptx2html > [style*="absolute"]').dblclick(function() {
-            //$(this).ResizableDestroy();
-            if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
-            $(this).css('cursor', 'auto');
-            //$(this).css('background-color','rgba(81, 203, 238,0.1)');
-            $(this).addClass('activeContent');
-            //$(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
-            // TODO:  restore draggable after pressing 'esc' key
-            if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
-                //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-                $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
-            }
-
-        });
-
-        $('.pptx2html > [style*="absolute"]').click(function() {
-        //$('.pptx2html').click(function() {
-            if (!$(this).hasClass('activeContent'))
-            {
-                //reset cursor
-                $(this).focus();
-                //$(this).select();
-                //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
-                if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
-                $('.activeContent').css('cursor', 'pointer');
-                //$('.activeContent').css('background-color','');
-                //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
-                $('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
-                $('.activeContent').removeClass('activeContent');
-            }
-        });
-
-
-        $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
-        $('.pptx2html > [style*="absolute"]').hover(function() {
-            $(this).draggable({cursor: 'move'});
-            $(this).css({'box-shadow':'0 0 5px rgba(81, 203, 238, 1)', 'animation': 'blink .5s step-end infinite alternate'});
-        }, function() {
-            $(this).css('box-shadow','');
-            //$(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
-        });
-
-        //give each input element a tab index
-        //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
-        $('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
-
-
-    }
 
     componentDidUpdate() {
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
