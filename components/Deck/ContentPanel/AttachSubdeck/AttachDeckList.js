@@ -77,6 +77,7 @@ class AttachDeckList extends React.Component {
                                   onKeyPress={(e) => { this.handleKeyPress(e,selectedDeck);}}
                                   style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
                                   role="listitem"
+                                  aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
                                   tabIndex="0">
                                 <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="small"/>
                                 <Item.Content verticalAlign="middle" >
