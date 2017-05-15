@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Dropdown} from 'semantic-ui-react';
+import {Dropdown, Radio} from 'semantic-ui-react';
 import diff from 'virtual-dom/diff';
 import {connectToStores} from 'fluxible-addons-react';
 
@@ -27,7 +27,12 @@ class ContentDiffviewPanel extends Component {
     state = {
         content: this.props.content,
         currentRevision: this.props.selector.sid.split('-')[1],
-        revisionsList: this.props.ContentHistoryStore.history
+        revisionsList: this.props.ContentHistoryStore.history,
+        inverse: false
+    }
+
+    toggleColor = () => {
+        this.setState({inverse: !this.state.inverse});
     }
 
     diff = (e) => {
@@ -76,7 +81,7 @@ class ContentDiffviewPanel extends Component {
     }
 
     render() {
-        const { currentRevision } = this.state;
+        const { content, currentRevision, inverse } = this.state;
 
         const revisions = this.state.revisionsList.map((el) => {
             const disable = el.id === parseInt(this.state.currentRevision) ? true : false;
@@ -89,10 +94,11 @@ class ContentDiffviewPanel extends Component {
         return (
             <div ref="ContentDiffviewPanel" className="ui">
                 <h1><span>{diffType}</span> – Diff View</h1>
+                <p>Change color palette: <Radio toggle onChange={this.toggleColor} /></p>
                 <p>Diff the current revision [{currentRevision}] against:</p>
                 <Dropdown placeholder='Select Revision' ref="dropdown" selection options={revisions}/>
                 <button className="ui blue icon button" onClick={this.diff}>DIFF</button>
-                <div className='diff-view' dangerouslySetInnerHTML={{__html: this.state.content}}></div>
+                <div className={`diff-view ${inverse ? 'inverse' : ''} `} dangerouslySetInnerHTML={{__html: content}}></div>
             </div>
         );
     }

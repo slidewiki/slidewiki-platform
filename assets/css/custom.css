@@ -59,6 +59,10 @@
 .diff-view .modified {border: 5px solid #FFCC00;}
 .diff-view .deleted {border: 5px solid #ff0030;}
 
+.diff-view.inverse .added {border: 5px solid #2ecc71;}
+.diff-view.inverse .modified {border: 5px solid #FF9800;}
+.diff-view.inverse .deleted {border: 5px solid #9C27B0;}
+
 /* Text related */
 .diff-view .ins {
   background-color: #eaf2c2;
