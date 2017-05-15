@@ -30,21 +30,21 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
 			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
             { name: 'links', items: [ 'Link', 'Unlink' ] },
-        '/',
+        //'/',
             { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
             { name: 'styles', items: [ 'lineheight' ] },
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
-        '/',
+        //'/',
             { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
             { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        '/',
+        //'/',
             { name: 'document', items: [ 'Sourcedialog'] },
             { name: 'document', items: [ 'CodeSnippet'] },
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        '/',
+        //'/',
     ];
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
@@ -69,8 +69,8 @@ CKEDITOR.editorConfig = function( config ) {
     ///config.toolbarLocation = 'bottom';
 
     //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
-    config.removePlugins = 'magicline,contextmenu,liststyle,tabletools';
-
+    config.removePlugins = 'magicline,contextmenu,liststyle,tabletools,elementspath';
+    config.resize_enabled = false;
     CKEDITOR.config.magicline_color = '#0000FF';
 
     //limit Copy Formatting to only allow basic text styles (bold, italic, underline, strikethrough) to be copied:
@@ -164,7 +164,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting,divarea';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
