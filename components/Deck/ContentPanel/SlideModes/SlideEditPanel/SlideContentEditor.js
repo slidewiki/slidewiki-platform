@@ -399,7 +399,7 @@ class SlideContentEditor extends React.Component {
         //***position mode - default/start***
         //http://api.jqueryui.com/resizable/
         //aspect ratio: http://stackoverflow.com/questions/3699125/jquery-ui-resize-only-one-handle-with-aspect-ratio
-        $('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
+        //$('.pptx2html > [style*="absolute"]').resizable({handles: 'all',  scroll: true});
         //$('.pptx2html > [style*="absolute"]').resizable({handles: 'all'});
         //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move', containment: '#inlineContent'});
         //$('.pptx2html > [style*="absolute"]').draggable({cursor: 'move'});
@@ -452,7 +452,7 @@ class SlideContentEditor extends React.Component {
             //if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
                 //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
             //    $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
-            $(this).css({'box-shadow':'0 0 5px rgba(218, 102, 25, 1)'});
+            $(this).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
             //}
 
         });
@@ -479,11 +479,12 @@ class SlideContentEditor extends React.Component {
 
         $('.pptx2html > [style*="absolute"]').hover(function() {
             if (!$(this).hasClass('activeContent')) {
-                $(this).draggable({cursor: 'move'});
-                $(this).css({'box-shadow':'0 0 5px rgba(81, 203, 238, 1)'});
+                if(!$('.activeContent').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
+                if(!$('.activeContent').resizable( 'instance' )){$(this).resizable({handles: 'all',  scroll: true});}
+                $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
             }
             else {
-                $(this).css({'box-shadow':'0 0 5px rgba(218, 102, 25, 1)'});
+                $(this).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
             }
         }, function() {
             if (!$(this).hasClass('activeContent'))
