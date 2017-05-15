@@ -55,6 +55,9 @@ class ActivityItem extends React.Component {
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
         const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={this.getPath(this.props.activity)} onClick={this.handleRefClick.bind(this)}>{node.content_name}</a></span>);
 
+        if (node.user_id === '0') {
+            node.user_id = undefined;
+        }
         switch (node.activity_type) {
             case 'translate':
                 IconNode = (<i className="ui big translate icon"></i>);
