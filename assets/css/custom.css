@@ -34,14 +34,31 @@
 	padding-bottom: 0.21428571em;
 }
 
+/* Diff view related */
+.top-diff {
+  position: relative;
+  display: inline-block;
+  width: 100vw;
+  height: 83vh;
+}
+
+.top-diff .reveal .slides {
+  transform: scale(0.9);
+}
+
 .diff-view {
-  padding-top: 50px;
   display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.initVers, .mergedVers {
+  flex: 1;
+  transform: scale(0.9);
+  max-width: 50%;
 }
 
 .diff-view .pptx2html {
-  /*transform: scale(0.8);
-  top: -190px;*/
   left: -75px;
 }
 
