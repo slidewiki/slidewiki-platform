@@ -30,6 +30,7 @@ import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
+import loadDiffview from '../actions/loadDiffview';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -230,6 +231,15 @@ export default {
                 if (err) console.log(err);
                 context.executeAction(navigateAction, {'url': '/deck/'+result}, done);
             });        }
+    },
+    diffview: {
+        path: '/diffview/:stype/:sid/:did',
+        method: 'get',
+        page: 'diffview',
+        handler: require('../components/Deck/Diffview/Diffview'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDiffview, payload, done);
+        }
     },
     contributors: {
         path: '/contributors/:stype/:sid',
