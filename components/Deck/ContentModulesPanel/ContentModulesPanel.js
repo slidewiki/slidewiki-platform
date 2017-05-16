@@ -12,7 +12,6 @@ import loadTags from '../../../actions/tags/loadTags';
 //import loadContributors from '../../../actions/loadContributors';
 import ContentHistoryPanel from './ContentHistoryPanel/ContentHistoryPanel';
 import ContentUsagePanel from './ContentUsagePanel/ContentUsagePanel';
-import ContentDiffviewPanel from './ContentDiffviewPanel/ContentDiffviewPanel';
 import ContentDiscussionPanel from './ContentDiscussionPanel/ContentDiscussionPanel';
 //import ContentQuestionsPanel from './ContentQuestionsPanel/ContentQuestionsPanel';
 import DataSourcePanel from './DataSourcePanel/DataSourcePanel';
@@ -62,9 +61,6 @@ class ContentModulesPanel extends React.Component {
             case 'usage':
                 this.context.executeAction(loadContentUsage, {params: this.props.ContentModulesStore.selector});
                 break;
-            case 'diffview':
-                this.context.executeAction(loadContentDiffview, {params: this.props.ContentModulesStore.selector});
-                break;
             case 'discussion':
                 this.context.executeAction(loadContentDiscussion, {params: this.props.ContentModulesStore.selector});
                 break;
@@ -112,10 +108,6 @@ class ContentModulesPanel extends React.Component {
         let usageTabClass = classNames({
             'item': true,
             'active': (this.props.ContentModulesStore.moduleType === 'usage')
-        });
-        let diffviewTabClass = classNames({
-            'item': true,
-            'active': (this.props.ContentModulesStore.moduleType === 'diffview')
         });
         let discussionTabClass = classNames({
             'item': true,
