@@ -11,19 +11,22 @@ export default function uploadFile(context, payload, done) {
     context.myStuff = {
         uploadFinished: false
     };
-    const timeout = 60;
+    const timeout = 120;
     const remainingProgress = 55;
     let currentProgress = 0;
-    const updatePeriod = 3; //3 seconds
-    let progressPerThreeSeconds = parseInt(40 * 1024 * 1024 / payload.base64.length) + 1;
+    const averageUploadSpeed = 0.5; // MB/s
+    const updatePeriod = 2; // 2 seconds
+    const MBPerUpdatePeriod = updatePeriod * averageUploadSpeed;
+    const noOfUpdatePeriods = payload.base64.length / MBPerUpdatePeriod / 1024 / 1024;
+    let progressPerUpdatePeriod = parseInt(remainingProgress / noOfUpdatePeriods) + 1;
     const timer = () => {
         setTimeout(() => {
             if (!context.myStuff.uploadFinished && currentProgress < remainingProgress) {
-                currentProgress += progressPerThreeSeconds;
+                currentProgress += progressPerUpdatePeriod;
                 if (currentProgress > remainingProgress) {
-                    progressPerThreeSeconds -= currentProgress - remainingProgress;
+                    progressPerUpdatePeriod -= currentProgress - remainingProgress;
                 }
-                context.dispatch('UPLOAD_MORE_PROGRESS', progressPerThreeSeconds);
+                context.dispatch('UPLOAD_MORE_PROGRESS', progressPerUpdatePeriod);
                 timer();
             }
         }, updatePeriod * 1000);
