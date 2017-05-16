@@ -7,7 +7,7 @@ import DeckTreeStore from '../stores/DeckTreeStore.js';
 import { isEmpty } from '../common.js';
 const log = require('./log/clog');
 
-export default function loadContentDiffview(context, payload, done) {
+export default function loadDiffview(context, payload, done) {
     log.info(context);
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         context.executeAction(deckContentTypeError, payload, done);
@@ -29,17 +29,15 @@ export default function loadContentDiffview(context, payload, done) {
         payload.params.spath = deckTreeState.selector.get('spath');
     }
 
-    //TODO: change 'usage.list' argument
-    context.service.read('history.list', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.read('diffview.slide', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, { filepath: __filename, err: err });
             context.executeAction(serviceUnavailable, payload, done);
             context.dispatch('LOAD_CONTENT_DIFFVIEW_FAILURE', err);
         } else {
-            context.dispatch('LOAD_CONTENT_HISTORY_SUCCESS', res);
-            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'diffview'});
+            context.dispatch('LOAD_CONTENT_DIFFVIEW_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Content Diff View | ' + payload.params.stype + ' | ' + payload.params.sid;
+        let pageTitle = shortTitle + ' | Diff View';
         context.dispatch('UPDATE_PAGE_TITLE', {
             pageTitle: pageTitle
         });
