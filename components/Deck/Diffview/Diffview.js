@@ -17,6 +17,7 @@ class DiffView extends Component {
         diffcontent: ' ',
         currContent: ' ',
         inverse: false,
+        isLoaded: false
     }
 
     state = {
@@ -28,6 +29,7 @@ class DiffView extends Component {
 
     componentDidMount = () => {
         this.diff();
+        this.setState({ isLoaded: true });
     }
 
     toggleColor = () => {
@@ -80,6 +82,8 @@ class DiffView extends Component {
 
     render() {
         const { inverse, diffcontent, currContent, isLoaded } = this.state;
+
+        if(!isLoaded) return (<div>Loading ...</div>);
 
         return (
             <div className="ui top-diff">
