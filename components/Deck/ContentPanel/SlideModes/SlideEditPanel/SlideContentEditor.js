@@ -39,21 +39,7 @@ class SlideContentEditor extends React.Component {
         }
         this.refs.template;
         this.showTemplates = false;
-        // Add the CSS dependency for the theme
-        // Get the theme information, and download the stylesheet
-        let styleName = 'default';
-        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-            styleName = this.props.selector.theme;
-        }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
-        }
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme they will be legacy decks:
-            styleName = 'white';
-        }
-        require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
 
     }
 
@@ -93,6 +79,7 @@ class SlideContentEditor extends React.Component {
     applyTemplate(template){
         switch (template) {
             case '1':
+                //TODO replace with this.refs.inlineContent.innerHTML + cases below
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+
                     '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
                     '<h3 class="h-mid"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Title</span></h3></div>'+
@@ -195,10 +182,22 @@ class SlideContentEditor extends React.Component {
         this.emitChange();
         this.forceUpdate();
     }
-
+    uniqueIDAllElements(){
+        let allElements = this.refs.inlineContent.getElementsByTagName('*');
+        let allIds = [];
+        for (let i = 0, n = allElements.length; i < n; ++i) {
+            let random = Math.floor((Math.random() * 100000) + 1);
+            let el = allElements[i];
+            if (el.id) { allIds.push(el.id); }
+            else {el.id = random;}
+        }
+        //console.log('allIds ' + allIds);
+        //console.log('this.refs.inlineContent.innerHTML ' + this.refs.inlineContent.innerHTML);
+    }
     handleSaveButton(){
         if (this.props.UserProfileStore.username !== '') {
             // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
+            // TODO: wait for successfull save signal from
             swal({
                 title: 'Saving Content...',
                 text: '',
@@ -223,21 +222,20 @@ class SlideContentEditor extends React.Component {
             $('.movetofrontdiv').remove();
             $('.sendtobackdiv').remove();
 
+            this.uniqueIDAllElements();
             //ReactDOM.findDOMNode(this.refs.inlineContent).attr('value');
             //ReactDOM.findDOMNode(this.refs.inlineContent).getContent();
-            //let slide.content = 'test';
             //this.context.executeAction(saveSlide, {slide});
-            //let slide = 'test';
             // let title = CKEDITOR.instances.inlineHeader.getData();
-            let title = this.props.SlideEditStore.title;
-            //let title = this.refs.inlineHeader.value;
-            //let title = this.refs.title.value;
-            let content = CKEDITOR.instances.inlineContent.getData();
-            let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
+            let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
+            //let content = CKEDITOR.instances.inlineContent.getData();
+            let content = (this.refs.inlineContent.innerHTML !== '') ? this.refs.inlineContent.innerHTML : ' ';
+            //let speakernotes = CKEDITOR.instances.inlineSpeakerNotes.getData();
+            let speakernotes = (this.refs.inlineSpeakerNotes.innerHTML !== '') ? this.refs.inlineSpeakerNotes.innerHTML : ' ';
             //these fields should not be empty:
-            if (title === ''){title = ' ';}
-            if (content === ''){content = ' ';}
-            if (speakernotes === ''){speakernotes = ' ';}
+            //if (title === ''){title = ' ';}
+            //if (content === ''){content = ' ';}
+            //if (speakernotes === ''){speakernotes = ' ';}
             //update store
             this.props.SlideEditStore.title = title;
             this.props.SlideEditStore.content = content;
@@ -272,6 +270,7 @@ class SlideContentEditor extends React.Component {
         //console.log('absolutediv');
         //if(this.props.content.indexOf('pptx2html') !== -1 || (CKEDITOR.instances.inlineContent.getData() !== '' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1))
         //if(this.props.content.indexOf('pptx2html') !== -1 || (CKEDITOR.instances.inlineContent.getData() !== '' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1))
+        //TODO replace with this.refs.inlineContent.innerHTML
         if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             //console.log('input box');
@@ -303,6 +302,7 @@ class SlideContentEditor extends React.Component {
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             }).then((accepted) => {
+                //TODO replace with this.refs.inlineContent.innerHTML
                 let currentContent = CKEDITOR.instances.inlineContent.getData();
                 let newContent = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1,1); transform-origin: left top 0px;">' +
                 '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">' +
@@ -310,6 +310,7 @@ class SlideContentEditor extends React.Component {
                 '</div>' +
                 '</div>';
                 //update content
+                //TODO replace with this.refs.inlineContent.innerHTML
                 CKEDITOR.instances.inlineContent.setData(newContent);
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
@@ -329,33 +330,12 @@ class SlideContentEditor extends React.Component {
     componentDidMount() {
 
         //alert('remount');
+        //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
 
         //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
         //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
-
-        if (typeof(CKEDITOR.instances.inlineHeader) === 'undefined'){CKEDITOR.inline('inlineHeader', {
-            customConfig: '/assets/ckeditor_config.js',
-            toolbarGroups: [
-		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-		{ name: 'forms', groups: [ 'forms' ] },
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'links', groups: [ 'links' ] },
-		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-		{ name: 'insert', groups: [ 'insert' ] },
-		{ name: 'colors', groups: [ 'colors' ] },
-		{ name: 'styles', groups: [ 'styles' ] },
-		{ name: 'tools', groups: [ 'tools' ] },
-		{ name: 'others', groups: [ 'others' ] },
-		{ name: 'about', groups: [ 'about' ] }
-            ],
-            floatSpacePreferRight: true,
-            uiColor: '#4183C4',
-            removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Undo,Clipboard,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
-            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
-        });}
 
         CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
@@ -531,7 +511,7 @@ class SlideContentEditor extends React.Component {
         window.onbeforeunload = () => {};
         //TODO
         //CKEDITOR.instances.nonInline.destroy();
-        CKEDITOR.instances.inlineHeader.destroy();
+        //CKEDITOR.instances.inlineHeader.destroy();
         CKEDITOR.instances.inlineContent.destroy();
         CKEDITOR.instances.inlineSpeakerNotes.destroy();
     }
@@ -615,6 +595,23 @@ class SlideContentEditor extends React.Component {
             <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
                     */
 
+        // Add the CSS dependency for the theme
+        // Get the theme information, and download the stylesheet
+        let styleName = 'default';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+        }
+        let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
                 <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
@@ -630,10 +627,9 @@ class SlideContentEditor extends React.Component {
                     <i className="browser icon blue"> </i>
                     Use template
                 </button>
-                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
-                    <div className="reveal">
-                        <div className="slides">
+                    <div className={[style.reveal, 'reveal'].join(' ')}>
+                        <div className={[style.slides, 'slides'].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                                 <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
                             </section>

@@ -12,21 +12,7 @@ class SlideViewPanel extends React.Component {
     constructor(props){
         super(props);
 
-        // Add the CSS dependency for the theme
-        // Get the theme information, and download the stylesheet
-        let styleName = 'default';
-        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-            styleName = this.props.selector.theme;
-        }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
-        }
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme:
-            styleName = 'white';
-        }
-        require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
 
     }
     render() {
@@ -73,13 +59,31 @@ class SlideViewPanel extends React.Component {
 
         };
 
+        // Add the CSS dependency for the theme
+        // Get the theme information, and download the stylesheet
+        let styleName = 'default';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
+            styleName = this.props.PresentationStore.theme;
+        }
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme:
+            styleName = 'white';
+        }
+        let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+        //console.log(style);
+        //console.log(style.reveal);
+        //console.log(style.slides);
 
         return (
           <div className="ui bottom attached segment">
               <ResizeAware ref='container' id='container'>
                   <div ref="slideViewPanel" className="ui" style={compStyle}>
-                      <div className="reveal">
-                          <div className="slides">
+                      <div className={['reveal', style.reveal].join(' ')}>
+                          <div className={['slides', style.slides].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
                               <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}}></div>
                             </section>

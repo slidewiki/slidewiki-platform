@@ -116,7 +116,8 @@ class AddDeck extends React.Component {
             license: license,
             tags: tags,
             userid: this.props.UserProfileStore.userid,
-            deckId: this.props.ImportStore.deckId
+            deckId: this.props.ImportStore.deckId,
+            selector: {id: this.props.ImportStore.deckId}
         });
     }
     handleCancel(x) {
@@ -259,7 +260,7 @@ class AddDeck extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
         */
-        let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"  ref="select_themes">
+        let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
             <option value="default">Default - Reveal.js White</option>
             <option value="beige">Reveal.js Beige</option>
             <option value="black">Reveal.js Black</option>
@@ -299,18 +300,24 @@ class AddDeck extends React.Component {
               </div>
               <div className="sixteen wide column">
                   <form className="ui form upload">
-                          <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
-                              <label htmlFor="title">
-                                  Title
-                              </label>
-                              <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
-                          </div>
+                      <div className="two fields">
+                        <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                            <label htmlFor="title">
+                                Title
+                            </label>
+                            <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                        </div>
+                        <div className={fieldClass_language}>
+                            <label htmlFor="language">Language</label>
+                            <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
+                        </div>
+                      </div>
 
                       <div className="field">
                           <label htmlFor="deck-description">Description</label>
                           <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
                       </div>
-                      <div className="three fields">
+                      <div className="two fields">
                           <div className="field" ref="div_themes" >
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
@@ -318,10 +325,6 @@ class AddDeck extends React.Component {
                           <div className={fieldClass_license} data-tooltip={hint_license} ref="div_licenses" >
                               <label htmlFor="license">License</label>
                                   {licenseOptions}
-                          </div>
-                          <div className={fieldClass_language}>
-                              <label>Language</label>
-                              <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
                           </div>
                       </div>
 
