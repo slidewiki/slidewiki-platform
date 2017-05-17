@@ -16,15 +16,18 @@ class DiffView extends Component {
     static defaultProps = {
         diffcontent: ' ',
         currContent: ' ',
-        inverse: false
+        inverse: false,
     }
 
     state = {
         diffcontent: this.props.content,
         currContent: this.props.content,
-        revisionsList: [],
-        currentRevision: '5',
-        diffRevision: '3'
+        base: this.props.DiffViewStore.baseSlide,
+        diff: this.props.DiffViewStore.diffSlide
+    }
+
+    componentDidMount = () => {
+        this.diff();
     }
 
     toggleColor = () => {
@@ -39,8 +42,8 @@ class DiffView extends Component {
         * baseSRC - current slide version
         * diffSRC - toDIFF slide verion
         */
-        let baseSRC = this.state.revisionsList.find((el) => el.id === parseInt(this.state.currentRevision)).content;
-        let diffSRC = this.state.revisionsList.find((el) => el.id === parseInt(this.state.diffRevision)).content;
+        let baseSRC = this.state.base.content;
+        let diffSRC = this.state.diff.content;
 
         const isUploaded = diffSRC.indexOf('pptx2html') !== -1;
         //PRE-PROCESS & CONVERT html into hyperscript
@@ -76,8 +79,7 @@ class DiffView extends Component {
     }
 
     render() {
-        const {inverse, diffcontent, currContent} = this.state;
-        // const params = window.location.href.split("?")[1];
+        const { inverse, diffcontent, currContent, isLoaded } = this.state;
 
         return (
             <div className="ui top-diff">

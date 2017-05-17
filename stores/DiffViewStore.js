@@ -3,26 +3,26 @@ import {BaseStore} from 'fluxible/addons';
 class DiffViewStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.history = [];
-        this.selector = {};
+        this.baseSlide = {};
+        this.diffSlide = {};
     }
     updateDiffview(payload) {
-        this.history = payload.history;
-        this.selector = payload.selector;
+        this.baseSlide = payload.baseSlide;
+        this.diffSlide = payload.diffSlide;
         this.emitChange();
     }
     getState() {
         return {
-            history: this.history,
-            selector: this.selector,
+            baseSlide: this.baseSlide,
+            diffSlide: this.diffSlide
         };
     }
     dehydrate() {
         return this.getState();
     }
     rehydrate(state) {
-        this.history = state.history;
-        this.selector = state.selector;
+        this.baseSlide = state.baseSlide;
+        this.diffSlide = state.diffSlide;
     }
     handleDeckParamErrors(err) {
         this.emitChange();
