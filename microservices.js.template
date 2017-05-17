@@ -32,7 +32,7 @@ export default {
         },
         'pdf': {
             uri : '${SERVICE_URL_PDF}'
-        }
+        },
         'tag': {
             uri : '${SERVICE_URL_TAG}'
         }
