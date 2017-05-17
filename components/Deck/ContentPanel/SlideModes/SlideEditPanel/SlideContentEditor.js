@@ -13,6 +13,7 @@ import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import TemplateDropdown from '../../../../common/TemplateDropdown';
+import {HotKeys} from 'react-hotkeys';
 
 let ReactDOM = require('react-dom');
 
@@ -590,8 +591,7 @@ class SlideContentEditor extends React.Component {
                     $(this).addClass('activeContent');
                     $(this).mouseleave(function(){$(this).css('background-color','rgba(30,120,187,0.1)');});
                 }
-                /*
-                else if(key === 'move')
+                else if(key === 'add') //use default key - do not have to make new command
                 {
                     if (!$(this).hasClass('activeContent'))
                     {
@@ -606,7 +606,6 @@ class SlideContentEditor extends React.Component {
                         $('.activeContent').removeClass('activeContent');
                     }
                 }
-                */
                 else if(key === 'cut')
                 {
                     //TODO: store in temporary variable + $(this).remove();
@@ -659,13 +658,24 @@ class SlideContentEditor extends React.Component {
             },
             items: {
                 'edit': {name: 'Edit', icon: 'edit'},
-                'move': {move: 'Move'},
+                'add': {move: 'Move around', icon: 'fa-arrows'},
+                //'move': {move: 'Move around', icon: function($element, key, item){ return 'context-menu-icon fa-arrows'; }},
+                'fold1': {
+                    'name': 'Order',
+                    'items': {
+                        'fold1-key1': {'name': 'Bring to front'},
+                        //'fold1-key2': {'name': 'Bring forward'},
+                        //'fold1-key3': {'name': 'Send Backwards'},
+                        'fold1-key4': {'name': 'Send to back'}
+                    }
+                },
                 'cut': {name: 'Cut', icon: 'cut'},
                 'copy': {name: 'Copy', icon: 'copy'},
                 'paste': {name: 'Paste', icon: 'paste'},
                 'delete': {name: 'Delete', icon: 'delete'},
                 'sep1': '---------',
-                'quit': {name: 'Quit', icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
+                'quit': {name: 'Close menu', icon: 'quit'}
+                // icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
             }
         });
     }
@@ -723,6 +733,32 @@ class SlideContentEditor extends React.Component {
         //TODO - add zoomin button + restore button
         //TODO - center editable screen + space above + below
         // When the component is rendered the confirmation is configured.
+
+        const keyMap = {
+            'deleteNode': ['del', 'backspace',
+                'shift+del', 'shift+backspace',
+                'ctrl+del', 'ctrl+backspace',
+                'alt+del', 'alt+backspace'],
+            'moveUp': ['up', 'w'],
+            'moveDown': ['down', 's'],
+            'moveLeft': ['left', 'a'],
+            'moveRight': ['right', 'd'],
+            'bringToFront': ['ctrl+shift+up', 'ctrl+up', 'shift+up',
+                'ctrl+shift+pageup', 'ctrl+pageup', 'shift+pageup', 'pageup',
+                'ctrl+shift+plus', 'ctrl+plus', 'shift+plus', 'plus' ],
+            'bringToBack': ['ctrl+shift+down', 'ctrl+down', 'shift+down',
+                'ctrl+shift+pagedown', 'ctrl+pagedown', 'shift+pagedown', 'pagedown',
+                'ctrl+shift+-', 'ctrl+-', 'shift+-', '-' ]
+        };
+        const handlers = {
+            'deleteNode': (event) => console.log('Delete node hotkey called!'),
+            'moveUp': (event) => console.log('Move up hotkey called!'),
+            'moveDown': (event) => console.log('moveDown hotkey called!'),
+            'moveLeft': (event) => console.log('moveLeft hotkey called!'),
+            'moveRight': (event) => console.log('moveRight hotkey called!'),
+            'bringToFront': (event) => console.log('bringToFront hotkey called!'),
+            'bringToBack': (event) => console.log('bringToBack hotkey called!')
+        };
 
         const headerStyle = {
             //minWidth: '100%',
@@ -819,9 +855,11 @@ class SlideContentEditor extends React.Component {
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
-                            <section className="present"  style={sectionElementStyle}>
-                                <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
-                            </section>
+                            <HotKeys keyMap={keyMap} handlers={handlers}>
+                                <section className="present"  style={sectionElementStyle}>
+                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                </section>
+                            </HotKeys>
                         </div>
                     </div>
                 </div>

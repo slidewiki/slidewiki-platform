@@ -66,6 +66,7 @@ server.use('/ckeditor-plugins/lineheight', express.static(path.join(__dirname, '
 server.use('/mathjax', express.static(path.join(__dirname, 'node_modules/mathjax')));
 server.use('/jquery-ui-dist', express.static(path.join(__dirname, 'node_modules/jquery-ui-dist')));
 server.use('/jquery-contextmenu', express.static(path.join(__dirname, 'node_modules/jquery-contextmenu')));
+server.use('/font-awesome', express.static(path.join(__dirname, 'node_modules/font-awesome')));
 
 //server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
