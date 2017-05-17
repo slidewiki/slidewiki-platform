@@ -40,16 +40,13 @@ export default function uploadFile(context, payload, done) {
         if (err) {
             log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('UPLOAD_FAILED', err);
-            //context.dispatch('CREATION_FAILURE', err);
         } else {
-            //TODO: use correct headers - atm service is not ready
             if (res.deckid === undefined) {
                 context.dispatch('UPLOAD_FAILED', err);
                 context.dispatch('CREATION_FAILURE', err);
+            } else {
+                context.dispatch('UPLOAD_SUCCESS', res);
             }
-
-            context.dispatch('UPLOAD_SUCCESS', res);
         }
         done();
     });
