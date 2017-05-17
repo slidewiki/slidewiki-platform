@@ -14,6 +14,7 @@ import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
+import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from 'react-contextmenu';
 
 let ReactDOM = require('react-dom');
 
@@ -340,6 +341,13 @@ class SlideContentEditor extends React.Component {
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             this.resize();
+
+            //SWIK-1238 - detect change to source code via source dialog plugin
+            //console.log($( ".cke_dialog_ui_button_ok" ).innerHTML);
+            //$( ".cke_dialog_ui_button_ok" ).click(function() {
+            //    console.log( "Handler for .click() called." );
+            //});
+            //CKEDITOR.instances.inlineContent.on('change', function(){console.log('change');});
             //console.log('inlineConent CKeditor ready' + CKEDITOR.instances.inlineContent);
             //if (!CKEDITOR.instances.inlineContent)
             if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
@@ -376,8 +384,6 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
         $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
-        this.contextMenu();
-
     }
 
     resizeDrag(){
@@ -463,7 +469,7 @@ class SlideContentEditor extends React.Component {
             if (!$(this).hasClass('activeContent'))
             {
                 //reset cursor
-                $(this).focus();
+                //$(this).focus();
                 //$(this).select();
                 //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
                 if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
@@ -569,118 +575,6 @@ class SlideContentEditor extends React.Component {
         }
     }
 
-    contextMenu(){
-        // TODO: https://swisnl.github.io/jQuery-contextMenu/demo/accesskeys.html
-
-        //https://github.com/swisnl/jQuery-contextMenu
-        //http://swisnl.github.io/jQuery-contextMenu/
-        $.contextMenu({
-        //$('.pptx2html').contextMenu({
-            // define which elements trigger this menu
-            selector: '.pptx2html > [style*="absolute"]',
-            // define the elements of the menu
-            callback: function(key, options) {
-                //console.log('clicked: ' + key +  'on'  + $(this).text());
-                console.log('clicked: ' + key +  'on'  + $(this).text());
-                if(key === 'edit'){
-                    //copied from $('.pptx2html > [style*="absolute"]').dblclick(function() {
-                    //keep consistent!!
-                    if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
-                    $(this).css('cursor', 'auto');
-                    $(this).css('background-color','rgba(30,120,187,0.1)');
-                    $(this).addClass('activeContent');
-                    $(this).mouseleave(function(){$(this).css('background-color','rgba(30,120,187,0.1)');});
-                }
-                else if(key === 'add') //use default key - do not have to make new command
-                {
-                    if (!$(this).hasClass('activeContent'))
-                    {
-                        //reset cursor
-                        $(this).focus();
-                        //$(this).select();
-                        //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
-                        if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
-                        $('.activeContent').css('cursor', 'pointer');
-                        $('.activeContent').css('background-color','');
-                        $('.activeContent').mouseleave(function(){$(this).css('background-color','');});
-                        $('.activeContent').removeClass('activeContent');
-                    }
-                }
-                else if(key === 'cut')
-                {
-                    //TODO: store in temporary variable + $(this).remove();
-
-                }
-                else if(key === 'copy')
-                {
-                    //TODO: move to different x / Y position if draggable element
-                    //this.clone().appendTo('.pptx2html');
-                    $(this).clone().appendTo('.pptx2html');
-                    //this.emitChange();
-                    //this.forceUpdate();
-                    //this.addBorders();
-                    //this.resizeDrag();
-                }
-
-                else if(key === 'paste')
-                {
-                    //TODO: get from temporary variable + .appendTo('.pptx2html');
-                }
-                else if(key === 'delete')
-                {
-                    swal({
-                        title: 'Remove element',
-                        text: 'Are you sure you want to delete this element?',
-                        type: 'question',
-                        showCloseButton: true,
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                        confirmButtonClass: 'ui olive button',
-                        cancelButtonText: 'No',
-                        cancelButtonClass: 'ui red button',
-                        buttonsStyling: false
-                    }).then((accepted) => {
-                        //alert(cEl.parentNode.className);
-                        //if ($(this).parentNode.childNodes.length === 1)
-                        //{
-                            //add a div element to prevent empty PPTX element which gets removed by CKeditor
-                            //let emptydiv = document.createElement('div');
-                            //emptydiv.innerHTML = "";
-                            //$(this).parentNode.appendChild(emptydiv);
-                        //}
-                        //$(this).parentNode.removeChild(cEl);
-                        if (!$(this).hasClass('pptx2html')){$(this).remove();}
-                    }, (reason) => {
-                        //done(reason);
-                    });
-                }
-
-            },
-            items: {
-                'edit': {name: 'Edit', icon: 'edit'},
-                'add': {move: 'Move around', icon: 'fa-arrows'},
-                //'move': {move: 'Move around', icon: function($element, key, item){ return 'context-menu-icon fa-arrows'; }},
-                'fold1': {
-                    'name': 'Order',
-                    'items': {
-                        'fold1-key1': {'name': 'Bring to front'},
-                        //'fold1-key2': {'name': 'Bring forward'},
-                        //'fold1-key3': {'name': 'Send Backwards'},
-                        'fold1-key4': {'name': 'Send to back'}
-                    }
-                },
-                'cut': {name: 'Cut', icon: 'cut'},
-                'copy': {name: 'Copy', icon: 'copy'},
-                'paste': {name: 'Paste', icon: 'paste'},
-                'delete': {name: 'Delete', icon: 'delete'},
-                'sep1': '---------',
-                'quit': {name: 'Close menu', icon: 'quit'}
-                // icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
-            }
-        });
-    }
-
-
     componentDidUpdate() {
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
@@ -719,6 +613,16 @@ class SlideContentEditor extends React.Component {
 
     handleClick(e, data) {
         console.log('Clicked on menu '+ data.item);
+        console.log('active element' + document.activeElement.tagName);
+        switch (data.item) {
+            case 'edit':
+                console.log('clicked on Edit');
+                break;
+            default:
+                console.log('clicked on another menu item');
+                break;
+
+        }
     }
     componentWillUnmount() {
         // Remove the warning window.
@@ -735,6 +639,16 @@ class SlideContentEditor extends React.Component {
         // When the component is rendered the confirmation is configured.
 
         const keyMap = {
+            'contextmenu': ['ctrl+alt', 'alt+ctrl'],
+            'contextMenuOption1handleClickEdit': ['ctrl+1'],
+            'contextMenuOption2handleClickMove': ['ctrl+2'],
+            'contextMenuOption3handleClickCut': ['ctrl+3'],
+            'contextMenuOption4handleClickCopy': ['ctrl+4'],
+            'contextMenuOption5handleClickPaste': ['ctrl+5'],
+            'contextMenuOption6handleClickBringToFront': ['ctrl+6'],
+            'contextMenuOption7handleClickBringToBack': ['ctrl+7'],
+            'contextMenuOption8handleClickDelete': ['ctrl+8'],
+            'contextMenuOption9handleClickClose': ['ctrl+9'],
             'deleteNode': ['del', 'backspace',
                 'shift+del', 'shift+backspace',
                 'ctrl+del', 'ctrl+backspace',
@@ -751,6 +665,17 @@ class SlideContentEditor extends React.Component {
                 'ctrl+shift+-', 'ctrl+-', 'shift+-', '-' ]
         };
         const handlers = {
+            'contextmenu': (event) => this.refs.contextTrigger.handleContextClick(event),
+            //'contextMenuOption1handleClickEdit': (event) => {this.handleClickEdit(); this.refs.contextTrigger.handleContextClick(event);},
+            'contextMenuOption1handleClickEdit': (event) => {$('#menuitem1').click();},
+            'contextMenuOption2handleClickMove': (event) => {$('#menuitem2').click();},
+            'contextMenuOption3handleClickCut': (event) => {$('#menuitem3').click();},
+            'contextMenuOption4handleClickCopy': (event) => {$('#menuitem4').click();},
+            'contextMenuOption5handleClickPaste': (event) => {$('#menuitem5').click();},
+            'contextMenuOption6handleClickBringToFront': (event) => {$('#menuitem6').click();},
+            'contextMenuOption7handleClickBringToBack': (event) => {$('#menuitem7').click();},
+            'contextMenuOption8handleClickDelete': (event) => {$('#menuitem8').click();},
+            'contextMenuOption9handleClickClose': (event) => {$('#menuitem9').click();},
             'deleteNode': (event) => console.log('Delete node hotkey called!'),
             'moveUp': (event) => console.log('Move up hotkey called!'),
             'moveDown': (event) => console.log('moveDown hotkey called!'),
@@ -836,6 +761,16 @@ class SlideContentEditor extends React.Component {
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
+        //https://github.com/vkbansal/react-contextmenu/
+        const MENU_TYPE = 'SIMPLE';
+        /*
+        let contextTrigger = null;
+        const toggleMenu = e => {
+            if(contextTrigger) {
+                contextTrigger.handleContextClick(e);
+            }
+        };
+        */
 
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
@@ -857,12 +792,27 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <HotKeys keyMap={keyMap} handlers={handlers}>
                                 <section className="present"  style={sectionElementStyle}>
-                                    <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                    <ContextMenuTrigger ref='contextTrigger' id={MENU_TYPE} holdToDisplay={1000} style={{zIndex: 1000000000}}> {/* holdToDisplay on mobile devices might conflict with draggable - https://github.com/vkbansal/react-contextmenu/blob/master/docs/faq.md*/}
+                                        <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
+                                    </ContextMenuTrigger>
                                 </section>
                             </HotKeys>
                         </div>
                     </div>
                 </div>
+                <ContextMenu id={MENU_TYPE} style={{zIndex: 1000000000}} accessible={true}>
+                    <MenuItem attributes={{ id: 'menuitem1' }} onClick={this.handleClick} data={{ item: 'Edit' }}><i className='edit icon blue'></i>Edit <font color='#C0C0C0'>(ctrl+1)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem2' }} onClick={this.handleClick} data={{ item: 'Move' }}><i className='move icon blue'> </i>Move <font color='#C0C0C0'>(ctrl+2)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem3' }} onClick={this.handleClick} data={{ item: 'Cut' }}><i className='cut icon blue'> </i>Cut <font color='#C0C0C0'>(ctrl+3)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem4' }} onClick={this.handleClick} data={{ item: 'Copy' }}><i className='copy icon blue'> </i>Copy <font color='#C0C0C0'>(ctrl+4)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem5' }} onClick={this.handleClick} data={{ item: 'Paste' }}><i className='paste icon blue'> </i>Paste <font color='#C0C0C0'>(ctrl+5)</font></MenuItem>
+                    {/*<SubMenu title='Order'>*/}
+                    <MenuItem attributes={{ id: 'menuitem6' }} onClick={this.handleClick} data={{ item: 'Bring to front' }}><i className='level up icon blue'> </i>Bring to front <font color='#C0C0C0'>(ctrl+6)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem7' }} onClick={this.handleClick} data={{ item: 'Send to back' }}><i className='level down icon blue'> </i>Send to back <font color='#C0C0C0'>(ctrl+7)</font></MenuItem>
+                    {/*</SubMenu>*/}
+                    <MenuItem attributes={{ id: 'menuitem8' }} onClick={this.handleClick} data={{ item: 'Delete' }}><i className='trash outline icon blue'> </i>Delete <font color='#C0C0C0'>(ctrl+8)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem9' }} onClick={this.handleClick} data={{ item: 'Close menu' }}><i className='remove icon blue'> </i>Close menu <font color='#C0C0C0'>(ctrl+9)</font></MenuItem>
+                </ContextMenu>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>
