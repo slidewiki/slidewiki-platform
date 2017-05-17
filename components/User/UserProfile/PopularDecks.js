@@ -14,12 +14,13 @@ class PublicUserDecks extends React.Component {
                 case '1':
                     content = content.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
                     break;
+                case '0':
+                    content = content.sort((a,b) => (b.title.toUpperCase() < a.title.toUpperCase()) ? 1 : -1 );
+                    break;
                 case '2':
+                default:
                     content = content.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
                     break;
-                case '0':
-                default:
-                    content = content.sort((a,b) => (b.title.toUpperCase() < a.title.toUpperCase()) ? 1 : -1 );
             }
             if (this.props.size === 0)
                 size = content.length;
