@@ -1,16 +1,18 @@
 import {BaseStore} from 'fluxible/addons';
 
-class ContentHistoryStore extends BaseStore {
+class DeckHistoryStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.history = [];
+        this.revisions = [];
+        this.changes = {};
         this.selector = {};
     }
-    updateHistory(payload) {
-        this.history = payload.history;
+    loadDeckRevisions(payload) {
+        this.revisions = payload.revisions;
         this.selector = payload.selector;
         this.emitChange();
     }
+
     getState() {
         return {
             history: this.history,
@@ -24,14 +26,11 @@ class ContentHistoryStore extends BaseStore {
         this.history = state.history;
         this.selector = state.selector;
     }
-    handleDeckParamErrors(err) {
-        this.emitChange();
-    }
 }
 
-ContentHistoryStore.storeName = 'ContentHistoryStore';
-ContentHistoryStore.handlers = {
-    'LOAD_CONTENT_HISTORY_SUCCESS': 'updateHistory'
+DeckHistoryStore.storeName = 'ContentHistoryStore';
+DeckHistoryStore.handlers = {
+    'LOAD_DECK_REVISIONS_SUCCESS': 'loadDeckRevisions'
 };
 
-export default ContentHistoryStore;
+export default DeckHistoryStore;

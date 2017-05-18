@@ -3,12 +3,6 @@ import rp from 'request-promise';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../configs/log').log;
 
-//extracts the position from path string
-function getRelPositionFromPath(spath) {
-    let arr = spath.split(';');
-    return arr[arr.length - 1].split(':')[1];
-}
-
 export default {
     name: 'history',
 
@@ -18,77 +12,55 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         let selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
-        let isRootDeck = selector.stype === 'deck' && selector.id === selector.sid;
-        if (resource === 'history.list') {
-            let history, contentItemPromise, parentPromise;
-            let parentId = TreeUtil.getParentId(selector);
-            if (!isRootDeck) {
-                //if the specified node is not the root deck, we need to request for its immediate parent in order to find the active revision
-                parentPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + parentId}).promise().bind(this);
-            }
-            contentItemPromise = rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid.split('-')[0]}).promise().bind(this);
-
-            //callback to execute when both requests are successful
-            Promise.all([parentPromise, contentItemPromise]).then((res) => {
-                let contentItem = JSON.parse(res[1]), revisions = contentItem.revisions, parentDeck;
-                let activeRevisionId;
-                if (isRootDeck) {
-                    activeRevisionId = contentItem.active;
-                }
-                else {
-                    parentDeck = JSON.parse(res[0]);
-                    //we asked for a specific revision of the parent deck so its revisions array should contain just one item
-                    activeRevisionId = parentDeck.revisions[0].contentItems[getRelPositionFromPath(selector.spath) - 1].ref.revision;
-                }
-                let activeRevision = revisions.find((revision) => revision.id === activeRevisionId);
-                if (activeRevision) {
-                    activeRevision.active = true;
-                }
-                let userIdsHash = {};
-                revisions.forEach((revision) => {
-                    if (revision.user != null) {
-                        userIdsHash[parseInt(revision.user)] = true;
-                    }
+        if (resource === 'history.changes') {
+            let changes;
+            let changesPromise = selector.stype === 'deck'? rp.get({uri: Microservices.deck.uri + '/deck/' + selector.sid.split('-')[0] + '/changes'}) :
+                rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid.split('-')[0] + '/changes', qs:{root: selector.id.split('-')[0]}});
+            changesPromise.then((res) => {
+                changes = JSON.parse(res);
+                //find unique user ids in change log
+                let userIds = [... new Set(changes.map((changeOp) => changeOp.user))];
+                return rp.post({uri: Microservices.user.uri + '/users', body: JSON.stringify(userIds)});
+            }).then((usersRes) => {
+                let users = JSON.parse(usersRes);
+                let usersById = {};
+                users.forEach((user) => usersById[user._id] = user);
+                changes.forEach((changeOp) => {
+                    changeOp.username = usersById[changeOp.user].username;
                 });
-                let userId, userPromises = [], userNames = {};
-                //todo use a single request if getMultipleUsers is added to user service
-                for (userId in userIdsHash) {
-                    userPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + userId}).then((userRes) => {
-                        let user = JSON.parse(userRes);
-                        userNames[user._id] = user.username;
-                    }));
-                }
-                //when all user data are fetched
-                Promise.all(userPromises).then().catch((err) => {
-                    console.log(err);
-                }).then(() => {
-                    // behaves like finally. called when all user requests are complete regardless of their success status
-                    //todo do this in the first then callback. just a temporary fix because of dummy user ids in database
-                    //enrich every revision with username
-                    revisions.forEach((revision) => {
-                        let userName = userNames[revision.user];
-                        if (userName == null || userName === '') {
-                            userName = 'Unknown user';
-                        }
-                        revision.username = userName;
-                    });
-                    callback(null, {
-                        //reverse revisions array so that it is sorted by date descending
-                        history: revisions.reverse(),
-                        selector: selector
-                    });
+                callback(null, {
+                    changes: changes,
+                    selector: selector
                 });
-            }).catch((err) => {
-                console.log(err);
-                callback(err);
-            });
-        } else if (resource === 'history.count'){
+            }).catch((err) => callback(err));
+            //returns the number of revisions of a deck
+        } else if (resource === 'history.revisionCount'){
             rp.get({uri: Microservices.deck.uri + '/deck/' + selector.sid + '/revisionCount/'}).then((res) => {
                 callback(null, {count: JSON.parse(res), selector: selector});
             }).catch((err) => {
                 //console.log(err);
                 callback({msg: 'Error in retrieving revisions count', content: err}, {});
             });
+            //returns the revisions of a deck
+        } else if (resource === 'history.revisions') {
+            let revisions;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.id.split('-')[0] + '/revisions'}).then((res) => {
+                revisions = JSON.parse(res);
+                //find unique user ids in revisions
+                let userIds = [... new Set(revisions.map((rev) => rev.user))];
+                return rp.post({uri: Microservices.user.uri + '/users', body: JSON.stringify(userIds)});
+            }).then((usersRes) => {
+                let users = JSON.parse(usersRes);
+                let usersById = {};
+                users.forEach((user) => usersById[user._id] = user);
+                revisions.forEach((rev) => {
+                    rev.username = usersById[rev.user].username;
+                });
+                callback(null, {
+                    revisions: revisions,
+                    selector: selector
+                });
+            }).catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {
