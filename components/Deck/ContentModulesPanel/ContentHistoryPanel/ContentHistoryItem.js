@@ -2,7 +2,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import revertRevision from '../../../../actions/history/revertRevision';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
-
+import moment from 'moment';
 
 class ContentHistoryItem extends React.Component {
 
@@ -20,13 +20,11 @@ class ContentHistoryItem extends React.Component {
             <i className="undo icon"/>
         </a>
         ) : '';
-        let revisionLink = <NavLink
-        href={ActivityFeedUtil.makeNodeRevisionURL(this.props.selector, revision.id)}>Revision {revision.id} </NavLink>;
         return (
         <div className="item">
             <div className="content">
                 <div className="header">
-                    {revisionLink}
+                    <span>{moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})}</span>
                     {revision.active ? <i className='check circle icon green'></i> : revertIcon}
                 </div>
                 <div className="description">
