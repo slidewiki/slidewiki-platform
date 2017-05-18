@@ -9,13 +9,15 @@ class DeckHistoryStore extends BaseStore {
     }
     loadDeckRevisions(payload) {
         this.revisions = payload.revisions;
+        this.changes = {};
         this.selector = payload.selector;
         this.emitChange();
     }
 
     getState() {
         return {
-            history: this.history,
+            revisions: this.revisions,
+            changes: this.changes,
             selector: this.selector,
         };
     }
@@ -23,12 +25,13 @@ class DeckHistoryStore extends BaseStore {
         return this.getState();
     }
     rehydrate(state) {
-        this.history = state.history;
+        this.revisions = state.revisions;
+        this.changes = state.changes;
         this.selector = state.selector;
     }
 }
 
-DeckHistoryStore.storeName = 'ContentHistoryStore';
+DeckHistoryStore.storeName = 'DeckHistoryStore';
 DeckHistoryStore.handlers = {
     'LOAD_DECK_REVISIONS_SUCCESS': 'loadDeckRevisions'
 };

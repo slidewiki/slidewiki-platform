@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import ContentHistoryStore from '../../../../stores/ContentHistoryStore';
+import DeckHistoryStore from '../../../../stores/DeckHistoryStore';
 import ContentHistoryList from './ContentHistoryList';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import PermissionsStore from '../../../../stores/PermissionsStore';
@@ -10,9 +10,9 @@ class ContentHistoryPanel extends React.Component {
         return (
             <div ref="contentHistoryPanel" className="ui">
                 <div>
-                    <ContentHistoryList revisions={this.props.ContentHistoryStore.history}
+                    <ContentHistoryList revisions={this.props.DeckHistoryStore.revisions}
                                         userid={this.props.UserProfileStore.userid}
-                                        selector={this.props.ContentHistoryStore.selector}
+                                        selector={this.props.DeckHistoryStore.selector}
                                         permissions={this.props.PermissionsStore.permissions} />
                 </div>
             </div>
@@ -20,9 +20,9 @@ class ContentHistoryPanel extends React.Component {
     }
 }
 
-ContentHistoryPanel = connectToStores(ContentHistoryPanel, [ContentHistoryStore, UserProfileStore, PermissionsStore], (context, props) => {
+ContentHistoryPanel = connectToStores(ContentHistoryPanel, [DeckHistoryStore, UserProfileStore, PermissionsStore], (context, props) => {
     return {
-        ContentHistoryStore: context.getStore(ContentHistoryStore).getState(),
+        DeckHistoryStore: context.getStore(DeckHistoryStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState()
     };

@@ -16,7 +16,7 @@ import TagsStore from './stores/TagsStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
 import TranslationStore from './stores/TranslationStore';
-import ContentHistoryStore from './stores/ContentHistoryStore';
+import DeckHistoryStore from './stores/DeckHistoryStore';
 import ContentUsageStore from './stores/ContentUsageStore';
 import ContentQuestionsStore from './stores/ContentQuestionsStore';
 import ContentDiscussionStore from './stores/ContentDiscussionStore';
@@ -60,7 +60,7 @@ const app = new Fluxible({
         ActivityFeedStore,
         DeckTreeStore,
         TranslationStore,
-        ContentHistoryStore,
+        DeckHistoryStore,
         ContentUsageStore,
         ContentQuestionsStore,
         ContentDiscussionStore,
