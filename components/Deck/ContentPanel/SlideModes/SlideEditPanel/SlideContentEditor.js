@@ -35,8 +35,7 @@ class SlideContentEditor extends React.Component {
         }
         this.refs.template;
         this.showTemplates = false;
-
-
+        this.menuFocus;
     }
 
     handleTemplatechange(){
@@ -198,11 +197,13 @@ class SlideContentEditor extends React.Component {
             //reset scaling of pptx2html element to get original size
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             //SWIK 107 - remove input box edit buttons
-            $('.dragdiv').remove();
+            /*$('.dragdiv').remove();
             $('.removediv').remove();
             $('.resizediv').remove();
             $('.movetofrontdiv').remove();
             $('.sendtobackdiv').remove();
+            */
+            $('.pptx2html > [style*="absolute"]').removeClass('activeContent');
 
             this.uniqueIDAllElements();
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
@@ -440,8 +441,9 @@ class SlideContentEditor extends React.Component {
             if (!$(this).hasClass('activeContent'))
             {//if not already in input mode
                 //set caret to start of text (span) in div element
-                //slideEditorContext.placeCaretAtEnd($(this).find('span:first')[0]);
+                //slideEditorContext.placeCaretAtStart($(this).find('span:first')[0]);
                 let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
+                //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
 
                 // Set a timer to allow the selection to happen and the dust settle first
                 //window.setTimeout(function() {
@@ -463,24 +465,45 @@ class SlideContentEditor extends React.Component {
             //}
 
         });
-        $('.pptx2html > [style*="absolute"]').click(function() {
-        //$('.pptx2html').click(function() {
-            //console.log($(this).attr('class'));
-            if (!$(this).hasClass('activeContent'))
-            {
-                //reset cursor
-                //$(this).focus();
-                //$(this).select();
-                //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
-                if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
-                $('.activeContent').css('cursor', 'pointer');
-                //$('.activeContent').css('background-color','');
-                //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
-                //$('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
-                $('.activeContent').css('box-shadow','');
-                $('.activeContent').removeClass('activeContent');
+        //$('.pptx2html > [style*="absolute"]').click(function() {
+        $('.pptx2html > [style*="absolute"]').mousedown(function(event) {
+            switch (event.which) {
+                case 1:
+                    console.log('Left Mouse button pressed.');
+                    //$('.pptx2html').click(function() {
+                    //console.log($(this).attr('class'));
+                    if (!$(this).hasClass('activeContent'))
+                    {
+                        //reset cursor
+                        //$(this).focus();
+                        //$(this).select();
+                        //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
+                        if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
+                        $('.activeContent').css('cursor', 'pointer');
+                        //$('.activeContent').css('background-color','');
+                        //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                        //$('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
+                        $('.activeContent').css('box-shadow','');
+                        $('.activeContent').removeClass('activeContent');
+                    }
+                    //});
+                    break;
+                case 2:
+                    console.log('Middle Mouse button pressed.');
+                    break;
+                case 3:
+                    console.log('Right Mouse button pressed.');
+                    //TODO: do this for inline elements as well with below line
+                    //this.menuFocus = $(':focus').attr('id');
+                    //this.menuFocus = $(this).attr('id');
+                    slideEditorContext.menuFocus = $(this).attr('id');
+                    console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
+                    break;
+                default:
+                    console.log('You have a strange Mouse!');
             }
         });
+
 
         $('.pptx2html > [style*="absolute"]').css('cursor', 'pointer');
 
@@ -504,12 +527,96 @@ class SlideContentEditor extends React.Component {
         //give each input element a tab index
         //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         $('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
-
-
     }
 
 
-    placeCaretAtEnd(el) {
+    setEditMode(evt, slideEditorContext, menuFocus){
+        //let id = this.currentfocus;
+        //console.log('slideEditorContext.menuFocusId' + slideEditorContext.menuFocus);
+        console.log('event' + evt);
+        let id = $(':focus').attr('id');
+        //let id = $('.currentFocus').attr('id');
+        console.log(menuFocus);
+        if (menuFocus){
+            //if right-click context menu has selected an input box object
+            console.log('menuFocusId' + menuFocus);
+            id = menuFocus;
+        }
+        console.log('id' + id);
+
+
+        //$('#' + id).find('span:first').focus();
+
+        //if (!$('#' + id).hasClass('activeContent'))
+        if (evt)
+        {//if not already in input mode
+            //set caret to start of text (span) in div element
+            //console.log('keycode' + evt.keyCode);
+            if(evt.keyCode){ //if keyboard event
+                evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
+                //console.log('placeCaretAtStart' + evt.keyCode);
+                //slideEditorContext.placeCaretAtStart($(this).find('span:first')[0]);
+                slideEditorContext.placeCaretAtStart(id);
+                //this.placeCaretAtStart($('#' + id).find('span:first')[0]);
+                /*
+                //placeCaretAtStart(el) {
+                let el = $('#' + id).find('span:first')[0];
+                    el.focus();
+                    if (typeof window.getSelection != 'undefined'
+                            && typeof document.createRange != 'undefined') {
+                        let range = document.createRange();
+                        range.selectNodeContents(el);
+                        //range.collapse(false);
+                        range.collapse(true); //place caret at start
+                        let sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    } else if (typeof document.body.createTextRange != 'undefined') {
+                        let textRange = document.body.createTextRange();
+                        textRange.moveToElementText(el);
+                        textRange.collapse(false);
+                        textRange.select();
+                    }
+                //}
+                */
+            }
+            else {
+
+                let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
+                //also need to get + store previous caretrange for context menu
+                //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
+                //let caretRange = this.getMouseEventCaretRange(evt);
+                // Set a timer to allow the selection to happen and the dust settle first
+                //window.setTimeout(function() {
+                slideEditorContext.selectRange(caretRange);
+                //this.selectRange(caretRange);
+                //}, 10);
+            }
+        }
+        else {
+            slideEditorContext.placeCaretAtStart(id);
+        }
+
+        //$(this).ResizableDestroy();
+        if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
+        $('#' + id).css('cursor', 'auto');
+        //$(this).css('background-color','rgba(81, 203, 238,0.1)');
+        $('#' + id).addClass('activeContent');
+        //$(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
+        // TODO:  restore draggable after pressing 'esc' key
+        //if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
+            //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+        //    $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
+        $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
+        //console.log('go to set edit mode end, with currentfocus: ' + this.currentfocus);
+        console.log('go to set edit mode end, with currentfocus: ' + id);
+        //}
+    }
+
+    //placeCaretAtStart(el) {
+    placeCaretAtStart() {
+        let el = $(':focus').find('span:first')[0];
+        //let focused = document.activeElement;
         el.focus();
         if (typeof window.getSelection != 'undefined'
                 && typeof document.createRange != 'undefined') {
@@ -664,11 +771,14 @@ class SlideContentEditor extends React.Component {
                 'ctrl+shift+pagedown', 'ctrl+pagedown', 'shift+pagedown', 'pagedown',
                 'ctrl+shift+-', 'ctrl+-', 'shift+-', '-' ]
         };
+        let slideEditorContext = this;
         const handlers = {
             'contextmenu': (event) => this.refs.contextTrigger.handleContextClick(event),
             //'contextMenuOption1handleClickEdit': (event) => {this.handleClickEdit(); this.refs.contextTrigger.handleContextClick(event);},
-            'contextMenuOption1handleClickEdit': (event) => {$('#menuitem1').click();},
-            'contextMenuOption2handleClickMove': (event) => {$('#menuitem2').click();},
+            //'contextMenuOption1handleClickEdit': (event, slideEditorContext) => {$('#menuitem1').click();},
+            //'contextMenuOption1handleClickEdit': (event, slideEditorContext) => {this.setEditMode();},
+            'contextMenuOption1handleClickEdit': (event) => this.setEditMode(event, slideEditorContext),
+            'contextMenuOption2handleClickMove': (event, slideEditorContext) => {$('#menuitem2').click();},
             'contextMenuOption3handleClickCut': (event) => {$('#menuitem3').click();},
             'contextMenuOption4handleClickCopy': (event) => {$('#menuitem4').click();},
             'contextMenuOption5handleClickPaste': (event) => {$('#menuitem5').click();},
@@ -682,7 +792,8 @@ class SlideContentEditor extends React.Component {
             'moveLeft': (event) => console.log('moveLeft hotkey called!'),
             'moveRight': (event) => console.log('moveRight hotkey called!'),
             'bringToFront': (event) => console.log('bringToFront hotkey called!'),
-            'bringToBack': (event) => console.log('bringToBack hotkey called!')
+            'bringToBack': (event) => console.log('bringToBack hotkey called!'),
+            'enter': (event) => this.setEditMode(event, slideEditorContext)
         };
 
         const headerStyle = {
@@ -801,7 +912,7 @@ class SlideContentEditor extends React.Component {
                     </div>
                 </div>
                 <ContextMenu id={MENU_TYPE} style={{zIndex: 1000000000}} accessible={true}>
-                    <MenuItem attributes={{ id: 'menuitem1' }} onClick={this.handleClick} data={{ item: 'Edit' }}><i className='edit icon blue'></i>Edit <font color='#C0C0C0'>(ctrl+1)</font></MenuItem>
+                    <MenuItem attributes={{ id: 'menuitem1' }} onClick={(event) => this.setEditMode(event, slideEditorContext, this.menuFocus)} data={{ item: 'Edit' }}><i className='edit icon blue'></i>Edit <font color='#C0C0C0'>(ctrl+1)</font></MenuItem>
                     <MenuItem attributes={{ id: 'menuitem2' }} onClick={this.handleClick} data={{ item: 'Move' }}><i className='move icon blue'> </i>Move <font color='#C0C0C0'>(ctrl+2)</font></MenuItem>
                     <MenuItem attributes={{ id: 'menuitem3' }} onClick={this.handleClick} data={{ item: 'Cut' }}><i className='cut icon blue'> </i>Cut <font color='#C0C0C0'>(ctrl+3)</font></MenuItem>
                     <MenuItem attributes={{ id: 'menuitem4' }} onClick={this.handleClick} data={{ item: 'Copy' }}><i className='copy icon blue'> </i>Copy <font color='#C0C0C0'>(ctrl+4)</font></MenuItem>
