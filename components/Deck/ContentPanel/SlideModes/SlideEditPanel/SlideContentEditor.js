@@ -14,7 +14,6 @@ import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
-import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from 'react-contextmenu';
 
 let ReactDOM = require('react-dom');
 
@@ -341,7 +340,7 @@ class SlideContentEditor extends React.Component {
         this.currentcontent = this.props.content;
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-            this.resize();
+            //this.resize();
 
             //SWIK-1238 - detect change to source code via source dialog plugin
             //console.log($( ".cke_dialog_ui_button_ok" ).innerHTML);
@@ -436,8 +435,15 @@ class SlideContentEditor extends React.Component {
 
         //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
         $('.pptx2html > [style*="absolute"]').dblclick(function(evt) {
+
+            if (!$(this).hasClass('activeContent'))
+            {
+                slideEditorContext.setEditMode(evt, slideEditorContext, $(this).attr('id'));
+            }
+            /*
             $(this).find('span:first').focus();
 
+            $('.cke_menu').show();
             if (!$(this).hasClass('activeContent'))
             {//if not already in input mode
                 //set caret to start of text (span) in div element
@@ -463,6 +469,7 @@ class SlideContentEditor extends React.Component {
             //    $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
             $(this).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
             //}
+            */
 
         });
         //$('.pptx2html > [style*="absolute"]').click(function() {
@@ -470,21 +477,33 @@ class SlideContentEditor extends React.Component {
             switch (event.which) {
                 case 1:
                     console.log('Left Mouse button pressed.');
+                    $('.cke_menu').hide();
                     //$('.pptx2html').click(function() {
                     //console.log($(this).attr('class'));
                     if (!$(this).hasClass('activeContent'))
-                    {
-                        //reset cursor
-                        //$(this).focus();
-                        //$(this).select();
-                        //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
-                        if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
-                        $('.activeContent').css('cursor', 'pointer');
-                        //$('.activeContent').css('background-color','');
-                        //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
-                        //$('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
-                        $('.activeContent').css('box-shadow','');
-                        $('.activeContent').removeClass('activeContent');
+                    { //the clicked element is not activeContent
+                        if($('.activeContent').length)
+                        { //there is an activeContent element (via doubleclick)
+                            //reset cursor
+                            //$(this).focus();
+                            //$(this).select();
+                            //if(!$(this).draggable( 'instance' )){$(this).draggable({cursor: 'move', containment: '#inlineContent'});}
+                            if(!$('.activeContent').draggable( 'instance' )){$('.activeContent').draggable({cursor: 'move'});}
+                            $('.activeContent').css('cursor', 'pointer');
+                            //$('.activeContent').css('background-color','');
+                            //$('.activeContent').mouseleave(function(){$(this).css('background-color','');});
+                            //$('.activeContent').not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
+                            $('.activeContent').css('box-shadow','');
+                            $('.activeContent').contextMenu(true);
+                            $('.activeContent').removeClass('activeContent');
+                            /*
+                            jQuery.data( document.body, 'menuStatus', {
+                                disableEdit: false,
+                                disableMove: true,
+                                disable: false
+                            });
+                            */
+                        }
                     }
                     //});
                     break;
@@ -492,16 +511,27 @@ class SlideContentEditor extends React.Component {
                     console.log('Middle Mouse button pressed.');
                     break;
                 case 3:
-                    console.log('Right Mouse button pressed.');
-                    //TODO: do this for inline elements as well with below line
-                    //this.menuFocus = $(':focus').attr('id');
-                    //this.menuFocus = $(this).attr('id');
-                    slideEditorContext.menuFocus = $(this).attr('id');
+                    event.preventDefault();
                     console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
+                    slideEditorContext.menuFocus = $(this).attr('id');
+                    console.log('Right Mouse button pressed.');
+                    if (!$(this).hasClass('activeContent'))
+                    {
+                        console.log('hide ckeditor context menu');
+                        $('.cke_menu').hide();
+                        //CKEDITOR.instances.inlineContent.destroy();
+                        //slideEditorContext.refs.inlineContent.contentEditable = false;
+                        //CKEDITOR.instances.inlineContent.hide();
+                    }
+                    else {
+                        $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                    }
+                    $(this).focus();
                     break;
                 default:
                     console.log('You have a strange Mouse!');
             }
+
         });
 
 
@@ -527,10 +557,21 @@ class SlideContentEditor extends React.Component {
         //give each input element a tab index
         //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         $('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+
+        this.contextMenuAll();
+        /*
+        jQuery.data( document.body, 'menuStatus', {
+            disableEdit: false,
+            disableMove: true,
+            disable: false
+        });
+        */
     }
 
 
     setEditMode(evt, slideEditorContext, menuFocus){
+
+        //$('#toggle-disabled').data()
         //let id = this.currentfocus;
         //console.log('slideEditorContext.menuFocusId' + slideEditorContext.menuFocus);
         console.log('event' + evt);
@@ -543,74 +584,56 @@ class SlideContentEditor extends React.Component {
             id = menuFocus;
         }
         console.log('id' + id);
+        if(!$('#'+id).hasClass('.activeContent'))
+        {
+            $('.cke_menu').show();
+            console.log('disable context menu with id: ' + id );
+            $('#'+id).contextMenu(false);
+            //$('#' + id).find('span:first').focus();
 
-
-        //$('#' + id).find('span:first').focus();
-
-        //if (!$('#' + id).hasClass('activeContent'))
-        if (evt)
-        {//if not already in input mode
-            //set caret to start of text (span) in div element
-            //console.log('keycode' + evt.keyCode);
-            if(evt.keyCode){ //if keyboard event
-                evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
-                //console.log('placeCaretAtStart' + evt.keyCode);
-                //slideEditorContext.placeCaretAtStart($(this).find('span:first')[0]);
-                slideEditorContext.placeCaretAtStart(id);
-                //this.placeCaretAtStart($('#' + id).find('span:first')[0]);
-                /*
-                //placeCaretAtStart(el) {
-                let el = $('#' + id).find('span:first')[0];
-                    el.focus();
-                    if (typeof window.getSelection != 'undefined'
-                            && typeof document.createRange != 'undefined') {
-                        let range = document.createRange();
-                        range.selectNodeContents(el);
-                        //range.collapse(false);
-                        range.collapse(true); //place caret at start
-                        let sel = window.getSelection();
-                        sel.removeAllRanges();
-                        sel.addRange(range);
-                    } else if (typeof document.body.createTextRange != 'undefined') {
-                        let textRange = document.body.createTextRange();
-                        textRange.moveToElementText(el);
-                        textRange.collapse(false);
-                        textRange.select();
-                    }
-                //}
-                */
+            //if (!$('#' + id).hasClass('activeContent'))
+            if (evt)
+            {//if not already in input mode
+                //set caret to start of text (span) in div element
+                //console.log('keycode' + evt.keyCode);
+                if(evt.keyCode){ //if keyboard event
+                    evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
+                    //console.log('placeCaretAtStart' + evt.keyCode);
+                    //slideEditorContext.placeCaretAtStart($(this).find('span:first')[0]);
+                    slideEditorContext.placeCaretAtStart(id);
+                    //this.placeCaretAtStart($('#' + id).find('span:first')[0]);
+                }
+                else {
+                    let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
+                    //also need to get + store previous caretrange for context menu
+                    //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
+                    //let caretRange = this.getMouseEventCaretRange(evt);
+                    // Set a timer to allow the selection to happen and the dust settle first
+                    //window.setTimeout(function() {
+                    slideEditorContext.selectRange(caretRange);
+                    //this.selectRange(caretRange);
+                    //}, 10);
+                }
             }
             else {
-
-                let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
-                //also need to get + store previous caretrange for context menu
-                //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                //let caretRange = this.getMouseEventCaretRange(evt);
-                // Set a timer to allow the selection to happen and the dust settle first
-                //window.setTimeout(function() {
-                slideEditorContext.selectRange(caretRange);
-                //this.selectRange(caretRange);
-                //}, 10);
+                slideEditorContext.placeCaretAtStart(id);
             }
-        }
-        else {
-            slideEditorContext.placeCaretAtStart(id);
-        }
 
-        //$(this).ResizableDestroy();
-        if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
-        $('#' + id).css('cursor', 'auto');
-        //$(this).css('background-color','rgba(81, 203, 238,0.1)');
-        $('#' + id).addClass('activeContent');
-        //$(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
-        // TODO:  restore draggable after pressing 'esc' key
-        //if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
-            //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
-        //    $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
-        $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
-        //console.log('go to set edit mode end, with currentfocus: ' + this.currentfocus);
-        console.log('go to set edit mode end, with currentfocus: ' + id);
-        //}
+            //$(this).ResizableDestroy();
+            if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
+            $('#' + id).css('cursor', 'auto');
+            //$(this).css('background-color','rgba(81, 203, 238,0.1)');
+            $('#' + id).addClass('activeContent');
+            //$(this).mouseleave(function(){$(this).css('background-color','rgba(81, 203, 238,0.1)');});
+            // TODO:  restore draggable after pressing 'esc' key
+            //if ($(this).not('.drawing-container').css('borderStyle') !== 'solid') {
+                //$('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'dashed', 'borderColor': '#33cc33'});
+            //    $(this).not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
+            $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
+            //console.log('go to set edit mode end, with currentfocus: ' + this.currentfocus);
+            console.log('go to set edit mode end, with currentfocus: ' + id);
+            //}
+        }
     }
 
     //placeCaretAtStart(el) {
@@ -681,6 +704,109 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
+    contextMenuAll(){
+        // TODO: https://swisnl.github.io/jQuery-contextMenu/demo/accesskeys.html
+
+        let slideEditorContext = this;
+        //https://github.com/swisnl/jQuery-contextMenu
+        //http://swisnl.github.io/jQuery-contextMenu/
+        $('.pptx2html > [style*="absolute"]').each(function () {
+            console.log('menu for: ' + $(this).attr('id'));
+            $.contextMenu({
+            //$('.pptx2html').contextMenu({
+                // define which elements trigger this menu
+                //selector: '.pptx2html > [style*="absolute"]',
+                selector: '#'+$(this).attr('id'),
+                // define the elements of the menu
+                callback: function(key, options) {
+                    //console.log('clicked: ' + key +  'on'  + $(this).text());
+                    console.log('clicked: ' + key +  'on'  + $(this).text());
+                    let m = 'clicked: ' + key;
+                    console.log(m);
+                    switch (key) {
+                        case 'edit':
+                            slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
+                            break;
+                        case 'front':
+                            break;
+                        case 'back':
+                            break;
+                        case 'copy':
+                            //TODO: move to different x / Y position if draggable element
+                            //this.clone().appendTo('.pptx2html');
+                            $(this).clone().appendTo('.pptx2html');
+                            $(this).css('top', '+=50');
+                            slideEditorContext.resizeDrag();
+                            //this.emitChange();
+                            //this.forceUpdate();
+                            //this.addBorders();
+                            //this.resizeDrag();
+                            break;
+                        case 'delete':
+                            swal({
+                                title: 'Remove element',
+                                text: 'Are you sure you want to delete this element?',
+                                type: 'question',
+                                showCloseButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes',
+                                confirmButtonClass: 'ui olive button',
+                                cancelButtonText: 'No',
+                                cancelButtonClass: 'ui red button',
+                                buttonsStyling: false
+                            }).then((accepted) => {
+                                //alert(cEl.parentNode.className);
+                                //if ($(this).parentNode.childNodes.length === 1)
+                                //{
+                                    //add a div element to prevent empty PPTX element which gets removed by CKeditor
+                                    //let emptydiv = document.createElement('div');
+                                    //emptydiv.innerHTML = "";
+                                    //$(this).parentNode.appendChild(emptydiv);
+                                //}
+                                //$(this).parentNode.removeChild(cEl);
+                                if (!$(this).hasClass('pptx2html')){$(this).remove();}
+                            }, (reason) => {
+                                //done(reason);
+                            });
+                            break;
+                        case 'quit':
+                            break;
+                        default:
+                    }
+                },
+                items: {
+                    'edit': {name: 'Edit (key:e)', icon: 'edit', accesskey: 'e'},
+                    /*
+                    'edit': {name: 'Edit', icon: 'edit',
+                        disabled: function(key, opt) {
+                            return jQuery.data( document.body, 'menuStatus' ).disableEdit;
+                        }
+                    },
+                    */
+                    //'cut': {move: 'Move around', icon: 'fa-arrows'},
+                    //'cut': {move: 'Move around', icon: 'cut'},
+                    //'move': {name: 'Move around', icon: 'cut'},
+                    /*
+                    'move': {name: 'Move around', icon: 'fa-arrows',
+                        disabled: function(key, opt) {
+                            return jQuery.data( document.body, 'menuStatus' ).disableMove;
+                        }
+                    },
+                    */
+                    //'move': {move: 'Move around', icon: function($element, key, item){ return 'context-menu-icon fa-arrows'; }},
+                    //'paste': {name: 'Bring to front', icon: 'paste'},
+                    'front': {name: 'Bring to front (key:f)', icon: 'fa-arrow-circle-up', accesskey: 'f'},
+                    'back': {name: 'Send to back (key:b)', icon: 'fa-arrow-circle-o-down', accesskey: 'b'},
+                    //'quit': {name: 'Send to back', icon: 'quit'},
+                    'copy': {name: 'Copy (key:c)', icon: 'copy', accesskey: 'c'},
+                    'delete': {name: 'Delete (key:d)', icon: 'delete', accesskey: 'd'},
+                    //'sep1': '---------',
+                    'quit': {name: 'Close menu (key:Esc)', icon: 'quit', accesskey: 'esc'}
+                    // icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
+                }
+            });
+        });
+    }
 
     componentDidUpdate() {
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
@@ -699,7 +825,10 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
         }
     }
-
+    keyContextMenu(){
+        let id = $(':focus').attr('id');
+        $('#'+id).contextMenu();
+    }
     resize() {
         let containerwidth = document.getElementById('container').offsetWidth;
         let containerheight = document.getElementById('container').offsetHeight;
@@ -717,20 +846,6 @@ class SlideContentEditor extends React.Component {
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
         this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
     }
-
-    handleClick(e, data) {
-        console.log('Clicked on menu '+ data.item);
-        console.log('active element' + document.activeElement.tagName);
-        switch (data.item) {
-            case 'edit':
-                console.log('clicked on Edit');
-                break;
-            default:
-                console.log('clicked on another menu item');
-                break;
-
-        }
-    }
     componentWillUnmount() {
         // Remove the warning window.
         window.onbeforeunload = () => {};
@@ -747,15 +862,6 @@ class SlideContentEditor extends React.Component {
 
         const keyMap = {
             'contextmenu': ['ctrl+alt', 'alt+ctrl'],
-            'contextMenuOption1handleClickEdit': ['ctrl+1'],
-            'contextMenuOption2handleClickMove': ['ctrl+2'],
-            'contextMenuOption3handleClickCut': ['ctrl+3'],
-            'contextMenuOption4handleClickCopy': ['ctrl+4'],
-            'contextMenuOption5handleClickPaste': ['ctrl+5'],
-            'contextMenuOption6handleClickBringToFront': ['ctrl+6'],
-            'contextMenuOption7handleClickBringToBack': ['ctrl+7'],
-            'contextMenuOption8handleClickDelete': ['ctrl+8'],
-            'contextMenuOption9handleClickClose': ['ctrl+9'],
             'deleteNode': ['del', 'backspace',
                 'shift+del', 'shift+backspace',
                 'ctrl+del', 'ctrl+backspace',
@@ -773,19 +879,8 @@ class SlideContentEditor extends React.Component {
         };
         let slideEditorContext = this;
         const handlers = {
-            'contextmenu': (event) => this.refs.contextTrigger.handleContextClick(event),
-            //'contextMenuOption1handleClickEdit': (event) => {this.handleClickEdit(); this.refs.contextTrigger.handleContextClick(event);},
-            //'contextMenuOption1handleClickEdit': (event, slideEditorContext) => {$('#menuitem1').click();},
-            //'contextMenuOption1handleClickEdit': (event, slideEditorContext) => {this.setEditMode();},
-            'contextMenuOption1handleClickEdit': (event) => this.setEditMode(event, slideEditorContext),
-            'contextMenuOption2handleClickMove': (event, slideEditorContext) => {$('#menuitem2').click();},
-            'contextMenuOption3handleClickCut': (event) => {$('#menuitem3').click();},
-            'contextMenuOption4handleClickCopy': (event) => {$('#menuitem4').click();},
-            'contextMenuOption5handleClickPaste': (event) => {$('#menuitem5').click();},
-            'contextMenuOption6handleClickBringToFront': (event) => {$('#menuitem6').click();},
-            'contextMenuOption7handleClickBringToBack': (event) => {$('#menuitem7').click();},
-            'contextMenuOption8handleClickDelete': (event) => {$('#menuitem8').click();},
-            'contextMenuOption9handleClickClose': (event) => {$('#menuitem9').click();},
+            //'contextmenu': (event) => this.refs.contextTrigger.handleContextClick(event),
+            'contextmenu': (event) => this.keyContextMenu(),
             'deleteNode': (event) => console.log('Delete node hotkey called!'),
             'moveUp': (event) => console.log('Move up hotkey called!'),
             'moveDown': (event) => console.log('moveDown hotkey called!'),
@@ -903,27 +998,12 @@ class SlideContentEditor extends React.Component {
                         <div className={[style.slides, 'slides'].join(' ')}>
                             <HotKeys keyMap={keyMap} handlers={handlers}>
                                 <section className="present"  style={sectionElementStyle}>
-                                    <ContextMenuTrigger ref='contextTrigger' id={MENU_TYPE} holdToDisplay={1000} style={{zIndex: 1000000000}}> {/* holdToDisplay on mobile devices might conflict with draggable - https://github.com/vkbansal/react-contextmenu/blob/master/docs/faq.md*/}
                                         <div style={contentStyle} contentEditable='true' name='inlineContent' ref='inlineContent' id='inlineContent' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.content}}></div>
-                                    </ContextMenuTrigger>
                                 </section>
                             </HotKeys>
                         </div>
                     </div>
                 </div>
-                <ContextMenu id={MENU_TYPE} style={{zIndex: 1000000000}} accessible={true}>
-                    <MenuItem attributes={{ id: 'menuitem1' }} onClick={(event) => this.setEditMode(event, slideEditorContext, this.menuFocus)} data={{ item: 'Edit' }}><i className='edit icon blue'></i>Edit <font color='#C0C0C0'>(ctrl+1)</font></MenuItem>
-                    <MenuItem attributes={{ id: 'menuitem2' }} onClick={this.handleClick} data={{ item: 'Move' }}><i className='move icon blue'> </i>Move <font color='#C0C0C0'>(ctrl+2)</font></MenuItem>
-                    <MenuItem attributes={{ id: 'menuitem3' }} onClick={this.handleClick} data={{ item: 'Cut' }}><i className='cut icon blue'> </i>Cut <font color='#C0C0C0'>(ctrl+3)</font></MenuItem>
-                    <MenuItem attributes={{ id: 'menuitem4' }} onClick={this.handleClick} data={{ item: 'Copy' }}><i className='copy icon blue'> </i>Copy <font color='#C0C0C0'>(ctrl+4)</font></MenuItem>
-                    <MenuItem attributes={{ id: 'menuitem5' }} onClick={this.handleClick} data={{ item: 'Paste' }}><i className='paste icon blue'> </i>Paste <font color='#C0C0C0'>(ctrl+5)</font></MenuItem>
-                    {/*<SubMenu title='Order'>*/}
-                    <MenuItem attributes={{ id: 'menuitem6' }} onClick={this.handleClick} data={{ item: 'Bring to front' }}><i className='level up icon blue'> </i>Bring to front <font color='#C0C0C0'>(ctrl+6)</font></MenuItem>
-                    <MenuItem attributes={{ id: 'menuitem7' }} onClick={this.handleClick} data={{ item: 'Send to back' }}><i className='level down icon blue'> </i>Send to back <font color='#C0C0C0'>(ctrl+7)</font></MenuItem>
-                    {/*</SubMenu>*/}
-                    <MenuItem attributes={{ id: 'menuitem8' }} onClick={this.handleClick} data={{ item: 'Delete' }}><i className='trash outline icon blue'> </i>Delete <font color='#C0C0C0'>(ctrl+8)</font></MenuItem>
-                    <MenuItem attributes={{ id: 'menuitem9' }} onClick={this.handleClick} data={{ item: 'Close menu' }}><i className='remove icon blue'> </i>Close menu <font color='#C0C0C0'>(ctrl+9)</font></MenuItem>
-                </ContextMenu>
                 <b>Speaker notes:</b><br />
                 <div style={speakernotesStyle} contentEditable='true' name='inlineSpeakerNotes' ref='inlineSpeakerNotes' id='inlineSpeakerNotes' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.speakernotes}}></div>
             </ResizeAware>

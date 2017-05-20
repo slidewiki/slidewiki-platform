@@ -69,7 +69,9 @@ CKEDITOR.editorConfig = function( config ) {
     ///config.toolbarLocation = 'bottom';
 
     //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
-    config.removePlugins = 'magicline,contextmenu,liststyle,tabletools';
+    config.removePlugins = 'magicline';
+    //Klaas edit -> remove CKeditor context menu
+    //config.removePlugins = 'magicline,contextmenu,liststyle,tabletools';
 
     CKEDITOR.config.magicline_color = '#0000FF';
 
