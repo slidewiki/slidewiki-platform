@@ -30,12 +30,31 @@ class DiffView extends Component {
     componentDidMount = () => {
         this.diff();
         this.setState({ isLoaded: true });
+        window.addEventListener('resize', (evt) => {
+            if(process.env.BROWSER){
+                this.forceUpdate();
+            }
+        });
+    }
+
+    componentDidUpdate() {
+        if(process.env.BROWSER){
+            this.resize();
+        }
     }
 
     toggleColor = () => {
         this.setState({
             inverse: !this.state.inverse
         });
+    }
+
+    resize = () => {
+        let containerwidth = document.getElementById('container').offsetWidth;
+        let pptxwidth = $('.pptx2html').width();
+        this.scaleratio = containerwidth / (pptxwidth);
+        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+        $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
     }
 
     diff = () => {
@@ -81,29 +100,32 @@ class DiffView extends Component {
     }
 
     render() {
-        const { inverse, diffcontent, currContent, isLoaded } = this.state;
+        const { base, diff, inverse, diffcontent, currContent, isLoaded } = this.state;
 
         if(!isLoaded) return (<div>Loading ...</div>);
 
         return (
-            <div className="ui top-diff">
+            <div className="fluid container ui top-diff">
+              <div className='ui'>
                 <div className='helpers'>Change color palette:
                     <Radio toggle onChange={this.toggleColor}/>
-                    <div className='revisions'>
-                      <span>Latest revision</span>
-                      <span>Diff view changes</span>
-                    </div>
                 </div>
-
 
                 <div className='reveal'>
                     <div className='slides'>
                         <div className={`diff-view ${inverse ? 'inverse' : ''} `}>
-                            <div className='initVers' dangerouslySetInnerHTML={{__html: currContent}}></div>
-                            <div className='mergedVers' dangerouslySetInnerHTML={{__html: diffcontent}}></div>
+                            <div className='initVers' id='container'>
+                              <span>Revision [#{base.id}]</span>
+                              <div className='inlineContent' dangerouslySetInnerHTML={{__html: currContent}}></div>
+                            </div>
+                            <div className='mergedVers'>
+                              <span>Diff view changes between: [#{base.id}] and [#{diff.id}]</span>
+                              <div dangerouslySetInnerHTML={{__html: diffcontent}}></div>
+                            </div>
                         </div>
                     </div>
                 </div>
+              </div>
             </div>
         );
     }
