@@ -80,16 +80,16 @@ class SlideContentEditor extends React.Component {
         switch (template) {
             case '1':
                 //TODO replace with this.refs.inlineContent.innerHTML + cases below
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
-                    '<h3 class="h-mid"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Title</span></h3></div>'+
+                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="position: relative; width: 960px; height: 720px;"><div class="bodySlide">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
+                    '<h3>Title</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
                     '<ul>'+
-                    '	<li class="h-left" style="text-align: left;"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Text bullet 1</span></li>'+
-                    '	<li class="h-left" style="text-align: left;"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Text bullet 2</span></li>'+
+                    '	<li class="h-left">Text bullet 1</span></li>'+
+                    '	<li class="h-left">Text bullet 2</span></li>'+
                     '</ul>'+
                     '<div class="h-left">&nbsp;</div>'+
-                    '</div></div>');
+                    '</div></div></div>');
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
                 break;
@@ -101,77 +101,92 @@ class SlideContentEditor extends React.Component {
                 break;
             case '3':
                 CKEDITOR.instances.inlineContent.setData(''+
-                    '<h1 style="text-align: center;">Title</h1>'+
+                    '<div class="h-mid"><h3>Title</h3></div>'+ // HF: We are not supposed to be using anything which is h1
                     '<p>text</p>');
                 this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
                 this.emitChange();
                 break;
             case '11':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Heading</div>'+
+                    '<div class="bodySlide">' +
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">&nbsp;Row 1 - Column 1</p></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div></div>');
+                    '<p>Row 1 - Column 1</p></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>' +
+                    '</div></div>');
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
                 break;
             case '12':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<p style="text-align:center">Row 1 - Column&nbsp;1</p>'+
+                    '<div class="bodySlide">' +
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 1 - Column&nbsp;1</p>'+
                     '</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
                     '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<div class="h-mid" style="text-align: center;">'+
-                    '<p style="text-align:center">Row 1 - Column&nbsp;2</p>'+
-                    '</div></div></div>');
+                    '<div class="h-mid">'+
+                    '<p>Row 1 - Column&nbsp;2</p>'+
+                    '</div></div></div></div>');
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
                 break;
             case '22':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<p style="text-align:center">Row 2 - Column&nbsp;1</p>'+
+                    '<div class="bodySlide">' +
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 2 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
                     '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
-                    '<div class="h-mid" style="text-align: center;"><p>Row 1</p></div></div>'+
+                    '<div class="h-mid">&nbsp;</div>'+
+                    '<div class="h-mid"><p>Row 1</p></div></div>'+
                     '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<div class="h-mid" style="text-align: center;">'+
-                    '<p style="text-align:center">Row 2 - Column&nbsp;2</p>'+
-                    '</div></div></div>');
+                    '<div class="h-mid">'+
+                    '<p>Row 2 - Column&nbsp;2</p>'+
+                    '</div></div></div></div>');
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
                 break;
             case '21':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<p style="text-align:center">Row 2 - Column 1</p>'+
+                    '<div class="bodySlide">' +
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 2 - Column 1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
                     '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
-                    '<div class="h-mid" style="text-align: center;">Row 1 - Column 1</div>'+
-                    '</div></div>');
+                    '<div class="h-mid">&nbsp;</div>'+
+                    '<div class="h-mid">Row 1 - Column 1</div>'+
+                    '</div></div></div>');
                 this.inputBoxButtonTitle = 'Add input box';
                 this.emitChange();
                 break;
             case '11img':
                 this.changeCKeditorData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
+                    '<div class="bodySlide">' +
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
+                    '<p>Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
                     '</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
                     '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
-                    '<div class="h-mid" style="text-align: center;">'+
-                    '<p style="text-align:center"><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
-                    '<p>&nbsp;</p></div></div></div>', 'Add input box');
+                    '<div class="h-mid">'+
+                    '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
+                    '<p>&nbsp;</p></div></div></div></div>', 'Add input box');
                 break;
+            case 'title':
+                this.changeCKeditorData(
+                  '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                  ' <div class="titlePage">' +
+                  '   <div class="titlePageHeading"><h3>Title</h3></div>' +
+                  '   <div class="titlePageSubHeading"><h4>Subtitle</h4></div>' +
+                  ' </div>' +
+                  '</div>'
+                );
         }
         this.forceUpdate();
     }
