@@ -77,7 +77,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'shared '} {nodeRef} {' on '}
-                        <a target="_blank" href={node.share_info.postURI}>{node.share_info.platform}</a>
+                        {node.share_info.platform}
                         <br/>
                         {DateDiv}
                     </div>

@@ -58,7 +58,7 @@ class UserNotificationsItem extends React.Component {
                             {notification.author.username}
                         </a> {'shared ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>{' on '}
-                        <a target="_blank" href={notification.share_info.postURI}>{notification.share_info.platform}</a>
+                        {notification.share_info.platform}
                         <br/>
                         {DateDiv}
                     </div>
