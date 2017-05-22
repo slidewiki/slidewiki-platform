@@ -52,6 +52,7 @@
 .diff-view {
   display: flex;
   flex-direction: row;
+  border-top: 3px solid #ccc;
 }
 
 .initVers, .mergedVers {
@@ -59,6 +60,8 @@
   width: 50%;
   padding: 2%;
 }
+
+.initVers {border-right: 3px solid #ccc;}
 
 @media screen and (max-width: 900px) {
    .diff-view { flex-direction: column; }
@@ -68,16 +71,13 @@
 
 /* HTML DOM Node related */
 .diff-view .added, .modified, .deleted {
-  padding: 5px; margin: 2px;
+  padding: 5px;
+  margin: 0px -10px;
   display: inline-block;
 }
 
 .diff-view p {
   margin: 1em;
-}
-
-.diff-view .text-block {
-  line-height: 32px;
 }
 
 .diff-view .added {border: 5px solid #93ca3b;}
@@ -93,10 +93,12 @@
   background-color: #eaf2c2;
   color: #406619;
   text-decoration: none;
+  line-height: 32px;
 }
 
 .diff-view .del {
   background-color: #fadad7;
   color: #b30000;
   text-decoration: line-through;
+  line-height: 32px;
 }
