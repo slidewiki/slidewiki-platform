@@ -170,8 +170,8 @@ class SlideContentEditor extends React.Component {
         for (let i = 0, n = allElements.length; i < n; ++i) {
             let random = Math.floor((Math.random() * 100000) + 1);
             let el = allElements[i];
-            if (el.id) { allIds.push(el.id); }
-            else {el.id = random;}
+            if (el.id && allIds.indexOf(el.id) !== -1) { allIds.push(el.id); }
+            else {el.id = random; allIds.push(random);}
         }
     }
     handleSaveButton(){
@@ -231,6 +231,17 @@ class SlideContentEditor extends React.Component {
         }
         return false;
     }
+    getHighestZIndex(){
+        let index_highest = 0;
+        $('.pptx2html [style*="absolute"]').each(function() {
+            let index_current = parseInt($(this).css('zIndex'), 10);
+            if(index_current > index_highest) {
+                index_highest = index_current;
+            }
+        });
+        //cEl.style.zIndex = index_highest + 10;
+        return index_highest;
+    }
     addAbsoluteDiv() {
         //absolutediv
         //Check if content already has canvas/absolute positioning
@@ -238,20 +249,13 @@ class SlideContentEditor extends React.Component {
         //if (typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            let index_highest = 0;
-            $('.pptx2html [style*="absolute"]').each(function() {
-                let index_current = parseInt($(this).css('zIndex'), 10);
-                if(index_current > index_highest) {
-                    index_highest = index_current;
-                }
-            });
-            //cEl.style.zIndex = index_highest + 10;
-
-            $('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
+            //$('.pptx2html').append(this.getAbsoluteDiv(index_highest + 10));
+            $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.emitChange(); //confirm non-save on-leave
-            this.forceUpdate();
+            this.uniqueIDAllElements();
             this.resizeDrag();
+            this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             swal({
                 title: 'Switch to canvas style layout',
@@ -288,7 +292,7 @@ class SlideContentEditor extends React.Component {
     }
     getAbsoluteDiv(zindex){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
+        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
     }
     componentDidMount() {
 
@@ -403,12 +407,16 @@ class SlideContentEditor extends React.Component {
             switch (event.which) {
                 case 1:
                     console.log('Left Mouse button pressed.');
-                    $('.cke_menu').hide();
+                    //$('.cke_menu').hide();
+                    slideEditorContext.menuFocus = $(this).attr('id');
+                    console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
                     if (!$(this).hasClass('editMode'))
                     { //the clicked element is not editMode
+                        console.log('hide ckeditor context menu');
+                        $('.cke_menu').hide();
                         if($('.editMode').length)
-                        {   //there is an editMode element (earlier via doubleclick)
-                            //we disable edit mode from this element.
+                        {   //there is one or more editMode element (earlier via doubleclick)
+                            //we disable edit mode from the(se) element(s).
                             slideEditorContext.removeEditMode();
                         }
                     }
@@ -417,25 +425,22 @@ class SlideContentEditor extends React.Component {
                     console.log('Middle Mouse button pressed.');
                     break;
                 case 3:
-                    event.preventDefault();
-                    console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                    slideEditorContext.menuFocus = $(this).attr('id');
                     console.log('Right Mouse button pressed.');
+                    //event.preventDefault();
+                    slideEditorContext.menuFocus = $(this).attr('id');
+                    console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
                     if (!$(this).hasClass('editMode'))
                     {
+                        $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
                         console.log('hide ckeditor context menu');
                         $('.cke_menu').hide();
                         //CKEDITOR.instances.inlineContent.destroy();
                         //slideEditorContext.refs.inlineContent.contentEditable = false;
                         //CKEDITOR.instances.inlineContent.hide();
                     }
-                    else {
-                        $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
-                    }
                     $(this).focus();
                     break;
                 default:
-                    console.log('You have a strange Mouse!');
             }
 
         });
@@ -631,6 +636,7 @@ class SlideContentEditor extends React.Component {
                             slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
                             break;
                         case 'front':
+                            $(this).css('zIndex', slideEditorContext.getHighestZIndex());
                             break;
                         case 'back':
                             break;
@@ -638,6 +644,7 @@ class SlideContentEditor extends React.Component {
                             //TODO: move to different x / Y position if draggable element
                             $(this).clone().appendTo('.pptx2html');
                             $(this).css('top', '+=50');
+                            slideEditorContext.uniqueIDAllElements();
                             slideEditorContext.resizeDrag();
                             slideEditorContext.emitChange(); //confirm non-save on-leave
                             //this.forceUpdate();
