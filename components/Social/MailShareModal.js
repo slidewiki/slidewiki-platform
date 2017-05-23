@@ -1,12 +1,13 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import mailShareShowWrongFields from '../../actions/socialshare/mailShareShowWrongFields';
+import addActivity from '../../actions/activityfeed/addActivity';
 import FocusTrap from 'focus-trap-react';
 import SocialShareStore from '../../stores/SocialShareStore';
-import { Button, Container, Form, Modal, TextArea, Icon, Segment } from 'semantic-ui-react';
-let classNames = require('classnames');
+import { Button, Container, Form, Modal, Icon, Segment } from 'semantic-ui-react';
 import {publicRecaptchaKey} from '../../configs/general';
 import ReCAPTCHA from 'react-google-recaptcha';
+let classNames = require('classnames');
 
 const headerStyle = {
     'textAlign': 'center'
@@ -28,11 +29,10 @@ class MailShareModal extends React.Component {
     }
 
     componentDidMount() {
-        $(this.refs.reasonDropdown).dropdown();
-        const reportValidation = {
+        const mailValidation = {
             fields: {
-                reason: {
-                    identifier: 'reason'
+                address: {
+                    identifier: 'address'
                 },
                 text: {
                     identifier: 'text'
@@ -41,29 +41,21 @@ class MailShareModal extends React.Component {
             onSuccess: this.handleSendMail.bind(this)
         };
 
-        $('.ui.form.report')
-            .form(reportValidation);
+        $('.ui.form.mail')
+            .form(mailValidation);
     }
 
-    componentDidUpdate() {
-        $(this.refs.reasonDropdown).dropdown();
-    }
-
-    getSelected() {
-        return this.refs.reason.value;
-    }
-
-    handleSendReport(e) {
+    handleSendMail(e) {
         let wrongFields = {
-            reason: false,
+            subject: false,
             text: false,
-            name: false
+            address: false
         };
 
         let everythingOk = true;
         e.preventDefault();
-        if(!this.refs.reason.value){
-            wrongFields.reason = true;
+        if(!this.refs.subject.value){
+            wrongFields.subject = true;
             everythingOk = false;
         }
 
@@ -77,13 +69,14 @@ class MailShareModal extends React.Component {
             }
         }
 
-        if((!this.refs.name || !this.refs.name.value || (this.refs.text.value.trim() === '')) && (this.props.userid === '')) {
-            wrongFields.name = true;
+        const address = this.refs.address.value;
+        if(!address && !(address.indexOf('@') === -1 || address.indexOf('.') === -1 || address.length < 5)) {
+            wrongFields.address = true;
             everythingOk = false;
         }
 
         // Recaptcha Validation
-        if(  this.props.userid === '' &&
+        if( this.props.userid === '' &&
             (this.state === null || this.state.grecaptcharesponse === undefined)) {
             everythingOk= false;
         }
@@ -91,35 +84,27 @@ class MailShareModal extends React.Component {
         this.context.executeAction(mailShareShowWrongFields, wrongFields);
         if(everythingOk) {
 
-            let deckOrSlideMailShareLine = '';
-            if(this.props.selector.stype === 'slide') {
-                deckOrSlideMailShareLine = 'Shares Slide: ' + this.props.selector.sid + '\n'
-                    + 'From Deck: ' + this.props.selector.id + '\n';
-            } else {
-                deckOrSlideMailShareLine = 'Shares Deck: ' + this.props.selector.id + '\n';
-            }
+            let subject = this.refs.subject.value ;
+            let emailBody = this.refs.text.value;
+            let toEmail = this.refs.address.value;
 
-            let userId = '';
-            // If user is not logged in, use the name provided
-            if(this.props.userid === '') {
-                userId = this.refs.name.value;
-            } else {
-                userId = this.props.userid;
-            }
-            let subject = '[SlideWiki] Sharing Deck/Slide' ;
-            let emailBody = 'User: ' + userId + '\n'
-                + deckOrSlideMailShareLine
-                + 'Reason of sharing: ' + this.refs.reason.value + '\n'
-                + 'Description of sharing: \n\n' + this.refs.text.value + '\n\n\n';
-
-            let toEmail = '';
-
-            let link = 'mailto:' + escape(toEmail)
-                // + "?cc=myCCaddress@example.com"
-                + '?subject=' + escape(subject)
-                + '&body=' + escape(emailBody);
+            let link = 'mailto:' + escape(toEmail) +
+                '?subject=' + escape(subject) +
+                '&body=' + escape(emailBody);
             window.location.href = link;
             this.handleClose();
+
+            //Add share activity
+            let activity = {
+                activity_type: 'share',
+                user_id: String(this.props.userid),
+                content_id: this.props.deckid,
+                content_kind: 'deck',
+                share_info: {
+                    platform: 'Mail'
+                }
+            };
+            context.executeAction(addActivity, {activity: activity});
         }
     }
 
@@ -154,49 +139,42 @@ class MailShareModal extends React.Component {
     }
 
     render() {
-        let fieldClass_reason = classNames({
+        let fieldClass_subject = classNames({
             'ui': true,
-            'selection': true,
-            'dropdown': true,
-            'required': true,
-            'error': this.props.SocialShareStore.wrongFields.reason
+            'aligned': true,
+            'field': true,
+            'error': this.props.SocialShareStore.wrongFields.subject
         });
 
         let fieldClass_text = classNames({
             'ui': true,
-            'center': true,
             'aligned': true,
             'field': true,
             'error': this.props.SocialShareStore.wrongFields.text
         });
 
-        let fieldClass_name = classNames({
+        let fieldClass_address = classNames({
             'ui': true,
-            'center': true,
             'aligned': true,
             'field': true,
-            'error': this.props.SocialShareStore.wrongFields.name
+            'error': this.props.SocialShareStore.wrongFields.address
         });
 
         const recaptchaStyle = {display: 'inline-block'};
+        const shareUrl = 'https://stable.slidewiki.org/deck/' + this.props.deckid;
+        const shareMessage ='Hi.\nI have found a very interesting deck, here on SlideWiki.\n' + shareUrl;
 
-        let nameField =
-            <div className={fieldClass_name} style={{width:'auto'}} >
-                <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="name_label" name="name" ref="name" placeholder="name" autoFocus aria-required="true"/></div>
-            </div>;
         let captchaField =
             <div >
                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
             </div>;
-
         return (
-
             <Modal
                 trigger={
-                    <Button icon aria-hidden="false" data-value="Mail" role="menuitem" className="ui basic button" type="button" aria-label="Mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleOpen} >
-                          <Icon name="mail blue inverted circular icon" size='large' />
-                    </Button>
+                    <div style={{'textAlign': 'center', 'marginTop': '2px', 'marginBottom': '2px'}} data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" >
+                          <Icon name="mail" color="orange" inverted={true} link={true} circular={true} aria-hidden="false" className="button" onClick={this.handleOpen} />
+                    </div>
                 }
                 open={this.state.modalOpen}
                 onOpen={this.handleOpen}
@@ -213,38 +191,36 @@ class MailShareModal extends React.Component {
                     active={this.state.activeTrap}
                     onDeactivate={this.unmountTrap}
                     clickOutsideDeactivates={true}
-                    initialFocus="#reason"
+                    initialFocus="#address"
                     >
                     <Modal.Header className="ui center aligned" id="mailShareModalHeader">
-                        <h1 style={headerStyle}>Share {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' } </h1>
+                        <h1 style={headerStyle}>Share this {this.props.selector.stype === 'slide' ? 'slide' : 'deck' } </h1>
                     </Modal.Header>
                     <Modal.Content>
                         <Container>
                             <Segment color="blue" textAlign="center" padded>
                                <Segment>
-                                   <div className="sr-only" id="mailShareModalDescription">Select the reason for sharing and give a brief description about it.</div>
+                                   <div className="sr-only" id="mailShareModalDescription">Select email recepient, subject and content.</div>
                                 <Form id="mailShareForm">
-                                    {(this.props.userid === '') ?  nameField: ''}
-                                    <div style={{width:'50%'}} className={fieldClass_reason} data-tooltip="Please select a reason" ref="reasonDropdown">
-                                        <input type="hidden" id="reason" name="reason" ref="reason" />
-                                            <i className="dropdown icon"/>
-                                            <div className="default text">Reason</div>
-                                            <div className="menu">
-                                                <div className="item" data-value="copyright">Copyright</div>
-                                                <div className="item" data-value="spam">Spam</div>
-                                            </div>
+                                    <div className={fieldClass_address} style={{width:'auto'}} >
+                                        <label>To</label>
+                                        <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="address_label" name="address" ref="address" placeholder="E-mail address" autoFocus aria-required="true"/></div>
                                     </div>
-                                    <br/>
+
+                                    <div className={fieldClass_subject} style={{width:'auto'}} >
+                                        <label>Subject</label>
+                                        <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="subject_label" name="subject" ref="subject" aria-required="true" defaultValue="Interesting deck on SlideWiki"/></div>
+                                    </div>
                                     <div className={fieldClass_text}>
-                                        <label>Explanation</label>
-                                        <textarea ref="text" id="mailShareComment" name="text" style={{width:'50%', minHeight: '6em', height: '6em'}} placeholder="Please give a short explanation about sharing"></textarea>
+                                        <label>Text</label>
+                                        <textarea ref="text" id="mailShareComment" name="text" defaultValue={shareMessage} style={{width:'50%', minHeight: '6em', height: '6em'}} ></textarea>
                                     </div>
                                     {(this.props.userid === '') ?  captchaField: ''}
                                     <Button
                                         color="blue"
                                         type="submit"
                                         content="Send"
-                                        icon='mail circle'
+                                        icon='mail'
                                         onClick={this.handleSendMail}
                                     />
                                     <Button
@@ -262,22 +238,6 @@ class MailShareModal extends React.Component {
                     </Modal.Content>
                 </FocusTrap>
             </Modal>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         );
     }
 

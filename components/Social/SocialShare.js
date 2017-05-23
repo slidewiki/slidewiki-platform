@@ -1,19 +1,16 @@
 import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
+import addActivity from '../../actions/activityfeed/addActivity';
 import MailShareModal from './MailShareModal';
 
 class SocialShare extends React.Component {
 
     componentDidMount(){
         $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
-        // $(this.refs.shareTwitter).on('click', this.handleTwitterClick());
-
     }
 
     componentDidUpdate() {
         $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
-        // $(this.refs.shareTwitter).on('click', this.handleTwitterClick());
-
     }
 
     getTargetDeckId() {
@@ -35,37 +32,28 @@ class SocialShare extends React.Component {
     }
 
     onEnterAndClick(text, value) {
-        // console.log('onEnterAndClick', text + '-' + value);
         $(this.refs.shareDropDown).dropdown('hide');
         return false;
     }
 
-    handleMailClick(){
-        console.log('handleMailClick');
-
-        //Share by email
-
-        //createShareActivity('Twitter');
-    }
-
     handleTwitterClick(){
         console.log('handleTwitterClick');
-        //createShareActivity('Twitter');
+        createShareActivity('Twitter');
     }
 
     handleFacebookClick(){
         console.log('handleFacebookClick');
-        //createShareActivity('Facebook');
+        createShareActivity('Facebook');
     }
 
     handleGooglePlusClick(){
         console.log('handleG+Click');
-        //createShareActivity('GooglePlus');
+        createShareActivity('GooglePlus');
     }
 
     handleLinkedinClick(){
         console.log('handleLinkedinClick');
-        //createShareActivity('Linkedin');
+        createShareActivity('Linkedin');
     }
 
     createShareActivity(platform) {
@@ -88,12 +76,7 @@ class SocialShare extends React.Component {
             FacebookShareButton,
             GooglePlusShareButton,
             LinkedinShareButton,
-            TwitterShareButton,
-            TelegramShareButton,
-            WhatsappShareButton,
-            PinterestShareButton,
-            VKShareButton,
-            OKShareButton
+            TwitterShareButton
         } = ShareButtons;
         const FacebookIcon = generateShareIcon('facebook');
         const TwitterIcon = generateShareIcon('twitter');
@@ -108,8 +91,7 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-
-                    <MailShareModal userid={this.props.userid} selector={this.props.selector} />
+                    <MailShareModal userid={this.props.userid} selector={this.props.selector} deckid={this.getTargetDeckId()}/>
 
                     <div className="item" data-value="Twitter" role="menuitem" aria-label="Twitter" data-tooltip="Twitter" tabIndex="0" onClick={this.handleTwitterClick.bind(this)}>
                         <TwitterShareButton
@@ -117,7 +99,7 @@ class SocialShare extends React.Component {
                             title="I have found a very interesting deck, here on SlideWiki."
                             className="Demo__some-network__share-button">
                             <TwitterIcon
-                                size={32}
+                                size={33}
                                 round />
                         </TwitterShareButton>
                     </div>
@@ -127,7 +109,7 @@ class SocialShare extends React.Component {
                             title='I have found a very interesting deck, here on SlideWiki.'
                             className="Demo__some-network__share-button">
                             <FacebookIcon
-                                size={32}
+                                size={33}
                                 round />
                         </FacebookShareButton>
                     </div>
@@ -137,7 +119,7 @@ class SocialShare extends React.Component {
                             content='I have found a very interesting deck, here on SlideWiki.'
                             className="Demo__some-network__share-button">
                             <GooglePlusIcon
-                                size={32}
+                                size={33}
                                 round />
                         </GooglePlusShareButton>
                     </div>
@@ -149,7 +131,7 @@ class SocialShare extends React.Component {
                             windowHeight={600}
                             className="Demo__some-network__share-button">
                             <LinkedinIcon
-                                size={32}
+                                size={33}
                                 round />
                         </LinkedinShareButton>
                     </div>
@@ -157,7 +139,6 @@ class SocialShare extends React.Component {
             </div>
         );
     }
-
 }
 
 SocialShare.contextTypes = {
