@@ -237,6 +237,8 @@ class SlideContentEditor extends React.Component {
             //$('.pptx2html > [style*="absolute"]').removeClass('editMode');
             this.removeEditMode();
             this.contextMenuAllRemove();
+            this.disableResizeDrag();
+            CKEDITOR.instances.inlineContent.destroy();
 
             this.uniqueIDAllElements();
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
@@ -264,6 +266,14 @@ class SlideContentEditor extends React.Component {
             this.resize();
         }
         return false;
+    }
+    disableResizeDrag(){
+        $('.pptx2html > [style*="absolute"]').each(function () {
+            if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
+            if($(this).resizable( 'instance' )){$(this).resizable('destroy');}
+            $(this).css('cursor', 'auto');
+            $(this).css('box-shadow','');
+        });
     }
     getHighestZIndex(){
         let index_highest = 0;
@@ -390,7 +400,7 @@ class SlideContentEditor extends React.Component {
         this.currentcontent = this.props.content;
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-            //this.resize();
+            this.resize();
             this.uniqueIDAllElements();
 
             //SWIK-1238 - detect change to source code via source dialog plugin
@@ -436,7 +446,6 @@ class SlideContentEditor extends React.Component {
             }
         });
     }
-
     resizeDrag(){
         //http://jqueryui.com/resizable/
         //http://interface.eyecon.ro/docs/resizable
@@ -456,7 +465,24 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html > [style*="absolute"]').hover(function() {
             if (!$(this).hasClass('editMode')) {
                 if(!$('.editMode').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
-                if(!$('.editMode').resizable( 'instance' )){$(this).resizable({handles: 'all',  scroll: true});}
+                //if(!$('.editMode').resizable( 'instance' )){$(this).resizable({handles: 'all', scroll: true});}
+                if(!$('.editMode').resizable( 'instance' )){
+                    $(this).resizable({
+                        handles: 'all',
+                        scroll: true,
+                        minWidth: -($(this).width()) * 10,  // these need to be large and negative
+                        minHeight: -($(this).width()) * 10, // so we can shrink our resizable while scaled
+                        resize: function(event, ui) {
+                            let changeWidth = ui.size.width - ui.originalSize.width; // find change in width
+                            let newWidth = ui.originalSize.width + changeWidth / slideEditorContext.scaleratio; // adjust new width by our zoomScale
+                            let changeHeight = ui.size.height - ui.originalSize.height; // find change in height
+                            let newHeight = ui.originalSize.height + changeHeight / slideEditorContext.scaleratio; // adjust new height by our zoomScale
+                            //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
+                            ui.size.width = newWidth;
+                            ui.size.height = newHeight;
+                        }
+                    });
+                };
                 $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
             }
             else {
@@ -485,16 +511,19 @@ class SlideContentEditor extends React.Component {
                 case 1:
                     console.log('Left Mouse button pressed.');
                     //$('.cke_menu').hide();
-                    slideEditorContext.menuFocus = $(this).attr('id');
-                    console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                    if (!$(this).hasClass('editMode'))
-                    { //the clicked element is not editMode
-                        console.log('hide ckeditor context menu');
-                        //$('.cke_menu').hide();
-                        if($('.editMode').length)
-                        {   //there is one or more editMode element (earlier via doubleclick)
-                            //we disable edit mode from the(se) element(s).
-                            slideEditorContext.removeEditMode();
+                    if ($(this).attr('id') !== 'inlineContent')
+                    {
+                        slideEditorContext.menuFocus = $(this).attr('id');
+                        console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
+                        if (!$(this).hasClass('editMode'))
+                        { //the clicked element is not editMode
+                            console.log('hide ckeditor context menu');
+                            $('.cke_menu').hide();
+                            if($('.editMode').length)
+                            {   //there is one or more editMode element (earlier via doubleclick)
+                                //we disable edit mode from the(se) element(s).
+                                slideEditorContext.removeEditMode();
+                            }
                         }
                     }
                     break;
@@ -504,26 +533,29 @@ class SlideContentEditor extends React.Component {
                 case 3:
                     console.log('Right Mouse button pressed.');
                     //event.preventDefault();
-                    slideEditorContext.menuFocus = $(this).attr('id');
-                    console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                    if (!$(this).hasClass('editMode'))
+                    if ($(this).attr('id') !== 'inlineContent')
                     {
-                        $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
-                        console.log('hide ckeditor context menu');
-                        //$('.cke_menu').hide();
-                        //set cursor to
-                        slideEditorContext.previousCaretRange = slideEditorContext.getMouseEventCaretRange(event);
-                        //slideEditorContext.selectRange(caretRange);
-                        //also need to get + store previous caretrange for context menu
-                        //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                        //let caretRange = this.getMouseEventCaretRange(evt);
-                        // Set a timer to allow the selection to happen and the dust settle first
-                        //window.setTimeout(function() {
-                        //CKEDITOR.instances.inlineContent.destroy();
-                        //slideEditorContext.refs.inlineContent.contentEditable = false;
-                        //CKEDITOR.instances.inlineContent.hide();
+                        slideEditorContext.menuFocus = $(this).attr('id');
+                        console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
+                        if (!$(this).hasClass('editMode'))
+                        {
+                            $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                            console.log('hide ckeditor context menu');
+                            $('.cke_menu').hide();
+                            //set cursor to
+                            slideEditorContext.previousCaretRange = slideEditorContext.getMouseEventCaretRange(event);
+                            //slideEditorContext.selectRange(caretRange);
+                            //also need to get + store previous caretrange for context menu
+                            //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
+                            //let caretRange = this.getMouseEventCaretRange(evt);
+                            // Set a timer to allow the selection to happen and the dust settle first
+                            //window.setTimeout(function() {
+                            //CKEDITOR.instances.inlineContent.destroy();
+                            //slideEditorContext.refs.inlineContent.contentEditable = false;
+                            //CKEDITOR.instances.inlineContent.hide();
+                        }
+                        $(this).focus();
                     }
-                    $(this).focus();
                     break;
                 default:
             }
@@ -548,7 +580,7 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html > [style*="absolute"]').not('.drawing-container').dblclick(function(evt) {
             if (!$(this).hasClass('editMode'))
             {
-                slideEditorContext.setEditMode(evt, slideEditorContext, $(this).attr('id'));
+                slideEditorContext.setEditMode(evt, slideEditorContext, $(this).attr('id'), false);
             }
         });
     }
@@ -581,9 +613,11 @@ class SlideContentEditor extends React.Component {
         }
         //id on which edit mode is applied
         console.log('id' + id);
-        if(!$('#'+id).hasClass('.editMode') && !$('#'+id).hasClass('drawing-container'))
+        if(!$('#'+id).hasClass('.editMode') &&
+           !$('#'+id).hasClass('drawing-container') &&
+            id !== 'inlineContent')
         { //if not already in edit mode or is not SVG in drawing-container
-            //$('.cke_menu').show();
+            $('.cke_menu').show();
             console.log('disable context menu with id: ' + id );
             $('#'+id).contextMenu(false);
             //$('#' + id).find('span:first').focus();
@@ -593,6 +627,7 @@ class SlideContentEditor extends React.Component {
             //if (!$(':focus').find('span:first')[0]){
             //console.log('create empty span element: ' + $('#'+id).attr('id') + $('#'+id).find('span').attr('id') + $('#'+id).find('span:first').attr('id'));
             //if (!$('#'+id).find('span:not()').not('.CKE_widget_wrapper').not('.cke_image_resizer').not('.cke_reset')){
+            /*
             console.log('find span:' + $('#'+id).find('span:not(.CKE_widget_wrapper, .cke_image_resizer, .cke_reset )').attr('id'));
             if ($('#'+id).find('span:not(.CKE_widget_wrapper, .cke_image_resizer, .cke_reset )').attr('id') !== undefined){
                 console.log('create empty span element: ' + $('#'+id).attr('id') + $('#'+id).find('span').attr('id') + $('#'+id).find('span:first').attr('id'));
@@ -602,6 +637,7 @@ class SlideContentEditor extends React.Component {
                 emptySpan.innerHTML = 'test <br/>';
                 $(':focus').append(emptySpan);
             }
+            */
 
             //if (!$('#' + id).hasClass('editMode'))
             if (evt)
@@ -652,6 +688,9 @@ class SlideContentEditor extends React.Component {
     placeCaretAtStart() {
         let el = $(':focus').find('span:first')[0];
         //let focused = document.activeElement;
+        if(!el){
+            el = $(':focus');
+        }
         el.focus();
         if (typeof window.getSelection != 'undefined'
                 && typeof document.createRange != 'undefined') {
@@ -719,6 +758,7 @@ class SlideContentEditor extends React.Component {
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $('.pptx2html > [style*="absolute"]').each(function () {
+            //if(!$(this).draggable( 'instance' )){
             console.log('menu for: ' + $(this).attr('id'));
             $.contextMenu({
             //$('.pptx2html').contextMenu({
@@ -736,16 +776,16 @@ class SlideContentEditor extends React.Component {
                             slideEditorContext.setEditMode(false, slideEditorContext, slideEditorContext.menuFocus, slideEditorContext.previousCaretRange);
                             break;
                         case 'front':
-                            slideEditorContext.bringToFront(slideEditorContext);
+                            slideEditorContext.bringToFront(slideEditorContext, false);
                             break;
                         case 'back':
-                            slideEditorContext.sendToBack(slideEditorContext);
+                            slideEditorContext.sendToBack(slideEditorContext, false);
                             break;
                         case 'copy':
-                            slideEditorContext.CopyNode(slideEditorContext);
+                            slideEditorContext.CopyNode(slideEditorContext, false);
                             break;
                         case 'delete':
-                            slideEditorContext.deleteNode(slideEditorContext);
+                            slideEditorContext.deleteNode(slideEditorContext, false);
                             break;
                         case 'quit':
                             break;
@@ -753,17 +793,18 @@ class SlideContentEditor extends React.Component {
                     }
                 },
                 items: {
-                    'edit': {name: 'Edit (key:1)', icon: 'edit', accesskey: '1'},
+                    'edit': {name: 'Edit', icon: 'edit'},
                     //'move': {name: 'Move around', icon: 'fa-arrows',},
-                    'front': {name: 'Bring to front (2)', icon: 'fa-arrow-circle-up', accesskey: '2'},
-                    'back': {name: 'Send to back (3)', icon: 'fa-arrow-circle-o-down', accesskey: '3'},
-                    'copy': {name: 'Copy (4)', icon: 'copy', accesskey: '4'},
-                    'delete': {name: 'Delete (5)', icon: 'delete', accesskey: '5'},
+                    'front': {name: 'Bring to front', icon: 'fa-arrow-circle-up'},
+                    'back': {name: 'Send to back', icon: 'fa-arrow-circle-o-down'},
+                    'copy': {name: 'Copy', icon: 'copy'},
+                    'delete': {name: 'Delete', icon: 'delete'},
                     //'sep1': '---------',
                     'quit': {name: 'Close menu (key:Esc)', icon: 'quit', accesskey: 'esc'}
                     //'quit': {name: 'Send to back', icon: 'quit'},
                 }
             });
+            //}
         });
     }
 
@@ -791,7 +832,9 @@ class SlideContentEditor extends React.Component {
     setTabFocus(event, context){
         //if($('.pptx2html [style*="absolute"]:focus').length)
         //{
+        console.log('tabFocus');
         let id = $(':focus').attr('id');
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode')){
             if($('.editMode').length)
             {   //there is one or more editMode element (earlier via doubleclick)
@@ -799,7 +842,7 @@ class SlideContentEditor extends React.Component {
                 context.removeEditMode();
             }
             context.menuFocus = id;
-            console.log('tabFocus for: ' + $(':focus').attr('id'));
+            console.log('tabFocus set for: ' + $(':focus').attr('id'));
         }
         //else {
             //set caret at start position
@@ -811,7 +854,8 @@ class SlideContentEditor extends React.Component {
         console.log('keyup');
         let id = $(':focus').attr('id');
         //if(!$('#'+id).hasClass('editMode')){
-        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active')){
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
+        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             //console.log('keyup not in edit mode + preventdefault');
             if(event){event.preventDefault();}
             $('#'+id).css('top', '-=10');
@@ -821,7 +865,8 @@ class SlideContentEditor extends React.Component {
     keyMoveDown(context, event){
         console.log('keyup');
         let id = $(':focus').attr('id');
-        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active')){
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
+        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
             //console.log('keyup not in edit mode + preventdefault');
             $('#'+id).css('top', '+=10');
@@ -830,7 +875,8 @@ class SlideContentEditor extends React.Component {
     }
     keyMoveLeft(context, event){
         let id = $(':focus').attr('id');
-        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active')){
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
+        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
             $('#'+id).css('left', '-=10');
             context.emitChange(); //confirm non-save on-leave
@@ -838,7 +884,8 @@ class SlideContentEditor extends React.Component {
     }
     keyMoveRight(context, event){
         let id = $(':focus').attr('id');
-        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active')){
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
+        if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
             $('#'+id).css('left', '+=10');
             context.emitChange(); //confirm non-save on-leave
@@ -846,8 +893,8 @@ class SlideContentEditor extends React.Component {
     }
     bringToFront(context, event){
         let id = $(':focus').attr('id');
-        if (!id){id = context.menuFocus;}
-        if(!$('#'+id).hasClass('editMode')){
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
+        if(!$('#'+id).hasClass('editMode') &&  id !== 'inlineContent'){
             if(event){event.preventDefault();}
             $('#'+id).css('zIndex', context.getHighestZIndex() + 10);
             context.emitChange(); //confirm non-save on-leave
@@ -855,16 +902,17 @@ class SlideContentEditor extends React.Component {
     }
     sendToBack(context, event){
         let id = $(':focus').attr('id');
-        if (!id){id = context.menuFocus;}
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode')){
             if(event){event.preventDefault();}
             $('#'+id).css('zIndex', context.getLowestZIndex() - 10);
             context.emitChange(); //confirm non-save on-leave
         }
     }
-    CopyNode(context){
+    CopyNode(context, event){
         let id = $(':focus').attr('id');
-        if (!id){id = context.menuFocus;}
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
+        console.log('copy node' + id);
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length){
             if(event){event.preventDefault();}
             $('#'+id).clone().appendTo('.pptx2html');
@@ -875,7 +923,7 @@ class SlideContentEditor extends React.Component {
             //this.forceUpdate();
         }
     }
-    deleteNode(context){
+    deleteNode(context, event){
         let id = $(':focus').attr('id');
         if (!id){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length && !$('#'+id).hasClass('pptx2html') && id !== 'inlineContent'){
@@ -913,6 +961,31 @@ class SlideContentEditor extends React.Component {
             });
         }
     }
+    /*
+    menuOptionsPreventDefault(event, context){
+        let id = $(':focus').attr('id');
+        if (context.menuFocus){
+            id = context.menuFocus;
+        }
+        console.log('prevent default 1-5 key if in context menu' + !$('.editMode').length + $('#'+id).hasClass('context-menu-active') + id);
+        //if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
+        //if(!$('.editMode').length){
+        if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
+            if(event){event.preventDefault();}
+            console.log('prevent default 1-5 key');
+        }
+    }
+    */
+    keyEnter(event){
+        let id = $(':focus').attr('id');
+        console.log('prevent default enter key if not in edit mode' + !$('.editMode').length + $('#'+id).hasClass('context-menu-active') + id);
+        //if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
+        //if(!$('.editMode').length){
+        if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
+            if(event){event.preventDefault();}
+            console.log('prevent default enter key');
+        }
+    }
     resize() {
         let containerwidth = document.getElementById('container').offsetWidth;
         let containerheight = document.getElementById('container').offsetHeight;
@@ -922,9 +995,14 @@ class SlideContentEditor extends React.Component {
         let pptxwidth = $('.pptx2html').width();
         let pptxheight = $('.pptx2html').height();
         //TODO - change to get right!
-        this.scaleratio = containerwidth / (pptxwidth+50);
+        //this.scaleratio = containerwidth / (pptxwidth+50);
+        this.scaleratio = containerwidth / (pptxwidth+110);
         $('.pptx2html').css({'transform': '', 'transform-origin': ''});
         $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+        //$('.pptx2html').animate({
+        //    transform: 'scale(2)'
+        //});
+        console.log('scale with ratio: ' + this.scaleratio);
 
         //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
         this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
@@ -948,6 +1026,7 @@ class SlideContentEditor extends React.Component {
         // TODO: move elements based on key-up / key-down / etc..
 
         const keyMap = {
+            //'menuOptions': ['1', '2', '3', '4', '5', ],
             'tabFocus': ['tab'],
             'contextmenu': ['ctrl+alt', 'alt+ctrl'],
             'deleteNode': ['del', 'backspace',
@@ -964,14 +1043,16 @@ class SlideContentEditor extends React.Component {
             'bringToBack': ['ctrl+shift+down', 'ctrl+down', 'shift+down',
                 'ctrl+shift+pagedown', 'ctrl+pagedown', 'shift+pagedown', 'pagedown',
                 'ctrl+shift+-', 'ctrl+-', 'shift+-', '-' ],
-            'copy': ['ctrl+c']
+            'copy': ['ctrl+c'],
+            'enter': ['enter']
         };
         let slideEditorContext = this;
         const handlers = {
             //'contextmenu': (event) => this.refs.contextTrigger.handleContextClick(event),
+            //'menuOptions': (event) => this.menuOptionsPreventDefault(event, slideEditorContext),
             'contextmenu': (event) => this.keyContextMenu(),
             'tabFocus': (event) => this.setTabFocus(event, slideEditorContext),
-            'enter': (event) => this.setEditMode(event, slideEditorContext),
+            'enter': (event) => this.setEditMode(event, slideEditorContext, false , false),
             'deleteNode': (event) => this.deleteNode(slideEditorContext),
             'moveUp': (event) => this.keyMoveUp(slideEditorContext, event),
             'moveDown': (event) => this.keyMoveDown(slideEditorContext, event),
@@ -993,6 +1074,11 @@ class SlideContentEditor extends React.Component {
         const contentStyle = {
             minWidth: '100%',
             // maxHeight: 450,
+            //padding: 10,
+            //paddingLeft: 50,
+            //paddingRight: 50,
+            //paddingTop: 10,
+            //xpaddingBottom: 10,
             minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
@@ -1013,6 +1099,7 @@ class SlideContentEditor extends React.Component {
             //position: 'relative'
             //minWidth: '100%',
             // maxHeight: 450,
+            //padding: 20,
             minHeight: 600,
             //minHeight: '100%',
             overflowY: 'auto',
@@ -1026,6 +1113,8 @@ class SlideContentEditor extends React.Component {
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
+            //padding: 10,
+            paddingTop: 40,
             height: '100%'
         };
 
