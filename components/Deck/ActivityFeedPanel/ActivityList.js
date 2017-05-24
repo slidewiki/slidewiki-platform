@@ -45,7 +45,7 @@ class ActivityList extends React.Component {
                 <ReactList ref="infiniteList" className="ui list"
                     itemRenderer={this.renderItem.bind(this)}
                     length={this.props.ActivityFeedStore.activities.length}
-                    type={'variable'}>
+                    type={'simple'}>
                 </ReactList>
               }
             </div>
