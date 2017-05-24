@@ -13,46 +13,24 @@ class SocialShare extends React.Component {
         $(this.refs.shareDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
     }
 
-    getTargetDeckId() {
-        const selector = this.props.selector;
-        let targetDeckId = 0;
-        if (selector.stype === 'deck') {
-            targetDeckId = selector.sid;
-        } else if (selector.stype === 'slide') {
-            let tmp = selector.spath.split(';');
-            if (tmp.length > 1) {
-                targetDeckId = tmp[tmp.length - 2];
-                tmp = targetDeckId.split(':');
-                targetDeckId = tmp[0];
-            } else {
-                targetDeckId = selector.id;
-            }
-        }
-        return targetDeckId;
-    }
-
     onEnterAndClick(text, value) {
         $(this.refs.shareDropDown).dropdown('hide');
         return false;
     }
 
     handleTwitterClick(){
-        console.log('handleTwitterClick');
         createShareActivity('Twitter');
     }
 
     handleFacebookClick(){
-        console.log('handleFacebookClick');
         createShareActivity('Facebook');
     }
 
     handleGooglePlusClick(){
-        console.log('handleG+Click');
         createShareActivity('GooglePlus');
     }
 
     handleLinkedinClick(){
-        console.log('handleLinkedinClick');
         createShareActivity('Linkedin');
     }
 
@@ -61,8 +39,8 @@ class SocialShare extends React.Component {
         let activity = {
             activity_type: 'share',
             user_id: String(this.props.userid),
-            content_id: this.getTargetDeckId(),
-            content_kind: 'deck',
+            content_id: this.props.selector.sid,
+            content_kind: this.props.selector.stype,
             share_info: {
                 platform: platform
             }
@@ -71,7 +49,11 @@ class SocialShare extends React.Component {
     }
 
     render() {
-        const shareUrl = 'https://stable.slidewiki.org/deck/' + this.getTargetDeckId();
+        let shareUrl = '';
+        if (typeof window !== 'undefined') {
+            shareUrl = window.location.href;
+        }
+
         const {
             FacebookShareButton,
             GooglePlusShareButton,
@@ -83,6 +65,8 @@ class SocialShare extends React.Component {
         const GooglePlusIcon = generateShareIcon('google');
         const LinkedinIcon = generateShareIcon('linkedin');
 
+        const shareMessage = 'I have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.';
+
         return(
             <div className="ui dropdown" ref="shareDropDown" role="button" aria-haspopup="true" aria-label="Share" data-tooltip="Share">
                 <div className="text">
@@ -91,12 +75,12 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-                    <MailShareModal userid={this.props.userid} selector={this.props.selector} deckid={this.getTargetDeckId()}/>
+                    <MailShareModal userid={this.props.userid} selector={this.props.selector} />
 
                     <div className="item" data-value="Twitter" role="menuitem" aria-label="Twitter" data-tooltip="Twitter" tabIndex="0" onClick={this.handleTwitterClick.bind(this)}>
                         <TwitterShareButton
                             url={shareUrl}
-                            title="I have found a very interesting deck, here on SlideWiki."
+                            title={shareMessage}
                             className="Demo__some-network__share-button">
                             <TwitterIcon
                                 size={33}
@@ -106,7 +90,7 @@ class SocialShare extends React.Component {
                     <div className="item" data-value="Facebook" role="menuitem" aria-label="Facebook" data-tooltip="Facebook" tabIndex="0" onClick={this.handleFacebookClick.bind(this)}>
                         <FacebookShareButton
                             url={shareUrl}
-                            title='I have found a very interesting deck, here on SlideWiki.'
+                            title={shareMessage}
                             className="Demo__some-network__share-button">
                             <FacebookIcon
                                 size={33}
@@ -115,8 +99,8 @@ class SocialShare extends React.Component {
                     </div>
                     <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" tabIndex="0" onClick={this.handleGooglePlusClick.bind(this)}>
                         <GooglePlusShareButton
-                            url={shareUrl}
-                            content='I have found a very interesting deck, here on SlideWiki.'
+                            url='http://localhost:3000/deck/1602-1/slide/11974-1/11974-1:1/view'
+                            content={shareMessage}
                             className="Demo__some-network__share-button">
                             <GooglePlusIcon
                                 size={33}
@@ -126,7 +110,7 @@ class SocialShare extends React.Component {
                     <div className="item" data-value="LinkedIn" role="menuitem" aria-label="LinkedIn" data-tooltip="LinkedIn" tabIndex="0" onClick={this.handleLinkedinClick.bind(this)}>
                         <LinkedinShareButton
                             url={shareUrl}
-                            title={'I have found a very interesting deck, here on SlideWiki. (' + shareUrl + ')'}
+                            title={shareMessage + '(' + shareUrl + ')'}
                             windowWidth={750}
                             windowHeight={600}
                             className="Demo__some-network__share-button">

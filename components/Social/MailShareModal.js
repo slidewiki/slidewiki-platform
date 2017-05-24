@@ -29,10 +29,13 @@ class MailShareModal extends React.Component {
     }
 
     componentDidMount() {
-        const mailValidation = {
+        const formValidation = {
             fields: {
                 address: {
                     identifier: 'address'
+                },
+                subject: {
+                    identifier: 'subject'
                 },
                 text: {
                     identifier: 'text'
@@ -42,14 +45,14 @@ class MailShareModal extends React.Component {
         };
 
         $('.ui.form.mail')
-            .form(mailValidation);
+            .form(formValidation);
     }
 
     handleSendMail(e) {
         let wrongFields = {
+            address: false,
             subject: false,
-            text: false,
-            address: false
+            text: false
         };
 
         let everythingOk = true;
@@ -70,7 +73,7 @@ class MailShareModal extends React.Component {
         }
 
         const address = this.refs.address.value;
-        if(!address && !(address.indexOf('@') === -1 || address.indexOf('.') === -1 || address.length < 5)) {
+        if(!address || (address.indexOf('@') === -1) || (address.indexOf('.') === -1) || (address.length < 5)) {
             wrongFields.address = true;
             everythingOk = false;
         }
@@ -98,8 +101,8 @@ class MailShareModal extends React.Component {
             let activity = {
                 activity_type: 'share',
                 user_id: String(this.props.userid),
-                content_id: this.props.deckid,
-                content_kind: 'deck',
+                content_id: this.props.selector.sid,
+                content_kind: this.props.selector.stype,
                 share_info: {
                     platform: 'Mail'
                 }
@@ -115,7 +118,6 @@ class MailShareModal extends React.Component {
             activeTrap:true
         });
     }
-
 
     handleClose(){
         $('#app').attr('aria-hidden', 'false');
@@ -161,9 +163,13 @@ class MailShareModal extends React.Component {
         });
 
         const recaptchaStyle = {display: 'inline-block'};
-        const shareUrl = 'https://stable.slidewiki.org/deck/' + this.props.deckid;
-        const shareMessage ='Hi.\nI have found a very interesting deck, here on SlideWiki.\n' + shareUrl;
+        let shareUrl = '';
+        if (typeof window !== 'undefined') {
+            shareUrl = window.location.href;
+        }
 
+        const shareMessage = 'Hi.\nI have found a very interesting ' + this.props.selector.stype + ', here on SlideWiki.\n' + shareUrl;
+        const shareSubject = 'Interesting ' + this.props.selector.stype + ' on SlideWiki';
         let captchaField =
             <div >
                 <input type="hidden" id="recaptcha" name="recaptcha"></input>
@@ -209,26 +215,26 @@ class MailShareModal extends React.Component {
 
                                     <div className={fieldClass_subject} style={{width:'auto'}} >
                                         <label>Subject</label>
-                                        <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="subject_label" name="subject" ref="subject" aria-required="true" defaultValue="Interesting deck on SlideWiki"/></div>
+                                        <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="subject_label" name="subject" ref="subject" aria-required="true" defaultValue={shareSubject} /></div>
                                     </div>
                                     <div className={fieldClass_text}>
                                         <label>Text</label>
                                         <textarea ref="text" id="mailShareComment" name="text" defaultValue={shareMessage} style={{width:'50%', minHeight: '6em', height: '6em'}} ></textarea>
                                     </div>
-                                    {(this.props.userid === '') ?  captchaField: ''}
+                                    {(this.props.userid === '') ? captchaField: ''}
                                     <Button
+                                        icon='mail'
                                         color="blue"
                                         type="submit"
                                         content="Send"
-                                        icon='mail'
                                         onClick={this.handleSendMail}
                                     />
                                     <Button
                                         icon="remove"
                                         color="red"
                                         type="button"
-                                        onClick={this.handleClose}
                                         content="Cancel"
+                                        onClick={this.handleClose}
                                     />
                                     <div className="ui error message"/>
                                 </Form>
@@ -240,7 +246,6 @@ class MailShareModal extends React.Component {
             </Modal>
         );
     }
-
 }
 
 MailShareModal.contextTypes = {

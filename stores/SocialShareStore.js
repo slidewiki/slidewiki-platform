@@ -5,21 +5,20 @@ class SocialShareStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
         this.wrongFields = {
-            reason: false,
-            text: false,
-            name: false
+            address: false,
+            subject: false,
+            text: false
         };
         this.error = null;
-
         this.openModal = false;
         this.activeTrap = false;
     }
 
     destructor() {
         this.wrongFields = {
-            reason: false,
-            text: false,
-            name: false
+            address: false,
+            subject: false,
+            text: false
         };
         this.error = null;
         this.openModal = false;
@@ -60,9 +59,9 @@ class SocialShareStore extends BaseStore {
     }
 
     showWrongFields(wF) {
-        this.wrongFields.reason = wF.reason;
+        this.wrongFields.address = wF.address;
+        this.wrongFields.subject = wF.subject;
         this.wrongFields.text = wF.text;
-        this.wrongFields.name = wF.name;
 
         this.emitChange();
     }
