@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea, Image,Dimmer, Header,Form} from 'semantic-ui-react';
+import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea, Image,Dimmer, Header,Form, Loader} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
@@ -12,6 +12,8 @@ import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
+import AttachMyDecks from './AttachMyDecks';
+import AttachSlideWiki from './AttachSlideWiki';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
 
@@ -111,67 +113,14 @@ class AttachSubdeckModal extends React.Component{
 
     }
     loadMyDecksContent(){
-        let userInfo ={
-            userId: this.props.UserProfileStore.userid,
-            username: this.props.UserProfileStore.username
 
-        };
-        let myDecksContent;
-        if(this.state.userDecks ===[]){
-            myDecksContent = <Segment id="panelMyDecksContent">
-                                <Dimmer active inverted>
-                                    <Loader inverted>Loading</Loader>
-                                </Dimmer>
-                                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                            </Segment>;
-        } else{
-            myDecksContent = <Segment id="panelMyDecksContent">
-                                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-
-                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} maxHeight='400px'/>
-                            </Segment>;
-        }
-
-        return myDecksContent;
+        return  <AttachMyDecks />;
     }
 
     loadSlideWikiContent(){
-        let slideWikiContent;
-
-        let userInfo ={
-            userId: this.props.UserProfileStore.userid,
-            username: this.props.UserProfileStore.username
-
-        };
-        if(this.state.recentDecks ===[]){
-            slideWikiContent = <Segment id="panelMyDecksContent">
-                                <Dimmer active inverted>
-                                    <Loader inverted>Loading</Loader>
-                                </Dimmer>
-                                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                            </Segment>;
-        } else{
-            let slides_to_show;
-            let fromDecksTitle;
-            if(!this.state.showSearchResults){
-                slides_to_show=this.state.recentDecks;
-                fromDecksTitle='Recent decks';
-            } else {
-                slides_to_show=this.state.searchDecks;
-                fromDecksTitle=slides_to_show.length>0 ? 'Found decks' : 'No results found';
-            }
-            slideWikiContent =  <Segment id="panelMyDecksContent">
-                                  <Header as="h3">{fromDecksTitle}</Header>
-                                  <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                  <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-                                  <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
-                                </Segment>;
-        }
-
-        return slideWikiContent;
-
+        return <AttachSlideWiki />;
     }
+    
     onSelect(searchstring){
         this.setState({keywords: searchstring});
         this.handleRedirect();
@@ -386,7 +335,7 @@ class AttachSubdeckModal extends React.Component{
                 <Modal.Content>
                     <Container text>
                          <Segment color="blue" textAlign="center" padded>
-                            <AttachMenu activeItem='MyDecks' />                
+                            <AttachMenu activeItem={this.state.activeItem}/>
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
 

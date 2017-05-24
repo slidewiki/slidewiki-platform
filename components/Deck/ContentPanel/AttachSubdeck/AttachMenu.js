@@ -32,7 +32,7 @@ class AttachMenu extends React.Component{
         let payload ={
             activeItem:'SlideWiki'
         };
-        console.log('handleSlideWikiClick'+payload);
+  
         this.context.executeAction(updateActiveItem,payload,null);
 
     }
