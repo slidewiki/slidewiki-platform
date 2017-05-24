@@ -464,7 +464,25 @@ class SlideContentEditor extends React.Component {
 
         $('.pptx2html > [style*="absolute"]').hover(function() {
             if (!$(this).hasClass('editMode')) {
-                if(!$('.editMode').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
+                //if(!$('.editMode').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
+                if(!$('.editMode').draggable( 'instance' )){
+                    $(this).draggable({
+                        cursor: 'move',
+                        //handle: '.drag-handle',
+                        start: function(event, ui) {
+                            ui.position.left = 0;
+                            ui.position.top = 0;
+                        },
+                        drag: function(event, ui) {
+                            let changeLeft = ui.position.left - ui.originalPosition.left; // find change in left
+                            let newLeft = ui.originalPosition.left + changeLeft / (( slideEditorContext.scaleratio)); // adjust new left by our zoomScale
+                            let changeTop = ui.position.top - ui.originalPosition.top; // find change in top
+                            let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleratio; // adjust new top by our zoomScale
+                            ui.position.left = newLeft;
+                            ui.position.top = newTop;
+                        }
+                    });
+                }
                 //if(!$('.editMode').resizable( 'instance' )){$(this).resizable({handles: 'all', scroll: true});}
                 if(!$('.editMode').resizable( 'instance' )){
                     $(this).resizable({
