@@ -11,6 +11,7 @@ import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
+import AttachMenu from './AttachMenu';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
 
@@ -42,8 +43,6 @@ class AttachSubdeckModal extends React.Component{
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
-        this.handleMyDecksClick = this.handleMyDecksClick.bind(this);
-        this.handleSlideWikiClick = this.handleSlideWikiClick.bind(this);
         this.handleAttachButton = this.handleAttachButton.bind(this);
 
     }
@@ -56,7 +55,8 @@ class AttachSubdeckModal extends React.Component{
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
             selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
             searchDecks: nextProps.AttachSubdeckModalStore.searchDecks,
-            showSearchResults: nextProps.AttachSubdeckModalStore.showSearchResults
+            showSearchResults: nextProps.AttachSubdeckModalStore.showSearchResults,
+            activeItem: nextProps.AttachSubdeckModalStore.activeItem
         });
 
     }
@@ -102,21 +102,6 @@ class AttachSubdeckModal extends React.Component{
         });
         this.context.executeAction(initModal,[]);
     }
-
-
-    handleMyDecksClick(){
-        this.setState({
-            activeItem:'MyDecks'
-        });
-
-    }
-
-    handleSlideWikiClick(){
-        this.setState({
-            activeItem:'SlideWiki'
-        });
-    }
-
 
     unmountTrap(){
         if(this.state.activeTrap){
@@ -401,12 +386,7 @@ class AttachSubdeckModal extends React.Component{
                 <Modal.Content>
                     <Container text>
                          <Segment color="blue" textAlign="center" padded>
-                            <Menu attached='top' tabular role="tablist">
-                                     <Menu.Item as="button" name="From My Decks" id="tabMyDecksId" active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
-                                                  role="tab" tabIndex="0" />
-                                     <Menu.Item as="button" name="From SlideWiki" id="tabFromSlideWikiId" active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
-                                                  onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
-                            </Menu>
+                            <AttachMenu activeItem='MyDecks' />                
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
 

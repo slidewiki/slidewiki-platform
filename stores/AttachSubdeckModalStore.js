@@ -10,6 +10,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle='Select one deck...';
         this.selectedDeckId =-1;
         this.showSearchResults = false;
+        this.activeItem = 'MyDecks';
     }
 
     getState(){
@@ -19,7 +20,9 @@ class AttachSubdeckModalStore extends BaseStore{
             searchDecks: this.searchDecks,
             selectedDeckTitle: this.selectedDeckTitle,
             selectedDeckId: this.selectedDeckId,
-            showSearchResults: this.showSearchResults
+            showSearchResults: this.showSearchResults,
+            activeItem: this.activeItem
+
         };
     }
     dehydrate() {
@@ -32,6 +35,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle = state.selectedDeckTitle;
         this.selectedDeckId = state.selectedDeckId;
         this.showSearchResults = state.showSearchResults;
+        this.activeItem = state.activeItem;
     }
 
     updateUserDecks(payload){
@@ -107,6 +111,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle = 'Select one deck...';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
+        this.activeItem = 'MyDecks';
 
         this.emitChange();
     }
@@ -114,6 +119,13 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle = 'Select one deck...';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
+        this.activeItem = 'MyDecks';
+
+        this.emitChange();
+    }
+
+    updateActiveItem(payload){
+        this.activeItem = payload.activeItem;
 
         this.emitChange();
     }
@@ -128,7 +140,8 @@ AttachSubdeckModalStore.handlers = {
     'ATTACHSUBDECK_LOAD_RECENTDECKS': 'updateRecentDecks',
     'ATTACHSUBDECK_LOAD_SEARCHDECKS' : 'updateSearchDecks',
     'ATTACHSUBDECK_RESET':'resetModalStore',
-    'ATTACHSUBDECK_INIT' :'initModal'
+    'ATTACHSUBDECK_INIT' :'initModal',
+    'ATTACHSUBDECK_ACTIVE_ITEM' :'updateActiveItem'
 };
 
 export default AttachSubdeckModalStore;
