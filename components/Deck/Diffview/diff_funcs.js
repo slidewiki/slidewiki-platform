@@ -185,7 +185,7 @@ const preprocessSrc = (source, mode) => {
 
         vTreeObject.length > 1 ? root = createElement(vTreeObject[0]) : root = createElement(vTreeObject);
 
-        $(root).find('br').remove();
+        // $(root).find('br').remove();
         $(root).find('.drawing-container').remove();
         $(root).find('p:empty').remove();
         $(root).find('span:empty').remove();
@@ -231,15 +231,15 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
         let patchType;
         switch (el.type) {
             case 0:
-                console.warn('NONE');
+                // console.warn('NONE');
                 break;
             case 1:
-                console.warn('TEXT');
+                // console.warn('TEXT');
                 const textArray = deepSearch(el, 'text');
                 initSrc = handleTEXT(textArray[0], textArray[1], initSrc);
                 break;
             case 2:
-                console.warn('VNODE');
+                // console.warn('VNODE');
                 nodeType = el.vNode.constructor.name;
                 patchType = el.patch.constructor.name;
                 if(nodeType === 'VirtualText')
@@ -248,28 +248,28 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
                     initSrc = handlePROPS(el.patch, el.patch.properties, initSrc, finalSrc, true);
                 break;
             case 3:
-                console.warn('WIDGET');
+                // console.warn('WIDGET');
                 elem = createElement(el.vNode);
                 break;
             case 4:
-                console.warn('PROPS');
+                // console.warn('PROPS');
                 initSrc = handlePROPS(el.vNode, el.patch, initSrc);
                 break;
             case 5:
-                console.warn('ORDER');
+                // console.warn('ORDER');
                 elem = createElement(el.patch);
                 break;
             case 6:
-                console.warn('INSERTED');
+                // console.warn('INSERTED');
                 initSrc = handleINSERT(el, initSrc, finalSrc);
                 break;
             case 7:
-                console.warn('REMOVE');
+                // console.warn('REMOVE');
                 nodeType = el.vNode.constructor.name;
                 if(nodeType === 'VirtualNode') initSrc = handleREMOVE(el, initSrc, finalSrc);
                 break;
             default:
-                console.warn('default');
+                // console.warn('default');
         }
     });
     console.groupEnd();
