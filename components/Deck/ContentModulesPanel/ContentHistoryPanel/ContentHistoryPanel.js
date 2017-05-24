@@ -1,30 +1,23 @@
 import React from 'react';
-import {connectToStores} from 'fluxible-addons-react';
-import DeckHistoryStore from '../../../../stores/DeckHistoryStore';
-import ContentHistoryList from './ContentHistoryList';
-import UserProfileStore from '../../../../stores/UserProfileStore';
-import PermissionsStore from '../../../../stores/PermissionsStore';
+import DeckHistoryPanel from './DeckHistoryPanel';
 
 class ContentHistoryPanel extends React.Component {
     render() {
+        let targetComponent = '';
+        switch (this.props.selector.stype) {
+            case 'deck':
+                targetComponent = <DeckHistoryPanel  selector={this.props.selector} />;
+                break;
+            case 'slide':
+                targetComponent = <div></div>;
+                break;
+        }
         return (
-            <div ref="contentHistoryPanel" className="ui">
-                <div>
-                    <ContentHistoryList revisions={this.props.DeckHistoryStore.revisions}
-                                        userid={this.props.UserProfileStore.userid}
-                                        selector={this.props.DeckHistoryStore.selector}
-                                        permissions={this.props.PermissionsStore.permissions} />
-                </div>
+            <div ref="contentHistoryPanel">
+                {targetComponent}
             </div>
         );
     }
 }
 
-ContentHistoryPanel = connectToStores(ContentHistoryPanel, [DeckHistoryStore, UserProfileStore, PermissionsStore], (context, props) => {
-    return {
-        DeckHistoryStore: context.getStore(DeckHistoryStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
-    };
-});
 export default ContentHistoryPanel;

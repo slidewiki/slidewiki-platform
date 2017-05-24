@@ -11,11 +11,10 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
-        let selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
         if (resource === 'history.changes') {
             let changes;
-            let changesPromise = selector.stype === 'deck'? rp.get({uri: Microservices.deck.uri + '/deck/' + selector.sid.split('-')[0] + '/changes'}) :
-                rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid.split('-')[0] + '/changes', qs:{root: selector.id.split('-')[0]}});
+            let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes'}) :
+                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId.split('-')[0] + '/changes', qs:{root: args.deckId.split('-')[0]}});
             changesPromise.then((res) => {
                 changes = JSON.parse(res);
                 //find unique user ids in change log
@@ -28,15 +27,12 @@ export default {
                 changes.forEach((changeOp) => {
                     changeOp.username = usersById[changeOp.user].username;
                 });
-                callback(null, {
-                    changes: changes,
-                    selector: selector
-                });
+                callback(null, changes);
             }).catch((err) => callback(err));
             //returns the number of revisions of a deck
         } else if (resource === 'history.revisionCount'){
-            rp.get({uri: Microservices.deck.uri + '/deck/' + selector.sid + '/revisionCount/'}).then((res) => {
-                callback(null, {count: JSON.parse(res), selector: selector});
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisionCount/'}).then((res) => {
+                callback(null, {count: JSON.parse(res)});
             }).catch((err) => {
                 //console.log(err);
                 callback({msg: 'Error in retrieving revisions count', content: err}, {});
@@ -44,7 +40,7 @@ export default {
             //returns the revisions of a deck
         } else if (resource === 'history.revisions') {
             let revisions;
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.id.split('-')[0] + '/revisions'}).then((res) => {
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisions'}).then((res) => {
                 revisions = JSON.parse(res);
                 //find unique user ids in revisions
                 let userIds = [... new Set(revisions.map((rev) => rev.user))];
@@ -57,10 +53,26 @@ export default {
                     rev.username = usersById[rev.user].username;
                 });
                 callback(null, {
-                    revisions: revisions,
-                    selector: selector
+                    revisions: revisions
                 });
             }).catch((err) => callback(err));
+        }
+    },
+    create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        //creates a new revision of a deck
+        if (resource === 'history.revision') {
+            rp({
+                method: 'POST',
+                uri: Microservices.deck.uri + '/deck/' + params.id + '/revision',
+                json: true,
+                body: {
+                    top_root_deck: params.id
+                },
+                headers: { '----jwt----': params.jwt }
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {

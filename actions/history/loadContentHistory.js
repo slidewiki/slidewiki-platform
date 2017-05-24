@@ -24,7 +24,7 @@ export default function loadContentHistory(context, payload, done) {
 
     async.parallel([
         (callback) => {
-            context.executeAction(loadDeckRevisions, payload, callback);
+            context.executeAction(loadDeckRevisions, {deckId: payload.params.sid.split('-')[0]}, callback);
         }],
     // final callback
     (err, results) => {

@@ -5,20 +5,41 @@ class DeckHistoryStore extends BaseStore {
         super(dispatcher);
         this.revisions = [];
         this.changes = {};
-        this.selector = {};
     }
     loadDeckRevisions(payload) {
         this.revisions = payload.revisions;
+        if (this.revisions.length > 0){
+            this.revisions[0].latest = true;
+        }
         this.changes = {};
-        this.selector = payload.selector;
+        this.emitChange();
+    }
+
+    loadDeckChanges(payload) {
+        this.changes[payload.revisionId] = payload.changes;
+        this.emitChange();
+    }
+
+    showRevisionChanges(payload) {
+        let revision = this.revisions.find((rev) => rev.id === payload.revisionId);
+        if (revision){
+            revision.expanded = true;
+        }
+        this.emitChange();
+    }
+
+    hideRevisionChanges(payload) {
+        let revision = this.revisions.find((rev) => rev.id === payload.revisionId);
+        if (revision){
+            revision.expanded = false;
+        }
         this.emitChange();
     }
 
     getState() {
         return {
             revisions: this.revisions,
-            changes: this.changes,
-            selector: this.selector,
+            changes: this.changes
         };
     }
     dehydrate() {
@@ -27,13 +48,16 @@ class DeckHistoryStore extends BaseStore {
     rehydrate(state) {
         this.revisions = state.revisions;
         this.changes = state.changes;
-        this.selector = state.selector;
     }
 }
 
 DeckHistoryStore.storeName = 'DeckHistoryStore';
 DeckHistoryStore.handlers = {
-    'LOAD_DECK_REVISIONS_SUCCESS': 'loadDeckRevisions'
+    'LOAD_DECK_REVISIONS_SUCCESS': 'loadDeckRevisions',
+    'LOAD_DECK_CHANGES_SUCCESS': 'loadDeckChanges',
+    'SHOW_REVISION_CHANGES': 'showRevisionChanges',
+    'HIDE_REVISION_CHANGES': 'hideRevisionChanges'
+
 };
 
 export default DeckHistoryStore;
