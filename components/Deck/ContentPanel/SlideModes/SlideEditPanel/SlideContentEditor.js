@@ -610,11 +610,13 @@ class SlideContentEditor extends React.Component {
             $('.editMode').css('cursor', 'pointer');
             $('.editMode').css('box-shadow','');
             //$('.cke_menu').show();
+            $('.cke_menu').hide();
             $('.editMode').contextMenu(true);
             $('.editMode').removeClass('editMode');
         }
     }
     setEditMode(evt, slideEditorContext, menuFocus, previousCaret){
+        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         console.log('editmode');
         slideEditorContext.removeEditMode(); //remove existing edit mode from elements
         console.log('event' + evt);
@@ -636,7 +638,7 @@ class SlideContentEditor extends React.Component {
             id !== 'inlineContent')
         { //if not already in edit mode or is not SVG in drawing-container
             $('.cke_menu').show();
-            console.log('disable context menu with id: ' + id );
+            console.log('disable extra context menu with id: ' + id );
             $('#'+id).contextMenu(false);
             //$('#' + id).find('span:first').focus();
 
@@ -811,17 +813,18 @@ class SlideContentEditor extends React.Component {
                     }
                 },
                 items: {
-                    'edit': {name: 'Edit', icon: 'edit'},
+                    'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
                     //'move': {name: 'Move around', icon: 'fa-arrows',},
-                    'front': {name: 'Bring to front', icon: 'fa-arrow-circle-up'},
-                    'back': {name: 'Send to back', icon: 'fa-arrow-circle-o-down'},
-                    'copy': {name: 'Copy', icon: 'copy'},
-                    'delete': {name: 'Delete', icon: 'delete'},
+                    'front': {name: 'Bring to front (Ctrl +)', icon: 'fa-arrow-circle-up'},
+                    'back': {name: 'Send to back (Ctrl -)', icon: 'fa-arrow-circle-o-down'},
+                    'copy': {name: 'Copy (key: Ctrl c)', icon: 'copy'},
+                    'delete': {name: 'Delete (key: Delete)', icon: 'delete'},
                     //'sep1': '---------',
-                    'quit': {name: 'Close menu (key:Esc)', icon: 'quit', accesskey: 'esc'}
+                    'quit': {name: 'Close menu (key: Esc)', icon: 'quit', accesskey: 'esc'}
                     //'quit': {name: 'Send to back', icon: 'quit'},
                 }
             });
+            $(this).contextMenu(true);
             //}
         });
     }
@@ -842,11 +845,16 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html [style*="absolute"]').not('.drawing-container').css({'borderStyle': 'solid', 'borderWidth': '1px', 'borderColor': 'rgba(30,120,187,0.5)'});
         }
     }
-    keyContextMenu(){
+    keyContextMenu(event, context){
         let id = $(':focus').attr('id');
-        $('#'+id).contextMenu();
+        if (!id || id === 'inlineContent'){id = context.menuFocus;}
         console.log('keyContextMenu id: ' + id);
+        if(!$('#'+id).hasClass('editMode')){
+            if(event){event.preventDefault();}
+            $('#'+id).contextMenu();
+        }
     }
+
     setTabFocus(event, context){
         //if($('.pptx2html [style*="absolute"]:focus').length)
         //{
@@ -859,9 +867,9 @@ class SlideContentEditor extends React.Component {
                 //we disable edit mode from the(se) element(s).
                 context.removeEditMode();
             }
-            context.menuFocus = id;
-            console.log('tabFocus set for: ' + $(':focus').attr('id'));
         }
+        context.menuFocus = id;
+        console.log('tabFocus set for: ' + $(':focus').attr('id'));
         //else {
             //set caret at start position
         //    setEditMode(event, context);
@@ -910,6 +918,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     bringToFront(context, event){
+        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') &&  id !== 'inlineContent'){
@@ -919,6 +928,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     sendToBack(context, event){
+        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode')){
@@ -928,6 +938,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     CopyNode(context, event){
+        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         console.log('copy node' + id);
@@ -942,6 +953,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     deleteNode(context, event){
+        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         if (!id){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length && !$('#'+id).hasClass('pptx2html') && id !== 'inlineContent'){
@@ -995,6 +1007,7 @@ class SlideContentEditor extends React.Component {
     }
     */
     keyEnter(event){
+        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         console.log('prevent default enter key if not in edit mode' + !$('.editMode').length + $('#'+id).hasClass('context-menu-active') + id);
         //if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
@@ -1014,7 +1027,7 @@ class SlideContentEditor extends React.Component {
         let pptxheight = $('.pptx2html').height();
         //TODO - change to get right!
         //this.scaleratio = containerwidth / (pptxwidth+50);
-        this.scaleratio = containerwidth / (pptxwidth+110);
+        this.scaleratio = containerwidth / (pptxwidth+120);
         $('.pptx2html').css({'transform': '', 'transform-origin': ''});
         $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
         //$('.pptx2html').animate({
@@ -1062,13 +1075,12 @@ class SlideContentEditor extends React.Component {
                 'ctrl+shift+pagedown', 'ctrl+pagedown', 'shift+pagedown', 'pagedown',
                 'ctrl+shift+-', 'ctrl+-', 'shift+-', '-' ],
             'copy': ['ctrl+c'],
-            'enter': ['enter']
+            'enter': ['ctrl+enter']
         };
         let slideEditorContext = this;
         const handlers = {
-            //'contextmenu': (event) => this.refs.contextTrigger.handleContextClick(event),
             //'menuOptions': (event) => this.menuOptionsPreventDefault(event, slideEditorContext),
-            'contextmenu': (event) => this.keyContextMenu(),
+            'contextmenu': (event) => this.keyContextMenu(event, slideEditorContext),
             'tabFocus': (event) => this.setTabFocus(event, slideEditorContext),
             'enter': (event) => this.setEditMode(event, slideEditorContext, false , false),
             'deleteNode': (event) => this.deleteNode(slideEditorContext),
@@ -1093,10 +1105,10 @@ class SlideContentEditor extends React.Component {
             minWidth: '100%',
             // maxHeight: 450,
             //padding: 10,
-            //paddingLeft: 50,
-            //paddingRight: 50,
-            //paddingTop: 10,
-            //xpaddingBottom: 10,
+            paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 10,
+            xpaddingBottom: 10,
             minHeight: 610,
             overflowY: 'auto',
             overflowX: 'auto',
