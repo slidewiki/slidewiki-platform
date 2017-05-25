@@ -1,12 +1,12 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea, Image,Dimmer, Header,Form, Loader} from 'semantic-ui-react';
+import { Button, Icon, Modal, Container, Segment, TextArea} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
-import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
+//import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
@@ -14,8 +14,9 @@ import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
-import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
-import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
+import AttachSearchForm from './AttachSearchForm';
+//import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
+//import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
 
 
 
@@ -32,14 +33,14 @@ class AttachSubdeckModal extends React.Component{
         super(props);
 
         this.state = {
-            openModal: false,
+            modalOpen: false,
             activeItem: 'MyDecks',
             activeTrap: false,
-            userDecks: [],
-            recentDecks:[],
-            searchDecks:[],
-            selectedDeckTitle: 'Select one deck...',
-            showSearchResults: false
+
+
+
+          //  selectedDeckTitle: 'Select one deck...',
+          //  showSearchResults: false
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -52,12 +53,12 @@ class AttachSubdeckModal extends React.Component{
     componentWillReceiveProps(nextProps){
 
         this.setState({
-            userDecks: nextProps.AttachSubdeckModalStore.userDecks,
-            recentDecks: nextProps.AttachSubdeckModalStore.recentDecks,
+
+
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
-            selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
-            searchDecks: nextProps.AttachSubdeckModalStore.searchDecks,
-            showSearchResults: nextProps.AttachSubdeckModalStore.showSearchResults,
+          //  selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
+
+          //  showSearchResults: nextProps.AttachSubdeckModalStore.showSearchResults,
             activeItem: nextProps.AttachSubdeckModalStore.activeItem
         });
 
@@ -99,8 +100,8 @@ class AttachSubdeckModal extends React.Component{
             modalOpen:false,
             activeTrap: false,
             activeItem: 'MyDecks',
-            selectedDeckTitle: 'Select one deck...',
-            showSearchResults: false
+          //  selectedDeckTitle: 'Select one deck...',
+          //  showSearchResults: false
         });
         this.context.executeAction(initModal,[]);
     }
@@ -112,158 +113,7 @@ class AttachSubdeckModal extends React.Component{
         }
 
     }
-    loadMyDecksContent(){
 
-        return  <AttachMyDecks />;
-    }
-
-    loadSlideWikiContent(){
-        return <AttachSlideWiki />;
-    }
-    
-    onSelect(searchstring){
-        this.setState({keywords: searchstring});
-        this.handleRedirect();
-    }
-    // onChange(event) {
-    //
-    //     let curstate = {};
-    //     curstate[event.target.name] = event.target.value;
-    //     this.setState(curstate);
-    // }
-    clearInput(){
-        this.setState({searchstring: ''});
-        this.refs.keywords.focus();
-    }
-    getEncodedParams(params){
-        let queryparams = {
-            keywords: (params && params.keywords)
-                        ? params.keywords       // if keywords are set from redirection
-                        : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
-            field: this.refs.field.value.trim(),
-            kind: 'deck',
-            language: this.refs.language.value.trim(),
-            license: this.refs.license.value.trim(),
-            user: this.refs.user.getSelected().split(','),
-            // tag: this.refs.tag.value.trim(),
-            sort: (params && params.sort) ? params.sort : ''
-        };
-
-        // encode params
-        let encodedParams = '';
-        for(let key in queryparams){
-            if(queryparams[key] instanceof Array){
-                for(let el in queryparams[key]){
-                    encodedParams += this.encodeParam(encodedParams, key, queryparams[key][el]);
-                }
-            }
-            else{
-                encodedParams += this.encodeParam(encodedParams, key, queryparams[key]);
-            }
-        }
-
-        return encodedParams;
-    }
-    encodeParam(encodedParams, key, value){
-        if(value.trim() === '')
-            return '';
-
-        return ((encodedParams) ? '&' : '')
-                + encodeURIComponent(key) + '=' + encodeURIComponent(value);
-    }
-    handleKeyPress(event){
-
-        if(event.key === 'Enter'){
-            this.handleRedirect(event);
-        }
-
-    }
-    handleRedirect(event, params){
-        if(event){
-            event.preventDefault();
-        }
-
-        this.setState({
-            fromDecksTitle:'Search results'
-        });
-
-        this.context.executeAction(loadSearchedDecks, {
-            params: {
-                queryparams: this.getEncodedParams(params)
-            }
-        });
-
-        this.refs.keywords.blur();
-
-        return false;
-
-    }
-    loadSearchForm(){
-        let searchForm = '';
-        if (this.state.activeItem === 'SlideWiki'){
-
-            searchForm = <Segment className='advancedSearch'>
-                            <Header as="h3">Search for decks</Header>
-                            <Form success>
-                              <Form.Group>
-
-                                <Form.Field width="11" >
-                                  <label htmlFor="SearchTerm"  className="sr-only">Search Term</label>
-                                  <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)}/>
-                                </Form.Field>
-                                <Form.Field>
-                                 <label htmlFor="field" className="sr-only">Search field</label>
-                                 <select name='field' id='field' multiple='' className='ui fluid search dropdown' ref='field'>
-                                   <option value=' '>Select Search field</option>
-                                   <option value='title'>Title</option>
-                                   <option value='description'>Description</option>
-                                   <option value='content'>Content</option>
-                                   <option value='speakernotes'>Speakernotes</option>
-                                 </select>
-                                </Form.Field>
-                              </Form.Group>
-                              <Form.Group widths="equal" >
-                                <div className="field">
-                                  <label htmlFor="users_input_field"  className="sr-only">User</label>
-                                  <UsersInput ref='user' placeholder='Select Users' />
-                                </div>
-
-                                <Form.Field>
-                                <label htmlFor="language" className="sr-only">Language</label>
-                                <select name='language' multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-                                  <option value=' '>Select Language</option>
-                                  <option value='en_GB'>English</option>
-                                  <option value='de_DE'>German</option>
-                                  <option value='el_GR'>Greek</option>
-                                  <option value='it_IT'>Italian</option>
-                                  <option value='pt_PT'>Portuguese</option>
-                                  <option value='sr_RS'>Serbian</option>
-                                  <option value='es_ES'>Spanish</option>
-                                </select>
-                                </Form.Field>
-                                <Form.Field>
-                                  <label htmlFor="license" className="sr-only">License</label>
-                                  <select name='license' id='license' multiple='' className='ui fluid search dropdown' ref='license'>
-                                  <option value=' '>Select Licence</option>
-                                  <option value='CC0'>CC0</option>
-                                  <option value='CC BY'>CC BY</option>
-                                  <option value='CC BY-SA'>CC BY-SA</option>
-                                </select>
-                                </Form.Field>
-                              </Form.Group>
-                              <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"
-                                  data-tooltip="Search for Decks" onClick={this.handleRedirect.bind(this)}>
-                                <Icon name="search"/>
-                                  Search
-                              </Button>
-                            </Form>
-
-                         </Segment>;
-        }
-
-
-        return searchForm;
-    }
 
     handleAttachButton() {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
@@ -277,27 +127,27 @@ class AttachSubdeckModal extends React.Component{
     render() {
 
 
-        /*
-        let selectedDeckArea = <Segment textAlign="left" >
-                                  <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                  <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-                              </Segment>;
-                        */
-        let searchForm = this.loadSearchForm();
+
+
         //From my Decks option content
-        let myDecksContent = this.loadMyDecksContent();
+        let myDecksContent = <AttachMyDecks />;
 
         //From SlideWiki content
-        let slideWikiContent = this.loadSlideWikiContent();
+        let slideWikiContent = <AttachSlideWiki />;
 
         //Default Content
         let segmentPanelContent = myDecksContent;
+        let searchForm='';
 
         if (this.state.activeItem === 'MyDecks'){
+            searchForm ='';
             segmentPanelContent = myDecksContent;
 
         }else{
+            searchForm =  <AttachSearchForm />;
             segmentPanelContent = slideWikiContent;
+
+
         }
 
         return (

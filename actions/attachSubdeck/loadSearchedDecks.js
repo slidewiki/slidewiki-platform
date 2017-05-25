@@ -20,7 +20,7 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
         } else { //Normal action
-            
+
             log.info(context,res);
             context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
         }

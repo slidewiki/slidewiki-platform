@@ -81,9 +81,10 @@ class AttachSubdeckModalStore extends BaseStore{
     updateSearchDecks(payload){
         if(payload.docs===[]){
             this.searchDecks =[];
+            this.showSearchResults = true;
         }else{
             let searchDecks = payload.docs.map((deck) => {
-                console.log(deck);
+
                 return({
                     title: !isEmpty(deck.title) ? deck.title : 'No Title',
                     picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
@@ -132,6 +133,8 @@ class AttachSubdeckModalStore extends BaseStore{
 
 
 
+
+
 }
 AttachSubdeckModalStore.storeName = 'AttachSubdeckModalStore';
 AttachSubdeckModalStore.handlers = {
@@ -141,7 +144,8 @@ AttachSubdeckModalStore.handlers = {
     'ATTACHSUBDECK_LOAD_SEARCHDECKS' : 'updateSearchDecks',
     'ATTACHSUBDECK_RESET':'resetModalStore',
     'ATTACHSUBDECK_INIT' :'initModal',
-    'ATTACHSUBDECK_ACTIVE_ITEM' :'updateActiveItem'
+    'ATTACHSUBDECK_ACTIVE_ITEM' :'updateActiveItem',
+
 };
 
 export default AttachSubdeckModalStore;
