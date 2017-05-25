@@ -6,7 +6,7 @@ import {Accordion, Button, Icon, Header, Segment} from 'semantic-ui-react';
 import DeckRevisionChanges from './DeckRevisionChanges';
 import moment from 'moment';
 
-class ContentHistoryItem extends React.Component {
+class DeckRevision extends React.Component {
 
     handleExpandClick() {
         if (this.props.revision.expanded) {
@@ -15,10 +15,15 @@ class ContentHistoryItem extends React.Component {
             });
         } else {
             this.context.executeAction(showRevisionChanges, {
-                deckId: this.props.selector.id.split('-')[0],
+                deckId: this.props.selector.sid.split('-')[0],
                 revisionId: this.props.revision.id
             });
         }
+    }
+
+    handleViewRevisionClick() {
+        //open the deck revision in a new tab
+        window.open('/deck/' + this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id , '_blank');
     }
 
 
@@ -28,25 +33,10 @@ class ContentHistoryItem extends React.Component {
         });
     }
 
-    /*<div className="item">
-     <div className="content">
-     <div className="header">
-     <span>{moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})} by <a className="user"
-     href={'/user/' + revision.user}> {revision.username}</a>
-     </span>
-     {revision.active ? <i className='check circle icon green'></i> : revertIcon}
-     </div>
-     <div className="description"></div>
-     </div>
-     </div>*/
-
     render() {
         const revision = this.props.revision;
-        const revertIcon = (this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly) ? (
-        <a className="like" onClick={this.handleRevertClick.bind(this)}>
-            <i className="undo icon"/>
-        </a>
-        ) : '';
+        const canEdit = this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly;
+
         return (
         <div>
             <Accordion.Title active={revision.expanded}>
@@ -66,8 +56,8 @@ class ContentHistoryItem extends React.Component {
                         {revision.latest ? '' :
                         <Button.Group basic size='tiny' floated='right'>
                             <Button aria-label='Compare to current deck' icon='exchange' disabled/>
-                            <Button aria-label='Restore deck' icon='history'/>
-                            <Button aria-label='View deck in new tab' icon>
+                            <Button aria-label='Restore deck' icon='history' disabled={!canEdit}/>
+                            <Button aria-label='View deck in new tab' icon onClick={this.handleViewRevisionClick.bind(this)}>
                                 <Icon.Group>
                                     <Icon name='unhide'/>
                                     <Icon name='external' corner/>
@@ -83,8 +73,8 @@ class ContentHistoryItem extends React.Component {
     }
 }
 
-ContentHistoryItem.contextTypes = {
+DeckRevision.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-export default ContentHistoryItem;
+export default DeckRevision;
