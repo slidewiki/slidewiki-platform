@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon,   Segment, Menu,Label,Input, Header,Form} from 'semantic-ui-react';
+import { Button, Icon,   Segment, Menu,Label,Input, Header,Form,Dropdown} from 'semantic-ui-react';
 import loadSearchedDecks from '../../../../actions/attachSubdeck/loadSearchedDecks';
 import KeywordsInput from '../../../Search/AutocompleteComponents/KeywordsInput';
 import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
@@ -25,7 +25,8 @@ class AttachSearchForm extends React.Component{
                             : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
             field: this.refs.field.value.trim(),
             kind: 'deck',
-            language: this.refs.language.value.trim(),
+            //language: this.refs.language.value.trim(),
+            language: this.refs.language.value,
             license: this.refs.license.value.trim(),
             user: this.refs.user.getSelected().split(','),
                 // tag: this.refs.tag.value.trim(),
@@ -47,8 +48,14 @@ class AttachSearchForm extends React.Component{
         return encodedParams;
     }
     encodeParam(encodedParams, key, value){
+        console.log('encodeParams');
+        console.log(value);
+/*
         if(value.trim() === '')
             return '';
+*/
+        if(value === '')
+                return '';
 
         return ((encodedParams) ? '&' : '')
                 + encodeURIComponent(key) + '=' + encodeURIComponent(value);
@@ -81,7 +88,16 @@ class AttachSearchForm extends React.Component{
 
     }
     render(){
-
+        let languageOptions =[
+          { value:'', text:'Select Language'},
+          { value:'en_GB', text:'English' },
+          {value:'de_DE', text: 'German' },
+          { value:'el_GR', text:'Greek'},
+          {value:'it_IT', text:'Italian'},
+          {value:'pt_PT',text:'Portuguese'},
+          {value:'sr_RS', text:'Serbian'},
+          {value:'es_ES', text:'Spanish'}
+        ];
         return (
           <Segment className='advancedSearch'>
                           <Header as="h3">Search for decks</Header>
@@ -89,13 +105,13 @@ class AttachSearchForm extends React.Component{
                             <Form.Group>
 
                               <Form.Field width="11" >
-                                <label htmlFor="SearchTerm"  className="sr-only">Search Term</label>
+                                <Label htmlFor="SearchTerm"  className="sr-only">Search Term</Label>
                                 <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)}/>
                               </Form.Field>
                               <Form.Field>
-                               <label htmlFor="field" className="sr-only">Search field</label>
+                               <Label htmlFor="field" className="sr-only">Search field</Label>
                                <select name='field' id='field' multiple='' className='ui fluid search dropdown' ref='field'>
-                                 <option value=' '>Select Search field</option>
+                                 <option value=''>Select Search field</option>
                                  <option value='title'>Title</option>
                                  <option value='description'>Description</option>
                                  <option value='content'>Content</option>
@@ -104,13 +120,13 @@ class AttachSearchForm extends React.Component{
                               </Form.Field>
                             </Form.Group>
                             <Form.Group widths="equal" >
-                              <div className="field">
-                                <label htmlFor="users_input_field"  className="sr-only">User</label>
-                                <UsersInput ref='user' placeholder='Select Users' />
-                              </div>
-
                               <Form.Field>
-                              <label htmlFor="language" className="sr-only">Language</label>
+                                <Label htmlFor="users_input_field"  className="sr-only">User</Label>
+                                <UsersInput ref='user' placeholder='Select Users' />
+                              </Form.Field>
+                              {/*
+                              <Form.Field>
+                              <Label htmlFor="language" className="sr-only">Language</Label>
                               <select name='language' multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                 <option value=' '>Select Language</option>
                                 <option value='en_GB'>English</option>
@@ -122,10 +138,15 @@ class AttachSearchForm extends React.Component{
                                 <option value='es_ES'>Spanish</option>
                               </select>
                               </Form.Field>
+                              */}
                               <Form.Field>
-                                <label htmlFor="license" className="sr-only">License</label>
+                               <Label htmlFor="language" className="sr-only">Language</Label>
+                               <Dropdown selection  placeholder='Select Language' name='language'  id='language' ref='language' options={languageOptions} defaultValue='' role="listbox"/>
+                              </Form.Field>
+                              <Form.Field>
+                                <Label htmlFor="license" className="sr-only">License</Label>
                                 <select name='license' id='license' multiple='' className='ui fluid search dropdown' ref='license'>
-                                <option value=' '>Select Licence</option>
+                                <option value=''>Select Licence</option>
                                 <option value='CC0'>CC0</option>
                                 <option value='CC BY'>CC BY</option>
                                 <option value='CC BY-SA'>CC BY-SA</option>

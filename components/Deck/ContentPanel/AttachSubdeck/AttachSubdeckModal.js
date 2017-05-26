@@ -79,7 +79,7 @@ class AttachSubdeckModal extends React.Component{
             username:this.props.UserProfileStore.username
         }};
         let payload2 ={params: {
-            limit: 5,
+            limit: 20,
             offset: 0
         }};
         this.context.executeAction(loadUserDecks, payload,null);
