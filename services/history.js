@@ -78,24 +78,18 @@ export default {
     update: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
-        let args = params.params ? params.params : params;
         if (resource === 'history.revert') {
-            let parentId = TreeUtil.getParentId(args.selector);
-            let requestBody = {
-                revision_id: String(args.revisionId)
-            };
-            if (parentId != null) {
-                requestBody.root_deck = parentId;
-            }
-            requestBody.top_root_deck = args.selector.id;
             rp.post({
-                uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],
-                body: JSON.stringify(requestBody),
-                headers: { '----jwt----': args.jwt }
+                uri: Microservices.deck.uri + '/' + params.selector.stype + '/revert/' + params.selector.sid.split('-')[0],
+                json: true,
+                body: {
+                    revision_id: String(params.revisionId),
+                    top_root_deck: params.selector.id
+                },
+                headers: { '----jwt----': params.jwt }
             }).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, res);
             }).catch((err) => {
-                console.log(err);
                 callback(err, {
                     error: err
                 });
