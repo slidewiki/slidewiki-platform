@@ -9,9 +9,12 @@ class AttachSearchForm extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            language : '',
-            keywords: '',
-            field:'',
+            language : encodeURIComponent(''),
+            keywords: encodeURIComponent(''),
+            field:encodeURIComponent(''),
+            license:encodeURIComponent(''),
+            user:encodeURIComponent(''),
+          //  sort:encodeURIComponent('')
 
         };
 
@@ -20,10 +23,13 @@ class AttachSearchForm extends React.Component{
 
 
     onSelect(searchstring){
-        this.setState({keywords: searchstring});
-        this.handleRedirect();
-    }
+        this.setState({
+            keywords: encodeURIComponent(searchstring.trim())
+        });
+        //this.handleRedirect(); //I remove this line because the user perhaps wants to select also other things...
 
+    }
+/*
     getEncodedParams(params){
         let queryparams = {
             keywords: (params && params.keywords)
@@ -63,21 +69,21 @@ class AttachSearchForm extends React.Component{
         return ((encodedParams) ? '&' : '')
                 + encodeURIComponent(key) + '=' + encodeURIComponent(value);
     }
-
-    handleRedirect(event, params){
+*/
+    handleRedirect(event){
 
         if(event){
             event.preventDefault();
         }
-
+        let queryparams = '';
 
         this.context.executeAction(loadSearchedDecks, {
             params: {
-                queryparams: this.getEncodedParams(params)
+                queryparams: queryparams
             }
         });
 
-        this.refs.keywords.blur();
+        this.keywords.blur();
 
         return false;
 
@@ -90,13 +96,45 @@ class AttachSearchForm extends React.Component{
         }
 
     }
-    handelLanguageChange(value){
+    handleKeyowrdsChange(){
+
         this.setState({
-            language:value
+            keywords:encodeURIComponent(this.keywordsInput.getSelected().trim())
         });
 
     }
+    handleUserChange(){
+        this.setState({
+            user:encodeURIComponent(this.user.getSelected().trim())
+        });
+    }
+    handleLanguageChange(value){
+        this.setState({
+            language:encodeURIComponent(value.trim())
+        });
+
+    }
+    handleLicenceChange(value){
+        this.setState({
+            license:encodeURIComponent(value.trim())
+        });
+
+    }
+    handleFieldChange(){
+        this.setState({
+            field:encodeURIComponent(value.trim())
+        });
+    }
     render(){
+        let fieldOptions =[
+        //  { value:'', text:'Select Search field'},
+          {value:'title' , text:'Title'},
+          {value:'description' , text:'Description'},
+          {value:'content' , text:'Content'},
+          {value:'speakernotes' , text:'Speakernotes'}
+
+        ];
+
         let languageOptions =[
           //{ value:'', text:'Select Language'},
           { value:'en_GB', text:'English' },
@@ -107,6 +145,14 @@ class AttachSearchForm extends React.Component{
           {value:'sr_RS', text:'Serbian'},
           {value:'es_ES', text:'Spanish'}
         ];
+
+        let licenseOptions = [
+        //  { value:'', text:'Select Licence' },
+          { value:'CC0', text:'CC0' },
+          { value:'CC BY', text:'CC BY' },
+          { value:'CC BY-SA', text:'CC BY-SA' }
+        ];
+
         return (
           <Segment className='advancedSearch'>
                           <Header as="h3">Search for decks</Header>
@@ -115,51 +161,25 @@ class AttachSearchForm extends React.Component{
 
                               <Form.Field width="11" >
                                 <Label htmlFor="SearchTerm"  className="sr-only">Search Term</Label>
-                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} />
+                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} onChange={this.handleKeyowrdsChange.bind(this)} />
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="field" className="sr-only">Search field</Label>
-                               <select name='field' id='field' multiple='' className='ui fluid search dropdown' ref='field'>
-                                 <option value=''>Select Search field</option>
-                                 <option value='title'>Title</option>
-                                 <option value='description'>Description</option>
-                                 <option value='content'>Content</option>
-                                 <option value='speakernotes'>Speakernotes</option>
-                               </select>
+                               <Dropdown selection name='field' id='field' ref={(field) => {this.field = field;}}  placeholder='Select Search field' options={fieldOptions} role="listbox"  onChange={(e, {value }) => {this.handeFieldChange(value);}}/>
                               </Form.Field>
                             </Form.Group>
                             <Form.Group widths="equal" >
                               <Form.Field>
                                 <Label htmlFor="users_input_field"  className="sr-only">User</Label>
-                                <UsersInput ref='user' placeholder='Select Users' />
+                                <UsersInput ref={(user) => {this.user=user;}} placeholder='Select Users' onChange={this.handleUserChange.bind(this)}/>
                               </Form.Field>
-                              {/*
-                              <Form.Field>
-                              <Label htmlFor="language" className="sr-only">Language</Label>
-                              <select name='language' multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-                                <option value=' '>Select Language</option>
-                                <option value='en_GB'>English</option>
-                                <option value='de_DE'>German</option>
-                                <option value='el_GR'>Greek</option>
-                                <option value='it_IT'>Italian</option>
-                                <option value='pt_PT'>Portuguese</option>
-                                <option value='sr_RS'>Serbian</option>
-                                <option value='es_ES'>Spanish</option>
-                              </select>
-                              </Form.Field>
-                              */}
                               <Form.Field>
                                <Label htmlFor="language" className="sr-only">Language</Label>
-                               <Dropdown selection  placeholder='Select Language' name='language'  id='language' ref='language' options={languageOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handelLanguageChange(value);}}/>
+                               <Dropdown selection  placeholder='Select Language' name='language'  id='language'  options={languageOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handleLanguageChange(value);}}/>
                               </Form.Field>
                               <Form.Field>
                                 <Label htmlFor="license" className="sr-only">License</Label>
-                                <select name='license' id='license' multiple='' className='ui fluid search dropdown' ref='license'>
-                                <option value=''>Select Licence</option>
-                                <option value='CC0'>CC0</option>
-                                <option value='CC BY'>CC BY</option>
-                                <option value='CC BY-SA'>CC BY-SA</option>
-                              </select>
+                                <Dropdown selection placeholder='Select Licence' name='license' id='license' ref={(license) => {this.license = license;}} options={licenseOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handleLicenceChange(value);}}/>
                               </Form.Field>
                             </Form.Group>
                             <Button  color="blue" icon tabIndex="0" role="button" type="submit" aria-label="Search for Decks"
