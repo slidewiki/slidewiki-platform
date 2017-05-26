@@ -51,14 +51,14 @@ class UserNotificationsItem extends React.Component {
                 break;
             case 'share':
                 const shareIconClass = allIconClass.concat(' slideshare');
+                const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 iconNotification = (<i className={shareIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
                         <a className="user" href={'/user/' + notification.user_id}>
                             {notification.author.username}
                         </a> {'shared ' + notification.content_kind + ' '}
-                        <a href={viewPath}>{notification.content_name}</a>{' on '}
-                        {notification.share_info.platform}
+                        <a href={viewPath}>{notification.content_name}</a> {onPlatform}
                         <br/>
                         {DateDiv}
                     </div>

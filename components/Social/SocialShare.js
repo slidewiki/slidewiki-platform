@@ -19,26 +19,30 @@ class SocialShare extends React.Component {
     }
 
     handleTwitterClick(){
-        createShareActivity('Twitter');
+        this.createShareActivity('Twitter');
     }
 
     handleFacebookClick(){
-        createShareActivity('Facebook');
+        this.createShareActivity('Facebook');
     }
 
     handleGooglePlusClick(){
-        createShareActivity('GooglePlus');
+        this.createShareActivity('GooglePlus');
     }
 
     handleLinkedinClick(){
-        createShareActivity('Linkedin');
+        this.createShareActivity('Linkedin');
     }
 
     createShareActivity(platform) {
+        let userId = String(this.props.userid);
+        if (userId === '') {
+            userId = '0';//Unknown - not logged in
+        }
         // Add new activity
         let activity = {
             activity_type: 'share',
-            user_id: String(this.props.userid),
+            user_id: userId,
             content_id: this.props.selector.sid,
             content_kind: this.props.selector.stype,
             share_info: {

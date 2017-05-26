@@ -98,13 +98,17 @@ class MailShareModal extends React.Component {
             this.handleClose();
 
             //Add share activity
+            let userId = String(this.props.userid);
+            if (userId === '') {
+                userId = '0';//Unknown - not logged in
+            }
             let activity = {
                 activity_type: 'share',
-                user_id: String(this.props.userid),
+                user_id: userId,
                 content_id: this.props.selector.sid,
                 content_kind: this.props.selector.stype,
                 share_info: {
-                    platform: 'Mail'
+                    platform: 'E-mail'
                 }
             };
             context.executeAction(addActivity, {activity: activity});

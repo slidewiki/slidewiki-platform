@@ -72,12 +72,12 @@ class ActivityItem extends React.Component {
                 break;
             case 'share':
                 IconNode = (<i className="ui big slideshare icon"></i>);
+                const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'shared '} {nodeRef} {' on '}
-                        {node.share_info.platform}
+                        </a> {'shared '} {nodeRef} {onPlatform}
                         <br/>
                         {DateDiv}
                     </div>
