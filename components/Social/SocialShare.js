@@ -103,7 +103,7 @@ class SocialShare extends React.Component {
                     </div>
                     <div className="item" data-value="GooglePlus" role="menuitem" aria-label="GooglePlus" data-tooltip="Google Plus" tabIndex="0" onClick={this.handleGooglePlusClick.bind(this)}>
                         <GooglePlusShareButton
-                            url='http://localhost:3000/deck/1602-1/slide/11974-1/11974-1:1/view'
+                            url={shareUrl}
                             content={shareMessage}
                             className="Demo__some-network__share-button">
                             <GooglePlusIcon
