@@ -8,6 +8,12 @@ import UsersInput from '../../../Search/AutocompleteComponents/UsersInput';
 class AttachSearchForm extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            language : '',
+            keywords: '',
+            field:'',
+
+        };
 
 
     }
@@ -26,7 +32,7 @@ class AttachSearchForm extends React.Component{
             field: this.refs.field.value.trim(),
             kind: 'deck',
             //language: this.refs.language.value.trim(),
-            language: this.refs.language.value,
+            language: this.state.language.trim(),
             license: this.refs.license.value.trim(),
             user: this.refs.user.getSelected().split(','),
                 // tag: this.refs.tag.value.trim(),
@@ -50,12 +56,9 @@ class AttachSearchForm extends React.Component{
     encodeParam(encodedParams, key, value){
         console.log('encodeParams');
         console.log(value);
-/*
+
         if(value.trim() === '')
             return '';
-*/
-        if(value === '')
-                return '';
 
         return ((encodedParams) ? '&' : '')
                 + encodeURIComponent(key) + '=' + encodeURIComponent(value);
@@ -87,9 +90,15 @@ class AttachSearchForm extends React.Component{
         }
 
     }
+    handelLanguageChange(value){
+        this.setState({
+            language:value
+        });
+
+    }
     render(){
         let languageOptions =[
-          { value:'', text:'Select Language'},
+          //{ value:'', text:'Select Language'},
           { value:'en_GB', text:'English' },
           {value:'de_DE', text: 'German' },
           { value:'el_GR', text:'Greek'},
@@ -106,7 +115,7 @@ class AttachSearchForm extends React.Component{
 
                               <Form.Field width="11" >
                                 <Label htmlFor="SearchTerm"  className="sr-only">Search Term</Label>
-                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)}/>
+                                <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} />
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="field" className="sr-only">Search field</Label>
@@ -141,7 +150,7 @@ class AttachSearchForm extends React.Component{
                               */}
                               <Form.Field>
                                <Label htmlFor="language" className="sr-only">Language</Label>
-                               <Dropdown selection  placeholder='Select Language' name='language'  id='language' ref='language' options={languageOptions} defaultValue='' role="listbox"/>
+                               <Dropdown selection  placeholder='Select Language' name='language'  id='language' ref='language' options={languageOptions} defaultValue='' role="listbox"  onChange={(e, { value }) => {this.handelLanguageChange(value);}}/>
                               </Form.Field>
                               <Form.Field>
                                 <Label htmlFor="license" className="sr-only">License</Label>

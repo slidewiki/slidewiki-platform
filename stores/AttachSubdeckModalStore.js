@@ -81,10 +81,10 @@ class AttachSubdeckModalStore extends BaseStore{
     updateSearchDecks(payload){
         if((payload.docs===[])||(typeof payload.docs === 'undefined')){
             this.searchDecks =[];
-            this.showSearchResults = true;
+            this.showSearchResults = true;          
 
         }else{
-          
+
             let searchDecks = payload.docs.map((deck) => {
 
                 return({
