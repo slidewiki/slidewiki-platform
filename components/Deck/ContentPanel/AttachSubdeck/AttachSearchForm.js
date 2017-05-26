@@ -15,80 +15,57 @@ class AttachSearchForm extends React.Component{
             license:encodeURIComponent(''),
             user:encodeURIComponent(''),
           //  sort:encodeURIComponent('')
-
         };
 
 
     }
 
-
+    // this is used when an autocomplete suggestion is pressed
     onSelect(searchstring){
         this.setState({
             keywords: encodeURIComponent(searchstring.trim())
         });
-        //this.handleRedirect(); //I remove this line because the user perhaps wants to select also other things...
-
+        this.handleRedirect();
     }
-/*
-    getEncodedParams(params){
-        let queryparams = {
-            keywords: (params && params.keywords)
-                            ? params.keywords       // if keywords are set from redirection
-                            : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
-            field: this.refs.field.value.trim(),
-            kind: 'deck',
-            //language: this.refs.language.value.trim(),
-            language: this.state.language.trim(),
-            license: this.refs.license.value.trim(),
-            user: this.refs.user.getSelected().split(','),
-                // tag: this.refs.tag.value.trim(),
-            sort: (params && params.sort) ? params.sort : ''
-        };
 
-            // encode params
-        let encodedParams = '';
-        for(let key in queryparams){
-            if(queryparams[key] instanceof Array){
-                for(let el in queryparams[key]){
-                    encodedParams += this.encodeParam(encodedParams, key, queryparams[key][el]);
-                }
-            }else{
-                encodedParams += this.encodeParam(encodedParams, key, queryparams[key]);
-            }
-        }
-
-        return encodedParams;
-    }
-    encodeParam(encodedParams, key, value){
-        console.log('encodeParams');
-        console.log(value);
-
-        if(value.trim() === '')
-            return '';
-
-        return ((encodedParams) ? '&' : '')
-                + encodeURIComponent(key) + '=' + encodeURIComponent(value);
-    }
-*/
     handleRedirect(event){
 
         if(event){
             event.preventDefault();
         }
-        let queryparams = '';
 
+        // form the query parameters to send to service
+        let queryparams = 'keywords=' + ((this.state.keywords) ? this.state.keywords : '*:*');
+        if(this.state.field)
+            queryparams += `&field=${this.state.field}`;
+
+        if(this.state.language)
+            queryparams += `&language=${this.state.language}`;
+
+        if(this.state.license)
+            queryparams += `&license=${this.state.license}`;
+
+        queryparams += '&kind=deck';        // always request decks here
+
+        let users = this.refs.user.getSelected();
+        if(users){
+            users = users.split(',');
+            for(let i in users){
+                queryparams += `&user=${users[i]}`;
+            }
+        }
+
+        // console.log(queryparams);
         this.context.executeAction(loadSearchedDecks, {
             params: {
                 queryparams: queryparams
             }
         });
 
-        this.keywords.blur();
+        this.keywordsInput.blur();
 
         return false;
-
     }
-
     handleKeyPress(event){
 
         if(event.key === 'Enter'){
@@ -96,16 +73,9 @@ class AttachSearchForm extends React.Component{
         }
 
     }
-    handleKeyowrdsChange(){
-
+    handleKeywordsChange(){
         this.setState({
             keywords:encodeURIComponent(this.keywordsInput.getSelected().trim())
-        });
-
-    }
-    handleUserChange(){
-        this.setState({
-            user:encodeURIComponent(this.user.getSelected().trim())
         });
     }
     handleLanguageChange(value){
@@ -120,7 +90,7 @@ class AttachSearchForm extends React.Component{
         });
 
     }
-    handleFieldChange(){
+    handleFieldChange(value){
         this.setState({
             field:encodeURIComponent(value.trim())
         });
@@ -161,17 +131,17 @@ class AttachSearchForm extends React.Component{
 
                               <Form.Field width="11" >
                                 <Label htmlFor="SearchTerm"  className="sr-only">Search Term</Label>
-                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} onChange={this.handleKeyowrdsChange.bind(this)} />
+                                <KeywordsInput ref={(keywords) => {this.keywordsInput = keywords; }} onSelect={this.onSelect.bind(this)} placeholder='Type your keywords here' onKeyPress={this.handleKeyPress.bind(this)} onChange={this.handleKeywordsChange.bind(this)} />
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="field" className="sr-only">Search field</Label>
-                               <Dropdown selection name='field' id='field' ref={(field) => {this.field = field;}}  placeholder='Select Search field' options={fieldOptions} role="listbox"  onChange={(e, {value }) => {this.handeFieldChange(value);}}/>
+                               <Dropdown selection name='field' id='field' ref={(field) => {this.field = field;}}  placeholder='Select Search field' options={fieldOptions} role="listbox"  onChange={(e, {value }) => {this.handleFieldChange(value);}}/>
                               </Form.Field>
                             </Form.Group>
                             <Form.Group widths="equal" >
                               <Form.Field>
                                 <Label htmlFor="users_input_field"  className="sr-only">User</Label>
-                                <UsersInput ref={(user) => {this.user=user;}} placeholder='Select Users' onChange={this.handleUserChange.bind(this)}/>
+                                <UsersInput ref='user' placeholder='Select Users'/>
                               </Form.Field>
                               <Form.Field>
                                <Label htmlFor="language" className="sr-only">Language</Label>

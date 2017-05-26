@@ -81,7 +81,7 @@ class AttachSubdeckModalStore extends BaseStore{
     updateSearchDecks(payload){
         if((payload.docs===[])||(typeof payload.docs === 'undefined')){
             this.searchDecks =[];
-            this.showSearchResults = true;          
+            this.showSearchResults = true;
 
         }else{
 
@@ -102,7 +102,7 @@ class AttachSubdeckModalStore extends BaseStore{
                 });
             });//map
 
-            Object.assign(this.searchDecks, searchDecks);
+            this.searchDecks = searchDecks;
             this.showSearchResults = true;
         }
         this.emitChange();
