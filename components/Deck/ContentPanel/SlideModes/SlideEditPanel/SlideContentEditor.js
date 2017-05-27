@@ -39,7 +39,7 @@ class SlideContentEditor extends React.Component {
         }
         this.refs.template;
         this.showTemplates = false;
-
+        this.revealStyle = require('../../../../../custom_modules/reveal.js/css/reveal.css');
 
     }
 
@@ -80,7 +80,7 @@ class SlideContentEditor extends React.Component {
         switch (template) {
             case '1':
                 //TODO replace with this.refs.inlineContent.innerHTML + cases below
-                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="position: relative; width: 960px; height: 720px;"><div class="bodySlide">'+
+                CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="position: relative; width: 960px; height: 720px;"><div class="bodySlide ' + this.revealStyle.bodySlide + '">'+
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
                     '<h3>Title</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
@@ -108,7 +108,7 @@ class SlideContentEditor extends React.Component {
                 break;
             case '11':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div class="bodySlide">' +
+                    '<div class="bodySlide ' + this.revealStyle.bodySlide + '">' +
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
                     '<p>Row 1 - Column 1</p></div>'+
@@ -119,7 +119,7 @@ class SlideContentEditor extends React.Component {
                 break;
             case '12':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div class="bodySlide">' +
+                    '<div class="bodySlide ' + this.revealStyle.bodySlide + '">' +
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
                     '<p>Row 1 - Column&nbsp;1</p>'+
@@ -134,7 +134,7 @@ class SlideContentEditor extends React.Component {
                 break;
             case '22':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div class="bodySlide">' +
+                    '<div class="bodySlide ' + this.revealStyle.bodySlide + '">' +
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
                     '<p>Row 2 - Column&nbsp;1</p>'+
@@ -152,7 +152,7 @@ class SlideContentEditor extends React.Component {
                 break;
             case '21':
                 CKEDITOR.instances.inlineContent.setData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div class="bodySlide">' +
+                    '<div class="bodySlide ' + this.revealStyle.bodySlide + '">' +
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
                     '<p>Row 2 - Column 1</p>'+
@@ -167,7 +167,7 @@ class SlideContentEditor extends React.Component {
                 break;
             case '11img':
                 this.changeCKeditorData('<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div class="bodySlide">' +
+                    '<div class="bodySlide ' + this.revealStyle.bodySlide + '">' +
                     '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
                     '<p>Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
@@ -181,12 +181,15 @@ class SlideContentEditor extends React.Component {
             case 'title':
                 this.changeCKeditorData(
                   '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
-                  ' <div class="titlePage">' +
+                  ' <div class="titleSlide ' + this.revealStyle.titleSlide + '">' +
                   '   <div class="titlePageHeading"><h3>Title</h3></div>' +
                   '   <div class="titlePageSubHeading"><h4>Subtitle</h4></div>' +
                   ' </div>' +
                   '</div>'
                 );
+                this.inputBoxButtonTitle = 'Add input box';
+                this.emitChange();
+                break;
         }
         this.forceUpdate();
     }
@@ -611,6 +614,7 @@ class SlideContentEditor extends React.Component {
                     */
 
         // Add the CSS dependency for the theme
+
         // Get the theme information, and download the stylesheet
         let styleName = 'default';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
