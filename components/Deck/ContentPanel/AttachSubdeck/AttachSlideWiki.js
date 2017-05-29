@@ -40,7 +40,7 @@ class AttachSlideWiki extends React.Component{
             username: this.props.UserProfileStore.username
 
         };
-        if(this.state.recentDecks ===[]){
+        if(this.state.recentDecks.length === 0){
             slideWikiContent = <Segment id="panelMyDecksContent">
                               <Dimmer active inverted>
                                   <Loader inverted>Loading</Loader>
@@ -63,7 +63,7 @@ class AttachSlideWiki extends React.Component{
                                 <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
                                 <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
                               </Segment>;
-          
+
         }
 
 

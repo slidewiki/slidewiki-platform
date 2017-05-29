@@ -11,6 +11,8 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckId =-1;
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
+        this.selectedSlides = [];
+        this.deckSlides =[1,2];
     }
 
     getState(){
@@ -21,7 +23,9 @@ class AttachSubdeckModalStore extends BaseStore{
             selectedDeckTitle: this.selectedDeckTitle,
             selectedDeckId: this.selectedDeckId,
             showSearchResults: this.showSearchResults,
-            activeItem: this.activeItem
+            activeItem: this.activeItem,
+            selectedSlides:this.selectedSlides,
+            deckSlides: this.deckSlides
 
         };
     }
@@ -36,6 +40,8 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckId = state.selectedDeckId;
         this.showSearchResults = state.showSearchResults;
         this.activeItem = state.activeItem;
+        this.selectedSlides = state.selectedSlides;
+        this.deckSlides = state.deckSlides;
     }
 
     updateUserDecks(payload){
@@ -116,6 +122,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
+        this.selectedSlides = [];
 
         this.emitChange();
     }

@@ -34,7 +34,7 @@ class AttachMyDecks extends React.Component{
         };
 
         let myDecksContent;
-        if(this.state.userDecks ===[]){
+        if(this.state.userDecks.length === 0){
             myDecksContent = <Segment id="panelMyDecksContent">
                                 <Dimmer active inverted>
                                   <Loader inverted>Loading</Loader>
