@@ -11,6 +11,7 @@ import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDec
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
+import addActivity from '../../../../actions/activityfeed/addActivity';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import UserProfileStore from '../../../../stores/UserProfileStore';
@@ -65,7 +66,7 @@ class ContentActionsFooter extends React.Component {
             e.preventDefault();
             window.open(this.getExportHref('PDF'));
         }
-
+        this.createDownloadActivity();
     }
 
     getExportHref(type){
@@ -77,6 +78,7 @@ class ContentActionsFooter extends React.Component {
             //console.log(this.props.ContentStore.selector.id);
             let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
             let pdfHref = Microservices.pdf.uri + '/export' + type + '/' + splittedId[0];
+
             return pdfHref;
         }
         else
@@ -92,7 +94,23 @@ class ContentActionsFooter extends React.Component {
             e.preventDefault();
             window.open(this.getExportHref('EPub'));
         }
+        this.createDownloadActivity();
+    }
 
+    createDownloadActivity() {
+        //create new activity
+        let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
+        let userId = String(this.props.UserProfileStore.userid);
+        if (userId === '') {
+            userId = '0';//Unknown - not logged in
+        }
+        let activity = {
+            activity_type: 'download',
+            user_id: userId,
+            content_id: splittedId[0],
+            content_kind: 'deck'
+        };
+        this.context.executeAction(addActivity, {activity: activity});
     }
 
     handleLikeClick(e){
