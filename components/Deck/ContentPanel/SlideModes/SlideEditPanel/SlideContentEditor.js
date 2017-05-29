@@ -1018,26 +1018,29 @@ class SlideContentEditor extends React.Component {
         }
     }
     resize() {
-        let containerwidth = document.getElementById('container').offsetWidth;
-        let containerheight = document.getElementById('container').offsetHeight;
-        //reset scaling of pptx2html element to get original size
-        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-        //Function to fit contents in edit and view component
-        let pptxwidth = $('.pptx2html').width();
-        let pptxheight = $('.pptx2html').height();
-        //TODO - change to get right!
-        //this.scaleratio = containerwidth / (pptxwidth+50);
-        this.scaleratio = containerwidth / (pptxwidth+120);
-        $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-        $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
-        //$('.pptx2html').animate({
-        //    transform: 'scale(2)'
-        //});
-        console.log('scale with ratio: ' + this.scaleratio);
+        if($('.pptx2html').length)
+        {
+            let containerwidth = document.getElementById('container').offsetWidth;
+            let containerheight = document.getElementById('container').offsetHeight;
+            //reset scaling of pptx2html element to get original size
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            //Function to fit contents in edit and view component
+            let pptxwidth = $('.pptx2html').width();
+            let pptxheight = $('.pptx2html').height();
+            //TODO - change to get right!
+            //this.scaleratio = containerwidth / (pptxwidth+50);
+            this.scaleratio = containerwidth / (pptxwidth+120);
+            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            //$('.pptx2html').animate({
+            //    transform: 'scale(2)'
+            //});
+            console.log('scale with ratio: ' + this.scaleratio);
 
-        //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-        this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-        this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
+            this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
+            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+        }
     }
     componentWillUnmount() {
         // Remove the warning window.
