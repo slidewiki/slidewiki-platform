@@ -62,7 +62,7 @@ class ImportStore extends BaseStore {
     }
 
     storeFile(payload) {
-        console.log('ImportStore: storeFile()', payload);
+        // console.log('ImportStore: storeFile()', payload);
         this.file = payload.file;
         this.base64 = payload.base64;
         this.filename = this.file.name;
@@ -83,10 +83,10 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadSuccess(headers) {
-        console.log('ImportStore: uploadSuccess()', headers);
+        // console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         // this.uploadProgress = 100;
-        this.uploadProgress = 33;
+        this.uploadProgress = 65;
         this.deckId = headers.deckid;
         this.totalNoOfSlides = parseInt(headers.noofslides);
 
@@ -97,7 +97,7 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadStarted() {
-        console.log('ImportStore: uploadStarted()');
+        // console.log('ImportStore: uploadStarted()');
         this.uploadProgress = 10;
         this.error = null;
         this.noOfSlides = 0;
@@ -106,7 +106,7 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadMoreProgress(progress) {
-        console.log('ImportStore: uploadMoreProgress()', progress);
+        // console.log('ImportStore: uploadMoreProgress()', progress);
         if (this.uploadProgress === 100)
             return;
 
