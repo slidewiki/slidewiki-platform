@@ -13,7 +13,6 @@ import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterSt
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
-import addActivity from '../../../../actions/activityfeed/addActivity';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
 
