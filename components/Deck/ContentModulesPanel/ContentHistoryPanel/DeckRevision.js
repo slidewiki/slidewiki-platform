@@ -56,7 +56,7 @@ class DeckRevision extends React.Component {
                         {revision.latest ? '' :
                         <Button.Group basic size='tiny' floated='right'>
                             <Button aria-label='Compare to current deck' icon='exchange' disabled/>
-                            <Button aria-label='Restore deck' icon='history' disabled={!canEdit}/>
+                            <Button aria-label='Restore deck' icon='history' disabled={!canEdit} onClick={this.handleRevertClick.bind(this)}/>
                             <Button aria-label='View deck in new tab' icon onClick={this.handleViewRevisionClick.bind(this)}>
                                 <Icon.Group>
                                     <Icon name='unhide'/>

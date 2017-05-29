@@ -7,19 +7,35 @@ class DeckRevisionChanges extends React.Component {
 
     render() {
         const changes = this.props.changes ? this.props.changes.map((change, index) => {
-            let opVerb, opObj;
-            switch (change.op) {
+            let actionVerb, actionObj;
+            switch (change.action) {
                 case 'add':
-                    opVerb = 'added';
-                    opObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                    actionVerb = 'added';
+                    actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
                     break;
-                case 'replace':
-                    opVerb = 'updated';
-                    opObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '"';
+                case 'revise':
+                    actionVerb = 'created a new version of';
+                    actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '"';
+                    break;
+                case 'rename':
+                    actionVerb = 'renamed';
+                    actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '"';
+                    break;
+                case 'revert':
+                    actionVerb = 'restored';
+                    actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '" to an earlier version';
+                    break;
+                case 'remove':
+                    actionVerb = 'removed';
+                    actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                    break;
+                case 'move':
+                    actionVerb = 'moved';
+                    actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
                     break;
                 default:
-                    opVerb = 'updated';
-                    opObj = 'the deck';
+                    actionVerb = 'updated';
+                    actionObj = 'the deck';
             }
 
             return (
@@ -30,7 +46,7 @@ class DeckRevisionChanges extends React.Component {
                 <Feed.Content>
                     <Feed.Date>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</Feed.Date>
                     <Feed.Summary>
-                        <NavLink className="user" href={'/user/' + change.username}> {change.username}</NavLink> {opVerb + ' ' + opObj}
+                        <NavLink className="user" href={'/user/' + change.username}> {change.username}</NavLink> {actionVerb + ' ' + actionObj}
                     </Feed.Summary>
                 </Feed.Content>
             </Feed.Event>
