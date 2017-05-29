@@ -1,6 +1,7 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 import serviceUnavailable from '../error/serviceUnavailable';
 import {navigateAction} from 'fluxible-router';
+import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
 
 export default function saveTreeNode(context, payload, done) {
@@ -34,6 +35,15 @@ export default function saveTreeNode(context, payload, done) {
                 context.executeAction(navigateAction, {
                     url: newURL
                 });
+
+                //create new activity
+                let activity = {
+                    activity_type: 'edit',
+                    user_id: String(userid),
+                    content_id: String(newSid),
+                    content_kind: payload.selector.stype
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
             done();
         });
