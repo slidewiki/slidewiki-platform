@@ -1,5 +1,6 @@
 import {shortTitle} from '../../configs/general';
 import loadDeckRevisions from './loadDeckRevisions';
+import loadSlideChanges from './loadSlideChanges';
 import deckContentTypeError from '../error/deckContentTypeError';
 import slideIdTypeError from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';
@@ -24,7 +25,11 @@ export default function loadContentHistory(context, payload, done) {
 
     async.parallel([
         (callback) => {
-            context.executeAction(loadDeckRevisions, {deckId: payload.params.sid.split('-')[0]}, callback);
+            if (payload.params.stype === 'deck'){
+                context.executeAction(loadDeckRevisions, {deckId: payload.params.sid.split('-')[0]}, callback);
+            } else {
+                context.executeAction(loadSlideChanges, {slideId: payload.params.sid.split('-')[0], deckId: payload.params.id.split('-')[0]}, callback);
+            }
         }],
     // final callback
     (err, results) => {

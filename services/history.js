@@ -14,7 +14,7 @@ export default {
         if (resource === 'history.changes') {
             let changes;
             let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes'}) :
-                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId.split('-')[0] + '/changes', qs:{root: args.deckId.split('-')[0]}});
+                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes', qs:{root: args.deckId}});
             changesPromise.then((res) => {
                 changes = JSON.parse(res);
                 //find unique user ids in change log

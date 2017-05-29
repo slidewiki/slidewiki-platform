@@ -1,5 +1,7 @@
 import React from 'react';
 import DeckHistoryPanel from './DeckHistoryPanel';
+import SlideHistoryPanel from './SlideHistoryPanel';
+
 
 class ContentHistoryPanel extends React.Component {
     render() {
@@ -9,7 +11,7 @@ class ContentHistoryPanel extends React.Component {
                 targetComponent = <DeckHistoryPanel  selector={this.props.selector} />;
                 break;
             case 'slide':
-                targetComponent = <div></div>;
+                targetComponent = <SlideHistoryPanel  selector={this.props.selector} />;
                 break;
         }
         return (
