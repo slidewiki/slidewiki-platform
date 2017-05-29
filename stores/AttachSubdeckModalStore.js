@@ -39,8 +39,8 @@ class AttachSubdeckModalStore extends BaseStore{
     }
 
     updateUserDecks(payload){
-
-        Object.assign(this.userDecks, payload);
+        this.userDecks = payload;
+        //Object.assign(this.userDecks, payload);
         this.emitChange();
     }
 
@@ -73,7 +73,8 @@ class AttachSubdeckModalStore extends BaseStore{
                 });
 
             }); //map
-            Object.assign(this.recentDecks, recentDecks);
+            this.recentDecks = recentDecks;
+            //Object.assign(this.recentDecks, recentDecks);
         }
         this.emitChange();
     }
