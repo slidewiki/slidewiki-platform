@@ -18,6 +18,7 @@ class UserNotificationsStore extends BaseStore {
             {type:'translate', selected: true},
             {type:'share', selected: true},
             {type:'use', selected: true},
+            {type:'fork', selected: true}
         ];
     }
     loadNotifications(payload) {

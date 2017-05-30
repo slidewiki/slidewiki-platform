@@ -36,48 +36,8 @@ class ActivityList extends React.Component {
         this.loading = false;
     }
     render() {
-        ////////////////////////////////////////////////////////
-        //legacy code (commented below), can be removed probably
-        ////////////////////////////////////////////////////////
-
-        //let rows = [];
-        //let currentRow = [];
-        //this.props.ActivityFeedStore.activities.forEach((item) => {
-        //    if (currentRow.length % 3 === 0 && currentRow.length > 0) {
-        //        rows.push((
-        //            <div className="row" key={rows.length}>
-        //                {currentRow}
-        //            </div>
-        //        ));
-        //        currentRow = [];
-        //    }
-        //    currentRow.push((
-        //        <div className="ui column" key={currentRow.length}>
-        //            <ActivityItem activity={item} />
-        //        </div>
-        //    ));
-        //});
-        //if (currentRow.length > 0) {
-        //    rows.push((
-        //        <div className="row" key={rows.length}>
-        //            {currentRow}
-        //        </div>
-        //    ));
-        //}
-        //let list = this.props.ActivityFeedStore.activities.map((node, index) => {
-        //    return (
-        //        <div className="ui item" key={index} style={{ margin: '1em 0'}}>
-        //            <ActivityItem activity={node} />
-        //        </div>
-        //    );
-        //});
-
-        const listStyles = {
-            maxHeight: '400px',
-            overflowY: 'auto'
-        };
         return (
-            <div ref="activityList" style={listStyles}>
+            <div ref="activityList">
                 {(this.props.ActivityFeedStore.activities.length === 0)
                 ?
                 <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
@@ -85,7 +45,7 @@ class ActivityList extends React.Component {
                 <ReactList ref="infiniteList" className="ui list"
                     itemRenderer={this.renderItem.bind(this)}
                     length={this.props.ActivityFeedStore.activities.length}
-                    type={'variable'}>
+                    type={'simple'}>
                 </ReactList>
               }
             </div>
