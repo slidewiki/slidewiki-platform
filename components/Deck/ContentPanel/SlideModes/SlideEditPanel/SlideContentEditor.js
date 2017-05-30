@@ -347,6 +347,7 @@ class SlideContentEditor extends React.Component {
         const userId = this.props.UserProfileStore.userid;
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
 
+        //TODO: takes some time before font-size and other drop-downs work... or immediately when clicking in inline input
         CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){
         CKEDITOR.inline('inlineSpeakerNotes', {
@@ -400,6 +401,7 @@ class SlideContentEditor extends React.Component {
             //console.log('inlineConent CKeditor ready' + CKEDITOR.instances.inlineContent);
             //if (!CKEDITOR.instances.inlineContent)
 
+            /*
             if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
             {
                 //CKEDITOR.instances.inlineContent.destroy();
@@ -410,6 +412,7 @@ class SlideContentEditor extends React.Component {
                     uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
 
             }
+            */
 
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
@@ -427,7 +430,7 @@ class SlideContentEditor extends React.Component {
             }
         });
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-        //$('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
+        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
         ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
