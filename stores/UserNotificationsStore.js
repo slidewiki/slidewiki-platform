@@ -8,16 +8,15 @@ class UserNotificationsStore extends BaseStore {
         this.subscriptions = [];
         this.activityTypes = [
             {type:'add', selected: true},
-            {type:'comment', selected: true},
-            {type:'download', selected: true},
             {type:'edit', selected: true},
-            {type:'rate', selected: true},
-            {type:'react', selected: true},
+            {type:'comment', selected: true},
             {type:'reply', selected: true},
+            {type:'download', selected: true},
             {type:'share', selected: true},
-            {type:'translate', selected: true},
-            {type:'share', selected: true},
-            {type:'use', selected: true},
+            {type:'react', selected: true},
+            // {type:'rate', selected: true},
+            // {type:'translate', selected: true},
+            // {type:'use', selected: true},
             {type:'fork', selected: true}
         ];
     }
