@@ -227,14 +227,6 @@ class SlideContentEditor extends React.Component {
             .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
             //reset scaling of pptx2html element to get original size
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            //SWIK 107 - remove input box edit buttons
-            /*$('.dragdiv').remove();
-            $('.removediv').remove();
-            $('.resizediv').remove();
-            $('.movetofrontdiv').remove();
-            $('.sendtobackdiv').remove();
-            */
-            //$('.pptx2html > [style*="absolute"]').removeClass('editMode');
             this.removeEditMode();
             this.contextMenuAllRemove();
             this.disableResizeDrag();
@@ -353,37 +345,26 @@ class SlideContentEditor extends React.Component {
 
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
-
-        //TODO/bug? = inline-toolbar does not resize properly when zooming in browser. Does work in example on CKeditor website..
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
-        //TODO: refresh of edit pages resets the toolbar configuration to default - needs fix
 
         CKEDITOR.disableAutoInline = true;
-        //CKEDITOR.disableAutoInline = false;
-        //if (typeof(CKEDITOR.instances.title) === 'undefined'){CKEDITOR.instances.title.destroy();}
-        //TODO - remove more buttons speakernotes
-        if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){CKEDITOR.inline('inlineSpeakerNotes', {
-            customConfig: '/assets/ckeditor_config.js',
+        //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){
+        CKEDITOR.inline('inlineSpeakerNotes', {
+            customConfig: '/assets/ckeditor_config_basic.js',
             toolbarGroups: [
-		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-		{ name: 'forms', groups: [ 'forms' ] },
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'links', groups: [ 'links' ] },
-		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-		{ name: 'insert', groups: [ 'insert' ] },
-		{ name: 'colors', groups: [ 'colors' ] },
-		{ name: 'clipboard', groups: [ 'undo', 'clipboard' ] },
-		{ name: 'styles', groups: [ 'styles' ] },
-		{ name: 'tools', groups: [ 'tools' ] },
-		{ name: 'others', groups: [ 'others' ] },
-		{ name: 'about', groups: [ 'about' ] }
+                //needed for Chrome initialization
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'styles', items: [ 'FontSize' ] },
+                { name: 'insert', items: [ 'Image'] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter'] },
             ],
-            floatSpacePreferRight: true,
-            uiColor: '#4183C4',
-            removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
-            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId
-        });}
+            //floatSpacePreferRight: true,
+            //uiColor: '#4183C4',
+            //removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
+        });
+        //}
         //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
             //const userId = this.props.UserProfileStore.userid;
             // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
@@ -394,10 +375,17 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.replace('inlineContent', {
             //customConfig: '/assets/ckeditor_config.js',
             customConfig: '/assets/ckeditor_config_basic.js',
+            toolbarGroups: [
+                //needed for Chrome initialization
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+                { name: 'styles', items: [ 'FontSize' ] },
+                { name: 'insert', items: [ 'Image'] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter'] },
+            ],
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
-            uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
-        //}
-        this.currentcontent = this.props.content;
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
+        }); //leave all buttons
+        //this.currentcontent = this.props.content;
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             this.resize();
@@ -411,9 +399,10 @@ class SlideContentEditor extends React.Component {
             //CKEDITOR.instances.inlineContent.on('change', function(){console.log('change');});
             //console.log('inlineConent CKeditor ready' + CKEDITOR.instances.inlineContent);
             //if (!CKEDITOR.instances.inlineContent)
+
             if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
             {
-                CKEDITOR.instances.inlineContent.destroy();
+                //CKEDITOR.instances.inlineContent.destroy();
                 CKEDITOR.inline('inlineContent', {
                     //customConfig: '/assets/ckeditor_config.js',
                     customConfig: '/assets/ckeditor_config_basic.js',
@@ -421,6 +410,7 @@ class SlideContentEditor extends React.Component {
                     uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
 
             }
+
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
                 this.forceUpdate();
@@ -437,7 +427,7 @@ class SlideContentEditor extends React.Component {
             }
         });
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
-        $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
+        //$('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
 
         ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
@@ -572,7 +562,7 @@ class SlideContentEditor extends React.Component {
                             //slideEditorContext.refs.inlineContent.contentEditable = false;
                             //CKEDITOR.instances.inlineContent.hide();
                         }
-                        $(this).focus();
+                        //$(this).focus();
                     }
                     break;
                 default:
