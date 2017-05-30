@@ -7,7 +7,7 @@ class DeckRevisionChanges extends React.Component {
     render() {
         const changes = this.props.changes ? this.props.changes.map((change, index) => {
             return (
-            <ContentChangeItem change={change} key={index}/>
+            <ContentChangeItem selector={this.props.selector} permissions={this.props.permissions} type='deck' change={change} key={index}/>
             );
         }) : '';
 

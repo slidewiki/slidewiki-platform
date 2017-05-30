@@ -11,7 +11,7 @@ class SlideHistoryPanel extends React.Component {
     render() {
         const changes = this.props.SlideHistoryStore.changes ? this.props.SlideHistoryStore.changes.map((change, index) => {
             return (
-            <ContentChangeItem change={change} key={index}/>
+            <ContentChangeItem selector={this.props.selector} permissions={this.props.PermissionsStore.permissions} change={change} key={index}/>
             );
         }) : '';
 

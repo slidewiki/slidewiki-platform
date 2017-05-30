@@ -65,7 +65,7 @@ class DeckRevision extends React.Component {
                             </Button>
                         </Button.Group>}
                     </Header>
-                    <DeckRevisionChanges changes={this.props.changes}/>
+                    <DeckRevisionChanges selector={this.props.selector} permissions={this.props.permissions} changes={this.props.changes}/>
                 </Segment>
             </Accordion.Content>
         </div>

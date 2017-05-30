@@ -1,13 +1,22 @@
 import React from 'react';
-import {Feed, Icon} from 'semantic-ui-react';
+import {Feed, Icon, Button} from 'semantic-ui-react';
 import moment from 'moment';
+import revertRevision from '../../../../actions/history/revertRevision';
 import {NavLink} from 'fluxible-router';
 
 class ContentChangeItem extends React.Component {
 
+    handleRevertClick() {
+        this.context.executeAction(revertRevision, {
+            selector: this.props.selector, revisionId: this.props.change.value.ref.revision
+        });
+    }
+
     render() {
         const change = this.props.change;
+        const canEdit = this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly;
         let actionVerb, actionObj;
+
         switch (change.action) {
             case 'add':
                 actionVerb = 'added';
@@ -42,6 +51,17 @@ class ContentChangeItem extends React.Component {
                 actionObj = 'the deck';
         }
 
+        let buttons = this.props.selector.stype === 'slide' && ['add', 'replace', 'rename'].includes(change.action) ? <span><Button.Group basic size='tiny' floated='right'>
+                        <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
+                        <Button aria-label='Restore slide' icon='history' disabled={!canEdit} onClick={this.handleRevertClick.bind(this)} />
+                        <Button aria-label='View slide' icon>
+                            <Icon.Group>
+                                <Icon name='unhide'/>
+                                <Icon name='external' corner/>
+                            </Icon.Group>
+                        </Button>
+                    </Button.Group></span> : '';
+
         return (
         <Feed.Event>
             <Feed.Label>
@@ -52,6 +72,7 @@ class ContentChangeItem extends React.Component {
                 <Feed.Summary>
                     <NavLink className="user"
                              href={'/user/' + change.username}> {change.username}</NavLink> {actionVerb + ' ' + actionObj}
+                    {buttons}
                 </Feed.Summary>
             </Feed.Content>
         </Feed.Event>
