@@ -260,7 +260,7 @@ class SlideContentEditor extends React.Component {
         return false;
     }
     disableResizeDrag(){
-        $('.pptx2html > [style*="absolute"]').each(function () {
+        $('.pptx2html [style*="absolute"]').each(function () {
             if($(this).draggable( 'instance' )){$(this).draggable('destroy');}
             if($(this).resizable( 'instance' )){$(this).resizable('destroy');}
             $(this).css('cursor', 'auto');
@@ -453,9 +453,9 @@ class SlideContentEditor extends React.Component {
 
         let slideEditorContext = this; //set slideEditorContext inside doubleclick callbacks
 
-        $('.pptx2html > [style*="absolute"]').css('cursor', 'move');
+        $('.pptx2html [style*="absolute"]').css('cursor', 'move');
 
-        $('.pptx2html > [style*="absolute"]').hover(function() {
+        $('.pptx2html [style*="absolute"]').hover(function() {
             if (!$(this).hasClass('editMode')) {
                 //if(!$('.editMode').draggable( 'instance' )){$(this).draggable({cursor: 'move'});}
                 if(!$('.editMode').draggable( 'instance' )){
@@ -506,7 +506,7 @@ class SlideContentEditor extends React.Component {
             }
             //$(this).not('.drawing-container').css({'borderStyle': '', 'borderWidth': '', 'borderColor': ''});
         });
-        $('.pptx2html > [style*="absolute"]').keyup((event) => {
+        $('.pptx2html [style*="absolute"]').keyup((event) => {
             if( event.which === 9 ) { //if tabkey
                 console.log( event.target.id );
                 console.log('tabFocus');
@@ -532,14 +532,14 @@ class SlideContentEditor extends React.Component {
         //TODO: http://chrispearce.co/exploring-hotkeys-and-focus-in-react/
 
         /*
-        $('.pptx2html > [style*="absolute"]').focusin(function(event) {
+        $('.pptx2html [style*="absolute"]').focusin(function(event) {
             event.preventDefault();
         }, function() {
         });
         */
 
-        //$('.pptx2html > [style*="absolute"]').click(function() {
-        $('.pptx2html > [style*="absolute"]').mousedown(function(event) {
+        //$('.pptx2html [style*="absolute"]').click(function() {
+        $('.pptx2html [style*="absolute"]').mousedown(function(event) {
             switch (event.which) {
                 case 1:
                     console.log('Left Mouse button pressed.');
@@ -602,9 +602,9 @@ class SlideContentEditor extends React.Component {
 
 
         //give each input element a tab index
-        //$('.pptx2html > [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
-        //$('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
-        $('.pptx2html > [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+        //$('.pptx2html [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
+        //$('.pptx2html [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
+        $('.pptx2html [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
         //give each input box element a context menu (hide/overlap CKeditor context menu)
         this.contextMenuAll();
 
@@ -616,7 +616,7 @@ class SlideContentEditor extends React.Component {
         //TODO: if you select an element and starty typing: then directly switch to edit mode
 
         //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
-        $('.pptx2html > [style*="absolute"]').not('.drawing-container').dblclick(function(evt) {
+        $('.pptx2html [style*="absolute"]').not('.drawing-container').dblclick(function(evt) {
             if (!$(this).hasClass('editMode'))
             {
                 slideEditorContext.setEditMode(evt, slideEditorContext, $(this).attr('id'), false);
@@ -789,7 +789,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     contextMenuAllRemove(){
-        $('.pptx2html > [style*="absolute"]').each(function () {
+        $('.pptx2html [style*="absolute"]').each(function () {
             $(this).contextMenu(false);
         });
     }
@@ -797,13 +797,13 @@ class SlideContentEditor extends React.Component {
         let slideEditorContext = this;
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
-        $('.pptx2html > [style*="absolute"]').each(function () {
+        $('.pptx2html [style*="absolute"]').each(function () {
             //if(!$(this).draggable( 'instance' )){
             console.log('menu for: ' + $(this).attr('id'));
             $.contextMenu({
             //$('.pptx2html').contextMenu({
                 // define which elements trigger this menu
-                //selector: '.pptx2html > [style*="absolute"]',
+                //selector: '.pptx2html [style*="absolute"]',
                 selector: '#'+$(this).attr('id'),
                 // define the elements + functions of the menu
                 callback: function(key, options) {
