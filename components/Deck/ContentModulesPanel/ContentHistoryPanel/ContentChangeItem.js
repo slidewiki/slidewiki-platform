@@ -28,7 +28,7 @@ class ContentChangeItem extends React.Component {
                 break;
             case 'rename':
                 actionVerb = 'renamed';
-                actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '"';
+                actionObj = `${change.renamed.kind} "${change.renamed.from}" to "${change.renamed.to}"`;
                 break;
             case 'revert':
                 actionVerb = 'restored';
@@ -38,20 +38,30 @@ class ContentChangeItem extends React.Component {
                 actionVerb = 'removed';
                 actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
                 break;
-            case 'replace':
+            case 'edit':
                 actionVerb = 'edited';
-                actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                actionObj = 'slide "' + change.value.ref.title + '"';
                 break;
             case 'move':
                 actionVerb = 'moved';
-                actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                if (this.props.selector.stype === 'slide') {
+                    actionObj = 'the slide';
+                } else if (parseInt(this.props.selector.sid) === change.value.ref.id) {
+                    actionObj = 'the deck';
+                } else {
+                    actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                }
+                break;
+            case 'update':
+                actionVerb = 'updated';
+                actionObj = 'the deck';
                 break;
             default:
                 actionVerb = 'updated';
                 actionObj = 'the deck';
         }
 
-        let buttons = this.props.selector.stype === 'slide' && ['add', 'replace', 'rename'].includes(change.action) ? <span><Button.Group basic size='tiny' floated='right'>
+        let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) ? <span><Button.Group basic size='tiny' floated='right'>
                         <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
                         <Button aria-label='Restore slide' icon='history' disabled={!canEdit} onClick={this.handleRevertClick.bind(this)} />
                         <Button aria-label='View slide' icon>
