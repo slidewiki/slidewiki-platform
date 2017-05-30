@@ -637,9 +637,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     setEditMode(evt, slideEditorContext, clickMenuFocus, previousCaret){
-        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         console.log('editmode with event: ' + evt);
-        slideEditorContext.removeEditMode(); //remove existing edit mode from existing elements
         let id = $(':focus').attr('id');
         //let id = this.currentfocus;
         //let id = $('.currentFocus').attr('id');
@@ -656,47 +654,56 @@ class SlideContentEditor extends React.Component {
         }
         //id on which edit mode is applied
         console.log('seteditmode with id: ' + id);
-        if(!$('#'+id).hasClass('.editMode') &&
-           !$('#'+id).hasClass('drawing-container') &&
-            id !== 'inlineContent')
-        { //if not already in edit mode or is not SVG in drawing-container
-            $('.cke_menu').show();
-            console.log('disable extra context menu with id: ' + id );
-            $('#'+id).contextMenu(false);
+        if(id !== 'inlineContent')
+        {
+            $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
+            slideEditorContext.removeEditMode(); //remove existing edit mode from existing elements
 
-            if (evt)
-            {//if not already in input mode
-                if(evt.keyCode){ //if keyboard event
-                    evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
-                    //set caret to start of text (span) in last selected div element
-                    slideEditorContext.placeCaretAtStart(id);
+            if(!$('#'+id).hasClass('.editMode') &&
+               !$('#'+id).hasClass('drawing-container') &&
+                id !== 'inlineContent')
+            { //if not already in edit mode or is not SVG in drawing-container
+                $('.cke_menu').show();
+                console.log('disable extra context menu with id: ' + id );
+                $('#'+id).contextMenu(false);
+
+                if (evt)
+                {//if not already in input mode
+                    if(evt.keyCode){ //if keyboard event
+                        evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
+                        //set caret to start of text (span) in last selected div element
+                        slideEditorContext.placeCaretAtStart(id);
+                    }
+                    else {
+                        let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
+                        //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
+                        //let caretRange = this.getMouseEventCaretRange(evt);
+                        // Set a timer to allow the selection to happen and the dust settle first
+                        //window.setTimeout(function() {
+                        slideEditorContext.selectRange(caretRange);
+                        //this.selectRange(caretRange);
+                        //}, 10);
+                    }
                 }
                 else {
-                    let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
-                    //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                    //let caretRange = this.getMouseEventCaretRange(evt);
-                    // Set a timer to allow the selection to happen and the dust settle first
-                    //window.setTimeout(function() {
-                    slideEditorContext.selectRange(caretRange);
-                    //this.selectRange(caretRange);
-                    //}, 10);
+                    //event is false = right-click context menu was used
+                    if (previousCaret){
+                        slideEditorContext.selectRange(previousCaret);
+                    } else {
+                        //set caret to start of text (span) in last selected div element
+                        slideEditorContext.placeCaretAtStart(id);
+                    }
                 }
+                if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
+                $('#' + id).css('cursor', 'auto');
+                $('#' + id).addClass('editMode');
+                // TODO:  restore draggable after pressing 'esc' key
+                $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
+                console.log('set edit mode end, with currentfocus: ' + id);
             }
-            else {
-                //event is false = right-click context menu was used
-                if (previousCaret){
-                    slideEditorContext.selectRange(previousCaret);
-                } else {
-                    //set caret to start of text (span) in last selected div element
-                    slideEditorContext.placeCaretAtStart(id);
-                }
-            }
-            if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
-            $('#' + id).css('cursor', 'auto');
-            $('#' + id).addClass('editMode');
-            // TODO:  restore draggable after pressing 'esc' key
-            $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
-            console.log('set edit mode end, with currentfocus: ' + id);
+        }
+        else {
+            console.log('editmode canceled due to selection of inlineContent');
         }
     }
     placeCaretAtStart(id) {
@@ -1204,21 +1211,21 @@ class SlideContentEditor extends React.Component {
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-                <button tabIndex="0" ref="submitbutton" className="ui button blue" onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon"></i>
+                <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
+                 <i className="save icon large"></i>
                  Save
                 </button>
-                <button tabIndex="0" ref="submitbutton" className="ui blue basic button" onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-                    <i className="plus square outline icon"></i>
+                <button tabIndex="0" ref="submitbutton" className="ui orange button " onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
+                    <i className="plus square outline icon lightblue large"></i>
                     {this.inputBoxButtonTitle}
                 </button>
-                <TemplateDropdown name="template" ref="template" id="template" />
-                <button tabIndex="0" ref="templatebutton" className="ui icon button" onClick={this.handleTemplatechange.bind(this)} >
-                    <i className="browser icon blue"> </i>
+                <button tabIndex="0" ref="templatebutton" className="ui orange button " onClick={this.handleTemplatechange.bind(this)} >
+                    <i className="browser icon lightblue large"> </i>
                     Use template
                 </button>
-                <button tabIndex="0" ref="CKeditorModeButton" className="ui grey basic button" onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
-                 <i className="outline tasks icon"></i>
+                <TemplateDropdown name="template" ref="template" id="template" onChange={this.handleTemplatechange.bind(this)}/>
+                <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
+                 <i className="outline tasks icon lightblue large"></i>
                  {this.CKeditorMode}
                 </button>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
