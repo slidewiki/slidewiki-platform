@@ -99,20 +99,20 @@ class SlideContentEditor extends React.Component {
                 break;
             case '11':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Heading</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; ">'+
                     '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">&nbsp;Row 1 - Column 1</p></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div></div>';
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '12':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Heading</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p style="text-align:center">Row 1 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
-                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center">Row 1 - Column&nbsp;2</p>'+
                     '</div></div></div>';
@@ -120,15 +120,15 @@ class SlideContentEditor extends React.Component {
                 break;
             case '22':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p style="text-align:center">Row 2 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
                     '<div class="h-mid" style="text-align: center;"><p>Row 1</p></div></div>'+
-                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; ">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center">Row 2 - Column&nbsp;2</p>'+
                     '</div></div></div>';
@@ -136,12 +136,12 @@ class SlideContentEditor extends React.Component {
                 break;
             case '21':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p style="text-align:center">Row 2 - Column 1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
                     '<div class="h-mid" style="text-align: center;">Row 1 - Column 1</div>'+
                     '</div></div>';
@@ -149,12 +149,12 @@ class SlideContentEditor extends React.Component {
                 break;
             case '11img':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">Footer</div>'+
-                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid" style="text-align: center;">'+
                     '<p style="text-align:center"><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
                     '<p>&nbsp;</p></div></div></div>';
@@ -320,7 +320,7 @@ class SlideContentEditor extends React.Component {
                 //let currentContent = CKEDITOR.instances.inlineContent.getData();
                 //let newContent =
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1,1); transform-origin: left top 0px;">' +
-                '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; border-style: solid; border-width: 1px; border-color: rgba(30,120,187,0.5);">' +
+                '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; ">' +
                 '<div class="h-left">' + this.refs.inlineContent.innerHTML + '</div>' +
                 '</div>' +
                 '</div>';
@@ -494,7 +494,8 @@ class SlideContentEditor extends React.Component {
                         }
                     });
                 };
-                $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                //$(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                $(this).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
             }
             else {
                 $(this).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
@@ -525,7 +526,8 @@ class SlideContentEditor extends React.Component {
                     this.menuFocus = id;
                     console.log('tabFocus set to: ' + id + ' - this.menufocus:'+ this.menuFocus + 'slideEditorContext.menufocus:'+  slideEditorContext.menuFocus);
                     $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
-                    $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                    //$('#' + id).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                    $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
                 }
             }
         });
@@ -573,7 +575,8 @@ class SlideContentEditor extends React.Component {
                         if (!$(this).hasClass('editMode'))
                         {
                             $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
-                            $(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                            //$(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+                            $(this).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
                             console.log('hide ckeditor context menu');
                             $('.cke_menu').hide();
                             //set cursor to
@@ -897,7 +900,8 @@ class SlideContentEditor extends React.Component {
         context.menuFocus = id;
         console.log('tabFocus set for: ' + $(':focus').attr('id'));
         $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
-        $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+        //$('#' + id).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
+        $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
         //else {
             //set caret at start position
         //    setEditMode(event, context);
@@ -1100,12 +1104,8 @@ class SlideContentEditor extends React.Component {
             'moveDown': ['down'],
             'moveLeft': ['left'],
             'moveRight': ['right'],
-            'bringToFront': ['ctrl+shift+up', 'ctrl+up', 'shift+up',
-                'ctrl+shift+pageup', 'ctrl+pageup', 'shift+pageup', 'pageup',
-                'ctrl+shift+plus', 'ctrl+plus', 'shift+plus', 'plus' ],
-            'bringToBack': ['ctrl+shift+down', 'ctrl+down', 'shift+down',
-                'ctrl+shift+pagedown', 'ctrl+pagedown', 'shift+pagedown', 'pagedown',
-                'ctrl+shift+-', 'ctrl+-', 'shift+-', '-' ],
+            'bringToFront': [ 'ctrl+plus'],
+            'bringToBack': ['ctrl+-'],
             'copy': ['ctrl+c'],
             'enter': ['ctrl+enter']
         };
