@@ -56,7 +56,7 @@ class UserNotificationsItem extends React.Component {
                 break;
             case 'share':
                 const shareIconClass = allIconClass.concat(' slideshare');
-                const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
+                const onPlatform = (notification.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + notification.share_info.platform);
                 iconNotification = (<i className={shareIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
