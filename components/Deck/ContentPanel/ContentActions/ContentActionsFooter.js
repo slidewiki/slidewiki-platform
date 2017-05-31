@@ -6,6 +6,7 @@ import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import ReportModal from '../../../Report/ReportModal';
 import openReportModal from '../../../../actions/report/openReportModal';
+import SocialShare from '../../../Social/SocialShare';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
@@ -14,7 +15,6 @@ import addActivity from '../../../../actions/activityfeed/addActivity';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
-
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -169,9 +169,7 @@ class ContentActionsFooter extends React.Component {
                                 </button>
                             </NavLink>
                             <ReportModal/>
-                            <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
-                                <i className="share alternate large icon"></i>
-                            </button>
+                            <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
                                 <i className={classNameLikeButton}></i>
                             </button>
