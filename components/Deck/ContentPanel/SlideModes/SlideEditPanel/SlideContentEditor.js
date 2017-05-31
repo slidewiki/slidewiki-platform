@@ -1154,6 +1154,10 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
 
+        const buttonColorBlack = {
+            color: 'black'
+        };
+
         const compStyle = {
             // maxHeight: 450,
             //minHeight: 450,
@@ -1212,21 +1216,21 @@ class SlideContentEditor extends React.Component {
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon large"></i>
+                 <i className="save icon"></i>
                  Save
                 </button>
                 <button tabIndex="0" ref="submitbutton" className="ui orange button " onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-                    <i className="plus square outline icon lightblue large"></i>
-                    {this.inputBoxButtonTitle}
+                    <i className="plus square outline icon black"></i>
+                    <a style={buttonColorBlack}>{this.inputBoxButtonTitle}</a>
                 </button>
                 <button tabIndex="0" ref="templatebutton" className="ui orange button " onClick={this.handleTemplatechange.bind(this)} >
-                    <i className="browser icon lightblue large"> </i>
-                    Use template
+                    <i className="browser icon black"> </i>
+                    <a style={buttonColorBlack}>Use template</a>
                 </button>
                 <TemplateDropdown name="template" ref="template" id="template" onChange={this.handleTemplatechange.bind(this)}/>
                 <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
-                 <i className="outline tasks icon lightblue large"></i>
-                 {this.CKeditorMode}
+                 <i className="outline tasks icon black"></i>
+                 <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
