@@ -843,8 +843,8 @@ class SlideContentEditor extends React.Component {
                 items: {
                     'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
                     //'move': {name: 'Move around', icon: 'fa-arrows',},
-                    'front': {name: 'Bring to front (Ctrl +)', icon: 'fa-arrow-circle-up'},
-                    'back': {name: 'Send to back (Ctrl -)', icon: 'fa-arrow-circle-o-down'},
+                    'front': {name: 'Bring to front (Ctrl-shift +)', icon: 'fa-arrow-circle-up'},
+                    'back': {name: 'Send to back (Ctrl-shift -)', icon: 'fa-arrow-circle-o-down'},
                     'copy': {name: 'Copy (key: Ctrl c)', icon: 'copy'},
                     'delete': {name: 'Delete (key: Delete)', icon: 'delete'},
                     //'sep1': '---------',
@@ -1104,10 +1104,11 @@ class SlideContentEditor extends React.Component {
             'moveDown': ['down'],
             'moveLeft': ['left'],
             'moveRight': ['right'],
-            'bringToFront': [ 'ctrl+plus'],
-            'bringToBack': ['ctrl+-'],
+            'bringToFront': [ 'ctrl+shift+plus'],
+            'bringToBack': ['ctrl+shift+-'],
             'copy': ['ctrl+c'],
-            'enter': ['ctrl+enter']
+            'enter': ['ctrl+enter'],
+            'escape': ['escape']
         };
         let slideEditorContext = this;
         const handlers = {
@@ -1122,7 +1123,8 @@ class SlideContentEditor extends React.Component {
             'moveRight': (event) => this.keyMoveRight(slideEditorContext, event),
             'bringToFront': (event) => this.bringToFront(slideEditorContext, event),
             'bringToBack': (event) => this.sendToBack(slideEditorContext, event),
-            'copy': (event) => this.CopyNode(slideEditorContext, event)
+            'copy': (event) => this.CopyNode(slideEditorContext, event),
+            'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
 
         const headerStyle = {
