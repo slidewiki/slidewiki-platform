@@ -47,8 +47,7 @@ export default {
                     text: args.text,
                     user_id: String(args.userid),
                     content_id: content_id,
-                    content_kind: selector.stype,
-                    is_activity: false //Added this for backward compatibility - prevents discussion-service to create activity; will remove it once the discussion-service branch which no longer creates activities is merged
+                    content_kind: selector.stype
                 })
             }).then((res) => {
                 callback(null, {comment: JSON.parse(res), selector: args.selector});
