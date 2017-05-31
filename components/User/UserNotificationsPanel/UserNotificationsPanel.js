@@ -21,17 +21,15 @@ class UserNotificationsPanel extends React.Component {
                 url: '/'
             });
         } else {
-            this.context.executeAction(loadNewUserNotifications, { uid: this.props.UserProfileStore.userid });
             this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
+            this.context.executeAction(loadNewUserNotifications, { uid: this.props.UserProfileStore.userid });
         }
     }
 
     componentWillUpdate() {
-        this.displayEmptyText = 'There are currently no notifications.';
-    }
-
-    handleSettingsClick() {
-
+        if (this.props.UserNotificationsStore.notifications !== undefined) {
+            this.displayEmptyText = 'There are currently no notifications.';
+        }
     }
 
     handleChangeToggle(type, id) {
@@ -93,16 +91,18 @@ class UserNotificationsPanel extends React.Component {
         });
 
         const notifications = this.props.UserNotificationsStore.notifications;
+        const newNotifications = this.props.UserNotificationsStore.newNotifications;
         const selector = this.props.UserNotificationsStore.selector;
 
+        const iconMarkAsReadTitle = 'Mark all ' + newNotifications.length + ' as read';
         let iconMarkAsRead = (//disabled icon
-            <a className="item" title="Mark all as read">
+            <a className="item" title={iconMarkAsReadTitle}>
                 <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
             </a>
         );
-        if(this.props.UserNotificationsStore.newNotifications.length > 0) {//if there are new notifications -> enable it
+        if(newNotifications.length > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
-              <a className="item" onClick={this.handleMarkAsRead.bind(this)} title="Mark all as read" >
+              <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
                   <i tabIndex="0" className="ui large checkmark box icon"></i>
               </a>
             );
@@ -164,21 +164,19 @@ class UserNotificationsPanel extends React.Component {
         // );
         return (
             <div ref="userNotificationsPanel">
-                <div className="ui top attached secondary pointing menu">
-                    <a className="item active" href="/notifications">User notifications<span className="ui mini label">{this.props.UserNotificationsStore.newNotifications.length}</span></a>
-                    <div className="menu">
+                <div className="ui hidden divider"></div>
+                <div className="ui container stackable two columm grid">
+                    <div className="six wide column">
+                      <div className="ui huge header">
+                          Notifications <div className="ui mini label" >{iconMarkAsRead} {newNotifications.length}</div>
+                      </div><div className="ui basic segment">
 
-                        <div className="mark-read-icon">
-                            {iconMarkAsRead}
+                            {filters}
                         </div>
                     </div>
-                </div>
-
-                <div className="ui grid">
-                    {filters}
-                    <div className="ten wide column">
+                    <div className="column ten wide">
                         <div className="ui basic segment">
-                            {(notifications.length === 0)
+                            {(!notifications || notifications.length === 0)
                                 ?
                                 <div>{this.displayEmptyText}</div>
                                 :

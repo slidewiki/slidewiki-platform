@@ -34,14 +34,14 @@ class HeaderDropdown extends React.Component {
 
     render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
+        const alarmClassName = (this.props.UserNotificationsStore.newNotifications.length > 0) ? 'alarm red icon' : 'alarm outline icon';
+        const alarmIcon = (this.props.UserNotificationsStore.newNotifications.length > 0) ? (<i className="ui small outline alarm icon" />) : '';
         return(
             <div className="ui top right pointing dropdown" ref="userDropDown" role="button" aria-haspopup="true" aria-label="User management">
                 <div className="text">
-                    <i className="icons"><UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 }/>
-                    {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini circular floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
-                  </i>
+                    <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
-                <i className="ui big left floated aligned dropdown icon"></i>
+                <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
                 <div className="menu" role="menu">
                     <div className="header">
                         {this.props.UserProfileStore.username}
@@ -53,11 +53,8 @@ class HeaderDropdown extends React.Component {
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
                         <i className="setting icon" /> My Settings
                     </div>
-                    <div className="item" data-value={'/notifications'}>
-                        <i className="icons">
-                        <i className="newspaper icon"/>
-                            {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini circular floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
-                        </i> My Notifications
+                    <div className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="0" >
+                        <i className={alarmClassName} /> My Notifications
                     </div>
                     <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
                         <i className="sign out icon"/> Sign Out
