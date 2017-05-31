@@ -23,6 +23,9 @@ class ContentChangeItem extends React.Component {
                 iconName = change.value.kind === 'slide'? 'file text' :'folder';
                 description = <span>added {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
+            case 'copy':
+                description = <span>created a duplicate of {change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
+                break;
             case 'attach':
                 description = <span>attached {change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
