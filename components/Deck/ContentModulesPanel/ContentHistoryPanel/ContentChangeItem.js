@@ -16,33 +16,40 @@ class ContentChangeItem extends React.Component {
         const change = this.props.change;
         const canEdit = this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly;
         let description;
+        let iconName = 'write';
 
         switch (change.action) {
             case 'add':
+                iconName = change.value.kind === 'slide'? 'file text' :'folder';
                 description = <span>added {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'attach':
                 description = <span>attached {change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
             case 'fork':
-                description = <span>created a fork of deck <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
+                iconName = 'fork';
+                description = <span>created a fork of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink></span>;
                 break;
             case 'revise':
+                iconName = 'save';
                 description = <span>created a new version of {change.oldValue.kind} <em>{change.oldValue.ref.title}</em></span>;
                 break;
             case 'rename':
                 description = <span>renamed {change.renamed.kind} <em>{change.renamed.from}</em> to <em>{change.renamed.to}</em></span>;
                 break;
             case 'revert':
+                iconName='history';
                 description = <span>restored {change.oldValue.kind} <em>{change.oldValue.ref.title}</em> to an earlier version</span>;
                 break;
             case 'remove':
+                iconName = 'trash outline';
                 description = <span>removed {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'edit':
                 description = <span>edited slide <em>{change.value.ref.title}</em></span>;
                 break;
             case 'move':
+                iconName = 'move';
                 if (this.props.selector.stype === 'slide') {
                     description = 'moved the slide';
                 } else if (parseInt(this.props.selector.sid) === change.value.ref.id) {
@@ -72,7 +79,7 @@ class ContentChangeItem extends React.Component {
         return (
         <Feed.Event>
             <Feed.Label>
-                <Icon name='pencil'/>
+                <Icon name={iconName}/>
             </Feed.Label>
             <Feed.Content>
                 <Feed.Date>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</Feed.Date>

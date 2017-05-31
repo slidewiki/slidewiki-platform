@@ -12,21 +12,22 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
         if (resource === 'history.changes') {
-            let changes;
-            let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes'}) :
-                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes', qs:{root: args.deckId}});
-            changesPromise.then((res) => {
-                changes = JSON.parse(res);
+            let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes', json: true}) :
+                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes', qs:{root: args.deckId}, json: true});
+
+            changesPromise.then((changes) => {
+                if (!changes.length){
+                    return changes;
+                }
                 //find unique user ids in change log
                 let userIds = [... new Set(changes.map((changeOp) => changeOp.user))];
-                return rp.post({uri: Microservices.user.uri + '/users', body: JSON.stringify(userIds)});
-            }).then((usersRes) => {
-                let users = JSON.parse(usersRes);
-                let usersById = {};
-                users.forEach((user) => usersById[user._id] = user);
-                changes.forEach((changeOp) => {
-                    changeOp.username = usersById[changeOp.user].username;
+                return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
+                    changes.forEach((changeOp) => {
+                        changeOp.username = users.find((user) => user._id === changeOp.user).username;
+                    });
+                    return changes;
                 });
+            }).then((changes) => {
                 callback(null, changes);
             }).catch((err) => callback(err));
             //returns the number of revisions of a deck
@@ -34,24 +35,20 @@ export default {
             rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisionCount/'}).then((res) => {
                 callback(null, {count: JSON.parse(res)});
             }).catch((err) => {
-                //console.log(err);
                 callback({msg: 'Error in retrieving revisions count', content: err}, {});
             });
             //returns the revisions of a deck
         } else if (resource === 'history.revisions') {
-            let revisions;
-            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisions'}).then((res) => {
-                revisions = JSON.parse(res);
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisions', json: true}).then((revisions) => {
                 //find unique user ids in revisions
                 let userIds = [... new Set(revisions.map((rev) => rev.user))];
-                return rp.post({uri: Microservices.user.uri + '/users', body: JSON.stringify(userIds)});
-            }).then((usersRes) => {
-                let users = JSON.parse(usersRes);
-                let usersById = {};
-                users.forEach((user) => usersById[user._id] = user);
-                revisions.forEach((rev) => {
-                    rev.username = usersById[rev.user].username;
+                return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
+                    revisions.forEach((rev) => {
+                        rev.username = users.find((user) => user._id === rev.user).username;
+                    });
+                    return revisions;
                 });
+            }).then((revisions) => {
                 callback(null, {
                     revisions: revisions
                 });

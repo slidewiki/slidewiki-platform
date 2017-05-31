@@ -52,7 +52,7 @@ class DeckRevision extends React.Component {
             </Accordion.Title>
             <Accordion.Content active={revision.expanded}>
                 <Segment clearing>
-                    <Header size='small'>Summary of changes
+                    <Header size='small'>Version changes
                         {revision.latest ? '' :
                         <Button.Group basic size='tiny' floated='right'>
                             <Button aria-label='Compare to current deck' icon='exchange' disabled/>
