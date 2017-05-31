@@ -15,58 +15,47 @@ class ContentChangeItem extends React.Component {
     render() {
         const change = this.props.change;
         const canEdit = this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly;
-        let actionVerb, actionObj;
+        let description;
 
         switch (change.action) {
             case 'add':
-                actionVerb = 'added';
-                actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                description = <span>added {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'attach':
-                actionVerb = 'attached';
-                actionObj = `${change.value.kind} "${change.value.origin.title}" ${change.value.origin.id}-${change.value.origin.revision}`;
+                description = <span>attached {change.value.kind} <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
             case 'fork':
-                actionVerb = 'created a fork of';
-                actionObj = `deck "${change.value.origin.title}" ${change.value.origin.id}-${change.value.origin.revision}`;
+                description = <span>created a fork of deck <em>{change.value.origin.title}</em> {change.value.origin.id}-{change.value.origin.revision}</span>;
                 break;
             case 'revise':
-                actionVerb = 'created a new version of';
-                actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '"';
+                description = <span>created a new version of {change.oldValue.kind} <em>{change.oldValue.ref.title}</em></span>;
                 break;
             case 'rename':
-                actionVerb = 'renamed';
-                actionObj = `${change.renamed.kind} "${change.renamed.from}" to "${change.renamed.to}"`;
+                description = <span>renamed {change.renamed.kind} <em>{change.renamed.from}</em> to <em>{change.renamed.to}</em></span>;
                 break;
             case 'revert':
-                actionVerb = 'restored';
-                actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '" to an earlier version';
+                description = <span>restored {change.oldValue.kind} <em>{change.oldValue.ref.title}</em> to an earlier version</span>;
                 break;
             case 'remove':
-                actionVerb = 'removed';
-                actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                description = <span>removed {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 break;
             case 'edit':
-                actionVerb = 'edited';
-                actionObj = 'slide "' + change.value.ref.title + '"';
+                description = <span>edited slide <em>{change.value.ref.title}</em></span>;
                 break;
             case 'move':
-                actionVerb = 'moved';
                 if (this.props.selector.stype === 'slide') {
-                    actionObj = 'the slide';
+                    description = 'moved the slide';
                 } else if (parseInt(this.props.selector.sid) === change.value.ref.id) {
-                    actionObj = 'the deck';
+                    description = 'moved the deck';
                 } else {
-                    actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
+                    description = <span>moved {change.value.kind} <em>{change.value.ref.title}</em></span>;
                 }
                 break;
             case 'update':
-                actionVerb = 'updated';
-                actionObj = 'the deck';
+                description = <span>updated deck <em>{change.path[change.path.length - 1].title}</em></span>;
                 break;
             default:
-                actionVerb = 'updated';
-                actionObj = 'the deck';
+                description = <span>updated the deck</span>;
         }
 
         let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) ? <span><Button.Group basic size='tiny' floated='right'>
@@ -89,7 +78,7 @@ class ContentChangeItem extends React.Component {
                 <Feed.Date>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</Feed.Date>
                 <Feed.Summary>
                     <NavLink className="user"
-                             href={'/user/' + change.username}> {change.username}</NavLink> {actionVerb + ' ' + actionObj}
+                             href={'/user/' + change.username}> {change.username}</NavLink> {description}
                     {buttons}
                 </Feed.Summary>
             </Feed.Content>
