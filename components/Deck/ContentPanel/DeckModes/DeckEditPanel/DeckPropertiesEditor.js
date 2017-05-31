@@ -272,7 +272,7 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 let optionalElement = (user.organization || user.country) ?  (
                   <div>
-                    {user.organization || 'Unknown organization'}, {user.country || 'unknown country'}
+                    {user.organization || 'Unknown organization'} ({user.country || 'unknown country'})
                     <br/>
                   </div>
                 ) : '';

@@ -158,7 +158,7 @@ class UserGroupEdit extends React.Component {
                 };
                 let optionalElement = (member.organization || member.country) ?  (
                   <div>
-                    {member.organization || 'Unknown organization'}, {member.country || 'unknown country'}
+                    {member.organization || 'Unknown organization'} ({member.country || 'unknown country'})
                     <br/>
                   </div>
                 ) : '';
