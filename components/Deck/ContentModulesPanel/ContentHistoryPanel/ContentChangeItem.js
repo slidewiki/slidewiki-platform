@@ -22,6 +22,14 @@ class ContentChangeItem extends React.Component {
                 actionVerb = 'added';
                 actionObj = change.value.kind + ' "' + change.value.ref.title + '"';
                 break;
+            case 'attach':
+                actionVerb = 'attached';
+                actionObj = `${change.value.kind} "${change.value.origin.title}" ${change.value.origin.id}-${change.value.origin.revision}`;
+                break;
+            case 'fork':
+                actionVerb = 'created a fork of';
+                actionObj = `deck "${change.value.origin.title}" ${change.value.origin.id}-${change.value.origin.revision}`;
+                break;
             case 'revise':
                 actionVerb = 'created a new version of';
                 actionObj = change.oldValue.kind + ' "' + change.oldValue.ref.title + '"';
