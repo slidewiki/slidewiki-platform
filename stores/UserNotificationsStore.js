@@ -3,7 +3,7 @@ import {BaseStore} from 'fluxible/addons';
 class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.notifications = [];
+        this.notifications = undefined;
         this.newNotifications = [];
         this.subscriptions = [];
         this.activityTypes = [
@@ -22,15 +22,12 @@ class UserNotificationsStore extends BaseStore {
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        this.markNewNotifications();
-
-
-        // this.newNotifications = payload.newNotifications;
-
-
-
+        this.newNotifications = payload.newNotifications;
         this.subscriptions = payload.subscriptions;
+
+        this.markNewNotifications();
         this.addVisibleParameterToNotifications();
+        
         this.emitChange();
     }
     loadNewNotifications(payload) {
