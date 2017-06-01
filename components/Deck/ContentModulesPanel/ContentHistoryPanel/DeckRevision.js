@@ -35,7 +35,7 @@ class DeckRevision extends React.Component {
 
     render() {
         const revision = this.props.revision;
-        const canEdit = this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly;
+        const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
 
         return (
         <div>

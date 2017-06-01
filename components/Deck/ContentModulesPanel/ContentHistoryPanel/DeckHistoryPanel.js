@@ -28,11 +28,10 @@ class DeckHistoryPanel extends React.Component {
         });
         return (
         <div ref="deckHistoryPanel" className="ui">
-            {isRoot ?
-            <Button positive aria-label='Create a new version of this deck' size='small' floated='right' icon='plus'
-                    content='Create
-                        a new version' onClick={this.handleCreateRevisionClick.bind(this)}/> : ''}
-            <Divider hidden clearing/>
+            {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
+            <div><Button positive aria-label='Create a new version of this deck' size='small' floated='right' icon='plus'
+                         content='Create a new version' onClick={this.handleCreateRevisionClick.bind(this)}/>
+                <Divider hidden clearing/></div> : ''}
             <Accordion fluid>
                 {deckRevisions}
             </Accordion>

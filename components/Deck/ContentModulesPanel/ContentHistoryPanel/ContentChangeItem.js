@@ -14,7 +14,7 @@ class ContentChangeItem extends React.Component {
 
     render() {
         const change = this.props.change;
-        const canEdit = this.props.userid !== '' && this.props.permissions.edit && !this.props.permissions.readOnly;
+        const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
         let description;
         let iconName = 'write';
 
