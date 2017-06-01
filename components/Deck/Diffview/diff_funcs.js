@@ -185,7 +185,7 @@ const preprocessSrc = (source, mode) => {
 
         vTreeObject.length > 1 ? root = createElement(vTreeObject[0]) : root = createElement(vTreeObject);
 
-        // $(root).find('br').remove();
+        $(root).find('br').remove();
         $(root).find('.drawing-container').remove();
         $(root).find('p:empty').remove();
         $(root).find('span:empty').remove();
