@@ -181,7 +181,7 @@ class ContentQuestionsPanel extends React.Component {
         {buttonBar}
         {questionsHeader}
         <ContentQuestionsList items={questions} />
-        {pagination}
+        {/* {pagination} */}
       </div>
     );
 

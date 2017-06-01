@@ -4,7 +4,7 @@ import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import serviceUnavailable from './error/serviceUnavailable';
 const log = require('./log/clog');
-const maxQuestions = 5; // number of questions per page
+const maxQuestions = 100; // number of questions per page
 const pageNum = 1; // pagination
 
 export default function loadContentQuestions(context, payload, done) {
@@ -21,7 +21,7 @@ export default function loadContentQuestions(context, payload, done) {
 
     payload.params.maxQ = payload.params.maxQ === undefined || parseInt(payload.params.maxQ) === 'NaN' ? maxQuestions : payload.params.maxQ;
     payload.params.pageNum = payload.params.pageNum === undefined || parseInt(payload.params.pageNum) === 'NaN' ? pageNum : payload.params.pageNum;
-    
+
     context.service.read('questions.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename, err: err});
