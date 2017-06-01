@@ -197,6 +197,9 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadPresentation, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadTranslations, payload, callback);
                 }
             ],
             (err, result) => {
