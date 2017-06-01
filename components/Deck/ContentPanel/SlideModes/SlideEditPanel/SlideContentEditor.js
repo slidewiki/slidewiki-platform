@@ -347,6 +347,16 @@ class SlideContentEditor extends React.Component {
         const userId = this.props.UserProfileStore.userid;
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
 
+        //destroy previous ckeditor-plugins
+        if (CKEDITOR.instances.inlineContent != null) {
+            console.log('destroy previous CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
+        }
+        if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+            console.log('destroy previous CKEDITOR instance');
+            CKEDITOR.instances.inlineSpeakerNotes.destroy();
+        }
+        
         //TODO: takes some time before font-size and other drop-downs work... or immediately when clicking in inline input
         CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){
