@@ -82,7 +82,7 @@ export default {
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
             let uid = String(args.uid);
-            uid = (!uid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - uid.length) + uid) : uid;//TODO solve these ID issues
+            
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',
