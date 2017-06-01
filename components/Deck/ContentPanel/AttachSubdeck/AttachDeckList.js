@@ -32,7 +32,7 @@ class AttachDeckList extends React.Component {
 
     }
     handleKeyPress(event,selectedDeck){
-
+      
         if(event.key === 'Enter'){
             event.preventDefault();
             this.handleOnclick(selectedDeck);

@@ -7,6 +7,7 @@ import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
+import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import AttachDeckList from './AttachDeckList';
@@ -37,6 +38,8 @@ class AttachSubdeckModal extends React.Component{
             selectedDeckId: -1,
             selectedSlides:[],
             showSlides:false,
+            deckSlides:[],
+
 
           //  selectedDeckTitle: 'Select one deck...',
           //  showSearchResults: false
@@ -48,14 +51,18 @@ class AttachSubdeckModal extends React.Component{
         this.handleAttachButton = this.handleAttachButton.bind(this);
         this.handleNextButton = this.handleNextButton.bind(this);
 
+
     }
 
     componentWillReceiveProps(nextProps){
 
         this.setState({
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
-            activeItem: nextProps.AttachSubdeckModalStore.activeItem
+            activeItem: nextProps.AttachSubdeckModalStore.activeItem,
+            selectedSlides: nextProps.AttachSubdeckModalStore.selectedSlides,
+            deckSlides:nextProps.AttachSubdeckModalStore.deckSlides
         });
+
 
     }
     componentWillUnmount(){
@@ -77,8 +84,8 @@ class AttachSubdeckModal extends React.Component{
             limit: 20,
             offset: 0
         }};
-        this.context.executeAction(loadUserDecks, payload,null);
-        this.context.executeAction(loadRecentDecks, payload2,null);
+        this.context.executeAction(loadUserDecks, payload);
+        this.context.executeAction(loadRecentDecks, payload2);
 
         $('#app').attr('aria-hidden','true');
         this.setState({
@@ -111,15 +118,17 @@ class AttachSubdeckModal extends React.Component{
     }
 
     handleNextButton(){
+        this.context.executeAction(loadSlides,{id:this.state.selectedDeckId});
         this.setState({
             showSlides:true
         });
+
 
     }
     handleAttachButton(){
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "deck", id: 1245-2}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
+        //this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
         this.handleClose();
 
     }
@@ -155,10 +164,10 @@ class AttachSubdeckModal extends React.Component{
                                 Next
                                <Icon name="arrow right"/>
                             </Button>;
-        } else{
-        
+        } else{ //deck selected, diplay its slides
+
             searchForm ='';
-            segmentPanelContent = <AttachSlides />;
+            segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
                             data-tooltip="Attach" disabled={this.state.selectedSlides===[]} onClick={this.handleAttachButton}>
                              <Icon name="attach"/>

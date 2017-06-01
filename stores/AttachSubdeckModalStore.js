@@ -12,7 +12,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
-        this.deckSlides =[1,2];
+        this.deckSlides =[];
     }
 
     getState(){
@@ -42,6 +42,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = state.activeItem;
         this.selectedSlides = state.selectedSlides;
         this.deckSlides = state.deckSlides;
+
     }
 
     updateUserDecks(payload){
@@ -123,6 +124,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
+        this.deckSlides =[];
 
         this.emitChange();
     }
@@ -131,12 +133,37 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
+        this.selectedSlides = [];
+        this.deckSlides =[];
+
 
         this.emitChange();
     }
 
     updateActiveItem(payload){
         this.activeItem = payload.activeItem;
+        this.emitChange();
+    }
+
+    updateDeckSlides(payload){
+        if((payload.slides===[])||(typeof payload.slides === 'undefined')){
+            this.deckSlides =[];
+        }else{
+            this.deckSlides = payload.slides.map((slide) => {
+                return(slide.id);
+            });
+        }
+
+        this.emitChange();
+
+    }
+
+    updateSelectedSlides(payload){
+        if((payload.selectedSlides===[])||(typeof payload.selectedSlides === 'undefined')){
+            this.selectedSlides =[];
+        }else{
+            this.selectedSlides = payload.selectedSlides;
+        }
 
         this.emitChange();
     }
@@ -155,6 +182,8 @@ AttachSubdeckModalStore.handlers = {
     'ATTACHSUBDECK_RESET':'resetModalStore',
     'ATTACHSUBDECK_INIT' :'initModal',
     'ATTACHSUBDECK_ACTIVE_ITEM' :'updateActiveItem',
+    'ATTACHSUBDECK_LOAD_SLIDES' : 'updateDeckSlides',
+    'ATTACHSUBDECK_SELECTED_SLIDES' :'updateSelectedSlides'
 
 };
 
