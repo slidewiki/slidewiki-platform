@@ -15,47 +15,56 @@ class InfoPanel extends React.Component {
         const rootNodeStyles = {
             fontSize: '1.06em'
         };
-        const slideTitle = SlideViewStore.title;
+
 
 
         return (
-            <div className="ui panel sw-info-panel" ref="infoPanel" >
-                <div className="ui segments">
-                    <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
+            <div className="ui panel" ref="infoPanel" >
+
+                <div className="ui top attached tabular icon stackable fluid  menu">
+                    <a className="active item">
+                        <i className="large info circle blue icon"></i>Info
+                    </a>
+{/*
+                <a className="item">
+                        <i className="large remove bookmark blue icon"></i>Suggest
+                    </a>
+                    <a className="item">
+                        <i className="large grid layout blue icon"></i>Design
+                    </a>
+                    */}
+                </div>
+
+                <div className="ui bottom attached active tab segment">
+                    <div className="ui segment">
+                        <h4 className="header item" >This is the slide title </h4>
                     </div>
-                    <div className="ui top attached pointing icon stackable fluid large menu">
-                        <div className="ui basic button">
-                            <i className="very large info circle icon"></i>Info
-                        </div>
-                        <div className="ui basic button">
-                            <i className="very large tag icon"></i>Suggest
-                        </div>
-                        <div className="ui basic button">
-                            <i className="very large write icon"></i>Edit
-                        </div>
+
+
+                    <div className="ui segment">
+                        <h4 className="header item" >Contributors </h4>
                     </div>
-
-
-                    <div className="ui bottom attached segment" >
-                        <div className="ui compact segments">
-                            <div className="ui attached segments">
-                                <h4 className="header item">THis is the slide title </h4>
-                                <div ref="contentModulesPanel">
-                                    <div className="ui segment attached">
-                                        {ContributorsPanel}
-                                    </div>
-                                </div>
-
+                    <div className="ui segment">
+                        <h4 className="header item" >Activity feed</h4>
+                    </div>
+                    <div className="ui segment">
+                        <div className="item" >
+                            <div className="ui image">
+                                <img alt="Creative Commons License"  src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"  href="http://creativecommons.org/licenses/by-sa/4.0/" />
                             </div>
+
+                            <div className="description">
+                                <p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>                                
+                            </div>  
                         </div>
-
-
-
-
                     </div>
                 </div>
             </div>
+
+
+
+
+
         );
     }
 }
@@ -63,11 +72,5 @@ class InfoPanel extends React.Component {
 InfoPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TreePanel = connectToStores(InfoPanel, [SlideViewStore, UserProfileStore, PermissionsStore], (context, props) => {
-    return {
-        SlideViewStore: context.getStore(SlideViewStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
-    };
-});
+
 export default InfoPanel;
