@@ -11,6 +11,7 @@ import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import ServiceUnavailable from '../Error/ServiceUnavailable';
+import InfoPanel from './InfoPanel/InfoPanel';
 
 class Deck extends React.Component {
     handleExpandClick(){
@@ -128,14 +129,9 @@ class Deck extends React.Component {
 
                 <div className={rightColClass}>
                     <div className={treePanelClass}>
-                        <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                        <InfoPanel />
                     </div>
-                    <div className="ui hidden divider"></div>
-                    <div className={ActivityFeedPanelClass}>
-                        <div className="row">
-                            <ActivityFeedPanel />
-                        </div>
-                    </div>
+                    
                     <div className="ui hidden divider"></div>
                 </div>
 

@@ -44,8 +44,7 @@ class MailShareModal extends React.Component {
             onSuccess: this.handleSendMail.bind(this)
         };
 
-        $('.ui.form.mail')
-            .form(formValidation);
+        if($('.ui.form.mail').length === 1){$('.ui.form.mail').form(formValidation);}
     }
 
     handleSendMail(e) {
