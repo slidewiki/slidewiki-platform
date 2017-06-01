@@ -35,12 +35,30 @@ class UserNotificationsStore extends BaseStore {
         this.emitChange();
     }
     markNewNotifications() {
-        this.newNotifications.forEach((newNotification) => {
-            let notification = this.notifications.find((notification) => {return (notification.id === newNotification.activity_id);});
+        let invalidNewNotificationsIndexes = [];
+        for (let i = 0; i < this.newNotifications.length; i++) {
+            let newNotification = this.newNotifications[i];
+
+            //find the matching item in notifications array
+            let notification;
+            for(let j = 0; j < this.notifications; j++) {
+                if (this.notifications[j].id === newNotification.activity_id) {
+                    notification = this.notifications[j];
+                    break;
+                }
+            }
             if (notification !== undefined) {
                 notification.newNotificationId = newNotification.id;
+            } else {
+                invalidNewNotificationsIndexes.push(i);
             }
-        });
+        }
+
+        //remove invalid new notifications
+        for (let i = invalidNewNotificationsIndexes.length - 1; i >=0; i--) {
+            this.newNotifications.splice(invalidNewNotificationsIndexes[i], 1);
+        }
+
     }
     clearNotificationNewParameter(payload) {
         let index = this.newNotifications.findIndex((notification) => {return (notification.newNotificationId === payload.newNotificationId);});

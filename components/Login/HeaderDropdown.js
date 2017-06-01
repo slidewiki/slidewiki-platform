@@ -3,7 +3,7 @@ import { NavLink, navigateAction } from 'fluxible-router';
 import UserPicture from '../common/UserPicture';
 import { connectToStores } from 'fluxible-addons-react';
 import userSignOut from '../../actions/user/userSignOut';
-import loadNewUserNotifications from '../../actions/user/notifications/loadNewUserNotifications';
+import loadUserNotifications from '../../actions/user/notifications/loadUserNotifications';
 import UserProfileStore from '../../stores/UserProfileStore';
 import UserNotificationsStore from '../../stores/UserNotificationsStore';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
@@ -14,7 +14,7 @@ class HeaderDropdown extends React.Component {
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
 
-        this.context.executeAction(loadNewUserNotifications, { uid: this.props.UserProfileStore.userid });
+        this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
     }
 
     componentDidUpdate() {

@@ -7,7 +7,6 @@ import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
-import loadNewUserNotifications from '../../../actions/user/notifications/loadNewUserNotifications';
 
 class UserNotificationsPanel extends React.Component {
     constructor() {
@@ -22,7 +21,6 @@ class UserNotificationsPanel extends React.Component {
             });
         } else {
             this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
-            this.context.executeAction(loadNewUserNotifications, { uid: this.props.UserProfileStore.userid });
         }
     }
 
@@ -94,7 +92,7 @@ class UserNotificationsPanel extends React.Component {
         const newNotifications = this.props.UserNotificationsStore.newNotifications;
         const selector = this.props.UserNotificationsStore.selector;
 
-        const iconMarkAsReadTitle = 'Mark all ' + newNotifications.length + ' as read';
+        const iconMarkAsReadTitle = (newNotifications.length > 0) ? 'Mark all ' + newNotifications.length + ' as read' : 'Mark all as read';
         let iconMarkAsRead = (//disabled icon
             <a className="item" title={iconMarkAsReadTitle}>
                 <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
