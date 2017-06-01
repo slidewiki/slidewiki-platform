@@ -247,7 +247,14 @@ class SlideContentEditor extends React.Component {
             this.removeEditMode();
             this.contextMenuAllRemove();
             this.disableResizeDrag();
-            CKEDITOR.instances.inlineContent.destroy();
+            if (CKEDITOR.instances.inlineContent != null) {
+                console.log('destroy previous CKEDITOR instance');
+                CKEDITOR.instances.inlineContent.destroy();
+            }
+            if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+                console.log('destroy previous CKEDITOR instance');
+                CKEDITOR.instances.inlineSpeakerNotes.destroy();
+            }
 
             this.uniqueIDAllElements();
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
