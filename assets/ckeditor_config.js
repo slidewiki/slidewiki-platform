@@ -14,12 +14,17 @@ CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
 CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
+CKEDITOR.plugins.addExternal('imagecrop', '/custom_modules/imagecrop/');
 
 
 CKEDITOR.disableAutoInline = true;
+
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
+
+    config.extraPlugins = 'imagecrop';
+    config.allowedContent = true;
 
     //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
@@ -37,7 +42,7 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'insert', items: [ 'Image', 'ImageCrop', 'Table', 'Symbol', 'Youtube'] },
             { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
@@ -46,6 +51,24 @@ CKEDITOR.editorConfig = function( config ) {
 			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
         '/',
     ];
+
+
+    config.filebrowserBrowseUrl = '/browser/browse.php';
+    config.filebrowserUploadUrl = '/uploader/upload.php';
+
+// Setup cropper options. (See cropper.js documentation https://github.com/fengyuanchen/cropperjs)
+    config.cropperOption = {
+        'aspectRatio': 1.8,
+        'autoCropArea': 1,
+        'background': false,
+        'cropBoxResizable': false,
+        'dragMode': 'move'
+    };
+
+// Add js and css urls to cropper.js
+    config.cropperJsUrl = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js';
+    config.cropperCssUrl = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css';
+
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
     //{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
@@ -155,7 +178,7 @@ CKEDITOR.editorConfig = function( config ) {
 	//config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elements.
-    config.format_tags = 'p;h1;h2;h3;pre';
+    config.format_tags = 'p;h3;h4;h5;pre';
 
     //#####Image upload via CKeditor - TODO//
     //config.uploadUrl;
