@@ -14,11 +14,9 @@ CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
 CKEDITOR.plugins.addExternal('symbol', '/custom_modules/symbol/');
 CKEDITOR.plugins.addExternal('copyformatting', '/custom_modules/copyformatting/');
-CKEDITOR.plugins.addExternal('imagecrop', '/custom_modules/imagecrop/');
 
 
 CKEDITOR.disableAutoInline = true;
-
 CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
@@ -32,43 +30,27 @@ CKEDITOR.editorConfig = function( config ) {
     config.format_tags = 'p;h3;h4;h5;pre';
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
-        '/',
-            { name: 'styles', items: [ 'Font'] },
+            //{ name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+        //'/',
+        //    { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
-            { name: 'styles', items: [ 'Styles' ] },
-            { name: 'styles', items: [ 'Format'] },
-        '/',
-            { name: 'insert', items: [ 'Image', 'ImageCrop', 'Table', 'Symbol', 'Youtube'] },
-            { name: 'source', items: [ 'Mathjax'] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        '/',
-            { name: 'document', items: [ 'Sourcedialog'] },
-            { name: 'document', items: [ 'CodeSnippet'] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        '/',
+        //    { name: 'styles', items: [ 'lineheight' ] },
+            //{ name: 'styles', items: [ 'Styles' ] },
+            //{ name: 'styles', items: [ 'Format'] },
+        //'/',
+            //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'insert', items: [ 'Image'] },
+            //{ name: 'source', items: [ 'Mathjax'] },
+			//{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            //{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter'] },
+        //'/',
+            //{ name: 'document', items: [ 'Sourcedialog'] },
+            //{ name: 'document', items: [ 'CodeSnippet'] },
+			//{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+        //'/',
     ];
-
-
-    //config.filebrowserBrowseUrl = '/browser/browse.php';
-    //config.filebrowserUploadUrl = '/uploader/upload.php';
-
-// Setup cropper options. (See cropper.js documentation https://github.com/fengyuanchen/cropperjs)
-    config.cropperOption = {
-        'aspectRatio': 1.8,
-        'autoCropArea': 1,
-        'background': false,
-        'cropBoxResizable': false,
-        'dragMode': 'move'
-    };
-
-// Add js and css urls to cropper.js
-    config.cropperJsUrl = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js';
-    config.cropperCssUrl = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css';
-
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
     //{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
@@ -180,16 +162,13 @@ CKEDITOR.editorConfig = function( config ) {
 
 	//config.removeButtons = 'Underline,Subscript,Superscript';
 
-	// Set the most common block elements.
-    config.format_tags = 'p;h3;h4;h5;pre';
-
     //#####Image upload via CKeditor - TODO//
     //config.uploadUrl;
     //config.uploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting,imagecrop';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';

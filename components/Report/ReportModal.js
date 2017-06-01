@@ -48,8 +48,7 @@ class ReportModal extends React.Component {
             onSuccess: this.handleSendReport.bind(this)
         };
 
-        $('.ui.form.report')
-            .form(reportValidation);
+        //$('.ui.form.report').form(reportValidation);
     }
 
     componentDidUpdate() {
