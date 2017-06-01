@@ -32,12 +32,12 @@ class UserNotificationsPanel extends React.Component {
         }
     }
 
-    handleChangeToggle(type, id) {
-        this.context.executeAction(updateUserNotificationsVisibility, {
-            changedType: type,
-            changedId: id
-        });
-    }
+    // handleChangeToggle(type, id) {
+    //     this.context.executeAction(updateUserNotificationsVisibility, {
+    //         changedType: type,
+    //         changedId: id
+    //     });
+    // }
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {
@@ -50,34 +50,34 @@ class UserNotificationsPanel extends React.Component {
             return null;
         }
         //Create subscription lists
-        const subscriptions = this.props.UserNotificationsStore.subscriptions;
-        const userSubscriptionList = subscriptions.map((s, index) => {
-            if (s.type === 'user')
-                return (
-                    <div className="ui item toggle checkbox" key={index} >
-                        <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-                        <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-                    </div>
-                );
-        });
-        const slideSubscriptionList = subscriptions.map((s, index) => {
-            if (s.type === 'slide')
-                return (
-                    <div className="ui item toggle checkbox" key={index} >
-                        <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-                        <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-                    </div>
-                );
-        });
-        const deckSubscriptionList = subscriptions.map((s, index) => {
-            if (s.type === 'deck')
-                return (
-                    <div className="ui item toggle checkbox" key={index} >
-                        <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-                        <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-                    </div>
-                );
-        });
+        // const subscriptions = this.props.UserNotificationsStore.subscriptions;
+        // const userSubscriptionList = subscriptions.map((s, index) => {
+        //     if (s.type === 'user')
+        //         return (
+        //             <div className="ui item toggle checkbox" key={index} >
+        //                 <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
+        //                 <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
+        //             </div>
+        //         );
+        // });
+        // const slideSubscriptionList = subscriptions.map((s, index) => {
+        //     if (s.type === 'slide')
+        //         return (
+        //             <div className="ui item toggle checkbox" key={index} >
+        //                 <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
+        //                 <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
+        //             </div>
+        //         );
+        // });
+        // const deckSubscriptionList = subscriptions.map((s, index) => {
+        //     if (s.type === 'deck')
+        //         return (
+        //             <div className="ui item toggle checkbox" key={index} >
+        //                 <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
+        //                 <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
+        //             </div>
+        //         );
+        // });
         const activityTypeList = this.props.UserNotificationsStore.activityTypes.map((at, index) => {
 
             const labelName = (at.type === 'react') ? 'Like' : at.type;
