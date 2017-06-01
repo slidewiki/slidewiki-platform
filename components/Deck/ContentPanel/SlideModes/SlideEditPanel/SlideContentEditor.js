@@ -193,8 +193,25 @@ class SlideContentEditor extends React.Component {
                 this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
+                $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
+                    //remove resize and drag interaction because it generates HTML in slide editor content
+                    this.disableResizeDrag();
+                    console.log('====ckeditor on change====');
+                    //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                    setTimeout(() => {
+                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
+                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //this.addBorders();
+                            setTimeout(() => {
+                                this.resizeDrag();
+                                //this.forceUpdate();
+                            }, 500);
+                        });
+                    }, 500);
+                });
             }
         });
+
     }
     uniqueIDAllElements(){
         let allElements = this.refs.inlineContent.getElementsByTagName('*');
@@ -346,6 +363,16 @@ class SlideContentEditor extends React.Component {
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
         //TODO: needs sharedspace plugin for proper positioning of inline toolbars + http://ckeditor.com/addon/closebtn plugin for closing inline editor
+
+        //destroy previous ckeditor-plugins
+        if (CKEDITOR.instances.inlineContent != null) {
+            console.log('destroy previous CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
+        }
+        if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+            console.log('destroy previous CKEDITOR instance');
+            CKEDITOR.instances.inlineSpeakerNotes.destroy();
+        }
 
         //TODO: takes some time before font-size and other drop-downs work... or immediately when clicking in inline input
         CKEDITOR.disableAutoInline = true;
