@@ -23,9 +23,6 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
 
-    config.extraPlugins = 'imagecrop';
-    config.allowedContent = true;
-
     //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
     //config.extraPlugins = 'sourcedialog';
@@ -53,8 +50,8 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
 
-    config.filebrowserBrowseUrl = '/browser/browse.php';
-    config.filebrowserUploadUrl = '/uploader/upload.php';
+    //config.filebrowserBrowseUrl = '/browser/browse.php';
+    //config.filebrowserUploadUrl = '/uploader/upload.php';
 
 // Setup cropper options. (See cropper.js documentation https://github.com/fengyuanchen/cropperjs)
     config.cropperOption = {
@@ -186,7 +183,7 @@ CKEDITOR.editorConfig = function( config ) {
     //config.filebrowserUploadUrl = 'http://importservice.experimental.slidewiki.org/importImage/2';
     //config.codeSnippet_theme = 'github';
     //config.codeSnippet_theme = 'pojoaque';
-    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting';
+    config.extraPlugins = 'uploadimage,uploadwidget,codesnippet,youtube,mathjax,symbol,copyformatting,imagecrop';
     //config.codeSnippet_theme = 'pojoaque';
     //CKEDITOR.config.codeSnippet_theme = 'monokai_sublime';
     //config.extraPlugins = 'uploadimage';
