@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <textarea name="editor1"></textarea>
+
+    <script src="http://cdn.ckeditor.com/4.6.0/standard/ckeditor.js"></script>
+    <script>
+        // Get path to ckeditor plugins directory
+        var path = location.href.substring(0, location.href.lastIndexOf('/'));
+            path = path.substring(0, path.lastIndexOf('/') + 1);
+
+        // If imagecrop plugin do not inside ckeditor plugins directory
+        // we will need to use addExternal and setup path to imagecrop plugin
+        CKEDITOR.plugins.addExternal(
+            'imagecrop',
+            path,
+            'plugin.js'
+        );
+
+        // Replace textarea with ckeditor and add imagecrop options
+        CKEDITOR.replace('editor1', {
+            'extraPlugins': 'imagecrop',
+            'allowedContent': true,
+            'toolbar': 'Custom',
+            'toolbar_Custom': [{'name': 'insert', 'items': ['ImageCrop']}],
+            
+            // Setup file browser urls
+            // (See CKEditor documentation http://docs.ckeditor.com/#!/guide/dev_file_browser_api)
+            'filebrowserBrowseUrl': '/browser/browse.php',
+            'filebrowserUploadUrl': '/uploader/upload.php',
+
+            // Setup cropper options.
+            // (See cropper.js documentation https://github.com/fengyuanchen/cropperjs)
+            'cropperOption': {
+                'aspectRatio': 1.8,
+                'autoCropArea': 1,
+                'background': false,
+                'cropBoxResizable': false,
+                'dragMode': 'move'
+            },
+
+            // Add js and css urls to cropper.js
+            'cropperJsUrl': 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js',
+            'cropperCssUrl': 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.css'
+        });
+    </script>
+</body>
+</html>
