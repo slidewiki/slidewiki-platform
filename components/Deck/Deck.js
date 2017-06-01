@@ -88,7 +88,7 @@ class Deck extends React.Component {
         }
         return (
             <div className="ui fluid container" ref="deck">
-                <div className="ui vertically padded stackable grid ">
+                <div className="ui padded stackable grid ">
                 {error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''}
                 <div className="row">
                     <div className={navigationPanelClass}>
