@@ -193,8 +193,25 @@ class SlideContentEditor extends React.Component {
                 this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
+                $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
+                    //remove resize and drag interaction because it generates HTML in slide editor content
+                    this.disableResizeDrag();
+                    console.log('====ckeditor on change====');
+                    //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                    setTimeout(() => {
+                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
+                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //this.addBorders();
+                            setTimeout(() => {
+                                this.resizeDrag();
+                                //this.forceUpdate();
+                            }, 500);
+                        });
+                    }, 500);
+                });
             }
         });
+
     }
     uniqueIDAllElements(){
         let allElements = this.refs.inlineContent.getElementsByTagName('*');
@@ -356,7 +373,7 @@ class SlideContentEditor extends React.Component {
             console.log('destroy previous CKEDITOR instance');
             CKEDITOR.instances.inlineSpeakerNotes.destroy();
         }
-        
+
         //TODO: takes some time before font-size and other drop-downs work... or immediately when clicking in inline input
         CKEDITOR.disableAutoInline = true;
         //if (typeof(CKEDITOR.instances.inlineSpeakerNotes) === 'undefined'){
