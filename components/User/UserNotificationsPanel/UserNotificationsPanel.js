@@ -32,12 +32,12 @@ class UserNotificationsPanel extends React.Component {
         }
     }
 
-    // handleChangeToggle(type, id) {
-    //     this.context.executeAction(updateUserNotificationsVisibility, {
-    //         changedType: type,
-    //         changedId: id
-    //     });
-    // }
+    handleChangeToggle(type, id) {
+        this.context.executeAction(updateUserNotificationsVisibility, {
+            changedType: type,
+            changedId: id
+        });
+    }
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {

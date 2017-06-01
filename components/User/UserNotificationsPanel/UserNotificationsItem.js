@@ -30,7 +30,7 @@ class UserNotificationsItem extends React.Component {
             'big': this.props.iconSize === 'big'
         });
 
-        if (notification.user_id === '0') {
+        if (notification.user_id === '0' || notification.user_id === 'undefined') {
             notification.user_id = undefined;
         }
 
