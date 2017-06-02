@@ -30,8 +30,8 @@ import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
-
 import {navigateAction} from 'fluxible-router';
+import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -242,8 +242,12 @@ export default {
                     context.executeAction(loadPresentation, payload, callback);
                 },
                 (callback) => {
+                    context.executeAction(loadSupportedLanguages, payload, callback);
+                },
+                (callback) => {
                     context.executeAction(loadTranslations, payload, callback);
-                }
+                },
+
             ],
             (err, result) => {
                 if(err) console.log(err);

@@ -213,6 +213,21 @@ export default {
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
+        } else if (resource === 'deck.translate'){
+            let toSend = {
+                user: params.user,
+                language: params.language
+            };
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId + '/translate',
+                json: true,
+                body: toSend
+            }).then((deck) => {
+                console.log('DECK:' + deck);
+                callback(false, deck);
+            })
+            .catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {

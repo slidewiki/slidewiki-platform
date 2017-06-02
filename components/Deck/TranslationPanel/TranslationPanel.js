@@ -2,8 +2,9 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ISO6391 from 'iso-639-1';
 import {NavLink, navigateAction} from 'fluxible-router';
+import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
-import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 
@@ -48,6 +49,13 @@ class TranslationPanel extends React.Component {
         });
     }
 
+    handleTranslateToClick(code){
+        
+        this.context.executeAction(translateDeckRevision, {
+            language: code
+        });
+    }
+
     renderAvailable(translation) {
         if (translation.lang !== this.props.TranslationStore.currentLang.lang){
             let languageName = ISO6391.getName(translation.lang.toLowerCase());
@@ -62,17 +70,43 @@ class TranslationPanel extends React.Component {
                     </Dropdown.Item>
                 );
             }
-        } 
+        }
+    }
+
+    renderTranslateTo(supported) {
+        if (supported.key !== this.props.TranslationStore.currentLang.lang){
+
+            return (
+                <Dropdown.Item
+                key = {supported.code}
+                onClick={ this.handleTranslateToClick.bind(this, supported.code) }
+                //href={''}
+                >
+                {supported.name}
+                </Dropdown.Item>
+            );
+        }
+
     }
 
     render() {
         const deckLanguage = this.props.TranslationStore.currentLang.lang;
         const translations = this.props.TranslationStore.translations;
+        const supported = this.props.TranslationStore.supportedLangs;
+
         let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase())}</span>;
         return(
 
             <Dropdown item trigger={currentLang}>
-                <Dropdown.Menu>{ translations.map(this.renderAvailable, this) }</Dropdown.Menu>
+                <Dropdown.Menu>
+                { translations.map(this.renderAvailable, this) }
+                    <Dropdown.Divider />
+                    <Dropdown scrolling item trigger={ <span>Translate</span>}>
+                        <Dropdown.Menu>
+                            {supported.map(this.renderTranslateTo, this)}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Dropdown.Menu>
             </Dropdown>
 
         );
