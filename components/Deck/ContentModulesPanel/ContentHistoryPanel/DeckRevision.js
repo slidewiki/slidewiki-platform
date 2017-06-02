@@ -36,6 +36,10 @@ class DeckRevision extends React.Component {
     render() {
         const revision = this.props.revision;
         const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+        let segmentStyle = {
+            'overflow-y': 'auto',
+            'max-height': '400px'
+        };
         return (
             <List.Item>
                 <List.Content floated='right'>
@@ -51,7 +55,7 @@ class DeckRevision extends React.Component {
                             href={'/user/' + revision.username}> {revision.username}</a>
                             </span>
                     {revision.expanded &&
-                        <Segment>
+                        <Segment style={segmentStyle}>
                             <Header size='small'>Version changes
                                 {revision.latest ? '' :
                                     <Button.Group basic size='tiny' floated='right'>
