@@ -48,9 +48,16 @@ class Presentation extends React.Component{
 
             this.revealDiv.style.display = 'inline';
 
-            let pptxwidth = $('.pptx2html').width();
-            let pptxheight = $('.pptx2html').height();
 
+            if($('.pptx2html')){
+                let pptxwidth = $('.pptx2html').width();
+                let pptxheight = $('.pptx2html').height();
+            } else {
+                let pptxwidth = '100%';
+                let pptxheight = '100%';
+            }
+            let pptxwidth = '100%';
+            let pptxheight = '100%';
             Reveal.initialize({
                 width: pptxwidth,
     			height: pptxheight,
