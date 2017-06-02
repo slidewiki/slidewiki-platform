@@ -28,6 +28,7 @@ import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
+import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -199,8 +200,12 @@ export default {
                     context.executeAction(loadPresentation, payload, callback);
                 },
                 (callback) => {
+                    context.executeAction(loadSupportedLanguages, payload, callback);
+                },
+                (callback) => {
                     context.executeAction(loadTranslations, payload, callback);
-                }
+                },
+
             ],
             (err, result) => {
                 if(err) console.log(err);

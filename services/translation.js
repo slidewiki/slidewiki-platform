@@ -1,3 +1,5 @@
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
 const log = require('../configs/log').log;
 
 export default {
@@ -33,6 +35,19 @@ export default {
 
             let currentLang = {'lang': 'EN', 'id': 343};
             callback(null, {translations: translations, currentLang: currentLang});
+        }
+        if (resource === 'translation.supported'){
+            rp.get({uri: Microservices.translation.uri + '/supported'}).then((res) => {
+                callback(null, {supportedLangs: JSON.parse(res)});
+            }).catch((err) => {
+                callback(err, {supportedLangs: []});
+            });
+            // let supportedLangs = [];
+            // supportedLangs = [
+            //     {'language':'Afrikan', 'code':'af'},
+            //     {'language':'Russian', 'code':'ru'}
+            // ];
+            // callback(null, {supportedLangs: supportedLangs});
         }
     }
     // other methods

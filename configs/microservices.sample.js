@@ -67,6 +67,9 @@ export default {
         },
         'tag': {
             uri : 'https://tagservice.experimental.slidewiki.org'
-        }
+        },
+        'translation': {
+            uri: 'https://translationservice.experimental.slidewiki.org'
+        },
     }
 };
