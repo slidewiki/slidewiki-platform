@@ -13,6 +13,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
         this.deckSlides =[];
+        this.deckSlidesTitles=[];
     }
 
     getState(){
@@ -25,7 +26,8 @@ class AttachSubdeckModalStore extends BaseStore{
             showSearchResults: this.showSearchResults,
             activeItem: this.activeItem,
             selectedSlides:this.selectedSlides,
-            deckSlides: this.deckSlides
+            deckSlides: this.deckSlides,
+            deckSlidesTitles:  this.deckSlidesTitles
 
         };
     }
@@ -42,6 +44,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = state.activeItem;
         this.selectedSlides = state.selectedSlides;
         this.deckSlides = state.deckSlides;
+        this.deckSlidesTitles = state.deckSlidesTitles;
 
     }
 
@@ -125,6 +128,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
         this.deckSlides =[];
+        this.deckSlidesTitles=[];
 
         this.emitChange();
     }
@@ -135,6 +139,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
         this.deckSlides =[];
+        this.deckSlidesTitles=[];
 
 
         this.emitChange();
@@ -152,6 +157,11 @@ class AttachSubdeckModalStore extends BaseStore{
             this.deckSlides = payload.slides.map((slide) => {
                 return(slide.id);
             });
+            this.deckSlidesTitles = payload.slides.map((slide) => {
+                return(slide.title);
+            });
+
+
         }
 
         this.emitChange();

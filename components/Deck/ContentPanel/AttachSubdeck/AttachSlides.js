@@ -17,10 +17,13 @@ class AttachSlides extends React.Component{
             selectedDeckTitle:  this.props.AttachSubdeckModalStore.selectedDeckTitle,
             selectedDeckId: this.props.AttachSubdeckModalStore.selectedDeckId,
             deckSlides: this.props.AttachSubdeckModalStore.deckSlides,
-            selectedSlides:this.props.AttachSubdeckModalStore.selectedSlides
-
+            selectedSlides:this.props.AttachSubdeckModalStore.selectedSlides,
+            deckSlidesTitles:this.props.AttachSubdeckModalStore.deckSlidesTitles,
+            selectedSlidesLabel: this.props.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length
 
         };
+        this.handleAllSlides = this.handleAllSlides.bind(this);
+        this.handleNone = this.handleNone.bind(this);
 
     }
     componentWillReceiveProps(nextProps){
@@ -29,23 +32,55 @@ class AttachSlides extends React.Component{
             userDecks: nextProps.AttachSubdeckModalStore.userDecks,
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
             deckSlides: nextProps.AttachSubdeckModalStore.deckSlides,
-            selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle
+            selectedSlides:nextProps.AttachSubdeckModalStore.selectedSlides,
+            selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
+            deckSlidesTitles:nextProps.AttachSubdeckModalStore.deckSlidesTitles,
+            selectedSlidesLabel: nextProps.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length
+
         });
 
     }
-    handleOnclick(selectedSlide){
-        let slides = this.state.selectedSlides;
+    checkNoEmpty(element){
+        return (element.toString().length>0);
+    }
 
-        slides.push(selectedSlide);
-        console.log('onclick');
-        console.log(selectedSlide);
+    handleOnclick(selectedSlide){
+      /*This method:
+       - adds the selectedSlide into the selectedSlides list if it was not selectedSlide
+       - removes the selectedSlide from the selectedSlides list if it was
+      */
+        let slides = this.state.selectedSlides;
+        let index = slides.indexOf(selectedSlide);
+        if(index === -1){//It was not selected
+            slides.push(selectedSlide);
+        } else { //It was selected...remove from it
+            slides[index]='';
+            slides = slides.filter(this.checkNoEmpty);
+        };
+
         this.setState({
             selectedSlides: slides
         });
-        console.log(this.state.selectedSlides);
-        this.context.executeAction(updateSelectedSlides,{selectedSlides:this.state.selectedSlides},null);
+
+        this.context.executeAction(updateSelectedSlides,{selectedSlides:slides},null);
 
     }
+    handleAllSlides(){
+        this.setState({
+            selectedSlides:this.state.deckSlides,
+        });
+        this.context.executeAction(updateSelectedSlides,{selectedSlides:this.state.deckSlides},null);
+    }
+
+    handleNone(){
+        this.setState({
+            selectedSlides: [],
+        });
+
+        this.context.executeAction(updateSelectedSlides,{selectedSlides:[]},null);
+
+    }
+
     handleKeyPress(selectedSlide,event){
         if(event.key === 'Enter'){
             event.preventDefault();
@@ -80,7 +115,8 @@ class AttachSlides extends React.Component{
                                     role="listitem"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
                                     tabIndex="0">
-                                    <Image src={Microservices.file.uri + '/slideThumbnail/' +slideId+'.jpeg'} bordered size='medium' />
+                                    <Image src={Microservices.file.uri + '/slideThumbnail/' +slideId+'.jpeg'}
+                                        alt={this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
                                   </Grid.Column>;
                 columnsContent[columnCount] = singleColumn;
                 columnCount ++;
@@ -126,11 +162,19 @@ class AttachSlides extends React.Component{
                                     </Grid.Row>
                                     <Grid.Row columns={2}>
                                       <Grid.Column textAlign="left">
-                                      <Label htmlFor="slidesContentId"  color='blue'  pointing="right"  content="Select slides:"/>
+                                      <Label htmlFor="slidesContentId"  color='blue'  pointing="right"  content="Selected slides:"/>
+                                      <Label  id="slidesContentId" content={this.state.selectedSlidesLabel} basic color="blue"/>
+
                                       </Grid.Column>
                                       <Grid.Column textAlign="right" >
-                                        <Button >All Slides</Button>
-                                        <Button >None</Button>
+                                        <Button type="button"
+                                           aria-label="All Slides"
+                                           data-tooltip="All Slides"
+                                           onClick={this.handleAllSlides}>All Slides</Button>
+                                        <Button type="button"
+                                            aria-label="None"
+                                            data-tooltip="None"
+                                            onClick={this.handleNone}>None</Button>
                                       </Grid.Column>
                                     </Grid.Row>
                                   </Grid>;

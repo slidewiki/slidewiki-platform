@@ -10,6 +10,7 @@ import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
+import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
 import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
@@ -50,6 +51,7 @@ class AttachSubdeckModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleAttachButton = this.handleAttachButton.bind(this);
         this.handleNextButton = this.handleNextButton.bind(this);
+        this.handlePreviousButton = this.handlePreviousButton.bind(this);
 
 
     }
@@ -132,12 +134,17 @@ class AttachSubdeckModal extends React.Component{
         this.handleClose();
 
     }
+    handlePreviousButton(){
+        this.setState({
+            showSlides:false
+        });
+        this.context.executeAction(updateSelectedSlides,{selectedSlides:[]},null);
+
+
+    }
 
 
     render() {
-
-
-
 
         //From my Decks option content
         let myDecksContent = <AttachMyDecks />;
@@ -148,7 +155,11 @@ class AttachSubdeckModal extends React.Component{
         let segmentPanelContent;
         let searchForm;
         let actionButton;
+        let actionButton2;
+        let attachMenu;
+
         if(!this.state.showSlides){//no deck selected, displaying next button
+            attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
                 segmentPanelContent = myDecksContent;
@@ -164,15 +175,22 @@ class AttachSubdeckModal extends React.Component{
                                 Next
                                <Icon name="arrow right"/>
                             </Button>;
-        } else{ //deck selected, diplay its slides
-
+            actionButton2='';
+        } else{ //deck selected, diplay its slides, previous and attach button
+            attachMenu ='';
             searchForm ='';
             segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
-                            data-tooltip="Attach" disabled={this.state.selectedSlides===[]} onClick={this.handleAttachButton}>
+                            data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
                              <Icon name="attach"/>
                               Attach
                              <Icon name="attach"/>
+                          </Button>;
+            actionButton2 =<Button id="previousAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Previos"
+                            data-tooltip="Previous" onClick={this.handlePreviousButton}>
+                             <Icon name="arrow left"/>
+                              Previous
+                             <Icon name="arrow left"/>
                           </Button>;
 
         }
@@ -213,7 +231,7 @@ class AttachSubdeckModal extends React.Component{
                 <Modal.Content>
                     <Container text>
                          <Segment color="blue" textAlign="center" padded>
-                            <AttachMenu activeItem={this.state.activeItem}/>
+                            {attachMenu}
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
 
@@ -221,6 +239,7 @@ class AttachSubdeckModal extends React.Component{
                                {segmentPanelContent}
                             </Segment>
                             <Modal.Actions>
+                              {actionButton2}
                               {actionButton}
                               <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
