@@ -2,7 +2,7 @@ import React from 'react';
 import revertRevision from '../../../../actions/history/revertRevision';
 import showRevisionChanges from '../../../../actions/history/showRevisionChanges';
 import hideRevisionChanges from '../../../../actions/history/hideRevisionChanges';
-import {Accordion, Button, Icon, Header, Segment} from 'semantic-ui-react';
+import {List, Button, Icon, Header, Segment} from 'semantic-ui-react';
 import DeckRevisionChanges from './DeckRevisionChanges';
 import moment from 'moment';
 
@@ -23,7 +23,7 @@ class DeckRevision extends React.Component {
 
     handleViewRevisionClick() {
         //open the deck revision in a new tab
-        window.open('/deck/' + this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id , '_blank');
+        window.open('/deck/' + this.props.selector.sid.split('-')[0] + '-' + this.props.revision.id, '_blank');
     }
 
 
@@ -36,39 +36,43 @@ class DeckRevision extends React.Component {
     render() {
         const revision = this.props.revision;
         const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
-
         return (
-        <div>
-            <Accordion.Title active={revision.expanded}>
-                <Icon color='grey' name='save' size='large' className='outline'
-                      aria-label='Saved at'/>
-                <span>{moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})} by <a
-                className="user"
-                href={'/user/' + revision.username}> {revision.username}</a>
+            <List.Item>
+                <List.Content floated='right'>
+                    <Button basic floated='right' size='tiny' aria-label='expand details'
+                            icon='ellipsis horizontal'
+                            onClick={this.handleExpandClick.bind(this)}/>
+                </List.Content>
+                <List.Content>
+                        <Icon color='grey' name='save' size='large' className='outline'
+                              aria-label='Saved at'/>
+                        <span>{moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})} by <a
+                            className="user"
+                            href={'/user/' + revision.username}> {revision.username}</a>
                             </span>
-                <Button basic floated='right' size='tiny' aria-label='expand details'
-                        icon='ellipsis horizontal'
-                        onClick={this.handleExpandClick.bind(this)}/>
-            </Accordion.Title>
-            <Accordion.Content active={revision.expanded}>
-                <Segment clearing>
-                    <Header size='small'>Version changes
-                        {revision.latest ? '' :
-                        <Button.Group basic size='tiny' floated='right'>
-                            <Button aria-label='Compare to current deck' icon='exchange' disabled/>
-                            <Button aria-label='Restore deck' icon='history' disabled={!canEdit} onClick={this.handleRevertClick.bind(this)}/>
-                            <Button aria-label='View deck in new tab' icon onClick={this.handleViewRevisionClick.bind(this)}>
-                                <Icon.Group>
-                                    <Icon name='unhide'/>
-                                    <Icon name='external' corner/>
-                                </Icon.Group>
-                            </Button>
-                        </Button.Group>}
-                    </Header>
-                    <DeckRevisionChanges selector={this.props.selector} permissions={this.props.permissions} changes={this.props.changes}/>
-                </Segment>
-            </Accordion.Content>
-        </div>
+                    {revision.expanded &&
+                        <Segment>
+                            <Header size='small'>Version changes
+                                {revision.latest ? '' :
+                                    <Button.Group basic size='tiny' floated='right'>
+                                        <Button aria-label='Compare to current deck' icon='exchange' disabled/>
+                                        <Button aria-label='Restore deck' icon='history' disabled={!canEdit}
+                                                onClick={this.handleRevertClick.bind(this)}/>
+                                        <Button aria-label='View deck in new tab' icon
+                                                onClick={this.handleViewRevisionClick.bind(this)}>
+                                            <Icon.Group>
+                                                <Icon name='unhide'/>
+                                                <Icon name='external' corner/>
+                                            </Icon.Group>
+                                        </Button>
+                                    </Button.Group>}
+                            </Header>
+                            <DeckRevisionChanges selector={this.props.selector} permissions={this.props.permissions}
+                                                 changes={this.props.changes}/>
+                        </Segment>
+                    }
+                </List.Content>
+            </List.Item>
         );
     }
 }

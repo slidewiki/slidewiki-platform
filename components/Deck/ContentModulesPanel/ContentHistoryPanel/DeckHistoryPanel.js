@@ -5,7 +5,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import createRevision from '../../../../actions/history/createRevision';
 import DeckRevision from './DeckRevision';
-import {Button, Divider, Accordion} from 'semantic-ui-react';
+import {Button, Divider, List} from 'semantic-ui-react';
 
 class DeckHistoryPanel extends React.Component {
 
@@ -29,12 +29,13 @@ class DeckHistoryPanel extends React.Component {
         return (
         <div ref="deckHistoryPanel" className="ui">
             {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
-            <div><Button positive aria-label='Create a new version of this deck' size='small' floated='right' icon='plus'
+            <div><Button positive aria-label='Create a new version of this deck' size='small' floated='right'
+                         icon='plus'
                          content='Create a new version' onClick={this.handleCreateRevisionClick.bind(this)}/>
                 <Divider hidden clearing/></div> : ''}
-            <Accordion fluid>
+            <List relaxed verticalAlign='middle'>
                 {deckRevisions}
-            </Accordion>
+            </List>
         </div>
         );
     }
