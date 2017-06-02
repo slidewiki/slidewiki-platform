@@ -8,6 +8,8 @@ import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
 import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
+import AttachSlides from '../ContentPanel/AttachSubdeck/AttachSlidesModal';
+
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -152,7 +154,7 @@ class TreeNode extends React.Component {
             classNames : classNames({
                 'ui':true,
                 'disabled': this.props.permissions.readOnly || !this.props.permissions.edit
-            }),            
+            }),
             iconSize : 'small',
             attached : '',
             disabled: this.props.item.get('type') === 'deck'
@@ -169,6 +171,7 @@ class TreeNode extends React.Component {
                             <i className="inverted corner plus icon"></i>
                         </i>
                     </button>
+                    <AttachSlides buttonStyle={buttonStyle} selector={nodeSelector} />
                     <button className="ui button"
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})}
                             aria-label="Add deck"

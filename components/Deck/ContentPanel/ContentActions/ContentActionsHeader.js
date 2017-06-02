@@ -7,8 +7,8 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
-import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
-import AttachSlides from '../AttachSubdeck/AttachSlidesModal.js';
+import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal';
+import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 
@@ -96,7 +96,7 @@ class ContentActionsHeader extends React.Component {
                               <i className="inverted corner plus icon"></i>
                             </i>
                         </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />                  
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
                         <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
                             <i className="grey large copy icon"></i>
 
