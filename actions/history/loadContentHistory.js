@@ -25,10 +25,11 @@ export default function loadContentHistory(context, payload, done) {
 
     async.parallel([
         (callback) => {
+            let splitSid = payload.params.sid.split('-');
             if (payload.params.stype === 'deck'){
-                context.executeAction(loadDeckRevisions, {deckId: payload.params.sid.split('-')[0]}, callback);
+                context.executeAction(loadDeckRevisions, {deckId: splitSid[0], revisionId: splitSid[1]}, callback);
             } else {
-                context.executeAction(loadSlideChanges, {slideId: payload.params.sid.split('-')[0], deckId: payload.params.id.split('-')[0]}, callback);
+                context.executeAction(loadSlideChanges, {slideId: splitSid[0], deckId: payload.params.id}, callback);
             }
         }],
     // final callback
