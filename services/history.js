@@ -41,7 +41,9 @@ export default {
         } else if (resource === 'history.revisions') {
             rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisions', json: true}).then((revisions) => {
                 //keep only revisions up to the given revision id
-                revisions = revisions.slice(revisions.findIndex((rev) => rev.id === args.revisionId));
+                if (args.revisionId != null){
+                    revisions = revisions.slice(revisions.findIndex((rev) => rev.id === args.revisionId));
+                }
                 //find unique user ids in revisions
                 let userIds = [... new Set(revisions.map((rev) => rev.user))];
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
