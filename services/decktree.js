@@ -41,6 +41,22 @@ export default {
                 console.log(err);
                 callback(null, {node: {}, selector: args.selector});
             });
+        } else if(resource === 'decktree.nodelist'){
+          /*********connect to microservices*************/
+            rp.post({
+                uri: Microservices.deck.uri + '/decktree/nodelist/create', //it depends on kostis implementation
+                body:JSON.stringify({
+                    selector: selector,
+                    nodeSpec: nodeSpec,
+                    user: args.userid.toString()
+                })
+            }).then((res) => {
+                callback(null, {node: JSON.parse(res), selector: args.selector});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {node: {}, selector: args.selector});
+            });
+
         }
     },
     update: (req, resource, params, body, config, callback) => {
