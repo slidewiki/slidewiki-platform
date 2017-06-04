@@ -7,6 +7,7 @@ import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TreePanel from './TreePanel/TreePanel';
+import InfoPanel from './InfoPanel/InfoPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
@@ -125,23 +126,15 @@ class Deck extends React.Component {
                         </div>
                     </div>
                 </div>
-                    
+
                     <div className={rightColClass}>
-                         <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
-                        </div>
-                        <div className="ui hidden divider"></div>
-                        <div className={ActivityFeedPanelClass}>
-                            <div className="row">
-                                <ActivityFeedPanel />
-                            </div>
+                         <InfoPanel DeckTreeStore={this.props.DeckTreeStore} mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
                         </div>
                         <div className="ui hidden divider"></div>
                     </div>
-               
-             
 
                 </div>
-         
+
         );
     }
 }

@@ -2,11 +2,22 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
-import DeckTreeStore from '../../../stores/SlideViewStore';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import Tree from '../TreePanel/Tree';
+import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
+import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
+import renameTreeNode from '../../../actions/decktree/renameTreeNode';
+import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
+import saveTreeNode from '../../../actions/decktree/saveTreeNode';
+import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
+import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
+import forkDeck from '../../../actions/decktree/forkDeck';
+import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 import PermissionsStore from '../../../stores/PermissionsStore';
-import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
-import ContributorsStore from '../../../stores/ContributorsStore';
+import SlideViewStore from '../../../stores/SlideViewStore';
+import InfoPanelHeader from './InfoPanelHeader';
+import InfoPanelInfoView from './InfoPanelInfoView';
 
 
 class InfoPanel extends React.Component {
@@ -17,43 +28,18 @@ class InfoPanel extends React.Component {
         };
         const slideTitle = SlideViewStore.title;
 
+        let deckTree = this.props.DeckTreeStore.deckTree;
+        let selector = this.props.DeckTreeStore.selector;
+        let prevSelector = this.props.DeckTreeStore.prevSelector;
+        let nextSelector = this.props.DeckTreeStore.nextSelector;
+        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
+
 
         return (
             <div className="ui panel sw-info-panel" ref="infoPanel" >
                 <div className="ui segments">
-                    <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
-                    </div>
-                    <div className="ui top attached pointing icon stackable fluid large menu">
-                        <div className="ui basic button">
-                            <i className="very large info circle icon"></i>Info
-                        </div>
-                        <div className="ui basic button">
-                            <i className="very large tag icon"></i>Suggest
-                        </div>
-                        <div className="ui basic button">
-                            <i className="very large write icon"></i>Edit
-                        </div>
-                    </div>
-
-
-                    <div className="ui bottom attached segment" >
-                        <div className="ui compact segments">
-                            <div className="ui attached segments">
-                                <h4 className="header item">THis is the slide title </h4>
-                                <div ref="contentModulesPanel">
-                                    <div className="ui segment attached">
-                                        {ContributorsPanel}
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-
-
-                    </div>
+                  <InfoPanelHeader   />
+                  <InfoPanelInfoView rootNode={rootNode} />
                 </div>
             </div>
         );
@@ -63,11 +49,13 @@ class InfoPanel extends React.Component {
 InfoPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TreePanel = connectToStores(InfoPanel, [SlideViewStore, UserProfileStore, PermissionsStore], (context, props) => {
+InfoPanel = connectToStores(InfoPanel, [SlideViewStore, UserProfileStore, PermissionsStore, DeckTreeStore], (context, props) => {
     return {
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+
     };
 });
 export default InfoPanel;
