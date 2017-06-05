@@ -28,8 +28,22 @@ class DeckRevision extends React.Component {
 
 
     handleRevertClick() {
-        this.context.executeAction(revertRevision, {
-            selector: this.props.selector, revisionId: this.props.revision.id
+        swal({
+            text: 'This action will restore the deck to an earlier version. Do you want to continue?',
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, restore deck',
+            confirmButtonClass: 'ui olive button',
+            cancelButtonText: 'No',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false
+        }).then((accepted) => {
+            this.context.executeAction(revertRevision, {
+                selector: this.props.selector, revisionId: this.props.revision.id
+            });
+        }, (reason) => {
+            //done(reason);
         });
     }
 

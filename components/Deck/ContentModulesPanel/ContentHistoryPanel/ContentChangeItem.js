@@ -7,8 +7,22 @@ import {NavLink} from 'fluxible-router';
 class ContentChangeItem extends React.Component {
 
     handleRevertClick() {
-        this.context.executeAction(revertRevision, {
-            selector: this.props.selector, revisionId: this.props.change.value.ref.revision
+        swal({
+            text: 'This action will restore the slide to an earlier version. Do you want to continue?',
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, restore slide',
+            confirmButtonClass: 'ui olive button',
+            cancelButtonText: 'No',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false
+        }).then((accepted) => {
+            this.context.executeAction(revertRevision, {
+                selector: this.props.selector, revisionId: this.props.change.value.ref.revision
+            });
+        }, (reason) => {
+            //done(reason);
         });
     }
 
@@ -68,16 +82,21 @@ class ContentChangeItem extends React.Component {
                 description = <span>updated the deck</span>;
         }
 
-        let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) ? <span><Button.Group basic size='tiny' floated='right'>
-                        <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
-                        <Button aria-label='Restore slide' icon='history' disabled={!canEdit} onClick={this.handleRevertClick.bind(this)} />
-                        <Button aria-label='View slide' icon>
-                            <Icon.Group>
-                                <Icon name='unhide'/>
-                                <Icon name='external' corner/>
-                            </Icon.Group>
-                        </Button>
-                    </Button.Group></span> : '';
+        // buttons are shown only for slide history and only for changes that result in new slide revisions
+        let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) &&
+            <span>
+                <Button.Group basic size='tiny' floated='right'>
+                            <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
+                            <Button aria-label='Restore slide' icon='history' disabled={!canEdit}
+                                    onClick={this.handleRevertClick.bind(this)}/>
+                            <Button aria-label='View slide' icon>
+                                <Icon.Group>
+                                    <Icon name='unhide'/>
+                                    <Icon name='external' corner/>
+                                </Icon.Group>
+                            </Button>
+                </Button.Group>
+            </span>;
 
         return (
         <Feed.Event>
