@@ -105,7 +105,7 @@ class AttachSlides extends React.Component{
         let singleRow;
         let rowsContent=[];
         let slideId;
-        //tabIndex="0" quitado de debajo de aria-selected
+  
         for(let i=0;i<numRows;i++){
             while((columnCount<this.numColumns) && (slidesShowed < this.state.deckSlides.length)){
                 slideId =this.state.deckSlides[slidesShowed];
@@ -115,9 +115,9 @@ class AttachSlides extends React.Component{
                                     style={this.state.selectedSlides.includes(slideId)?activeItemStyle:{}}
                                     role="gridcell"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
-                                    >
+                                    tabIndex="0">
                                     <Image src={Microservices.file.uri + '/slideThumbnail/' +slideId+'.jpeg'}
-                                        alt={this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
+                                        alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
                                   </Grid.Column>;
                 columnsContent[columnCount] = singleColumn;
                 columnCount ++;

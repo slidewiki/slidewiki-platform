@@ -28,8 +28,7 @@ class AttachMyDecks extends React.Component{
 
     }
     render(){
-        console.log('AttachMyDecks'+this.props.destinationDeckId);
-
+  
         let userInfo ={
             userId: this.props.UserProfileStore.userid,
             username: this.props.UserProfileStore.username
