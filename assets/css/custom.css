@@ -37,31 +37,57 @@
 /* Diff view related */
 
 .top-diff .helpers {
-  padding: 2%;
   font-size: 20px;
+  position: absolute;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+}
+
+.helpers .checkbox {
+  margin: 5px 0px;
 }
 
 .top-diff .reveal {
   position: relative;
+  width: calc(100% - 200px);
 }
 
 .top-diff .reveal .slides {
   position: relative;
 }
 
+.top-diff .diff-header{
+  display: flex;
+  font-size: 16px;
+  height: 60px;
+  padding: 5px;
+  color: #fff;
+  width: 100%;
+  -webkit-box-align: center;
+  padding: 18px;
+  background-color: #ff9900;
+}
+
+.top-diff .reveal .diff-header{
+  background-color: #424242;
+  color: #fff;
+}
+
 .diff-view {
   display: flex;
   flex-direction: row;
-  border-top: 3px solid #ccc;
 }
 
 .initVers, .mergedVers {
   flex: 1;
   width: 50%;
-  padding: 2%;
+  border-right: 2px solid #333;
 }
 
-.initVers {border-right: 3px solid #ccc;}
+.top-diff .inlineContent {
+  padding: 2%;
+}
 
 @media screen and (max-width: 900px) {
    .diff-view { flex-direction: column; }
@@ -119,4 +145,15 @@
   color: #b30000;
   text-decoration: line-through;
   line-height: 32px;
+}
+
+.diff-view.hide-add .added, .diff-view.hide-mod .modified, .diff-view.hide-del .deleted  {
+  border: 5px solid transparent;
+  background-color: transparent;
+}
+
+.diff-view.hide-text .ins, .diff-view.hide-text .del{
+  color: #333;
+  background-color: transparent;
+  text-decoration: none;
 }

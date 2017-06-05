@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Radio} from 'semantic-ui-react';
+import {Radio, Checkbox} from 'semantic-ui-react';
 import diff from 'virtual-dom/diff';
 import {connectToStores} from 'fluxible-addons-react';
 
@@ -24,7 +24,13 @@ class DiffView extends Component {
         diffcontent: this.props.content,
         currContent: this.props.content,
         base: this.props.DiffViewStore.baseSlide,
-        diff: this.props.DiffViewStore.diffSlide
+        diff: this.props.DiffViewStore.diffSlide,
+        show: {
+            add: true,
+            mod: true,
+            del: true,
+            text: true
+        }
     }
 
     componentDidMount = () => {
@@ -47,6 +53,13 @@ class DiffView extends Component {
         this.setState({
             inverse: !this.state.inverse
         });
+    }
+
+    toggleVisibleChanges = (mode) => {
+        let show = this.state.show;
+        show[mode] = !show[mode];
+
+        this.setState({ show });
     }
 
     resize = () => {
@@ -100,27 +113,46 @@ class DiffView extends Component {
     }
 
     render() {
-        const { base, diff, inverse, diffcontent, currContent, isLoaded } = this.state;
+        const { base, diff, inverse, diffcontent, currContent, isLoaded, show } = this.state;
 
         if(!isLoaded) return (<div>Loading ...</div>);
 
         return (
             <div className="fluid container ui top-diff">
               <div className='ui'>
-                <div className='helpers'>Change color palette:
-                    <Radio toggle onChange={this.toggleColor}/>
+                <div className='helpers'>
+                  <div className='diff-header'>
+                    Settings
+                  </div>
+                  <div className='inlineContent'>
+                    <Radio label='Change color palette' toggle onChange={this.toggleColor}/>
+                    <Checkbox label='Show Addition' defaultChecked onChange={() => this.toggleVisibleChanges('add')} />
+                    <Checkbox label='Show Mofidication' defaultChecked onChange={() => this.toggleVisibleChanges('mod')} />
+                    <Checkbox label='Show Deletion' defaultChecked onChange={() => this.toggleVisibleChanges('del')} />
+                    <Checkbox label='Show Text' defaultChecked onChange={() => this.toggleVisibleChanges('text')} />
+                  </div>
                 </div>
 
                 <div className='reveal'>
                     <div className='slides'>
-                        <div className={`diff-view ${inverse ? 'inverse' : ''} `}>
+                        <div className={`diff-view
+                            ${inverse && 'inverse'}
+                            ${!show.add && 'hide-add'}
+                            ${!show.mod && 'hide-mod'}
+                            ${!show.del && 'hide-del'}
+                            ${!show.text && 'hide-text'}
+                            `}>
                             <div className='initVers' id='container'>
-                              <span>Revision [#{base.id}]</span>
+                              <div className='diff-header'>
+                                Revision [#{base.id}]
+                              </div>
                               <div className='inlineContent' dangerouslySetInnerHTML={{__html: currContent}}></div>
                             </div>
                             <div className='mergedVers'>
-                              <span>Diff view changes between: [#{base.id}] and [#{diff.id}]</span>
-                              <div dangerouslySetInnerHTML={{__html: diffcontent}}></div>
+                              <div className='diff-header'>
+                                Diff view changes between: [#{base.id}] and [#{diff.id}]
+                              </div>
+                              <div className='inlineContent' dangerouslySetInnerHTML={{__html: diffcontent}}></div>
                             </div>
                         </div>
                     </div>
