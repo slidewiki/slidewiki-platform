@@ -181,7 +181,7 @@ class AttachSubdeckModal extends React.Component{
                          <Segment color="blue" textAlign="center" padded>
                             <AttachMenu activeItem={this.state.activeItem}/>
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
+                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>
                                {searchForm}
                                {segmentPanelContent}
                             </Segment>
