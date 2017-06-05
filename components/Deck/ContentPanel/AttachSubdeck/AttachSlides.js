@@ -105,6 +105,7 @@ class AttachSlides extends React.Component{
         let singleRow;
         let rowsContent=[];
         let slideId;
+        //tabIndex="0" quitado de debajo de aria-selected
         for(let i=0;i<numRows;i++){
             while((columnCount<this.numColumns) && (slidesShowed < this.state.deckSlides.length)){
                 slideId =this.state.deckSlides[slidesShowed];
@@ -112,9 +113,9 @@ class AttachSlides extends React.Component{
                                     onClick={this.handleOnclick.bind(this,slideId)}
                                     onKeyPress={this.handleKeyPress.bind(this,slideId)}
                                     style={this.state.selectedSlides.includes(slideId)?activeItemStyle:{}}
-                                    role="listitem"
+                                    role="gridcell"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
-                                    tabIndex="0">
+                                    >
                                     <Image src={Microservices.file.uri + '/slideThumbnail/' +slideId+'.jpeg'}
                                         alt={this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
                                   </Grid.Column>;
@@ -183,7 +184,7 @@ class AttachSlides extends React.Component{
                                {headerContent}
                                <Grid columns={this.numColumns}
                                  style={{maxHeight:'400px',minHeight:'320px',overflowY:'auto'}}
-                                 role="listbox"
+                                 role="grid"
                                  aria-expanded="true">
                                 {rowsContent}
                                </Grid>

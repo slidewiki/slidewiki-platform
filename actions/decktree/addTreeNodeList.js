@@ -1,7 +1,7 @@
 import UserProfileStore from '../../stores/UserProfileStore';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
-import addActivity from '../activityfeed/addActivity';
+import addActivities from '../activityfeed/addActivities';
 
 export default function addTreeNodeList(context, payload, done) {
     log.info(context);
@@ -9,20 +9,22 @@ export default function addTreeNodeList(context, payload, done) {
     if (userid != null && userid !== '') {
         //enrich with user id
         payload.userid = userid;
-        context.service.create('decktree.nodelist', payload, {timeout: 20 * 1000}, (err, res) => {
+        context.service.create('decktree.node', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
-                context.dispatch('ADD_TREE_NODELIT_SUCCESS', res);
+                context.dispatch('ADD_TREE_NODELIST_SUCCESS', res); //perhaps another thing is needed..
+                let activities = res.map((activity) => {
+                    return {
+                        activity_type: 'add',
+                        user_id: String(context.getStore(UserProfileStore).userid),
+                        content_id: String(activity.node.id),
+                        content_kind: activity.node.type
+                    };
 
-                let activity = {
-                    activity_type: 'add',
-                    user_id: String(context.getStore(UserProfileStore).userid),
-                    content_id: String(res.node.id),
-                    content_kind: res.node.type
-                };
-                context.executeAction(addActivity, {activity: activity});
+                });
+                context.executeAction(addActivities, {activities: activities});
             }
             done(null, res);
         });

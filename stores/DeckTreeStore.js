@@ -467,6 +467,12 @@ class DeckTreeStore extends BaseStore {
             this.emitChange();
         }
     }
+    addTreeNodeList(payload){
+        for(let node in payload){
+            this.addTreeNode(node);
+        };
+
+    }
     updateNodeRelPosition(path, newPosition) {
         let arr = path.split(';');
         let lastNode = arr[arr.length - 1];
@@ -567,9 +573,12 @@ DeckTreeStore.handlers = {
     'DELETE_TREE_NODE_SUCCESS': 'deleteTreeNode',
     'UPDATE_TREE_NODE_SUCCESS': 'updateTreeNode',
     'ADD_TREE_NODE_SUCCESS': 'addTreeNode',
+    'ADD_TREE_NODELIST_SUCCESS': 'addTreeNodeList',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
+
+
 };
 
 export default DeckTreeStore;

@@ -11,10 +11,19 @@ import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelecte
 
 class AttachDeckList extends React.Component {
     constructor(props){
+        /* Receives:
+          user: user info
+          decks: array with the decks to showSlides
+          selectedDeckId: initial selected deck...if it was previosly selected
+          destinationDeckId: deck in which data will be appended.
+
+
+        */
         super(props);
+
+
         this.state = {
             selectedDeckId: this.props.selectedDeckId,
-
         };
     }
 
@@ -32,7 +41,7 @@ class AttachDeckList extends React.Component {
 
     }
     handleKeyPress(event,selectedDeck){
-      
+
         if(event.key === 'Enter'){
             event.preventDefault();
             this.handleOnclick(selectedDeck);
@@ -55,23 +64,24 @@ class AttachDeckList extends React.Component {
         if (decks_to_show.length){
             deck_list =
                 decks_to_show.map((deck, index) => {
-                    //From deck users, data is in props.user. From slideWiki, data is in the deck
-                    let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
-                    let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
+          
+                    if(this.props.destinationDeckId.toString() !== deck.deckID.toString()){
+                      //From deck users, data is in props.user. From slideWiki, data is in the deck
+                        let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
+                        let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
 
-                    let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
-                    let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
-                    let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
-                    // default English
-                    deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-                    //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
-                    let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
-                    let selectedDeck = {
-
-                        selectedDeckTitle:deck.title,
-                        selectedDeckId: deck.deckID+'-'+deck.countRevisions
-                    };
-                    return (
+                        let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
+                        let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
+                        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+                        // default English
+                        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+                        //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
+                        let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
+                        let selectedDeck = {
+                            selectedDeckTitle:deck.title,
+                            selectedDeckId: deck.deckID+'-'+deck.countRevisions
+                        };
+                        return (
                            <Item key={index}
                                   onClick={this.handleOnclick.bind(this,selectedDeck)}
                                   onKeyPress={(e) => { this.handleKeyPress(e,selectedDeck);}}
@@ -106,7 +116,8 @@ class AttachDeckList extends React.Component {
                                 </Item.Content>
                             </Item>
 
-                    );
+                        );
+                    }
                 });
         }
 

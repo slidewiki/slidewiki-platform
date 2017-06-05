@@ -1,6 +1,6 @@
 import async from 'async';
 import DeckTreeStore from '../../stores/DeckTreeStore';
-import addTreeNode from './addTreeNode';
+import addTreeNodeList from './addTreeNodeList';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import {navigateAction} from 'fluxible-router';

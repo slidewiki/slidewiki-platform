@@ -33,6 +33,7 @@ class AttachSlideWiki extends React.Component{
     }
 
     render(){
+        console.log('slideWikiContent'+this.props.destinationDeckId);
         let slideWikiContent;
 
         let userInfo ={
@@ -61,7 +62,7 @@ class AttachSlideWiki extends React.Component{
                                 <Header as="h3">{fromDecksTitle}</Header>
                                 <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                 <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
-                                <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} maxHeight='320px'/>
+                                <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} maxHeight='320px'/>
                               </Segment>;
 
         }

@@ -9,7 +9,7 @@ import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks'
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
-import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
+import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
 import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
 import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
@@ -129,8 +129,14 @@ class AttachSubdeckModal extends React.Component{
     }
     handleAttachButton(){
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "deck", id: 1245-2}
-        //this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
+        //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
+        let nodeSpec = this.state.selectedSlides.map((slideId) => {
+            return {
+                type:'deck',
+                id:slideId
+            };
+        });
+        this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec});
         this.handleClose();
 
     }
@@ -145,12 +151,12 @@ class AttachSubdeckModal extends React.Component{
 
 
     render() {
-
+        
         //From my Decks option content
-        let myDecksContent = <AttachMyDecks />;
+        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id}/>;
 
         //From SlideWiki content
-        let slideWikiContent = <AttachSlideWiki />;
+        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id}/>;
 
         let segmentPanelContent;
         let searchForm;
@@ -233,7 +239,7 @@ class AttachSubdeckModal extends React.Component{
                          <Segment color="blue" textAlign="center" padded>
                             {attachMenu}
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" />
+                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>
 
                                {searchForm}
                                {segmentPanelContent}
