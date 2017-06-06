@@ -167,25 +167,44 @@ class SlideContentEditor extends React.Component {
         this.resizeDrag();
         this.forceUpdate();
     }
-    handleCKeditorModeButton(){
-        if (this.CKeditorMode === 'advanced toolbar'){
-            console.log('current CKeditor toolbar mode is basic - set to advanced');
-            CKEDITOR.instances.inlineContent.destroy();
-            CKEDITOR.inline('inlineContent', {
-                customConfig: '/assets/ckeditor_config.js',
-                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+    handleCKeditorModeButton(noswitch){
+        if(noswitch)
+        {
+            if (this.CKeditorMode === 'advanced toolbar'){
+                console.log('current CKeditor toolbar mode is basic - set to advanced');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
 
-            this.CKeditorMode = 'basic toolbar';
-        }
-        else {
-            console.log('current CKeditor toolbar mode is advanced - set to basic');
-            CKEDITOR.instances.inlineContent.destroy();
-            CKEDITOR.inline('inlineContent', {
-                customConfig: '/assets/ckeditor_config_basic.js',
-                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-            this.CKeditorMode = 'advanced toolbar';
+                this.CKeditorMode = 'basic toolbar';
+            }
+            else {
+                console.log('current CKeditor toolbar mode is advanced - set to basic');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config_basic.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+                this.CKeditorMode = 'advanced toolbar';
+            }
+        } else {
+            if (this.CKeditorMode === 'advanced toolbar'){
+                console.log('current CKeditor toolbar mode is basic - refreshed');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config_basic.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+            } else {
+                console.log('current CKeditor toolbar mode is advanced - refreshed');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+            }
         }
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
@@ -193,6 +212,7 @@ class SlideContentEditor extends React.Component {
                 this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
+                //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
                 $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
@@ -204,6 +224,21 @@ class SlideContentEditor extends React.Component {
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
+                                //this.forceUpdate();
+                            }, 500);
+                        });
+                    }, 500);
+                });
+                //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+                $('.cke_button__image_label').mousedown((evt) => { //detect click on image dialog button
+                    console.log('====ckeditor image dialog onclick====');
+                    //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                    setTimeout(() => {
+                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                            console.log('====ckeditor image save button ok==== refresh CKeditor');
+                            //this.addBorders();
+                            setTimeout(() => {
+                                this.handleCKeditorModeButton(true);
                                 //this.forceUpdate();
                             }, 500);
                         });
