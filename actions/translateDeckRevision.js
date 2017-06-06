@@ -38,7 +38,7 @@ export default function translateDeckRevision(context, payload, done) {
             // context.executeAction(addActivity, {activity: activity});
 
             context.executeAction(navigateAction, {
-                url: '/deck/' + res.id //ADD HERE NEW DECK ID
+                url: '/deck/' + res.root_deck //ADD HERE NEW DECK ID
             });
             done();
 
