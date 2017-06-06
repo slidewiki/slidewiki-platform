@@ -163,7 +163,7 @@ class TreeNode extends React.Component {
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
                     <button className="ui button"
-                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: 0})}
+                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: '0'})}
                             aria-label="Add Slide"
                             data-tooltip="Add Slide">
                         <i className="icons">
@@ -173,7 +173,7 @@ class TreeNode extends React.Component {
                     </button>
                     <AttachSlides buttonStyle={buttonStyle} selector={nodeSelector} />
                     <button className="ui button"
-                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: 0})}
+                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: '0'})}
                             aria-label="Add deck"
                             data-tooltip="Add deck">
                         <i className="medium icons">

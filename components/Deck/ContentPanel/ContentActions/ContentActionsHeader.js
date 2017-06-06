@@ -82,7 +82,7 @@ class ContentActionsHeader extends React.Component {
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
                             <i className="icons">
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
@@ -90,7 +90,7 @@ class ContentActionsHeader extends React.Component {
 
                         </button>
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} />
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
+                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
                             <i className="medium icons">
                               <i className="yellow large folder icon"></i>
                               <i className="inverted corner plus icon"></i>
