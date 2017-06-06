@@ -14,7 +14,6 @@ class SearchParamsStore extends BaseStore {
         this.user = '';
         this.tag = '';
         this.revisions = false;
-        this.license = '';
         this.fetch = false;
         this.sort = '';
     }
@@ -50,7 +49,6 @@ class SearchParamsStore extends BaseStore {
         this.user = (params.user || '');
         this.tag = (params.tag || '');
         this.revisions = params.revisions;
-        this.license = params.license;
         this.sort = params.sort;
         this.fetch = true;
         this.emitChange();
@@ -66,7 +64,6 @@ class SearchParamsStore extends BaseStore {
         this.user = '';
         this.tag = '';
         this.revisions = false;
-        this.license = '';
         this.sort = '';
         this.fetch = true;
         this.emitChange();
@@ -83,7 +80,6 @@ class SearchParamsStore extends BaseStore {
             user: this.user,
             tag: this.tag,
             revisions: this.revisions,
-            license: this.license,
             sort: this.sort,
             fetch: this.fetch
         };
@@ -101,7 +97,6 @@ class SearchParamsStore extends BaseStore {
         this.user = state.user;
         this.tag = state.tag;
         this.revisions = state.revisions;
-        this.license = state.license;
         this.sort = state.sort;
         this.fetch = state.fetch;
     }
