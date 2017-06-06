@@ -74,9 +74,16 @@ class SlideViewPanel extends React.Component {
             styleName = 'white';
         }
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
-        //console.log(style);
-        //console.log(style.reveal);
-        //console.log(style.slides);
+
+        // HACK CSS Modules theme needs to get to be used for the .titleSlide and .bodySlide in the [text] HTML we load
+
+        let slideContent = this.props.SlideViewStore.content;
+        if(slideContent && typeof slideContent !== 'undefined'){
+            slideContent = slideContent.replace('class="titleSlide"', 'class="titleSlide ' + styleName.titleSlide + '"');
+            slideContent = slideContent.replace('class="bodySlide"', 'class="bodySlide ' + styleName.bodySlide + '"');
+        }
+
+
 
         return (
           <div className="ui bottom attached segment">
@@ -85,7 +92,7 @@ class SlideViewPanel extends React.Component {
                       <div className={['reveal', style.reveal].join(' ')}>
                           <div className={['slides', style.slides].join(' ')}>
                             <section className="present"  style={sectionElementStyle}>
-                              <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}}></div>
+                              <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:slideContent}}></div>
                             </section>
                           </div>
                           <br />

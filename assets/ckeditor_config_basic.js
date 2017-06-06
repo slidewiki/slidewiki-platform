@@ -30,24 +30,26 @@ CKEDITOR.editorConfig = function( config ) {
     config.format_tags = 'p;h3;h4;h5;pre';
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
-        '/',
-            { name: 'styles', items: [ 'Font'] },
+            //{ name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+        //'/',
+        //    { name: 'styles', items: [ 'Font'] },
             { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
-            { name: 'styles', items: [ 'Styles' ] },
-            { name: 'styles', items: [ 'Format'] },
-        '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
-            { name: 'source', items: [ 'Mathjax'] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-        '/',
-            { name: 'document', items: [ 'Sourcedialog'] },
-            { name: 'document', items: [ 'CodeSnippet'] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        '/',
+        //    { name: 'styles', items: [ 'lineheight' ] },
+            //{ name: 'styles', items: [ 'Styles' ] },
+            //{ name: 'styles', items: [ 'Format'] },
+        //'/',
+            //{ name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'insert', items: [ 'Image'] },
+            //{ name: 'source', items: [ 'Mathjax'] },
+			//{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            //{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter'] },
+        //'/',
+            //{ name: 'document', items: [ 'Sourcedialog'] },
+            //{ name: 'document', items: [ 'CodeSnippet'] },
+			//{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+        //'/',
     ];
     //{ name: 'document', items: ['Templates' ] },
     //{ name: 'paragraph', items: ['CreateDiv']},
@@ -159,8 +161,6 @@ CKEDITOR.editorConfig = function( config ) {
     //config.extraPlugins = 'dialogadvtab';
 
 	//config.removeButtons = 'Underline,Subscript,Superscript';
-
-
 
     //#####Image upload via CKeditor - TODO//
     //config.uploadUrl;
