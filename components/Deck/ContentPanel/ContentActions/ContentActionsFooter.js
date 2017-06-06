@@ -5,14 +5,16 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideControl from '../SlideModes/SlideControl';
 import expandContentPanel from '../../../../actions/deckpagelayout/expandContentPanel';
 import ReportModal from '../../../Report/ReportModal';
+import openReportModal from '../../../../actions/report/openReportModal';
+import SocialShare from '../../../Social/SocialShare';
 import restoreDeckPageLayout from '../../../../actions/deckpagelayout/restoreDeckPageLayout';
 import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
+import addActivity from '../../../../actions/activityfeed/addActivity';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
-
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -63,13 +65,7 @@ class ContentActionsFooter extends React.Component {
             e.preventDefault();
             window.open(this.getExportHref('PDF'));
         }
-
-    }
-
-    handleReportClick(){
-        // Toggle Modal and so on...
-        $('.ui.report.modal')
-            .modal('toggle');
+        this.createDownloadActivity();
     }
 
     getExportHref(type){
@@ -81,6 +77,7 @@ class ContentActionsFooter extends React.Component {
             //console.log(this.props.ContentStore.selector.id);
             let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
             let pdfHref = Microservices.pdf.uri + '/export' + type + '/' + splittedId[0];
+
             return pdfHref;
         }
         else
@@ -96,7 +93,23 @@ class ContentActionsFooter extends React.Component {
             e.preventDefault();
             window.open(this.getExportHref('EPub'));
         }
+        this.createDownloadActivity();
+    }
 
+    createDownloadActivity() {
+        //create new activity
+        let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
+        let userId = String(this.props.UserProfileStore.userid);
+        if (userId === '') {
+            userId = '0';//Unknown - not logged in
+        }
+        let activity = {
+            activity_type: 'download',
+            user_id: userId,
+            content_id: splittedId[0],
+            content_kind: 'deck'
+        };
+        this.context.executeAction(addActivity, {activity: activity});
     }
 
     handleLikeClick(e){
@@ -118,12 +131,6 @@ class ContentActionsFooter extends React.Component {
     }
 
     render() {
-        let reportButton = <div ref="reportButton" onClick={this.handleReportClick.bind(this)} target="_blank">
-                            <button className="ui button" type="button" aria-label="Report" data-tooltip="Report" >
-                                <i className="warning circle large icon"></i>
-                            </button>
-                        </div>;
-
         let likeButton = 'ui button';
         let classNameLikeButton = 'thumbs up alternate large icon';
         let tooltipLikeButton = 'Like this deck';
@@ -161,11 +168,8 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
-                            {(this.props.UserProfileStore.userid !== '') ? reportButton : ''}
                             <ReportModal/>
-                            <button className="ui disabled button" type="button" aria-label="Share" data-tooltip="Share">
-                                <i className="share alternate large icon"></i>
-                            </button>
+                            <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
                                 <i className={classNameLikeButton}></i>
                             </button>

@@ -77,6 +77,8 @@ export default function saveDeckRevision(context, payload, done) {
                         let userCopy = JSON.parse(JSON.stringify(user));
                         delete userCopy.username;
                         delete userCopy.picture;
+                        delete userCopy.country;
+                        delete userCopy.organization;
                         array.push(userCopy);
                         return array;
                     }, []);
