@@ -25,14 +25,15 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
-        let nodeSpec = {'id': String(args.nodeSpec.id), 'type': args.nodeSpec.type};
+        
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/decktree/node/create',
                 body:JSON.stringify({
                     selector: selector,
-                    nodeSpec: nodeSpec,
+                    //nodeSpec: nodeSpec,
+                    nodeSpec:args.nodeSpec,
                     user: args.userid.toString()
                 })
             }).then((res) => {
@@ -41,7 +42,7 @@ export default {
                 console.log(err);
                 callback(null, {node: {}, selector: args.selector});
             });
-        } 
+        }
     },
     update: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
