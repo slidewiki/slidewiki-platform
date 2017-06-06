@@ -3,7 +3,9 @@ import { NavLink, navigateAction } from 'fluxible-router';
 import UserPicture from '../common/UserPicture';
 import { connectToStores } from 'fluxible-addons-react';
 import userSignOut from '../../actions/user/userSignOut';
+import loadUserNotifications from '../../actions/user/notifications/loadUserNotifications';
 import UserProfileStore from '../../stores/UserProfileStore';
+import UserNotificationsStore from '../../stores/UserNotificationsStore';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 
 class HeaderDropdown extends React.Component {
@@ -11,6 +13,8 @@ class HeaderDropdown extends React.Component {
         $(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
+
+        this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
     }
 
     componentDidUpdate() {
@@ -30,12 +34,14 @@ class HeaderDropdown extends React.Component {
 
     render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
+        const alarmClassName = (this.props.UserNotificationsStore.newNotifications.length > 0) ? 'alarm red icon' : 'alarm outline icon';
+        const alarmIcon = (this.props.UserNotificationsStore.newNotifications.length > 0) ? (<i className="ui small outline alarm icon" />) : '';
         return(
             <div className="ui top right pointing dropdown" ref="userDropDown" role="button" aria-haspopup="true" aria-label="User management">
                 <div className="text">
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
-                <i className="ui big left floated aligned dropdown icon"></i>
+                <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
                 <div className="menu" role="menu">
                     <div className="header">
                         {this.props.UserProfileStore.username}
@@ -47,8 +53,11 @@ class HeaderDropdown extends React.Component {
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
                         <i className="setting icon" /> My Settings
                     </div>
+                    <div className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="0" >
+                        <i className={alarmClassName} /> My Notifications
+                    </div>
                     <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
-                        <i className="sign out icon"  /> Sign Out
+                        <i className="sign out icon"/> Sign Out
                     </div>
                 </div>
             </div>
@@ -60,9 +69,10 @@ HeaderDropdown.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-HeaderDropdown = connectToStores(HeaderDropdown, [UserProfileStore], (context, props) => {
+HeaderDropdown = connectToStores(HeaderDropdown, [UserProfileStore, UserNotificationsStore], (context, props) => {
     return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        UserNotificationsStore: context.getStore(UserNotificationsStore).getState()
     };
 });
 export default HeaderDropdown;
