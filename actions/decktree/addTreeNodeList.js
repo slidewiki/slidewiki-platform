@@ -1,7 +1,8 @@
 import UserProfileStore from '../../stores/UserProfileStore';
-const log = require('../log/clog');
+import log from  '../log/clog';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivities from '../activityfeed/addActivities';
+import addActivity from '../activityfeed/addActivity';
 
 export default function addTreeNodeList(context, payload, done) {
     log.info(context);
@@ -14,17 +15,30 @@ export default function addTreeNodeList(context, payload, done) {
                 log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
-                context.dispatch('ADD_TREE_NODELIST_SUCCESS', res); //perhaps another thing is needed..
-                let activities = res.map((activity) => {
-                    return {
+                context.dispatch('ADD_TREE_NODELIST_SUCCESS', res); 
+                if(Array.isArray(res.node)){ //More than one slide/deck was added
+                    let activities = res.node.map((node) => {
+                        return {
+                            activity_type: 'add',
+                            user_id: String(context.getStore(UserProfileStore).userid),
+                            content_id: String(node.id),
+                            content_kind: node.type
+                        };
+
+                    });
+                    context.executeAction(addActivities, {activities: activities});
+                } else {  //Only a slide/deck was added
+                    let activity = {
                         activity_type: 'add',
                         user_id: String(context.getStore(UserProfileStore).userid),
-                        content_id: String(activity.node.id),
-                        content_kind: activity.node.type
+                        content_id: String(res.node.id),
+                        content_kind: res.node.type
                     };
+                    context.executeAction(addActivity, {activity: activity});
+                }
 
-                });
-                context.executeAction(addActivities, {activities: activities});
+
+
             }
             done(null, res);
         });
