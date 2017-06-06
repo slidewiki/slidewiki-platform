@@ -168,7 +168,7 @@ class SlideContentEditor extends React.Component {
         this.forceUpdate();
     }
     handleCKeditorModeButton(noswitch){
-        if(noswitch)
+        if(noswitch !== 'noswitch')
         {
             if (this.CKeditorMode === 'advanced toolbar'){
                 console.log('current CKeditor toolbar mode is basic - set to advanced');
@@ -229,22 +229,22 @@ class SlideContentEditor extends React.Component {
                         });
                     }, 500);
                 });
-                //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
-                $('.cke_button__image_label').mousedown((evt) => { //detect click on image dialog button
-                    console.log('====ckeditor image dialog onclick====');
-                    //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
-                    setTimeout(() => {
-                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
-                            console.log('====ckeditor image save button ok==== refresh CKeditor');
-                            //this.addBorders();
-                            setTimeout(() => {
-                                this.handleCKeditorModeButton(true);
-                                //this.forceUpdate();
-                            }, 500);
-                        });
-                    }, 500);
-                });
             }
+            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
+                console.log('====ckeditor image dialog onclick====');
+                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.handleCKeditorModeButton('noswitch');
+                            //this.forceUpdate();
+                        }, 500);
+                    });
+                }, 500);
+            });
         });
 
     }
@@ -482,12 +482,27 @@ class SlideContentEditor extends React.Component {
 
             }
             */
-
+            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
+                console.log('====ckeditor image dialog onclick====');
+                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.handleCKeditorModeButton('noswitch');
+                            //this.forceUpdate();
+                        }, 500);
+                    });
+                }, 500);
+            });
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
                 this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
+
                 //console.log('resizeDrag and borders');
                 //show that content is outside of pptx2html box
                 //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
