@@ -16,6 +16,7 @@ class AttachDeckList extends React.Component {
           decks: array with the decks to showSlides
           selectedDeckId: initial selected deck...if it was previosly selected
           destinationDeckId: deck in which data will be appended.
+          actionButtonId: buttonId which receives the focus. It was not possible to use ref to do that.
 
 
         */
@@ -38,7 +39,8 @@ class AttachDeckList extends React.Component {
             selectedDeckTitle:selectedDeck.selectedDeckTitle
         };
         this.context.executeAction(updateSelectedDeck,payload,null);
-        $('#nextAttachModal').focus();
+
+        $(this.props.actionButtonId).focus();
 
     }
     handleKeyPress(event,selectedDeck){
