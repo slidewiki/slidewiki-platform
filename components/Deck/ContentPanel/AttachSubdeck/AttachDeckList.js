@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import CustomDate from '../../util/CustomDate';
-import { Segment,Item,Icon,Label,Image} from 'semantic-ui-react';
+import { Segment,Item,Icon,Label,Image, TextArea} from 'semantic-ui-react';
 import ISO6391 from 'iso-639-1';
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
@@ -64,7 +64,7 @@ class AttachDeckList extends React.Component {
         if (decks_to_show.length){
             deck_list =
                 decks_to_show.map((deck, index) => {
-          
+
                     if(this.props.destinationDeckId.toString() !== deck.deckID.toString()){
                       //From deck users, data is in props.user. From slideWiki, data is in the deck
                         let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
@@ -123,7 +123,8 @@ class AttachDeckList extends React.Component {
 
         return (
           <Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
-             role="listbox" aria-expanded="true">
+             role="listbox" aria-expanded="true"  aria-describedby="listInstructions">
+             <TextArea className="sr-only" id="listInstructions" value="Use tab to navigate through the list and then enter to select a deck." tabIndex ='-1'/>
 
                 {deck_list}
           </Item.Group>

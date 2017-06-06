@@ -70,6 +70,7 @@ class AttachSubdeckModal extends React.Component{
     componentWillUnmount(){
         this.context.executeAction(resetModalStore,[]);
 
+
     }
 
     handleOpen(){
@@ -94,6 +95,7 @@ class AttachSubdeckModal extends React.Component{
             modalOpen:true,
             activeTrap:true
         });
+
 
     }
 
@@ -126,13 +128,14 @@ class AttachSubdeckModal extends React.Component{
         });
 
 
+
     }
     handleAttachButton(){
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
         let nodeSpec = this.state.selectedSlides.map((slideId) => {
             return {
-                type:'deck',
+                type:'slide',
                 id:slideId
             };
         });
@@ -151,7 +154,7 @@ class AttachSubdeckModal extends React.Component{
 
 
     render() {
-        
+
         //From my Decks option content
         let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id}/>;
 
@@ -163,9 +166,11 @@ class AttachSubdeckModal extends React.Component{
         let actionButton;
         let actionButton2;
         let attachMenu;
+        let modalDescription;
 
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>;
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
                 segmentPanelContent = myDecksContent;
@@ -185,6 +190,7 @@ class AttachSubdeckModal extends React.Component{
         } else{ //deck selected, diplay its slides, previous and attach button
             attachMenu ='';
             searchForm ='';
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
             segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
                             data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
@@ -217,8 +223,8 @@ class AttachSubdeckModal extends React.Component{
                 onClose={this.handleClose}
                 role="dialog"
                 id="attachSubDeckModal"
-                aria-labelledby="attachSubdeckHeader"
-                aria-describedby="attachSubdeckModalDescription"
+                aria-labelledby="attachModalHeader"
+                aria-describedby="attachSlidesDescription"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
@@ -231,22 +237,21 @@ class AttachSubdeckModal extends React.Component{
                         active={this.state.activeTrap}
                         className = "header">
 
-                <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModalHeader">
+                <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
                      Attach Slides
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
                          <Segment color="blue" textAlign="center" padded>
                             {attachMenu}
-                            <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>
-
+                            <Segment attached="bottom" textAlign="left" role="tabpanel">                               
+                               {modalDescription}
                                {searchForm}
                                {segmentPanelContent}
                             </Segment>
                             <Modal.Actions>
-                              {actionButton2}
                               {actionButton}
+                              {actionButton2}
                               <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>

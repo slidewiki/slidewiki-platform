@@ -3,7 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import AttachDeckList from './AttachDeckList';
-import {  Segment, Loader,Label, Image,Dimmer,Grid, Button} from 'semantic-ui-react';
+import {  Segment, Loader,Label, Image,Dimmer,Grid, Button,TextArea} from 'semantic-ui-react';
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
 
@@ -22,6 +22,7 @@ class AttachSlides extends React.Component{
             selectedSlidesLabel: this.props.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length
 
         };
+
         this.handleAllSlides = this.handleAllSlides.bind(this);
         this.handleNone = this.handleNone.bind(this);
 
@@ -38,6 +39,13 @@ class AttachSlides extends React.Component{
             selectedSlidesLabel: nextProps.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length
 
         });
+
+    }
+    componentDidUpdate(){
+        if(this.state.deckSlides.length !== 0) //We have the slides rendered
+            $('#attachAllSlidesButtonId').focus();
+
+
 
     }
     checkNoEmpty(element){
@@ -94,7 +102,7 @@ class AttachSlides extends React.Component{
             border:'2px solid #2185d0'
 
         };
-        //style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
+
 
         let numRows = Math.ceil(this.state.deckSlides.length/this.numColumns);
         let rowCount=0;
@@ -105,11 +113,12 @@ class AttachSlides extends React.Component{
         let singleRow;
         let rowsContent=[];
         let slideId;
-  
+
         for(let i=0;i<numRows;i++){
             while((columnCount<this.numColumns) && (slidesShowed < this.state.deckSlides.length)){
                 slideId =this.state.deckSlides[slidesShowed];
                 singleColumn =  <Grid.Column key={slidesShowed}
+                                    id={'slide'+slidesShowed}
                                     onClick={this.handleOnclick.bind(this,slideId)}
                                     onKeyPress={this.handleKeyPress.bind(this,slideId)}
                                     style={this.state.selectedSlides.includes(slideId)?activeItemStyle:{}}
@@ -145,7 +154,7 @@ class AttachSlides extends React.Component{
 
         let slidesContent;
 
-        if(this.state.deckSlides.length === 0){ //ojo que hay que controlar...que tenemos las slides
+        if(this.state.deckSlides.length === 0){ //No slides loaded
             slidesContent = <Segment id="panelSlidesContent">
                                 <Dimmer active inverted>
                                   <Loader inverted>Loading</Loader>
@@ -169,13 +178,16 @@ class AttachSlides extends React.Component{
                                       </Grid.Column>
                                       <Grid.Column textAlign="right" >
                                         <Button type="button"
-                                           aria-label="All Slides"
-                                           data-tooltip="All Slides"
-                                           onClick={this.handleAllSlides}>All Slides</Button>
+                                           id="attachAllSlidesButtonId"
+                                           color="blue"
+                                           aria-label="Select All"
+                                           data-tooltip="Select All"
+                                           onClick={this.handleAllSlides} >Select All</Button>
                                         <Button type="button"
-                                            aria-label="None"
-                                            data-tooltip="None"
-                                            onClick={this.handleNone}>None</Button>
+                                            color="blue"
+                                            aria-label="Clear Selection"
+                                            data-tooltip="Clear Selection"                                            
+                                            onClick={this.handleNone}>Clear Selection</Button>
                                       </Grid.Column>
                                     </Grid.Row>
                                   </Grid>;
@@ -185,7 +197,9 @@ class AttachSlides extends React.Component{
                                <Grid columns={this.numColumns}
                                  style={{maxHeight:'400px',minHeight:'320px',overflowY:'auto'}}
                                  role="grid"
-                                 aria-expanded="true">
+                                 aria-expanded="true"
+                                  aria-describedby="gridInstructions">
+                                 <TextArea className="sr-only" id="gridInstructions" value="Use tab to navigate through the list and then enter to select a deck." tabIndex ='-1'/>
                                 {rowsContent}
                                </Grid>
 

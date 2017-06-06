@@ -33,7 +33,7 @@ class AttachSlideWiki extends React.Component{
     }
 
     render(){
-        console.log('slideWikiContent'+this.props.destinationDeckId);
+        
         let slideWikiContent;
 
         let userInfo ={
