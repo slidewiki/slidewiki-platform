@@ -1,7 +1,7 @@
 import async from 'async';
 import DeckTreeStore from '../../stores/DeckTreeStore';
 import addTreeNodeList from './addTreeNodeList';
-const log = require('../log/clog');
+import log from '../log/clog';
 import serviceUnavailable from '../error/serviceUnavailable';
 import {navigateAction} from 'fluxible-router';
 import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
@@ -27,7 +27,7 @@ export default function addTreeNodeListAndNavigate(context, payload, done) {
                 spath: currentState.selector.get('spath')
             };
             context.executeAction(navigateAction, {
-                url: TreeUtil.makeNodeURL(selector, 'deck', 'edit')
+                url: TreeUtil.makeNodeURL(selector, 'deck', 'view')
             });
         }
         else {
