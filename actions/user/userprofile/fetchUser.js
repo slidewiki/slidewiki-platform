@@ -14,6 +14,13 @@ export default function fetchUser(context, payload, done) {
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     payload.params.loggedInUser = context.getStore(UserProfileStore).username;
+
+    if (!((payload.params.username !== undefined && payload.params.username !== null && payload.params.username !== '') || (payload.params.id !== undefined && payload.params.id !== null && payload.params.id !== ''))) {
+        //no data for the user
+        context.deleteUser();
+        return done();
+    }
+
     context.service.read('userProfile.read', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             console.log(err.statusCode);
