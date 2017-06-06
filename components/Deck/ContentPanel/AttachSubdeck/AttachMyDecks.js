@@ -28,7 +28,7 @@ class AttachMyDecks extends React.Component{
 
     }
     render(){
-  
+
         let userInfo ={
             userId: this.props.UserProfileStore.userid,
             username: this.props.UserProfileStore.username
@@ -48,7 +48,7 @@ class AttachMyDecks extends React.Component{
                                 <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
                                 <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue"/>
 
-                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} maxHeight='400px'/>
+                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} actionButtonId={this.props.actionButtonId} maxHeight='400px'/>
                               </Segment>;
         }
 

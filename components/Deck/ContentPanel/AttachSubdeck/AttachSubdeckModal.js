@@ -124,10 +124,10 @@ class AttachSubdeckModal extends React.Component{
 
 
         //From my Decks option content
-        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id}/>;
+        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#attachAttachDeckModal'}/>;
 
         //From SlideWiki content
-        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} />;
+        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} actionButtonId={'#attachAttachDeckModal'}/>;
 
         //Default Content
         let segmentPanelContent = myDecksContent;

@@ -21,7 +21,7 @@ class ContentActionsHeader extends React.Component {
     }
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "slide", id: 0}
+        //nodeSec: Object {type: "slide", id: "0"}
         this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
     }
 

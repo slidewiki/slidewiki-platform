@@ -66,6 +66,9 @@ class AttachSubdeckModal extends React.Component{
         });
 
 
+
+
+
     }
     componentWillUnmount(){
         this.context.executeAction(resetModalStore,[]);
@@ -156,10 +159,10 @@ class AttachSubdeckModal extends React.Component{
     render() {
 
         //From my Decks option content
-        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id}/>;
+        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
 
         //From SlideWiki content
-        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id}/>;
+        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
 
         let segmentPanelContent;
         let searchForm;
@@ -244,7 +247,7 @@ class AttachSubdeckModal extends React.Component{
                     <Container text>
                          <Segment color="blue" textAlign="center" padded>
                             {attachMenu}
-                            <Segment attached="bottom" textAlign="left" role="tabpanel">                               
+                            <Segment attached="bottom" textAlign="left" role="tabpanel">
                                {modalDescription}
                                {searchForm}
                                {segmentPanelContent}

@@ -38,6 +38,7 @@ class AttachDeckList extends React.Component {
             selectedDeckTitle:selectedDeck.selectedDeckTitle
         };
         this.context.executeAction(updateSelectedDeck,payload,null);
+        $('#nextAttachModal').focus();
 
     }
     handleKeyPress(event,selectedDeck){
