@@ -203,9 +203,9 @@ export default {
                 uri: Microservices.deck.uri + '/deck/' + params.deckId + '/translate',
                 json: true,
                 body: toSend
-            }).then((deck) => {
-                console.log('DECK:' + deck);
-                callback(false, deck);
+            }).then((data) => {
+                //console.log('DECK:' + JSON.stringify(data.root_deck));
+                callback(false, data);
             })
             .catch((err) => callback(err));
         }
