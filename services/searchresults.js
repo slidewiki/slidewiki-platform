@@ -38,6 +38,71 @@ function extractSpellcheckSuggestion(spellcheck){
     return '';
 }
 
+function parseSlide(slide){
+    slide.deck = {
+        id: slide.usage[0],
+        title: '',
+        link: ''
+    };
+    slide.link = '/deck/' + slide.usage[0] + '/slide/' + slide.db_id + '-' + slide.db_revision_id;
+    slide.kind = 'Slide';
+    slide.title = (slide.title && slide.title.length > 70) ? slide.title.substring(0,70)+'...' : slide.title;
+    slide.description = (slide.content && slide.content.length > 85) ? slide.content.substring(0,85)+'...' : slide.content;
+    slide.lastUpdate = customDate.format(slide.lastUpdate, 'Do MMMM YYYY');
+    slide.user = {
+        id: slide.creator,
+        username: '',
+        link: ''
+    };
+}
+
+function parseDeck(deck){
+    deck.link = '/deck/' + deck.db_id + '-' + deck.db_revision_id;
+    deck.kind = 'Deck';
+    deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
+    deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
+    deck.lastUpdate = customDate.format(deck.lastUpdate, 'Do MMMM YYYY');
+    deck.user = {
+        id: deck.creator,
+        username: '',
+        link: ''
+    };
+}
+
+function getUsers(userIdsSet){
+    let userPromises = [];
+    let usernames = {};
+
+    // request usernames of user ids found
+    for(let userId of userIdsSet){
+        userPromises.push(rp.get({uri: `${Microservices.user.uri}/user/${userId}`}).then((userRes) => {
+            usernames[userId] = JSON.parse(userRes).username;
+        }).catch( (err) => {
+            usernames[userId] = 'Unknown user';
+        }));
+    }
+
+    return Promise.all(userPromises).then( () => { return usernames; });
+}
+
+function getDecks(deckIdsSet){
+    let decks = {}, deckRevisions = {};
+    let deckPromises = [];
+
+    for(let deckId of deckIdsSet){
+        deckPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`}).then( (deckRes) => {
+            decks[deckId] = JSON.parse(deckRes);
+            decks[deckId].revisions.forEach( (rev) => {
+                deckRevisions[deckId + '-' + rev.id] = rev;
+            });
+        }).catch( (err) => {
+            decks[deckId] = null;
+        }));
+    }
+
+    return Promise.all(deckPromises).then( () => { return {decks, deckRevisions}; });
+}
+
 export default {
     name: 'searchresults',
     // At least one of the CRUD methods is Required
@@ -57,85 +122,50 @@ export default {
                 // console.log(JSON.stringify(JSON.parse(results), null, 2));
 
                 let searchResults = JSON.parse(results);
-                let allPromises = [], decks = {}, decksIdHash = {}, deckRevisions = {};
-                let userPromises = [], usernames = {}, userIdHash = {};
+                let userIds = new Set(), deckIds = new Set();
 
                 searchResults.response.docs.forEach( (res) => {
 
                     // keep user id to request later
                     if(res.creator !== null){
-                        userIdHash[res.creator] = true;
+                        userIds.add(res.creator);
                     }
 
                     // transform results to return to frontend
                     if(res.kind === 'deck'){
-                        res.link = '/deck/' + res.db_id + '-' + res.db_revision_id;
-                        res.kind = 'Deck';
-                        res.title = (res.title && res.title.length > 70) ? res.title.substring(0,70)+'...' : res.title;
-                        res.description = (res.description && res.description.length > 85) ? res.description.substring(0,85)+'...' : res.description;
-                        res.lastUpdate = customDate.format(res.lastUpdate, 'Do MMMM YYYY');
-                        res.user = {
-                            id: res.creator,
-                            username: '',
-                            link: ''
-                        };
+
+                        parseDeck(res);
 
                         //keep deck id to request later
-                        decksIdHash[res.db_id] = true;
+                        deckIds.add(res.db_id);
                     }
                     else if(res.kind === 'slide'){
-                        res.deck = {
-                            id: res.usage[0],
-                            title: '',
-                            link: ''
-                        };
-                        res.link = '/deck/' + res.usage[0] + '/slide/' + res.db_id + '-' + res.db_revision_id;
-                        res.kind = 'Slide';
-                        res.title = (res.title && res.title.length > 70) ? res.title.substring(0,70)+'...' : res.title;
-                        res.description = (res.content && res.content.length > 85) ? res.content.substring(0,85)+'...' : res.content;
-                        res.lastUpdate = customDate.format(res.lastUpdate, 'Do MMMM YYYY');
-                        res.user = {
-                            id: res.creator,
-                            username: '',
-                            link: ''
-                        };
+
+                        parseSlide(res);
 
                         // keep more deck ids to request later
                         res.usage.forEach( (deckRev) => {
-                            let deckId = deckRev.split('-')[0];
-                            decksIdHash[deckId] = true;
+                            deckIds.add(deckRev.split('-')[0]);
                         });
                     }
 
                 });
 
-                // request usernames of user ids found
-                for(let userId in userIdHash){
-                    allPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + userId}).then((userRes) => {
-                        usernames[userId] = JSON.parse(userRes).username;
-                        return Promise.resolve(userRes);
-                    }).catch( (err) => {
-                        usernames[userId] = 'Unknown user';
-                        return Promise.resolve(err);
-                    }));
-                }
+                // get required usernames
+                let usernames = {};
+                let userPromise = getUsers(userIds).then( (usernamesFromService) => {
+                    usernames = usernamesFromService;
+                });
 
-                // request decks of deck ids found
-                for(let deckId in decksIdHash){
-                    allPromises.push(rp.get({uri: Microservices.deck.uri + '/deck/' + deckId}).then( (deckRes) => {
-                        decks[deckId] = JSON.parse(deckRes);
-                        decks[deckId].revisions.forEach( (rev) => {
-                            deckRevisions[deckId + '-' + rev.id] = rev;
-                        });
+                // get requires decks and deck revisions
+                let decks = {}, deckRevisions = {};
+                let deckPromise = getDecks(deckIds).then( (decksFromService) => {
+                    decks = decksFromService.decks;
+                    deckRevisions = decksFromService.deckRevisions;
+                });
 
-                        return Promise.resolve(deckRes);
-                    }).catch( (err) => {
-                        decks[deckId] = null;
-                        return Promise.resolve(err);
-                    }));
-                }
 
-                Promise.all(allPromises).then( () => {
+                Promise.all([userPromise, deckPromise]).then( () => {
                     searchResults.response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
@@ -144,25 +174,28 @@ export default {
 
                         if(returnItem.kind === 'Deck'){
 
-                            returnItem.revisionsCount = decks[returnItem.db_id].revisions.length;
-                            returnItem.firstSlide = deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide;
+                            returnItem.revisionsCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
+                            returnItem.firstSlide = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
+                                                        deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
 
                             // fill deck subitems (revisions of the deck)
-                            returnItem.subItems = decks[returnItem.db_id].revisions.filter( (rev) => {
-                                // do not contain revision presented in result title
-                                return (rev.id !== returnItem.db_revision_id);
-                            }).map( (rev) => {
-                                return {
-                                    id: rev.id,
-                                    title: rev.title,
-                                    link: '/deck/' + returnItem.db_id + '-' + rev.id
-                                };
-                            }).reverse();
+                            if(decks[returnItem.db_id]){
+                                returnItem.subItems = decks[returnItem.db_id].revisions.filter( (rev) => {
+                                    // do not contain revision presented in result title
+                                    return (rev.id !== returnItem.db_revision_id);
+                                }).map( (rev) => {
+                                    return {
+                                        id: rev.id,
+                                        title: rev.title,
+                                        link: '/deck/' + returnItem.db_id + '-' + rev.id
+                                    };
+                                }).reverse();
+                            }
                         }
                         else if(returnItem.kind === 'Slide'){
                             returnItem.subItems = returnItem.usage.filter( (usageItem) => {
                                 // do not contain usage presented in result title
-                                return (returnItem.deck.id !== usageItem);
+                                return (returnItem.deck.id !== usageItem) && deckRevisions[usageItem];
                             }).map( (usageItem) => {
                                 return {
                                     id: usageItem,
@@ -172,7 +205,7 @@ export default {
                             });
 
                             // fill deck info
-                            returnItem.deck.title = deckRevisions[returnItem.deck.id].title;
+                            returnItem.deck.title = (deckRevisions[returnItem.deck.id]) ? deckRevisions[returnItem.deck.id].title : '';
                             returnItem.deck.link = '/deck/' + returnItem.deck.id;
                         }
                     });
