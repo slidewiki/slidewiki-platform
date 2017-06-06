@@ -468,9 +468,34 @@ class DeckTreeStore extends BaseStore {
         }
     }
     addTreeNodeList(payload){
-        for(let node in payload){
-            this.addTreeNode(node);
-        };
+        let nodePayload;
+        let nodeSelector;
+        let nodeTreePosition;
+
+        // the first point to attach is the provided as selector
+        nodeSelector=payload.selector;
+
+
+        if(Array.isArray(payload.node)){ //more than node in the service answer
+            for(let i=0;i<payload.node.length;i++){
+                nodePayload = {
+                    node:payload.node[i],
+                    selector:nodeSelector
+                };
+                this.addTreeNode(nodePayload);
+                //update next point to attach: addTreeNode updates it in this.selector
+                nodeSelector={
+                    id:this.selector.get('id'),
+                    sid:this.selector.get('sid'),
+                    spath:this.selector.get('spath'),
+                    stype:this.selector.get('stype'),
+                };
+
+            }
+        } else{ //only one slide or deck was selected.
+            this.addTreeNode(payload);
+        }
+      //  this.updateTreeNode(payload);
 
     }
     updateNodeRelPosition(path, newPosition) {

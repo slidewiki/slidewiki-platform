@@ -15,7 +15,7 @@ export default function addTreeNodeList(context, payload, done) {
                 log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
-                context.dispatch('ADD_TREE_NODELIST_SUCCESS', res); 
+                context.dispatch('ADD_TREE_NODELIST_SUCCESS', res);
                 if(Array.isArray(res.node)){ //More than one slide/deck was added
                     let activities = res.node.map((node) => {
                         return {
