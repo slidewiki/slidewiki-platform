@@ -81,7 +81,7 @@ class UserNotificationsPanel extends React.Component {
             const labelName = (at.type === 'react') ? 'Like' : at.type;
             const label = labelName.charAt(0).toUpperCase() + labelName.slice(1);
             return (
-                <div className="ui item toggle checkbox" key={index} >
+                <div className="ui item toggle checkbox" key={index} role="listitem" tabIndex="0">
                     <input name="toggleCheckbox" type="checkbox" defaultChecked={at.selected} onChange={this.handleChangeToggle.bind(this, at.type, 0)} />
                     <label>{label}</label>
                 </div>
@@ -113,7 +113,7 @@ class UserNotificationsPanel extends React.Component {
                     <h4 className="ui header">Show activity types:</h4>
                     <div className="activityTypes">
                         <div ref="activityTypeList">
-                            <div className="ui relaxed list">
+                            <div className="ui relaxed list" role="list" >
                                 {activityTypeList}
                             </div>
                          </div>

@@ -246,7 +246,7 @@ class UserNotificationsItem extends React.Component {
         });
         return (
             <div className="ui feed">
-                <div className={itemClass} onClick={this.handleClick.bind(this, notification)}>
+                <div className={itemClass} onClick={this.handleClick.bind(this, notification)} role="listitem" tabIndex="0">
                     <div className="activity-icon">
                         {iconNotification}
                     </div>
