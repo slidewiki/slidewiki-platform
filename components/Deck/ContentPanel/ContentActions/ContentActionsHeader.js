@@ -7,7 +7,8 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
-import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
+import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal';
+import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 
@@ -20,7 +21,7 @@ class ContentActionsHeader extends React.Component {
     }
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "slide", id: 0}
+        //nodeSec: Object {type: "slide", id: "0"}
         this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
     }
 
@@ -81,14 +82,15 @@ class ContentActionsHeader extends React.Component {
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
                             <i className="icons">
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
 
                         </button>
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
+                        <AttachSlides buttonStyle={buttonStyle} selector={selector} />
+                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
                             <i className="medium icons">
                               <i className="yellow large folder icon"></i>
                               <i className="inverted corner plus icon"></i>

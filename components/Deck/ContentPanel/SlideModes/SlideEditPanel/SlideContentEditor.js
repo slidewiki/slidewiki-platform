@@ -240,7 +240,8 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.handleCKeditorModeButton('noswitch');
-                            //this.forceUpdate();
+                            this.resizeDrag();
+                            this.forceUpdate();
                         }, 500);
                     });
                 }, 500);
@@ -492,7 +493,8 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.handleCKeditorModeButton('noswitch');
-                            //this.forceUpdate();
+                            this.resizeDrag();
+                            this.forceUpdate();
                         }, 500);
                     });
                 }, 500);
@@ -1145,8 +1147,8 @@ class SlideContentEditor extends React.Component {
             let pptxwidth = $('.pptx2html').width();
             let pptxheight = $('.pptx2html').height();
             //TODO - change to get right!
-            //this.scaleratio = containerwidth / (pptxwidth+50);
-            this.scaleratio = containerwidth / (pptxwidth+120);
+            this.scaleratio = containerwidth / (pptxwidth+50);
+            //this.scaleratio = containerwidth / (pptxwidth+120);
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
             //$('.pptx2html').animate({
@@ -1219,31 +1221,6 @@ class SlideContentEditor extends React.Component {
             //borderColor: '#e7e7e7',
             position: 'relative'
         };
-        const contentStyle = {
-            minWidth: '100%',
-            // maxHeight: 450,
-            //padding: 10,
-            paddingLeft: 50,
-            paddingRight: 50,
-            paddingTop: 10,
-            xpaddingBottom: 10,
-            minHeight: 610,
-            overflowY: 'auto',
-            overflowX: 'auto',
-            //borderStyle: 'dashed',
-            //borderColor: '#e7e7e7',
-        };
-        const speakernotesStyle = {
-            maxHeight: 50,
-            minHeight: 50,
-            overflowY: 'auto',
-            position: 'relative'
-        };
-
-        const buttonColorBlack = {
-            color: 'black'
-        };
-
         const compStyle = {
             // maxHeight: 450,
             //minHeight: 450,
@@ -1261,7 +1238,6 @@ class SlideContentEditor extends React.Component {
             //overflow: 'hidden,'
             position: 'relative'
         };
-
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
@@ -1269,6 +1245,31 @@ class SlideContentEditor extends React.Component {
             paddingTop: 40,
             height: '100%'
         };
+        const contentStyle = {
+            minWidth: '100%',
+            // maxHeight: 450,
+            //padding: 10,
+            /*paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 10,
+            xpaddingBottom: 10,*/
+            minHeight: 610,
+            overflowY: 'auto',
+            overflowX: 'auto',
+            //borderStyle: 'dashed',
+            //borderColor: '#e7e7e7',
+        };
+        const speakernotesStyle = {
+            maxHeight: 50,
+            minHeight: 50,
+            overflowY: 'auto',
+            position: 'relative'
+        };
+
+        const buttonColorBlack = {
+            color: 'black'
+        };
+
 
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>
