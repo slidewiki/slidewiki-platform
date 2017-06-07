@@ -7,13 +7,16 @@ import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
+import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
-import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
+import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
+import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
 import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
 import AttachSearchForm from './AttachSearchForm';
+import AttachSlides from './AttachSlides';
 
 
 
@@ -33,7 +36,10 @@ class AttachSubdeckModal extends React.Component{
             modalOpen: false,
             activeItem: 'MyDecks',
             activeTrap: false,
-
+            selectedDeckId: -1,
+            selectedSlides:[],
+            showSlides:false,
+            deckSlides:[],
 
 
           //  selectedDeckTitle: 'Select one deck...',
@@ -44,21 +50,29 @@ class AttachSubdeckModal extends React.Component{
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleAttachButton = this.handleAttachButton.bind(this);
+        this.handleNextButton = this.handleNextButton.bind(this);
+        this.handlePreviousButton = this.handlePreviousButton.bind(this);
+
 
     }
 
     componentWillReceiveProps(nextProps){
 
         this.setState({
-
-
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
-            activeItem: nextProps.AttachSubdeckModalStore.activeItem
+            activeItem: nextProps.AttachSubdeckModalStore.activeItem,
+            selectedSlides: nextProps.AttachSubdeckModalStore.selectedSlides,
+            deckSlides:nextProps.AttachSubdeckModalStore.deckSlides
         });
+
+
+
+
 
     }
     componentWillUnmount(){
         this.context.executeAction(resetModalStore,[]);
+
 
     }
 
@@ -76,14 +90,15 @@ class AttachSubdeckModal extends React.Component{
             limit: 20,
             offset: 0
         }};
-        this.context.executeAction(loadUserDecks, payload,null);
-        this.context.executeAction(loadRecentDecks, payload2,null);
+        this.context.executeAction(loadUserDecks, payload);
+        this.context.executeAction(loadRecentDecks, payload2);
 
         $('#app').attr('aria-hidden','true');
         this.setState({
             modalOpen:true,
             activeTrap:true
         });
+
 
     }
 
@@ -94,8 +109,9 @@ class AttachSubdeckModal extends React.Component{
             modalOpen:false,
             activeTrap: false,
             activeItem: 'MyDecks',
-          //  selectedDeckTitle: 'Select one deck...',
-          //  showSearchResults: false
+            selectedSlides:[],
+            showSlides:false
+
         });
         this.context.executeAction(initModal,[]);
     }
@@ -108,50 +124,101 @@ class AttachSubdeckModal extends React.Component{
 
     }
 
+    handleNextButton(){
+        this.context.executeAction(loadSlides,{id:this.state.selectedDeckId});
+        this.setState({
+            showSlides:true
+        });
 
-    handleAttachButton() {
+
+
+    }
+    handleAttachButton(){
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "deck", id: 1245-2}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
+        //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
+        let nodeSpec = this.state.selectedSlides.map((slideId) => {
+            return {
+                type:'slide',
+                id:slideId
+            };
+        });
+        this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec});
         this.handleClose();
+
+    }
+    handlePreviousButton(){
+        this.setState({
+            showSlides:false
+        });
+        this.context.executeAction(updateSelectedSlides,{selectedSlides:[]},null);
+
 
     }
 
 
     render() {
 
-
-
-
         //From my Decks option content
-        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#attachAttachDeckModal'}/>;
+        let myDecksContent = <AttachMyDecks destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
 
         //From SlideWiki content
-        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} actionButtonId={'#attachAttachDeckModal'}/>;
+        let slideWikiContent = <AttachSlideWiki destinationDeckId={this.props.selector.id} actionButtonId={'#nextAttachModal'}/>;
 
-        //Default Content
-        let segmentPanelContent = myDecksContent;
-        let searchForm='';
+        let segmentPanelContent;
+        let searchForm;
+        let actionButton;
+        let actionButton2;
+        let attachMenu;
+        let modalDescription;
 
-        if (this.state.activeItem === 'MyDecks'){
+        if(!this.state.showSlides){//no deck selected, displaying next button
+            attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>;
+            if (this.state.activeItem === 'MyDecks'){
+                searchForm ='';
+                segmentPanelContent = myDecksContent;
+
+            }else{
+                searchForm =  <AttachSearchForm />;
+                segmentPanelContent = slideWikiContent;
+            }
+
+            actionButton = <Button id="nextAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Next Select slides"
+                              data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
+                               <Icon name="arrow right"/>
+                                Next
+                               <Icon name="arrow right"/>
+                            </Button>;
+            actionButton2='';
+        } else{ //deck selected, diplay its slides, previous and attach button
+            attachMenu ='';
             searchForm ='';
-            segmentPanelContent = myDecksContent;
-
-        }else{
-            searchForm =  <AttachSearchForm />;
-            segmentPanelContent = slideWikiContent;
-
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
+            segmentPanelContent = <AttachSlides numColumns="3" />;
+            actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
+                            data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
+                             <Icon name="attach"/>
+                              Attach
+                             <Icon name="attach"/>
+                          </Button>;
+            actionButton2 =<Button id="previousAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Previos"
+                            data-tooltip="Previous" onClick={this.handlePreviousButton}>
+                             <Icon name="arrow left"/>
+                              Previous
+                             <Icon name="arrow left"/>
+                          </Button>;
 
         }
+
 
         return (
            <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button" aria-label="Attach Deck" data-tooltip="Attach Deck" aria-hidden={this.state.modalOpen}
+                      type="button" aria-label="Attach Slides" data-tooltip="Attach Slides" aria-hidden={this.state.modalOpen}
                       basic icon onClick={this.handleOpen} >
                         <Icon.Group size={this.props.buttonStyle.iconSize}>
-                            <Icon className="yellow" name="folder" />
-                            <Icon className="corner" name="attach" />
+                            <Icon className="grey" name="file text outline" />
+                            <Icon className="corner black" name="attach" />
                         </Icon.Group>
                     </Button>
                    }
@@ -159,8 +226,8 @@ class AttachSubdeckModal extends React.Component{
                 onClose={this.handleClose}
                 role="dialog"
                 id="attachSubDeckModal"
-                aria-labelledby="attachSubdeckHeader"
-                aria-describedby="attachSubdeckModalDescription"
+                aria-labelledby="attachModalHeader"
+                aria-describedby="attachSlidesDescription"
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
@@ -173,25 +240,21 @@ class AttachSubdeckModal extends React.Component{
                         active={this.state.activeTrap}
                         className = "header">
 
-                <Modal.Header className="ui center aligned" as="h1" id="attachSubdeckModalHeader">
-                     Attach Deck
+                <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
+                     Attach Slides
                 </Modal.Header>
                 <Modal.Content>
                     <Container text>
                          <Segment color="blue" textAlign="center" padded>
-                            <AttachMenu activeItem={this.state.activeItem}/>
+                            {attachMenu}
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               <TextArea className="sr-only" id="attachSubdeckModalDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>
+                               {modalDescription}
                                {searchForm}
                                {segmentPanelContent}
                             </Segment>
                             <Modal.Actions>
-                              <Button id="attachAttachDeckModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
-                                  data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleAttachButton}>
-                                <Icon name="attach"/>
-                                  Attach
-                                  <Icon name="attach"/>
-                              </Button>
+                              {actionButton}
+                              {actionButton2}
                               <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>

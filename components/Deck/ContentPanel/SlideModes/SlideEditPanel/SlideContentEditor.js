@@ -167,25 +167,44 @@ class SlideContentEditor extends React.Component {
         this.resizeDrag();
         this.forceUpdate();
     }
-    handleCKeditorModeButton(){
-        if (this.CKeditorMode === 'advanced toolbar'){
-            console.log('current CKeditor toolbar mode is basic - set to advanced');
-            CKEDITOR.instances.inlineContent.destroy();
-            CKEDITOR.inline('inlineContent', {
-                customConfig: '/assets/ckeditor_config.js',
-                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+    handleCKeditorModeButton(noswitch){
+        if(noswitch !== 'noswitch')
+        {
+            if (this.CKeditorMode === 'advanced toolbar'){
+                console.log('current CKeditor toolbar mode is basic - set to advanced');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
 
-            this.CKeditorMode = 'basic toolbar';
-        }
-        else {
-            console.log('current CKeditor toolbar mode is advanced - set to basic');
-            CKEDITOR.instances.inlineContent.destroy();
-            CKEDITOR.inline('inlineContent', {
-                customConfig: '/assets/ckeditor_config_basic.js',
-                filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-            this.CKeditorMode = 'advanced toolbar';
+                this.CKeditorMode = 'basic toolbar';
+            }
+            else {
+                console.log('current CKeditor toolbar mode is advanced - set to basic');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config_basic.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+                this.CKeditorMode = 'advanced toolbar';
+            }
+        } else {
+            if (this.CKeditorMode === 'advanced toolbar'){
+                console.log('current CKeditor toolbar mode is basic - refreshed');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config_basic.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+            } else {
+                console.log('current CKeditor toolbar mode is advanced - refreshed');
+                CKEDITOR.instances.inlineContent.destroy();
+                CKEDITOR.inline('inlineContent', {
+                    customConfig: '/assets/ckeditor_config.js',
+                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+            }
         }
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
@@ -193,6 +212,7 @@ class SlideContentEditor extends React.Component {
                 this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
+                //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
                 $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
@@ -210,6 +230,22 @@ class SlideContentEditor extends React.Component {
                     }, 500);
                 });
             }
+            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
+                console.log('====ckeditor image dialog onclick====');
+                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.handleCKeditorModeButton('noswitch');
+                            this.resizeDrag();
+                            this.forceUpdate();
+                        }, 500);
+                    });
+                }, 500);
+            });
         });
 
     }
@@ -447,12 +483,28 @@ class SlideContentEditor extends React.Component {
 
             }
             */
-
+            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
+                console.log('====ckeditor image dialog onclick====');
+                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.handleCKeditorModeButton('noswitch');
+                            this.resizeDrag();
+                            this.forceUpdate();
+                        }, 500);
+                    });
+                }, 500);
+            });
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
                 this.forceUpdate();
                 //this.addBorders();
                 this.resizeDrag();
+
                 //console.log('resizeDrag and borders');
                 //show that content is outside of pptx2html box
                 //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
@@ -1095,8 +1147,8 @@ class SlideContentEditor extends React.Component {
             let pptxwidth = $('.pptx2html').width();
             let pptxheight = $('.pptx2html').height();
             //TODO - change to get right!
-            //this.scaleratio = containerwidth / (pptxwidth+50);
-            this.scaleratio = containerwidth / (pptxwidth+120);
+            this.scaleratio = containerwidth / (pptxwidth+50);
+            //this.scaleratio = containerwidth / (pptxwidth+120);
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
             //$('.pptx2html').animate({
@@ -1169,31 +1221,6 @@ class SlideContentEditor extends React.Component {
             //borderColor: '#e7e7e7',
             position: 'relative'
         };
-        const contentStyle = {
-            minWidth: '100%',
-            // maxHeight: 450,
-            //padding: 10,
-            paddingLeft: 50,
-            paddingRight: 50,
-            paddingTop: 10,
-            xpaddingBottom: 10,
-            minHeight: 610,
-            overflowY: 'auto',
-            overflowX: 'auto',
-            //borderStyle: 'dashed',
-            //borderColor: '#e7e7e7',
-        };
-        const speakernotesStyle = {
-            maxHeight: 50,
-            minHeight: 50,
-            overflowY: 'auto',
-            position: 'relative'
-        };
-
-        const buttonColorBlack = {
-            color: 'black'
-        };
-
         const compStyle = {
             // maxHeight: 450,
             //minHeight: 450,
@@ -1211,7 +1238,6 @@ class SlideContentEditor extends React.Component {
             //overflow: 'hidden,'
             position: 'relative'
         };
-
         const sectionElementStyle = {
             overflowY: 'hidden',
             overflowX: 'auto',
@@ -1219,6 +1245,31 @@ class SlideContentEditor extends React.Component {
             paddingTop: 40,
             height: '100%'
         };
+        const contentStyle = {
+            minWidth: '100%',
+            // maxHeight: 450,
+            //padding: 10,
+            /*paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 10,
+            xpaddingBottom: 10,*/
+            minHeight: 610,
+            overflowY: 'auto',
+            overflowX: 'auto',
+            //borderStyle: 'dashed',
+            //borderColor: '#e7e7e7',
+        };
+        const speakernotesStyle = {
+            maxHeight: 50,
+            minHeight: 50,
+            overflowY: 'auto',
+            position: 'relative'
+        };
+
+        const buttonColorBlack = {
+            color: 'black'
+        };
+
 
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>

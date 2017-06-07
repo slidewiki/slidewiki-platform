@@ -85,7 +85,7 @@ const app = new Fluxible({
         ContentActionsFooterStore,
         IntlStore,
         AttachSubdeckModalStore,
-	    ServiceErrorStore,
+	      ServiceErrorStore,
         PermissionsStore,
         ContentLikeStore,
         SocialShareStore
