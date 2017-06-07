@@ -49,20 +49,22 @@ class Presentation extends React.Component{
             this.revealDiv.style.display = 'inline';
 
 
-            let pptxwidth = '100%';
-            let pptxheight = '100%';
+            //SWIK-1321 - Non-canvas/pptx2html content is not scaled in presentation mode and bottom content is hidden
+            let pptxwidth = '100%'; //use 100% of screen width
+            let pptxheight = '100%'; //use 100% of screen height
             if($('.pptx2html').html() !== ''){
                 pptxwidth = $('.pptx2html').width();
                 pptxheight = $('.pptx2html').height();
             } else {
                 pptxwidth = '100%';
                 pptxheight = '100%';
+                //TODO - copy paste from below
             }
             console.log('presentation.js dimension: ' + pptxheight + ' by ' + pptxwidth);
             Reveal.initialize({
                 width: pptxwidth,
     			height: pptxheight,
-                margin: 0.1,
+                margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
@@ -81,6 +83,26 @@ class Presentation extends React.Component{
                 } else {
                     pptxwidth = '100%';
                     pptxheight = '100%';
+                    //resize non-pptx2html slide content based on current height of window
+                    //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
+                    let presentwidth = $('.present').width();
+                    let presentheight = $('.present').height();
+                    console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
+
+                    //let containerwidth = document.getElementById('reveal').offsetWidth;
+                    //let containerheight = document.getElementById('reveal').offsetHeight;
+                    let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth;
+                    let screenheight = document.getElementsByClassName('reveal')[0].offsetHeight;
+                    console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
+                    let heightratio = screenheight / presentheight ;
+                    let widthratio = screenwidth / presentwidth;
+                    let scaleratio = 1;
+                    if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                    console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
+                    console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
+
+                    $('.present').css({'transform': '', 'transform-origin': ''});
+                    $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
                 }
                 console.log('slidechanged dimensions: ' + pptxheight + ' by ' + pptxwidth);
                 Reveal.configure({
