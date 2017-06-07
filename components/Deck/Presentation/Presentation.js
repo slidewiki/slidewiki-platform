@@ -49,18 +49,20 @@ class Presentation extends React.Component{
             this.revealDiv.style.display = 'inline';
 
 
-            if($('.pptx2html')){
-                let pptxwidth = $('.pptx2html').width();
-                let pptxheight = $('.pptx2html').height();
-            } else {
-                let pptxwidth = '100%';
-                let pptxheight = '100%';
-            }
             let pptxwidth = '100%';
             let pptxheight = '100%';
+            if($('.pptx2html').html() !== ''){
+                pptxwidth = $('.pptx2html').width();
+                pptxheight = $('.pptx2html').height();
+            } else {
+                pptxwidth = '100%';
+                pptxheight = '100%';
+            }
+            console.log('presentation.js dimension: ' + pptxheight + ' by ' + pptxwidth);
             Reveal.initialize({
                 width: pptxwidth,
     			height: pptxheight,
+                margin: 0.1,
                 transition: 'none',
                 backgroundTransition: 'none',
                 history: true,
@@ -69,6 +71,26 @@ class Presentation extends React.Component{
                     { src: '/custom_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
                 ]
             });
+
+            Reveal.addEventListener( 'slidechanged', ( event ) => {
+
+                console.log('slidechanged: ' + $('.present > .pptx2html').html());
+                if($('.present > .pptx2html').html()){
+                    pptxwidth = $('.present > .pptx2html').width();
+                    pptxheight = $('.present > .pptx2html').height();
+                } else {
+                    pptxwidth = '100%';
+                    pptxheight = '100%';
+                }
+                console.log('slidechanged dimensions: ' + pptxheight + ' by ' + pptxwidth);
+                Reveal.configure({
+                    width: pptxwidth,
+                    height: pptxheight
+                });
+	            // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+                let state = Reveal.getState();
+                console.log('state: ' + JSON.stringify(state));
+            } );
 
         }
         // update mathjax rendering
