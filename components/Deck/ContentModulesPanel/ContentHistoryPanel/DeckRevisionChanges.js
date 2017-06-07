@@ -1,5 +1,5 @@
 import React from 'react';
-import {Feed} from 'semantic-ui-react';
+import {List} from 'semantic-ui-react';
 import ContentChangeItem from './ContentChangeItem';
 
 class DeckRevisionChanges extends React.Component {
@@ -12,9 +12,9 @@ class DeckRevisionChanges extends React.Component {
         }) : 'There are no changes for this version.';
 
         return (
-            <Feed>
+            <List relaxed>
                 {changes}
-            </Feed>
+            </List>
         );
     }
 }

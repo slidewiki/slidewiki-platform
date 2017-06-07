@@ -3,7 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideHistoryStore from '../../../../stores/SlideHistoryStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import PermissionsStore from '../../../../stores/PermissionsStore';
-import {Feed} from 'semantic-ui-react';
+import {List} from 'semantic-ui-react';
 import ContentChangeItem from './ContentChangeItem';
 
 class SlideHistoryPanel extends React.Component {
@@ -17,9 +17,9 @@ class SlideHistoryPanel extends React.Component {
 
         return (
         <div ref="slideHistoryPanel" className="ui">
-            <Feed>
+            <List relaxed>
                 {changes}
-            </Feed>
+            </List>
         </div>
         );
     }

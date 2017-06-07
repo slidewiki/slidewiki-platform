@@ -1,7 +1,8 @@
 import React from 'react';
-import {Feed, Icon, Button} from 'semantic-ui-react';
+import {List, Icon, Button} from 'semantic-ui-react';
 import moment from 'moment';
 import revertRevision from '../../../../actions/history/revertRevision';
+
 import {NavLink} from 'fluxible-router';
 
 class ContentChangeItem extends React.Component {
@@ -24,6 +25,10 @@ class ContentChangeItem extends React.Component {
         }, (reason) => {
             //done(reason);
         });
+    }
+
+    handleViewSlideClick() {
+        
     }
 
     render() {
@@ -84,34 +89,29 @@ class ContentChangeItem extends React.Component {
 
         // buttons are shown only for slide history and only for changes that result in new slide revisions
         let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) &&
-            <span>
-                <Button.Group basic size='tiny' floated='right'>
-                            <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
-                            <Button aria-label='Restore slide' icon='history' disabled={!canEdit}
-                                    onClick={this.handleRevertClick.bind(this)}/>
-                            <Button aria-label='View slide' icon>
-                                <Icon.Group>
-                                    <Icon name='unhide'/>
-                                    <Icon name='external' corner/>
-                                </Icon.Group>
-                            </Button>
-                </Button.Group>
-            </span>;
+            <Button.Group basic size='tiny' floated='right'>
+                        <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
+                        <Button aria-label='Restore slide' icon='history' disabled={!canEdit}
+                                onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
+                        <Button aria-label='View slide' icon tabIndex='0' onClick={this.handleViewSlideClick.bind(this)}>
+                            <Icon.Group>
+                                <Icon name='unhide'/>
+                                <Icon name='external' corner/>
+                            </Icon.Group>
+                        </Button>
+            </Button.Group>;
 
         return (
-        <Feed.Event>
-            <Feed.Label>
-                <Icon name={iconName}/>
-            </Feed.Label>
-            <Feed.Content>
-                <Feed.Date>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</Feed.Date>
-                <Feed.Summary>
-                    <NavLink className="user"
-                             href={'/user/' + change.username}> {change.username}</NavLink> {description}
-                    {buttons}
-                </Feed.Summary>
-            </Feed.Content>
-        </Feed.Event>
+            <List.Item>
+                <Icon name={iconName} />
+                <List.Content style={{width:'100%'}} tabIndex='0'>
+                    <List.Header>
+                        <NavLink className="user"
+                                          href={'/user/' + change.username}> {change.username}</NavLink> {description} {buttons}
+                    </List.Header>
+                    <List.Description>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</List.Description>
+                </List.Content>
+            </List.Item>
         );
     };
 }
