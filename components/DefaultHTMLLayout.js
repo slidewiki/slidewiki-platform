@@ -41,6 +41,8 @@ class DefaultHTMLLayout extends React.Component {
                 {/* Above are added only to support IE browser */}
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
+                {/* TODO: load specific parts of jquery UI for performance */}
+                <script src="/jquery-ui-dist/jquery-ui.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/progress.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js"></script>
@@ -66,7 +68,6 @@ class DefaultHTMLLayout extends React.Component {
                 <script src={'/public/js/' + this.props.clientFile}></script>
                 <script type="text/javascript" src="https://slidewiki.atlassian.net/s/5e2fc7b2a8ba40bc00a09a4f81a301c8-T/rfg5q6/100012/c/1000.0.9/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=241c9e18"></script>
                 <script src="/sweetalert2/dist/sweetalert2.min.js"></script>
-                <script src="/jquery-ui-dist/jquery-ui.min.js"></script>
                 <script src="/jquery-contextmenu/dist/jquery.contextMenu.min.js"></script>
                 {/*<script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script src="/custom_modules/slide-edit-input-controls/lib/index.js"></script>*/}
