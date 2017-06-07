@@ -27,7 +27,7 @@ class UserNotificationsStore extends BaseStore {
 
         this.markNewNotifications();
         this.addVisibleParameterToNotifications();
-        
+
         this.emitChange();
     }
     loadNewNotifications(payload) {
@@ -41,7 +41,7 @@ class UserNotificationsStore extends BaseStore {
 
             //find the matching item in notifications array
             let notification;
-            for(let j = 0; j < this.notifications; j++) {
+            for(let j = 0; j < this.notifications.length; j++) {
                 if (this.notifications[j].id === newNotification.activity_id) {
                     notification = this.notifications[j];
                     break;
