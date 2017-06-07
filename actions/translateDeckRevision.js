@@ -12,7 +12,7 @@ export default function translateDeckRevision(context, payload, done) {
     log.info(context);
     console.log('action translateDeckRevision: got payload', payload);
     //enrich with user id
-    const user = context.getStore(UserProfileStore).user.uname;
+    const user = context.getStore(UserProfileStore).userid;
 
     payload.user = user;
     payload.deckId = context.getStore(ContentStore).selector.id;
