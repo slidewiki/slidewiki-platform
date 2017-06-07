@@ -9,7 +9,8 @@ CKEDITOR.dialog.add('cropDialog', function (editor) {
                 blobURL,
                 file = e.target.files[0],
                 //canvas = CKEDITOR.document.getElementsByTag('img').$[0];
-                canvas = CKEDITOR.document.getElementsByTag('p').$[0];
+                canvas = CKEDITOR.document.getElementsByTag('ul').$[0];
+
 
             if (!cropper)
                 cropper = new Cropper(canvas, options);
