@@ -240,7 +240,8 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.handleCKeditorModeButton('noswitch');
-                            //this.forceUpdate();
+                            this.resizeDrag();
+                            this.forceUpdate();
                         }, 500);
                     });
                 }, 500);
@@ -492,7 +493,8 @@ class SlideContentEditor extends React.Component {
                         //this.addBorders();
                         setTimeout(() => {
                             this.handleCKeditorModeButton('noswitch');
-                            //this.forceUpdate();
+                            this.resizeDrag();
+                            this.forceUpdate();
                         }, 500);
                     });
                 }, 500);
