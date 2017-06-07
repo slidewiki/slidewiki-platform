@@ -15,7 +15,7 @@ class UserNotificationsList extends React.Component {
 
         return (
             <div ref="userNotificationsList">
-                <div className="ui relaxed divided list">
+                <div className="ui relaxed divided list" role="list" tabIndex="0">
                     {list}
                 </div>
             </div>
