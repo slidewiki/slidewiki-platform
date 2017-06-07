@@ -30,11 +30,11 @@ class UserNotificationsItem extends React.Component {
             'big': this.props.iconSize === 'big'
         });
 
-        if (notification.user_id === '0') {
+        if (notification.user_id === '0' || notification.user_id === 'undefined') {
             notification.user_id = undefined;
         }
 
-        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
+        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deck/') + notification.content_id;
         if (notification.content_kind === 'group')
             viewPath = '/user/'+notification.user_id+'/profile/groups'; //TODO the username is neede here instead of the userid
         switch (notification.activity_type) {

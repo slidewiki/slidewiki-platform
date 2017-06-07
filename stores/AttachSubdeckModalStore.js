@@ -10,6 +10,10 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle='Select one deck...';
         this.selectedDeckId =-1;
         this.showSearchResults = false;
+        this.activeItem = 'MyDecks';
+        this.selectedSlides = [];
+        this.deckSlides =[];
+        this.deckSlidesTitles=[];
     }
 
     getState(){
@@ -19,7 +23,12 @@ class AttachSubdeckModalStore extends BaseStore{
             searchDecks: this.searchDecks,
             selectedDeckTitle: this.selectedDeckTitle,
             selectedDeckId: this.selectedDeckId,
-            showSearchResults: this.showSearchResults
+            showSearchResults: this.showSearchResults,
+            activeItem: this.activeItem,
+            selectedSlides:this.selectedSlides,
+            deckSlides: this.deckSlides,
+            deckSlidesTitles:  this.deckSlidesTitles
+
         };
     }
     dehydrate() {
@@ -32,11 +41,16 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle = state.selectedDeckTitle;
         this.selectedDeckId = state.selectedDeckId;
         this.showSearchResults = state.showSearchResults;
+        this.activeItem = state.activeItem;
+        this.selectedSlides = state.selectedSlides;
+        this.deckSlides = state.deckSlides;
+        this.deckSlidesTitles = state.deckSlidesTitles;
+
     }
 
     updateUserDecks(payload){
-
-        Object.assign(this.userDecks, payload);
+        this.userDecks = payload;
+        //Object.assign(this.userDecks, payload);
         this.emitChange();
     }
 
@@ -69,17 +83,21 @@ class AttachSubdeckModalStore extends BaseStore{
                 });
 
             }); //map
-            Object.assign(this.recentDecks, recentDecks);
+            this.recentDecks = recentDecks;
+            //Object.assign(this.recentDecks, recentDecks);
         }
         this.emitChange();
     }
 
     updateSearchDecks(payload){
-        if(payload.docs===[]){
+        if((payload.docs===[])||(typeof payload.docs === 'undefined')){
             this.searchDecks =[];
+            this.showSearchResults = true;
+
         }else{
+
             let searchDecks = payload.docs.map((deck) => {
-                console.log(deck);
+
                 return({
                     title: !isEmpty(deck.title) ? deck.title : 'No Title',
                     picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
@@ -95,7 +113,7 @@ class AttachSubdeckModalStore extends BaseStore{
                 });
             });//map
 
-            Object.assign(this.searchDecks, searchDecks);
+            this.searchDecks = searchDecks;
             this.showSearchResults = true;
         }
         this.emitChange();
@@ -107,6 +125,10 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle = 'Select one deck...';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
+        this.activeItem = 'MyDecks';
+        this.selectedSlides = [];
+        this.deckSlides =[];
+        this.deckSlidesTitles=[];
 
         this.emitChange();
     }
@@ -114,9 +136,49 @@ class AttachSubdeckModalStore extends BaseStore{
         this.selectedDeckTitle = 'Select one deck...';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
+        this.activeItem = 'MyDecks';
+        this.selectedSlides = [];
+        this.deckSlides =[];
+        this.deckSlidesTitles=[];
+
 
         this.emitChange();
     }
+
+    updateActiveItem(payload){
+        this.activeItem = payload.activeItem;
+        this.emitChange();
+    }
+
+    updateDeckSlides(payload){
+        if((payload.slides===[])||(typeof payload.slides === 'undefined')){
+            this.deckSlides =[];
+        }else{
+            this.deckSlides = payload.slides.map((slide) => {
+                return(slide.id);
+            });
+            this.deckSlidesTitles = payload.slides.map((slide) => {
+                return(slide.title);
+            });
+
+
+        }
+
+        this.emitChange();
+
+    }
+
+    updateSelectedSlides(payload){
+        if((payload.selectedSlides===[])||(typeof payload.selectedSlides === 'undefined')){
+            this.selectedSlides =[];
+        }else{
+            this.selectedSlides = payload.selectedSlides;
+        }
+
+        this.emitChange();
+    }
+
+
 
 
 
@@ -128,7 +190,11 @@ AttachSubdeckModalStore.handlers = {
     'ATTACHSUBDECK_LOAD_RECENTDECKS': 'updateRecentDecks',
     'ATTACHSUBDECK_LOAD_SEARCHDECKS' : 'updateSearchDecks',
     'ATTACHSUBDECK_RESET':'resetModalStore',
-    'ATTACHSUBDECK_INIT' :'initModal'
+    'ATTACHSUBDECK_INIT' :'initModal',
+    'ATTACHSUBDECK_ACTIVE_ITEM' :'updateActiveItem',
+    'ATTACHSUBDECK_LOAD_SLIDES' : 'updateDeckSlides',
+    'ATTACHSUBDECK_SELECTED_SLIDES' :'updateSelectedSlides'
+
 };
 
 export default AttachSubdeckModalStore;

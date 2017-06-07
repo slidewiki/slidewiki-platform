@@ -165,6 +165,17 @@ export default {
             }).then((body) => {
                 callback(null, body);
             }).catch((err) => callback(err));
+        } else if (resource ==='deck.slides'){
+
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'}).then((res) => {
+                callback(null, {slides: JSON.parse(res).children});
+            }).catch((err) => {
+                callback({
+                    msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...',
+                    content: err
+                }, {slides: []});
+            });          
         }
     },
     // other methods
