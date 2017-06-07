@@ -10,8 +10,22 @@ import {Button, Divider, List} from 'semantic-ui-react';
 class DeckHistoryPanel extends React.Component {
 
     handleCreateRevisionClick() {
-        this.context.executeAction(createRevision, {
-            id: this.props.selector.id.split('-')[0]
+        swal({
+            text: 'This action will create a new version for this deck. Do you want to continue?',
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, create a new version',
+            confirmButtonClass: 'ui olive button',
+            cancelButtonText: 'No',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false
+        }).then((accepted) => {
+            this.context.executeAction(createRevision, {
+                id: this.props.selector.id.split('-')[0]
+            });
+        }, (reason) => {
+            //done(reason);
         });
     }
 
