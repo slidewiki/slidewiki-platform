@@ -203,12 +203,13 @@ export default {
                 (callback) => {
                     context.executeAction(loadPresentation, payload, callback);
                 },
-                (callback) => {
-                    context.executeAction(loadSupportedLanguages, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadTranslations, payload, callback);
-                },
+                //Please leave it here=)
+                // (callback) => {
+                //     context.executeAction(loadSupportedLanguages, payload, callback);
+                // },
+                // (callback) => {
+                //     context.executeAction(loadTranslations, payload, callback);
+                // },
 
             ],
             (err, result) => {

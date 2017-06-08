@@ -61,10 +61,10 @@ class DeckViewPanel extends React.Component {
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
 
-        // let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
-        // let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
-        // // default English
-        // deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+        let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
+        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+        // default English
+        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
         // //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
         // //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
@@ -109,7 +109,9 @@ class DeckViewPanel extends React.Component {
                         <div className="content">
                             <div className="ui hidden divider"></div>
                             <div className="meta">
-                                <TranslationPanel/>
+                                <div className="ui large label" tabIndex="0">
+                                    <i className="comment icon" aria-label="Deck language"></i>{deckLanguage}
+                                </div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                 </div>
