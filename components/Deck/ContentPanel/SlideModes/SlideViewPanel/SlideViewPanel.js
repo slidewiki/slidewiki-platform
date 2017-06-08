@@ -10,8 +10,7 @@ class SlideViewPanel extends React.Component {
             <div className="ui bottom attached segment">
                 <SlideContentView content={this.props.SlideViewStore.content}
                                   speakernotes={this.props.SlideViewStore.speakernotes}
-                                  selector={this.props.selector}
-                                  theme={this.props.PresentationStore.theme} />
+                                  theme={this.props.selector && this.props.selector.theme ? this.props.selector.theme : this.props.PresentationStore.theme} />
             </div>
         );
     }
