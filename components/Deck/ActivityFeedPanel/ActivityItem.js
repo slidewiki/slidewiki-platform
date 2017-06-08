@@ -125,7 +125,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'reply':
-                IconNode = (<i className="ui big comments outline icon"></i>);
+                IconNode = (<i className="ui massive comments outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>

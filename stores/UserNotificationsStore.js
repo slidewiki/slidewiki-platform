@@ -61,7 +61,7 @@ class UserNotificationsStore extends BaseStore {
 
     }
     clearNotificationNewParameter(payload) {
-        let index = this.newNotifications.findIndex((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
+        let index = this.newNotifications.findIndex((newNotification) => {return (newNotification.id === payload.newNotificationId);});
         if (index >=0) {
             this.newNotifications.splice(index, 1);
 
