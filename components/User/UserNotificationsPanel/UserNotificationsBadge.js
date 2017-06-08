@@ -61,7 +61,7 @@ class UserNotificationsBadge extends React.Component {
 
         let noNewNotificationsMessage = '';
         if (this.props.UserNotificationsStore.newNotifications.length === 0) {
-            noNewNotificationsMessage = (<span><i className="ui big check circle outline icon" />There is no new notifications.</span>);
+            noNewNotificationsMessage = (<span><i className="ui big check circle outline icon" />There are no new notifications.</span>);
         }
         const newNotifications = this.props.UserNotificationsStore.newNotifications;
         const list = newNotifications.map((notification, index) => {

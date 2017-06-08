@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import CustomDate from '../../util/CustomDate';
-import { Segment,Item,Icon,Label,Image} from 'semantic-ui-react';
+import { Segment,Item,Icon,Label,Image, TextArea} from 'semantic-ui-react';
 import ISO6391 from 'iso-639-1';
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
@@ -11,10 +11,20 @@ import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelecte
 
 class AttachDeckList extends React.Component {
     constructor(props){
+        /* Receives:
+          user: user info
+          decks: array with the decks to showSlides
+          selectedDeckId: initial selected deck...if it was previosly selected
+          destinationDeckId: deck in which data will be appended.
+          actionButtonId: buttonId which receives the focus. It was not possible to use ref to do that.
+
+
+        */
         super(props);
+
+
         this.state = {
             selectedDeckId: this.props.selectedDeckId,
-
         };
     }
 
@@ -29,6 +39,8 @@ class AttachDeckList extends React.Component {
             selectedDeckTitle:selectedDeck.selectedDeckTitle
         };
         this.context.executeAction(updateSelectedDeck,payload,null);
+
+        $(this.props.actionButtonId).focus();
 
     }
     handleKeyPress(event,selectedDeck){
@@ -55,23 +67,24 @@ class AttachDeckList extends React.Component {
         if (decks_to_show.length){
             deck_list =
                 decks_to_show.map((deck, index) => {
-                    //From deck users, data is in props.user. From slideWiki, data is in the deck
-                    let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
-                    let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
 
-                    let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
-                    let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
-                    let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
-                    // default English
-                    deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-                    //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
-                    let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
-                    let selectedDeck = {
+                    if(this.props.destinationDeckId.toString() !== deck.deckID.toString()){
+                      //From deck users, data is in props.user. From slideWiki, data is in the deck
+                        let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
+                        let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
 
-                        selectedDeckTitle:deck.title,
-                        selectedDeckId: deck.deckID+'-'+deck.countRevisions
-                    };
-                    return (
+                        let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
+                        let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
+                        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+                        // default English
+                        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+                        //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
+                        let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
+                        let selectedDeck = {
+                            selectedDeckTitle:deck.title,
+                            selectedDeckId: deck.deckID+'-'+deck.countRevisions
+                        };
+                        return (
                            <Item key={index}
                                   onClick={this.handleOnclick.bind(this,selectedDeck)}
                                   onKeyPress={(e) => { this.handleKeyPress(e,selectedDeck);}}
@@ -106,13 +119,15 @@ class AttachDeckList extends React.Component {
                                 </Item.Content>
                             </Item>
 
-                    );
+                        );
+                    }
                 });
         }
 
         return (
           <Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
-             role="listbox" aria-expanded="true">
+             role="listbox" aria-expanded="true"  aria-describedby="listInstructions">
+             <TextArea className="sr-only" id="listInstructions" value="Use tab to navigate through the list and then enter to select a deck." tabIndex ='-1'/>
 
                 {deck_list}
           </Item.Group>
