@@ -14,10 +14,14 @@ class ChangePersonalData extends React.Component {
         payload.fname = this.refs.fname.value;
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
-        payload.language = this.refs.language.getSelected();
+        payload.language = 'en';
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
+
+        if (document.cookie.indexOf('locale=') > 0)
+            payload.language = document.cookie.substr(document.cookie.indexOf('locale=') + 7, 2);
+
         this.context.executeAction(changeUserData, payload);
         return false;
     }

@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import readUserNotification from '../../../actions/user/notifications/readUserNotification';
 
 class UserNotificationsItem extends React.Component {
-    handleClick(notification) {
+    handleMarkAsRead(notification) {
         if (notification.newNotificationId !== undefined && notification.newNotificationId !== '') {
             this.context.executeAction(readUserNotification, {
                 newNotificationId: notification.newNotificationId
@@ -30,11 +30,11 @@ class UserNotificationsItem extends React.Component {
             'big': this.props.iconSize === 'big'
         });
 
-        if (notification.user_id === '0') {
+        if (notification.user_id === '0' || notification.user_id === 'undefined') {
             notification.user_id = undefined;
         }
 
-        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
+        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deck/') + notification.content_id;
         if (notification.content_kind === 'group')
             viewPath = '/user/'+notification.user_id+'/profile/groups'; //TODO the username is neede here instead of the userid
         switch (notification.activity_type) {
@@ -114,7 +114,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'reply':
-                const replyIconClass = allIconClass.concat(' comments outline');
+                const replyIconClass = allIconClass.concat(' comments massive outline');
                 iconNotification = (<i className={replyIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
@@ -240,19 +240,29 @@ class UserNotificationsItem extends React.Component {
                 );
         }
 
+        let notificationIsNew = (notification.newNotificationId !== undefined && notification.newNotificationId !== '');
         let itemClass = classNames({
             'event': true,
-            'ui raised segment': (notification.newNotificationId !== undefined && notification.newNotificationId !== '')
+            'ui raised segment': notificationIsNew
         });
+        let markAsReadButton = (notificationIsNew) ? (
+            <div className="one wide column">
+                <a className="item" onClick={this.handleMarkAsRead.bind(this, notification)} title='Mark as read' >
+                    <i tabIndex="0" className="ui checkmark box icon link"></i>
+                </a>
+            </div>) : '';
         return (
             <div className="ui feed">
-                <div className={itemClass} onClick={this.handleClick.bind(this, notification)}>
+                <div className={itemClass} role="listitem" tabIndex="0">
                     <div className="activity-icon">
                         {iconNotification}
                     </div>
                     <div className="content" style={{marginLeft: '1em'}}>
-                        {summaryNotification}
+                        <div className="five wide column">
+                            {summaryNotification}
+                        </div>
                     </div>
+                    {markAsReadButton}
                 </div>
             </div>
         );

@@ -51,7 +51,6 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-    // create: (activity_type, user_id, content_id, content_kind, additional_info, content_name, content_owner_id) => {
 
         switch (resource) {
             case 'activities.new':
