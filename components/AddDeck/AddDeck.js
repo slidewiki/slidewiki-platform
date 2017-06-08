@@ -181,7 +181,7 @@ class AddDeck extends React.Component {
             }
             //call action
             const payload = {
-                filename: this.props.ImportStore.file.name,
+                filename: this.props.ImportStore.filename,
                 user: this.props.UserProfileStore.userid,
                 jwt: this.props.UserProfileStore.jwt,
                 language: language,
