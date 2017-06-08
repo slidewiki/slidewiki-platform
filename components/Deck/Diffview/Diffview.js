@@ -16,30 +16,27 @@ const MESSAGES = {
 };
 
 class DiffView extends Component {
+    constructor(props) {
+        super(props);
 
-    static defaultProps = {
-        diffcontent: '',
-        currContent: '',
-        error: '',
-        inverse: false,
-        isLoaded: false
+        this.state = {
+            diffcontent: this.props.content,
+            currContent: this.props.content,
+            base: this.props.DiffViewStore.baseSlide,
+            diff: this.props.DiffViewStore.diffSlide,
+            error: '',
+            show: {
+                add: true,
+                mod: true,
+                del: true,
+                text: true
+            }
+        };
+
+        this.toggleColor = this.toggleColor.bind(this);
     }
 
-    state = {
-        diffcontent: this.props.content,
-        currContent: this.props.content,
-        base: this.props.DiffViewStore.baseSlide,
-        diff: this.props.DiffViewStore.diffSlide,
-        error: '',
-        show: {
-            add: true,
-            mod: true,
-            del: true,
-            text: true
-        }
-    }
-
-    componentDidMount = () => {
+    componentDidMount() {
         this.diff();
         this.setState({ isLoaded: true });
         window.addEventListener('resize', (evt) => {
@@ -55,20 +52,20 @@ class DiffView extends Component {
         }
     }
 
-    toggleColor = () => {
+    toggleColor() {
         this.setState({
             inverse: !this.state.inverse
         });
     }
 
-    toggleVisibleChanges = (mode) => {
+    toggleVisibleChanges(mode) {
         let show = this.state.show;
         show[mode] = !show[mode];
 
         this.setState({ show });
     }
 
-    resize = () => {
+    resize() {
         let containerwidth = document.getElementById('container').offsetWidth;
         let pptxwidth = $('.pptx2html').width();
         this.scaleratio = containerwidth / (pptxwidth);
@@ -76,7 +73,7 @@ class DiffView extends Component {
         $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
     }
 
-    diff = () => {
+    diff() {
 
         /** FETCH 2 html strings to DIFF
         * baseSRC - current slide version
@@ -90,12 +87,13 @@ class DiffView extends Component {
         let baseSRC = this.state.base.content;
         let diffSRC = this.state.diff.content;
 
+        //CHECK if the slide was uploaded or created
         const isUploaded = diffSRC.indexOf('pptx2html') !== -1;
         //PRE-PROCESS & CONVERT html into hyperscript
         diffSRC = diff_fns.preprocess(diffSRC, isUploaded);
         baseSRC = diff_fns.preprocess(baseSRC, isUploaded);
 
-        //ADD ID as key per element
+        //ADD unique ID as key per element
         const vTree = diff_fns.setKeys(diffSRC);
         const vTree2 = diff_fns.setKeys(baseSRC);
 
@@ -119,8 +117,7 @@ class DiffView extends Component {
         diffSRC = diff_fns.construct(elements, diffSRC, isUploaded, baseSRC);
 
         //UPDATE state
-        this.setState({diffcontent: diffSRC});
-        this.setState({currContent: baseSRC});
+        this.setState({diffcontent: diffSRC, currContent: baseSRC});
     }
 
     render() {
@@ -156,13 +153,13 @@ class DiffView extends Component {
                             `}>
                             <div className='initVers' id='container'>
                               <div className='diff-header'>
-                                Revision [#{base.id}]
+                                Revision [ {base.id} ]
                               </div>
                               <div className='inlineContent' dangerouslySetInnerHTML={{__html: currContent}}></div>
                             </div>
                             <div className='mergedVers'>
                               <div className='diff-header'>
-                                Diff view changes between: [#{base.id}] and [#{diff.id}]
+                                Diff view changes between [ {base.id} ] and [ {diff.id} ]
                               </div>
                               <div className='inlineContent' dangerouslySetInnerHTML={{__html: diffcontent}}></div>
                             </div>
@@ -174,6 +171,14 @@ class DiffView extends Component {
     }
 
 }
+
+DiffView.defaultProps = {
+    diffcontent: '',
+    currContent: '',
+    error: '',
+    inverse: false,
+    isLoaded: false
+};
 
 DiffView = connectToStores(DiffView, [DiffViewStore], (context, props) => {
     return {DiffViewStore: context.getStore(DiffViewStore).getState()};
