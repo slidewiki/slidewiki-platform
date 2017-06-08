@@ -8,14 +8,19 @@ import DiffViewStore from '../../../stores/DiffViewStore';
 import diff_fns from './diff_funcs';
 
 const MESSAGES = {
-    'Error_Version': 'Error message'
+    'Error_Version': `Unfortunately, the chosen versions of the slide are incompatible, due to one of the following reasons:
+    1. New template applied
+    2. Manual code layout modification
+    3. ...`,
+    'Error_Content': 'An error occurred while fetching the content. Please visit the History panel of a slide and try once more.',
 };
 
 class DiffView extends Component {
 
     static defaultProps = {
-        diffcontent: ' ',
-        currContent: ' ',
+        diffcontent: '',
+        currContent: '',
+        error: '',
         inverse: false,
         isLoaded: false
     }
@@ -25,6 +30,7 @@ class DiffView extends Component {
         currContent: this.props.content,
         base: this.props.DiffViewStore.baseSlide,
         diff: this.props.DiffViewStore.diffSlide,
+        error: '',
         show: {
             add: true,
             mod: true,
@@ -76,6 +82,11 @@ class DiffView extends Component {
         * baseSRC - current slide version
         * diffSRC - toDIFF slide verion
         */
+        if(!this.state.base || !this.state.diff) {
+            this.setState({error: MESSAGES.Error_Content});
+            return;
+        }
+
         let baseSRC = this.state.base.content;
         let diffSRC = this.state.diff.content;
 
@@ -89,7 +100,7 @@ class DiffView extends Component {
         const vTree2 = diff_fns.setKeys(baseSRC);
 
         if (!diff_fns.compareWrapperIds(diffSRC, baseSRC)) {
-            this.setState({currContent: MESSAGES.Error_Version});
+            this.setState({error: MESSAGES.Error_Version});
             return;
         }
 
@@ -113,13 +124,14 @@ class DiffView extends Component {
     }
 
     render() {
-        const { base, diff, inverse, diffcontent, currContent, isLoaded, show } = this.state;
+        const { base, diff, inverse, error, diffcontent, currContent, isLoaded, show } = this.state;
 
         if(!isLoaded) return (<div>Loading ...</div>);
 
+        if(error) return (<div>{error}</div>);
+
         return (
-            <div className="fluid container ui top-diff">
-              <div className='ui'>
+            <div className="fluid container top-diff">
                 <div className='helpers'>
                   <div className='diff-header'>
                     Settings
@@ -157,7 +169,6 @@ class DiffView extends Component {
                         </div>
                     </div>
                 </div>
-              </div>
             </div>
         );
     }
