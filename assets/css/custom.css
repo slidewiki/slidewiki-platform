@@ -45,7 +45,7 @@
 }
 
 .helpers .checkbox {
-  margin: 5px 0px;
+  margin: 7px 0px;
 }
 
 .top-diff .reveal {
@@ -58,14 +58,11 @@
 }
 
 .top-diff .diff-header{
-  display: flex;
-  font-size: 16px;
-  height: 60px;
-  padding: 5px;
-  color: #fff;
   width: 100%;
-  -webkit-box-align: center;
+  height: 60px;
   padding: 18px;
+  font-size: 16px;
+  color: #fff;
   background-color: #ff9900;
 }
 
@@ -93,6 +90,33 @@
    .diff-view { flex-direction: column; }
 
    .initVers, .mergedVers { width: 100%; }
+
+   .mergedVers { order: -1; }
+
+   .top-diff .reveal {
+     width: 100%;
+   }
+
+   .top-diff .helpers {
+     width: 100vw;
+     position: relative;
+     height: 180px;
+     background-color: rgba(255,153,0,0.2);
+   }
+
+   .top-diff .helpers .inlineContent {
+     display: flex;
+     flex-direction: column;
+   }
+
+   .top-diff .helpers .checkbox {
+     flex: 1;
+   }
+
+   .top-diff .helpers .diff-header {
+     display: none
+   }
+
  }
 
 /* HTML DOM Node related */
