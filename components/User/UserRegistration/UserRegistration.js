@@ -57,8 +57,8 @@ class UserRegistration extends React.Component {
                         type   : 'maxLength[64]',
                         prompt : 'Your username can not be longer than 64 characters'
                     }, {
-                        type   : 'regExp[/^[a-z0-9]+$/i]',
-                        prompt : 'The username must contain only alphanumeric characters'
+                        type   : 'regExp[/^[a-zA-Z0-9-.~_]+$/i]',
+                        prompt : 'The username must contain only alphanumeric characters plus the following: _ . - ~'
                     }]
                 },
                 email: {
