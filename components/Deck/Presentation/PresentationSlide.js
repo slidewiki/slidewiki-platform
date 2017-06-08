@@ -10,7 +10,7 @@ let sectionStyle = { 'top': 'unset !important'};
 class PresentationSlide extends React.Component {
     render(){
         return (
-            <section data-state='somestate' dangerouslySetInnerHTML={{__html:this.props.content}} id={this.props.id} />
+            <section dangerouslySetInnerHTML={{__html:this.props.content}} id={this.props.id} />
         );
     }
 
