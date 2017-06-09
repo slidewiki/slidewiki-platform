@@ -95,7 +95,7 @@ class ContentQuestionsPanel extends React.Component {
         let content = (
       <div>
         {this.state.showAddPanel ?
-          <ContentQuestionAdd /> :
+          <ContentQuestionAdd onButtonClick={this.handleAddClick} /> :
           <div>
             {buttonBar}
             {questionsHeader}
