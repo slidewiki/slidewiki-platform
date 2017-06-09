@@ -61,7 +61,8 @@ class AddDeck extends React.Component {
         const language = this.refs.div_languages.getSelected();
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
-        const license = this.refs.select_licenses.value;
+        // const license = this.refs.select_licenses.value;
+        const license = 'CC BY-SA';//default license
         //const tags = this.refs.input_tags.value.split(', ');
         const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
@@ -84,13 +85,13 @@ class AddDeck extends React.Component {
         else {
             wrongFields.language = false;
         }
-        if (license === null || license === undefined || license.length < 2) {
-            wrongFields.license = true;
-            everythingIsFine = false;
-        }
-        else {
-            wrongFields.license = false;
-        }
+        // if (license === null || license === undefined || license.length < 2) {
+        //     wrongFields.license = true;
+        //     everythingIsFine = false;
+        // }
+        // else {
+        //     wrongFields.license = false;
+        // }
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
             everythingIsFine = false;
@@ -172,13 +173,14 @@ class AddDeck extends React.Component {
 
         if (this.props.ImportStore.file !== null) {
             let language = this.refs.div_languages.getSelected();
-            let license = this.refs.select_licenses.value;
+            // let license = this.refs.select_licenses.value;
+            const license = 'CC BY-SA';
             if (language === null || language === undefined || language === 'Select Language') {//set default
                 language = 'en_GB';
             }
-            if (license === null || license === undefined) {//set default
-                license = 'CC0';
-            }
+            // if (license === null || license === undefined) {//set default
+            //    license = 'CC0';
+            // }
             //call action
             const payload = {
                 filename: this.props.ImportStore.file.name,
@@ -212,11 +214,11 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.title
         });
-        let fieldClass_license = classNames({
-            'required': true,
-            'field': true,
-            'error': this.props.AddDeckStore.wrongFields.license
-        });
+        // let fieldClass_license = classNames({
+        //     'required': true,
+        //     'field': true,
+        //     'error': this.props.AddDeckStore.wrongFields.license
+        // });
         let fieldClass_conditions = classNames({
             'required': true,
             'inline': true,
@@ -274,15 +276,15 @@ class AddDeck extends React.Component {
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
-        let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
-          <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-          <option value="CC BY" >Creative Commons Attribution</option>
-          <option value="CC0" >Creative Commons CC0 Public Domain</option>
-        </select>;
+        // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
+        //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+        //   <option value="CC BY" >Creative Commons Attribution</option>
+        //   <option value="CC0" >Creative Commons CC0 Public Domain</option>
+        // </select>;
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
-        let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
+        // let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
@@ -323,10 +325,7 @@ class AddDeck extends React.Component {
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
-                          <div className={fieldClass_license} data-tooltip={hint_license} ref="div_licenses" >
-                              <label htmlFor="license">License</label>
-                                  {licenseOptions}
-                          </div>
+
                       </div>
 
                         <div className="ui message" id="uploadDesc">
