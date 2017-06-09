@@ -35,17 +35,17 @@ class ContentQuestionAdd extends React.Component {
                 <input
                   type="checkbox"
                   name="example1"
-                  id="answer4"
+                  id={`answer${i+1}`}
                   tabIndex={0}
                   className="hidden" />
-                <label htmlFor="answer4" />
+                <label htmlFor={`answer${i+1}`} />
               </div>
               <input
                 type="text"
                 style={{width: 680}}
-                name="response4"
-                id="response4" />
-              <label htmlFor="response4" />
+                name={`response${i+1}`}
+                id={`response${i+1}`} />
+              <label htmlFor={`response${i+1}`} />
             </div>
           );
             }
