@@ -3,6 +3,33 @@ import React from 'react';
 class ContentQuestionAdd extends React.Component {
 
     render() {
+
+        const getAnswerChoiceFields = () => {
+            let array = [];
+            for (let i = 0; i < 4; i++) {
+                array.push(
+            <div key={i} className="inline field">
+              <div className="ui checkbox">
+                <input
+                  type="checkbox"
+                  name="example1"
+                  id="answer4"
+                  tabindex={0}
+                  className="hidden" />
+                <label htmlFor="answer4" />
+              </div>
+              <input
+                type="text"
+                style={{width: 680}}
+                name="response4"
+                id="response4" />
+              <label htmlFor="response4" />
+            </div>
+          );
+            }
+            return array;
+        };
+
         return (
       <div
         className="ui segment attached"
@@ -82,74 +109,7 @@ class ContentQuestionAdd extends React.Component {
                   <legend>
                     Answer Choices
                   </legend>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer1"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer1" />
-                    </div>
-                    <input
-                      style={{width: 680}}
-                      type="text"
-                      name="response1"
-                      id="response1" />
-                    <label htmlFor="response1" />
-                  </div>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer2"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer2" />
-                    </div>
-                    <input
-                      style={{width: 680}}
-                      type="text"
-                      name="response2"
-                      id="response2" />
-                    <label htmlFor="response2" />
-                  </div>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer3"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer3" />
-                    </div>
-                    <input
-                      style={{width: 680}}
-                      type="text"
-                      name="response3"
-                      id="response3" />
-                    <label htmlFor="response3" />
-                  </div>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer4"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer4" />
-                    </div>
-                    <input
-                      type="text"
-                      style={{width: 680}}
-                      name="response4"
-                      id="response4" />
-                    <label htmlFor="response4" />
-                  </div>
+                  {getAnswerChoiceFields()}
                 </fieldset>
               </div>
               <div className="field">
