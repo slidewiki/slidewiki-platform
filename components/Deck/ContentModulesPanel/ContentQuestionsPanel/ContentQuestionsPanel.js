@@ -3,6 +3,7 @@ import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import ContentQuestionsList from './ContentQuestionsList';
+import ContentQuestionAdd from './ContentQuestionAdd';
 // import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
@@ -78,6 +79,7 @@ class ContentQuestionsPanel extends React.Component {
         {buttonBar}
         {questionsHeader}
         <ContentQuestionsList items={questions} />
+        <ContentQuestionAdd />
       </div>
     );
 
