@@ -133,7 +133,7 @@ class ImportStore extends BaseStore {
                 }
             }
         } else {
-            if (++this.safetyCounter > 100) {//50 times the call was made, and no change in noOfSlides
+            if (++this.safetyCounter > 100) {//100 times the call was made, and no change in noOfSlides
                 this.uploadProgress = 100;
             }
         }
