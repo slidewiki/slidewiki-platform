@@ -4,11 +4,12 @@ class ContentQuestionAdd extends React.Component {
 
     constructor(props){
         super(props);
-        this.handleButtonClick = this.handleButtonClick.bind(this);
+        //this.handleButtonClick = this.handleButtonClick.bind(this);
     }
 
     handleButtonClick() {
-        this.props.onButtonClick;
+        //this.props.onButtonClick;
+        console.log('Button clicked');
     }
 
     render() {
@@ -120,7 +121,7 @@ class ContentQuestionAdd extends React.Component {
               <div className="field">
                 <div className="ui container">
                   <div className="ui right floated buttons">
-                    <button className="ui primary button" onClick={this.handleButtonClick}>Save</button>
+                    <button type='button' className="ui primary button" onClick={this.handleButtonClick}>Save</button>
                     <button className="ui secondary button" onClick={this.handleButtonClick}>Cancel</button>
                   </div>
                 </div>
