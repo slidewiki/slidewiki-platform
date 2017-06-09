@@ -403,7 +403,7 @@ class DeckPropertiesEditor extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
         let licenseOptions = <a className="ui label">
-          <i className="copyright large icon"></i>Can only save as: <b>Creative Commons Attribution-ShareAlike</b>
+          <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
         </a>;
         /*
         <i className="creative commons large icon"></i>
