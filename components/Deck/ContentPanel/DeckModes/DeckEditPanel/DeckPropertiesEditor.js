@@ -91,6 +91,10 @@ class DeckPropertiesEditor extends React.Component {
         this.handleDropboxes();
     }
 
+    componentDidMount() {
+        this.handleDropboxes();
+    }
+
     handleDropboxes() {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown({
@@ -124,7 +128,8 @@ class DeckPropertiesEditor extends React.Component {
         $(ReactDOM.findDOMNode(this.refs.AddUser))
             .dropdown({
                 apiSettings: {
-                    url: Microservices.user.uri + '/information/username/search/{query}'
+                    url: Microservices.user.uri + '/information/username/search/{query}',
+                    cache: false
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
@@ -141,12 +146,14 @@ class DeckPropertiesEditor extends React.Component {
                     // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
                         return member.id === parseInt(data.userid);
-                    }) === -1 && parseInt(value) !== this.props.userid) {
+                    }) === -1 && parseInt(data.userid) !== this.props.userid) {
                         users.push({
-                            username: name,
+                            username: data.username,
                             id: parseInt(data.userid),
-                            joined: (new Date()).toISOString(),
-                            picture: data.picture
+                            joined: data.joined || (new Date()).toISOString(),
+                            picture: data.picture,
+                            country: data.country,
+                            organization: data.organization
                         });
                     }
 
@@ -263,8 +270,15 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
+                let optionalElement = (user.organization || user.country) ?  (
+                  <div>
+                    {user.organization || 'Unknown organization'} ({user.country || 'unknown country'})
+                    <br/>
+                  </div>
+                ) : '';
                 let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
+                // console.log('new authorized user:', user);
                 // console.log('New key for authorized user:', key, user);
                 list_authorized.push(
                   (
@@ -273,14 +287,18 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="one wide column">
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
-                        <div className="fifteen wide column">
-                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
-                          <div className="description">
-                            {optionalText}&nbsp;&nbsp;&nbsp;
+                        <div className="ten wide column">
+                          <div className="content">
+                            <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                            <div className="description">
+                              {optionalElement}{optionalText}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="four wide column middle aligned">
                             <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
                               Remove
                             </button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -310,18 +328,21 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="one wide column">
                           <i className="large group middle aligned icon"></i>
                         </div>
-                        <div className="fifteen wide column">
-                          <a className="header">{group.name}</a>
-                          <div className="description">
-                            {optionalText}&nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" onClick={fct}>
-                              Remove
-                            </button>
-                            &nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
-                              Show details
-                            </button>
+                        <div className="ten wide column">
+                          <div className="content">
+                            <a className="header">{group.name}</a>
+                            <div className="description">
+                              {optionalText}
+                            </div>
                           </div>
+                        </div>
+                        <div className="four wide column middle aligned">
+                          <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                            Remove
+                          </button>
+                          <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
+                            Show details
+                          </button>
                         </div>
                       </div>
                     </div>

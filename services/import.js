@@ -1,5 +1,4 @@
 import {Microservices} from '../configs/microservices';
-import rp from 'request';
 import formdata from 'form-data';
 const util = require('util');
 const log = require('../configs/log').log;
@@ -13,12 +12,13 @@ export default {
 
         //let keys = [];
         //for(let k in params) keys.push(k);
-        console.log('import service', params.file, params.base64.length);
+        // console.log('import service', params.file, params.base64.length);
 
         //create a HTTP POST form request
         form.append('file', params.base64);
         form.append('filename', params.filename ? params.filename : 'unknown');
         form.append('user', params.user);
+        form.append('jwt', params.jwt);
         form.append('language', params.language);
         form.append('license', params.license);
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
@@ -42,7 +42,7 @@ export default {
                 return;
             }
 
-            console.log('result of call to import-microservice', res.headers, res.statusCode);
+            // console.log('result of call to import-microservice', res.headers, res.statusCode);
             //res does not contain any data ...
             //the response data have to be send via headers
             callback(null, res.headers);

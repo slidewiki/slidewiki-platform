@@ -3,34 +3,31 @@ import {BaseStore} from 'fluxible/addons';
 class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.notifications = [];
+        this.notifications = undefined;
         this.newNotifications = [];
         this.subscriptions = [];
         this.activityTypes = [
             {type:'add', selected: true},
-            {type:'comment', selected: true},
-            {type:'download', selected: true},
             {type:'edit', selected: true},
-            {type:'rate', selected: true},
-            {type:'react', selected: true},
+            {type:'comment', selected: true},
             {type:'reply', selected: true},
+            {type:'download', selected: true},
             {type:'share', selected: true},
-            {type:'translate', selected: true},
-            {type:'share', selected: true},
-            {type:'use', selected: true},
+            {type:'react', selected: true},
+            // {type:'rate', selected: true},
+            // {type:'translate', selected: true},
+            // {type:'use', selected: true},
+            {type:'fork', selected: true}
         ];
     }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
-        this.markNewNotifications();
-
-
-        // this.newNotifications = payload.newNotifications;
-
-
-
+        this.newNotifications = payload.newNotifications;
         this.subscriptions = payload.subscriptions;
+
+        this.markNewNotifications();
         this.addVisibleParameterToNotifications();
+
         this.emitChange();
     }
     loadNewNotifications(payload) {
@@ -38,15 +35,33 @@ class UserNotificationsStore extends BaseStore {
         this.emitChange();
     }
     markNewNotifications() {
-        this.newNotifications.forEach((newNotification) => {
-            let notification = this.notifications.find((notification) => {return (notification.id === newNotification.activity_id);});
+        let invalidNewNotificationsIndexes = [];
+        for (let i = 0; i < this.newNotifications.length; i++) {
+            let newNotification = this.newNotifications[i];
+
+            //find the matching item in notifications array
+            let notification;
+            for(let j = 0; j < this.notifications.length; j++) {
+                if (this.notifications[j].id === newNotification.activity_id) {
+                    notification = this.notifications[j];
+                    break;
+                }
+            }
             if (notification !== undefined) {
                 notification.newNotificationId = newNotification.id;
+            } else {
+                invalidNewNotificationsIndexes.push(i);
             }
-        });
+        }
+
+        //remove invalid new notifications
+        for (let i = invalidNewNotificationsIndexes.length - 1; i >=0; i--) {
+            this.newNotifications.splice(invalidNewNotificationsIndexes[i], 1);
+        }
+
     }
     clearNotificationNewParameter(payload) {
-        let index = this.newNotifications.findIndex((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
+        let index = this.newNotifications.findIndex((newNotification) => {return (newNotification.id === payload.newNotificationId);});
         if (index >=0) {
             this.newNotifications.splice(index, 1);
 
@@ -99,7 +114,7 @@ class UserNotificationsStore extends BaseStore {
     //     }
     // }
     isVisible(notification) {
-        return (this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id)) && this.isActivityTypeSelected(notification.activity_type);
+        return (this.isSubscribed(notification.content_kind, notification.content_id) || this.isSubscribed('user', notification.user_id) || this.isSubscribed('owner', notification.content_owner_id)) && this.isActivityTypeSelected(notification.activity_type);
     }
     isSubscribed(type, id) {
         let subscription = this.subscriptions.find((s) => {return ((s.type === type) && (s.id === id));});

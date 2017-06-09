@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import readUserNotification from '../../../actions/user/notifications/readUserNotification';
 
 class UserNotificationsItem extends React.Component {
-    handleClick(notification) {
+    handleMarkAsRead(notification) {
         if (notification.newNotificationId !== undefined && notification.newNotificationId !== '') {
             this.context.executeAction(readUserNotification, {
                 newNotificationId: notification.newNotificationId
@@ -29,7 +29,12 @@ class UserNotificationsItem extends React.Component {
             'ui icon': true,
             'big': this.props.iconSize === 'big'
         });
-        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deckview/') + notification.content_id;
+
+        if (notification.user_id === '0' || notification.user_id === 'undefined') {
+            notification.user_id = undefined;
+        }
+
+        let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deck/') + notification.content_id;
         if (notification.content_kind === 'group')
             viewPath = '/user/'+notification.user_id+'/profile/groups'; //TODO the username is neede here instead of the userid
         switch (notification.activity_type) {
@@ -38,8 +43,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={translateIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'translated ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>{' to '}
                         {/*<a href={'/slideview/' + notification.translation_info.content_id}>{notification.translation_info.language}</a>*/}
@@ -51,14 +56,14 @@ class UserNotificationsItem extends React.Component {
                 break;
             case 'share':
                 const shareIconClass = allIconClass.concat(' slideshare');
+                const onPlatform = (notification.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + notification.share_info.platform);
                 iconNotification = (<i className={shareIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'shared ' + notification.content_kind + ' '}
-                        <a href={viewPath}>{notification.content_name}</a>{' on '}
-                        <a target="_blank" href={notification.share_info.postURI}>{notification.share_info.platform}</a>
+                        <a href={viewPath}>{notification.content_name}</a> {onPlatform}
                         <br/>
                         {DateDiv}
                     </div>
@@ -69,8 +74,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={addIconClass}></i>);
                 summaryNotification = (
                     <div className="summary" >
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'created ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -83,8 +88,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={editIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'edited ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -97,8 +102,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={commentIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'commented on ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -109,12 +114,12 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'reply':
-                const replyIconClass = allIconClass.concat(' comments outline');
+                const replyIconClass = allIconClass.concat(' comments massive outline');
                 iconNotification = (<i className={replyIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a>
                         <span> replied to a comment </span>{'on ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
@@ -130,8 +135,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'used ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         {/*{' in deck '}<a href={'/slideview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>*/}
@@ -146,8 +151,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={rateIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'rated ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -160,8 +165,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={reactIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'liked ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -174,9 +179,23 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={downloadIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'downloaded ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{notification.content_name}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'fork':
+                const forkIconClass = allIconClass.concat(' fork');
+                iconNotification = (<i className={forkIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary">
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'forked ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
                         {DateDiv}
@@ -188,8 +207,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={joinedIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'Changes in ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -202,8 +221,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={leftIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                        <a className="user" href={'/user/' + notification.user_id}>
-                            {notification.author.username}
+                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                        {notification.author ? notification.author.username : 'unknown'}
                         </a> {'Changes in ' + notification.content_kind + ' '}
                         <a href={viewPath}>{notification.content_name}</a>
                         <br/>
@@ -221,19 +240,29 @@ class UserNotificationsItem extends React.Component {
                 );
         }
 
+        let notificationIsNew = (notification.newNotificationId !== undefined && notification.newNotificationId !== '');
         let itemClass = classNames({
             'event': true,
-            'ui raised segment': (notification.newNotificationId !== undefined && notification.newNotificationId !== '')
+            'ui raised segment': notificationIsNew
         });
+        let markAsReadButton = (notificationIsNew) ? (
+            <div className="one wide column">
+                <a className="item" onClick={this.handleMarkAsRead.bind(this, notification)} title='Mark as read' >
+                    <i tabIndex="0" className="ui checkmark box icon link"></i>
+                </a>
+            </div>) : '';
         return (
             <div className="ui feed">
-                <div className={itemClass} onClick={this.handleClick.bind(this, notification)}>
+                <div className={itemClass} role="listitem" tabIndex="0">
                     <div className="activity-icon">
                         {iconNotification}
                     </div>
                     <div className="content" style={{marginLeft: '1em'}}>
-                        {summaryNotification}
+                        <div className="five wide column">
+                            {summaryNotification}
+                        </div>
                     </div>
+                    {markAsReadButton}
                 </div>
             </div>
         );

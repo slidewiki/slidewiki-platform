@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from 'fluxible-router';
 import { connectToStores } from 'fluxible-addons-react';
 import classNames from 'classnames/bind';
 import loadActivities from '../../../actions/activityfeed/loadActivities';
@@ -23,22 +24,26 @@ class ActivityFeedPanel extends React.Component {
     }
 
     render() {
-        let pointingMenu = '';
         let activityDIV = '';
         let hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
         if (this.props.ActivityFeedStore.selector.stype === undefined || this.props.ActivityFeedStore.selector.sid === undefined) {
             hrefPath = '';
         }
 
+        const panelDIVStyles = {
+            maxHeight: 400,
+            overflowY: 'auto'
+        };
+
         activityDIV = <ActivityList />;
 
         return (
             <div ref="activityFeedPanel">
-                <div className="ui compact segments">
+                <div className="ui segments">
                     <div className="ui secondary segment">
-                        <a href={hrefPath}>Activity Feed</a>
+                        <NavLink href={hrefPath}>Activity Feed</NavLink>
                     </div>
-                    <div className="ui segment attached">
+                    <div className="ui segment" style={panelDIVStyles}>
                         {activityDIV}
                     </div>
                 </div>

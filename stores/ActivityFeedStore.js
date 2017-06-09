@@ -86,7 +86,8 @@ class ActivityFeedStore extends BaseStore {
                 },
                 content_id:  payload.selector.sid,
                 content_kind: 'deck',
-                react_type: 'like'
+                react_type: 'like',
+                timestamp: new Date()
             };
             this.activities.unshift(activity);//add to the beginning
             if (isLocalStorageOn()) {
@@ -100,7 +101,7 @@ class ActivityFeedStore extends BaseStore {
         //find like activity and remove it
         if (payload.selector.stype === 'deck') {
             let i = 0;
-            for(i = 0; i < this.activities.length; i++) {
+            for(; i < this.activities.length; i++) {
                 const activity = this.activities[i];
                 if (activity.activity_type === 'react' && activity.user_id === payload.userid && activity.content_id === payload.selector.sid && activity.content_kind === 'deck') {
                     break;

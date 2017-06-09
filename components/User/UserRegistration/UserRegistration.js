@@ -57,8 +57,8 @@ class UserRegistration extends React.Component {
                         type   : 'maxLength[64]',
                         prompt : 'Your username can not be longer than 64 characters'
                     }, {
-                        type   : 'regExp[/^[a-z0-9]+$/i]',
-                        prompt : 'The username must contain only alphanumeric characters'
+                        type   : 'regExp[/^[a-zA-Z0-9-.~_]+$/i]',
+                        prompt : 'The username must contain only alphanumeric characters plus the following: _ . - ~'
                     }]
                 },
                 email: {
@@ -469,8 +469,7 @@ class UserRegistration extends React.Component {
 
                         <h3 className="ui dividing header">Sign Up with a Social Provider</h3>
 
-                           <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>
-
+                            {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label="Sign up with Google"><i className="big google plus lnk icon"></i></button>
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label="Sign up with Github"><i className="big github icon"></i></button>
 

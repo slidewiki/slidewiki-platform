@@ -9,6 +9,7 @@ import ErrorStore from '../../stores/ErrorStore';
 import SearchResultsPanel from './SearchResultsPanel/SearchResultsPanel';
 import loadSearchResults from '../../actions/search/loadSearchResults';
 import UsersInput from './AutocompleteComponents/UsersInput';
+import TagsInput from './AutocompleteComponents/TagsInput';
 import KeywordsInput from './AutocompleteComponents/KeywordsInput';
 
 class SearchPanel extends React.Component {
@@ -22,14 +23,12 @@ class SearchPanel extends React.Component {
             user: this.props.SearchParamsStore.user,
             tag: this.props.SearchParamsStore.tag,
             revisions: this.props.SearchParamsStore.revisions,
-            license: this.props.SearchParamsStore.license
         };
     }
     initDropdown(){
         $('#field').dropdown();
         $('#kind').dropdown();
         $('#language').dropdown();
-        $('#license').dropdown();
     }
     componentDidMount(){
         this.initDropdown();
@@ -69,9 +68,8 @@ class SearchPanel extends React.Component {
             field: this.refs.field.value.trim(),
             kind: this.refs.kind.value.trim(),
             language: this.refs.language.value.trim(),
-            license: this.refs.license.value.trim(),
             user: this.refs.user.getSelected().split(','),
-            tag: this.refs.tag.value.trim(),
+            tag: this.refs.tag.getSelected().split(','),
             // revisions: $('.ui.checkbox.revisions').checkbox('is checked')
             sort: (params && params.sort) ? params.sort : ''
         };
@@ -147,7 +145,7 @@ class SearchPanel extends React.Component {
                                 <label htmlFor="SearchTerm">Search Term</label>
                                 <KeywordsInput ref='keywords' onSelect={this.onSelect.bind(this)} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={decodeURIComponent(this.state.keywords)} placeholder='Type your keywords here' clearInputHandler={this.clearInput.bind(this)}/>
                             </div>
-                            <div className="four fields">
+                            <div className="three fields">
                                 <div className="field">
                                     <label htmlFor="field">Search field</label>
                                     <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
@@ -181,17 +179,6 @@ class SearchPanel extends React.Component {
                                       <option value='es_ES'>Spanish</option>
                                     </select>
                                 </div>
-
-                                <div className="field">
-                                    <label htmlFor="license">License</label>
-                                    <select name='license' id='license' onChange={this.onChange.bind(this)} value={this.state.license} multiple='' className='ui fluid search dropdown' ref='license'>
-                                      <option value=' '>Select Search field</option>
-                                      <option value='CC0'>CC0</option>
-                                      <option value='CC BY'>CC BY</option>
-                                      <option value='CC BY-SA'>CC BY-SA</option>
-                                    </select>
-                                </div>
-
                             </div>
 
                             <div className="two fields">
@@ -200,9 +187,9 @@ class SearchPanel extends React.Component {
                                     <UsersInput ref='user' placeholder='Select Users' />
                                 </div>
 
-                                <div className="field disabled">
-                                    <label htmlFor="tag">Tags</label>
-                                    <input name='tag' id='tag' onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} value={this.state.tag} placeholder="Tags" type="text" ref='tag' tabIndex="-1"></input>
+                                <div className="field">
+                                    <label htmlFor="tags_input_field">Tags</label>
+                                    <TagsInput ref='tag' placeholder='Select Tags' />
                                 </div>
 
                             </div>
