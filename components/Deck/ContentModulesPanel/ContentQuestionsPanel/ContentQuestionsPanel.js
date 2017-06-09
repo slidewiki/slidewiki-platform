@@ -7,6 +7,21 @@ import ContentQuestionAdd from './ContentQuestionAdd';
 // import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            showAddPanel: false,
+        };
+        this.handleAddClick = this.handleAddClick.bind(this);
+    }
+
+    handleAddClick() {
+        this.setState({
+            showAddPanel: !this.state.showAddPanel,
+        });
+    }
+
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
@@ -58,7 +73,10 @@ class ContentQuestionsPanel extends React.Component {
             <div className="ui label red">Prototype interface - not functional</div></h3>
                 </div>
                 <div className="column right aligned">
-                  <button className="ui right floated compact button primary">
+                  <button
+                    className="ui right floated compact button primary"
+                    onClick={this.handleAddClick}
+                  >
                     <i
                       className="small plus icon"
                       data-reactid={640} />
@@ -76,10 +94,13 @@ class ContentQuestionsPanel extends React.Component {
 
         let content = (
       <div>
-        {buttonBar}
-        {questionsHeader}
-        <ContentQuestionsList items={questions} />
-        <ContentQuestionAdd />
+        {this.state.showAddPanel ?
+          <ContentQuestionAdd /> :
+          <div>
+            {buttonBar}
+            {questionsHeader}
+            <ContentQuestionsList items={questions} />
+          </div>}
       </div>
     );
 
