@@ -92,7 +92,7 @@ class UserNotificationsPanel extends React.Component {
         const newNotifications = this.props.UserNotificationsStore.newNotifications;
         const selector = this.props.UserNotificationsStore.selector;
 
-        const iconMarkAsReadTitle = (newNotifications.length > 0) ? 'Mark all ' + newNotifications.length + ' as read' : 'Mark all as read';
+        const iconMarkAsReadTitle = (newNotifications.length > 0) ? 'Mark all ' + newNotifications.length + ' new notifications as read' : 'Mark all as read';
         let iconMarkAsRead = (//disabled icon
             <a className="item" title={iconMarkAsReadTitle}>
                 <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
@@ -167,10 +167,10 @@ class UserNotificationsPanel extends React.Component {
                     <div className="six wide column">
                       <div className="ui huge header">
                           Notifications <div className="ui mini label" >{iconMarkAsRead} {newNotifications.length}</div>
-                      </div><div className="ui basic segment">
-
-                            {filters}
-                        </div>
+                      </div>
+                      <div className="ui basic segment">
+                          {filters}
+                      </div>
                     </div>
                     <div className="column ten wide">
                         <div className="ui basic segment">
