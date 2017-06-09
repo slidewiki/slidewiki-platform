@@ -4,17 +4,39 @@ class ContentQuestionAdd extends React.Component {
 
     render() {
 
+        const getRadioButtons = () => {
+            let buttons = [];
+            let levels = ['Easy', 'Moderate', 'Hard'];
+
+            for (let i = 0; i < 3; i++) {
+                buttons.push(
+            <div key={i} className="field">
+              <div className="ui radio checkbox">
+                <input
+                  type="radio"
+                  id={levels[i].toLowerCase}
+                  defaultChecked
+                  tabIndex={0}
+                  className="hidden" />
+                <label htmlFor={levels[i].toLowerCase}>{levels[i]}</label>
+              </div>
+            </div>
+          );
+            }
+            return buttons;
+        };
+
         const getAnswerChoiceFields = () => {
-            let array = [];
+            let answers = [];
             for (let i = 0; i < 4; i++) {
-                array.push(
+                answers.push(
             <div key={i} className="inline field">
               <div className="ui checkbox">
                 <input
                   type="checkbox"
                   name="example1"
                   id="answer4"
-                  tabindex={0}
+                  tabIndex={0}
                   className="hidden" />
                 <label htmlFor="answer4" />
               </div>
@@ -27,7 +49,7 @@ class ContentQuestionAdd extends React.Component {
             </div>
           );
             }
-            return array;
+            return answers;
         };
 
         return (
@@ -67,39 +89,7 @@ class ContentQuestionAdd extends React.Component {
                   <fieldset>
                     <legend>Difficulty</legend>
                     <div className="inline fields">
-                      <div className="field">
-                        <div className="ui radio checkbox">
-                          <input
-                            type="radio"
-                            id="easy"
-                            defaultChecked
-                            tabindex={0}
-                            className="hidden" />
-                          <label htmlFor="easy">Easy</label>
-                        </div>
-                      </div>
-                      <div className="field">
-                        <div className="ui radio checkbox">
-                          <input
-                            type="radio"
-                            id="moderate"
-                            defaultChecked
-                            tabindex={0}
-                            className="hidden" />
-                          <label htmlFor="easy">Moderate</label>
-                        </div>
-                      </div>
-                      <div className="field">
-                        <div className="ui radio checkbox">
-                          <input
-                            type="radio"
-                            id="Hard"
-                            defaultChecked
-                            tabindex={0}
-                            className="hidden" />
-                          <label htmlFor="easy">Hard</label>
-                        </div>
-                      </div>
+                      {getRadioButtons()}
                     </div>
                   </fieldset>
                 </div>
