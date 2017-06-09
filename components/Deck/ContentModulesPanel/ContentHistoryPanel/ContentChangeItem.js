@@ -28,7 +28,8 @@ class ContentChangeItem extends React.Component {
     }
 
     handleViewSlideClick() {
-        
+        //open the slide revision in a new tab
+        window.open('/slideview/' + this.props.change.value.ref.id + '-' + this.props.change.value.ref.revision, '_blank');
     }
 
     render() {
