@@ -160,6 +160,37 @@ class SlideContentEditor extends React.Component {
                     '<p>&nbsp;</p></div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
+                // case 'title':
+                //     this.refs.inlineContent.innerHTML =
+                //       '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                //       ' <div class="titleSlide>' +
+                //       '   <div class="titlePageHeading"><h3>Title</h3></div>' +
+                //       '   <div class="titlePageSubHeading"><h4>Subtitle</h4></div>' +
+                //       ' </div>' +
+                //       '</div>';
+                //
+                //     this.inputBoxButtonTitle = 'Add input box';
+                //     this.emitChange();
+                //     break;
+            case 'outitleslide':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                '<div class="titleSlide" style="style="background-image: url(/custom_modules/reveal.js/img/outitlepage.png);background-repeat: no-repeat;background-position: center; height:100%; width:100%">' +
+                '<h3>This is the title</h3>' +
+                '</div></div>';
+                this.inputBoxButtonTitle = 'Add input box';
+                this.emitChange();
+                break;
+            case 'oegtitleslide':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                '<div class="titleSlide" style="style="background-image: url(/custom_modules/reveal.js/img/outitlepage.png);background-repeat: no-repeat;background-position: center; height:100%; width:100%">' +
+                '<h3>This is the title</h3>' +
+                '</div></div>';
+                this.inputBoxButtonTitle = 'Add input box';
+                this.emitChange();
+                break;
+            
         }
         this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
