@@ -2,7 +2,66 @@ import React from 'react';
 
 class ContentQuestionAdd extends React.Component {
 
+    constructor(props){
+        super(props);
+        //this.handleButtonClick = this.handleButtonClick.bind(this);
+    }
+
+    handleButtonClick() {
+        //this.props.onButtonClick;
+        console.log('Button clicked');
+    }
+
     render() {
+
+        const getRadioButtons = () => {
+            let buttons = [];
+            let levels = ['Easy', 'Moderate', 'Hard'];
+
+            for (let i = 0; i < 3; i++) {
+                buttons.push(
+            <div key={i} className="field">
+              <div className="ui radio checkbox">
+                <input
+                  type="radio"
+                  id={levels[i].toLowerCase}
+                  defaultChecked
+                  tabIndex={0}
+                  className="hidden" />
+                <label htmlFor={levels[i].toLowerCase}>{levels[i]}</label>
+              </div>
+            </div>
+          );
+            }
+            return buttons;
+        };
+
+        const getAnswerChoiceFields = () => {
+            let answers = [];
+            for (let i = 0; i < 4; i++) {
+                answers.push(
+            <div key={i} className="inline field">
+              <div className="ui checkbox">
+                <input
+                  type="checkbox"
+                  name="example1"
+                  id={`answer${i+1}`}
+                  tabIndex={0}
+                  className="hidden" />
+                <label htmlFor={`answer${i+1}`} />
+              </div>
+              <input
+                type="text"
+                style={{width: 680}}
+                name={`response${i+1}`}
+                id={`response${i+1}`} />
+              <label htmlFor={`response${i+1}`} />
+            </div>
+          );
+            }
+            return answers;
+        };
+
         return (
       <div
         className="ui segment attached"
@@ -40,39 +99,7 @@ class ContentQuestionAdd extends React.Component {
                   <fieldset>
                     <legend>Difficulty</legend>
                     <div className="inline fields">
-                      <div className="field">
-                        <div className="ui radio checkbox">
-                          <input
-                            type="radio"
-                            id="easy"
-                            defaultChecked
-                            tabindex={0}
-                            className="hidden" />
-                          <label htmlFor="easy">Easy</label>
-                        </div>
-                      </div>
-                      <div className="field">
-                        <div className="ui radio checkbox">
-                          <input
-                            type="radio"
-                            id="moderate"
-                            defaultChecked
-                            tabindex={0}
-                            className="hidden" />
-                          <label htmlFor="easy">Moderate</label>
-                        </div>
-                      </div>
-                      <div className="field">
-                        <div className="ui radio checkbox">
-                          <input
-                            type="radio"
-                            id="Hard"
-                            defaultChecked
-                            tabindex={0}
-                            className="hidden" />
-                          <label htmlFor="easy">Hard</label>
-                        </div>
-                      </div>
+                      {getRadioButtons()}
                     </div>
                   </fieldset>
                 </div>
@@ -82,74 +109,7 @@ class ContentQuestionAdd extends React.Component {
                   <legend>
                     Answer Choices
                   </legend>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer1"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer1" />
-                    </div>
-                    <input
-                      style={{width: 680}}
-                      type="text"
-                      name="response1"
-                      id="response1" />
-                    <label htmlFor="response1" />
-                  </div>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer2"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer2" />
-                    </div>
-                    <input
-                      style={{width: 680}}
-                      type="text"
-                      name="response2"
-                      id="response2" />
-                    <label htmlFor="response2" />
-                  </div>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer3"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer3" />
-                    </div>
-                    <input
-                      style={{width: 680}}
-                      type="text"
-                      name="response3"
-                      id="response3" />
-                    <label htmlFor="response3" />
-                  </div>
-                  <div className="inline field">
-                    <div className="ui checkbox">
-                      <input
-                        type="checkbox"
-                        name="example1"
-                        id="answer4"
-                        tabindex={0}
-                        className="hidden" />
-                      <label htmlFor="answer4" />
-                    </div>
-                    <input
-                      type="text"
-                      style={{width: 680}}
-                      name="response4"
-                      id="response4" />
-                    <label htmlFor="response4" />
-                  </div>
+                  {getAnswerChoiceFields()}
                 </fieldset>
               </div>
               <div className="field">
@@ -161,8 +121,8 @@ class ContentQuestionAdd extends React.Component {
               <div className="field">
                 <div className="ui container">
                   <div className="ui right floated buttons">
-                    <button className="ui primary button">Save</button>
-                    <button className="ui secondary button">Cancel</button>
+                    <button type='button' className="ui primary button" onClick={this.handleButtonClick}>Save</button>
+                    <button className="ui secondary button" onClick={this.handleButtonClick}>Cancel</button>
                   </div>
                 </div>
               </div>
