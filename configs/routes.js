@@ -28,6 +28,11 @@ import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
+import loadSupportedLanguages from '../actions/loadSupportedLanguages';
+import loadLegacy from '../actions/loadLegacy';
+
+
+import {navigateAction} from 'fluxible-router';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -184,9 +189,9 @@ export default {
     // sid: 'id of selected content; may contain [0-9a-zA-Z-]',
     // spath: 'path of the content in deck tree, separated by semi-colon and colon for its position e.g. 67:3;45:1;45:4'; may contain [0-9a-z:;-],
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
-    // theme: For testing, choice of any of the reveal.js themes
+    // theme: For testing, choice of any of the reveal.js theme
     deck: {
-        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -197,15 +202,30 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadPresentation, payload, callback);
-                }
+                },
+                //Please leave it here=)
+                // (callback) => {
+                //     context.executeAction(loadSupportedLanguages, payload, callback);
+                // },
+                // (callback) => {
+                //     context.executeAction(loadTranslations, payload, callback);
+                // },
+
             ],
             (err, result) => {
                 if(err) console.log(err);
                 done();
             });
-
-
-
+        }
+    },
+    legacydeck: {
+        path: '/deck/:oldid(\\d+_\\w+)',
+        method: 'get',
+        action: (context, payload, done) => {
+            context.executeAction(loadLegacy, payload, (err, result) => {
+                if (err) console.log(err);
+                context.executeAction(navigateAction, {'url': '/deck/'+result}, done);
+            });
         }
     },
     contributors: {

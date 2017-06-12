@@ -9,10 +9,17 @@ import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
+import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+
+import {navigateAction} from 'fluxible-router';
+
 import ContentLikeStore from '../../../../../stores/ContentLikeStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import TranslationStore from '../../../../../stores/TranslationStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
+
+import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -58,10 +65,11 @@ class DeckViewPanel extends React.Component {
         let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
         // default English
         deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-        //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
-        //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
-        // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
-        //const countryFlag = 'gb';
+        // //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
+        // //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
+        // // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
+        // //const countryFlag = 'gb';
+        //let translations = this.props.TranslationStore.translations;
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
@@ -101,9 +109,9 @@ class DeckViewPanel extends React.Component {
                         <div className="content">
                             <div className="ui hidden divider"></div>
                             <div className="meta">
-                                <div className="ui large label">
-                                <i className="ui comments outline icon"></i>
-                                    {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
+                                <div className="ui large label" tabIndex="0">
+                                    <i className="comment icon" aria-label="Deck language"></i>{deckLanguage}
+                                </div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                 </div>
@@ -154,12 +162,17 @@ class DeckViewPanel extends React.Component {
     }
 }
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {
+DeckViewPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore, TranslationStore], (context, props) => {
     return {
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState(),
     };
 });
 export default DeckViewPanel;

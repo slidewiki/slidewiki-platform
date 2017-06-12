@@ -9,6 +9,16 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
+
+        if (resource === 'deck.legacy'){
+
+            rp.get({uri: Microservices.deck.uri + '/legacy/' + params.oldid}).then((res) => {
+                //console.log('RES:' + res);
+                callback(null, {new_id: res});
+            }).catch((err) => {
+                callback(err, {new_id: null});
+            });
+        }
         if (resource === 'deck.featured') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             /*********connect to microservices*************/
@@ -204,6 +214,21 @@ export default {
                 json: true,
                 body: toSend
             }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
+        } else if (resource === 'deck.translate'){
+            let toSend = {
+                user: params.user,
+                language: params.language
+            };
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId + '/translate',
+                json: true,
+                body: toSend
+            }).then((data) => {
+                //console.log('DECK:' + JSON.stringify(data.root_deck));
+                callback(false, data);
+            })
             .catch((err) => callback(err));
         }
     },
