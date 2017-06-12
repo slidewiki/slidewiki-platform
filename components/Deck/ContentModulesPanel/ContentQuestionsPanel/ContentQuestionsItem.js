@@ -59,7 +59,6 @@ class ContentQuestionsItem extends React.Component {
         };
 
         let activeIfFirst = this.props.index === 0 ? 'active' : ''; // something wrong with accordion - doesn't expand
-        console.log(activeIfFirst);
 
         return (
             // <div className="item">
