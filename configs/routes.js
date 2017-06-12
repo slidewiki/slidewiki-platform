@@ -351,7 +351,7 @@ export default {
         }
     },
     questions: {
-        path: '/questions/:stype/:sid',
+        path: '/questions/:stype/:sid/:maxQ/:pageNum',
         method: 'get',
         page: 'questions',
         handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ContentQuestionsPanel'),
