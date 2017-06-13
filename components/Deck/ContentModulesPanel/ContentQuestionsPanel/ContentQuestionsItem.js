@@ -79,21 +79,22 @@ class ContentQuestionsItem extends React.Component {
             // </div>
             // </div>
             <div>
-            <div className={activeIfFirst + ' title'}>
-              <i className="dropdown icon" />
-              {question.title}
-              <div
-                className="ui star rating"
-                data-rating={question.difficulty}
-                aria-label={'difficulty level ' + question.difficulty}
-                tabIndex={0} />
-              {difficultyStars(question.difficulty)}
-            </div>
-            <div
-              className={activeIfFirst + ' content'}
-              data-reactid={653}>
-              {answers}
-            </div>
+                <div className={activeIfFirst + ' title'}>
+                    <i className="dropdown icon" />
+                    {question.title}
+                    <div
+                        className="ui star rating"
+                        data-rating={question.difficulty}
+                        aria-label={'difficulty level ' + question.difficulty}
+                        tabIndex={0} />
+                    {difficultyStars(question.difficulty)}
+                    <i className="edit icon" />
+                </div>
+                <div
+                    className={activeIfFirst + ' content'}
+                    data-reactid={653}>
+                    {answers}
+                </div>
             </div>
         );
     }
