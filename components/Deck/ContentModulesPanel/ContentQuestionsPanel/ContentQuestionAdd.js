@@ -1,5 +1,5 @@
 import React from 'react';
-import addContentQuestion from '../../../../actions/addContentQuestion';
+import addQuestion from '../../../../actions/questions/addQuestion';
 
 class ContentQuestionAdd extends React.Component {
 
@@ -9,7 +9,7 @@ class ContentQuestionAdd extends React.Component {
     }
 
     handleButtonClick() {
-        context.executeAction(addContentQuestion, {
+        context.executeAction(addQuestion, {
             question: {
                 id: 120,
                 title: 'Brand new question',
