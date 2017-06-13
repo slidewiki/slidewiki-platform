@@ -1,15 +1,29 @@
 import React from 'react';
+import addContentQuestion from '../../../../actions/addContentQuestion';
 
 class ContentQuestionAdd extends React.Component {
 
     constructor(props){
         super(props);
-        //this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
     }
 
     handleButtonClick() {
-        //this.props.onButtonClick;
-        console.log('Button clicked');
+        context.executeAction(addContentQuestion, {
+            question: {
+                id: 120,
+                title: 'Brand new question',
+                username: 'Ilya B.',
+                userID: 66,
+                difficulty: 2,
+                Date: 'yesterday',
+                answers: [{answer: 'Ja', correct: true, explanation: 'Obvious'},
+                          {answer: 'Nein', correct: false, explanation: ''},
+                          {answer: 'Vielleicht', correct: true, explanation: 'May the power comes with you!'},
+                          {answer: 'Ich kenne das nicht', correct: false, explanation: ''}]
+            },
+        });
+        this.props.onButtonClick();
     }
 
     render() {
@@ -122,7 +136,7 @@ class ContentQuestionAdd extends React.Component {
                 <div className="ui container">
                   <div className="ui right floated buttons">
                     <button type='button' className="ui primary button" onClick={this.handleButtonClick}>Save</button>
-                    <button className="ui secondary button" onClick={this.handleButtonClick}>Cancel</button>
+                    <button type='button' className="ui secondary button" onClick={this.handleButtonClick}>Cancel</button>
                   </div>
                 </div>
               </div>
@@ -133,5 +147,9 @@ class ContentQuestionAdd extends React.Component {
         );
     }
 }
+
+ContentQuestionAdd.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default ContentQuestionAdd;

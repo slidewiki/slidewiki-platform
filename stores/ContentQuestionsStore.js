@@ -30,7 +30,11 @@ class ContentQuestionsStore extends BaseStore {
         else {
             question.answersShown = true;
         }
-        this.emitChange();        
+        this.emitChange();
+    }
+    addQuestion(payload){
+        this.questions = payload.questions;
+        this.emitChange();
     }
     getState() {
         return {
@@ -54,7 +58,8 @@ ContentQuestionsStore.handlers = {
     'LOAD_CONTENT_QUESTIONS_SUCCESS': 'loadQuestions',
     'LOAD_QUESTION': 'loadQuestion',
     'CANCEL_QUESTION': 'cancelQuestion',
-    'TOGGLE_ANSWERS': 'toggleAnswers'
+    'TOGGLE_ANSWERS': 'toggleAnswers',
+    'ADD_QUESTION_SUCCESS': 'addQuestion',
 };
 
 export default ContentQuestionsStore;
