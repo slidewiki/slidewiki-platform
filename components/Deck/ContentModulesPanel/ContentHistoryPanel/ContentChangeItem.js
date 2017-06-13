@@ -34,14 +34,15 @@ class ContentChangeItem extends React.Component {
     }
 
     handleDiffViewClick() {
-        const slideId = this.props.change.value.ref.id + '-' + this.props.change.value.ref.revision;
-        //TODO: @did (diff id) - ID of the selected slide
-        // window.open(`/diffview/${stype}/${sid}/${did}`);
+        const { sid, stype } = this.props.selector;
+        const did = this.props.change.value.ref.revision;
+        window.open(`/diffview/${stype}/${sid}/${did}`);
     }
 
     render() {
         const change = this.props.change;
         const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+        const isCurrent = this.props.selector.sid === `${this.props.change.value.ref.id}-${this.props.change.value.ref.revision}`;
         let description;
         let iconName = 'write';
 
@@ -98,7 +99,7 @@ class ContentChangeItem extends React.Component {
         // buttons are shown only for slide history and only for changes that result in new slide revisions
         let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) &&
             <Button.Group basic size='tiny' floated='right'>
-                        <Button aria-label='Compare to current slide version' icon='exchange' onClick={this.handleDiffViewClick.bind(this)}/>
+                        <Button aria-label='Compare to current slide version' icon='exchange' disabled={isCurrent} onClick={this.handleDiffViewClick.bind(this)}/>
                         <Button aria-label='Restore slide' icon='history' disabled={!canEdit}
                                 onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
                         <Button aria-label='View slide' icon tabIndex='0' onClick={this.handleViewSlideClick.bind(this)}>
