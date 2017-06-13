@@ -1,5 +1,5 @@
 slidewikiplatform:
-  image: slidewiki/platform
+  image: slidewiki/platform:latest-dev
   restart: on-failure:5
   expose:
     - "80"
