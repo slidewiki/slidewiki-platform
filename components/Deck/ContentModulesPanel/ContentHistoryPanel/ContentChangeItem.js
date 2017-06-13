@@ -34,9 +34,7 @@ class ContentChangeItem extends React.Component {
     }
 
     handleDiffViewClick() {
-        const {sid, stype} = this.props.selector;
-        console.log(this.props);
-        // @sid - ID of the current slide
+        const slideId = this.props.change.value.ref.id + '-' + this.props.change.value.ref.revision;
         //TODO: @did (diff id) - ID of the selected slide
         // window.open(`/diffview/${stype}/${sid}/${did}`);
     }
