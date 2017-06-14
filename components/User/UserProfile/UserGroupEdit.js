@@ -127,11 +127,13 @@ class UserGroupEdit extends React.Component {
     }
 
     handleClickRemoveMember(member) {
-        console.log('handleClickRemoveMember', member);
+        // console.log('handleClickRemoveMember', member, 'from', this.props.UserProfileStore.currentUsergroup.members);
 
         let group = this.getGroup(this.props.UserProfileStore.currentUsergroup.members);
 
-        group.members.pop(member);
+        group.members = group.members.filter((gmember) => {
+            return gmember.userid !== member.userid;
+        });
 
         this.context.executeAction(updateUsergroup, {group: group, offline: true});
     }

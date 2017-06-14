@@ -65,6 +65,12 @@ class TemplateDropdown extends React.Component {
             <div className="item" data-value="3" >
                 Document with title
             </div>
+            <div className="item" data-value="outitle">
+                Open University Theme Title Page
+            </div>
+            <div className="item" data-value="outitle">
+                OEG Theme Title Page
+            </div>
         </div>;
 
         //let tooltip = this.props.tooltip;
