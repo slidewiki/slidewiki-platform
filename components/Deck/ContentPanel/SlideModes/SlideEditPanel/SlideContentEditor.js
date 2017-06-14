@@ -292,8 +292,20 @@ class SlideContentEditor extends React.Component {
         for (let i = 0, n = allElements.length; i < n; ++i) {
             let random = Math.floor((Math.random() * 100000) + 1);
             let el = allElements[i];
-            if (el.id && allIds.indexOf(el.id) !== -1) { allIds.push(el.id); }
-            else {el.id = random; allIds.push(random);}
+            if (el.id )
+            {
+                if(allIds.indexOf(el.id) !== -1)
+                {//if duplicate entry:
+                    while (allIds.indexOf(random) !== -1) {random = Math.floor((Math.random() * 100000) + 1);}
+                    el.id = random; allIds.push(random);
+                } else{
+                    allIds.push(el.id);
+                }
+            }
+            else {
+                while (allIds.indexOf(random) !== -1){random = Math.floor((Math.random() * 100000) + 1);}
+                el.id = random; allIds.push(random);
+            }
         }
     }
     handleSaveButton(){
