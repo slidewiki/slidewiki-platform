@@ -134,7 +134,7 @@ class ResetPassword extends React.Component {
 
     handleClick(e) {
         e.preventDefault();
-        let language = common.getBrowserLanguage();
+        let language = common.getIntlLanguage();
 
         this.context.executeAction(resetPassword, {
             language: language,

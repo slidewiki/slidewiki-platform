@@ -113,10 +113,7 @@ class UserRegistrationSocial extends React.Component {
         user.forename = this.refs.firstname.value;
         user.surname = this.refs.lastname.value;
 
-        let language = common.getBrowserLanguage();
-        if (language.length === 2) {
-            language += '-' + language.toUpperCase();
-        }
+        let language = common.getIntlLanguage();
         user.language = language;
 
         this.context.executeAction(socialSignUp, user);
