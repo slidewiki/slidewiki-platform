@@ -209,7 +209,10 @@ class SlideContentEditor extends React.Component {
         {
             if (this.CKeditorMode === 'advanced toolbar'){
                 console.log('current CKeditor toolbar mode is basic - set to advanced');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
@@ -219,7 +222,10 @@ class SlideContentEditor extends React.Component {
             }
             else {
                 console.log('current CKeditor toolbar mode is advanced - set to basic');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config_basic.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
@@ -229,14 +235,20 @@ class SlideContentEditor extends React.Component {
         } else {
             if (this.CKeditorMode === 'advanced toolbar'){
                 console.log('current CKeditor toolbar mode is basic - refreshed');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config_basic.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
                     uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
             } else {
                 console.log('current CKeditor toolbar mode is advanced - refreshed');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
@@ -1213,8 +1225,14 @@ class SlideContentEditor extends React.Component {
     componentWillUnmount() {
         // Remove the warning window.
         window.onbeforeunload = () => {};
-        CKEDITOR.instances.inlineContent.destroy();
-        CKEDITOR.instances.inlineSpeakerNotes.destroy();
+        if (CKEDITOR.instances.inlineContent != null) {
+            //console.log('destroy CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
+        }
+        if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+            //console.log('destroy CKEDITOR instance');
+            CKEDITOR.instances.inlineSpeakerNotes.destroy();
+        }
     }
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)
