@@ -275,6 +275,9 @@ class AddDeck extends React.Component {
             <option value="simple">Reveal.js Simple</option>
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
+            <option value="openuniversity">Open University Theme</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>            
         </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>

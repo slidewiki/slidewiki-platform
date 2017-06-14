@@ -401,6 +401,9 @@ class DeckPropertiesEditor extends React.Component {
             <option value="simple">Reveal.js Simple</option>
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
+            <option value="openuniversity">Open University Theme</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>
         </select>;
         let licenseOptions = <a className="ui label">
           <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
