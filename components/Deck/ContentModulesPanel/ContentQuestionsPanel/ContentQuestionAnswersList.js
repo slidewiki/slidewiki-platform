@@ -1,7 +1,9 @@
 import React from 'react';
 import ContentQuestionAnswersItem from './ContentQuestionAnswersItem';
+import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
+import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 
 class ContentQuestionAnswersList extends React.Component {
 
@@ -35,7 +37,7 @@ class ContentQuestionAnswersList extends React.Component {
 
         const showEditButton = () => {
             if(userId && creatorId === userId){
-                return showEditButton;
+                return editButton;
             }
             return null;
         };
@@ -96,5 +98,13 @@ class ContentQuestionAnswersList extends React.Component {
         );
     }
 }
+
+ContentQuestionAnswersList = connectToStores(ContentQuestionAnswersList, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {
+    return {
+        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+    };
+});
 
 export default ContentQuestionAnswersList;
