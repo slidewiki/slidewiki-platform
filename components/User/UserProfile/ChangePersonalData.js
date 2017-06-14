@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import CountryDropdown from '../../common/CountryDropdown.js';
 import LanguageDropdown from '../../common/LanguageDropdown.js';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
+import common from '../../../common.js';
 
 
 class ChangePersonalData extends React.Component {
@@ -14,10 +15,13 @@ class ChangePersonalData extends React.Component {
         payload.fname = this.refs.fname.value;
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
-        payload.language = this.refs.language.getSelected();
+        payload.language = common.getIntlLanguage();
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
+
+        // console.log('Using now language:', payload.language);
+
         this.context.executeAction(changeUserData, payload);
         return false;
     }

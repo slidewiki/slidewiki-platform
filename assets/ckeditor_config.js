@@ -73,6 +73,9 @@ CKEDITOR.editorConfig = function( config ) {
 
     //Klaas edit -> remove CKeditor red magicline overlay for enter by mouse
     config.removePlugins = 'magicline';
+    //Klaas edit -> remove CKeditor context menu
+    //config.removePlugins = 'magicline,contextmenu,liststyle,tabletools';
+
     CKEDITOR.config.magicline_color = '#0000FF';
 
     //limit Copy Formatting to only allow basic text styles (bold, italic, underline, strikethrough) to be copied:

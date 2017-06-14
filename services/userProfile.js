@@ -84,6 +84,8 @@ export default {
               .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
             //prepare data
+            if (params.members === null || params.members === undefined)
+                params.members = [];
             let members = params.members.reduce((prev, curr) => {
                 let member = {
                     userid: curr.userid,
@@ -142,6 +144,7 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         if(resource !== 'userProfile.fetchUserDecks') {
             if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
+                // console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
@@ -169,6 +172,7 @@ export default {
                 })
                 .catch((err) => callback(err));
             } else {
+                // console.log('trying to get public user with username: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.username,

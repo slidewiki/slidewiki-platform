@@ -99,7 +99,6 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'UPDATE_NEEDS_NEW_REVISION': 'updateNeedsNewRevision',
     'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
 };
 

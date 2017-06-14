@@ -57,8 +57,8 @@ class UserRegistration extends React.Component {
                         type   : 'maxLength[64]',
                         prompt : 'Your username can not be longer than 64 characters'
                     }, {
-                        type   : 'regExp[/^[a-z0-9]+$/i]',
-                        prompt : 'The username must contain only alphanumeric characters'
+                        type   : 'regExp[/^[a-zA-Z0-9-.~_]+$/i]',
+                        prompt : 'The username must contain only alphanumeric characters plus the following: _ . - ~'
                     }]
                 },
                 email: {
@@ -248,7 +248,7 @@ class UserRegistration extends React.Component {
     handleSignUp(e) {
         e.preventDefault();
 
-        let language = common.getBrowserLanguage();
+        let language = common.getIntlLanguage();
 
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
@@ -344,7 +344,7 @@ class UserRegistration extends React.Component {
         }
 
         //add language before send to service
-        let language = common.getBrowserLanguage();
+        let language = common.getIntlLanguage();
         data.language = language;
 
         //check data - valid and not empty

@@ -16,7 +16,8 @@ import TagsStore from './stores/TagsStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
 import TranslationStore from './stores/TranslationStore';
-import ContentHistoryStore from './stores/ContentHistoryStore';
+import DeckHistoryStore from './stores/DeckHistoryStore';
+import SlideHistoryStore from './stores/SlideHistoryStore';
 import ContentUsageStore from './stores/ContentUsageStore';
 import ContentQuestionsStore from './stores/ContentQuestionsStore';
 import ContentDiscussionStore from './stores/ContentDiscussionStore';
@@ -41,6 +42,7 @@ import AttachSubdeckModalStore from './stores/AttachSubdeckModalStore';
 import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
 import ContentLikeStore from './stores/ContentLikeStore';
+import SocialShareStore from './stores/SocialShareStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -60,7 +62,8 @@ const app = new Fluxible({
         ActivityFeedStore,
         DeckTreeStore,
         TranslationStore,
-        ContentHistoryStore,
+        DeckHistoryStore,
+        SlideHistoryStore,
         ContentUsageStore,
         ContentQuestionsStore,
         ContentDiscussionStore,
@@ -82,9 +85,10 @@ const app = new Fluxible({
         ContentActionsFooterStore,
         IntlStore,
         AttachSubdeckModalStore,
-	    ServiceErrorStore,
+	      ServiceErrorStore,
         PermissionsStore,
-        ContentLikeStore
+        ContentLikeStore,
+        SocialShareStore
     ]
 });
 
