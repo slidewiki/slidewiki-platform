@@ -248,7 +248,7 @@ class UserRegistration extends React.Component {
     handleSignUp(e) {
         e.preventDefault();
 
-        let language = common.getBrowserLanguage();
+        let language = common.getIntlLanguage();
 
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
@@ -344,7 +344,7 @@ class UserRegistration extends React.Component {
         }
 
         //add language before send to service
-        let language = common.getBrowserLanguage();
+        let language = common.getIntlLanguage();
         data.language = language;
 
         //check data - valid and not empty
