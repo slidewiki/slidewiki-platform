@@ -28,6 +28,8 @@ class ContentQuestionAnswersList extends React.Component {
     render() {
         const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
+        console.log('creator id:', creatorId);
+        console.log('user id:', userId);
         const editButton = (
             <button className="ui compact button primary" onClick={this.handleEditButtonClick.bind(this)}>
                 <i className="edit icon" />
@@ -36,7 +38,7 @@ class ContentQuestionAnswersList extends React.Component {
         );
 
         const showEditButton = () => {
-            if(userId && creatorId === userId){
+            if(userId === creatorId){
                 return editButton;
             }
             return null;
