@@ -53,8 +53,11 @@ class ActivityItem extends React.Component {
             fontWeight: 400
         };
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
-        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={this.getPath(this.props.activity)} onClick={this.handleRefClick.bind(this)}>{node.content_name}</a></span>);
+        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{node.content_name}</a></span>);
 
+        if (node.user_id === '0') {
+            node.user_id = undefined;
+        }
         switch (node.activity_type) {
             case 'translate':
                 IconNode = (<i className="ui big translate icon"></i>);
@@ -72,12 +75,12 @@ class ActivityItem extends React.Component {
                 break;
             case 'share':
                 IconNode = (<i className="ui big slideshare icon"></i>);
+                const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'shared '} {nodeRef} {' on '}
-                        <a target="_blank" href={node.share_info.postURI}>{node.share_info.platform}</a>
+                        </a> {'shared '} {nodeRef} {onPlatform}
                         <br/>
                         {DateDiv}
                     </div>
@@ -122,7 +125,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'reply':
-                IconNode = (<i className="ui big comments outline icon"></i>);
+                IconNode = (<i className="ui massive comments outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
@@ -180,6 +183,18 @@ class ActivityItem extends React.Component {
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'downloaded '} {nodeRef}
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'fork':
+                IconNode = (<i className="ui big fork icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> {'forked '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>

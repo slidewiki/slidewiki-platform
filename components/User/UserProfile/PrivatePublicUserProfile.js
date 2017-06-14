@@ -5,7 +5,7 @@ import PublicUserData from './PublicUserData';
 class PrivatePublicUserProfile extends React.Component {
     constructor(props){
         super(props);
-        this.sortBy = '0';
+        this.sortBy = '2';
     }
     componentDidMount() {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
@@ -31,11 +31,11 @@ class PrivatePublicUserProfile extends React.Component {
                           <h2 className="ui left floated header">{(this.props.loggedinuser === this.props.user.uname) ? 'My Decks' : 'Owned Decks' }</h2>
                           <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                               <i className="icon exchange"/>
-                              <div className="text">Title</div>
+                              <div className="text">Last updated</div>
                               <div className="menu">
-                                  <div className="item active selected" data-value={0}>Title</div>
+                                  <div className="item active selected" data-value={2}>Last updated</div>
                                   <div className="item" data-value={1}>Creation date</div>
-                                  <div className="item" data-value={2}>Last updated</div>
+                                  <div className="item" data-value={0}>Title</div>
                               </div>
                           </div>
                       </div>

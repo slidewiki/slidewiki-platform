@@ -6,11 +6,13 @@ class ContentQuestionsStore extends BaseStore {
         this.questions = [];
         this.question = null;
         this.selector = {};
+        this.totalLength = 0;
     }
     loadQuestions(payload) {
         this.questions = payload.questions;
         this.question = null;
         this.selector = payload.selector;
+        this.totalLength = payload.totalLength;
         this.emitChange();
     }
     loadQuestion(payload) {
@@ -30,13 +32,14 @@ class ContentQuestionsStore extends BaseStore {
         else {
             question.answersShown = true;
         }
-        this.emitChange();        
+        this.emitChange();
     }
     getState() {
         return {
             questions: this.questions,
             question: this.question,
-            selector: this.selector
+            selector: this.selector,
+            totalLength: this.totalLength
         };
     }
     dehydrate() {
@@ -46,6 +49,7 @@ class ContentQuestionsStore extends BaseStore {
         this.questions = state.questions;
         this.question = state.question;
         this.selector = state.selector;
+        this.totalLength = state.totalLength;
     }
 }
 

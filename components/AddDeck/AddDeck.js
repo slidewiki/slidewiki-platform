@@ -61,7 +61,8 @@ class AddDeck extends React.Component {
         const language = this.refs.div_languages.getSelected();
         const description = this.refs.textarea_description.value;
         const theme = this.refs.select_themes.value;
-        const license = this.refs.select_licenses.value;
+        // const license = this.refs.select_licenses.value;
+        const license = 'CC BY-SA';//default license
         //const tags = this.refs.input_tags.value.split(', ');
         const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
@@ -84,13 +85,13 @@ class AddDeck extends React.Component {
         else {
             wrongFields.language = false;
         }
-        if (license === null || license === undefined || license.length < 2) {
-            wrongFields.license = true;
-            everythingIsFine = false;
-        }
-        else {
-            wrongFields.license = false;
-        }
+        // if (license === null || license === undefined || license.length < 2) {
+        //     wrongFields.license = true;
+        //     everythingIsFine = false;
+        // }
+        // else {
+        //     wrongFields.license = false;
+        // }
         if (acceptedConditions === false) {
             wrongFields.conditions = true;
             everythingIsFine = false;
@@ -142,12 +143,12 @@ class AddDeck extends React.Component {
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
-        let progressLabel = (totalNoOfSlides === '0') ? 'Uploading file' :
-          (noOfSlides === '1' && totalNoOfSlides !== '1') ? 'Converting file' :
+        let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? 'Uploading file' :
+          (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
           (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
           (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
           'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
-        $('#progresslabel_addDeck_upload').text(progressLabel);
+        $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
     }
     initializeProgressBar() {
         $('#progressbar_addDeck_upload').progress('set active');
@@ -172,17 +173,19 @@ class AddDeck extends React.Component {
 
         if (this.props.ImportStore.file !== null) {
             let language = this.refs.div_languages.getSelected();
-            let license = this.refs.select_licenses.value;
+            // let license = this.refs.select_licenses.value;
+            const license = 'CC BY-SA';
             if (language === null || language === undefined || language === 'Select Language') {//set default
                 language = 'en_GB';
             }
-            if (license === null || license === undefined) {//set default
-                license = 'CC0';
-            }
+            // if (license === null || license === undefined) {//set default
+            //    license = 'CC0';
+            // }
             //call action
             const payload = {
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
+                jwt: this.props.UserProfileStore.jwt,
                 language: language,
                 license: license,
                 base64: this.props.ImportStore.base64
@@ -211,11 +214,11 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.title
         });
-        let fieldClass_license = classNames({
-            'required': true,
-            'field': true,
-            'error': this.props.AddDeckStore.wrongFields.license
-        });
+        // let fieldClass_license = classNames({
+        //     'required': true,
+        //     'field': true,
+        //     'error': this.props.AddDeckStore.wrongFields.license
+        // });
         let fieldClass_conditions = classNames({
             'required': true,
             'inline': true,
@@ -273,15 +276,16 @@ class AddDeck extends React.Component {
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
         </select>;
-        let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
-          <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
-          <option value="CC BY" >Creative Commons Attribution</option>
-          <option value="CC0" >Creative Commons CC0 Public Domain</option>
-        </select>;
+        // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
+        //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
+        //   <option value="CC BY" >Creative Commons Attribution</option>
+        //   <option value="CC0" >Creative Commons CC0 Public Domain</option>
+        // </select>;
+
 
         let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
         let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
-        let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
+        // let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
         let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
@@ -322,10 +326,7 @@ class AddDeck extends React.Component {
                               <label htmlFor="themes">Choose deck theme</label>
                                   {themeOptions}
                           </div>
-                          <div className={fieldClass_license} data-tooltip={hint_license} ref="div_licenses" >
-                              <label htmlFor="license">License</label>
-                                  {licenseOptions}
-                          </div>
+
                       </div>
 
                         <div className="ui message" id="uploadDesc">
@@ -344,11 +345,9 @@ class AddDeck extends React.Component {
                           </div>
                       </div>
                   </div>
-                  <div className="ui progress" ref="div_progress" id="progressbar_addDeck_upload" >
-                      <div className="bar">
-                          <div className="progress"></div>
-                      </div>
-                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload"></div>
+                  <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
+                      <div className="bar"></div>
+                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"></div>
                   </div>
                       <div className={fieldClass_conditions} >
                           <div className="ui checkbox" ref="div_conditions" >

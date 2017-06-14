@@ -3,12 +3,6 @@ import rp from 'request-promise';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 const log = require('../configs/log').log;
 
-//extracts the position from path string
-function getRelPositionFromPath(spath) {
-    let arr = spath.split(';');
-    return arr[arr.length - 1].split(':')[1];
-}
-
 export default {
     name: 'history',
 
@@ -17,101 +11,86 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
-        let selector = {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
-        let isRootDeck = selector.stype === 'deck' && selector.id === selector.sid;
-        if (resource === 'history.list') {
-            let history, contentItemPromise, parentPromise;
-            let parentId = TreeUtil.getParentId(selector);
-            if (!isRootDeck) {
-                //if the specified node is not the root deck, we need to request for its immediate parent in order to find the active revision
-                parentPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + parentId}).promise().bind(this);
-            }
-            contentItemPromise = rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid.split('-')[0]}).promise().bind(this);
+        if (resource === 'history.changes') {
+            let changesPromise = args.slideId == null ? rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/changes', json: true}) :
+                rp.get({uri: Microservices.deck.uri + '/slide/' + args.slideId + '/changes', qs:{root: args.deckId}, json: true});
 
-            //callback to execute when both requests are successful
-            Promise.all([parentPromise, contentItemPromise]).then((res) => {
-                let contentItem = JSON.parse(res[1]), revisions = contentItem.revisions, parentDeck;
-                let activeRevisionId;
-                if (isRootDeck) {
-                    activeRevisionId = contentItem.active;
+            changesPromise.then((changes) => {
+                if (!changes.length){
+                    return changes;
                 }
-                else {
-                    parentDeck = JSON.parse(res[0]);
-                    //we asked for a specific revision of the parent deck so its revisions array should contain just one item
-                    activeRevisionId = parentDeck.revisions[0].contentItems[getRelPositionFromPath(selector.spath) - 1].ref.revision;
-                }
-                let activeRevision = revisions.find((revision) => revision.id === activeRevisionId);
-                if (activeRevision) {
-                    activeRevision.active = true;
-                }
-                let userIdsHash = {};
-                revisions.forEach((revision) => {
-                    if (revision.user != null) {
-                        userIdsHash[parseInt(revision.user)] = true;
-                    }
-                });
-                let userId, userPromises = [], userNames = {};
-                //todo use a single request if getMultipleUsers is added to user service
-                for (userId in userIdsHash) {
-                    userPromises.push(rp.get({uri: Microservices.user.uri + '/user/' + userId}).then((userRes) => {
-                        let user = JSON.parse(userRes);
-                        userNames[user._id] = user.username;
-                    }));
-                }
-                //when all user data are fetched
-                Promise.all(userPromises).then().catch((err) => {
-                    console.log(err);
-                }).then(() => {
-                    // behaves like finally. called when all user requests are complete regardless of their success status
-                    //todo do this in the first then callback. just a temporary fix because of dummy user ids in database
-                    //enrich every revision with username
-                    revisions.forEach((revision) => {
-                        let userName = userNames[revision.user];
-                        if (userName == null || userName === '') {
-                            userName = 'Unknown user';
-                        }
-                        revision.username = userName;
+                //find unique user ids in change log
+                let userIds = [... new Set(changes.map((changeOp) => changeOp.user))];
+                return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
+                    changes.forEach((changeOp) => {
+                        changeOp.username = users.find((user) => user._id === changeOp.user).username;
                     });
-                    callback(null, {
-                        //reverse revisions array so that it is sorted by date descending
-                        history: revisions.reverse(),
-                        selector: selector
-                    });
+                    return changes;
                 });
+            }).then((changes) => {
+                callback(null, changes);
+            }).catch((err) => callback(err));
+            //returns the number of revisions of a deck
+        } else if (resource === 'history.revisionCount'){
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisionCount/'}).then((res) => {
+                callback(null, {count: JSON.parse(res)});
             }).catch((err) => {
-                console.log(err);
-                callback(err);
-            });
-        } else if (resource === 'history.count'){
-            rp.get({uri: Microservices.deck.uri + '/deck/' + selector.sid + '/revisionCount/'}).then((res) => {
-                callback(null, {count: JSON.parse(res), selector: selector});
-            }).catch((err) => {
-                //console.log(err);
                 callback({msg: 'Error in retrieving revisions count', content: err}, {});
             });
+            //returns the revisions of a deck
+        } else if (resource === 'history.revisions') {
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.deckId + '/revisions', json: true}).then((revisions) => {
+                //keep only revisions up to the given revision id
+                if (args.revisionId != null){
+                    revisions = revisions.slice(revisions.findIndex((rev) => rev.id === args.revisionId));
+                }
+                //find unique user ids in revisions
+                let userIds = [... new Set(revisions.map((rev) => rev.user))];
+                return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
+                    revisions.forEach((rev) => {
+                        rev.username = users.find((user) => user._id === rev.user).username;
+                    });
+                    return revisions;
+                });
+            }).then((revisions) => {
+                callback(null, {
+                    revisions: revisions
+                });
+            }).catch((err) => callback(err));
+        }
+    },
+    create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        //creates a new revision of a deck
+        if (resource === 'history.revision') {
+            rp({
+                method: 'POST',
+                uri: Microservices.deck.uri + '/deck/' + params.id + '/revision',
+                json: true,
+                body: {
+                    top_root_deck: params.id
+                },
+                headers: { '----jwt----': params.jwt }
+            }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
-        let args = params.params ? params.params : params;
         if (resource === 'history.revert') {
-            let parentId = TreeUtil.getParentId(args.selector);
-            let requestBody = {
-                revision_id: String(args.revisionId)
-            };
-            if (parentId != null) {
-                requestBody.root_deck = parentId;
-            }
-            requestBody.top_root_deck = args.selector.id;
             rp.post({
-                uri: Microservices.deck.uri + '/' + args.selector.stype + '/revert/' + args.selector.sid.split('-')[0],
-                body: JSON.stringify(requestBody),
-                headers: { '----jwt----': args.jwt }
+                uri: Microservices.deck.uri + '/' + params.selector.stype + '/revert/' + params.selector.sid.split('-')[0],
+                json: true,
+                body: {
+                    revision_id: String(params.revisionId),
+                    top_root_deck: params.selector.id
+                },
+                headers: { '----jwt----': params.jwt }
             }).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, res);
             }).catch((err) => {
-                console.log(err);
                 callback(err, {
                     error: err
                 });
