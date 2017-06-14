@@ -6,7 +6,7 @@ class ContentQuestionAdd extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            difficulty: 'easy',
+            difficulty: '1',
             question: '',
             response1: '',
             response2: '',
@@ -16,6 +16,7 @@ class ContentQuestionAdd extends React.Component {
             isResponseCorrect2: false,
             isResponseCorrect3: false,
             isResponseCorrect4: false,
+            explanation: '',
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -26,15 +27,15 @@ class ContentQuestionAdd extends React.Component {
         let dummyQuestion = {
             question: {
                 id: 120,
-                title: 'Brand new question',
+                title: this.state.question,
                 username: 'Ilya B.',
                 userID: 66,
-                difficulty: 2,
+                difficulty: this.state.difficulty,
                 Date: 'yesterday',
-                answers: [{answer: 'Ja', correct: true, explanation: 'Obvious'},
-                          {answer: 'Nein', correct: false, explanation: ''},
-                          {answer: 'Vielleicht', correct: true, explanation: 'May the power comes with you!'},
-                          {answer: 'Ich kenne das nicht', correct: false, explanation: ''}]
+                answers: [{answer: this.state.response1, correct: this.state.isResponseCorrect1, explanation: this.state.explanation},
+                          {answer: this.state.response2, correct: this.state.isResponseCorrect2, explanation: this.state.explanation},
+                          {answer: this.state.response3, correct: this.state.isResponseCorrect3, explanation: this.state.explanation},
+                          {answer: this.state.response4, correct: this.state.isResponseCorrect4, explanation: this.state.explanation}]
             },
         };
         context.executeAction(addQuestion, dummyQuestion);
@@ -53,12 +54,6 @@ class ContentQuestionAdd extends React.Component {
         });
     }
 
-    handleSubmit(event) {
-        console.log(this.state);
-        event.preventDefault();
-    }
-
-
     render() {
 
         const getRadioButtons = () => {
@@ -75,8 +70,8 @@ class ContentQuestionAdd extends React.Component {
                   name='difficulty'
                   tabIndex={0}
                   className="hidden"
-                  value={levels[i].toLowerCase()}
-                  checked={this.state.difficulty === levels[i].toLowerCase()}
+                  value={i+1}
+                  checked={this.state.difficulty === `${i+1}`}
                   onChange={this.handleChange}
                 />
               <label htmlFor={levels[i].toLowerCase()}>{levels[i]}</label>
@@ -138,7 +133,7 @@ class ContentQuestionAdd extends React.Component {
             </div>
           </div>
           <div className="ui padded segment">
-            <form className="ui form" onSubmit={this.handleSubmit}>
+            <form className="ui form">
               <div className="two fields">
                 <div className="required field">
                   <label htmlFor="question">Question</label>
@@ -173,7 +168,12 @@ class ContentQuestionAdd extends React.Component {
                 <label htmlFor="explanation">
                   Explanation (optional)
                 </label>
-                <textarea rows={2} id="explanation" />
+                <textarea
+                  rows={2}
+                  id="explanation"
+                  name="explanation"
+                  onChange={this.handleChange}
+                  value={this.state.explanation} />
               </div>
               <div className="field">
                 <div className="ui container">
