@@ -7,14 +7,6 @@ import DiffViewStore from '../../../stores/DiffViewStore';
 
 import diff_fns from './diff_funcs';
 
-const MESSAGES = {
-    'Error_Version': `Unfortunately, the chosen versions of the slide are incompatible, due to one of the following reasons:
-    1. New template applied
-    2. Manual code layout modification
-    3. ...`,
-    'Error_Content': 'An error occurred while fetching the content. Please visit the History panel of a slide and try once more.',
-};
-
 class DiffView extends Component {
     constructor(props) {
         super(props);
@@ -80,7 +72,7 @@ class DiffView extends Component {
         * diffSRC - toDIFF slide verion
         */
         if(!this.state.base || !this.state.diff) {
-            this.setState({error: MESSAGES.Error_Content});
+            this.setState({error: <ErrorContent />});
             return;
         }
 
@@ -98,7 +90,7 @@ class DiffView extends Component {
         const vTree2 = diff_fns.setKeys(baseSRC);
 
         if (!diff_fns.compareWrapperIds(diffSRC, baseSRC)) {
-            this.setState({error: MESSAGES.Error_Version});
+            this.setState({error: <ErrorVersion />});
             return;
         }
 
@@ -185,3 +177,21 @@ DiffView = connectToStores(DiffView, [DiffViewStore], (context, props) => {
 });
 
 export default DiffView;
+
+const ErrorVersion = () => (
+  <div className="ui error message text container left">
+      <div className="header row">Error: Incompatible Revisions</div>
+      <p>Unfortunately, the chosen revisions of the slide are incompatible, due to one of the following reasons:</p>
+      <ul className="list">
+          <li>New template applied</li>
+          <li>Manual HTML nodes <b>id</b> attribute modified</li>
+      </ul>
+  </div>
+);
+
+const ErrorContent = () => (
+  <div className="ui error message text container left">
+      <div className="header row">Error: Revisions Content</div>
+      <p>An error occurred while fetching the content. Please visit the <b>History panel</b> of the slide and try once more.</p>
+  </div>
+);
