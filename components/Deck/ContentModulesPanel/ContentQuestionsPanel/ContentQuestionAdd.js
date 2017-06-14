@@ -5,11 +5,25 @@ class ContentQuestionAdd extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            difficulty: 'easy',
+            question: '',
+            response1: '',
+            response2: '',
+            response3: '',
+            response4: '',
+            isResponseCorrect1: true,
+            isResponseCorrect2: false,
+            isResponseCorrect3: false,
+            isResponseCorrect4: false,
+        };
         this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleAnswerChange = this.handleAnswerChange.bind(this);
     }
 
     handleButtonClick() {
-        context.executeAction(addQuestion, {
+        let dummyQuestion = {
             question: {
                 id: 120,
                 title: 'Brand new question',
@@ -22,9 +36,28 @@ class ContentQuestionAdd extends React.Component {
                           {answer: 'Vielleicht', correct: true, explanation: 'May the power comes with you!'},
                           {answer: 'Ich kenne das nicht', correct: false, explanation: ''}]
             },
-        });
+        };
+        context.executeAction(addQuestion, dummyQuestion);
         this.props.onButtonClick();
     }
+
+    handleChange(changeEvent) {
+        this.setState({
+            [changeEvent.target.name]: changeEvent.target.value,
+        });
+    }
+
+    handleAnswerChange(changeEvent) {
+        this.setState({
+            [changeEvent.target.name]: changeEvent.target.checked,
+        });
+    }
+
+    handleSubmit(event) {
+        console.log(this.state);
+        event.preventDefault();
+    }
+
 
     render() {
 
@@ -38,11 +71,15 @@ class ContentQuestionAdd extends React.Component {
               <div className="ui radio checkbox">
                 <input
                   type="radio"
-                  id={levels[i].toLowerCase}
-                  defaultChecked
+                  id={levels[i].toLowerCase()}
+                  name='difficulty'
                   tabIndex={0}
-                  className="hidden" />
-                <label htmlFor={levels[i].toLowerCase}>{levels[i]}</label>
+                  className="hidden"
+                  value={levels[i].toLowerCase()}
+                  checked={this.state.difficulty === levels[i].toLowerCase()}
+                  onChange={this.handleChange}
+                />
+              <label htmlFor={levels[i].toLowerCase()}>{levels[i]}</label>
               </div>
             </div>
           );
@@ -58,17 +95,20 @@ class ContentQuestionAdd extends React.Component {
               <div className="ui checkbox">
                 <input
                   type="checkbox"
-                  name="example1"
-                  id={`answer${i+1}`}
+                  id={`box${i+1}`}
+                  name={`isResponseCorrect${i+1}`}
                   tabIndex={0}
-                  className="hidden" />
+                  checked={this.state[`isResponseCorrect${i+1}`]}
+                  onChange={this.handleAnswerChange} />
                 <label htmlFor={`answer${i+1}`} />
               </div>
               <input
                 type="text"
                 style={{width: 680}}
                 name={`response${i+1}`}
-                id={`response${i+1}`} />
+                id={`response${i+1}`}
+                value={this.state[`response${i+1}`]}
+                onChange={this.handleChange} />
               <label htmlFor={`response${i+1}`} />
             </div>
           );
@@ -98,7 +138,7 @@ class ContentQuestionAdd extends React.Component {
             </div>
           </div>
           <div className="ui padded segment">
-            <form className="ui form">
+            <form className="ui form" onSubmit={this.handleSubmit}>
               <div className="two fields">
                 <div className="required field">
                   <label htmlFor="question">Question</label>
@@ -106,7 +146,10 @@ class ContentQuestionAdd extends React.Component {
                     rows={3}
                     name="question"
                     id="question"
-                    aria-required="true">
+                    aria-required="true"
+                    onChange={this.handleChange}
+                    value={this.state.question}
+                  >
                   </textarea>
                 </div>
                 <div className="ui grouped fields">
