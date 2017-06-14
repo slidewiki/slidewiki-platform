@@ -84,6 +84,8 @@ export default {
               .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
             //prepare data
+            if (params.members === null || params.members === undefined)
+                params.members = [];
             let members = params.members.reduce((prev, curr) => {
                 let member = {
                     userid: curr.userid,
