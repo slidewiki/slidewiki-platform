@@ -41,7 +41,7 @@ export default {
                 username: params.uname,
                 surname: !isEmpty(params.lname) ? params.lname : '',
                 forename: !isEmpty(params.fname) ? params.fname : '',
-                language: !isEmpty(params.language) ? params.language : '',
+                language: !isEmpty(params.language) ? params.language.replace('-', '_') : '',
                 country: !isEmpty(params.country) ? params.country : '',
                 picture: !isEmpty(params.picture) ? params.picture : '',
                 organization: !isEmpty(params.organization) ? params.organization : '',
@@ -77,7 +77,7 @@ export default {
                     token: params.token,
                     token_creation: params.token_creation,
                     email: params.email,
-                    language: params.language
+                    language: params.language.replace('-', '_')
                 }
             })
               .then((body) => callback(null, body))
