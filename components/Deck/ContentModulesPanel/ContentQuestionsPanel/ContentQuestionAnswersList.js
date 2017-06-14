@@ -1,5 +1,9 @@
 import React from 'react';
 import ContentQuestionAnswersItem from './ContentQuestionAnswersItem';
+import {connectToStores} from 'fluxible-addons-react';
+import DeckViewStore from '../../../../stores/DeckViewStore';
+import UserProfileStore from '../../../../stores/UserProfileStore';
+import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 
 class ContentQuestionAnswersList extends React.Component {
 
@@ -8,7 +12,7 @@ class ContentQuestionAnswersList extends React.Component {
         this.state = {
             showCorrect: false,
         };
-        this.handleButtonClick = this.handleButtonClick.bind(this);
+        //this.handleButtonClick = this.handleButtonClick.bind(this);
     }
 
     handleButtonClick() {
@@ -17,7 +21,29 @@ class ContentQuestionAnswersList extends React.Component {
         });
     }
 
+    handleEditButtonClick() {
+        console.log(this);
+    }
+
     render() {
+        const creatorId = this.props.DeckViewStore.creatorData._id;
+        const userId = this.props.UserProfileStore.userid;
+        console.log('creator id:', creatorId);
+        console.log('user id:', userId);
+        const editButton = (
+            <button className="ui compact button primary" onClick={this.handleEditButtonClick.bind(this)}>
+                <i className="edit icon" />
+                Edit question
+            </button>
+        );
+
+        const showEditButton = () => {
+            if(userId === creatorId){
+                return editButton;
+            }
+            return null;
+        };
+
         let list = this.props.items.map((node, index) => {
             return (
                 <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index}/>
@@ -55,6 +81,7 @@ class ContentQuestionAnswersList extends React.Component {
                     <i className=" help circle icon" />
                     Show answer
                   </button>
+                  {showEditButton()}
                   <div className="ui item">
                     <div className="content">
                       {this.state.showCorrect ? correctAnswers : null}
@@ -73,5 +100,13 @@ class ContentQuestionAnswersList extends React.Component {
         );
     }
 }
+
+ContentQuestionAnswersList = connectToStores(ContentQuestionAnswersList, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {
+    return {
+        ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
+        DeckViewStore: context.getStore(DeckViewStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+    };
+});
 
 export default ContentQuestionAnswersList;
