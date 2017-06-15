@@ -7,11 +7,11 @@ import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TreePanel from './TreePanel/TreePanel';
-import InfoPanel from './InfoPanel/InfoPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import ServiceUnavailable from '../Error/ServiceUnavailable';
+import InfoPanel from './InfoPanel/InfoPanel';
 
 class Deck extends React.Component {
     handleExpandClick(){
@@ -131,13 +131,19 @@ class Deck extends React.Component {
                     </div>
                 </div>
 
-                    <div className={rightColClass}>
-                         <InfoPanel />
-                        </div>
-                        <div className="ui hidden divider"></div>
+                <div className={rightColClass}>
+                    <div className={treePanelClass}>
+                        <InfoPanel />
                     </div>
 
+                    <div className="ui hidden divider"></div>
                 </div>
+
+
+
+                </div>
+            </div>
+
         );
     }
 }

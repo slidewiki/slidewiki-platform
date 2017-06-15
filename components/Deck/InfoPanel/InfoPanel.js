@@ -32,4 +32,5 @@ InfoPanel = connectToStores(InfoPanel, [], (context, props) => {
     return {
     };
 });
+
 export default InfoPanel;
