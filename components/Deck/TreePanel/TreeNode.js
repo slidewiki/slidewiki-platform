@@ -9,7 +9,8 @@ import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
 import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
 import AttachSlides from '../ContentPanel/AttachSubdeck/AttachSlidesModal';
-
+import {connectToStores} from 'fluxible-addons-react';
+import ContentStore from '../../../stores/ContentStore';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -146,23 +147,29 @@ class TreeNode extends React.Component {
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
         });
+        console.log(this.props.ContentStore.mode);
+        const buttonItemClass = classNames({
+            'ui button': true,
+            'disabled': this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
+        });
+
         const duplicateItemClass = classNames({
             'ui button': true,
-            'disabled': this.props.item.get('type') === 'deck'
+            'disabled': this.props.item.get('type') === 'deck'|| this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode=== 'edit'
         });
         let buttonStyle = {
             classNames : classNames({
                 'ui':true,
-                'disabled': this.props.permissions.readOnly || !this.props.permissions.edit
+                'disabled': this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
             }),
             iconSize : 'small',
             attached : '',
-            disabled: this.props.item.get('type') === 'deck'
+
         };
         let actionBtns = (
             <div className={actionBtnsClass}>
                 <div className="ui small basic icon compact fluid buttons">
-                    <button className="ui button"
+                    <button className={buttonItemClass}
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: '0'})}
                             aria-label="Add Slide"
                             data-tooltip="Add Slide">
@@ -172,7 +179,7 @@ class TreeNode extends React.Component {
                         </i>
                     </button>
                     <AttachSlides buttonStyle={buttonStyle} selector={nodeSelector} />
-                    <button className="ui button"
+                    <button className={buttonItemClass}
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: '0'})}
                             aria-label="Add deck"
                             data-tooltip="Add deck">
@@ -191,7 +198,7 @@ class TreeNode extends React.Component {
                             data-tooltip="Duplicate">
                         <i className="copy icon"></i>
                     </button>
-                    <button className="ui button" onClick={this.handleDeleteClick.bind(this, nodeSelector)}
+                    <button className={buttonItemClass} onClick={this.handleDeleteClick.bind(this, nodeSelector)}
                           aria-label="Delete"
                           data-tooltip="Delete">
                         <i className="red trash circle icon"></i>
@@ -250,6 +257,12 @@ class TreeNode extends React.Component {
         );
     }
 }
+
+TreeNode = connectToStores(TreeNode,[ContentStore], (context, props) => {
+    return {
+        ContentStore: context.getStore(ContentStore).getState()
+    };
+});
 
 let TreeNodeWrapped = DragSource('tree-node', treeNodeSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
