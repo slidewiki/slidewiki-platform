@@ -43,6 +43,7 @@ import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
 import ContentLikeStore from './stores/ContentLikeStore';
 import SocialShareStore from './stores/SocialShareStore';
+import DeckFamilyStore from './stores/DeckFamilyStore';
 
 // create new fluxible instance & register all stores
 const app = new Fluxible({
@@ -85,10 +86,11 @@ const app = new Fluxible({
         ContentActionsFooterStore,
         IntlStore,
         AttachSubdeckModalStore,
-	      ServiceErrorStore,
+        ServiceErrorStore,
         PermissionsStore,
         ContentLikeStore,
-        SocialShareStore
+        SocialShareStore,
+        DeckFamilyStore
     ]
 });
 

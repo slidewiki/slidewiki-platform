@@ -21,8 +21,9 @@ class ContentDiscussionPanel extends React.Component {
                 <NavLink href={'/discussion/' + this.props.ContentDiscussionStore.selector.stype + '/' + this.props.ContentDiscussionStore.selector.sid}>{'/discussion/' + this.props.ContentDiscussionStore.selector.stype + '/' + this.props.ContentDiscussionStore.selector.sid}</NavLink>
             </div>
         );
+        const selector = (this.props.selector !== undefined && this.props.selector !== {}) ? this.props.selector : this.props.ContentDiscussionStore.selector;
         let addComment = (this.props.ContentDiscussionStore.showCommentBox) ?
-            (<AddComment/>)
+            (<AddComment selector={selector} />)
             :
             (<button tabIndex="0" className="ui blue labeled icon button" onClick={this.handleInvertCommentBox.bind(this)}>
                 <i className="icon plus"></i> Add comment
@@ -34,7 +35,7 @@ class ContentDiscussionPanel extends React.Component {
                 <h3 className="ui dividing header">Comments</h3>
                 {(this.props.ContentDiscussionStore.discussion.length === 0)
                     ?
-                    <div>There are currently no comments for this {this.props.ContentDiscussionStore.selector.stype}.</div>
+                    <div>There are currently no comments for this {selector.stype}.</div>
                     :
                     <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
                         {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} userid={this.props.UserProfileStore.userid} />); })}

@@ -80,6 +80,7 @@ class DeckViewPanel extends React.Component {
         <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
             <div className="ui segment" style={heightStyle}>
                 <div className="ui two column grid container">
+                {(deckTitle === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                     <div className="column">
                         <div className="content">
                             <h3 className="ui header">{deckTitle}</h3>

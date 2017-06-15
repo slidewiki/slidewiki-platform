@@ -12,7 +12,7 @@ import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
-import TemplateDropdown from '../../../../common/TemplateDropdown';
+//import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 
 let ReactDOM = require('react-dom');
@@ -40,34 +40,36 @@ class SlideContentEditor extends React.Component {
     }
 
     handleTemplatechange(){
+        /*
         if (this.showTemplates === false){
             this.refs.template.showOptions();
             this.showTemplates = true;
         }
-        else{
-            let template = this.refs.template.getSelected();
-            if (this.refs.template.getSelected() !== '')
-            {
-                //overwrite content with templates from
-                //http://stable.slidewiki.org/deck/9319-3/
-                swal({
-                    title: 'Apply template',
-                    text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
-                    type: 'question',
-                    showCloseButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, apply template',
-                    confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'No',
-                    cancelButtonClass: 'ui red button',
-                    buttonsStyling: false
-                }).then((accepted) => {
-                    this.applyTemplate(template);
-                }, (reason) => {
-                    //done(reason);
-                });
-            }
+        else{*/
+        //let template = this.refs.template.getSelected();
+        let template = this.refs.template.value;
+        if (template !== '')
+        {
+            //overwrite content with templates from
+            //http://stable.slidewiki.org/deck/9319-3/
+            swal({
+                title: 'Apply template',
+                text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Yes, apply template',
+                confirmButtonClass: 'ui olive button',
+                cancelButtonText: 'No',
+                cancelButtonClass: 'ui red button',
+                buttonsStyling: false
+            }).then((accepted) => {
+                this.applyTemplate(template);
+            }, (reason) => {
+                //done(reason);
+            });
         }
+        //}
     }
 
     applyTemplate(template){
@@ -98,51 +100,51 @@ class SlideContentEditor extends React.Component {
                 this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
                 break;
             case '11':
-                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; ">'+
                     '<p>Row 1 - Column 1</p></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>' +
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>' +
                     '</div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '12':
-                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Heading</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; ">'+
                     '<p>Row 1 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
-                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">'+
                     '<p>Row 1 - Column&nbsp;2</p>'+
                     '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '22':
-                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p>Row 2 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">&nbsp;</div>'+
                     '<div class="h-mid"><p>Row 1</p></div></div>'+
-                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; ">'+
                     '<div class="h-mid">'+
                     '<p>Row 2 - Column&nbsp;2</p>'+
                     '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '21':
-                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p>Row 2 - Column 1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">&nbsp;</div>'+
                     '<div class="h-mid">Row 1 - Column 1</div>'+
                     '</div></div>';
@@ -150,13 +152,13 @@ class SlideContentEditor extends React.Component {
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '11img':
-                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; "><h3>Header</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; ">'+
                     '<p>Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
-                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
+                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">'+
                     '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
                     '<p>&nbsp;</p></div></div></div>', 'Add input box';
@@ -164,7 +166,7 @@ class SlideContentEditor extends React.Component {
                 break;
             // case 'title':
             //     this.refs.inlineContent.innerHTML =
-            //       '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+            //       '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">' +
             //       ' <div class="titleSlide>' +
             //       '   <div class="titlePageHeading"><h3>Title</h3></div>' +
             //       '   <div class="titlePageSubHeading"><h4>Subtitle</h4></div>' +
@@ -176,31 +178,31 @@ class SlideContentEditor extends React.Component {
             //     break;
             case 'outitleslide':
                 this.refs.inlineContent.innerHTML =
-                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">' +
                 '<div class="titleSlide" style="background-image: url(/custom_modules/reveal.js/img/outitlepage.png);background-repeat: no-repeat;background-position: center; height:100%; width:100%">' +
                 '<div style="position:absolute; left:100px; top: 200px; width:300px; height: 200px;">' +
                 '<h3>Title</h3>' +
                 '<h4>[Subtitle]</h4>' +
                 '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
             case 'oegtitleslide':
                 this.refs.inlineContent.innerHTML =
-                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">' +
                 '<div class="titleSlide" style="background-image: url(/custom_modules/reveal.js/img/oeglargelogo.png), url(/custom_modules/reveal.js/img/ccimage.png), url(/custom_modules/reveal.js/img/upmlogo.png), url(/custom_modules/reveal.js/img/oeglogo.png); background-position: top left, bottom left, top center, top right; background-repeat: no-repeat;">' +
                 '<div style="position:absolute; left:100px; top: 200px; width:300px; height: 200px;">' +
                 '<h3>Title</h3>' +
                 '<h4>[Subtitle]</h4>' +
                 '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
-                this.emitChange();
                 break;
 
         }
         this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
         this.uniqueIDAllElements();
+        this.resize();
+        $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
         this.resizeDrag();
         this.forceUpdate();
     }
@@ -273,6 +275,7 @@ class SlideContentEditor extends React.Component {
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
+                                this.emitChange();
                                 //this.forceUpdate();
                             }, 500);
                         });
@@ -291,6 +294,7 @@ class SlideContentEditor extends React.Component {
                             this.handleCKeditorModeButton('noswitch');
                             this.resizeDrag();
                             this.forceUpdate();
+                            this.emitChange();
                         }, 500);
                     });
                 }, 500);
@@ -440,7 +444,7 @@ class SlideContentEditor extends React.Component {
                 //TODO replace with this.refs.inlineContent.innerHTML
                 //let currentContent = CKEDITOR.instances.inlineContent.getData();
                 //let newContent =
-                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1,1); transform-origin: left top 0px;">' +
+                this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; ">' +
                 '<p></p><p></p><p></p><p></p><p></p><div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 10px; left: 10px; width: 940px; height: 700px; z-index: 2138483647; ">' +
                 '<div class="h-left">' + this.refs.inlineContent.innerHTML + '</div>' +
                 '</div>' +
@@ -452,6 +456,8 @@ class SlideContentEditor extends React.Component {
                 this.emitChange(); //confirm non-save on-leave
                 this.forceUpdate();
                 this.resizeDrag();
+                this.resize();
+                $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
             }, (reason) => {
                 //done(reason);
             });
@@ -463,6 +469,12 @@ class SlideContentEditor extends React.Component {
         return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
     }
     componentDidMount() {
+        //todo: do testing and if it works remove these libs from default layout
+        //if(process.env.BROWSER){
+            //require('../../../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
+          //  require('../../../../../node_modules/ckeditor/ckeditor.js');
+        //}
+        $(this.refs.TemplateDropdown).dropdown();
 
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
@@ -620,6 +632,7 @@ class SlideContentEditor extends React.Component {
                             let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleratio; // adjust new top by our zoomScale
                             ui.position.left = newLeft;
                             ui.position.top = newTop;
+                            slideEditorContext.emitChange();
                         }
                     });
                 }
@@ -638,6 +651,7 @@ class SlideContentEditor extends React.Component {
                             //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
+                            slideEditorContext.emitChange();
                         }
                     });
                 };
@@ -1005,6 +1019,7 @@ class SlideContentEditor extends React.Component {
     }
 
     componentDidUpdate() {
+        $(this.refs.TemplateDropdown).dropdown();
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             this.inputBoxButtonTitle = 'Add input box';
@@ -1279,6 +1294,38 @@ class SlideContentEditor extends React.Component {
             'copy': (event) => this.CopyNode(slideEditorContext, event),
             'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
+        let templateOptions = <div className="menu">
+            <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
+                Title and bullets
+            </div>
+            <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
+                Empty document
+            </div>
+            <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
+                1 row 1 column
+            </div>
+            <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
+                1 row 2 columns
+            </div>
+            <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
+                2 rows 2 columns
+            </div>
+            <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
+                2 rows 1 column
+            </div>
+            <div className="item" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
+                1 row 1 column image
+            </div>
+            <div className="item" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
+                Document with title
+            </div>
+            <div className="item" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
+                Open University Theme Title Page
+            </div>
+            <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
+                OEG Theme Title Page
+            </div>
+        </div>;
 
         const headerStyle = {
             //minWidth: '100%',
@@ -1377,11 +1424,23 @@ class SlideContentEditor extends React.Component {
                     <i className="plus square outline icon black"></i>
                     <a style={buttonColorBlack}>{this.inputBoxButtonTitle}</a>
                 </button>
+                <div className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
+                    <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
+                    <i className="dropdown icon"/>
+                    <div className="default text">Use template</div>
+                    {templateOptions}
+                </div> {/*
+                    'ui': true,
+                    'field': true,
+                    'search': true,
+                    'selection': true,
+                    'dropdown': true
+
                 <button tabIndex="0" ref="templatebutton" className="ui orange button " onClick={this.handleTemplatechange.bind(this)} >
                     <i className="browser icon black"> </i>
                     <a style={buttonColorBlack}>Use template</a>
                 </button>
-                <TemplateDropdown name="template" ref="template" id="template" onChange={this.handleTemplatechange.bind(this)}/>
+                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/> */}
                 <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
                  <i className="outline tasks icon black"></i>
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>

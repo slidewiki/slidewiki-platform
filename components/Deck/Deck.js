@@ -9,7 +9,7 @@ import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
-import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
+//import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
 import ServiceUnavailable from '../Error/ServiceUnavailable';
 import InfoPanel from './InfoPanel/InfoPanel';
 
@@ -42,9 +42,11 @@ class Deck extends React.Component {
         let treePanelClass = classNames({
             'hide-element': !status.TreePanel.visible
         });
+        /*
         let ActivityFeedPanelClass = classNames({
             'hide-element': !status.ActivityFeedPanel.visible
         });
+        */
         let centerColClass = classNames({
             'four':  status.ContentPanel.columnSize===4 || status.ContentModulesPanel.columnSize===4,
             'ten':  status.ContentPanel.columnSize===10 || status.ContentModulesPanel.columnSize===10,
@@ -72,7 +74,8 @@ class Deck extends React.Component {
             'twelve':  status.TreePanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
             'sixteen':  status.TreePanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
             'wide column': status.TreePanel.visible || status.ActivityFeedPanel.visible,
-            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible
+            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible,
+            'ui container': true
         });
         let oneColumnMode = 0;
         if(!status.TreePanel.visible && !status.ActivityFeedPanel.visible){
@@ -101,12 +104,13 @@ class Deck extends React.Component {
                         <div className={treePanelClass}>
                             <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
                         </div>
+                        {/*
                         <div className="ui hidden divider"></div>
                         <div className={ActivityFeedPanelClass}>
                             <div className="row">
                                 <ActivityFeedPanel />
                             </div>
-                        </div>
+                        </div>*/}
                         <div className="ui hidden divider"></div>
                     </div>
                 </div>
@@ -131,7 +135,7 @@ class Deck extends React.Component {
                     <div className={treePanelClass}>
                         <InfoPanel />
                     </div>
-                    
+
                     <div className="ui hidden divider"></div>
                 </div>
 

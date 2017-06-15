@@ -18,7 +18,6 @@ import {navigateAction} from 'fluxible-router';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import app from './app';
-import HTMLComponent from './components/DefaultHTMLLayout';
 import { createElementWithContext } from 'fluxible-addons-react';
 import { locales } from './configs/general'; //a list of supported locales, defines also the localeSwitcher component
 import Cookie from 'js-cookie';
