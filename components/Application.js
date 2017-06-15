@@ -48,6 +48,15 @@ class Application extends React.Component {
         document.title = newProps.pageTitle;
     }
 }
+Application.contextTypes = {
+    getStore: React.PropTypes.func,
+    executeAction: React.PropTypes.func,
+    getUser: React.PropTypes.func
+};
+
+Application = provideContext(Application, { //jshint ignore:line
+    getUser: React.PropTypes.func
+});
 
 export default provideContext(handleHistory(connectToStores(
     DragDropContext(HTML5Backend)(Application),
