@@ -1,3 +1,8 @@
+/*
+IMPORTANT NOTE:
+This file gets overridden by entrypoint.sh with the substitude of general.js.template
+*/
+
 import sha512 from 'js-sha512';
 const co = require('../common');
 
