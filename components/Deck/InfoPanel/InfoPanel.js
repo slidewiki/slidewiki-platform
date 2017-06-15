@@ -26,7 +26,7 @@ class InfoPanel extends React.Component {
         const rootNodeStyles = {
             fontSize: '1.06em'
         };
-        const slideTitle = SlideViewStore.title;
+
 
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;

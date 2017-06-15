@@ -211,10 +211,7 @@ class LoginModal extends React.Component {
         }
 
         //add language before send to service
-        let language = common.getBrowserLanguage();
-        if (language.length === 2) {
-            language += '-' + language.toUpperCase();
-        }
+        let language = common.getIntlLanguage();
         data.language = language;
 
         // console.log('LoginModal got social data', data);
@@ -302,7 +299,7 @@ class LoginModal extends React.Component {
                       </form>
                       <br/>
                       <div className="container">
-                        <i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>
+                        {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
                         <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
                         <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
                       </div>

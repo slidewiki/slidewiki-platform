@@ -1,5 +1,5 @@
 import { Microservices } from '../configs/microservices';
-import { resetPasswordAPIKey } from '../configs/general';
+import { resetPasswordAPIKey, hashingSalt } from '../configs/general';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
 
@@ -212,7 +212,8 @@ export default {
                 body: JSON.stringify({
                     email: params.email,
                     language: params.language,
-                    APIKey: resetPasswordAPIKey
+                    APIKey: resetPasswordAPIKey,
+                    salt: hashingSalt
                 }),
                 resolveWithFullResponse: true
             }).then((res) => {

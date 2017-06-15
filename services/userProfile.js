@@ -41,7 +41,7 @@ export default {
                 username: params.uname,
                 surname: !isEmpty(params.lname) ? params.lname : '',
                 forename: !isEmpty(params.fname) ? params.fname : '',
-                language: !isEmpty(params.language) ? params.language : '',
+                language: !isEmpty(params.language) ? params.language.replace('-', '_') : '',
                 country: !isEmpty(params.country) ? params.country : '',
                 picture: !isEmpty(params.picture) ? params.picture : '',
                 organization: !isEmpty(params.organization) ? params.organization : '',
@@ -77,13 +77,15 @@ export default {
                     token: params.token,
                     token_creation: params.token_creation,
                     email: params.email,
-                    language: params.language
+                    language: params.language.replace('-', '_')
                 }
             })
               .then((body) => callback(null, body))
               .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
             //prepare data
+            if (params.members === null || params.members === undefined)
+                params.members = [];
             let members = params.members.reduce((prev, curr) => {
                 let member = {
                     userid: curr.userid,
@@ -142,6 +144,7 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         if(resource !== 'userProfile.fetchUserDecks') {
             if (params.params.loggedInUser === params.params.username || params.params.id === params.params.username) {
+                // console.log('trying to get private user with id: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
@@ -169,6 +172,7 @@ export default {
                 })
                 .catch((err) => callback(err));
             } else {
+                // console.log('trying to get public user with username: ', params);
                 rp({
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.username,
