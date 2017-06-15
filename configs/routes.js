@@ -29,7 +29,7 @@ import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
-
+import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -367,6 +367,17 @@ export default {
             context.executeAction(loadDeckTree, payload, done);
         }
     },
+    infopanel:{
+        path: '/infopanel/:id/:spath?',
+        method: 'get',
+        page: 'decktree',
+        handler: require('../components/Deck/InfoPanel/InfoPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckTree, payload, done);
+        }
+
+    },
+
     presentation: {
         // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
         path: '/presentation/:id/',
@@ -433,6 +444,16 @@ export default {
                 pageTitle: shortTitle + ' | Login'
             });
             done();
+        }
+    },
+    deckfamily: {
+        path: '/deckfamily/:tag',
+        method: 'get',
+        page: 'deckfamily',
+        title: 'SlideWiki -- Deck Family',
+        handler: require('../components/Deck/DeckFamily/DeckFamily'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckFamily, payload, done);
         }
     },
     /* This should be the last route in routes.js */
