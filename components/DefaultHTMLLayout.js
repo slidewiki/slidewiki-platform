@@ -42,7 +42,7 @@ class DefaultHTMLLayout extends React.Component {
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
                 {/* TODO: load specific parts of jquery UI for performance */}
-                <script src="/jquery-ui-dist/jquery-ui.min.js"></script>
+
                 <script src="/custom_modules/custom-semantic-ui/dist/components/progress.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js"></script>
@@ -60,7 +60,7 @@ class DefaultHTMLLayout extends React.Component {
                 {/* All external vendors bundle*/
                     this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'}></script> : ''
                 }
-                <script src="/ckeditor/ckeditor.js"></script>
+                
                 <script src="/headjs/dist/1.0.0/head.min.js"></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js"></script>
