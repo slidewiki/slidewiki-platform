@@ -11,4 +11,5 @@ env | grep "SLIDEWIKI_.*"
 
 cat /nodeApp/microservices.js.template | envsubst > /nodeApp/configs/microservices.js
 cat /nodeApp/general.js.template | envsubst > /nodeApp/configs/general.js
+cat /nodeApp/secrets.js.template | envsubst > /nodeApp/configs/secrets.js
 npm run build
