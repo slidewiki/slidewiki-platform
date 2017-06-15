@@ -4,7 +4,8 @@ import showRevisionChanges from '../../../../actions/history/showRevisionChanges
 import hideRevisionChanges from '../../../../actions/history/hideRevisionChanges';
 import {List, Button, Icon, Header, Segment} from 'semantic-ui-react';
 import DeckRevisionChanges from './DeckRevisionChanges';
-import moment from 'moment';
+//import moment from 'moment';
+import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
 
 class DeckRevision extends React.Component {
 
@@ -54,12 +55,13 @@ class DeckRevision extends React.Component {
             'overflow-y': 'auto',
             'max-height': '400px'
         };
+        const datechange = new Date(revision.lastUpdate);
         return (
             <List.Item>
                 <List.Content tabIndex='0'>
                     <List.Header><Icon color='grey' name='save' size='large' className='outline'
                                        aria-label='Saved at'/>
-                        <span>{moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})} by <a
+                        <span>{formatDate(revision.lastUpdate)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} by <a
                         className="user"
                         href={'/user/' + revision.username}> {revision.username}</a>
                             </span>
