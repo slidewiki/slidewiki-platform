@@ -5,14 +5,19 @@ import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 //import ActivityList from '../ActivityFeedPanel/ActivityList';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
-import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import cheerio from 'cheerio';
-import loadContributors from '../../../actions/loadContributors';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
+import loadContributors from '../../../actions/loadContributors';
+import ContributorsStore from '../../../stores/ContributorsStore';
+import ContributorsList from '../ContentModulesPanel/ContributorsPanel/ContributorsList';
+//import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 
 
 class InfoPanelInfoView extends React.Component {
-
+    constructor(props) {
+        super(props);
+        //this.
+    }
     getNameofNodes(tree, selector) {
         if(!selector.get('spath')){
             return 0;
@@ -78,7 +83,13 @@ class InfoPanelInfoView extends React.Component {
                       <h4 className="header ui medium" >{title}</h4>
                   </div>
                   <div className="ui attached segment">
-                      <ContributorsPanel />
+                  <b>Creator:</b>
+                      <ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
+                  <b>Contributors:</b>
+                      {this.props.ContributorsStore.contributors.length === 0 ?
+                      <div>There are no contributors for this {this.props.ContributorsStore.selector.stype}.</div> :
+                      <ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>}
+                      {/*<ContributorsPanel />*/}
                   </div>
                   <div className="ui attached segment">
                       {/*<h4 className="ui medium header">Activity</h4>
@@ -103,10 +114,11 @@ class InfoPanelInfoView extends React.Component {
 InfoPanelInfoView.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [DeckTreeStore,ContentModulesStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [DeckTreeStore, ContentModulesStore, ContributorsStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ContentModulesStore: context.getStore(ContentModulesStore).getState(),
+        ContributorsStore: context.getStore(ContributorsStore).getState()
     };
 });
 export default InfoPanelInfoView;
