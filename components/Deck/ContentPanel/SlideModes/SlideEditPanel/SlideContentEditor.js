@@ -463,6 +463,11 @@ class SlideContentEditor extends React.Component {
         return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-left"><span class="text-block" ">New content</span></div></div>';
     }
     componentDidMount() {
+        if(process.env.BROWSER){
+            require('../../../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
+            require('../../../../../node_modules/ckeditor/ckeditor.js');
+        }
+
 
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
