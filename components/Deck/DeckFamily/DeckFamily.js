@@ -46,11 +46,13 @@ class DeckFamily extends React.Component {
 
         return (
           <div className = "ui vertically padded stackable grid container" >
-              <div className = "sixteen wide column" >
+              <div className = "four wide column" >
+              </div>
+              <div className = "twelve wide column" >
                   <div className="ui segments">
                       {(this.props.DeckFamilyStore.loading) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                       <div className="ui secondary clearing segment">
-                          <h2 className="ui left floated header">Deck Family ({this.props.DeckFamilyStore.tag})</h2>
+                          <h2 className="ui left floated header">Decks for tag: {this.props.DeckFamilyStore.tag}</h2>
 
                           <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                               <i className="icon exchange"/>
@@ -69,7 +71,6 @@ class DeckFamily extends React.Component {
                       {loadMoreDiv}
                   </div>
               </div>
-              <div className="ui tab" data-tab="activity"></div>
           </div>
         );
     }
