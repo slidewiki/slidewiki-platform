@@ -66,6 +66,7 @@ class AddDeck extends React.Component {
         //const tags = this.refs.input_tags.value.split(', ');
         const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
+        const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
@@ -99,16 +100,23 @@ class AddDeck extends React.Component {
         else {
             wrongFields.conditions = false;
         }
+        if (acceptedImagesLicense === false) {
+            wrongFields.imageslicense = true;
+            everythingIsFine = false;
+        }
+        else {
+            wrongFields.imageslicense = false;
+        }
 
         //call action to update view
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
-            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
+            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
-    correctMetadata(title, language, description, theme, license, tags, acceptedConditions) {
+    correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense) {
         this.context.executeAction(addDeckSaveDeck, {
             title: title,
             language: language,
@@ -225,6 +233,12 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.conditions
         });
+        let fieldClass_imageslicense = classNames({
+            'required': true,
+            'inline': true,
+            'field': true,
+            'error': this.props.AddDeckStore.wrongFields.imageslicense
+        });
         let btnClasses_submit = classNames({
             'ui': true,
             'primary': true,
@@ -277,7 +291,7 @@ class AddDeck extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
             <option value="openuniversity">Open University Theme</option>
             <option value="odimadrid">ODI Madrid</option>
-            <option value="oeg">OEG</option>            
+            <option value="oeg">OEG</option>
         </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
@@ -357,6 +371,14 @@ class AddDeck extends React.Component {
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
                                   I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
+                              </label>
+                          </div>
+                      </div>
+                      <div className={fieldClass_imageslicense} >
+                          <div className="ui checkbox" ref="div_imageslicense" >
+                              <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
+                              <label htmlFor="termsimages">
+                                  By clicking this, you agree that all images in your new deck will have the 'CC0' license. If you want to change this for some image, please go to the slide which contains it and edit the image properties.
                               </label>
                           </div>
                       </div>
