@@ -1,56 +1,98 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+//import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
-import UserProfileStore from '../../../stores/UserProfileStore';
-import Tree from '../TreePanel/Tree';
-import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
-import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
-import renameTreeNode from '../../../actions/decktree/renameTreeNode';
-import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
-import saveTreeNode from '../../../actions/decktree/saveTreeNode';
-import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
-import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
-import forkDeck from '../../../actions/decktree/forkDeck';
-import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
-import PermissionsStore from '../../../stores/PermissionsStore';
-import SlideViewStore from '../../../stores/SlideViewStore';
-import InfoPanel from './InfoPanel';
-import ActivityList from '../ActivityFeedPanel/ActivityList';
+//import ActivityList from '../ActivityFeedPanel/ActivityList';
+import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
+import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
+import cheerio from 'cheerio';
+import loadContributors from '../../../actions/loadContributors';
+import ContentModulesStore from '../../../stores/ContentModulesStore';
 
 
 class InfoPanelInfoView extends React.Component {
 
+    getNameofNodes(tree, selector) {
+        if(!selector.get('spath')){
+            return 0;
+        }
+        let names = [];
+        let nodes = selector.get('spath').split(';');
+        let currentChildren = tree.get('children');
+        let position = 0;
+        nodes.forEach ((node, index) => {
+            position = node.split(':')[1];
+            names.push(currentChildren.get(position - 1).get('title'));
+            if(currentChildren.get(position - 1).get('children')){
+                currentChildren = currentChildren.get(position - 1).get('children');
+            }
+        });
+        return names;
+    }
+    componentDidMount(){
+        this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
+    }
     render() {
+        let deckTree = this.props.DeckTreeStore.deckTree;
+        let selector = this.props.DeckTreeStore.selector;
+        //let selector = this.props.DeckTreeStore.selector;
+        ///let prevSelector = this.props.DeckTreeStore.prevSelector;
+        //let nextSelector = this.props.DeckTreeStore.nextSelector;
+        let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
+        let self = this;
+        let nodes = [];
+        let list, output = '';
+        let title = '';
+        let pathNames = this.getNameofNodes(deckTree, selector);
+        if(selector.get('spath')){
+            nodes = selector.get('spath').split(';');
+            list = nodes.map((node, index) => {
+                if(index === (nodes.length - 1)){
+                    return (
+                        <div key={index} className="section">
+                            {cheerio.load(pathNames[index]).text()}
+                        </div>
+                    );
+                }else{
+                    /*
+                    return (
+                        <div key={index} className="section">
+                            <NavLink href={'/deck/' + self.props.selector.get('id') + '/deck/' + self.props.selector.get('sid') + '/' + (nodes[index - 1] ? (nodes[index - 1] + ';') : '') + node}>{this.props.pathNames[index]}</NavLink>
+                            <i className="right chevron icon divider"></i>
+                        </div>
+                    );
+                    */
+                }
+
+            });
+            title = list; //use title of deck
+        }
+        else {
+            title = rootNode.title;
+        }
 
         return (
-
-                <div className="ui segments">
-                  <div className="ui bottom attached active tab segment">
-                    <div className="ui compact segments">
-                      <h4 className="header item">{this.props.rootNode.title}</h4>
-                    </div>
+                <div >
+                  <div className="ui attached segment">
+                      <h4 className="header ui medium" >{title}</h4>
                   </div>
-                  <div className={['ui', 'segment']}>
-                    <div className="ui compact segments">
-                      <h4 className="header item">Activity Feed</h4>
-                    </div>
-                    <ActivityList />
+                  <div className="ui attached segment">
+                      <ContributorsPanel />
                   </div>
-
-                  <div className={['ui', 'segment']}>
-                    <div className='item'>
+                  <div className="ui attached segment">
+                      {/*<h4 className="ui medium header">Activity</h4>
+                      <ActivityList />*/}
+                      <ActivityFeedPanel />
+                  </div>
+                  <div className="ui attached segment">
                       <div className={['ui', 'image']}>
-                        <a href="http://creativecommons.org/licenses/by-sa/4.0/">
+                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
                           <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                         </a>
-                      </div>
-                      <div className="description">
                         <p>
-                          This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" data-reactid="1575">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                          This work is licensed under a <a rel="license"  target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/" >Creative Commons Attribution-ShareAlike 4.0 International License</a>
                         </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -58,13 +100,13 @@ class InfoPanelInfoView extends React.Component {
     }
 }
 
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [SlideViewStore, UserProfileStore, PermissionsStore, DeckTreeStore], (context, props) => {
+InfoPanelInfoView.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [DeckTreeStore,ContentModulesStore], (context, props) => {
     return {
-        SlideViewStore: context.getStore(SlideViewStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-
+        ContentModulesStore: context.getStore(ContentModulesStore).getState()
     };
 });
 export default InfoPanelInfoView;
