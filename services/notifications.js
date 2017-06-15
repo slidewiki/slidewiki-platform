@@ -2,23 +2,6 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
 
-function adjustIDs(activity) {
-    activity.content_id = adjustID(activity.content_id);
-    activity.user_id = adjustID(activity.user_id);
-    if (activity.translation_info !== undefined)
-        activity.translation_info.content_id = adjustID(activity.translation_info.content_id);
-    if (activity.comment_info !== undefined)
-        activity.comment_info.comment_id = adjustID(activity.comment_info.comment_id);
-    if (activity.use_info !== undefined)
-        activity.use_info.target_id = adjustID(activity.use_info.target_id);
-}
-function adjustID(id) {
-    if (id.length === 24 && id.startsWith('1122334455')) {
-        return id.substring(20).replace(/^0+/, '');
-    }
-    return id;
-}
-
 export default {
     name: 'notifications',
     // At least one of the CRUD methods is Required
@@ -30,55 +13,42 @@ export default {
         if (uid === undefined) {
             uid = 0;
         }
-        // let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': parseInt(args.sid), 'stype': args.stype, 'page': params.page};
-
-        // if (resource === 'notifications.count'){
-        //     let notifications = mockupNotifications;
-        //     callback(null, {'count' : notifications.length});
-        // }
 
         if (resource === 'notifications.list'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
 
-            // let notifications = mockupNotifications;
             let subscriptionsString = '';
-            // callback(null, {notifications: notifications, subscriptions: subscriptions});
-            // mockupSubscriptions.forEach((subscription) => {
-            //     // const id = (!subscription.id.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - subscription.id.length) + subscription.id) : subscription.id;//TODO solve these ID issues
-            //     const id = subscription.id;
-            //     switch (subscription.type) {
-            //         case 'user':
-            //             subscriptionsString += '/u' + id;
-            //             break;
-            //         case 'slide':
-            //             subscriptionsString += '/s' + id;
-            //             break;
-            //         case 'deck':
-            //             subscriptionsString += '/d' + id;
-            //             break;
-            //         default:
-            //     }
-            // });
+
+            // let mockupSubscriptions = [
+            //   {id:'2', type: 'user', name: 'Nikola T.', selected: true},
+            //   {id:'1', type: 'user', name: 'Dejan P.', selected: true},
+            //   {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
+            //   {id:'8', type: 'slide', name: 'Introduction', selected: true}
+            // ];
+
+            // mockupSubscriptions.push({id:String(uid), type: 'owner', name: 'My decks and slides', selected: true});
+            let subscriptions = [{id:String(uid), type: 'owner', name: 'My decks and slides', selected: true}];
 
             subscriptionsString += '/o' + uid;
 
-            rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).then((res) => {
-                let notifications = JSON.parse(res);
-                notifications.forEach((notification) => adjustIDs(notification));//TODO solve these ID issues
+            let notificationsPromise = rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).promise().bind(this);
+            let newNotificationsPromise = rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).promise().bind(this);
 
-                callback(null, {notifications: notifications, subscriptions: mockupSubscriptions});
+            //callback to execute when both requests are successful
+            Promise.all([notificationsPromise, newNotificationsPromise]).then((res) => {
+
+                let notifications = JSON.parse(res[0]);
+                let newNotifications = JSON.parse(res[1]);
+
+                callback(null, {notifications: notifications, newNotifications: newNotifications, subscriptions: subscriptions});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {notifications: [], subscriptions: mockupSubscriptions});
+                callback(null, {notifications: [], newNotifications: [], subscriptions: subscriptions});
             });
         } else if (resource === 'notifications.listnew'){
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).then((res) => {
                 let newNotifications = JSON.parse(res);
                 newNotifications.forEach((notification) => {
                     notification.newNotificationId = notification.id;
-                    adjustIDs(notification);//TODO solve these ID issues
                 });
 
                 callback(null, {newNotifications: newNotifications});
@@ -112,7 +82,7 @@ export default {
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
             let uid = String(args.uid);
-            uid = (!uid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - uid.length) + uid) : uid;//TODO solve these ID issues
+            
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',
@@ -135,12 +105,7 @@ export default {
 
 };
 
-let mockupSubscriptions = [
-  {id:'2', type: 'user', name: 'Nikola T.', selected: true},
-  {id:'1', type: 'user', name: 'Dejan P.', selected: true},
-  {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
-  {id:'8', type: 'slide', name: 'Introduction', selected: true}
-];
+
 
 //Mockup data
 // let mockupNotifications = [

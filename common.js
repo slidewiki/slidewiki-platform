@@ -68,8 +68,19 @@ export default {
         let language =  navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
 
         if (language.length === 2) {
-            language += '-' + language.toUpperCase();
+            language += '_' + language.toUpperCase();
         }
+        else {
+            language = language.replace('-', '_');
+        }
+
+        return language;
+    },
+
+    getIntlLanguage() {
+        let language = 'en';
+        if (document.cookie.indexOf('locale=') > 0)
+            language = document.cookie.substr(document.cookie.indexOf('locale=') + 7, 2);
 
         return language;
     },

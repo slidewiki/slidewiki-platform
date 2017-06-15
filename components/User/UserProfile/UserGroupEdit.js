@@ -4,6 +4,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { timeSince } from '../../../common';
+import UserPicture from '../../common/UserPicture';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
 import saveUsergroup from '../../../actions/user/userprofile/saveUsergroup';
 
@@ -39,7 +40,8 @@ class UserGroupEdit extends React.Component {
         $('#usergoup_edit_dropdown_usernames_remote')
             .dropdown({
                 apiSettings: {
-                    url: Microservices.user.uri + '/information/username/search/{query}'
+                    url: Microservices.user.uri + '/information/username/search/{query}',
+                    cache: false
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
@@ -53,15 +55,17 @@ class UserGroupEdit extends React.Component {
                         group.members = [];
 
                     let data = JSON.parse(decodeURIComponent(value));
-                    // console.log('trying to add', name, 'to', group.members, ' with ', data);
+                    console.log('trying to add', name, 'to', group.members, ' with ', data);
                     if (group.members.findIndex((member) => {
                         return member.userid === parseInt(data.userid);
-                    }) === -1 && name !== this.props.UserProfileStore.username) {
+                    }) === -1 && data.username !== this.props.UserProfileStore.username) {
                         group.members.push({
-                            username: name,
+                            username: data.username,
                             userid: parseInt(data.userid),
                             joined: data.joined || undefined,
-                            picture: data.picture
+                            picture: data.picture,
+                            country: data.country,
+                            organization: data.organization
                         });
                     }
 
@@ -123,11 +127,13 @@ class UserGroupEdit extends React.Component {
     }
 
     handleClickRemoveMember(member) {
-        console.log('handleClickRemoveMember', member);
+        // console.log('handleClickRemoveMember', member, 'from', this.props.UserProfileStore.currentUsergroup.members);
 
         let group = this.getGroup(this.props.UserProfileStore.currentUsergroup.members);
 
-        group.members.pop(member);
+        group.members = group.members.filter((gmember) => {
+            return gmember.userid !== member.userid;
+        });
 
         this.context.executeAction(updateUsergroup, {group: group, offline: true});
     }
@@ -152,18 +158,24 @@ class UserGroupEdit extends React.Component {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
+                let optionalElement = (member.organization || member.country) ?  (
+                  <div>
+                    {member.organization || 'Unknown organization'} ({member.country || 'unknown country'})
+                    <br/>
+                  </div>
+                ) : '';
                 let optionalText = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
                 userlist.push(
                   (
                     <div className="item" key={member.userid}>
                       <div className="ui grid">
                         <div className="one wide column middle aligned">
-                          <i className="large user middle aligned icon"></i>
+                          <UserPicture picture={ member.picture } username={ member.username } avatar={ true } width= { 24 } />
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + member.username}>{member.username} ({member.userid})</a>
-                              <div className="description">{optionalText}</div>
+                              <a className="header" href={'/user/' + member.username}>{member.username}</a>
+                              <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
                         <div className="one wide column middle aligned">

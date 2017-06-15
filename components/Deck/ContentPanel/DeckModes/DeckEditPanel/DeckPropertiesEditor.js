@@ -39,7 +39,8 @@ class DeckPropertiesEditor extends React.Component {
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            license: props.deckProps.license || '',
+            //license: props.deckProps.license || '',
+            license: 'CC BY-SA',
             users: editors.users,
             groups: editors.groups
         };
@@ -91,6 +92,10 @@ class DeckPropertiesEditor extends React.Component {
         this.handleDropboxes();
     }
 
+    componentDidMount() {
+        this.handleDropboxes();
+    }
+
     handleDropboxes() {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown({
@@ -124,7 +129,8 @@ class DeckPropertiesEditor extends React.Component {
         $(ReactDOM.findDOMNode(this.refs.AddUser))
             .dropdown({
                 apiSettings: {
-                    url: Microservices.user.uri + '/information/username/search/{query}'
+                    url: Microservices.user.uri + '/information/username/search/{query}',
+                    cache: false
                 },
                 saveRemoteData: false,
                 action: (name, value, source) => {
@@ -141,12 +147,14 @@ class DeckPropertiesEditor extends React.Component {
                     // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
                         return member.id === parseInt(data.userid);
-                    }) === -1 && parseInt(value) !== this.props.userid) {
+                    }) === -1 && parseInt(data.userid) !== this.props.userid) {
                         users.push({
-                            username: name,
+                            username: data.username,
                             id: parseInt(data.userid),
-                            joined: (new Date()).toISOString(),
-                            picture: data.picture
+                            joined: data.joined || (new Date()).toISOString(),
+                            picture: data.picture,
+                            country: data.country,
+                            organization: data.organization
                         });
                     }
 
@@ -179,10 +187,12 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
+        /*
         if (this.state.license == null || this.state.license.length < 2) {
             validationErrors.license = 'Please select a license.';
             isValid = false;
         }
+        */
 
         let users = [], groups = [];
         users = this.props.DeckEditStore.authorizedUsers;
@@ -198,7 +208,8 @@ class DeckPropertiesEditor extends React.Component {
                 language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
-                license: this.state.license,
+                //license: this.state.license,
+                license: 'CC BY-SA',
                 selector: this.props.selector,
                 editors: {
                     old: this.props.DeckEditStore.originalEditors,
@@ -263,8 +274,15 @@ class DeckPropertiesEditor extends React.Component {
                 let fct = (event) => {
                     this.handleClickRemoveUser(user, event);
                 };
+                let optionalElement = (user.organization || user.country) ?  (
+                  <div>
+                    {user.organization || 'Unknown organization'} ({user.country || 'unknown country'})
+                    <br/>
+                  </div>
+                ) : '';
                 let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
+                // console.log('new authorized user:', user);
                 // console.log('New key for authorized user:', key, user);
                 list_authorized.push(
                   (
@@ -273,14 +291,18 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="one wide column">
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
-                        <div className="fifteen wide column">
-                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
-                          <div className="description">
-                            {optionalText}&nbsp;&nbsp;&nbsp;
+                        <div className="ten wide column">
+                          <div className="content">
+                            <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                            <div className="description">
+                              {optionalElement}{optionalText}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="four wide column middle aligned">
                             <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
                               Remove
                             </button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -310,18 +332,21 @@ class DeckPropertiesEditor extends React.Component {
                         <div className="one wide column">
                           <i className="large group middle aligned icon"></i>
                         </div>
-                        <div className="fifteen wide column">
-                          <a className="header">{group.name}</a>
-                          <div className="description">
-                            {optionalText}&nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" onClick={fct}>
-                              Remove
-                            </button>
-                            &nbsp;&nbsp;&nbsp;
-                            <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
-                              Show details
-                            </button>
+                        <div className="ten wide column">
+                          <div className="content">
+                            <a className="header">{group.name}</a>
+                            <div className="description">
+                              {optionalText}
+                            </div>
                           </div>
+                        </div>
+                        <div className="four wide column middle aligned">
+                          <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                            Remove
+                          </button>
+                          <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
+                            Show details
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -350,11 +375,13 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.language != null
         });
+        /*
         let licenseFieldClass = classNames({
             'required': true,
             'field': true,
             'error': this.state.validationErrors.license != null
         });
+        */
         let groupsFieldClass = classNames({
             'field': true,
         });
@@ -374,7 +401,15 @@ class DeckPropertiesEditor extends React.Component {
             <option value="simple">Reveal.js Simple</option>
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
+            <option value="openuniversity">Open University Theme</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>
         </select>;
+        let licenseOptions = <a className="ui label">
+          <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
+        </a>;
+        /*
+        <i className="creative commons large icon"></i>
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
                                      onChange={this.handleChange.bind(this, 'license')}>
@@ -382,6 +417,9 @@ class DeckPropertiesEditor extends React.Component {
            <option value="CC BY" >Creative Commons Attribution</option>
            <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
+        //
+        //
+        */
 
         let groupsArray = [];
         if (this.props.groups) {
@@ -417,6 +455,8 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         );
 
+        //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
+        //<div className={licenseFieldClass}>
         return (
         <div className="ui container">
             <div className="ui grid">
@@ -450,7 +490,7 @@ class DeckPropertiesEditor extends React.Component {
                                 <label htmlFor="theme" id="theme">Choose deck theme</label>
                                 {themeOptions}
                             </div>
-                            <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
+                            <div className="field">
                                 <label htmlFor="license" id="license_label">License</label>
                                 {licenseOptions}
                             </div>

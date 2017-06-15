@@ -1,5 +1,5 @@
 slidewikiplatform:
-  image: slidewiki/platform
+  image: slidewiki/platform:latest-dev
   restart: on-failure:5
   expose:
     - "80"
@@ -15,6 +15,8 @@ slidewikiplatform:
     - SERVICE_URL_USER=https://userservice.experimental.slidewiki.org
     - SERVICE_URL_IMPORT=https://importservice.experimental.slidewiki.org
     - SERVICE_URL_FILE=https://fileservice.experimental.slidewiki.org
+    - SERVICE_URL_TAG=https://tagservice.experimental.slidewiki.org
     - SERVICE_URL_SEARCH=https://searchservice.experimental.slidewiki.org
+    - SERVICE_URL_PDF=https://pdfservice.experimental.slidewiki.org
     - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org
 #    - SERVICE_USER_APIKEY=

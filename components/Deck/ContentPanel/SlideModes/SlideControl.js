@@ -94,7 +94,7 @@ class SlideControl extends React.Component {
                     {SlideControlUtil.getSlidePosition(this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree)}/{SlideControlUtil.getSlidesNumber(this.props.DeckTreeStore.flatTree)}
                     </button>
                     <button className="ui button" onClick={this.handleNextClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Go to the next slide (right arrow)" data-tooltip="Go to the next slide (right arrow)"><i className="icon step forward"></i></button>
-                    <button className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Go to the firlastst slide (shift + right arrow)" data-tooltip="Go to the firlastst slide (shift + right arrow)"><i className="icon fast forward"></i></button>
+                    <button className="ui button" onClick={this.handleForwardClick.bind(this, this.props.DeckTreeStore.selector, this.props.DeckTreeStore.flatTree, this.props.mode)} aria-label="Go to the last slide (shift + right arrow)" data-tooltip="Go to the last slide (shift + right arrow)"><i className="icon fast forward"></i></button>
                 </div>
             </HotKeys>
         );

@@ -62,7 +62,7 @@ class ImportStore extends BaseStore {
     }
 
     storeFile(payload) {
-        console.log('ImportStore: storeFile()', payload);
+        // console.log('ImportStore: storeFile()', payload);
         this.file = payload.file;
         this.base64 = payload.base64;
         this.filename = this.file.name;
@@ -83,10 +83,10 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadSuccess(headers) {
-        console.log('ImportStore: uploadSuccess()', headers);
+        // console.log('ImportStore: uploadSuccess()', headers);
         this.isUploaded = true;
         // this.uploadProgress = 100;
-        this.uploadProgress = 33;
+        this.uploadProgress = 65;
         this.deckId = headers.deckid;
         this.totalNoOfSlides = parseInt(headers.noofslides);
 
@@ -97,7 +97,7 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadStarted() {
-        console.log('ImportStore: uploadStarted()');
+        // console.log('ImportStore: uploadStarted()');
         this.uploadProgress = 10;
         this.error = null;
         this.noOfSlides = 0;
@@ -106,7 +106,7 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     uploadMoreProgress(progress) {
-        console.log('ImportStore: uploadMoreProgress()', progress);
+        // console.log('ImportStore: uploadMoreProgress()', progress);
         if (this.uploadProgress === 100)
             return;
 
@@ -118,16 +118,22 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     slidesProgress(res) {
-        if (this.noOfSlides < res.noofslides) {
-            this.safetyCounter = 0;
+        if (this.noOfSlides < res.noofslides) {//no of slides has changed
             this.noOfSlides = res.noofslides;
-            if (this.noOfSlides < this.totalNoOfSlides) {
-                this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
-            } else {
-                this.uploadProgress = 100;
+            if (this.noOfSlides === 1) {//only one slide imported - still converting (progress should stay at 'converting') or one-slide presentation?
+                if (this.totalNoOfSlides === 1) {//one-slide presentation - complete
+                    this.uploadProgress = 100;
+                }
+            } else {//more than one slide has been created ( show progress after 'converting')
+                this.safetyCounter = 0;
+                if (this.noOfSlides < this.totalNoOfSlides) {
+                    this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
+                } else {
+                    this.uploadProgress = 100;
+                }
             }
         } else {
-            if (++this.safetyCounter > 50) {//50 times the call was made, and no change in noOfSlides
+            if (++this.safetyCounter > 100) {//100 times the call was made, and no change in noOfSlides
                 this.uploadProgress = 100;
             }
         }

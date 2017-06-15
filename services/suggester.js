@@ -9,26 +9,29 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
-        let urlPrefix = '';
 
         switch (resource) {
             case 'suggester.users':
-                urlPrefix = '/suggest/users';
+                rp.get({uri: `${Microservices.search.uri}/suggest/users?q=${args.query}`}).then((res) => {
+                    callback(null, { success: true, results: JSON.parse(res).response.docs });
+                }).catch((err) => {
+                    callback(null, {success: false, results: {}});
+                });
                 break;
             case 'suggester.keywords':
-                urlPrefix = '/suggest/keywords';
+                rp.get({uri: `${Microservices.search.uri}/suggest/keywords?q=${args.query}`}).then((res) => {
+                    callback(null, { success: true, results: JSON.parse(res).response.docs });
+                }).catch((err) => {
+                    callback(null, {success: false, results: {}});
+                });
+                break;
+            case 'suggester.tags':
+                rp.get({uri: `${Microservices.tag.uri}/tag/suggest/${args.query}`}).then((res) => {
+                    callback(null, { success: true, results: JSON.parse(res) });
+                }).catch((err) => {
+                    callback(null, {success: false, results: {}});
+                });
                 break;
         }
-
-        rp.get({uri: Microservices.search.uri + urlPrefix + '?q=' + args.query}).then((res) => {
-
-            callback(null, {
-                success: true,
-                results: JSON.parse(res).response.docs
-            });
-        }).catch((err) => {
-            // console.log(err);
-            callback(null, {success: false, results: {}});
-        });
     }
 };

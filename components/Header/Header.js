@@ -79,7 +79,7 @@ class Header extends React.Component {
             {cookieBanner}
               <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
                 <div className="ui inverted blue menu" ref="header">
-                    <div className="ui container">
+                    <div className="ui fluid container">
                         <a className="item" href='/'>
                             <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
                             &nbsp; SlideWiki

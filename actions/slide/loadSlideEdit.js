@@ -18,9 +18,10 @@ export default function loadSlideEdit(context, payload, done) {
             //context.dispatch('LOAD_SLIDE_EDIT_FAILURE', err);
         } else {
             //expand edit view collapsing TreeNode. Then dispatch LOAD_SLIDE_EDIT_SUCCESS
-            context.executeAction(expandContentPanel,{}, () => {
-                context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
-            });
+            //revert for SWIK-1347 - Slide Edit view to display decktree (and right-hand panel)
+            //context.executeAction(expandContentPanel,{}, () => {
+            context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
+            //});
 
             //TODO: do not allow editing title when on the edit slide mode
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);

@@ -4,7 +4,6 @@ import { shortTitle, fullTitle } from '../configs/general';
 import loadContent from '../actions/loadContent';
 import loadContributors from '../actions/loadContributors';
 import loadSearchResults from '../actions/search/loadSearchResults';
-// import loadAdvancedSearchResults from '../actions/search/updateUserResultsVisibility';
 import loadDeck from '../actions/loadDeck';
 import loadSlideView from '../actions/slide/loadSlideView';
 import loadSlideEdit from '../actions/slide/loadSlideEdit';
@@ -29,6 +28,10 @@ import async from 'async';
 import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
+import loadLegacy from '../actions/loadLegacy';
+
+
+import {navigateAction} from 'fluxible-router';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -169,7 +172,6 @@ export default {
         }
     },
     search: {
-        // path: '/search/:searchstatus/:searchstring?/:entity?/:searchlang?/:deckid?/:userid?',
         path: '/search/:queryparams?',
         method: 'get',
         page: 'search',
@@ -188,7 +190,7 @@ export default {
     // mode: 'interaction mode e.g. view, edit, questions, datasources'}
     // theme: For testing, choice of any of the reveal.js themes
     deck: {
-        path: '/deck/:id/:stype?/:sid?/:spath?/:mode?/:theme?',
+        path: '/deck/:id(\\d+|\\d+-\\d+)/:stype?/:sid?/:spath?/:mode?/:theme?',
         method: 'get',
         page: 'deck',
         handler: require('../components/Deck/Deck'),
@@ -205,10 +207,16 @@ export default {
                 if(err) console.log(err);
                 done();
             });
-
-
-
         }
+    },
+    legacydeck: {
+        path: '/deck/:oldid(\\d+_\\w+)',
+        method: 'get',
+        action: (context, payload, done) => {
+            context.executeAction(loadLegacy, payload, (err, result) => {
+                if (err) console.log(err);
+                context.executeAction(navigateAction, {'url': '/deck/'+result}, done);
+            });        }
     },
     contributors: {
         path: '/contributors/:stype/:sid',
@@ -333,7 +341,7 @@ export default {
         }
     },
     questions: {
-        path: '/questions/:stype/:sid',
+        path: '/questions/:stype/:sid/:maxQ/:pageNum',
         method: 'get',
         page: 'questions',
         handler: require('../components/Deck/ContentModulesPanel/ContentQuestionsPanel/ContentQuestionsPanel'),

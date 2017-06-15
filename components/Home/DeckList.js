@@ -20,7 +20,6 @@ class DeckList extends React.Component {
                     let deckCreatorid = deck.user;
                     let deckCreator = deck.username;
                     let deckIdAndrevision = deck._id; //not used for now
-                    if (deck.revision_to_show) deckIdAndrevision+= '-' + deck.revision_to_show; //not used for now
                     let deckDate = CustomDate.format(deck.timestamp, 'Do MMMM YYYY');
                     let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
                     let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
@@ -44,7 +43,7 @@ class DeckList extends React.Component {
                                         {/*<div className="ui large label" tabIndex="0" >
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>*/}
                                        <div className="ui large label" tabIndex="0" >
-                                            <i className="fork icon" aria-label="Number of versions"></i>{deck.countRevisions}</div>
+                                            <i className="fork icon" aria-label="Number of versions"></i>{deck.forkCount}</div>
                                 </div>
                             </div>
                         </div>

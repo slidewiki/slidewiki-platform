@@ -64,6 +64,9 @@ server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckedit
 server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
 server.use('/ckeditor-plugins/lineheight', express.static(path.join(__dirname, 'node_modules/ckeditor-lineheight-plugin')));
 server.use('/mathjax', express.static(path.join(__dirname, 'node_modules/mathjax')));
+server.use('/jquery-ui-dist', express.static(path.join(__dirname, 'node_modules/jquery-ui-dist')));
+server.use('/jquery-contextmenu', express.static(path.join(__dirname, 'node_modules/jquery-contextmenu')));
+server.use('/font-awesome', express.static(path.join(__dirname, 'node_modules/font-awesome')));
 
 //server.use(csrf({cookie: true}));
 // Get access to the fetchr plugin instance
@@ -90,8 +93,11 @@ fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
+fetchrPlugin.registerService(require('./services/usergroup'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
+fetchrPlugin.registerService(require('./services/logservice'));
+fetchrPlugin.registerService(require('./services/like'));
 
 
 // ************************** UI Internationalisation routines ***************************************
