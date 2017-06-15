@@ -1,5 +1,7 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
+import ga from '../plugins/googleAnalytics/ga';
+
 let hook = require('css-modules-require-hook');
 
 hook({
@@ -91,6 +93,7 @@ class DefaultHTMLLayout extends React.Component {
                 {/*<script src="/custom_modules/simple-draggable/lib/index.js"></script>
                 <script src="/custom_modules/slide-edit-input-controls/lib/index.js"></script>*/}
                 {/*<script>hljs.initHighlightingOnLoad();</script>*/}
+                <script dangerouslySetInnerHTML={ {__html: ga} } />
             </body>
             </html>
         );
