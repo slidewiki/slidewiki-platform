@@ -1,4 +1,8 @@
+const log = require('../../log/clog');
+
 export default function updateUsergroup(context, payload, done) {
+    log.info(context);
+
     if (payload.offline) {
         context.dispatch('UPDATE_USERGROUP', payload.group);
         return done();

@@ -76,12 +76,12 @@ class SlideContentEditor extends React.Component {
                 //TODO replace with this.refs.inlineContent.innerHTML + cases below
                 //CKEDITOR.instances.inlineContent.setData(
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="position: relative; width: 960px; height: 720px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
-                    '<h3 class="h-mid"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Title</span></h3></div>'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" style="position: absolute; top: 38.3334px; left: 66px; width: 828px; height: 139.167px; z-index: 23488;">'+
+                    '<h3>Title</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
                     '<ul>'+
-                    '	<li class="h-left" style="text-align: left;"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Text bullet 1</span></li>'+
-                    '	<li class="h-left" style="text-align: left;"><span class="text-block" style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Text bullet 2</span></li>'+
+                    '	<li class="h-left">Text bullet 1</span></li>'+
+                    '	<li class="h-left">Text bullet 2</span></li>'+
                     '</ul>'+
                     '<div class="h-left">&nbsp;</div>'+
                     '</div></div>';
@@ -93,73 +93,110 @@ class SlideContentEditor extends React.Component {
                 this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
                 break;
             case '3':
-                this.refs.inlineContent.innerHTML = '<h1 style="text-align: center;">Title</h1>'+
+                this.refs.inlineContent.innerHTML =  '<div class="h-mid"><h3>Title</h3></div>'+
                     '<p>text</p>';
                 this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
                 break;
             case '11':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; ">'+
-                    '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">&nbsp;Row 1 - Column 1</p></div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div></div>';
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 941.77px; height: 610px; text-align: left; position: absolute; z-index: 2120483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 1 - Column 1</p></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>' +
+                    '</div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '12':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Heading</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; text-align: left; position: absolute; z-index: 2138483647; ">'+
-                    '<p style="text-align:center">Row 1 - Column&nbsp;1</p>'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Heading</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 64.11px; width: 661px; height: 613.14px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 1 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
-                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; ">'+
-                    '<div class="h-mid" style="text-align: center;">'+
-                    '<p style="text-align:center">Row 1 - Column&nbsp;2</p>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
+                    '<div style="left: 660.87px; top: 63.85px; width: 282.49px; height: 611.39px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div class="h-mid">'+
+                    '<p>Row 1 - Column&nbsp;2</p>'+
                     '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '22':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; ">'+
-                    '<p style="text-align:center">Row 2 - Column&nbsp;1</p>'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Header</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 202.48px; width: 661.48px; height: 476.18px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 2 - Column&nbsp;1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; ">'+
-                    '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
-                    '<div class="h-mid" style="text-align: center;"><p>Row 1</p></div></div>'+
-                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; ">'+
-                    '<div class="h-mid" style="text-align: center;">'+
-                    '<p style="text-align:center">Row 2 - Column&nbsp;2</p>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 940.44px; height: 137.18px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div class="h-mid">&nbsp;</div>'+
+                    '<div class="h-mid"><p>Row 1</p></div></div>'+
+                    '<div style="left: 660px; top: 201px; width: 279px; height: 476.18px; position: absolute; z-index: 80000; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div class="h-mid">'+
+                    '<p>Row 2 - Column&nbsp;2</p>'+
                     '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '21':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<p></p><p></p><p></p><p></p><p></p><div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; ">'+
-                    '<p style="text-align:center">Row 2 - Column 1</p>'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0.87px; top: 267.64px; width: 941.62px; height: 409px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 2 - Column 1</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
-                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; ">'+
-                    '<div class="h-mid" style="text-align: center;">&nbsp;</div>'+
-                    '<div class="h-mid" style="text-align: center;">Row 1 - Column 1</div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
+                    '<div style="left: 0.44px; top: 65.4px; width: 941.74px; height: 203.38px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div class="h-mid">&nbsp;</div>'+
+                    '<div class="h-mid">Row 1 - Column 1</div>'+
                     '</div></div>';
+
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
             case '11img':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">'+
-                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; ">Header</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; ">'+
-                    '<p style="font-weight: initial; font-style: normal; text-decoration: initial; vertical-align: ;">Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
+                    '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid" style="left: 0px; top: 0px; width: 940.59px; height: 64.33px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);"><h3>Header</h3></div>'+
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 0px; top: 65.14px; width: 940.85px; height: 228.78px; text-align: left; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<p>Row 1 - Column 1 - <br/> Insert the image by pasting the url in the HTML code in the last div section after source=</p>'+
                     '</div>'+
-                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; ">Footer</div>'+
-                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; ">'+
-                    '<div class="h-mid" style="text-align: center;">'+
-                    '<p style="text-align:center"><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
-                    '<p>&nbsp;</p></div></div></div>';
+                    '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="left: 2.02366px; top: 667.247px; width: 941.77px; height: 43.44px; text-align: center; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">Footer</div>'+
+                    '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; border-style: dashed; border-color: rgb(51, 204, 51);">'+
+                    '<div class="h-mid">'+
+                    '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
+                    '<p>&nbsp;</p></div></div></div>', 'Add input box';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
+            // case 'title':
+            //     this.refs.inlineContent.innerHTML =
+            //       '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+            //       ' <div class="titleSlide>' +
+            //       '   <div class="titlePageHeading"><h3>Title</h3></div>' +
+            //       '   <div class="titlePageSubHeading"><h4>Subtitle</h4></div>' +
+            //       ' </div>' +
+            //       '</div>';
+            //
+            //     this.inputBoxButtonTitle = 'Add input box';
+            //     this.emitChange();
+            //     break;
+            case 'outitleslide':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                '<div class="titleSlide" style="background-image: url(/custom_modules/reveal.js/img/outitlepage.png);background-repeat: no-repeat;background-position: center; height:100%; width:100%">' +
+                '<div style="position:absolute; left:100px; top: 200px; width:300px; height: 200px;">' +
+                '<h3>Title</h3>' +
+                '<h4>[Subtitle]</h4>' +
+                '</div></div></div>';
+                this.inputBoxButtonTitle = 'Add input box';
+                this.emitChange();
+                break;
+            case 'oegtitleslide':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" style="width: 960px; height: 720px; position: relative; border-style: ridge ridge ridge ridge; border-color: rgb(218, 102, 25); transform: scale(1.14479, 1.14479); transform-origin: left top 0px;">' +
+                '<div class="titleSlide" style="background-image: url(/custom_modules/reveal.js/img/oeglargelogo.png), url(/custom_modules/reveal.js/img/ccimage.png), url(/custom_modules/reveal.js/img/upmlogo.png), url(/custom_modules/reveal.js/img/oeglogo.png); background-position: top left, bottom left, top center, top right; background-repeat: no-repeat;">' +
+                '<div style="position:absolute; left:100px; top: 200px; width:300px; height: 200px;">' +
+                '<h3>Title</h3>' +
+                '<h4>[Subtitle]</h4>' +
+                '</div></div></div>';
+                this.inputBoxButtonTitle = 'Add input box';
+                this.emitChange();
+                break;
+
         }
         this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
@@ -172,7 +209,10 @@ class SlideContentEditor extends React.Component {
         {
             if (this.CKeditorMode === 'advanced toolbar'){
                 console.log('current CKeditor toolbar mode is basic - set to advanced');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
@@ -182,7 +222,10 @@ class SlideContentEditor extends React.Component {
             }
             else {
                 console.log('current CKeditor toolbar mode is advanced - set to basic');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config_basic.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
@@ -192,14 +235,20 @@ class SlideContentEditor extends React.Component {
         } else {
             if (this.CKeditorMode === 'advanced toolbar'){
                 console.log('current CKeditor toolbar mode is basic - refreshed');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config_basic.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
                     uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
             } else {
                 console.log('current CKeditor toolbar mode is advanced - refreshed');
-                CKEDITOR.instances.inlineContent.destroy();
+                if (CKEDITOR.instances.inlineContent != null) {
+                    //console.log('destroy CKEDITOR instance');
+                    CKEDITOR.instances.inlineContent.destroy();
+                }
                 CKEDITOR.inline('inlineContent', {
                     customConfig: '/assets/ckeditor_config.js',
                     filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
@@ -255,8 +304,20 @@ class SlideContentEditor extends React.Component {
         for (let i = 0, n = allElements.length; i < n; ++i) {
             let random = Math.floor((Math.random() * 100000) + 1);
             let el = allElements[i];
-            if (el.id && allIds.indexOf(el.id) !== -1) { allIds.push(el.id); }
-            else {el.id = random; allIds.push(random);}
+            if (el.id )
+            {
+                if(allIds.indexOf(el.id) !== -1)
+                {//if duplicate entry:
+                    while (allIds.indexOf(random) !== -1) {random = Math.floor((Math.random() * 100000) + 1);}
+                    el.id = random; allIds.push(random);
+                } else{
+                    allIds.push(el.id);
+                }
+            }
+            else {
+                while (allIds.indexOf(random) !== -1){random = Math.floor((Math.random() * 100000) + 1);}
+                el.id = random; allIds.push(random);
+            }
         }
     }
     handleSaveButton(){
@@ -1164,8 +1225,14 @@ class SlideContentEditor extends React.Component {
     componentWillUnmount() {
         // Remove the warning window.
         window.onbeforeunload = () => {};
-        CKEDITOR.instances.inlineContent.destroy();
-        CKEDITOR.instances.inlineSpeakerNotes.destroy();
+        if (CKEDITOR.instances.inlineContent != null) {
+            //console.log('destroy CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
+        }
+        if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+            //console.log('destroy CKEDITOR instance');
+            CKEDITOR.instances.inlineSpeakerNotes.destroy();
+        }
     }
     render() {
         //TODO: offer option to switch between inline-editor (alloy) and permanent/full editor (CKeditor)

@@ -167,10 +167,7 @@ class Integrations extends React.Component {
         }
 
         //add language before send to service
-        let language = common.getBrowserLanguage();
-        if (language.length === 2) {
-            language += '-' + language.toUpperCase();
-        }
+        let language = common.getIntlLanguage();
         data.language = language;
 
         //check data - valid and not empty
