@@ -29,7 +29,7 @@ import { chooseAction } from '../actions/user/userprofile/chooseAction';
 import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
-
+import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -433,6 +433,16 @@ export default {
                 pageTitle: shortTitle + ' | Login'
             });
             done();
+        }
+    },
+    deckfamily: {
+        path: '/deckfamily/:tag',
+        method: 'get',
+        page: 'deckfamily',
+        title: 'SlideWiki -- Deck Family',
+        handler: require('../components/Deck/DeckFamily/DeckFamily'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDeckFamily, payload, done);
         }
     },
     /* This should be the last route in routes.js */
