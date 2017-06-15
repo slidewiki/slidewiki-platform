@@ -147,7 +147,6 @@ class TreeNode extends React.Component {
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
         });
-        console.log(this.props.ContentStore.mode);
         const buttonItemClass = classNames({
             'ui button': true,
             'disabled': this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
