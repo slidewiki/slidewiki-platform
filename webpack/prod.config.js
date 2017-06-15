@@ -37,7 +37,7 @@ let webpackConfig = {
                 exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    loader: [
+                    use: [
                         'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]'
                     ],
                     // use: 'css-loader',

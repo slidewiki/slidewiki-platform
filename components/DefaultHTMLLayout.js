@@ -38,7 +38,6 @@ class DefaultHTMLLayout extends React.Component {
                 }
                 {/*<link href="/custom_modules/reveal.js/css/print/pdf.css" rel="stylesheet" type="text/css" />*/}
                 {/* we add this config option for mathjax so we can better control when the typesetting will occur */}
-
                 <script type="text/x-mathjax-config" dangerouslySetInnerHTML={{__html:'MathJax.Hub.Config({skipStartupTypeset: true});'}}></script>
                 <script src="/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
             </head>
@@ -71,7 +70,6 @@ class DefaultHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/api.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js"></script>
-
                 {/* All external vendors bundle*/
                     this.props.addAssets ? <script src={'/public/js/vendor.bundle.js'}></script> : ''
                 }
