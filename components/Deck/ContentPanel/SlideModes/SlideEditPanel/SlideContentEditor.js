@@ -46,29 +46,29 @@ class SlideContentEditor extends React.Component {
             this.showTemplates = true;
         }
         else{*/
-            //let template = this.refs.template.getSelected();
-            let template = this.refs.template.value;
-            if (template !== '')
-            {
-                //overwrite content with templates from
-                //http://stable.slidewiki.org/deck/9319-3/
-                swal({
-                    title: 'Apply template',
-                    text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
-                    type: 'question',
-                    showCloseButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, apply template',
-                    confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'No',
-                    cancelButtonClass: 'ui red button',
-                    buttonsStyling: false
-                }).then((accepted) => {
-                    this.applyTemplate(template);
-                }, (reason) => {
-                    //done(reason);
-                });
-            }
+        //let template = this.refs.template.getSelected();
+        let template = this.refs.template.value;
+        if (template !== '')
+        {
+            //overwrite content with templates from
+            //http://stable.slidewiki.org/deck/9319-3/
+            swal({
+                title: 'Apply template',
+                text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Yes, apply template',
+                confirmButtonClass: 'ui olive button',
+                cancelButtonText: 'No',
+                cancelButtonClass: 'ui red button',
+                buttonsStyling: false
+            }).then((accepted) => {
+                this.applyTemplate(template);
+            }, (reason) => {
+                //done(reason);
+            });
+        }
         //}
     }
 
