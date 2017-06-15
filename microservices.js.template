@@ -15,7 +15,9 @@ export default {
             uri: '${SERVICE_URL_NOTIFICATION}'
         },
         'user': {
-            uri: '${SERVICE_URL_USER}'
+            uri: '${SERVICE_URL_USER}',
+            resetPasswordAPIKey: '${SERVICE_USER_APIKEY}',
+            PRIVATE_RECAPTCHA_KEY: '${SERVICE_USER_PRIVATE_RECAPTCHA_KEY}'
         },
         'import': {
             uri: '${SERVICE_URL_IMPORT}',
