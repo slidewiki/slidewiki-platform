@@ -76,11 +76,11 @@ class Header extends React.Component {
         return (
             <div>
             {cookieBanner}
-              <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
+              <MediaQuery minDeviceWidth={768} va lues={{deviceWidth: 1600}}>
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui fluid container">
                         <a className="item" href='/'>
-                            <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '150px'}}/>
+                            <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
                         </a>
                         <div className="item">
                             <SearchBox className="item"/>
