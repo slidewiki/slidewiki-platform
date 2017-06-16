@@ -31,7 +31,6 @@ class LocaleSwitcher extends React.Component {
               {Iso.getName(locale)}
             </Dropdown.Item>
         );
-
     }
 
     render() {
