@@ -370,7 +370,7 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
-                                  I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
+                                  I agree to the SlideWiki <NavLink className="item" routeName="imprint">terms and conditions</NavLink> and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.
                               </label>
                           </div>
                       </div>
@@ -378,7 +378,7 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_imageslicense" >
                               <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
                               <label htmlFor="termsimages">
-                                  By clicking this, you agree that all images in your new deck will have the 'CC0' license. If you want to change this for some image, please go to the slide which contains it and edit the image properties.
+                                  I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.
                               </label>
                           </div>
                       </div>
