@@ -7,6 +7,7 @@ import { connectToStores } from 'fluxible-addons-react';
 import { Dropdown, Menu, Flag } from 'semantic-ui-react';
 
 class LocaleSwitcher extends React.Component {
+    //HACK This component is reused but also reimplemented in User/UserProfile/ChangePersonalData.js for better integration reasons.
     constructor(props){
         super(props);
         this.state = {
