@@ -41,7 +41,7 @@ class ContentPanel extends React.Component {
         return (
             <div ref="contentPanel">
                 <div className="ui top attached">
-                    <ContentActionsHeader ContentStore={this.props.ContentStore} />
+                    <ContentActionsHeader />
                 </div>
                 <div className="ui top attached">
                     {targetComponent}
