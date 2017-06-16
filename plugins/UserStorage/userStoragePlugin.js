@@ -136,7 +136,23 @@ module.exports = function userStoragePlugin(options) {
                  */
                 plugComponentContext: function plugComponentContext(componentContext) {
                     componentContext.getUser = function () {
-                        return user;
+                        let result = user;
+
+                        try {
+                            if (result === undefined || result === {}) {
+                                if (res) {
+                                    result = JSON.parse(cookies[user_cookieName]);
+                                }
+                                else {
+                                    result = cookie.getJSON(user_cookieName);
+                                }
+                              // console.log('userStoragePlugin actionContext getUser: got user from cookies');
+                            }
+                        } catch (e) {
+
+                        }
+
+                        return result;
                     };
                 },
                 /**

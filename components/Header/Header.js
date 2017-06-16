@@ -45,7 +45,6 @@ class Header extends React.Component {
     }
 
     render() {
-
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/> Sign in</a>;
         let notification_locale = '';
@@ -128,8 +127,10 @@ class Header extends React.Component {
     }
 }
 
+
 Header.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    getUser: React.PropTypes.func
 };
 
 Header = connectToStores(Header, [UserProfileStore], (context, props) => {
