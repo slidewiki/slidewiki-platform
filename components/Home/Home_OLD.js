@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import DeckList from './DeckList';
-import Carousel from './Carousel';
 import {NavLink} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
@@ -24,10 +23,6 @@ class Home extends React.Component {
         return (
 
         <div ref="home">
-            <div className="ui blue inverted segment">
-                <h2>SlideWiki...Create, Share and Enjoy Presentations</h2>
-                <Carousel />
-            </div>
             <div className="ui message">
                 <div className="ui container two column grid">
                     <div className="six wide column">
