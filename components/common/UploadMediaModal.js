@@ -1,8 +1,7 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
-
-import { Button, Icon, Image, Input, Modal, Divider, TextArea, Dimmer, Dropdown, Checkbox} from 'semantic-ui-react';
+import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown} from 'semantic-ui-react';
 
 class UploadMediaModal extends React.Component {
 
@@ -12,16 +11,16 @@ class UploadMediaModal extends React.Component {
         this.state = {
             openModal: false,
             activeTrap: false,
+            active: true,
             files: [],
-            license: false
+            license: false,
+            licenseValue: 'CC0'
         };
 
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
-        this.uploadMedia = this.uploadMedia.bind(this);
         this.showLicense = this.showLicense.bind(this);
-        this.state = { files: [], active: true };
     }
 
     handleOpen(){
@@ -38,7 +37,8 @@ class UploadMediaModal extends React.Component {
             modalOpen:false,
             activeTrap: false,
             files: [],
-            license: false
+            license: false,
+            licenseValue: 'CC0'
         });
     }
 
@@ -47,27 +47,6 @@ class UploadMediaModal extends React.Component {
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
         }
-    }
-
-    uploadMedia(e) {
-
-        /*let payload = {};
-        Object.assign(payload, this.props.user);
-        payload.picture = this.refs.cropper.crop({ maxWidth: 170 });
-        if(payload.picture.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
-            this.context.executeAction(changeUserData, payload);
-            this.handleClose();
-        } else {
-            this.handleClose();
-            swal({
-                title: 'A wild error has been spotted!',
-                text: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
-                type: 'error',
-                confirmButtonClass: 'ui primary button',
-                buttonsStyling: false
-            });
-        }*/
-        this.handleClose();
     }
 
     showLicense() {
@@ -82,6 +61,20 @@ class UploadMediaModal extends React.Component {
         });
     }
 
+    changeLicense(event, data) {
+        this.setState({
+            licenseValue: data.value
+        });
+    }
+
+    submitPressed(e) {
+        e.preventDefault();
+        console.log('Jay!');
+        //TODO Upload + hand something to CKeditor
+        //this.handleClose();
+        return false;
+    }
+
     render() {
         let dropzone = '';
         if(this.state.files.length < 1){
@@ -91,13 +84,13 @@ class UploadMediaModal extends React.Component {
                 <p>Try drop a file here, or click to select a file to upload.</p>
               </Dropzone>
             </div>;
-        } else {
+        } else { //TODO Implement a switch-case statement for other media files. Currently only works for images.
             dropzone = <div><div className="dropzone">
               <Dropzone onDrop={this.onDrop.bind(this)} accept="image/*" multiple={false} className="ui secondary clearing segment">
                 <Image src={this.state.files[0].preview} size="large" centered={true}/>
               </Dropzone>
             </div>
-            <br/><p>Not the right image? Click on the image to upload another one!</p></div>;
+            <br/><p>Not the right image? Click on the image to upload another one.</p></div>;
         }
         let heading = 'Upload a media file';
         let content = <div>
@@ -105,18 +98,41 @@ class UploadMediaModal extends React.Component {
           {dropzone}
           </div>;
         let saveHandler= this.showLicense;
+        let licenseBoxes = '';
+        let submitButtonText = 'Next';
+        let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = 'License information';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Attribution:</label><TextArea fluid ref="mediaAttribution" required/></div> : '';
             content = <div>
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
-              <Input fluid label='Title:'/><br/>
-              <Input fluid label='Alt Text:'/><br/>
-              <Input fluid label='Owner:'/><br/>
-              <Dropdown fluid placeholder='Select a license' fluid selection options={[{text: 'CC0', value: 'CC0'},{text: 'CC BY 4.0', value: 'CC BY 4.0'},{text: 'CC BY SA 4.0', value: 'CC BY SA 4.0'}]} /><br/>
-              <Checkbox label='I am allowed to upload and use this file' />
+              <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
+                <div className="required field">
+                  <label>Title:</label>
+                  <Input fluid defaultValue={this.state.files[0].name} ref="mediaTitle" required/>
+                </div>
+                <div className="required field">
+                  <label>Alt Text:</label>
+                  <input fluid ref="mediaAltText" required/>
+                </div>
+                <div className="required field">
+                  <label>Choose a license:</label>
+                  <Dropdown fluid fluid selection options={[{text: 'No Copyright Reserved (CC0)', value: 'CC0'},{text: 'Creative Commons Attribution (CC BY) 4.0', value: 'CC BY 4.0'},{text: 'Creative Common Attribution Share-Alike (CC BY SA) 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" required/>
+                </div>
+                {licenseBoxes}
+                <div className="required field">
+                  <div className="ui checkbox">
+                    <input type="checkbox" required/>
+                    <label>I assure that I am able to to upload and use this file and that the license information is correct.</label>
+                  </div>
+                </div>
+                <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
+              </form>
               </div>;
-            saveHandler = this.uploadMedia;
+            saveHandler = (() => {$('#UploadFormSubmitButton').click();});
+            submitButtonText = 'Upload';
+            submitButtonIcon = 'upload';
         }
 
         return (
@@ -149,7 +165,7 @@ class UploadMediaModal extends React.Component {
                     <Divider />
                     <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                       <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                      <Button id="UploadMediaModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={saveHandler} icon="upload" labelPosition='left' content="Upload"/>
+                      <Button id="UploadMediaModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={saveHandler} icon={submitButtonIcon} labelPosition='left' content={submitButtonText}/>
                     </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>
