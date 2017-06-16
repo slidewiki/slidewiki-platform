@@ -1,6 +1,7 @@
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
+import cheerio from 'cheerio';
 import classNames from 'classnames';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import TreeUtil from '../../../../components/Deck/TreePanel/util/TreeUtil';
@@ -132,7 +133,8 @@ class DataSourceItem extends React.Component {
         const node = this.props.node;
         //append origin of the datasource
         const selector = this.props.selector;
-        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{node.stitle}</a>)</i> </span> : '';
+        const cheerioSlideName = cheerio.load(node.stitle).text();
+        const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioSlideName}</a>)</i> </span> : '';
 
         const appendEdit = (this.props.editable) ? (
             <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
