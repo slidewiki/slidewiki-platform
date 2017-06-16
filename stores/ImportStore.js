@@ -29,6 +29,10 @@ class ImportStore extends BaseStore {
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
     }
+    cancel() {
+        this.destructor();
+        this.emitChange();
+    }
     getState() {
         return {
             isUploaded: this.isUploaded,
@@ -145,6 +149,7 @@ class ImportStore extends BaseStore {
 ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
     'STORE_FILE': 'storeFile',
+    'IMPORT_CANCELED': 'cancel',
     'IMPORT_FINISHED': 'destructor',
     'UPLOAD_FAILED': 'uploadFailed',
     'UPLOAD_SUCCESS': 'uploadSuccess',

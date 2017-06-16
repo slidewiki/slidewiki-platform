@@ -20,7 +20,7 @@ export default function addDeckSaveDeck(context, payload, done) {
                 context.dispatch('CREATION_FAILURE', err);
             } else {
                 context.dispatch('CREATION_SUCCESS', res);
-                createAction(res);
+                createActivity(res);
             }
             done();
         });
@@ -34,14 +34,14 @@ export default function addDeckSaveDeck(context, payload, done) {
                 context.dispatch('CREATION_FAILURE', err);
             } else {
                 context.dispatch('CREATION_SUCCESS', res);
-                createAction(res);
+                createActivity(res);
             }
             done();
         });
     }
 }
 
-function createAction(deck) {
+function createActivity(deck) {
     let activity = {
         activity_type: 'add',
         user_id: String(deck.user),
