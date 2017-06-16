@@ -1,6 +1,7 @@
 import { Microservices } from '../configs/microservices';
-import { resetPasswordAPIKey, hashingSalt } from '../configs/general';
+import { hashingSalt } from '../configs/general';
 import rp from 'request-promise';
+import secrets from '../configs/secrets';
 const log = require('../configs/log').log;
 
 export default {
@@ -105,11 +106,10 @@ export default {
         let args = params.params ? params.params : params;
         if (resource === 'user.registration') {
             const hashedPassword = args.password;
-            const PRIVATE_KEY = '6LdNLyYTAAAAAFMC0J_zuVI1b9lXWZjPH6WLe-vJ';
             rp.post({ //TODO increase timeout
                 uri: 'https://www.google.com/recaptcha/api/siteverify',
                 form: {
-                    secret: PRIVATE_KEY,
+                    secret: secrets.PRIVATE_RECAPTCHA_KEY,
                     response: args.grecaptcharesponse
                 }
             })
@@ -212,7 +212,7 @@ export default {
                 body: JSON.stringify({
                     email: params.email,
                     language: params.language,
-                    APIKey: resetPasswordAPIKey,
+                    APIKey: secrets.resetPasswordAPIKey,
                     salt: hashingSalt
                 }),
                 resolveWithFullResponse: true

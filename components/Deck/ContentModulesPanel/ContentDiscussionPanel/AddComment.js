@@ -1,6 +1,5 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addComment from '../../../../actions/contentdiscussion/addComment';
 import invertCommentBoxFlag from '../../../../actions/contentdiscussion/invertCommentBoxFlag';
@@ -26,7 +25,7 @@ class AddComment extends React.Component {
         e.preventDefault();
         if (this.refs.title.value !== '') {
             this.context.executeAction(addComment, {
-                selector: this.props.ContentDiscussionStore.selector,
+                selector: this.props.selector,
                 title: this.refs.title.value,
                 text: this.refs.text.value,
                 userid: this.props.UserProfileStore.userid
@@ -70,9 +69,8 @@ AddComment.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AddComment = connectToStores(AddComment, [ContentDiscussionStore, UserProfileStore], (context, props) => {
+AddComment = connectToStores(AddComment, [UserProfileStore], (context, props) => {
     return {
-        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
