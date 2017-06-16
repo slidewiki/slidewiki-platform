@@ -68,9 +68,10 @@ class ContentActionsHeader extends React.Component {
                 'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
             }),
             iconSize : 'large',
-            attached : 'left'
+            attached : 'left',
+            noTabIndex : contentDetails.mode ==='edit'
         } ;
-        
+
         return (
             <div className="ui top attached tabular menu" role="tablist">
                 <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
@@ -83,7 +84,11 @@ class ContentActionsHeader extends React.Component {
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
+                          type="button"
+                          aria-label="Add Slide"
+                          data-tooltip="Add Slide"
+                          tabIndex={contentDetails.mode ==='edit'?-1:0}>
                             <i className="icons">
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
@@ -91,33 +96,45 @@ class ContentActionsHeader extends React.Component {
 
                         </button>
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} />
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
-                            <i className="medium icons">
-                              <i className="yellow large folder icon"></i>
-                              <i className="inverted corner plus icon"></i>
-                            </i>
-                        </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
-                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
-                            <i className="grey large copy icon"></i>
+                          <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
+                           type="button"
+                           aria-label="Add Deck"
+                           data-tooltip="Add Deck"
+                           tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                              <i className="medium icons">
+                                <i className="yellow large folder icon"></i>
+                                <i className="inverted corner plus icon"></i>
+                              </i>
+                          </button>
+                          <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
+                          <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
+                           type="button"
+                           aria-label="Duplicate"
+                           data-tooltip="Duplicate"
+                           tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                              <i className="grey large copy icon"></i>
 
-                        </button>
-                        <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)} type="button" aria-label="Delete" data-tooltip="Delete">
-                            <i className="red large trash icon"></i>
-                        </button>
-                        {/*
-                        <button className="item ui small basic right attached disabled button">
-                            <a className="" title="Settings">
-                                <i className="black large setting icon"></i>
-                            </a>
-                        </button>
-                        */}
-                    </div>
-                }
-            </div>
+                          </button>
+                          <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
+                            type="button"
+                            aria-label="Delete"
+                            data-tooltip="Delete"
+                            tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                              <i className="red large trash icon"></i>
+                          </button>
+                          {/*
+                          <button className="item ui small basic right attached disabled button">
+                              <a className="" title="Settings">
+                                  <i className="black large setting icon"></i>
+                              </a>
+                          </button>
+                          */}
+                      </div>
+                  }
+              </div>
         );
     }
-}
+  }
 ContentActionsHeader.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
