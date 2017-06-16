@@ -61,6 +61,7 @@ function parseDeck(deck){
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
+    deck.updated = deck.lastUpdate;     // this is used to sort deck family's decks
     deck.lastUpdate = customDate.format(deck.lastUpdate, 'Do MMMM YYYY');
     deck.user = {
         id: deck.creator,
