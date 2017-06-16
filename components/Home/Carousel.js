@@ -2,8 +2,13 @@ import React, {PropTypes} from 'react';
 import {NavLink} from 'fluxible-router';
 
 class Carousel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.slider = null;
+        this.state = {paused: 0};
+    }
     componentDidMount(){
-        $('.glide').glide({
+        this.slider = $('.glide').glide({
             type: 'carousel',
             autoplay: 4000,
             centered: true,
@@ -12,6 +17,14 @@ class Carousel extends React.Component {
                 $('.gh' + data.index).addClass('active');
 				    },
         });
+    }
+    togglePause() {
+        if(this.state.paused){
+            this.slider.data('glide_api').start(4000);
+        }else{
+            this.slider.data('glide_api').pause();
+        }
+        this.setState({paused: !this.state.paused});
     }
     render() {
         return (
@@ -69,6 +82,7 @@ class Carousel extends React.Component {
                       Feature 4
                     </a>
                   </div>
+                  <button onClick={this.togglePause.bind(this)} className="ui small icon button fluid">{this.state.paused ? <i className="ui play small icon"></i> : <i className="ui pause small icon"></i>}</button>
                 </div>
             </div>
 
