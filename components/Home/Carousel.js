@@ -6,7 +6,11 @@ class Carousel extends React.Component {
         $('.glide').glide({
             type: 'carousel',
             autoplay: 4000,
-            centered: true
+            centered: true,
+            afterTransition: function(data){
+                $('.gslide-header').removeClass('active');
+                $('.gh' + data.index).addClass('active');
+				    },
         });
     }
     render() {
@@ -51,17 +55,17 @@ class Carousel extends React.Component {
                 </div>
 
                 <div className="four wide column">
-                  <div className="ui fluid secondary vertical pointing menu">
-                    <a className="item" data-glide-trigger='.glide' data-glide-dir='=1'>
+                  <div className="ui fluid vertical divided menu">
+                    <a className="item gslide-header gh1" data-glide-trigger='.glide' data-glide-dir='=1'>
                       Feature 1
                     </a>
-                    <a className="item" data-glide-trigger='.glide' data-glide-dir='=2'>
+                    <a className="item gslide-header gh2" data-glide-trigger='.glide' data-glide-dir='=2'>
                       Feature 2
                     </a>
-                    <a className="item" data-glide-trigger='.glide' data-glide-dir='=3'>
+                    <a className="item gslide-header gh3" data-glide-trigger='.glide' data-glide-dir='=3'>
                       Feature 3
                     </a>
-                    <a className="item" data-glide-trigger='.glide' data-glide-dir='=4'>
+                    <a className="item gslide-header gh4" data-glide-trigger='.glide' data-glide-dir='=4'>
                       Feature 4
                     </a>
                   </div>

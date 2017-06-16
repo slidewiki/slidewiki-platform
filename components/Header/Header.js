@@ -80,8 +80,7 @@ class Header extends React.Component {
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui fluid container">
                         <a className="item" href='/'>
-                            <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
-                            &nbsp; SlideWiki
+                            <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '150px'}}/>
                         </a>
                         <div className="item">
                             <SearchBox className="item"/>
