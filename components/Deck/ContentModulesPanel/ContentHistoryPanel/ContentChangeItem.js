@@ -1,7 +1,8 @@
 import React from 'react';
 import {List, Icon, Button} from 'semantic-ui-react';
-import moment from 'moment';
+//import moment from 'moment';
 import revertRevision from '../../../../actions/history/revertRevision';
+import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
 
 import {NavLink} from 'fluxible-router';
 
@@ -101,7 +102,7 @@ class ContentChangeItem extends React.Component {
                             </Icon.Group>
                         </Button>
             </Button.Group>;
-
+        const datechange = new Date(change.timestamp);
         return (
             <List.Item>
                 <Icon name={iconName} />
@@ -110,7 +111,8 @@ class ContentChangeItem extends React.Component {
                         <NavLink className="user"
                                           href={'/user/' + change.username}> {change.username}</NavLink> {description} {buttons}
                     </List.Header>
-                    <List.Description>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</List.Description>
+                    {/*<List.Description>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</List.Description>*/}
+                    <List.Description>{formatDate(change.timestamp)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}</List.Description>
                 </List.Content>
             </List.Item>
         );
