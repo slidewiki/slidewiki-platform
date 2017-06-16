@@ -214,8 +214,12 @@ class AttachSubdeckModal extends React.Component{
         return (
            <Modal trigger={
                     <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button" aria-label="Attach Slides" data-tooltip="Attach Slides" aria-hidden={this.state.modalOpen}
-                      basic icon onClick={this.handleOpen} >
+                      type="button"
+                      aria-label="Attach Slides"
+                      data-tooltip="Attach Slides"
+                      aria-hidden={this.state.modalOpen}
+                      basic icon onClick={this.handleOpen}
+                      tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
                         <Icon.Group size={this.props.buttonStyle.iconSize}>
                             <Icon className="grey" name="file text outline" />
                             <Icon className="corner black" name="attach" />
