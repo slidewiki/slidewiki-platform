@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
-import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown} from 'semantic-ui-react';
+import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
 
 class UploadMediaModal extends React.Component {
 
@@ -103,7 +103,7 @@ class UploadMediaModal extends React.Component {
         let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = 'License information';
-            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Attribution:</label><TextArea fluid ref="mediaAttribution" required/></div> : '';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><TextArea fluid ref="mediaAttribution" required/></div> : '';
             content = <div>
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
@@ -113,18 +113,18 @@ class UploadMediaModal extends React.Component {
                   <Input fluid defaultValue={this.state.files[0].name} ref="mediaTitle" required/>
                 </div>
                 <div className="required field">
-                  <label>Alt Text:</label>
-                  <input fluid ref="mediaAltText" required/>
+                  <label>Description/Alt Text:</label>
+                  <Popup trigger={<input fluid ref="mediaAltText" required/>} content='What does the picture mean?' position='top center'/>
                 </div>
                 <div className="required field">
                   <label>Choose a license:</label>
-                  <Dropdown fluid fluid selection options={[{text: 'No Copyright Reserved (CC0)', value: 'CC0'},{text: 'Creative Commons Attribution (CC BY) 4.0', value: 'CC BY 4.0'},{text: 'Creative Common Attribution Share-Alike (CC BY SA) 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" required/>
+                  <Dropdown fluid fluid selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" required/>
                 </div>
                 {licenseBoxes}
                 <div className="required field">
                   <div className="ui checkbox">
                     <input type="checkbox" required/>
-                    <label>I assure that I am able to to upload and use this file and that the license information is correct.</label>
+                    <label>I confirm that I have the rights to upload this image as per the SlideWiki terms and conditions and that the license information I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
                   </div>
                 </div>
                 <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
