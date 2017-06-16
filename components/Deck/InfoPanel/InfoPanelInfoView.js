@@ -7,7 +7,6 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import cheerio from 'cheerio';
-import loadContributors from '../../../actions/loadContributors';
 import ContentModulesStore from '../../../stores/ContentModulesStore';
 
 
@@ -29,9 +28,6 @@ class InfoPanelInfoView extends React.Component {
             }
         });
         return names;
-    }
-    componentDidMount(){
-        this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
     }
     render() {
         let deckTree = this.props.DeckTreeStore.deckTree;
