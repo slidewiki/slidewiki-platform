@@ -1,11 +1,10 @@
 import React from 'react';
 import {NavLink} from 'fluxible-router';
-import { connectToStores } from 'fluxible-addons-react';
-import classNames from 'classnames/bind';
+import {connectToStores} from 'fluxible-addons-react';
 import loadActivities from '../../../actions/activityfeed/loadActivities';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 import ActivityList from './ActivityList';
-import { isLocalStorageOn } from '../../../common.js';
+import {isLocalStorageOn} from '../../../common.js';
 
 class ActivityFeedPanel extends React.Component {
     componentWillMount() {
@@ -25,11 +24,6 @@ class ActivityFeedPanel extends React.Component {
 
     render() {
         let activityDIV = '';
-        let hrefPath = '/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid;
-        if (this.props.ActivityFeedStore.selector.stype === undefined || this.props.ActivityFeedStore.selector.sid === undefined) {
-            hrefPath = '';
-        }
-
         const panelDIVStyles = {
             maxHeight: 400,
             overflowY: 'auto'
@@ -41,7 +35,8 @@ class ActivityFeedPanel extends React.Component {
             <div ref="activityFeedPanel">
                 <div className="ui segments">
                     <div className="ui secondary segment">
-                        <NavLink href={hrefPath}>Activity Feed</NavLink>
+                        {this.props.ActivityFeedStore.selector.stype && this.props.ActivityFeedStore.selector.sid ?
+                            <NavLink href={'/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid}>Activity Feed</NavLink> : 'Activity Feed'}
                     </div>
                     <div className="ui segment" style={panelDIVStyles}>
                         {activityDIV}
