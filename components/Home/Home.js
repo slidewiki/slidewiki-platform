@@ -21,7 +21,6 @@ class Home extends React.Component {
                 defaultMessage: 'SlideWiki beta logo',
             }
         });
-
         return (
 
         <div ref="home">
@@ -100,7 +99,8 @@ class Home extends React.Component {
 }
 
 Home.contextTypes = {
-    intl: React.PropTypes.object.isRequired
+    intl: React.PropTypes.object.isRequired,
+    getUser: React.PropTypes.func
 };
 
 

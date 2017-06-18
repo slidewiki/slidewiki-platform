@@ -14,7 +14,7 @@ let webpackConfig = {
             './client.js'
         ],
         vendor: [
-            'react-intl', 'react', 'react-dom', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
+            'react-intl', 'react', 'react-dom', 'semantic-ui-react', 'react-hotkeys', 'react-list', 'react-responsive', 'react-custom-scrollbars', 'react-resize-aware', 'async', 'immutable', 'classnames', 'fluxible', 'fluxible-addons-react', 'fluxible-plugin-fetchr', 'fluxible-router', 'react-google-recaptcha', 'identicons-react', 'iso-639-1', 'lodash', 'cheerio', 'react-dnd', 'react-dnd-html5-backend', 'striptags', 'js-sha512', 'debug', 'md5', 'js-cookie', 'cookie', 'fumble', 'crypt'
         ]
     },
     output: {
@@ -37,7 +37,7 @@ let webpackConfig = {
                 exclude:  /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    loader: [
+                    use: [
                         'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]'
                     ],
                     // use: 'css-loader',

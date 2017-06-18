@@ -118,8 +118,8 @@ class Import extends React.Component {
                           </div>
                           <div className="actions">
                               <button tabIndex="0" ref="submitbutton" className={uploadBtn_classes} >
-                                  <div className="visible content"><i className="upload icon"></i>Upload <i className="upload icon"></i></div>
-                                  <div className="hidden content" ><i className="thumbs up icon"></i>To SlideWiki<i className="thumbs up icon"></i></div>
+                                  <div className="visible content"><i className="thumbs up icon"></i>Select <i className="thumbs up icon"></i></div>
+                                  <div className="hidden content" ><i className="upload icon"></i>Done <i className="upload icon"></i></div>
                               </button>
                               <div className="ui cancel button red" tabIndex="0">Cancel</div>
                           </div>
