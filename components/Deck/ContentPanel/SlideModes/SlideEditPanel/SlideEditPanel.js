@@ -29,14 +29,14 @@ class SlideEditPanel extends React.Component {
         //    console.log('slide id changed - destroy/unmount SlideContentEditor component');
         //    this.editorcontent = ''; //destroy/unmount SlideContentEditor component
         //    this.destroy = true;
-            if(this.currentContent !== this.props.SlideEditStore.content)
-            {
-                //console.log('content changed');
-                this.editorcontent = ''; //destroy/unmount SlideContentEditor component
-                this.destroy = true;
-                //this.currentID = this.props.selector.sid;
-                this.currentContent = this.props.SlideEditStore.content;
-            }
+        if(this.currentContent !== this.props.SlideEditStore.content)
+        {
+            //console.log('content changed');
+            this.editorcontent = ''; //destroy/unmount SlideContentEditor component
+            this.destroy = true;
+            //this.currentID = this.props.selector.sid;
+            this.currentContent = this.props.SlideEditStore.content;
+        }
         //}
         else {
             this.destroy = false;
