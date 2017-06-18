@@ -1,17 +1,13 @@
 import React from 'react';
-import { connectToStores } from 'fluxible-addons-react';
-
-import { locales } from '../../configs/general';
+import Iso from 'iso-639-1';
 import { writeCookie } from '../../common';
-
+import IntlStore from '../../stores/IntlStore';
+import { locales } from '../../configs/general';
+import { connectToStores } from 'fluxible-addons-react';
 import { Dropdown, Menu, Flag } from 'semantic-ui-react';
 
-
-import IntlStore from '../../stores/IntlStore';
-
-import Iso from 'iso-639-1';
-
 class LocaleSwitcher extends React.Component {
+    //HACK This component is reused but also reimplemented in User/UserProfile/ChangePersonalData.js for better integration reasons.
     constructor(props){
         super(props);
         this.state = {
@@ -19,6 +15,7 @@ class LocaleSwitcher extends React.Component {
             locales: this.props.IntlStore.locales
         };
     }
+
     handleLocaleClick(locale, e) {
         e.preventDefault();
         writeCookie('locale', locale, 365);
@@ -26,44 +23,20 @@ class LocaleSwitcher extends React.Component {
         window.location.reload();
     }
 
-
     renderLocaleLink(locale) {
-        let flag = locale;
-        if (locale === 'en'){
-            flag = 'gb';
-        }
-        if (locale === this.state.currentLocale){
-            return (
-                <Dropdown.Item
-                key = {locale}
-                onClick={ this.handleLocaleClick.bind(this, locale) }
-                href={ `?locale=${locale}` }
-                className = 'active'
-                >
-                <Flag name={flag}/>{ Iso.getName(locale) }
-                </Dropdown.Item>
-            );
-        } else{
-            return (
-                <Dropdown.Item
-                key = {locale}
-                onClick={ this.handleLocaleClick.bind(this, locale) }
-                href={ `?locale=${locale}` }
-                >
-                <Flag name={flag}/>{ Iso.getName(locale) }
-                </Dropdown.Item>
-            );
-        }
-
+        let flag = (locale === 'en') ? 'gb' : locale;
+        let className = (locale === this.state.currentLocale) ? 'active' : '';
+        return (
+            <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
+              <Flag name={flag}/>
+              {Iso.getName(locale)}
+            </Dropdown.Item>
+        );
     }
 
     render() {
-
-        let currentFlag = this.state.currentLocale;
-        if (this.state.currentLocale === 'en'){
-            currentFlag = 'gb';
-        }
-        let switcher, current_header = '';
+        let currentFlag = (this.state.currentLocale === 'en') ? 'gb' : this.state.currentLocale;
+        let current_header = <span><i className='icon comments'/>Language</span>;
         switch (this.props.mode) {
             case 'icon':
                 current_header = <Flag name={currentFlag}/>;
@@ -72,15 +45,8 @@ class LocaleSwitcher extends React.Component {
                       <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
                     </Dropdown>
                 );
-            case 'menu':
-                current_header = <span><i className='icon comments'/>Language</span>;
-                return (
-                    <Dropdown item trigger={current_header}>
-                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
-                    </Dropdown>
-                );
+                break;
             default:
-                current_header = <span><i className='icon comments'/>Language</span>;
                 return (
                     <Dropdown item trigger={current_header}>
                       <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
@@ -88,7 +54,6 @@ class LocaleSwitcher extends React.Component {
                 );
         }
     }
-
 }
 
 LocaleSwitcher = connectToStores(LocaleSwitcher, [IntlStore], (context, props) => {
@@ -96,4 +61,5 @@ LocaleSwitcher = connectToStores(LocaleSwitcher, [IntlStore], (context, props) =
         IntlStore: context.getStore(IntlStore).getState()
     };
 });
+
 export default LocaleSwitcher;
