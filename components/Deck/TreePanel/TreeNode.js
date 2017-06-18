@@ -124,6 +124,7 @@ class TreeNode extends React.Component {
             sid: this.props.item.get('id'),
             spath: this.props.item.get('path')
         };
+        // SWIK-1464 do not go to edit mode if this.props.mode === 'edit' in TreeUtil.makeNodeURL
         let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, this.props.mode);
         let childNodesDIV = '';
         let actionSigClass;

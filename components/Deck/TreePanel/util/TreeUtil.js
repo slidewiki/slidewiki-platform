@@ -3,6 +3,8 @@ class TreeUtil {
     static makeNodeURL(selector, page, mode) {
         let nodeURL;
         //adapt URLs based on the current page
+        // SWIK-1464 do not go to edit mode
+        if(mode === 'edit'){mode = 'view';}
         switch (page) {
             case 'deck':
                 if (selector.spath) {
