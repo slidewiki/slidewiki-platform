@@ -561,7 +561,7 @@ class SlideContentEditor extends React.Component {
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
                 this.refs.uploadMediaModal.handleOpen();
-                evt.preventDefault
+                evt.preventDefault();
                 /*
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
