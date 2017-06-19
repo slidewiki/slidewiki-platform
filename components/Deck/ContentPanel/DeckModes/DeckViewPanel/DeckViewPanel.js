@@ -92,7 +92,6 @@ class DeckViewPanel extends React.Component {
                                 <a href={ownerProfileURL}>{deckOwner}</a>
                             </div>
                             <div className="meta">Date: {deckDate}</div>
-                            <div className="meta">License: {deckLicense}</div>
                             <div className="description">Description: {deckDescription}</div>
                         </div>
                     </div>
@@ -102,8 +101,8 @@ class DeckViewPanel extends React.Component {
                         <div className="content">
                             <div className="ui hidden divider"></div>
                             <div className="meta">
-                                <div className="ui large label">
-                                <i className="ui comments outline icon"></i>
+                                <div className="ui large label" tabIndex="0">
+                                <i className="ui comments outline icon" aria-label="Deck language"></i>
                                     {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
@@ -140,7 +139,7 @@ class DeckViewPanel extends React.Component {
                                                        slideId={slide.id}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
-                                           className='header'>{this.getTextFromHtml(slide.title)}</a>
+                                           className='header' tabIndex="-1">{this.getTextFromHtml(slide.title)}</a>
                                         <div className="description">Slide {index + 1} of {totalSlides}</div>
                                     </div>
                                 </div>
