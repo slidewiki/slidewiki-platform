@@ -92,7 +92,8 @@ class UploadMediaModal extends React.Component {
             </div>
             <br/><p>Not the right image? Click on the image to upload another one.</p></div>;
         }
-        let heading = 'Upload a media file';
+        //let heading = 'Upload a media file';
+        let heading = 'Add image - upload image file from your computer';
         let content = <div>
           <TextArea className="sr-only" id="UploadMediaModalDescription" value="This modal is used to upload media files and to provide additional information about these." />
           {dropzone}
@@ -135,9 +136,16 @@ class UploadMediaModal extends React.Component {
             submitButtonIcon = 'upload';
         }
 
+        const buttonColorBlack = {
+            color: 'black'
+        };
+
         return (
           <Modal trigger={
-                  <Button tabIndex='-1' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} value="">Upload Media File</Button>
+                  <Button className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
+                    <i className="outline upload icon black"></i>
+                    <a style={buttonColorBlack}>Add Image</a>
+                  </Button>
                  }
               open={this.state.modalOpen}
               onClose={this.handleClose}
