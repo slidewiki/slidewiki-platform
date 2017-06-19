@@ -3,7 +3,6 @@ import DeckList from './DeckList';
 import {NavLink} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-import UploadMediaModal from '../common/UploadMediaModal';
 
 class Home extends React.Component {
     render() {
@@ -41,8 +40,6 @@ class Home extends React.Component {
                     </div>
                 </div>
             </div>
-
-            <UploadMediaModal ref="uploadMediaModal"/>
 
             <div className="ui hidden divider"></div>
             <div className="ui container stackable two columm grid">

@@ -14,6 +14,7 @@ import {Microservices} from '../../../../../configs/microservices';
 import PresentationStore from '../../../../../stores/PresentationStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
+import UploadMediaModal from '../../../../common/UploadMediaModal';
 
 let ReactDOM = require('react-dom');
 
@@ -559,6 +560,7 @@ class SlideContentEditor extends React.Component {
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
+                this.refs.uploadMediaModal.click();
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
@@ -1445,6 +1447,7 @@ class SlideContentEditor extends React.Component {
                  <i className="outline tasks icon black"></i>
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
+                <UploadMediaModal ref="uploadMediaModal"/>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
