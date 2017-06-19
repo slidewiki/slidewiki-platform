@@ -25,7 +25,10 @@ class DeckViewPanel extends React.Component {
 
     render() {
         const heightStyle = {
-            height: this.props.DeckViewStore.deckViewPanelHeight + 'px'
+            //height: this.props.DeckViewStore.deckViewPanelHeight + 'px',
+            minHeight: this.props.DeckViewStore.deckViewPanelHeight,
+            overflowY: 'auto',
+            overflowX: 'auto'
         };
         const deckData = this.props.DeckViewStore.deckData;
         let slidesArr = [];
