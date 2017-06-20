@@ -2,6 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
+import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 
 class UploadMediaModal extends React.Component {
 
@@ -21,6 +22,11 @@ class UploadMediaModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
         this.showLicense = this.showLicense.bind(this);
+        this.submitPressed = this.submitPressed.bind(this);
+    }
+
+    handleChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     handleOpen(){
@@ -69,9 +75,28 @@ class UploadMediaModal extends React.Component {
 
     submitPressed(e) {
         e.preventDefault();
-        console.log('Jay!');
-        //TODO Upload + hand something to CKeditor
-        //this.handleClose();
+        let context = this.context;
+        let payload = {
+            type: 'image',
+            license: this.state.licenseValue,
+            title: this.state.title || this.state.files[0].name,
+            text: this.state.alt,
+            filesize: this.state.files[0].size,
+            filename: this.state.files[0].name,
+            base64: ''
+        };
+        // console.log(this.state, payload, e.target);
+
+        let reader = new FileReader();
+
+        reader.onloadend = function () {
+            // console.log(reader.result.substr(0,100));
+            payload.base64 = reader.result;
+            context.executeAction(uploadMediaFiles, payload);
+        };
+
+        reader.readAsDataURL(this.state.files[0]);
+
         return false;
     }
 
@@ -111,11 +136,11 @@ class UploadMediaModal extends React.Component {
               <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                 <div className="required field">
                   <label>Title:</label>
-                  <Input fluid defaultValue={this.state.files[0].name} ref="mediaTitle" required/>
+                  <Input fluid defaultValue={this.state.files[0].name} ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} required/>
                 </div>
                 <div className="required field">
                   <label>Description/Alt Text:</label>
-                  <Popup trigger={<input fluid ref="mediaAltText" required/>} content='What does the picture mean?' position='top center'/>
+                  <Popup trigger={<input fluid ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} required/>} content='What does the picture mean?' position='top center'/>
                 </div>
                 <div className="required field">
                   <label>Choose a license:</label>
