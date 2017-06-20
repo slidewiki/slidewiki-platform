@@ -65,7 +65,7 @@ class Carousel extends React.Component {
 
                       <div className="glide__bullets"></div>
                     </div>
-                    <button onClick={this.togglePause.bind(this)} className="ui small icon button right floated">{this.state.paused ? <i className="ui play small icon"></i> : <i className="ui pause small icon"></i>}</button>
+                    <button onClick={this.togglePause.bind(this)} className="ui small icon button right floated" aria-label="pause carousel">{this.state.paused ? <i className="ui play small icon"></i> : <i className="ui pause small icon"></i>}</button>
                 </div>
 
                 <div className="four wide column">
