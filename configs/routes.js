@@ -98,6 +98,19 @@ export default {
             done();
         }
     },
+     license: {
+        path: '/license',
+        method: 'get',
+        page: 'license',
+        title: 'SlideWiki -- Content licenses',
+        handler: require('../components/Home/License'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Content Licenses'
+            });
+            done();
+        }
+    },
     imprint: {
         path: '/imprint',
         method: 'get',
