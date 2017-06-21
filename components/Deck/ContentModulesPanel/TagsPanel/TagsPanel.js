@@ -9,58 +9,23 @@ import changeEditMode from '../../../../actions/tags/changeEditMode';
 import removeTag from '../../../../actions/tags/removeTag';
 import saveTags from '../../../../actions/tags/saveTags';
 import TagInput from './TagInput';
+import showMoreTags from '../../../../actions/tags/showMoreTags';
+import showLessTags from '../../../../actions/tags/showLessTags';
 
 class TagsPanel extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    // }
-
-    // onAddTag(e) {
-    //     e.preventDefault();
-    //     const val = this.refs.taginp.value;
-    //     if (!val) {
-    //         return false;
-    //     }
-    //     if (this.props.TagsStore.tags.findIndex((tag) => {return tag.tagName === val;}) !== -1) {
-    //         //found duplicate tag
-    //         swal({
-    //             type: 'info',
-    //             title: 'Information',
-    //             text: 'This tag is already existing.',
-    //             timer: 4000,
-    //             showCloseButton: false,
-    //             showCancelButton: false,
-    //             allowEscapeKey: false,
-    //             showConfirmButton: false
-    //         })
-    //         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-    //         return false;
-    //     }
-    //     this.refs.taginp.value = '';
-    //
-    //     this.context.executeAction(newTag, {
-    //         tag: val
-    //     });
-    // }
 
     onShowEditForm(e) {
         e.preventDefault();
         this.context.executeAction(changeEditMode, {isEditMode: true});
     }
-
-    // onRemoveTag(tag) {
-    //     const { selector } = this.props;
-    //
-    //     this.context.executeAction(removeTag, {
-    //         tag: tag
-    //     });
-    // }
-
     handleShowMore(e) {
         e.preventDefault();
-        //this.context.executeAction(showMoreTags);
+        this.context.executeAction(showMoreTags);
     }
-
+    handleShowLess(e){
+        e.preventDefault();
+        this.context.executeAction(showLessTags);
+    }
     handleSave(e) {
         e.preventDefault();
 
@@ -78,18 +43,22 @@ class TagsPanel extends React.Component {
         const showAllTags = this.props.TagsStore.showAllTags;
         const displayTags = (arrayOfTagsIsLarge && !showAllTags) ? tags.slice(0, 9) : tags;
 
-        let showMoreLink = (!showAllTags && arrayOfTagsIsLarge) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div> : '';
+        let expandLink = '';
+        if(arrayOfTagsIsLarge){
+            expandLink = (!showAllTags) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div>
+            : <div><br/><a href="#" onClick={this.handleShowLess.bind(this)} >Show less ...</a></div>;
+        }
         let tagViewPanel = (tags.length === 0)
             ? <div>There are currently no tags.</div>
             : <div>
                 <TagList items={displayTags} editable={false}/>
-                {showMoreLink}
+                {expandLink}
             </div>;
 
         let tagEditPanel = <TagInput initialTags={tags} ref="tags_input"/> ;
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
-        
+
         let tagPanel = '';
         let actionBtn = '';
         if(this.props.TagsStore.isEditMode){

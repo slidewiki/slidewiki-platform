@@ -51,7 +51,6 @@ class TagsStore extends BaseStore {
         this.selectedIndex = -1;
         this.tagsHaveChanged = false;
         this.isLoading = false;
-        // this.isEditMode = false;
         this.emitChange();
     }
     newTag(payload) {
@@ -70,6 +69,10 @@ class TagsStore extends BaseStore {
     }
     handleShowAllTags() {
         this.showAllTags = true;
+        this.emitChange();
+    }
+    handleShowLessTags(){
+        this.showAllTags = false;
         this.emitChange();
     }
     changeMode(payload) {
@@ -130,6 +133,7 @@ TagsStore.handlers = {
     'LOAD_SLIDE_CONTENT_SUCCESS': 'loadTagsSlide',
     'LOAD_DECK_CONTENT_SUCCESS': 'loadTagsDeck',
     'SHOW_ALL_TAGS': 'handleShowAllTags',
+    'SHOW_LESS_TAGS': 'handleShowLessTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
     'CANCEL_EDIT_TAGS': 'cancelEditTag',
     'CHANGE_EDIT_MODE': 'changeMode',
