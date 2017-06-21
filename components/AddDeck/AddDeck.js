@@ -69,6 +69,7 @@ class AddDeck extends React.Component {
         //const tags = this.refs.input_tags.value.split(', ');
         const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
+        const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
@@ -102,17 +103,23 @@ class AddDeck extends React.Component {
         else {
             wrongFields.conditions = false;
         }
+        if (acceptedImagesLicense === false) {
+            wrongFields.imageslicense = true;
+            everythingIsFine = false;
+        }
+        else {
+            wrongFields.imageslicense = false;
+        }
 
         //call action to update view
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
-            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
+            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
-    correctMetadata(title, language, description, theme, license, tags, acceptedConditions) {
-
+    correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense) {
         if (this.props.ImportStore.filename !== '') {//import deck
             this.handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions);
         } else {//create empty deck
@@ -284,6 +291,12 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.conditions
         });
+        let fieldClass_imageslicense = classNames({
+            'required': true,
+            'inline': true,
+            'field': true,
+            'error': this.props.AddDeckStore.wrongFields.imageslicense
+        });
         let btnClasses_submit = classNames({
             'ui': true,
             'primary': true,
@@ -416,7 +429,15 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
-                                  I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
+                                  I agree to the SlideWiki <NavLink className="item" routeName="imprint">terms and conditions</NavLink> and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.
+                              </label>
+                          </div>
+                      </div>
+                      <div className={fieldClass_imageslicense} >
+                          <div className="ui checkbox" ref="div_imageslicense" >
+                              <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
+                              <label htmlFor="termsimages">
+                                  I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.
                               </label>
                           </div>
                       </div>
