@@ -331,7 +331,7 @@ export default {
                 });
 
                 rp.put({
-                    uri: Microservices.deck.uri + '/deck/' + params.selector.id + '/tags',
+                    uri: Microservices.deck.uri + '/deck/' + params.selector.sid + '/tags',
                     json: true,
                     body: deckTags
                 }).catch( (err) => {
