@@ -51,6 +51,7 @@ class TagsStore extends BaseStore {
         this.selectedIndex = -1;
         this.tagsHaveChanged = false;
         this.isLoading = false;
+        // this.isEditMode = false;
         this.emitChange();
     }
     newTag(payload) {
@@ -72,7 +73,7 @@ class TagsStore extends BaseStore {
         this.emitChange();
     }
     changeMode(payload) {
-        this.isEditMode = payload.isEditMode;
+        this.isEditMode = !this.isEditMode;
         this.emitChange();
     }
     tagSavingPending() {
@@ -92,7 +93,6 @@ class TagsStore extends BaseStore {
 
         return false;
     }
-
     getState() {
         return {
             tags: this.tags,

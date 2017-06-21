@@ -310,6 +310,37 @@ export default {
                 headers: { '----jwt----': params.jwt }
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
+        } else if (resource === 'deck.updateTags'){
+
+            // send tags to tag-service
+            rp.post({
+                uri: Microservices.tag.uri + '/tag/upload',
+                json: true,
+                body: {
+                    user: params.userid,
+                    tags: params.tags
+                }
+            }).then((tags) => {
+
+                // send tagName and defaultName to deck-service
+                let deckTags = tags.map( (t) => {
+                    return {
+                        tagName: t.tagName,
+                        defaultName:  t.defaultName
+                    };
+                });
+
+                rp.put({
+                    uri: Microservices.deck.uri + '/deck/' + params.selector.id + '/tags',
+                    json: true,
+                    body: deckTags
+                }).catch( (err) => {
+                    console.log(err);
+                    callback(err);
+                });
+
+                callback(null, {tags: tags});
+            }).catch((err) => callback(err));
         }
     }
     // delete: (req, resource, params, config, callback) => {}
