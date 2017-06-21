@@ -1,6 +1,5 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import ContentDiscussionStore from '../../../../stores/ContentDiscussionStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addComment from '../../../../actions/contentdiscussion/addComment';
 import invertCommentBoxFlag from '../../../../actions/contentdiscussion/invertCommentBoxFlag';
@@ -24,9 +23,9 @@ class AddComment extends React.Component {
 
     handleAddComment(e) {
         e.preventDefault();
-        if (this.refs.title.value !== '' && this.refs.text.value !== '') {
+        if (this.refs.title.value !== '') {
             this.context.executeAction(addComment, {
-                selector: this.props.ContentDiscussionStore.selector,
+                selector: this.props.selector,
                 title: this.refs.title.value,
                 text: this.refs.text.value,
                 userid: this.props.UserProfileStore.userid
@@ -49,9 +48,9 @@ class AddComment extends React.Component {
                   <label>Comment title</label>
                   <input type="text" ref="title" id="title" name="title" placeholder="Title" autoFocus required />
               </div>
-              <div className="ui required field">
+              <div className="ui field">
                   <label>Comment text</label>
-                  <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" required ></textarea>
+                  <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" ></textarea>
               </div>
 
               <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
@@ -70,9 +69,8 @@ AddComment.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AddComment = connectToStores(AddComment, [ContentDiscussionStore, UserProfileStore], (context, props) => {
+AddComment = connectToStores(AddComment, [UserProfileStore], (context, props) => {
     return {
-        ContentDiscussionStore: context.getStore(ContentDiscussionStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });

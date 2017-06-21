@@ -20,7 +20,12 @@ export default {
         form.append('user', params.user);
         form.append('jwt', params.jwt);
         form.append('language', params.language);
+        form.append('title', params.title);
+        form.append('description', params.description);
+        form.append('theme', params.theme);
         form.append('license', params.license);
+        form.append('tags', JSON.stringify(params.tags));
+
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
             //knownLength: params.file.size ? params.file.size : params.base64.length
 
