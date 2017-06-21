@@ -119,9 +119,7 @@ class AddDeck extends React.Component {
             this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
-
     correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense) {
-
         if (this.props.ImportStore.filename !== '') {//import deck
             this.handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions);
         } else {//create empty deck
