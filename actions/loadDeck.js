@@ -20,6 +20,7 @@ import loadPermissions from './permissions/loadPermissions';
 import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
 import PermissionsStore from '../stores/PermissionsStore';
+import loadContributors from './loadContributors';
 
 const log = require('./log/clog');
 
@@ -141,6 +142,14 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             if(runNonContentActions){
                 context.executeAction(loadLikes, {selector: payload.params}, callback);
+            }else{
+                callback();
+            }
+        },
+        (callback) => {
+            if(runNonContentActions){
+                //this.context.executeAction(loadContributors, {params: this.props.ContentModulesStore.selector});
+                context.executeAction(loadContributors, payloadCustom, callback);
             }else{
                 callback();
             }

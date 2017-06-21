@@ -25,7 +25,10 @@ class DeckViewPanel extends React.Component {
 
     render() {
         const heightStyle = {
-            height: this.props.DeckViewStore.deckViewPanelHeight + 'px'
+            //height: this.props.DeckViewStore.deckViewPanelHeight + 'px',
+            minHeight: this.props.DeckViewStore.deckViewPanelHeight,
+            overflowY: 'auto',
+            overflowX: 'auto'
         };
         const deckData = this.props.DeckViewStore.deckData;
         let slidesArr = [];
@@ -80,6 +83,7 @@ class DeckViewPanel extends React.Component {
         <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
             <div className="ui segment" style={heightStyle}>
                 <div className="ui two column grid container">
+                {(deckTitle === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                     <div className="column">
                         <div className="content">
                             <h3 className="ui header">{deckTitle}</h3>
@@ -91,7 +95,6 @@ class DeckViewPanel extends React.Component {
                                 <a href={ownerProfileURL}>{deckOwner}</a>
                             </div>
                             <div className="meta">Date: {deckDate}</div>
-                            <div className="meta">License: {deckLicense}</div>
                             <div className="description">Description: {deckDescription}</div>
                         </div>
                     </div>
@@ -101,8 +104,8 @@ class DeckViewPanel extends React.Component {
                         <div className="content">
                             <div className="ui hidden divider"></div>
                             <div className="meta">
-                                <div className="ui large label">
-                                <i className="ui comments outline icon"></i>
+                                <div className="ui large label" tabIndex="0">
+                                <i className="ui comments outline icon" aria-label="Deck language"></i>
                                     {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
@@ -139,7 +142,7 @@ class DeckViewPanel extends React.Component {
                                                        slideId={slide.id}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
-                                           className='header'>{this.getTextFromHtml(slide.title)}</a>
+                                           className='header' tabIndex="-1">{this.getTextFromHtml(slide.title)}</a>
                                         <div className="description">Slide {index + 1} of {totalSlides}</div>
                                     </div>
                                 </div>

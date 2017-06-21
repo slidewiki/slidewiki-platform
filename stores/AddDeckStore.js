@@ -6,8 +6,9 @@ class AddDeckStore extends BaseStore {
         this.wrongFields = {
             title: false,
             language: false,
-            license: false,
-            conditions: false
+            // license: false,
+            conditions: false,
+            imageslicense: false
         };
         this.redirectID = 0;
         this.error = null;
@@ -17,8 +18,9 @@ class AddDeckStore extends BaseStore {
         this.wrongFields = {
             title: false,
             language: false,
-            license: false,
-            conditions: false
+            // license: false,
+            conditions: false,
+            imageslicense: false
         };
         this.redirectID = 0;
         this.error = null;
@@ -42,8 +44,9 @@ class AddDeckStore extends BaseStore {
     showWrongFields(wF) {
         this.wrongFields.title = wF.title;
         this.wrongFields.language = wF.language;
-        this.wrongFields.license = wF.license;
+        // this.wrongFields.license = wF.license;
         this.wrongFields.conditions = wF.conditions;
+        this.wrongFields.imageslicense = wF.imageslicense;
 
         this.emitChange();
     }

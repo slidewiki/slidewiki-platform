@@ -7,8 +7,10 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
 import deleteTreeNodeAndNavigate from '../../../../actions/decktree/deleteTreeNodeAndNavigate';
-import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal.js';
+import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal';
+import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
+import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 
 
@@ -20,7 +22,7 @@ class ContentActionsHeader extends React.Component {
     }
     handleAddNode(selector, nodeSpec) {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
-        //nodeSec: Object {type: "slide", id: 0}
+        //nodeSec: Object {type: "slide", id: "0"}
         this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
     }
 
@@ -43,19 +45,19 @@ class ContentActionsHeader extends React.Component {
         //config buttons based on the selected item
         const addSlideClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const addDeckClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const deleteItemClass = classNames({
             'item ui small basic left attached button': true,
-            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
+            'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
@@ -63,15 +65,16 @@ class ContentActionsHeader extends React.Component {
         let buttonStyle = {
             classNames : classNames({
                 'item small attached left':true,
-                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit
+                'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
             }),
             iconSize : 'large',
-            attached : 'left'
+            attached : 'left',
+            noTabIndex : contentDetails.mode ==='edit'
         } ;
 
         return (
             <div className="ui top attached tabular menu" role="tablist">
-                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')}  onClick={this.handleEditNode.bind(this, selector)} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     <i></i>View
                 </NavLink>
                 {this.props.UserProfileStore.username === '' ? '' :
@@ -81,49 +84,67 @@ class ContentActionsHeader extends React.Component {
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: 0})} type="button" aria-label="Add Slide" data-tooltip="Add Slide">
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
+                          type="button"
+                          aria-label="Add Slide"
+                          data-tooltip="Add Slide"
+                          tabIndex={contentDetails.mode ==='edit'?-1:0}>
                             <i className="icons">
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
 
                         </button>
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: 0})}  type="button" aria-label="Add Deck" data-tooltip="Add Deck">
-                            <i className="medium icons">
-                              <i className="yellow large folder icon"></i>
-                              <i className="inverted corner plus icon"></i>
-                            </i>
-                        </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
-                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}  type="button" aria-label="Duplicate" data-tooltip="Duplicate">
-                            <i className="grey large copy icon"></i>
+                        <AttachSlides buttonStyle={buttonStyle} selector={selector} />
+                          <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
+                           type="button"
+                           aria-label="Add Deck"
+                           data-tooltip="Add Deck"
+                           tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                              <i className="medium icons">
+                                <i className="yellow large folder icon"></i>
+                                <i className="inverted corner plus icon"></i>
+                              </i>
+                          </button>
+                          <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
+                          <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
+                           type="button"
+                           aria-label="Duplicate"
+                           data-tooltip="Duplicate"
+                           tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                              <i className="grey large copy icon"></i>
 
-                        </button>
-                        <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)} type="button" aria-label="Delete" data-tooltip="Delete">
-                            <i className="red large trash icon"></i>
-                        </button>
-                        {/*
-                        <button className="item ui small basic right attached disabled button">
-                            <a className="" title="Settings">
-                                <i className="black large setting icon"></i>
-                            </a>
-                        </button>
-                        */}
-                    </div>
-                }
-            </div>
+                          </button>
+                          <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
+                            type="button"
+                            aria-label="Delete"
+                            data-tooltip="Delete"
+                            tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                              <i className="red large trash icon"></i>
+                          </button>
+                          {/*
+                          <button className="item ui small basic right attached disabled button">
+                              <a className="" title="Settings">
+                                  <i className="black large setting icon"></i>
+                              </a>
+                          </button>
+                          */}
+                      </div>
+                  }
+              </div>
         );
     }
-}
+  }
 ContentActionsHeader.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        PermissionsStore: context.getStore(PermissionsStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 export default ContentActionsHeader;

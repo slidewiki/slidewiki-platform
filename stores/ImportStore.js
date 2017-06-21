@@ -29,6 +29,10 @@ class ImportStore extends BaseStore {
         this.totalNoOfSlides = 0;
         this.safetyCounter = 0;
     }
+    cancel() {
+        this.destructor();
+        this.emitChange();
+    }
     getState() {
         return {
             isUploaded: this.isUploaded,
@@ -118,16 +122,22 @@ class ImportStore extends BaseStore {
         this.emitChange();
     }
     slidesProgress(res) {
-        if (this.noOfSlides < res.noofslides) {
-            this.safetyCounter = 0;
+        if (this.noOfSlides < res.noofslides) {//no of slides has changed
             this.noOfSlides = res.noofslides;
-            if (this.noOfSlides < this.totalNoOfSlides) {
-                this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
-            } else {
-                this.uploadProgress = 100;
+            if (this.noOfSlides === 1) {//only one slide imported - still converting (progress should stay at 'converting') or one-slide presentation?
+                if (this.totalNoOfSlides === 1) {//one-slide presentation - complete
+                    this.uploadProgress = 100;
+                }
+            } else {//more than one slide has been created ( show progress after 'converting')
+                this.safetyCounter = 0;
+                if (this.noOfSlides < this.totalNoOfSlides) {
+                    this.uploadProgress = 66 + 34 * (this.noOfSlides / this.totalNoOfSlides);
+                } else {
+                    this.uploadProgress = 100;
+                }
             }
         } else {
-            if (++this.safetyCounter > 50) {//50 times the call was made, and no change in noOfSlides
+            if (++this.safetyCounter > 100) {//100 times the call was made, and no change in noOfSlides
                 this.uploadProgress = 100;
             }
         }
@@ -139,6 +149,7 @@ class ImportStore extends BaseStore {
 ImportStore.storeName = 'ImportStore';
 ImportStore.handlers = {
     'STORE_FILE': 'storeFile',
+    'IMPORT_CANCELED': 'cancel',
     'IMPORT_FINISHED': 'destructor',
     'UPLOAD_FAILED': 'uploadFailed',
     'UPLOAD_SUCCESS': 'uploadSuccess',

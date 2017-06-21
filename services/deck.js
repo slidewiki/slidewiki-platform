@@ -9,6 +9,14 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params ? params.params : params;
+        if (resource === 'deck.legacy'){
+            rp.get({uri: Microservices.deck.uri + '/legacy/' + params.oldid}).then((res) => {
+                //console.log('RES:' + res);
+                callback(null, {new_id: res});
+            }).catch((err) => {
+                callback(err, {new_id: null});
+            });
+        }
         if (resource === 'deck.featured') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             /*********connect to microservices*************/
@@ -165,6 +173,17 @@ export default {
             }).then((body) => {
                 callback(null, body);
             }).catch((err) => callback(err));
+        } else if (resource ==='deck.slides'){
+
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.deck.uri + '/deck/' + args.id + '/slides'}).then((res) => {
+                callback(null, {slides: JSON.parse(res).children});
+            }).catch((err) => {
+                callback({
+                    msg: 'Error in retrieving slides data from ' + Microservices.deck.uri + ' service! Please try again later...',
+                    content: err
+                }, {slides: []});
+            });
         }
     },
     // other methods

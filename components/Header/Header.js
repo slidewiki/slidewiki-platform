@@ -45,7 +45,6 @@ class Header extends React.Component {
     }
 
     render() {
-
         let loginButton = <button ref="loginButton" className="ui inverted button" onClick={this.handleLoginButton.bind(this)}>Sign In</button>;
         let mobileLoginButton = <a className="item" onClick={this.handleLoginButton.bind(this)}><i className="sign in icon"/> Sign in</a>;
         let notification_locale = '';
@@ -81,8 +80,7 @@ class Header extends React.Component {
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui fluid container">
                         <a className="item" href='/'>
-                            <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
-                            &nbsp; SlideWiki
+                            <img  src="/assets/images/SlideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
                         </a>
                         <div className="item">
                             <SearchBox className="item"/>
@@ -128,8 +126,10 @@ class Header extends React.Component {
     }
 }
 
+
 Header.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    getUser: React.PropTypes.func
 };
 
 Header = connectToStores(Header, [UserProfileStore], (context, props) => {

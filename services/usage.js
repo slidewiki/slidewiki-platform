@@ -43,16 +43,17 @@ export default {
                     }));
                 });
                 return Promise.all(deckPromises);
-            }).then((res) => {
+            }).then(() => {
                 let userIds = [... new Set(usage.map((item) => item.user))];
-                return rp.post({uri: Microservices.user.uri + '/users', body: JSON.stringify(userIds)});
-            }).then((usersRes) => {
-                let users = JSON.parse(usersRes);
-                let usersById = {};
-                users.forEach((user) => usersById[user._id] = user);
-                usage.forEach((item) => {
-                    item.username = usersById[item.user].username;
+                if (!userIds.length){
+                    return;
+                }
+                return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
+                    usage.forEach((item) => {
+                        item.username = users.find((user) => user._id === item.user).username;
+                    });
                 });
+            }).then(() => {
                 callback(null, {usage: usage, selector: selector});
             }).catch((err) => {
                 callback(err);

@@ -39,7 +39,8 @@ class DeckPropertiesEditor extends React.Component {
             language: props.deckProps.language || '',
             description: props.deckProps.description || '',
             theme: props.deckProps.theme || '',
-            license: props.deckProps.license || '',
+            //license: props.deckProps.license || '',
+            license: 'CC BY-SA',
             users: editors.users,
             groups: editors.groups
         };
@@ -186,10 +187,12 @@ class DeckPropertiesEditor extends React.Component {
             isValid = false;
         }
 
+        /*
         if (this.state.license == null || this.state.license.length < 2) {
             validationErrors.license = 'Please select a license.';
             isValid = false;
         }
+        */
 
         let users = [], groups = [];
         users = this.props.DeckEditStore.authorizedUsers;
@@ -205,7 +208,8 @@ class DeckPropertiesEditor extends React.Component {
                 language: this.state.language,
                 description: this.state.description,
                 theme: this.state.theme,
-                license: this.state.license,
+                //license: this.state.license,
+                license: 'CC BY-SA',
                 selector: this.props.selector,
                 editors: {
                     old: this.props.DeckEditStore.originalEditors,
@@ -371,11 +375,13 @@ class DeckPropertiesEditor extends React.Component {
             'field': true,
             'error': this.state.validationErrors.language != null
         });
+        /*
         let licenseFieldClass = classNames({
             'required': true,
             'field': true,
             'error': this.state.validationErrors.license != null
         });
+        */
         let groupsFieldClass = classNames({
             'field': true,
         });
@@ -395,7 +401,15 @@ class DeckPropertiesEditor extends React.Component {
             <option value="simple">Reveal.js Simple</option>
             <option value="sky">Reveal.js Sky</option>
             <option value="solarized">Reveal.js Solarized</option>
+            <option value="openuniversity">Open University Theme</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>
         </select>;
+        let licenseOptions = <a className="ui label">
+          <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
+        </a>;
+        /*
+        <i className="creative commons large icon"></i>
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
                                      value={this.state.license}
                                      onChange={this.handleChange.bind(this, 'license')}>
@@ -403,6 +417,9 @@ class DeckPropertiesEditor extends React.Component {
            <option value="CC BY" >Creative Commons Attribution</option>
            <option value="CC0" >Creative Commons CC0 Public Domain</option>
         </select>;
+        //
+        //
+        */
 
         let groupsArray = [];
         if (this.props.groups) {
@@ -438,6 +455,8 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         );
 
+        //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
+        //<div className={licenseFieldClass}>
         return (
         <div className="ui container">
             <div className="ui grid">
@@ -471,7 +490,7 @@ class DeckPropertiesEditor extends React.Component {
                                 <label htmlFor="theme" id="theme">Choose deck theme</label>
                                 {themeOptions}
                             </div>
-                            <div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
+                            <div className="field">
                                 <label htmlFor="license" id="license_label">License</label>
                                 {licenseOptions}
                             </div>
