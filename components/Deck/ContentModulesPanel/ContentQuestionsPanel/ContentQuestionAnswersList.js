@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
+import ContentQuestionEdit from './ContentQuestionEdit';
 
 class ContentQuestionAnswersList extends React.Component {
 
@@ -11,6 +12,7 @@ class ContentQuestionAnswersList extends React.Component {
         super(props);
         this.state = {
             showCorrect: false,
+            isEditButtonClicked: false,
         };
         //this.handleButtonClick = this.handleButtonClick.bind(this);
     }
@@ -22,7 +24,11 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
+        this.setState({
+            isEditButtonClicked: true
+        });
         console.log(this);
+        console.log(this.state.isEditButtonClicked);
     }
 
     render() {
@@ -54,11 +60,11 @@ class ContentQuestionAnswersList extends React.Component {
             return (
               <div key={index}>
                 <a className="header">
-                  {node.answer}
+                  { node.answer }
                 </a>
                 <div className="description">
                   <p>
-                    {node.explanation}
+                    { node.explanation }
                   </p>
                 </div>
               </div>
@@ -76,7 +82,7 @@ class ContentQuestionAnswersList extends React.Component {
                 </div>
                 <div className="column">
                   <button className="ui compact button primary"
-                    onClick={this.handleButtonClick}
+                    onClick={ this.handleButtonClick }
                     >
                     <i className=" help circle icon" />
                     Show answer
@@ -84,19 +90,35 @@ class ContentQuestionAnswersList extends React.Component {
                   {showEditButton()}
                   <div className="ui item">
                     <div className="content">
-                      {this.state.showCorrect ? correctAnswers : null}
+                      { this.state.showCorrect ? correctAnswers : null }
                     </div>
                   </div>
                 </div>
               </div>
         );
 
+        let content = (
+            <div>
+                { this.state.isEditButtonClicked ?
+                    <ContentQuestionEdit /> :
+                    <div ref="contentquestionanswersList">
+                        <div className="ui relaxed list">
+                            {answers}
+                        </div>
+                    </div> }
+            </div>
+        );
+
         return (
-            <div ref="contentquestionanswersList">
-                <div className="ui relaxed list">
-                    {answers}
-                </div>
-             </div>
+            <div>
+                { this.state.isEditButtonClicked ?
+                    <ContentQuestionEdit /> :
+                    <div ref="contentquestionanswersList">
+                        <div className="ui relaxed list">
+                            {answers}
+                        </div>
+                    </div> }
+            </div>
         );
     }
 }
