@@ -98,7 +98,7 @@ export default {
             done();
         }
     },
-     license: {
+    license: {
         path: '/license',
         method: 'get',
         page: 'license',
