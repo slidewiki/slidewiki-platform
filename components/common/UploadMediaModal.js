@@ -15,7 +15,10 @@ class UploadMediaModal extends React.Component {
             active: true,
             files: [],
             license: false,
-            licenseValue: 'CC0'
+            licenseValue: 'CC0',
+            alt: '',
+            title: '',
+            isLoading: false
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -33,7 +36,8 @@ class UploadMediaModal extends React.Component {
         $('#app').attr('aria-hidden','true');
         this.setState({
             modalOpen:true,
-            activeTrap:true
+            activeTrap:true,
+            isLoading: false
         });
     }
 
@@ -44,7 +48,10 @@ class UploadMediaModal extends React.Component {
             activeTrap: false,
             files: [],
             license: false,
-            licenseValue: 'CC0'
+            licenseValue: 'CC0',
+            alt: '',
+            title: '',
+            isLoading: false
         });
     }
 
@@ -75,9 +82,9 @@ class UploadMediaModal extends React.Component {
 
     submitPressed(e) {
         e.preventDefault();
-        let context = this.context;
+        let that = this;
         let payload = {
-            type: 'image',
+            type: this.state.files[0].type,
             license: this.state.licenseValue,
             title: this.state.title || this.state.files[0].name,
             text: this.state.alt,
@@ -85,17 +92,37 @@ class UploadMediaModal extends React.Component {
             filename: this.state.files[0].name,
             base64: ''
         };
-        // console.log(this.state, payload, e.target);
+        console.log(this.state, payload);
 
         let reader = new FileReader();
 
         reader.onloadend = function () {
-            // console.log(reader.result.substr(0,100));
-            payload.base64 = reader.result;
-            context.executeAction(uploadMediaFiles, payload);
+            console.log(reader.result.substr(0,100));
+            payload.bytes = reader.result;
+            that.context.executeAction(uploadMediaFiles, payload);
+
+            that.setState({
+                isLoading: true
+            });
         };
 
-        reader.readAsDataURL(this.state.files[0]);
+        reader.onerror = (err) => {
+            swal({
+                title: 'Error',
+                text: 'Reading the selected file failed. Check you privileges and try again.',
+                type: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonClass: 'negative ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+            .then(() => {
+                return true;
+            });
+        };
+
+        reader.readAsBinaryString(this.state.files[0]);
 
         return false;
     }
@@ -195,6 +222,7 @@ class UploadMediaModal extends React.Component {
                   <Modal.Content>
                     <Divider/>
                     {content}
+                    {(this.state.isLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                     <Divider />
                     <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                       <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
@@ -206,5 +234,9 @@ class UploadMediaModal extends React.Component {
         );
     }
 }
+
+UploadMediaModal.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default UploadMediaModal;

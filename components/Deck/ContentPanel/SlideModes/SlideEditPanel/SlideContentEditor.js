@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -1032,6 +1033,32 @@ class SlideContentEditor extends React.Component {
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
     }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.MediaStore.status === 'uploading') {
+            if (nextProps.MediaStore.status === 'success') {
+                this.refs.uploadMediaModal.handleClose();
+                //TODO code which inserts the file into the slide
+                // MediaStore.file contains everything about the file - also the byte64 string and url
+            }
+            else if (extProps.MediaStore.status === 'error') {
+                this.refs.uploadMediaModal.handleClose();
+                swal({
+                    title: 'Error',
+                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                });
+            }
+        }
+
+    }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
         //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
@@ -1489,14 +1516,15 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore, MediaStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        PresentationStore: context.getStore(PresentationStore).getState()
+        PresentationStore: context.getStore(PresentationStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
     };
 });
 export default SlideContentEditor;
