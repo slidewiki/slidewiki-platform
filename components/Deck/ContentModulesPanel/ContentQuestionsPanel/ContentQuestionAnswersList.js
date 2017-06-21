@@ -13,6 +13,8 @@ class ContentQuestionAnswersList extends React.Component {
         this.state = {
             showCorrect: false,
             isEditButtonClicked: false,
+            choices: {1: '', 2: '', 3: '', 4: ''},
+            correct: {1: false, 2: false, 3: false, 4: false}
         };
         //this.handleButtonClick = this.handleButtonClick.bind(this);
     }
@@ -25,10 +27,13 @@ class ContentQuestionAnswersList extends React.Component {
 
     handleEditButtonClick() {
         this.setState({
-            isEditButtonClicked: true
+            isEditButtonClicked: true,
+            //choices: this.props.items,
         });
-        console.log(this);
-        console.log(this.state.isEditButtonClicked);
+        console.log('Props:', this.props);
+        console.log('Context:', this.context);
+        console.log('refs:', this.refs);
+        console.log(this.state);
     }
 
     render() {
