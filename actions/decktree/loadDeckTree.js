@@ -31,7 +31,7 @@ export default function loadDeckTree(context, payload, done) {
     if (runFetchTree) {
         //we need to load the whole tree for the first time
         payload.params.jwt = context.getStore(UserProfileStore).jwt;
-        context.service.read('decktree.nodes', payload, {}, (err, res) => {
+        context.service.read('decktree.nodes', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename, err: err});
                 context.executeAction(serviceUnavailable, payload, done);
