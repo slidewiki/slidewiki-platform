@@ -10,7 +10,9 @@ import addDeckDestruct from '../../actions/addDeck/addDeckDestruct';
 import addDeckDeleteError from '../../actions/addDeck/addDeckDeleteError';
 import checkNoOfSlides from '../../actions/addDeck/checkNoOfSlides';
 import importFinished from '../../actions/import/importFinished';
+import importCanceled from '../../actions/import/importCanceled';
 import uploadFile from '../../actions/import/uploadFile';
+import addActivity from '../../actions/activityfeed/addActivity';
 import Import from '../Import/Import';
 import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
@@ -29,11 +31,12 @@ class AddDeck extends React.Component {
         $('.ui.small.modal').modal({
             onDeny: function(){
                 //console.log('modal cancelled');
+                that.handleCancelSelectFile();
                 $('.ui.small.modal').modal('hide');//Added to remove duplicate modals
             },
             onApprove : function(data) {
                 //console.log('modal clicked on upload', data);
-                that.handleFileSubmit();
+                // that.handleFileSubmit();
                 $('.ui.small.modal').modal('hide');
             }
         });
@@ -66,6 +69,7 @@ class AddDeck extends React.Component {
         //const tags = this.refs.input_tags.value.split(', ');
         const tags = [];
         const acceptedConditions = this.refs.checkbox_conditions.checked;
+        const acceptedImagesLicense = this.refs.checkbox_imageslicense.checked;
         //console.log(title, language, description, theme, license, tags, acceptedConditions);
 
         //check empty or not selected
@@ -99,27 +103,41 @@ class AddDeck extends React.Component {
         else {
             wrongFields.conditions = false;
         }
+        if (acceptedImagesLicense === false) {
+            wrongFields.imageslicense = true;
+            everythingIsFine = false;
+        }
+        else {
+            wrongFields.imageslicense = false;
+        }
 
         //call action to update view
         this.context.executeAction(addDeckShowWrongFields, wrongFields);
 
         //if everything is fine then create the deck
         if (everythingIsFine) {
-            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions);
+            this.correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense);
         }
     }
-    correctMetadata(title, language, description, theme, license, tags, acceptedConditions) {
-        this.context.executeAction(addDeckSaveDeck, {
-            title: title,
-            language: language,
-            description: description,
-            theme: theme,
-            license: license,
-            tags: tags,
-            userid: this.props.UserProfileStore.userid,
-            deckId: this.props.ImportStore.deckId,
-            selector: {id: this.props.ImportStore.deckId}
-        });
+    correctMetadata(title, language, description, theme, license, tags, acceptedConditions, acceptedImagesLicense) {
+        if (this.props.ImportStore.filename !== '') {//import deck
+            this.handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions);
+        } else {//create empty deck
+            this.context.executeAction(addDeckSaveDeck, {
+                title: title,
+                language: language,
+                description: description,
+                theme: theme,
+                license: license,
+                tags: tags,
+                userid: this.props.UserProfileStore.userid,
+                deckId: this.props.ImportStore.deckId,
+                selector: {id: this.props.ImportStore.deckId}
+            });
+        }
+    }
+    handleCancelSelectFile() {
+        this.context.executeAction(importCanceled, {});
     }
     handleCancel(x) {
         //console.log('handleCancel: ', x);
@@ -138,6 +156,12 @@ class AddDeck extends React.Component {
             url: '/deck/' + this.props.AddDeckStore.redirectID
         });
     }
+    handleImportRedirect(){
+        this.context.executeAction(importFinished, {});  // destroy import components state
+        this.context.executeAction(navigateAction, {
+            url: '/deck/' + this.props.ImportStore.deckId
+        });
+    }
     updateProgressBar() {
         //console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
@@ -149,6 +173,52 @@ class AddDeck extends React.Component {
           (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
           'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
+
+        if (this.props.ImportStore.uploadProgress === 100) {
+            if (this.props.ImportStore.deckId !== null) {
+                // createActivity
+                let activity = {
+                    activity_type: 'add',
+                    user_id: String(this.props.UserProfileStore.userid),
+                    content_id: String(this.props.ImportStore.deckId) + '-1',
+                    content_name: this.refs.input_title.value,
+                    content_owner_id: String(this.props.UserProfileStore.userid),
+                    content_kind: 'deck'
+                };
+                context.executeAction(addActivity, {activity: activity});
+
+                swal({
+                    title: 'Deck created!',
+                    text: 'The selected file has been imported and a new deck nas been created.',
+                    type: 'success',
+                    confirmButtonText: 'View deck',
+                    confirmButtonClass: 'positive ui button',
+                    buttonsStyling: false
+                })
+                .then((dismiss) => {
+                    this.handleImportRedirect();
+                    return true;
+                })
+                .catch(() => {
+                    return true;
+                });
+            } else {
+                swal({
+                    title: 'Error',
+                    text: 'There was a problem with importing this file. Please, try again.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                })
+                .catch(() => {
+                    return true;
+                });
+            }
+        }
     }
     initializeProgressBar() {
         $('#progressbar_addDeck_upload').progress('set active');
@@ -166,28 +236,24 @@ class AddDeck extends React.Component {
         //update progress bar
         $('#progressbar_addDeck_upload').progress('set error');
     }
-    handleFileSubmit(){
+    handleFileSubmit(title, language, description, theme, license, tags, acceptedConditions){
         //console.log('handleFileSubmit()');
 
         this.context.executeAction(addDeckDeleteError, null);
 
         if (this.props.ImportStore.file !== null) {
-            let language = this.refs.div_languages.getSelected();
-            // let license = this.refs.select_licenses.value;
-            const license = 'CC BY-SA';
-            if (language === null || language === undefined || language === 'Select Language') {//set default
-                language = 'en_GB';
-            }
-            // if (license === null || license === undefined) {//set default
-            //    license = 'CC0';
-            // }
+
             //call action
             const payload = {
+                title: title,
+                language: language,
+                description: description,
+                theme: theme,
+                license: license,
+                tags: tags,
                 filename: this.props.ImportStore.file.name,
                 user: this.props.UserProfileStore.userid,
                 jwt: this.props.UserProfileStore.jwt,
-                language: language,
-                license: license,
                 base64: this.props.ImportStore.base64
             };
             this.initializeProgressBar();
@@ -225,10 +291,17 @@ class AddDeck extends React.Component {
             'field': true,
             'error': this.props.AddDeckStore.wrongFields.conditions
         });
+        let fieldClass_imageslicense = classNames({
+            'required': true,
+            'inline': true,
+            'field': true,
+            'error': this.props.AddDeckStore.wrongFields.imageslicense
+        });
         let btnClasses_submit = classNames({
             'ui': true,
             'primary': true,
             'disabled': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
+            'loading': this.props.ImportStore.uploadProgress > 0 && this.props.ImportStore.uploadProgress < 100,
             'button': true
         });
         let btnClasses_upload = classNames({
@@ -277,7 +350,7 @@ class AddDeck extends React.Component {
             <option value="solarized">Reveal.js Solarized</option>
             <option value="openuniversity">Open University Theme</option>
             <option value="odimadrid">ODI Madrid</option>
-            <option value="oeg">OEG</option>            
+            <option value="oeg">OEG</option>
         </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
@@ -339,12 +412,12 @@ class AddDeck extends React.Component {
                          <div className="two column row">
                           <div className="column">
                               <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
-                                  Upload
+                                  Select file
                               </div>
                               <Import />
                           </div>
                           <div className="column" ref="div_filename">
-                              {filename ? '"'+filename+'"' : ''}
+                              {filename ? '"Selected for upload: '+filename+'"' : ''}
                           </div>
                       </div>
                   </div>
@@ -356,7 +429,15 @@ class AddDeck extends React.Component {
                           <div className="ui checkbox" ref="div_conditions" >
                               <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                               <label htmlFor="terms">
-                                  I agree to the <NavLink className="item" routeName="imprint">terms and conditions</NavLink>.
+                                  I agree to the SlideWiki <NavLink className="item" routeName="imprint">terms and conditions</NavLink> and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.
+                              </label>
+                          </div>
+                      </div>
+                      <div className={fieldClass_imageslicense} >
+                          <div className="ui checkbox" ref="div_imageslicense" >
+                              <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
+                              <label htmlFor="termsimages">
+                                  I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.
                               </label>
                           </div>
                       </div>

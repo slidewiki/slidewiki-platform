@@ -1,12 +1,24 @@
 import React from 'react';
 import classNames from 'classnames';
+import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
-import LanguageDropdown from '../../common/LanguageDropdown.js';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
-import common from '../../../common.js';
+import Iso from 'iso-639-1';
+import { writeCookie } from '../../../common';
+import IntlStore from '../../../stores/IntlStore';
+import { locales } from '../../../configs/general';
+import { Dropdown, Flag, Label } from 'semantic-ui-react';
 
 
 class ChangePersonalData extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            currentLocale: this.props.IntlStore.currentLocale,
+            locales: this.props.IntlStore.locales
+        };
+    }
 
     handleChangeUserdata(e) {
         e.preventDefault();
@@ -15,15 +27,29 @@ class ChangePersonalData extends React.Component {
         payload.fname = this.refs.fname.value;
         payload.lname = this.refs.lname.value;
         payload.email = this.refs.email.value;
-        payload.language = common.getIntlLanguage();
+        payload.language = this.refs.language.getSelectedItem().value;//common.getIntlLanguage();
         payload.country = this.refs.country.getSelected();
         payload.organization = this.refs.organization.value;
         payload.description = this.refs.description.value;
 
-        // console.log('Using now language:', payload.language);
+        console.log(payload.language);
 
         this.context.executeAction(changeUserData, payload);
+        writeCookie('locale', payload.language, 365);
+        this.setState({currentLocale: payload.language});
+        //See UserProfile.js for page reload
         return false;
+    }
+
+    getLocaleOptions() {
+        return locales.map((locale) => {
+            return {
+                key: locale,
+                text: '' + Iso.getName(locale),
+                value: locale,
+                flag: (locale === 'en') ? 'gb' : locale,
+            };
+        });
     }
 
     render() {
@@ -33,6 +59,8 @@ class ChangePersonalData extends React.Component {
             'error': this.props.failures.emailNotAllowed
         });
         let emailToolTipp = this.props.failures.emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
+        let languageOptions = this.getLocaleOptions();
+        let currentLocale = (this.state.currentLocale.length <= 2) ? this.state.currentLocale : 'en';
         return (
             <div>
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
@@ -54,9 +82,8 @@ class ChangePersonalData extends React.Component {
                         </div>
                         <div className="ui field">
                             <div className="ui field">
-                                {/**<label htmlFor="language">Interface language</label>**/}
-                                {/**<LanguageDropdown ref="language" id="language" required={true} language={this.props.user.language}/>**/}
-
+                                <label htmlFor="language">User Interface Language</label>
+                                <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="langauge" required={true}/>
                             </div>
                         </div>
                     </div>
@@ -91,5 +118,11 @@ class ChangePersonalData extends React.Component {
 ChangePersonalData.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+ChangePersonalData = connectToStores(ChangePersonalData, [IntlStore], (context, props) => {
+    return {
+        IntlStore: context.getStore(IntlStore).getState()
+    };
+});
 
 export default ChangePersonalData;
