@@ -1,9 +1,11 @@
 import React from 'react';
+import { getIntlLanguage } from '../../../common.js';
 import CategoryBox from './CategoryBox';
 import ChangePicture from './ChangePicture';
 import ChangePassword from './ChangePassword';
 import DeactivateAccount from './DeactivateAccount';
 import ChangePersonalData from './ChangePersonalData';
+import IntlStore from '../../../stores/IntlStore';
 import UserGroups from './UserGroups';
 import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
@@ -27,7 +29,11 @@ class UserProfile extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             })
-            .then(() => {}).catch(swal.noop);
+            .then(() => {
+            },() => {//dismiss function
+                if(this.props.IntlStore.currentLocale !== getIntlLanguage()) //user to reload page beacuse of cookie change
+                    window.location.reload();
+            }).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.userdeleted === true)
             swal({
                 type: 'success',
@@ -184,9 +190,10 @@ UserProfile.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-UserProfile = connectToStores(UserProfile, [UserProfileStore], (context, props) => {
+UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {
     return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        IntlStore: context.getStore(IntlStore).getState()
     };
 });
 

@@ -148,12 +148,12 @@ class TreeNode extends React.Component {
             'ui right aligned': true
         });
         const buttonItemClass = classNames({
-            'ui button': true,
+            'ui basic icon button': true,
             'disabled': this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
         });
 
         const duplicateItemClass = classNames({
-            'ui button': true,
+            'ui basic icon button': true,
             'disabled': this.props.item.get('type') === 'deck'|| this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode=== 'edit'
         });
         let buttonStyle = {
