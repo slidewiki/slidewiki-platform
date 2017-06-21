@@ -21,7 +21,7 @@ class AddReply extends React.Component {
 
     handleAddReply(e) {
         e.preventDefault();
-        if (this.refs.replytitle.value !== '' && this.refs.replytext.value !== '') {
+        if (this.refs.replytitle.value !== '') {
             this.context.executeAction(addReply, {
                 comment: this.props.comment,
                 title: this.refs.replytitle.value,
@@ -42,9 +42,9 @@ class AddReply extends React.Component {
                   <label>Reply title</label>
                   <input type="text" ref="replytitle" id="replytitle" name="replytitle" defaultValue={replyTitle} required/>
               </div>
-              <div className="ui required field">
+              <div className="ui field">
                   <label>Reply text</label>
-                  <textarea ref="replytext" id="replytext" name="replytext" style={{minHeight: '6em', height: '6em'}} placeholder="Text" autoFocus required></textarea>
+                  <textarea ref="replytext" id="replytext" name="replytext" style={{minHeight: '6em', height: '6em'}} placeholder="Text" autoFocus></textarea>
               </div>
               <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
                   <i className="icon edit"></i> Add Reply
