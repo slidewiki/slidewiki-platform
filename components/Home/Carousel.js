@@ -65,25 +65,25 @@ class Carousel extends React.Component {
 
                       <div className="glide__bullets"></div>
                     </div>
-                    <button onClick={this.togglePause.bind(this)} className="ui small icon button right floated" aria-label="pause carousel">{this.state.paused ? <i className="ui play small icon"></i> : <i className="ui pause small icon"></i>}</button>
+                    <button onClick={this.togglePause.bind(this)} className="ui tiny primary icon button" aria-label="pause carousel">{this.state.paused ? <i className="ui play small icon"></i> : <i className="ui pause small icon"></i>}</button>
                 </div>
 
                 <div className="four wide column">
                   <div className="ui fluid vertical divided menu">
                     <a className="item gslide-header gh1" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=1'>
-                      Feature 1
+                      Multilingual Content
                     </a>
                     <a className="item gslide-header gh2" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=2'>
-                      Feature 2
+                      Content Reuse and Repurpose
                     </a>
                     <a className="item gslide-header gh3" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=3'>
-                      Feature 3
+                      Collaborative Content Authoring
                     </a>
                     <a className="item gslide-header gh4" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=4'>
-                      Feature 4
+                      Knowledge Communities
                     </a>
                   </div>
-                  
+
                 </div>
             </div>
 
