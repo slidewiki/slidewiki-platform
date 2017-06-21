@@ -59,6 +59,7 @@ const handleTEXT = (oldText, newText, source) => {
 
     const oldStr = oldText.text,
         newStr = newText.text;
+    let root = toHTML(source);
 
     let color = '',
         container = null,
@@ -76,7 +77,12 @@ const handleTEXT = (oldText, newText, source) => {
     });
 
     const markedText = temp.innerHTML;
-    source = source.replace(oldStr, markedText);
+
+    $(root).find(`*:contains(${oldStr})`)
+            .filter(function() { return $(this).text() === oldStr })
+            .html(markedText);
+
+    source = root.outerHTML;
 
     return source;
 };
@@ -95,12 +101,9 @@ const handleINSERT = (el, source, finalsource) => {
       // let targetElement = $(elem).children().first();
         targetElement.addClass('added');
 
-        if(tag === 'li'){
-            let parent = getParentId(finalsource, _id);
-            $(root).find(`#${parent}`).append(elem);
-        } else {
-            $(root).append(elem);
-        }
+        let parent = getParentId(finalsource, _id);
+        $(root).prop('id') === parent ?
+          $(root).append(elem) : $(root).find(`#${parent}`).append(elem);
     }
 
     source = root.outerHTML;
