@@ -89,7 +89,6 @@ class TagsPanel extends React.Component {
         let tagEditPanel = <TagInput initialTags={tags} ref="tags_input"/> ;
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
-        editPermission = true;
         
         let tagPanel = '';
         let actionBtn = '';
