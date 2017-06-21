@@ -178,7 +178,7 @@ class UserNotificationsPanel extends React.Component {
                                 ?
                                 <div>{this.displayEmptyText}</div>
                                 :
-                                <UserNotificationsList items={notifications} selector={selector} />
+                                <UserNotificationsList username={this.props.UserProfileStore.username} items={notifications} selector={selector} />
                             }
                         </div>
                     </div>

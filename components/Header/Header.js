@@ -60,7 +60,7 @@ class Header extends React.Component {
             notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
 
         } else{
-            notification_locale = <div className="item"><LocaleSwitcher mode ='icon' className = 'ui item'/></div>;
+            notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
         }
 
         if (!this.state.user_cookies) {
@@ -80,8 +80,7 @@ class Header extends React.Component {
                 <div className="ui inverted blue menu" ref="header">
                     <div className="ui fluid container">
                         <a className="item" href='/'>
-                            <img className="logo" src="/assets/images/slidewiki-square-notext-glow.svg" alt=""/>
-                            &nbsp; SlideWiki
+                            <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
                         </a>
                         <div className="item">
                             <SearchBox className="item"/>

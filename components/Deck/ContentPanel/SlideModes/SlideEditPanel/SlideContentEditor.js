@@ -196,6 +196,36 @@ class SlideContentEditor extends React.Component {
                 '</div></div></div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
+            case 'slidewikislide':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" id="56826" style="position: relative; width: 960px; height: 720px; transform: scale(0.859406, 0.859406); transform-origin: left top 0px; border-style: double; border-color: rgba(218, 102, 25, 0.5);">' +
+                '<div _id="2" _idx="undefined" _name="Title 1" _type="title" class="block content v-mid h-mid" id="79445" style="position: absolute; top: 144.275px; left: 1.43937px; width: 950.596px; height: 78.9953px; z-index: 23488; cursor: auto;" tabindex="0">' +
+                '<h3 id="4651"><span id="93000" style="color:#1e78bb;"><span id="80895"><span id="13770" style="font-family:Tahoma,Geneva,sans-serif;">SlideWiki</span></span></span></h3>' +
+                '</div>' +
+                '' +
+                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" id="70846" style="position: absolute; top: 313.978px; left: 4.17467px; width: 944.8px; height: 314.665px; z-index: 23520; cursor: auto;" tabindex="0">' +
+                '<p id="52813" style="text-align: center;"><span id="984">Content</span></p>' +
+                '</div>' +
+                '' +
+                '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" id="49382" style="position: absolute; top: 225.751px; left: 5.0175px; width: 945.964px; height: 59.8476px; z-index: 23520; cursor: auto;" tabindex="0">' +
+                '<p id="72233" style="text-align: center;"><span id="23985" style="color:#1e78bb;">Subtitle</span></p>' +
+                '</div>'+
+                '' +
+                '<div id="19340" style="position: absolute; top: 2.96545px; left: 2.9309px; width: 322.038px; height: 127.848px; z-index: 23530; cursor: auto;" tabindex="0">' +
+                '<div class="h-left" id="51275"><img alt="" height="100" id="20263" src="https://fileservice.stable.slidewiki.org/2346/08d55130-688b-11e7-b72f-6963e22f1150.png" width="316" /></div>' +
+                '</div>' +
+                '' +
+                '<div id="84757" style="position: absolute; top: 1.15979px; left: 806.461px; width: 150.15px; height: 120.182px; z-index: 23540; cursor: auto;" tabindex="0">' +
+                '<div class="h-left" id="47372"><img alt="" height="100" id="29851" src="https://fileservice.stable.slidewiki.org/2346/41eb9330-688b-11e7-b72f-6963e22f1150.png" width="136" /></div>' +
+                '</div>' +
+                '' +
+                '<div id="38573" style="position: absolute; top: 655.409px; left: 11.9155px; width: 936.411px; height: 52.2163px; z-index: 23550; cursor: auto;" tabindex="0">' +
+                '<h4 class="h-left" id="45263" style="text-align: center;"><span id="34455" style="color:#ffffff;"><span class="text-block" id="27908"><span id="54919" style="background-color:#1e78bb;">Footer</span></span></span></h4>' +
+                '</div>' +
+                '</div>';
+                this.inputBoxButtonTitle = 'Add input box';
+                break;
+
 
         }
         this.emitChange(); //confirm non-save on-leave
@@ -355,6 +385,12 @@ class SlideContentEditor extends React.Component {
             if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
                 console.log('destroy previous CKEDITOR instance');
                 CKEDITOR.instances.inlineSpeakerNotes.destroy();
+            }
+
+            //remove all ui-resizable-handles
+            let elements = document.getElementsByClassName('ui-resizable-handle');
+            while(elements.length > 0){
+                elements[0].parentNode.removeChild(elements[0]);
             }
 
             this.uniqueIDAllElements();
@@ -1324,6 +1360,9 @@ class SlideContentEditor extends React.Component {
             </div>
             <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
                 OEG Theme Title Page
+            </div>
+            <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
+                SlideWiki template
             </div>
         </div>;
 

@@ -36,9 +36,9 @@ class UserNotificationsItem extends React.Component {
         }
 
         let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deck/') + notification.content_id;
-        const cheerioContentName = cheerio.load(notification.content_name).text();
+        const cheerioContentName = (notification.content_name !== undefined) ? cheerio.load(notification.content_name).text() : '';
         if (notification.content_kind === 'group')
-            viewPath = '/user/'+notification.user_id+'/profile/groups'; //TODO the username is neede here instead of the userid
+            viewPath = '/user/' + this.props.username + '/groups/overview';
         switch (notification.activity_type) {
             case 'translate':
                 const translateIconClass = allIconClass.concat(' translate');
@@ -211,7 +211,7 @@ class UserNotificationsItem extends React.Component {
                     <div className="summary">
                     <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
                         {notification.author ? notification.author.username : 'unknown'}
-                        </a> {'Changes in ' + notification.content_kind + ' '}
+                      </a> {'made changes in ' + notification.content_kind + ': '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}
@@ -225,7 +225,7 @@ class UserNotificationsItem extends React.Component {
                     <div className="summary">
                     <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
                         {notification.author ? notification.author.username : 'unknown'}
-                        </a> {'Changes in ' + notification.content_kind + ' '}
+                      </a> {'made changes in ' + notification.content_kind + ': '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}
