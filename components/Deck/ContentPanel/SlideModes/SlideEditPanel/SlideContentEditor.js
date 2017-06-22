@@ -1044,7 +1044,7 @@ class SlideContentEditor extends React.Component {
                 this.refs.uploadMediaModal.handleClose();
                 swal({
                     title: 'Error',
-                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big.',
+                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you didn&apos;t uploaded an image twice.',
                     type: 'error',
                     confirmButtonText: 'Close',
                     confirmButtonClass: 'negative ui button',
