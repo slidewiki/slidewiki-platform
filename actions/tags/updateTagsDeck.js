@@ -11,6 +11,7 @@ export default function updateTagsDeck(context, payload, done) {
 
     // get user id from UserProfileStore
     payload.userid = context.getStore(UserProfileStore).userid;
+    payload.jwt = context.getStore(UserProfileStore).jwt;
 
     context.service.update('deck.updateTags', payload, null, {timeout: 30 * 1000}, (err, res) => {
         if(err){

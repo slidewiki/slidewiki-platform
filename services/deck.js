@@ -333,7 +333,11 @@ export default {
                 rp.put({
                     uri: Microservices.deck.uri + '/deck/' + params.selector.sid + '/tags',
                     json: true,
-                    body: deckTags
+                    body: {
+                        top_root_deck: params.selector.id,
+                        tags: deckTags,
+                    },
+                    headers: { '----jwt----': params.jwt },
                 }).catch( (err) => {
                     console.log(err);
                     callback(err);
