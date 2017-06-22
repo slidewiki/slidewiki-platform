@@ -505,8 +505,8 @@ class SlideContentEditor extends React.Component {
             //floatSpacePreferRight: true,
             //uiColor: '#4183C4',
             //removeButtons: 'Youtube,MathJax,Sourcedialog,CodeSnippet,Source,Save,NewPage,Preview,Print,Templates,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Button,Select,HiddenField,ImageButton,Subscript,Superscript,RemoveFormat,NumberedList,Outdent,BulletedList,Indent,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Image,Flash,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Maximize,ShowBlocks,About',
-            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + jwt,
-            uploadUrl: Microservices.import.uri + '/importImagePaste/' + jwt
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.jwt,
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.jwt
         });
         //}
         //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
@@ -526,8 +526,8 @@ class SlideContentEditor extends React.Component {
                 { name: 'insert', items: [ 'Image'] },
                 { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter'] },
             ],
-            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + jwt,
-            uploadUrl: Microservices.import.uri + '/importImagePaste/' + jwt
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.jwt,
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.jwt
         }); //leave all buttons
         //this.currentcontent = this.props.content;
 
