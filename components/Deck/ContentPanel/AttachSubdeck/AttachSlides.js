@@ -7,7 +7,15 @@ import {  Segment, Loader,Label, Image,Dimmer,Grid, Button,TextArea} from 'seman
 import {Microservices} from '../../../../configs/microservices';
 import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
 
+const KEY_CODE = {
+  LEFT:   37,
+  UP:     38,
+  RIGHT:  39,
+  DOWN:   40
+};
+
 class AttachSlides extends React.Component{
+
     constructor(props){
         super(props);
         this.numColumns = props.numColumns?props.numColumns:4; //if numColumns is not provided, 4 is used as default
@@ -48,6 +56,8 @@ class AttachSlides extends React.Component{
 
 
     }
+
+
     checkNoEmpty(element){
         return (element.toString().length>0);
     }
@@ -96,6 +106,53 @@ class AttachSlides extends React.Component{
 
         }
     }
+
+    getNextPos(pos,numSlides,numColumns,numRows,eventKeyCode){
+        /*******************************************
+            Returns next position in a grid, taking into account
+            the arrow key pressed and the number of rows and columns
+            of the grid
+        ********************************************/
+        let currentRow = Math.floor(pos/numColumns);
+
+        let lastPos = numSlides-1;
+        let nextPos = parseInt(pos); //In case of overflow, we stayed in the same position. Force working with integers
+        switch (eventKeyCode) {
+            case KEY_CODE.RIGHT:
+                if(pos !== lastPos) //No overflow by right direction
+                    nextPos ++;
+                break;
+            case KEY_CODE.LEFT:
+                if(pos !== 0)
+                    nextPos --;
+                break;
+            case KEY_CODE.UP:
+                if(currentRow !== 0)
+                    nextPos = nextPos - parseInt(numColumns);
+                break;
+            case KEY_CODE.DOWN:
+                if(currentRow !== (numRows-1))
+                    nextPos = nextPos + parseInt(numColumns);
+                break;
+
+        }
+        return nextPos;
+
+    }
+    handleKeyDown(pos,event){
+
+        if(event.keyCode === KEY_CODE.RIGHT ||
+           event.keyCode === KEY_CODE.LEFT ||
+           event.keyCode === KEY_CODE.UP ||
+           event.keyCode === KEY_CODE.DOWN ){
+           //the user wants to navigate through the grid
+            let numRows = Math.ceil(this.state.deckSlides.length/this.numColumns);
+            let nextPos = this.getNextPos(pos,this.state.deckSlides.length,this.numColumns,numRows,event.keyCode);  //get next cell
+             //get the id of the cell
+            $('#slide'+nextPos).focus(); //move to the cell
+        }
+
+    }
     loadSlidesGrid(){
         let activeItemStyle = {
             backgroundColor:'#f8ffff',
@@ -121,6 +178,7 @@ class AttachSlides extends React.Component{
                                     id={'slide'+slidesShowed}
                                     onClick={this.handleOnclick.bind(this,slideId)}
                                     onKeyPress={this.handleKeyPress.bind(this,slideId)}
+                                    onKeyDown={this.handleKeyDown.bind(this,slidesShowed)}
                                     style={this.state.selectedSlides.includes(slideId)?activeItemStyle:{}}
                                     role="gridcell"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
@@ -186,7 +244,7 @@ class AttachSlides extends React.Component{
                                         <Button type="button"
                                             color="blue"
                                             aria-label="Clear Selection"
-                                            data-tooltip="Clear Selection"                                            
+                                            data-tooltip="Clear Selection"
                                             onClick={this.handleNone}>Clear Selection</Button>
                                       </Grid.Column>
                                     </Grid.Row>
