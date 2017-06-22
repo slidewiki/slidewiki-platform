@@ -1,4 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import {Microservices} from '../../configs/microservices';
 const log = require('../log/clog');
 
 export default function uploadMediaFiles(context, payload, done) {
@@ -15,7 +16,8 @@ export default function uploadMediaFiles(context, payload, done) {
             context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
         }
         else {
-            payload.url = res;
+            payload.url = Microservices.file.uri + '/picture/' + res.filename;
+            payload.thumbnailUrl = Microservices.file.uri + '/picture/' + res.thumbnailName;
             context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
         }
         done();

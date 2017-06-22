@@ -16,7 +16,8 @@ class MediaStore extends BaseStore {
             filesize: 12873218637,
             filename: 'image.png',
             base64: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4TRDRXhpZgAATU0AKgAAAAgACwEPAAIAAAAIAAAAkgEQAAIAA',
-            url: 'https://fileservice.experimental.slidewiki.org/12/fds243jsdalkfdsfdsfdsf.png'
+            url: 'https://fileservice.experimental.slidewiki.org/picture/fds243jsdalkfdsfdsfdsf.png',
+            thumbnailUrl: 'https://fileservice.experimental.slidewiki.org/picture/fds243jsdalkfdsfdsfdsf.png'
         }
         */
         this.file = {};

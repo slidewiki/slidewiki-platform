@@ -6,14 +6,14 @@ import formdata from 'form-data';
 
 export default {
     name: 'media',
-    create: (req, resource, params, config, callback) => {
+    create: (req, resource, params, config, callback, x) => {
         if (resource === 'media.create') {
             // I am not able to send a files data to the service.
             // giving the file as parameter to here is not possible because it gets parsed before send via https
             // FileReader does not create Array buffers (is just undefined)
             // All other outputs of FileReader are not accepted by the API
             // form-data could not be used because the API does not expect multiform
-
+            console.log('req', resource, config, callback, x);
             let url = Microservices.file.uri + '/picture?' + 'license='+encodeURIComponent(params.license)+'&copyright='+encodeURIComponent(params.license+' by user '+params.userid)+'&title='+encodeURIComponent(params.title)+'&altText='+encodeURIComponent(params.text);
             console.log('use url', url);
             let headers = {
@@ -28,11 +28,11 @@ export default {
                 json: false
             })
                 .then((res) => {
-                    console.log('response from saving image:', res, );
+                    // console.log('response from saving image:', res);
                     callback(null, 'dummy');
                 })
                 .catch((err) => {
-                    console.log('Error while saving image', err.response.body, err.response.request.headers);
+                    // console.log('Error while saving image', err.response.body, err.response.request.headers);
                     callback(err, null);
                 });
         }
