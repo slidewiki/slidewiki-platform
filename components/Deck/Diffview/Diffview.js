@@ -181,11 +181,12 @@ export default DiffView;
 const ErrorVersion = () => (
   <div className="ui error message text container left">
       <div className="header row">Error: Incompatible Revisions</div>
-      <p>Unfortunately, the chosen revisions of the slide are incompatible, due to one of the following reasons:</p>
+      <p>Unfortunately, the chosen revisions of the slide are incompatible for automatical generation of the difference changes, due to one of the following reasons:</p>
       <ul className="list">
-          <li>New template applied</li>
-          <li>Manual HTML nodes <b>id</b> attribute modified</li>
+          <li>The two revisions compared don't share the same template</li>
+          <li>HTML code of the slide was manually modified</li>
       </ul>
+      <p>A possible option is to go back and manually view the versions for changes</p>
   </div>
 );
 
