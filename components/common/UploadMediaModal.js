@@ -180,7 +180,7 @@ class UploadMediaModal extends React.Component {
                 <div className="required field">
                   <div className="ui checkbox">
                     <input type="checkbox" required/>
-                    <label>I confirm that I have the rights to upload this image as per the SlideWiki <a href="/license">terms and conditions</a> and that the license information I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
+                    <label>I confirm that I have the rights to upload this image as per the SlideWiki <a href="/imprint">terms and conditions</a> and that the <a href="/license">license information</a> I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
                   </div>
                 </div>
                 <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}
