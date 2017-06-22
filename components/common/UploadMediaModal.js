@@ -90,20 +90,23 @@ class UploadMediaModal extends React.Component {
             text: this.state.alt,
             filesize: this.state.files[0].size,
             filename: this.state.files[0].name,
-            base64: ''
+            bytes: null
         };
         console.log(this.state, payload);
 
         let reader = new FileReader();
 
-        reader.onloadend = function () {
-            console.log(reader.result.substr(0,100));
-            payload.bytes = reader.result;
-            that.context.executeAction(uploadMediaFiles, payload);
+        reader.onloadend = function (evt) {
+            console.log('read total length from file: ', reader.result.length, evt.target.readyState);
 
-            that.setState({
-                isLoading: true
-            });
+            if (evt.target.readyState === FileReader.DONE) {
+                payload.bytes = reader.result;
+                that.context.executeAction(uploadMediaFiles, payload);
+
+                that.setState({
+                    isLoading: true
+                });
+            }
         };
 
         reader.onerror = (err) => {
@@ -122,7 +125,7 @@ class UploadMediaModal extends React.Component {
             });
         };
 
-        reader.readAsBinaryString(this.state.files[0]);
+        reader.readAsArrayBuffer(this.state.files[0]);
 
         return false;
     }
@@ -177,7 +180,7 @@ class UploadMediaModal extends React.Component {
                 <div className="required field">
                   <div className="ui checkbox">
                     <input type="checkbox" required/>
-                    <label>I confirm that I have the rights to upload this image as per the SlideWiki terms and conditions and that the license information I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
+                    <label>I confirm that I have the rights to upload this image as per the SlideWiki <a href="/license">terms and conditions</a> and that the license information I have provided is correct.</label>{/*TODO Add a link to the slidewiki terms/cond site, currently not exising*/}
                   </div>
                 </div>
                 <Button type='submit' id="UploadFormSubmitButton" style={{display: 'none'}}>Submit</Button> {/*black magic hack to trigger the form from the outside*/}

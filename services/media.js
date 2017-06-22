@@ -6,70 +6,40 @@ import formdata from 'form-data';
 
 export default {
     name: 'media',
-    // At least one of the CRUD methods is Required
-    read: (req, resource, params, config, callback) => {
-
-    },
-
     create: (req, resource, params, config, callback) => {
         if (resource === 'media.create') {
-            // let form = new formdata();
-            //
-            // //create a HTTP POST form request
-            // form.append('file', params.base64);
-            // form.append('filename', params.filename ? params.filename : 'unknown');
-            // form.append('user', params.userid);
-            // form.append('jwt', params.jwt);
-            // form.append('language', params.language);
-            // form.append('title', params.title);
-            // form.append('description', params.text);
-            // form.append('license', params.license);
-            // form.append('contentType', params.type);
-            //
-            //     // form.submit(Microservices.import.url + '/importPPTX'
-            // let request = form.submit({
-            //     port: Microservices.file.port ? Microservices.import.port : 3000,
-            //     host: Microservices.import.host,
-            //     path: Microservices.import.path ? Microservices.import.path : '/',
-            //     protocol: Microservices.import.protocol ? Microservices.import.protocol : 'https:',
-            //     timeout: body.timeout
-            // }, (err, res) => {
-            //     //res.setTimeout(body.timeout);
-            //
-            //     if (err) {
-            //         console.error(err);
-            //         //only callback if no timeout
-            //         if (err.toString() !== 'Error: XMLHttpRequest timeout')
-            //             callback(err, null);
-            //         return;
-            //     }
-            //
-            //     // console.log('result of call to import-microservice', res.headers, res.statusCode);
-            //     //res does not contain any data ...
-            //     //the response data have to be send via headers
-            //     callback(null, res);//TODO get url
-            // });
-
-            let url = Microservices.file.uri + '/picture'+'?license='+params.license+'&copyright='+params.license+' by user '+params.userid+'&title='+params.title+'&altText='+params.text;
+            // I am not able to send a files data to the service.
+            // giving the file as parameter to here is not possible because it gets parsed before send via https
+            // FileReader does not create Array buffers (is just undefined)
+            // All other outputs of FileReader are not accepted by the API
+            // form-data could not be used because the API does not expect multiform
+            
+            let url = Microservices.file.uri + '/picture?' + 'license='+encodeURIComponent(params.license)+'&copyright='+encodeURIComponent(params.license+' by user '+params.userid)+'&title='+encodeURIComponent(params.title)+'&altText='+encodeURIComponent(params.text);
             console.log('use url', url);
+            let headers = {
+                '----jwt----': params.jwt,
+                'content-type': params.type,
+                'Accept':  'application/json'
+            };
+            console.log('use headers', headers);
+            let bytes = '';
+            try {
+                bytes = Buffer.from(params.bytes, 'base64');
+            } catch (e) {
+                console.log(e);
+            }
             rp.post({
                 uri: url,
-                formData: {
-                    file: params.bytes,
-                    filename: params.filename ? params.filename : 'unknown'
-                },
+                body: params.file,
                 resolveWithFullResponse: true,
-                headers: {
-                    '----jwt----': params.jwt,
-                    'content-type': params.type
-                }
+                headers: headers
             })
                 .then((res) => {
-                    console.log('response from saving image:', res);
+                    console.log('response from saving image:', res.response.body, );
                     callback(null, 'dummy');
                 })
                 .catch((err) => {
-                    console.log('Error while saving image', err.response);
+                    console.log('Error while saving image', err.response.body, err.response.request);
                     callback(err, null);
                 });
         }

@@ -10,7 +10,7 @@ export default function uploadMediaFiles(context, payload, done) {
     console.log(payload);
     context.dispatch('START_UPLOADING_MEDIA_FILE', {type: payload.type, name: payload.title});
 
-    context.service.create('media.create', payload, { timeout: 20 * 1000 }, (err, res) => {
+    context.service.create('media.create', payload, { timeout: 20 * 1000 }, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
         }
