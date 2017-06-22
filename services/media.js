@@ -13,33 +13,26 @@ export default {
             // FileReader does not create Array buffers (is just undefined)
             // All other outputs of FileReader are not accepted by the API
             // form-data could not be used because the API does not expect multiform
-            
+
             let url = Microservices.file.uri + '/picture?' + 'license='+encodeURIComponent(params.license)+'&copyright='+encodeURIComponent(params.license+' by user '+params.userid)+'&title='+encodeURIComponent(params.title)+'&altText='+encodeURIComponent(params.text);
             console.log('use url', url);
             let headers = {
                 '----jwt----': params.jwt,
-                'content-type': params.type,
-                'Accept':  'application/json'
+                'content-type': params.type
             };
             console.log('use headers', headers);
-            let bytes = '';
-            try {
-                bytes = Buffer.from(params.bytes, 'base64');
-            } catch (e) {
-                console.log(e);
-            }
             rp.post({
                 uri: url,
-                body: params.file,
-                resolveWithFullResponse: true,
-                headers: headers
+                body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
+                headers: headers,
+                json: false
             })
                 .then((res) => {
-                    console.log('response from saving image:', res.response.body, );
+                    console.log('response from saving image:', res, );
                     callback(null, 'dummy');
                 })
                 .catch((err) => {
-                    console.log('Error while saving image', err.response.body, err.response.request);
+                    console.log('Error while saving image', err.response.body, err.response.request.headers);
                     callback(err, null);
                 });
         }

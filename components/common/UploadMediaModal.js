@@ -125,7 +125,7 @@ class UploadMediaModal extends React.Component {
             });
         };
 
-        reader.readAsArrayBuffer(this.state.files[0]);
+        reader.readAsDataURL(this.state.files[0]);
 
         return false;
     }
