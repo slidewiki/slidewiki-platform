@@ -13,6 +13,7 @@ class Footer extends React.Component {
                 <div className="ui inverted link list">
                   <NavLink className="item" routeName="about" href="/about">About Us</NavLink>
                   <NavLink className="item" routeName="about" href="/about">Contact Us</NavLink>
+                  <a className="item" href="https://github.com/slidewiki">Github</a>
                 </div>
               </div>
               <div className="three wide column">
