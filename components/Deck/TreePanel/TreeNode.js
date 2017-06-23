@@ -163,7 +163,7 @@ class TreeNode extends React.Component {
             }),
             iconSize : 'small',
             attached : '',
-            noTabIndex : this.props.ContentStore.mode ==='edit'
+            noTabIndex : this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
 
         };
         let actionBtns = (
@@ -173,7 +173,7 @@ class TreeNode extends React.Component {
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: '0'})}
                             aria-label="Add Slide"
                             data-tooltip="Add Slide"
-                            tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
+                            tabIndex={this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'?-1:0}>
                         <i className="icons">
                             <i className="file text icon"></i>
                             <i className="inverted corner plus icon"></i>
@@ -184,7 +184,7 @@ class TreeNode extends React.Component {
                             onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: '0'})}
                             aria-label="Add deck"
                             data-tooltip="Add deck"
-                            tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
+                            tabIndex={this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'?-1:0}>
                         <i className="medium icons">
                             <i className="yellow folder icon"></i>
                             <i className="inverted corner plus icon"></i>
@@ -198,13 +198,13 @@ class TreeNode extends React.Component {
                             })}
                             aria-label="Duplicate"
                             data-tooltip="Duplicate"
-                            tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
+                            tabIndex={this.props.item.get('type') === 'deck'|| this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode=== 'edit'?-1:0}>
                         <i className="copy icon"></i>
                     </button>
                     <button className={buttonItemClass} onClick={this.handleDeleteClick.bind(this, nodeSelector)}
                           aria-label="Delete"
                           data-tooltip="Delete"
-                          tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
+                          tabIndex={this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'?-1:0}>
                         <i className="red trash circle icon"></i>
                     </button>
                     {/*
