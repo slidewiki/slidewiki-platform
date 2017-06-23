@@ -13,7 +13,7 @@ class TagList extends React.Component {
     render() {
         return (
             <div ref="tagList">
-                { this.props.items.map((tag) => (<a target="_blank" href={'/deckfamily/' + tag.tagName} key={tag.tagName} className="ui large tag label" tabIndex="0">
+                { this.props.items.map((tag) => (<a target="_blank" href={'/deckfamily/' + tag.tagName} key={tag.tagName} className="ui large tag label" tabIndex="0" aria-label={tag.defaultName || tag.tagName}>
                     { tag.defaultName || tag.tagName }
                     {
                         this.props.isEditMode?

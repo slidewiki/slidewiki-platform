@@ -64,12 +64,12 @@ class TagsPanel extends React.Component {
         if(this.props.TagsStore.isEditMode){
             tagPanel = tagEditPanel;
             if(editPermission){
-                actionBtn = <button tabIndex="0" className="ui small blue button" onClick={this.handleSave.bind(this)}>Save Tags</button>;
+                actionBtn = <button tabIndex="0" className="ui small blue button" aria-label="Save Tags" onClick={this.handleSave.bind(this)}>Save Tags</button>;
             }
         } else {
             tagPanel = tagViewPanel;
             if(editPermission){
-                actionBtn = <button tabIndex="0" className="ui small blue button" onClick={this.onShowEditForm.bind(this)}>Edit Tags</button>;
+                actionBtn = <button tabIndex="0" className="ui small blue button" aria-label="Edit Tags" onClick={this.onShowEditForm.bind(this)}>Edit Tags</button>;
             }
         }
 
