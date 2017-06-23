@@ -67,7 +67,7 @@ class TagInput extends React.Component {
         });
 
         let initialOptions = this.props.initialTags.map( (t) => {
-            return <option key={t.tagName} value={'tagName:' + t.tagName}>{t.defaultName}</option>;
+            return <option key={t.tagName} value={'tagName:' + t.tagName}>{t.defaultName || t.tagName}</option>;
         });
         let initialOptionsValues = this.props.initialTags.map( (t) => {
             return 'tagName:' + t.tagName;
