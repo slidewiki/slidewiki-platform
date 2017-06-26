@@ -69,7 +69,7 @@ class ContentActionsHeader extends React.Component {
             }),
             iconSize : 'large',
             attached : 'left',
-            noTabIndex : contentDetails.mode ==='edit'
+            noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
 
         return (
@@ -88,7 +88,7 @@ class ContentActionsHeader extends React.Component {
                           type="button"
                           aria-label="Add Slide"
                           data-tooltip="Add Slide"
-                          tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                          tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                             <i className="icons">
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
@@ -100,7 +100,7 @@ class ContentActionsHeader extends React.Component {
                            type="button"
                            aria-label="Add Deck"
                            data-tooltip="Add Deck"
-                           tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                           tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="medium icons">
                                 <i className="yellow large folder icon"></i>
                                 <i className="inverted corner plus icon"></i>
@@ -111,7 +111,7 @@ class ContentActionsHeader extends React.Component {
                            type="button"
                            aria-label="Duplicate"
                            data-tooltip="Duplicate"
-                           tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                           tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="grey large copy icon"></i>
 
                           </button>
@@ -119,7 +119,7 @@ class ContentActionsHeader extends React.Component {
                             type="button"
                             aria-label="Delete"
                             data-tooltip="Delete"
-                            tabIndex={contentDetails.mode ==='edit'?-1:0}>
+                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="red large trash icon"></i>
                           </button>
                           {/*
