@@ -103,7 +103,7 @@ class DeckViewPanel extends React.Component {
                     </div>
                     </div>
                     <div className="column">
-                        
+
                             <div className="ui hidden divider"></div>
                             <div className="ui large labels">
                                 <div className="ui label" tabIndex="0">
@@ -125,7 +125,7 @@ class DeckViewPanel extends React.Component {
                                     return <a className="ui label" key={index} tabIndex="0">{tag}</a>;
                                 })}
                             </div>
-                   
+
 
                     </div>
                 </div>
@@ -141,7 +141,7 @@ class DeckViewPanel extends React.Component {
                                            tabIndex="-1">
                                             <Thumbnail key={index}
                                                        url={thumbnailURL + '/slideThumbnail/' + slide.id + '.jpeg'}
-                                                       slideId={slide.id} alt={""} abIndex={-1}/>
+                                                       slideId={slide.id} alt={''} abIndex={-1}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
                                            className='header' tabIndex="0" aria-describedby={'slide-no-'+index}>{this.getTextFromHtml(slide.title)}</a>
