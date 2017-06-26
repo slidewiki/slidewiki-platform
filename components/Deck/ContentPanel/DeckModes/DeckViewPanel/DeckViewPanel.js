@@ -142,8 +142,8 @@ class DeckViewPanel extends React.Component {
                                                        slideId={slide.id}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
-                                           className='header' tabIndex="-1">{this.getTextFromHtml(slide.title)}</a>
-                                        <div className="description">Slide {index + 1} of {totalSlides}</div>
+                                           className='header' tabIndex='-1'>{this.getTextFromHtml(slide.title)}</a>
+                                        <div className='description'>Slide {index + 1} of {totalSlides}</div>
                                     </div>
                                 </div>
                             </div>
