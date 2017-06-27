@@ -173,7 +173,7 @@ class AttachSubdeckModal extends React.Component{
 
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
-            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select deck to attach from your  My Decks list or search SlideWiki" tabIndex ='-1'/>;
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck" tabIndex ='-1'/>;
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
                 segmentPanelContent = myDecksContent;
