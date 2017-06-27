@@ -60,7 +60,7 @@ class Header extends React.Component {
             notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
 
         } else{
-            notification_locale = <div className="item"><LocaleSwitcher mode ='icon' className = 'ui item'/></div>;
+            notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
         }
 
         if (!this.state.user_cookies) {

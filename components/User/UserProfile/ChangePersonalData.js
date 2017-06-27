@@ -43,12 +43,17 @@ class ChangePersonalData extends React.Component {
 
     getLocaleOptions() {
         return locales.map((locale) => {
-            return {
+            let options = {
                 key: locale,
                 text: '' + Iso.getName(locale),
                 value: locale,
-                flag: (locale === 'en') ? 'gb' : locale,
             };
+
+            if (this.props.localeFlags){
+                options.flag = (locale === 'en') ? 'gb' : locale;
+            }
+
+            return options;
         });
     }
 

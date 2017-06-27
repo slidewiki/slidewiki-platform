@@ -133,7 +133,7 @@ class DataSourceItem extends React.Component {
         const node = this.props.node;
         //append origin of the datasource
         const selector = this.props.selector;
-        const cheerioSlideName = cheerio.load(node.stitle).text();
+        const cheerioSlideName =  (node.stitle !== undefined) ? cheerio.load(node.stitle).text() : '';
         const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioSlideName}</a>)</i> </span> : '';
 
         const appendEdit = (this.props.editable) ? (

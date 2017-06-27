@@ -125,7 +125,7 @@ class UserProfile extends React.Component {
                       <h3>Alter my personal data</h3>
                   </div>
                   <div className="ui segment">
-                      <ChangePersonalData user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures }/>
+                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures }/>
                   </div>
 
               </div>
