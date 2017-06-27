@@ -24,7 +24,7 @@ export default function loadContributors(context, payload, done) {
             //context.dispatch('LOAD_CONTRIBUTORS_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTRIBUTORS_SUCCESS', res);
-            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'contributors'});
+            // context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'contributors'});
         }
         let pageTitle = shortTitle + ' | Contributors | ' + payload.params.stype + ' | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {

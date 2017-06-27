@@ -36,7 +36,7 @@ class UserNotificationsItem extends React.Component {
         }
 
         let viewPath = ((notification.content_kind === 'slide') ? '/slideview/' : '/deck/') + notification.content_id;
-        const cheerioContentName = cheerio.load(notification.content_name).text();
+        const cheerioContentName = (notification.content_name !== undefined) ? cheerio.load(notification.content_name).text() : '';
         if (notification.content_kind === 'group')
             viewPath = '/user/'+notification.user_id+'/profile/groups'; //TODO the username is neede here instead of the userid
         switch (notification.activity_type) {
