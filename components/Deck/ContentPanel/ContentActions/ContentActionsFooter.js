@@ -15,6 +15,7 @@ import addActivity from '../../../../actions/activityfeed/addActivity';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
+import DownloadButton from './DownloadButton';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -168,6 +169,7 @@ class ContentActionsFooter extends React.Component {
                                     <i className="download large icon"></i>
                                 </button>
                             </NavLink>
+                            <DownloadButton/>
                             <ReportModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
