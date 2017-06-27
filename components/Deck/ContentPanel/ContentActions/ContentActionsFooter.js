@@ -70,7 +70,7 @@ class ContentActionsFooter extends React.Component {
     }
 
     getExportHref(type){
-        if (type !== 'EPub' && type !== 'PDF') {
+        if (type !== 'PDF') {//only for print now
             return;
         }
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0)
@@ -88,14 +88,7 @@ class ContentActionsFooter extends React.Component {
         }
     }
 
-    handleDownloadClick(e){
 
-        if(process.env.BROWSER){
-            e.preventDefault();
-            window.open(this.getExportHref('EPub'));
-        }
-        this.createDownloadActivity();
-    }
 
     createDownloadActivity() {
         //create new activity
@@ -164,11 +157,6 @@ class ContentActionsFooter extends React.Component {
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
-                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getExportHref('EPub')} target="_blank">
-                                <button className="ui button" type="button" aria-label="Download" data-tooltip="Download" >
-                                    <i className="download large icon"></i>
-                                </button>
-                            </NavLink>
                             <DownloadButton/>
                             <ReportModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
@@ -184,12 +172,6 @@ class ContentActionsFooter extends React.Component {
         );
     }
 }
-/*                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getPrintHref()} target="_blank">
-                                <button className="ui button">
-                                    <i className="print large icon"></i>
-                                </button>
-                            </NavLink>
-                            */
 
 ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
