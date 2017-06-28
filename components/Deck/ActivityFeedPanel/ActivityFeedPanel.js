@@ -25,7 +25,7 @@ class ActivityFeedPanel extends React.Component {
     render() {
         let activityDIV = '';
         const panelDIVStyles = {
-            maxHeight: 400,
+            maxHeight: 280,
             overflowY: 'auto'
         };
 
