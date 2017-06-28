@@ -33,14 +33,12 @@ class ActivityFeedPanel extends React.Component {
 
         return (
             <div ref="activityFeedPanel">
-                    <div className="ui small header">
-                        {this.props.ActivityFeedStore.selector.stype && this.props.ActivityFeedStore.selector.sid ?
-                            <NavLink href={'/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid}>Activity Feed</NavLink> : 'Activity Feed'}
-                    </div>
-                    <div className="ui basic compact segment" style={panelDIVStyles}>
-                        {activityDIV}
-                    </div>
+                <h5 className="ui small header" tabIndex="0">Activity Feed
+                </h5>
+                <div className="ui basic segment" style={panelDIVStyles}>
+                    {activityDIV}
                 </div>
+            </div>
         );
     }
 }

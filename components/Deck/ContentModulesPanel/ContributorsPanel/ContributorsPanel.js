@@ -29,12 +29,12 @@ class ContributorsPanel extends React.Component {
         return (
             <div className="sw-contributors-panel" ref="contributorsPanel">
                 <div className="ui">
-                    <h5 className="ui small header">
+                    <h5 className="ui small header" tabIndex="0">
                         Creator
                     </h5>
                     <ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
                     <div className="ui accordion">
-                        <div className="title" >
+                        <div className="title" tabIndex="0">
                             <i className="dropdown icon"></i>
                             Contributors
                         </div>
