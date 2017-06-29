@@ -79,7 +79,7 @@ const handleTEXT = (oldText, newText, source) => {
     const markedText = temp.innerHTML;
 
     $(root).find(`*:contains(${oldStr})`)
-            .filter(function() { return $(this).text() === oldStr })
+            .filter(function() { return $(this).text() === oldStr; })
             .html(markedText);
 
     source = root.outerHTML;
@@ -98,7 +98,6 @@ const handleINSERT = (el, source, finalsource) => {
         $(root).find(`#${parent}`).addClass('modified');
     } else {
         let targetElement = $(elem);
-      // let targetElement = $(elem).children().first();
         targetElement.addClass('added');
 
         let parent = getParentId(finalsource, _id);
@@ -122,7 +121,6 @@ const handleREMOVE = (el, source, finalsource) => {
     } else {
         if(_id){
             let targetElement = $(root).find(`#${_id}`);
-            // let targetElement = $(root).find(`#${_id}`).children().first();
             targetElement.addClass('deleted');
         }
     }
@@ -145,7 +143,6 @@ const handlePROPS = (node, patch, source, finalsource, vnode) => {
     let change = (_.isEmpty(styles)) ? attrs : styles;
     let key = Object.keys(change)[0];
     let vals = Object.values(change)[0];
-    // console.log(`Patch obj: ${change}, Key: ${key}, Value: ${vals}`);
 
     if (key && vals) {
         if (_id) {
@@ -159,9 +156,6 @@ const handlePROPS = (node, patch, source, finalsource, vnode) => {
                 targetElement = $(root).find(`#${parent}`);
             }
             targetElement.addClass('modified');
-            // let targetElement = $(root).find(`#${_id}`).children().first();
-
-            //TODO add attributes to the node [QA] use old styles or apply new styles ?
             targetElement.css(`${key}`, `${vals}`);
         }
     }
@@ -227,22 +221,18 @@ const setKeys = (source) => {
 */
 const detectnPatch = (list, initSrc, mode, finalSrc) => {
     let elem;
-    console.group();
-    console.info('Changes');
+
     list.map((el) => {
         let nodeType;
         let patchType;
         switch (el.type) {
             case 0:
-                // console.warn('NONE');
                 break;
             case 1:
-                // console.warn('TEXT');
                 const textArray = deepSearch(el, 'text');
                 initSrc = handleTEXT(textArray[0], textArray[1], initSrc);
                 break;
             case 2:
-                // console.warn('VNODE');
                 nodeType = el.vNode.constructor.name;
                 patchType = el.patch.constructor.name;
                 if(nodeType === 'VirtualText')
@@ -251,31 +241,24 @@ const detectnPatch = (list, initSrc, mode, finalSrc) => {
                     initSrc = handlePROPS(el.patch, el.patch.properties, initSrc, finalSrc, true);
                 break;
             case 3:
-                // console.warn('WIDGET');
                 elem = createElement(el.vNode);
                 break;
             case 4:
-                // console.warn('PROPS');
                 initSrc = handlePROPS(el.vNode, el.patch, initSrc);
                 break;
             case 5:
-                // console.warn('ORDER');
                 elem = createElement(el.patch);
                 break;
             case 6:
-                // console.warn('INSERTED');
                 initSrc = handleINSERT(el, initSrc, finalSrc);
                 break;
             case 7:
-                // console.warn('REMOVE');
                 nodeType = el.vNode.constructor.name;
                 if(nodeType === 'VirtualNode') initSrc = handleREMOVE(el, initSrc, finalSrc);
                 break;
             default:
-                // console.warn('default');
         }
     });
-    console.groupEnd();
 
     return initSrc;
 };
