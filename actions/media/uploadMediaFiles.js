@@ -15,18 +15,24 @@ export default function uploadMediaFiles(context, payload, done) {
         if (err) {
             // Every file send to the file-service gets checked if its distinct, if so 409 is returned
             // All images of all users are regarded thus the 409 response is really common
-            // if (error.length > 1) {
-            //     error = JSON.parse(error);
-            // }
-            // if (error.statusCode === 409) {
-            //     let parts = error.message.split(' ');
-            //     let filename = parts[parts.length-1];
-            //     payload.url = Microservices.file.uri + '/picture/' + filename;
-            //     payload.thumbnailUrl = Microservices.file.uri + '/picture/' + res.thumbnailName;
-            //     context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
-            // }
+            if (err.statusCode === 409) {
+                let parts = err.message.split(' ');
+                let filename = parts[parts.length-1];
+                filename = filename.substring(0, filename.length - 4);
+                payload.url = Microservices.file.uri + '/picture/' + filename;
 
-            context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
+                let thumbnailName = filename.substring(0, filename.lastIndexOf('.')) + '_thumbnail' + filename.substr(filename.lastIndexOf('.'));
+                payload.thumbnailUrl = Microservices.file.uri + '/picture/' + thumbnailName;
+
+                delete payload.jwt;
+                delete payload.userid;
+                
+                console.log('Got 409 from file service', payload);
+                context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+            }
+            else {
+                context.dispatch('FAILURE_UPLOADING_MEDIA_FILE', err);
+            }
         }
         else {
             payload.url = Microservices.file.uri + '/picture/' + res.filename;
