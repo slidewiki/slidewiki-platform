@@ -19,9 +19,9 @@ class InfoPanelHeader extends React.Component {
 
     render(){
         return (
-          <div className="ui top attached tabular icon stackble fluid large menu" >
+          <div className="ui top attached tabular menu">
               <a className="active item">
-                  <i className="blue very large info circle icon"></i>Info
+                  <i className="large info circle icon"></i>Info
               </a>
              {/* <NavLink className="item" href="#" onClick={this.handleDesignClick.bind(this)}>
                   <i className="very large grid layout icon"></i>Design

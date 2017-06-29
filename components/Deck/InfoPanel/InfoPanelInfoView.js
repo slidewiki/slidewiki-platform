@@ -35,6 +35,14 @@ class InfoPanelInfoView extends React.Component {
         //let selector = this.props.DeckTreeStore.selector;
         ///let prevSelector = this.props.DeckTreeStore.prevSelector;
         //let nextSelector = this.props.DeckTreeStore.nextSelector;
+
+        //change the node icon based on the type of node and its expanded state
+        //let iconClass = classNames({
+        //    'ui icon': true,
+        //    'grey file text': (this.props.DeckTreeStore.get('type') === 'slide'),
+        //    'yellow folder link': (this.props.DeckTreeStore.get('type') === //'deck'),
+        //});
+        
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let self = this;
         let nodes = [];
@@ -69,29 +77,29 @@ class InfoPanelInfoView extends React.Component {
         }
 
         return (
-                <div >
-                  <div className="ui attached segment">
-                      <h4 className="header ui medium" >{title}</h4>
-                  </div>
-                  <div className="ui attached segment">
-                      <ContributorsPanel />
-                  </div>
-                  <div className="ui attached segment">
-                      {/*<h4 className="ui medium header">Activity</h4>
-                      <ActivityList />*/}
-                      <ActivityFeedPanel />
-                  </div>
-                  <div className="ui attached segment">
-                      <div className={['ui', 'image']}>
-                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
-                          <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+            <div className="ui container" >
+                <div className="ui attached segment">
+                    <h4 className="header ui medium" aria-describedby="InfoTitle" tabIndex="0">
+                            {title}</h4>
+                    <div className="sr-only" id="InfoTitle">Title:</div>
+                </div>
+                <div className="ui attached segment">
+                    <ContributorsPanel />
+                </div>
+                <div className="ui attached segment">
+                    <ActivityFeedPanel />
+                </div>
+                <div className="ui attached segment">
+                    <div className={['ui', 'image']}>
+                        <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
+                            <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
                         </a>
                         <p>
-                          This work is licensed under a <a rel="license"  target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/" >Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                            This work is licensed under a <a rel="license"  target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/" >Creative Commons Attribution-ShareAlike 4.0 International License</a>
                         </p>
                     </div>
-                  </div>
                 </div>
+            </div>
         );
     }
 }
