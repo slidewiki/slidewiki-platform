@@ -11,7 +11,7 @@ export default function loadRecent(context, payload, done) {
                 context.dispatch('LOAD_RECENT_SUCCESS', data);
             }
             else {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
                 //context.dispatch('LOAD_HOME_PAGE_FAILURE', err);
             }
