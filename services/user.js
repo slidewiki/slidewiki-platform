@@ -86,7 +86,7 @@ export default {
                 });
             }
         } else if (resource === 'user.checkusername') {
-            let regExp = /^[a-z0-9]+$/i;
+            let regExp = /^[a-zA-Z0-9-.~_]+$/i;
             if (args.username === '' || !regExp.test(args.username)) {//Do not call microservice with invalid username
                 callback(null, {username: '', res: {taken: undefined, alsoTaken:[]}});
             } else {
