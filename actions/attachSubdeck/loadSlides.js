@@ -16,7 +16,7 @@ export default function loadSlides(context,payload,done){
                 context.dispatch('ATTACHSUBDECK_LOAD_SLIDES', []);
                 return;
             } else{
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.dispatch('ATTACHSUBDECK_LOAD_SLIDES', []);
             }
         } else { //Normal action

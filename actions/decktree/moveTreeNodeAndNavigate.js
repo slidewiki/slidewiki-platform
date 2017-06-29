@@ -34,7 +34,7 @@ export default function moveTreeNodeAndNavigate(context, payload, done) {
                 });
             }
             else {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
             }
             done();
         });

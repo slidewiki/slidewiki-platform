@@ -22,7 +22,7 @@ export default function fork(context, payload, done) {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');
                 context.dispatch('SAVE_DECK_EDIT_FAILURE', err);
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 // context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'success');
