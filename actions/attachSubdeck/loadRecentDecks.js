@@ -16,7 +16,7 @@ export default function loadRecentDecks(context,payload,done){
                 context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
                 return;
             } else{
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.dispatch('ATTACHSUBDECK_LOAD_RECENTDECKS', []);
             }
         } else { //Normal action
