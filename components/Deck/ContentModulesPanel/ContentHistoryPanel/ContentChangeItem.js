@@ -21,7 +21,7 @@ class ContentChangeItem extends React.Component {
             buttonsStyling: false
         }).then((accepted) => {
             this.context.executeAction(revertRevision, {
-                selector: this.props.selector, revisionId: this.props.change.value.ref.revision
+                selector: this.props.selector, revisionId: this.props.change.oldValue.ref.revision
             });
         }, (reason) => {
             //done(reason);
@@ -35,7 +35,7 @@ class ContentChangeItem extends React.Component {
 
     render() {
         const change = this.props.change;
-        const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+
         let description;
         let iconName = 'write';
 
@@ -89,19 +89,32 @@ class ContentChangeItem extends React.Component {
                 description = <span>updated the deck</span>;
         }
 
-        // buttons are shown only for slide history and only for changes that result in new slide revisions
-        let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) &&
-            <Button.Group basic size='tiny' floated='right'>
+        let buttons;
+        if (this.props.selector.stype === 'slide' && ['add', 'edit', 'rename', 'revert'].includes(change.action) ) {
+            // buttons are shown only for slide history and only for changes that result in new slide revisions
+
+            const currentRev = parseInt(this.props.selector.sid.split('-')[1]);
+            const shouldView = currentRev !== change.value.ref.revision;
+
+            const canRestore = this.props.permissions.edit && !this.props.permissions.readOnly 
+                && change.oldValue && currentRev !== change.oldValue.ref.revision;
+
+            const restoreText = canRestore ? `Restore slide to revision ${change.oldValue.ref.revision}` : '';
+            const viewText = `View slide at revision ${change.value.ref.revision}`;
+
+            buttons = <Button.Group basic size='tiny' floated='right'>
                         <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
-                        <Button aria-label='Restore slide' icon='history' disabled={!canEdit}
+                        <Button title={restoreText} aria-label='Restore slide' icon='history' disabled={!canRestore}
                                 onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
-                        <Button aria-label='View slide' icon tabIndex='0' onClick={this.handleViewSlideClick.bind(this)}>
+                        <Button title={viewText} aria-label='View slide' icon tabIndex='0' disabled={!shouldView} onClick={this.handleViewSlideClick.bind(this)}>
                             <Icon.Group>
                                 <Icon name='unhide'/>
                                 <Icon name='external' corner/>
                             </Icon.Group>
                         </Button>
             </Button.Group>;
+        }
+
         const datechange = new Date(change.timestamp);
         return (
             <List.Item>
