@@ -15,7 +15,7 @@ export default function addDeckSaveDeck(context, payload, done) {
         context.service.create('deck.create', payload, null, {timeout: 30 * 1000}, (err, res) => {
             //console.log('Action addDeckSaveDeck: got', err, res);
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
                 context.dispatch('CREATION_FAILURE', err);
             } else {
@@ -29,7 +29,7 @@ export default function addDeckSaveDeck(context, payload, done) {
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             //console.log('Action addDeckSaveDeck: got', err, res);
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
                 context.dispatch('CREATION_FAILURE', err);
             } else {

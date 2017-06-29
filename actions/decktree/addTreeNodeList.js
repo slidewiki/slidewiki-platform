@@ -12,7 +12,7 @@ export default function addTreeNodeList(context, payload, done) {
         payload.userid = userid;
         context.service.create('decktree.node', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('ADD_TREE_NODELIST_SUCCESS', res);
