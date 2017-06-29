@@ -15,7 +15,7 @@ export default function loadUserDecks(context,payload,done){
                 context.executeAction(methodNotAllowedError, {}, done);
                 return;
             } else{
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.dispatch('ATTACHSUBDECK_LOAD_USERDECKS', []);
             }
         } else { //Normal action

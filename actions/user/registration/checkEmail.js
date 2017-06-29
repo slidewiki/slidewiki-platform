@@ -5,7 +5,7 @@ export default function checkEmail(context, payload, done) {
     log.info(context);
     context.service.read('user.checkemail', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('CHECK_EMAIL_FAILURE', err);
         } else {

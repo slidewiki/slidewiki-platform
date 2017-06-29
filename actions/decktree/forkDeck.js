@@ -16,7 +16,7 @@ export default function forkDeck(context, payload, done) {
         let selector = payload.selector;
         context.service.update('deck.fork', {deckId: selector.id, userid: userid}, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
                 if (err.statusCode === 401) {
                     context.dispatch('FORK_DECK_FAILURE', err);

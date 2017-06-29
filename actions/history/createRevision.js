@@ -8,7 +8,7 @@ export default function createRevision(context, payload, done) {
     payload.jwt = context.getStore(UserProfileStore).jwt;
     context.service.create('history.revision', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         } else {
             context.dispatch('CREATE_REVISION_SUCCESS', res);
