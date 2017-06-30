@@ -9,26 +9,10 @@ import addActivity from '../../../../actions/activityfeed/addActivity';
 class DownloadButton extends React.Component{
     constructor(props) {
         super(props);
+        this.dropDown = null;
         //this.getExportHref = this.getExportHref.bind(this);
     }
     getExportHref(type){
-        /*
-        if (type !== 'EPub' && type !== 'PDF') {
-            return;
-        }
-        if (this.ContentStore.selector.id !== undefined && this.ContentStore.selector.id !== '' && this.ContentStore.selector.id !== 0)
-        {
-            //console.log(this.props.ContentStore.selector.id);
-            let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
-            let pdfHref = Microservices.pdf.uri + '/export' + type + '/' + splittedId[0];
-
-            return pdfHref;
-        }
-        else
-        {
-            // in adddeck this.props.ContentStore.selector.id is 0
-            return Microservices.pdf.uri + '/export' + type + '/';
-        }*/
         let splittedId;
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0){
 
@@ -79,39 +63,56 @@ class DownloadButton extends React.Component{
             //event.preventDefault();
             window.open(this.getExportHref(data.value));
         }
+        this.dropDown.setValue('');
         this.createDownloadActivity();
+
     }
 
     render(){
-        /*
+
         let downloadOptions =[
+          {value:'PDF' , text:'PDF'},
           {value:'ePub' , text:'ePub'},
-          {value:'SCORM1.2' , text:'SCORM 1.2'},
-          {value:'SCORM2' , text:'SCORM 2004 (3rd edition)'},
-          {value:'SCORM3' , text:'SCORM 2004 (4th edition)'},
-          {value:'SCORM4' , text:'SCORM 2004 (5th edition)'},
-          {value:'PDF' , text:'PDF'}
+          {value:'SCORMv1.2' , text:'SCORM 1.2'},
+          {value:'SCORMv2' , text:'SCORM 2004 (3rd edition)'},
+          {value:'SCORMv3' , text:'SCORM 2004 (4th edition)'},
+          {value:'SCORMv4' , text:'SCORM 2004 (5th edition)'},
+          //{value:'' , text:''},
+
         ];
-          icon='download large'*/
+          /*icon='download large'*/
         return(
           <Dropdown
               button
-              icon='download large'              
-              role='button'
+              icon='download large'
+              aria-label='Download. Choose the export format.'
+              data-tooltip='Download.Choose the export format.'
+              item
+              options={downloadOptions}
+              closeOnChange
+              defaultValue = ""
+              onChange = {this.handleDownloadSelection.bind(this)}
+              ref = {(dropDown) => {this.dropDown = dropDown;}}
+              >
 
-              aria-haspopup='true'
-              aria-label='Download'
-              closeOnChange = 'true'>
-           <Dropdown.Menu role="menu">
-            <Dropdown.Header content='Export format:' />
-            <Dropdown.Divider />
-             <Dropdown.Item value='PDF' text='PDF' role="menuitem" onClick={this.handleDownloadSelection.bind(this)}/>
-             <Dropdown.Item value='ePub' text='ePub'role="menuitem" onClick={this.handleDownloadSelection.bind(this)} />
-             <Dropdown.Item value='SCORMv1.2' text='SCORM 1.2' role="menuitem" onClick={this.handleDownloadSelection.bind(this)} />
-             <Dropdown.Item value='SCORMv2' text='SCORM 2004 (3rd edition)'role="menuitem" onClick={this.handleDownloadSelection.bind(this)} />
-             <Dropdown.Item value='SCORMv3' text='SCORM 2004 (4th edition)' role="menuitem" onClick={this.handleDownloadSelection.bind(this)} />
-             <Dropdown.Item value='SCORMv4' text='SCORM 2004 (5th edition)' role="menuitem" onClick={this.handleDownloadSelection.bind(this)} />
+
+            {/*}
+            //If we use menu, the component is not key accesible..
+           <Dropdown.Menu >
+
+              <Dropdown.Header content='Export format:' />
+            < Dropdown.Divider />
+
+             <Dropdown.Item value='PDF' text='PDF' onClick={this.handleDownloadSelection.bind(this)}/>
+             <Dropdown.Item value='ePub' text='ePub' onClick={this.handleDownloadSelection.bind(this)} />
+             <Dropdown.Item value='SCORMv1.2' text='SCORM 1.2'onClick={this.handleDownloadSelection.bind(this)} />
+             <Dropdown.Item value='SCORMv2' text='SCORM 2004 (3rd edition)' onClick={this.handleDownloadSelection.bind(this)} />
+             <Dropdown.Item value='SCORMv3' text='SCORM 2004 (4th edition)' onClick={this.handleDownloadSelection.bind(this)} />
+             <Dropdown.Item value='SCORMv4' text='SCORM 2004 (5th edition)'  onClick={this.handleDownloadSelection.bind(this)} />
+
+
            </Dropdown.Menu>
+           */}
           </Dropdown>
         );
     }
