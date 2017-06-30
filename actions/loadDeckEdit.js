@@ -17,7 +17,7 @@ export default function loadDeckEdit(context, payload, done) {
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     context.service.read('deck.properties', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             // context.executeAction(serviceUnavailable, payload, done);
             context.dispatch('LOAD_DECK_PROPS_FAILURE', err);
             done();

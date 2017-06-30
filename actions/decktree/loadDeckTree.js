@@ -33,7 +33,7 @@ export default function loadDeckTree(context, payload, done) {
         payload.params.jwt = context.getStore(UserProfileStore).jwt;
         context.service.read('decktree.nodes', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('LOAD_DECK_TREE_SUCCESS', res);

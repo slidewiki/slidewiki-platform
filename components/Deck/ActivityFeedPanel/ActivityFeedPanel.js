@@ -25,7 +25,7 @@ class ActivityFeedPanel extends React.Component {
     render() {
         let activityDIV = '';
         const panelDIVStyles = {
-            maxHeight: 400,
+            maxHeight: 280,
             overflowY: 'auto'
         };
 
@@ -33,14 +33,10 @@ class ActivityFeedPanel extends React.Component {
 
         return (
             <div ref="activityFeedPanel">
-                <div className="ui segments">
-                    <div className="ui secondary segment">
-                        {this.props.ActivityFeedStore.selector.stype && this.props.ActivityFeedStore.selector.sid ?
-                            <NavLink href={'/activities/' + this.props.ActivityFeedStore.selector.stype + '/' + this.props.ActivityFeedStore.selector.sid}>Activity Feed</NavLink> : 'Activity Feed'}
-                    </div>
-                    <div className="ui segment" style={panelDIVStyles}>
-                        {activityDIV}
-                    </div>
+                <h5 className="ui small header" tabIndex="0">Activity Feed
+                </h5>
+                <div className="ui basic segment" style={panelDIVStyles}>
+                    {activityDIV}
                 </div>
             </div>
         );
