@@ -99,14 +99,11 @@ class ContentChangeItem extends React.Component {
             const canRestore = this.props.permissions.edit && !this.props.permissions.readOnly 
                 && change.oldValue && currentRev !== change.oldValue.ref.revision;
 
-            const restoreText = canRestore ? `Restore slide to revision ${change.oldValue.ref.revision}` : '';
-            const viewText = `View slide at revision ${change.value.ref.revision}`;
-
             buttons = <Button.Group basic size='tiny' floated='right'>
                         <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
-                        <Button title={restoreText} aria-label='Restore slide' icon='history' disabled={!canRestore}
+                        <Button aria-label='Restore slide' icon='history' disabled={!canRestore}
                                 onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
-                        <Button title={viewText} aria-label='View slide' icon tabIndex='0' disabled={!shouldView} onClick={this.handleViewSlideClick.bind(this)}>
+                        <Button aria-label='View slide' icon tabIndex='0' disabled={!shouldView} onClick={this.handleViewSlideClick.bind(this)}>
                             <Icon.Group>
                                 <Icon name='unhide'/>
                                 <Icon name='external' corner/>
