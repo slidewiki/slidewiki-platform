@@ -13,7 +13,7 @@ export default {
         switch (resource) {
             case 'suggester.users':
                 rp.get({uri: `${Microservices.search.uri}/suggest/users?q=${args.query}`}).then((res) => {
-                    callback(null, { success: true, results: JSON.parse(res).response.docs });
+                    callback(null, { success: true, results: JSON.parse(res) });
                 }).catch((err) => {
                     callback(null, {success: false, results: {}});
                 });

@@ -21,12 +21,12 @@ class SearchResultsItem extends React.Component {
         if(result.subItems && result.subItems.length > 0){
             expandButton = <button className="ui small button">Other versions</button>;
 
-            subList = result.subItems.map( (item) => {
+            subList = result.subItems.map( (item, index) => {
                 if(result.kind === 'Deck'){
-                    return <div className="row" key={item.id}><a href={item.link}>Deck Revision {item.id}: {item.title}</a></div>;
+                    return <div className="row" key={item.id}><a href={item.link}>Deck Version {index+1}: {item.title}</a></div>;
                 }
                 else if(result.kind === 'Slide'){
-                    return <div className="row" key={item.id}><a href={item.link}>Also in deck: {item.title}</a></div>;
+                    return <div className="row" key={item.id}><a href={item.link}>Also in Deck: {item.title}</a></div>;
                 }
             });
         }
