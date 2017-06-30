@@ -90,7 +90,7 @@ class ContentChangeItem extends React.Component {
         }
 
         let buttons;
-        if (this.props.selector.stype === 'slide' && ['add', 'edit', 'rename', 'revert'].includes(change.action) ) {
+        if (this.props.selector.stype === 'slide' && ['add', 'attach', 'copy', 'edit', 'rename', 'revert'].includes(change.action) ) {
             // buttons are shown only for slide history and only for changes that result in new slide revisions
 
             const currentRev = parseInt(this.props.selector.sid.split('-')[1]);
