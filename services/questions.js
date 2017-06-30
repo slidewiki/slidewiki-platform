@@ -1,4 +1,6 @@
-const log = require('../configs/log').log;
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
+import log from '../configs/log';
 
 export default {
     name: 'questions',
@@ -16,7 +18,7 @@ export default {
 
         }
 
-        if(resource === 'questions.list'){
+        if(resource === 'questions.list') {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
@@ -74,9 +76,41 @@ export default {
             questions = questions.slice(lowerBound, upperBound);
             callback(null, {questions: questions, totalLength: length, selector: selector});
         }
-    }
-    // other methods
-    // create: (req, resource, params, body, config, callback) => {},
+    },
+
+    // create or add a new question
+    create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        let args = params.params? params.params : params;
+
+        const objectType = args.objType;
+        const objId = args.objId;
+        const userId = args.userId;
+        const questionTitle = args.title;
+        const choices = args.choices;
+        const difficulty = args.difficulty;
+
+        if (resource === 'questions.add') {
+            rp.post({
+                uri: Microservices.questions.uri + '/question',
+                body:JSON.stringify({
+                    title: args.title,
+                    user_id: args.userId,
+                    related_object_id: args.relatedObjectId,
+                    related_object: args.relatedObject,
+                    difficulty: args.difficulty,
+                    choices: args.choices,
+                    question: args.question                })
+            }).then((res) => {
+                callback(null, {});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
+
+    },
     // update: (req, resource, params, body, config, callback) => {}
     // delete: (req, resource, params, config, callback) => {}
 };
