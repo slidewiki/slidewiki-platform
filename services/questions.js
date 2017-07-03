@@ -84,24 +84,16 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
 
-        const objectType = args.objType;
-        const objId = args.objId;
-        const userId = args.userId;
-        const questionTitle = args.title;
-        const choices = args.choices;
-        const difficulty = args.difficulty;
-
         if (resource === 'questions.add') {
             rp.post({
                 uri: Microservices.questions.uri + '/question',
                 body:JSON.stringify({
-                    title: args.title,
                     user_id: args.userId,
                     related_object_id: args.relatedObjectId,
                     related_object: args.relatedObject,
                     difficulty: args.difficulty,
                     choices: args.choices,
-                    question: args.question                })
+                    question: args.question})
             }).then((res) => {
                 callback(null, {});
             }).catch((err) => {
@@ -111,6 +103,29 @@ export default {
         }
 
     },
-    // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
+
+    update: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'questions.update') {
+            rp.put({
+                uri: Microservices.questions.uri + '/question/' + args.questionId,
+                body:JSON.stringify({
+                    user_id: args.userId,
+                    related_object_id: args.relatedObjectId,
+                    related_object: args.relatedObject,
+                    difficulty: args.difficulty,
+                    choices: args.choices,
+                    question: args.question})
+            }).then((res) => {
+                callback(null, {});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
+
+    },
 };
