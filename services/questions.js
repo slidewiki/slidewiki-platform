@@ -118,6 +118,7 @@ export default {
                     choices: args.choices,
                     question: args.question})
             }).then((res) => {
+                console.log('Question update should be successful. Check via swagger for questionId:', args.questionId);
                 callback(null, {});
             }).catch((err) => {
                 console.log(err);
@@ -125,5 +126,23 @@ export default {
             });
         }
 
+    },
+
+    delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'questions.delete') {
+            rp.delete({
+                uri: Microservices.questions.uri + '/question/' + args.questionId
+            }).then((res) => {
+                console.log('Question delete should be successful. Check via swagger for questionId:', args.questionId);
+                callback(null, {});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
     },
 };
