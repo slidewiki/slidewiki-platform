@@ -17,9 +17,21 @@ export default {
         }
 
         if(resource === 'questions.list') {
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
+            rp.get({
+                uri: Microservices.questions.uri + '/' + args.relatedObject + '/' + args.relatedObjectId + '/' + 'questions',
+            }).then((res) => {
+                console.log('Questions get should be successful. Check via swagger for following object and id:', args.relatedObject, args.relatedObjectId);
+                console.log(res);
+                callback(null, {});
+            }).catch((err) => {
+                console.log('Questions get errored. Check via swagger for following object and id:', args.relatedObject, args.relatedObjectId);
+                console.log(res);
+                callback(err, {});
+            });
+        }
+
+        /* Hard coded sample work follows */
+        /*
             let questions = [
                 {id: 12, title: 'Super exciting question', username: 'Ilya B.', userID: 66, difficulty: 2, Date: 'yesterday',
                     answers: [{answer: 'Yes', correct: true, explanation: 'Obvious'},
@@ -75,8 +87,9 @@ export default {
             callback(null, {questions: questions, totalLength: length, selector: selector});
         }
     },
+    */
+    },
 
-    // create or add a new question
     create: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
