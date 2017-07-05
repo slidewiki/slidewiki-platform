@@ -81,7 +81,7 @@ class LoginModal extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
+        // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
         if (this.props.errorMessage !== '' && this.props.errorMessage !== undefined && this.isLoading) {
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
             this.isLoading = false;
