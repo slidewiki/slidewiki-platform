@@ -235,6 +235,7 @@ class UserProfileStore extends BaseStore {
         let rawMessage = JSON.parse(err.message)
             .output.message;
         this.errorMessage = this.extractMessage(rawMessage);
+        console.log('UserProfileStore: new erroMessage ', this.errorMessage);
         this.emitChange();
     }
 

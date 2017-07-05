@@ -12,13 +12,14 @@ class Social extends React.Component {
 
         //get data
         let data = this.findGetParameter('data');
+        alert(data);
 
         //save it
         if (data !== null && data !== undefined && data !== '') {
             localStorage.setItem(NAME, decodeURIComponent(data));
 
             //close the tab
-            window.close();
+            // window.close();
         }
     }
 

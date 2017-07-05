@@ -92,7 +92,7 @@ class Header extends React.Component {
                               </NavLink>
                             </div>
                             {notification_locale}
-                            <div className="item">{loginButton}<LoginModal/></div>
+                            <div className="item">{loginButton}<LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/></div>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@ class Header extends React.Component {
                     </NavLink>
                     {/*<UserNotificationsBadge className="ui item"/>*/}
                     {mobileLoginButton}
-                    <LoginModal/>
+                    <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                     <div className="item search">
                         <SearchBox className="item"/>
                     </div>

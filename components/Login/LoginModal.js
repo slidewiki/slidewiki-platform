@@ -6,7 +6,6 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
-import UserProfileStore from '../../stores/UserProfileStore';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
@@ -65,18 +64,30 @@ class LoginModal extends React.Component {
         return false;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.UserProfileStore.errorMessage !== '') {
-            $('.ui.form.signin').form('add errors', [nextProps.UserProfileStore.errorMessage]);
+    handleRegisterFirst(dismiss) {
+        localStorage.setItem(MODI, 'login_failed_register_now');
+
+        let thatContext = this.context;
+        async.series([
+            function(callback) {
+                thatContext.executeAction(navigateAction, {
+                    url: '/signup'
+                });
+                callback(null, 'two');
+            }
+        ]);
+
+        return true;
+    }
+
+    componentDidUpdate() {
+        console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
+        if (this.props.errorMessage !== '' && this.props.errorMessage !== undefined && this.isLoading) {
+            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
             this.isLoading = false;
             this.forceUpdate();
         }
-        if (this.props.UserProfileStore.userid === '' && nextProps.UserProfileStore.userid !== ''){
-            localStorage.setItem(MODI, 'login_success');
-            this.isLoading = false;
-            $('.ui.login.modal').modal('hide');
-        }
-        if (localStorage.getItem(MODI) === 'login'&& nextProps.UserProfileStore.socialLoginError){
+        else if (localStorage.getItem(MODI) === 'login' && this.props.socialLoginError){
             this.isLoading = false;
             this.forceUpdate();
             swal({
@@ -117,30 +128,15 @@ class LoginModal extends React.Component {
                 return true;
             });
         }
-    }
+        else if (this.props.userid !== '') {
+            localStorage.setItem(MODI, 'login_success');
+            this.isLoading = false;
+            $('.ui.login.modal').modal('hide');
 
-    handleRegisterFirst(dismiss) {
-        localStorage.setItem(MODI, 'login_failed_register_now');
-
-        let thatContext = this.context;
-        async.series([
-            function(callback) {
-                thatContext.executeAction(navigateAction, {
-                    url: '/signup'
-                });
-                callback(null, 'two');
-            }
-        ]);
-
-        return true;
-    }
-
-    componentDidUpdate() {
-        if (this.props.UserProfileStore.userid !== '') {
             //redirect if on a specific page
             if (location.pathname === '/signup' || location.pathname === '/resetpassword') {
                 this.context.executeAction(navigateAction, {
-                    url: '/user/' + this.props.UserProfileStore.username + '/settings/profile'
+                    url: '/user/' + this.props.username + '/settings/profile'
                 });
             }
         }
@@ -326,10 +322,4 @@ class LoginModal extends React.Component {
 LoginModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
-LoginModal = connectToStores(LoginModal, [UserProfileStore], (context, props) => {
-    return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
-    };
-});
 export default LoginModal;
