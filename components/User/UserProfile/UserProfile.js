@@ -174,7 +174,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroupedit() {
-        return (<UserGroupEdit />);
+        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} />);
     }
 
     notImplemented() {
