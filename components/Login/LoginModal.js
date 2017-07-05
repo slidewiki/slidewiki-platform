@@ -128,8 +128,9 @@ class LoginModal extends React.Component {
                 return true;
             });
         }
-        else if (this.props.userid !== '') {
-            localStorage.setItem(MODI, 'login_success');
+        else if (this.props.userid !== '' && $('.ui.login.modal').modal('is active')) {
+            if (localStorage.getItem(MODI) === 'login')
+                localStorage.setItem(MODI, 'login_success');
             this.isLoading = false;
             $('.ui.login.modal').modal('hide');
 

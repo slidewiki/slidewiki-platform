@@ -165,7 +165,7 @@ class UserProfile extends React.Component {
 
     displayIntegrations() {
         return (
-            <Integrations />
+            <Integrations removeProviderError={this.props.UserProfileStore.removeProviderError} addProviderError={this.props.UserProfileStore.addProviderError} addProviderAlreadyUsedError={this.props.UserProfileStore.addProviderAlreadyUsedError} providerAction={this.props.UserProfileStore.providerAction} providers={this.props.UserProfileStore.user.providers} hasPassword={this.props.UserProfileStore.user.hasPassword}/>
         );
     }
 
