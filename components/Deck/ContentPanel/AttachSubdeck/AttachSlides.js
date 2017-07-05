@@ -8,10 +8,10 @@ import {Microservices} from '../../../../configs/microservices';
 import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
 
 const KEY_CODE = {
-  LEFT:   37,
-  UP:     38,
-  RIGHT:  39,
-  DOWN:   40
+    LEFT:   37,
+    UP:     38,
+    RIGHT:  39,
+    DOWN:   40
 };
 
 class AttachSlides extends React.Component{
