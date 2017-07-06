@@ -36,8 +36,8 @@ export default {
                                 }),
                             userId: item.user_id,
                         };
-                    });
-                console.log('questions:', questions);
+                    }
+                );
                 callback(null, {questions: questions, totalLength: 2, selector: selector});
             }).catch((err) => {
                 console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
