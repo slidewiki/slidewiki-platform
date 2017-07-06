@@ -18,7 +18,8 @@ export default {
 
         if(resource === 'questions.list') {
             rp.get({
-                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
+                uri: 'https://questionservice.experimental.slidewiki.org/questions',
+                //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
             }).then((res) => {
                 console.log('Questions get should be successful. Check via swagger for following object and id:', args.stype, args.sid);
                 console.log(res);
