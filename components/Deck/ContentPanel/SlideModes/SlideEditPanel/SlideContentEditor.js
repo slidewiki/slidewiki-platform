@@ -357,6 +357,12 @@ class SlideContentEditor extends React.Component {
                 CKEDITOR.instances.inlineSpeakerNotes.destroy();
             }
 
+            //remove all ui-resizable-handles
+            let elements = document.getElementsByClassName('ui-resizable-handle');
+            while(elements.length > 0){
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+
             this.uniqueIDAllElements();
             let title = (this.props.SlideEditStore.title !== '') ? this.props.SlideEditStore.title : ' ';
             let content = (this.refs.inlineContent.innerHTML !== '') ? this.refs.inlineContent.innerHTML : ' ';
