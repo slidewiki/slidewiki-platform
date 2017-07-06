@@ -1,11 +1,11 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
-import log from '../configs/log';
+const log = require('../configs/log').log;
 
 export default {
     name: 'questions',
-    // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
+        console.log(resource, params);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
@@ -18,14 +18,14 @@ export default {
 
         if(resource === 'questions.list') {
             rp.get({
-                uri: Microservices.questions.uri + '/' + args.relatedObject + '/' + args.relatedObjectId + '/' + 'questions',
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
             }).then((res) => {
-                console.log('Questions get should be successful. Check via swagger for following object and id:', args.relatedObject, args.relatedObjectId);
+                console.log('Questions get should be successful. Check via swagger for following object and id:', args.stype, args.sid);
                 console.log(res);
                 callback(null, {});
             }).catch((err) => {
-                console.log('Questions get errored. Check via swagger for following object and id:', args.relatedObject, args.relatedObjectId);
-                console.log(res);
+                console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
+                console.log(err);
                 callback(err, {});
             });
         }
@@ -100,14 +100,16 @@ export default {
                 uri: Microservices.questions.uri + '/question',
                 body:JSON.stringify({
                     user_id: args.userId,
-                    related_object_id: args.relatedObjectId,
-                    related_object: args.relatedObject,
+                    related_object_id: args.sid,
+                    related_object: args.stype,
                     difficulty: args.difficulty,
                     choices: args.choices,
                     question: args.question})
             }).then((res) => {
+                console.log('Question create method should be successful. Check via swagger for following oid, otype, and qid:', args.sid, args.stype, args.questionId);
                 callback(null, {});
             }).catch((err) => {
+                console.log('Question create method errored. Check via swagger for following oid and qid:', args.sid, args.questionId);
                 console.log(err);
                 callback(err, {});
             });
@@ -125,8 +127,8 @@ export default {
                 uri: Microservices.questions.uri + '/question/' + args.questionId,
                 body:JSON.stringify({
                     user_id: args.userId,
-                    related_object_id: args.relatedObjectId,
-                    related_object: args.relatedObject,
+                    related_object_id: args.sid,
+                    related_object: args.stype,
                     difficulty: args.difficulty,
                     choices: args.choices,
                     question: args.question})
