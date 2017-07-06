@@ -69,7 +69,7 @@ export default {
             uri : 'https://tagservice.experimental.slidewiki.org'
         },
         'questions': {
-            uri: 'https://questionsservice.experimental.slidewiki.org'
+            uri: 'https://questionservice.experimental.slidewiki.org'
         }
     }
 };
