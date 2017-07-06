@@ -5,7 +5,6 @@ const log = require('../configs/log').log;
 export default {
     name: 'questions',
     read: (req, resource, params, config, callback) => {
-        console.log(resource, params);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
@@ -21,9 +20,25 @@ export default {
                 uri: 'https://questionservice.experimental.slidewiki.org/questions',
                 //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
             }).then((res) => {
-                console.log('Questions get should be successful. Check via swagger for following object and id:', args.stype, args.sid);
-                console.log(res);
-                callback(null, {});
+                /* This is what we get from microservice */
+                /*
+                [{"related_object":"slide","related_object_id":"10678","question":"string","user_id":"17","difficulty":1,"choices":[{"choice":"string","is_correct":true,"explanation":"string"}],"id":10},
+                 {"related_object":"slide","related_object_id":"1141","question":"question 2","user_id":"17","difficulty":2,"choices":[{"choice":"string","is_correct":true,"explanation":"string"},
+                 {"choice":"string","is_correct":true,"explanation":"string"}],"id":11}]
+                */
+                let questions = JSON.parse(res)
+                    .map((item, index) => {
+                        return {
+                            id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
+                            answers: item.choices
+                                .map((ans, ansIndex) => {
+                                    return {answer: ans.choice, correct: ans.is_correct, explanation: ans.explanation};
+                                }),
+                            userId: item.user_id,
+                        };
+                    });
+                console.log('questions:', questions);
+                callback(null, {questions: questions, totalLength: 2, selector: selector});
             }).catch((err) => {
                 console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
                 console.log(err);
