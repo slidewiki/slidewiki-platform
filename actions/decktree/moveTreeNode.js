@@ -37,7 +37,7 @@ export default function moveTreeNode(context, payload, done) {
             targetIndex
         }, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.dispatch('MOVE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('MOVE_TREE_NODE_SUCCESS', payload);

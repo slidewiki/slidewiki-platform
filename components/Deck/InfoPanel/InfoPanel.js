@@ -15,10 +15,10 @@ class InfoPanel extends React.Component {
 
 
         return (
-            <div className="ui top attached tabular icon stackble fluid large menu" ref="infoPanel" >
-                <div className="ui segments">
-                  <InfoPanelHeader   />
-                  <InfoPanelInfoView />
+            <div className="ui container" ref="infoPanel" role="complementary" >
+                  <InfoPanelHeader  />
+                   <div className="ui bottom attached segment">
+                       <InfoPanelInfoView />
                 </div>
             </div>
         );

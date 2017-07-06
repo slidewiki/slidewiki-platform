@@ -27,28 +27,26 @@ class ContributorsPanel extends React.Component {
 
     render() {
         return (
-        <div className="sw-contributors-panel" ref="contributorsPanel">
-            <div className="ui">
-                <div className="ui styled fluid accordion">
-                    <div className="title" style={{color: '#4183C4'}}>
-                        <i className="dropdown icon"></i>
+            <div className="sw-contributors-panel" ref="contributorsPanel">
+                <div className="ui">
+                    <h5 className="ui small header" tabIndex="0">
                         Creator
-                    </div>
-                    <div className="content">
-                        <ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
-                    </div>
-                    <div className="title" style={{color: '#4183C4'}}>
-                        <i className="dropdown icon"></i>
-                        Contributors
-                    </div>
-                    <div className="content">
-                        {this.props.ContributorsStore.contributors.length === 0 ?
-                        <div>There are no contributors for this {this.props.ContributorsStore.selector.stype}.</div> :
-                        <ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>}
+                    </h5>
+                    <ContributorsList items={this.props.ContributorsStore.creator  }></ContributorsList>
+                    <div className="ui accordion">
+                        <div className="title" tabIndex="0">
+                            <i className="dropdown icon"></i>
+                            Contributors
+                        </div>
+                        <div className="content">
+                            {this.props.ContributorsStore.contributors.length === 0 ?
+                                <div>There are no contributors for this {this.props.ContributorsStore.selector.stype}.</div> :
+                                <ContributorsList items={this.props.ContributorsStore.contributors}></ContributorsList>}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
         );
     }
 }
