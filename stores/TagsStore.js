@@ -71,8 +71,12 @@ class TagsStore extends BaseStore {
         this.showAllTags = true;
         this.emitChange();
     }
+    handleShowLessTags(){
+        this.showAllTags = false;
+        this.emitChange();
+    }
     changeMode(payload) {
-        this.isEditMode = payload.isEditMode;
+        this.isEditMode = !this.isEditMode;
         this.emitChange();
     }
     tagSavingPending() {
@@ -92,7 +96,6 @@ class TagsStore extends BaseStore {
 
         return false;
     }
-
     getState() {
         return {
             tags: this.tags,
@@ -130,6 +133,7 @@ TagsStore.handlers = {
     'LOAD_SLIDE_CONTENT_SUCCESS': 'loadTagsSlide',
     'LOAD_DECK_CONTENT_SUCCESS': 'loadTagsDeck',
     'SHOW_ALL_TAGS': 'handleShowAllTags',
+    'SHOW_LESS_TAGS': 'handleShowLessTags',
     'UPDATE_TAGS_SUCCESS': 'updateTags',
     'CANCEL_EDIT_TAGS': 'cancelEditTag',
     'CHANGE_EDIT_MODE': 'changeMode',
