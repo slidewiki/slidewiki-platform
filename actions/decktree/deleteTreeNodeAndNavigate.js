@@ -8,9 +8,13 @@ import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function deleteTreeNodeAndNavigate(context, payload, done) {
     log.info(context);
-    //load all required actions in parallel
+
+
+    let elementTitle = payload.stype;
+    if(elementTitle === 'deck')
+        elementTitle = 'sub' + elementTitle;
     swal({
-        title: 'Are you sure?',
+        title: 'Delete '+elementTitle+'. Are you sure?',
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -18,7 +22,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
         confirmButtonText: 'Yes, delete it!'
 
     }).then((accepted) => {
-
+       //load all required actions in parallel
         async.parallel([
             (callback) => {
                 context.executeAction(deleteTreeNode, payload, callback);
@@ -44,6 +48,6 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
               //context.executeAction(serviceUnavailable, payload, done);
             }
             done();
-        });        
+        });
     }, (reason) => {/*do nothing*/}).catch(swal.noop);
 }
