@@ -132,27 +132,23 @@ class TreePanel extends React.Component {
         let prevSelector = this.props.DeckTreeStore.prevSelector;
         let nextSelector = this.props.DeckTreeStore.nextSelector;
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
-        let rootNodeTitle = <strong> {rootNode.title} </strong>;
+        let rootNodeTitle = <strong>{rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
-            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+            <div className="ui panel sw-tree-panel" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <div className="ui segments">
                     <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
+                        <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2>
                     </div>
                     {this.props.UserProfileStore.username === '' ? '' :
-                        <div className="3 fluid ui icon large buttons">
-                            <div className="ui basic disabled attached button" aria-label="Theme" data-tooltip="Theme"
-                                 onClick={this.handleTheme.bind(this)}>
-                                <i className="theme black icon"></i>
-                            </div>
-                            <div className={classes_forksbtn} aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
-                                <i className="fork black icon"></i>
-                            </div>
-                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate"
-                                 onClick={this.handleTranslation.bind(this)}>
-                                <i className="translate black icon"></i>
-                            </div>
+                        <div className="fluid ui icon large buttons">
+                            <button className={classes_forksbtn} aria-label="Fork this deck" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
+                                <i className="fork large icon"></i>
+                            </button>
+                            <button className="ui basic disabled attached button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate"
+                                 onClick={this.handleTranslation.bind(this)} tabIndex="-1">
+                                <i className="translate large icon"></i>
+                            </button>
                         </div>
                     }
                     
