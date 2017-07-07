@@ -54,7 +54,9 @@ class Header extends React.Component {
             loginButton = <HeaderDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>My Decks</NavLink>
+              <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>My Groups</NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>My Settings</NavLink>
+              <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>My Notifications</NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>Logout</a>
             </div>);
             notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
