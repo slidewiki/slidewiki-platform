@@ -67,22 +67,16 @@ class LoginModal extends React.Component {
     handleRegisterFirst(dismiss) {
         localStorage.setItem(MODI, 'login_failed_register_now');
 
-        let thatContext = this.context;
-        async.series([
-            function(callback) {
-                thatContext.executeAction(navigateAction, {
-                    url: '/signup'
-                });
-                callback(null, 'two');
-            }
-        ]);
+        this.context.executeAction(navigateAction, {
+            url: '/signup'
+        });
 
         return true;
     }
 
     componentDidUpdate() {
         // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
-        if (this.props.errorMessage !== '' && this.props.errorMessage !== undefined && this.isLoading) {
+        if (!(this.props.errorMessage) && this.isLoading) {
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
             this.isLoading = false;
             this.forceUpdate();
@@ -128,7 +122,7 @@ class LoginModal extends React.Component {
                 return true;
             });
         }
-        else if (this.props.userid !== '' && $('.ui.login.modal').modal('is active')) {
+        else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
                 localStorage.setItem(MODI, 'login_success');
             this.isLoading = false;

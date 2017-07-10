@@ -65,7 +65,7 @@ class Integrations extends React.Component {
         console.log('handleEnable', e.target.attributes[1].nodeValue);
         e.preventDefault();
 
-        if (this.props.providerAction !== '') {
+        if (this.props.providerAction) {
             //do nothing
             return;
         }
@@ -109,7 +109,7 @@ class Integrations extends React.Component {
         console.log('handleDisable', e.target.attributes[1].nodeValue);
         e.preventDefault();
 
-        if (this.props.providerAction !== '') {
+        if (this.props.providerAction) {
             //do nothing
             return;
         }
@@ -368,7 +368,7 @@ class Integrations extends React.Component {
                           </div>
                         </div>
                       </div>
-                      {(this.props.providerAction !== '') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                      {(this.props.providerAction) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                   </div>
 
               </div>
