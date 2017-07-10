@@ -10,8 +10,6 @@ class ContentQuestionEdit extends React.Component {
         const title = this.props.question.title;
         const difficulty = this.props.question.difficulty;
         const answers = this.props.question.answers;
-
-        console.log(title, difficulty, answers);
         const answerChoiceWidth = {
             width: '680px',
         };
