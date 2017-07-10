@@ -19,7 +19,7 @@ class ContentQuestionEdit extends React.Component {
             <div className="ui bottom attached" data-reactid="637">
                 <div className="ui padded segment">
                     <form className="ui form">
-                        <div className="two fields">
+                        <div className="two fields inline">
                             <div className="required field"><label htmlFor="question">Question</label>
                                 <textarea rows="3"  name="question" id="question" aria-required="true" value={title} />
                             </div>
