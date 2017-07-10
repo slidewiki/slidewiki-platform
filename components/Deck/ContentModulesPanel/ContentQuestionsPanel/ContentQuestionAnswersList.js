@@ -12,7 +12,7 @@ class ContentQuestionAnswersList extends React.Component {
         this.state = {
             showCorrect: false,
         };
-        //this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
     }
 
     handleButtonClick() {
@@ -22,7 +22,7 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
-        console.log(this);
+        //console.log(this);
     }
 
     render() {
@@ -58,7 +58,7 @@ class ContentQuestionAnswersList extends React.Component {
                 </a>
                 <div className="description">
                   <p>
-                    {node.explanation}
+                    <label><strong>Explanation:</strong></label> {node.explanation}
                   </p>
                 </div>
               </div>
@@ -75,13 +75,11 @@ class ContentQuestionAnswersList extends React.Component {
                   </div>
                 </div>
                 <div className="column">
-                  <button className="ui compact button primary"
-                    onClick={this.handleButtonClick}
-                    >
+                  <button className="ui compact button primary" onClick={this.handleButtonClick}>
                     <i className=" help circle icon" />
                     Show answer
                   </button>
-                  {showEditButton()}
+                  {/*showEditButton()*/}
                   <div className="ui item">
                     <div className="content">
                       {this.state.showCorrect ? correctAnswers : null}
