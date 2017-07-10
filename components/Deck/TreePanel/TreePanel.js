@@ -162,9 +162,9 @@ class TreePanel extends React.Component {
 
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
-                                    'wordBreak': 'break-all',
-                                        'wordWrap': 'break-word'
-                                }}> {decktreeError} </div> : ''}
+                            'wordBreak': 'break-all',
+                            'wordWrap': 'break-word'
+                        }}> {decktreeError} </div> : ''}
 
                         <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
                             prevSelector={prevSelector} page={this.props.page}
