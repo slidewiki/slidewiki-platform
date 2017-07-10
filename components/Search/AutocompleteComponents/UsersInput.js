@@ -13,8 +13,9 @@ class UsersInput extends React.Component {
 
         $('#users_input_div').dropdown({
             fields: {
-                name: 'username',
-                value: returnType
+                name: 'highlight',
+                value: returnType,
+                text: 'username'
             },
             minCharacters: 1,
             allowAdditions: false,

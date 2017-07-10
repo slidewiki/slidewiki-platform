@@ -5,7 +5,7 @@ export default function addActivities(context, payload, done) {
     log.info(context);
     context.service.create('activities.newarray', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {

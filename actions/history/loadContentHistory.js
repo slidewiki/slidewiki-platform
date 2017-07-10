@@ -35,7 +35,7 @@ export default function loadContentHistory(context, payload, done) {
     // final callback
     (err, results) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         } else {
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'history'});

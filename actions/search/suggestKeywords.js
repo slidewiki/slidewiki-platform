@@ -8,7 +8,7 @@ export default function suggestKeywords(context, payload, done) {
 
     context.service.read('suggester.keywords', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         }
         done(null, res);

@@ -6,7 +6,7 @@ export default function showNoPermissionsModal(context, payload, done) {
     if (!permissions.edit){
         context.service.read('deck.forks', {params:{id: selector.id, user: user}}, {}, (err, res) => {
             if (err) {
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
             } else {
                 context.dispatch('SHOW_NO_PERMISSIONS_MODAL', {ownedForks: res});
