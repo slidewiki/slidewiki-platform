@@ -11,12 +11,10 @@ class ContentQuestionAnswersList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showCorrect: false,
-            isEditButtonClicked: false,
-            choices: {1: '', 2: '', 3: '', 4: ''},
-            correct: {1: false, 2: false, 3: false, 4: false}
+            isEditButtonClicked: false
         };
-        //this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
     }
 
     handleButtonClick() {
@@ -27,20 +25,13 @@ class ContentQuestionAnswersList extends React.Component {
 
     handleEditButtonClick() {
         this.setState({
-            isEditButtonClicked: true,
-            //choices: this.props.items,
+            isEditButtonClicked: true
         });
-        console.log('Props:', this.props);
-        console.log('Context:', this.context);
-        console.log('refs:', this.refs);
-        console.log(this.state);
     }
 
     render() {
         const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
-        console.log('creator id:', creatorId);
-        console.log('user id:', userId);
         const editButton = (
             <button className="ui compact button primary" onClick={this.handleEditButtonClick.bind(this)}>
                 <i className="edit icon" />
@@ -55,13 +46,13 @@ class ContentQuestionAnswersList extends React.Component {
             return null;
         };
 
-        let list = this.props.items.map((node, index) => {
+        let list = this.props.items.answers.map((node, index) => {
             return (
                 <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index}/>
             );
         });
 
-        let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
+        let correctAnswers = this.props.items.answers.filter((item) => item.correct).map((node, index) => {
             return (
               <div key={index}>
                 <a className="header">
@@ -102,22 +93,10 @@ class ContentQuestionAnswersList extends React.Component {
               </div>
         );
 
-        let content = (
-            <div>
-                { this.state.isEditButtonClicked ?
-                    <ContentQuestionEdit /> :
-                    <div ref="contentquestionanswersList">
-                        <div className="ui relaxed list">
-                            {answers}
-                        </div>
-                    </div> }
-            </div>
-        );
-
         return (
             <div>
                 { this.state.isEditButtonClicked ?
-                    <ContentQuestionEdit /> :
+                    <ContentQuestionEdit question={this.props.items}/> :
                     <div ref="contentquestionanswersList">
                         <div className="ui relaxed list">
                             {answers}
