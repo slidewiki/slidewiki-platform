@@ -16,7 +16,7 @@ class UserGroupEdit extends React.Component {
 
     componentDidUpdate() {
         console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError);
-        if (this.props.saveUsergroupError !== '') {
+        if (this.props.saveUsergroupError) {
             swal({
                 title: 'Error',
                 text: 'Unknown error while saving.',
