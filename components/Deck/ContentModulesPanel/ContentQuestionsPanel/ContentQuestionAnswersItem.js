@@ -22,17 +22,13 @@ class ContentQuestionAnswersItem extends React.Component {
             // </div>
             <div className="field">
               <div className="ui checkbox">
-                <input
-                  type="checkbox"
-                  name={name}
-                  id={name}
-                  defaultChecked={answer.correct} />
+                <input type="checkbox" name={name} id={name} /> {/*defaultChecked={answer.correct} /> */}
                 <label htmlFor={name}>
                   {answer.answer}
                 </label>
               </div>
             </div>
-            
+
         );
     }
 }
