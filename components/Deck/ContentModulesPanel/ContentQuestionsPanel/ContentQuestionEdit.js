@@ -14,7 +14,7 @@ class ContentQuestionEdit extends React.Component {
         const answerChoiceWidth = {
             width: '680px',
         };
-        console.log(answers);
+        
         return (
             <div className="ui bottom attached" data-reactid="637">
                 <div className="ui padded segment">
