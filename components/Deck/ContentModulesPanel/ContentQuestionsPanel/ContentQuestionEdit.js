@@ -1,12 +1,17 @@
 import React from 'react';
-//import editQuestion from '../../../../actions/questions/editQuestion';
 
 class ContentQuestionEdit extends React.Component {
-    constructor(props) {
+
+    constructor(props){
         super(props);
-    }
+    };
 
     render() {
+        const title = this.props.question.title;
+        const difficulty = this.props.question.difficulty;
+        const answers = this.props.question.answers;
+
+        console.log(title, difficulty, answers);
         const answerChoiceWidth = {
             width: '680px',
         };
@@ -18,6 +23,7 @@ class ContentQuestionEdit extends React.Component {
                         <div className="two fields">
                             <div className="required field"><label htmlFor="question">Question</label>
                                 <textarea rows="3"  name="question" id="question" aria-required="true">
+                                    {title}
                                 </textarea>
                             </div>
                             <div className="ui grouped fields">
@@ -26,18 +32,27 @@ class ContentQuestionEdit extends React.Component {
                                     <div className="inline fields">
                                         <div className="field">
                                             <div className="ui radio checkbox">
-                                                <input type="radio" id="easy" checked="" tabIndex="0" className="hidden" />
+                                                {difficulty === 1 ?
+                                                    <input type="radio" id="easy" checked="checked" tabIndex="0" className="hidden" /> :
+                                                    <input type="radio" id="easy" checked="" tabIndex="0" className="hidden" />
+                                                }
                                                 <label htmlFor="easy">Easy</label>
                                             </div>
                                         </div>
                                         <div className="field">
                                             <div className="ui radio checkbox">
-                                                <input type="radio" id="moderate" checked="" tabIndex="0" className="hidden" />
+                                                {difficulty === 2 ?
+                                                    <input type="radio" id="moderate" checked="checked" tabIndex="0" className="hidden" /> :
+                                                    <input type="radio" id="moderate" checked="" tabIndex="0" className="hidden" />
+                                                }
                                                 <label htmlFor="easy">Moderate</label>
                                             </div>
                                         </div><div className="field">
                                         <div className="ui radio checkbox">
-                                            <input type="radio" id="Hard" checked="" tabIndex="0" className="hidden" />
+                                            {difficulty === 3 ?
+                                                <input type="radio" id="hard" checked="checked" tabIndex="0" className="hidden" /> :
+                                                <input type="radio" id="hard" checked="" tabIndex="0" className="hidden" />
+                                            }
                                             <label htmlFor="easy">Hard</label>
                                         </div>
                                         </div>
@@ -50,34 +65,46 @@ class ContentQuestionEdit extends React.Component {
                                 <legend>Answer Choices</legend>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" />
+                                        {answers[0].correct ?
+                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" checked="checked"/> :
+                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden"/>
+                                        }
                                         <label htmlFor="answer1"></label>
                                     </div>
-                                    <input style={answerChoiceWidth} type="text" name="response1" id="response1" />
+                                    <input style={answerChoiceWidth} type="text" name="response1" id="response1" value={answers[0].answer} />
                                     <label htmlFor="response1"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input  type="checkbox" name="example1" id="answer2" tabIndex="0" className="hidden" />
+                                        {answers[1].correct ?
+                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" checked="checked"/> :
+                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" />
+                                        }
                                         <label htmlFor="answer2"></label>
                                     </div>
-                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" />
+                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" value={answers[1].answer}/>
                                     <label htmlFor="response2"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input type="checkbox" name="example1" id="answer3" tabIndex="0" className="hidden" />
+                                        {answers[2].correct ?
+                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" checked="checked"/> :
+                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" />
+                                        }
                                         <label htmlFor="answer3"></label>
                                     </div>
-                                    <input style={answerChoiceWidth} type="text" name="response3" id="response3" />
+                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" value={answers[2].answer}/>
                                     <label htmlFor="response3"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input  type="checkbox" name="example1" id="answer4" tabIndex="0" className="hidden" />
+                                        {answers[3].correct ?
+                                            <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" checked="checked"/> :
+                                            <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" />
+                                        }
                                         <label htmlFor="answer4"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" />
+                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" value={answers[3].answer}/>
                                     <label htmlFor="response4"></label>
                                 </div>
                             </fieldset>
@@ -100,9 +127,5 @@ class ContentQuestionEdit extends React.Component {
         );
     }
 }
-
-ContentQuestionEdit.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
-};
 
 export default ContentQuestionEdit;
