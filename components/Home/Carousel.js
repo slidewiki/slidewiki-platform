@@ -17,6 +17,8 @@ class Carousel extends React.Component {
                 $('.gh' + data.index).addClass('active');
 				    },
         });
+        //display carousel
+        $('.hide-element').removeClass('hide-element');
     }
     togglePause() {
         if(this.state.paused){
@@ -33,12 +35,12 @@ class Carousel extends React.Component {
 
                 <div className="twelve wide column center aligned">
                     <div className="glide" tabIndex="-1">
-                      <div className="glide__arrows">
+                      <div className="glide__arrows hide-element">
                           <button className="glide__arrow prev ui basic icon button" data-glide-dir="<" tabIndex="-1"><i className="ui big icon chevron left"></i></button>
                           <button className="glide__arrow next ui basic icon button" data-glide-dir=">" tabIndex="-1"><i className="ui big icon chevron right"></i></button>
                       </div>
 
-                      <div className="glide__wrapper">
+                      <div className="glide__wrapper hide-element">
                           <ul className="glide__track">
                               <li className="glide__slide" >
                                 <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">

@@ -133,10 +133,17 @@ class ContentModulesPanel extends React.Component {
         let compStyle = {
             outline: 'none'
         };
+      
+        // hide tags tab in slides 
+        let tagsTab = (this.props.ContentModulesStore.selector.stype === 'deck') 
+        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>
+            Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span>
+        </a> : '';
+
         pointingMenu = (
             <div className="ui top attached pointing menu">
                 <a tabIndex="0" className={datasourceTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'datasource')}>Sources<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.datasource}</span></a>
-                <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span></a>
+                {tagsTab}
                 {/*TODO add correct moduleCount*/}
                 <a tabIndex="0" className={discussionTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'discussion')}>Comments<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.comments}</span></a>
                 <a tabIndex="0" className={historyTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'history')}>History</a>
