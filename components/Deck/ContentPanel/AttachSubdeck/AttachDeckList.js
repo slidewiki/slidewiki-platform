@@ -92,7 +92,7 @@ class AttachDeckList extends React.Component {
                                   role="listitem"
                                   aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
                                   tabIndex="0">
-                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="small"/>
+                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} alt={deck.title} size="small"/>
                                 <Item.Content verticalAlign="middle" >
                                   <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
                                       {deck.title}
