@@ -4,9 +4,27 @@ class ContentQuestionEdit extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            title: this.props.question.title,
+            difficulty: this.props.question.difficulty,
+            answers: this.props.question.answers,
+            userid: this.props.question.user_id,
+            relatedObjectId: this.props.question.relatedObjectId,
+            relatedObject: this.props.question.relatedObject,
+            //qid: this.props.question.id
+        };
     };
 
+    saveButtonClick() {
+        this.context.executeAction(saveQuestion, {
+            // TODO collect values from input elements by id
+            qstid: this.props.question.id
+        });
+    }
+
     render() {
+
+        console.log(this.props);
         const title = this.props.question.title;
         const difficulty = this.props.question.difficulty;
         const answers = this.props.question.answers;
@@ -14,7 +32,7 @@ class ContentQuestionEdit extends React.Component {
         const answerChoiceWidth = {
             width: '680px',
         };
-        
+
         return (
             <div className="ui bottom attached" data-reactid="637">
                 <div className="ui padded segment">
@@ -113,7 +131,7 @@ class ContentQuestionEdit extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div className="ui right floated buttons">
-                                    <button className="ui primary button">Save</button>
+                                    <button className="ui primary button" onClick={this.saveButtonClick.bind(this)}>Save</button>
                                     <button className="ui secondary button">Cancel</button>
                                 </div>
                             </div>
