@@ -14,7 +14,6 @@ class Carousel extends React.Component {
             centered: true,
             keyboard: true,
             autoheight: true,
-            paddings: 50px,
             centered: true,
             afterTransition: function(data){
                 $('.gslide-header').removeClass('active');
