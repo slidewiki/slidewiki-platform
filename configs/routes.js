@@ -124,6 +124,19 @@ export default {
             done();
         }
     },
+    welcome: {
+        path: '/welcome',
+        method: 'get',
+        page: 'welcome',
+        title: 'SlideWiki -- Welcome',
+        handler: require('../components/Home/Welcome'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Welcome'
+            });
+            done();
+        }
+    },
     dataprotection: {
         path: '/dataprotection',
         method: 'get',

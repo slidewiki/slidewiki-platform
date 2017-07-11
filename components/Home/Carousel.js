@@ -45,23 +45,23 @@ class Carousel extends React.Component {
                                 <div className="glide__wrapper hide-element">
                                     <ul className="glide__track">
                                         <li className="glide__slide" >
-                                            <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                            <a href="http://slidewiki.org" className="ui big image" tabIndex="-1">
                                                 <img src="/assets/images/carousel/SW-deck.png" alt="Create slides with SlideWiki." />
                                             </a>
                                         </li>
                                         <li className="glide__slide" >
-                                            <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                            <a href="http://slidewiki.org" className="ui big image" tabIndex="-1">
                                                 <img src="/assets/images/carousel/OER_Logo.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
                                             </a>
                                         </li>
                                         <li className="glide__slide" >
-                                            <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                            <a href="http://slidewiki.org" className="ui big image" tabIndex="-1">
                                                 <img src="/assets/images/carousel/collaborative-hands.png" alt="Collaborative Content Authoring." />
                                             </a>
                                         </li>
                                         <li className="glide__slide" >
-                                            <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
-                                                <img src="/assets/images/carousel/smartphone-globe.png" alt="Supporting Knowledge Communities." />
+                                            <a href="http://slidewiki.org" className="ui big image" tabIndex="-1">
+                                                <img src="/assets/images/carousel/globe-smartphone.png" alt="Supporting Knowledge Communities." />
                                             </a>
                                         </li>
                                     </ul>
@@ -69,6 +69,7 @@ class Carousel extends React.Component {
 
                                 <div className="glide__bullets"></div>
                             </div>
+                            <button onClick={this.togglePause.bind(this)} className="ui lightGrey right labeled icon button" >{this.state.paused ? <i className="ui play icon">Play</i> : <i className="ui pause icon">Pause</i>}</button>
 
                         </div>
 
@@ -86,9 +87,8 @@ class Carousel extends React.Component {
                                 <a className="item gslide-header gh4" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=4'>
                                     Supporting Knowledge Communities
                                 </a>
-                                 </div>
-                                <button onClick={this.togglePause.bind(this)} className="ui fluid lightGrey right labeled icon button" >{this.state.paused ? <i className="ui play icon">Play</i> : <i className="ui pause icon">Pause</i>}</button>
-                           
+                            </div>
+
 
                         </div>
                         <div className="one wide column"></div>
