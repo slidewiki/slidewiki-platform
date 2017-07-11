@@ -32,10 +32,8 @@ class Carousel extends React.Component {
     render() {
         return (
             <div ref="carousel">
-                <div className="ui fluid container">             
-                    <div className="ui padded stackable grid " style={{minHeight: '200px'}}>             
-                        <div className="one wide column"></div>
-                        <div className="ten wide column center aligned">
+                <div className="ui fluid container grid " style={{minHeight: '200px'}}>       
+                        <div className="twelve wide column center aligned">
                             <div className="glide" tabIndex="-1">
                                 <div className="glide__arrows hide-element">
                                     <button className="glide__arrow prev ui basic icon button" data-glide-dir="<" tabIndex="-1"><i className="ui big icon chevron left"></i></button>
@@ -51,7 +49,7 @@ class Carousel extends React.Component {
                                         </li>
                                         <li className="glide__slide" >
                                             <a href="http://slidewiki.org" className="ui big image" tabIndex="-1">
-                                                <img src="/assets/images/carousel/OER_Logo.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
+                                                <img src="/assets/images/carousel/OER-Logo.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
                                             </a>
                                         </li>
                                         <li className="glide__slide" >
@@ -94,7 +92,7 @@ class Carousel extends React.Component {
                         <div className="one wide column"></div>
                     </div>
                 </div>
-            </div>
+       
         );
     }
 }
