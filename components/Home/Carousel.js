@@ -69,7 +69,7 @@ class Carousel extends React.Component {
 
                                 <div className="glide__bullets"></div>
                             </div>
-                            <button onClick={this.togglePause.bind(this)} className="ui lightGrey right labeled icon button" >{this.state.paused ? <i className="ui play icon">Play</i> : <i className="ui pause icon">Pause</i>}</button>
+                            <div onClick={this.togglePause.bind(this)} className="ui lightGrey right labeled icon button" role="button" tabIndex="0" >{this.state.paused ? <i className="ui play icon">Play</i> : <i className="ui pause icon">Pause</i>}</div>
 
                         </div>
 

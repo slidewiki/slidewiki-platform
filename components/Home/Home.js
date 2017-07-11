@@ -34,13 +34,13 @@ class Home extends React.Component {
                             <div className="four wide column">
                                 <div className="ui segments">
                                     <div className="ui segment top attached">
-                                        <h3>Getting Involved</h3>
+                                        <h3>Get Started</h3>
                                     </div>
                                     <div className="ui segment">
                                         <div className="ui divide list">
                                             <div className="item">
                                                 <div className="content">
-                                                    <a className="header" href="">Sign up to get started</a>
+                                                    <NavLink className="ui header" routeName="license" href="/signup">Sign up for a SlideWiki account</NavLink>
                                                     <div className="description">
                                                         <p>Create an account to start creating and sharing your decks</p>
                                                     </div>
@@ -48,17 +48,17 @@ class Home extends React.Component {
                                             </div>
                                             <div className="item">
                                                 <div className="content">
-                                                    <a className="header" href="">SlideWiki foundation</a>
+                                                    <a className="ui header" href="/features">Learn about  SlideWiki</a>
                                                     <div className="description">
-                                                        <p>Find out more about SlideWiki</p>
+                                                        <p>Find out more about SlideWiki's features and how it can be used to create, share and adapt slides, decks and open educational resources.</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="item">
                                                 <div className="content">
-                                                    <a className="header" href="">Contribute to SlideWiki's development</a>
+                                                    <a className="ui header" href="https://slidewiki.eu">Find out about the SlideWiki project</a>
                                                     <div className="description">
-                                                        <p>Get involved with supporting and improving SlideWiki</p>
+                                                        <p>SlideWiki is an open source development project, funded from the European Union's Horizon 2020 research and innovation programme. The project involves 17 partners to develop, test and trial SlideWiki. To find out more or get involved visit the <a href="https://slidewiki.eu">project webiste</a>.</p>
                                                     </div>
                                                 </div>
                                             </div>
