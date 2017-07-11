@@ -246,6 +246,7 @@ class AttachSlides extends React.Component{
                                             aria-label="Clear Selection"
                                             data-tooltip="Clear Selection"
                                             onClick={this.handleNone}>Clear Selection</Button>
+                                            <TextArea className="sr-only" id="gridInstructions" value="Use arrow keys to navigate through the grid and then enter to select a slide. You can select more than one slide." tabIndex ='-1'/>
                                       </Grid.Column>
                                     </Grid.Row>
                                   </Grid>;
@@ -257,7 +258,7 @@ class AttachSlides extends React.Component{
                                  role="grid"
                                  aria-expanded="true"
                                   aria-describedby="gridInstructions">
-                                 <TextArea className="sr-only" id="gridInstructions" value="Use tab to navigate through the list and then enter to select a deck." tabIndex ='-1'/>
+                                 {/*<TextArea className="sr-only" id="gridInstructions" value="Use arrow keys to navigate through the grid and then enter to select a slide. You can select more than one slide." tabIndex ='-1'/>*/}
                                 {rowsContent}
                                </Grid>
 
