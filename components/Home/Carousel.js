@@ -9,10 +9,13 @@ class Carousel extends React.Component {
     }
     componentDidMount(){
         this.slider = $('.glide').glide({
-            type: 'slideshow',
-            autoplay: 8000,
+            type: 'slider',
+            autoplay: 6000,
             centered: true,
             keyboard: true,
+            autoheight: true,
+            paddings: 50px,
+            centered: true,
             afterTransition: function(data){
                 $('.gslide-header').removeClass('active');
                 $('.gh' + data.index).addClass('active');
