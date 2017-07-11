@@ -24,8 +24,9 @@ class Home extends React.Component {
         return (
             <div ref="home">
                 <div className="ui blue inverted segment" style={{borderRadius: '0px'}}>
-                    <h2>SlideWiki...Create, Share and Enjoy Presentations</h2>
+                    <h1>SlideWiki...Create, Share and Enjoy Presentations</h1>
                     <Carousel />
+                    <div className="ui hidden divider"></div>
                 </div>
                 <div className="ui fluid container">
                     <div className="ui padded stackable grid ">
