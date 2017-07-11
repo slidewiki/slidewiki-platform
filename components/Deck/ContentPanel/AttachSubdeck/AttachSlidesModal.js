@@ -91,7 +91,7 @@ class AttachSubdeckModal extends React.Component{
         this.context.executeAction(loadRecentDecks, payload2);
         let payload3  = {
             selectedDeckId:this.state.selectedDeckId,
-            selectedDeckTitle:'First select the deck which contains the slides to attach..'
+            selectedDeckTitle:'First select the deck which contains the slides you wish to attach..'
         };
         this.context.executeAction(updateSelectedDeck,payload3);
 
