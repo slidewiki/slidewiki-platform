@@ -170,10 +170,12 @@ class AttachSubdeckModal extends React.Component{
         let actionButton2;
         let attachMenu;
         let modalDescription;
+        let modalDescription2;
 
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
             modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck" tabIndex ='-1'/>;
+            modalDescription2 = '';
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
                 segmentPanelContent = myDecksContent;
@@ -193,7 +195,8 @@ class AttachSubdeckModal extends React.Component{
         } else{ //deck selected, diplay its slides, previous and attach button
             attachMenu ='';
             searchForm ='';
-            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
+            modalDescription='';
+            modalDescription2 =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
             segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
                             data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
@@ -255,6 +258,7 @@ class AttachSubdeckModal extends React.Component{
                                {modalDescription}
                                {searchForm}
                                {segmentPanelContent}
+                               {modalDescription2}
                             </Segment>
                             <Modal.Actions>
                               {actionButton}
