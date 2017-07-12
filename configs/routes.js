@@ -223,7 +223,7 @@ export default {
         }
     },
     legacydeck: {
-        path: '/deck/:oldid(\\d+_\\w+)',
+        path: '/deck/:oldid(\\d+_\\w+.*)',
         method: 'get',
         action: (context, payload, done) => {
             context.executeAction(loadLegacy, payload, (err, result) => {
