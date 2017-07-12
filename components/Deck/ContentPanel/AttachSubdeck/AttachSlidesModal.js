@@ -11,6 +11,7 @@ import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
 import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
+import updateSelectedDeck from '../../../../actions/attachSubdeck/updateSelectedDeck';
 import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
@@ -40,10 +41,6 @@ class AttachSubdeckModal extends React.Component{
             selectedSlides:[],
             showSlides:false,
             deckSlides:[],
-
-
-          //  selectedDeckTitle: 'Select one deck...',
-          //  showSearchResults: false
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -86,12 +83,17 @@ class AttachSubdeckModal extends React.Component{
             loggedInUser:this.props.UserProfileStore.username,
             username:this.props.UserProfileStore.username
         }};
-        let payload2 ={params: {
+        let payload2 = {params: {
             limit: 20,
             offset: 0
         }};
         this.context.executeAction(loadUserDecks, payload);
         this.context.executeAction(loadRecentDecks, payload2);
+        let payload3  = {
+            selectedDeckId:this.state.selectedDeckId,
+            selectedDeckTitle:'First select the deck which contains the slides you wish to attach...'
+        };
+        this.context.executeAction(updateSelectedDeck,payload3);
 
         $('#app').attr('aria-hidden','true');
         this.setState({
@@ -257,7 +259,7 @@ class AttachSubdeckModal extends React.Component{
                             <Segment attached="bottom" textAlign="left" role="tabpanel">
                                {modalDescription}
                                {searchForm}
-                               {segmentPanelContent}                              
+                               {segmentPanelContent}
                             </Segment>
                             <Modal.Actions>
                               {actionButton}
