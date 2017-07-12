@@ -41,6 +41,7 @@ class AttachDeckList extends React.Component {
         this.context.executeAction(updateSelectedDeck,payload,null);
 
         $(this.props.actionButtonId).focus();
+        
 
     }
     handleKeyPress(event,selectedDeck){
