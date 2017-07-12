@@ -40,14 +40,17 @@ class Carousel extends React.Component {
         };
         return (
             <div ref="carousel">
-                <div className="ui container grid " style={{minHeight: '200px'}}>
+                <div className="ui grid " >
                     <div className="one wide column"></div>
                     <div className="fourteen wide column center aligned">
                         <div className="ui segment" >
                             <div className="ui two column fluid stackable grid">
                                 <div className="eleven wide column">
                                     <div className="glide" tabIndex="-1">
-
+                                        <div className="glide__arrows hide-element">
+                                            <button className="glide__arrow prev ui basic icon button" data-glide-dir="<" tabIndex="-1"><i className="ui big icon chevron left"></i></button>
+                                            <button className="glide__arrow next ui basic icon button" data-glide-dir=">" tabIndex="-1"><i className="ui big icon chevron right"></i></button>
+                                        </div>
 
                                         <div className="glide__wrapper hide-element">
                                             <ul className="glide__track">
@@ -76,10 +79,7 @@ class Carousel extends React.Component {
 
 
                                     </div>
-                                    <div onClick={this.togglePause.bind(this)} className="ui icon button" style={PauseStyle} role="button" tabIndex="0" aria-label= {this.state.paused ? 'Play' 
-                                        : 'Pause'}>
-                                        {this.state.paused ? <i className="play blue icon"></i> : <i className="pause blue icon"></i>}
-                                    </div>
+
                                 </div>
                                 <div className="left aligned five wide column">
                                     <h2>Discover SlideWiki</h2>
@@ -116,7 +116,12 @@ class Carousel extends React.Component {
                                         </NavLink>
                                     </div>
                                 </div>
-                            </div>
+                                  </div>
+                                    <div onClick={this.togglePause.bind(this)} className="ui icon button" style={PauseStyle} role="button" tabIndex="0" aria-label= {this.state.paused ? 'Play' 
+                                        : 'Pause'}>
+                                        {this.state.paused ? <i className="play blue icon"></i> : <i className="pause blue icon"></i>}
+                                    </div>
+
                         </div>
                     </div>
 

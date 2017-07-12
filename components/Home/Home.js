@@ -26,7 +26,7 @@ class Home extends React.Component {
                 <div className="ui blue inverted segment" style={{borderRadius: '0px'}}>
                     <h1>SlideWiki...Create, Share and Enjoy Presentations</h1>
                     <Carousel />
-                    <div className="ui hidden divider"></div>
+                    
                 </div>
                 <div className="ui fluid container">
                     <div className="ui padded stackable grid ">
@@ -77,7 +77,7 @@ class Home extends React.Component {
                                 <DeckList scope="featured"/>
                             </div>
                         </div>
-                        <div className="five wide column" style={{paddingRight: '2rem'}}>
+                        <div className="five wide column">
                             <div className="ui segments">
                                 <div className="ui segment top attached">
                                     <h3><FormattedMessage id='home.recent' defaultMessage='Recent decks'/>
