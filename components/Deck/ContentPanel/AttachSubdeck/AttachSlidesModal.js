@@ -138,7 +138,11 @@ class AttachSubdeckModal extends React.Component{
     handleAttachButton(){
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
-        let nodeSpec = this.state.selectedSlides.map((slideId) => {
+        //each element of the payload.selectedSlides array is like 11225-2-6 (slideId-revisionId-orderInDeck)
+        //we need to remove the order in Deck
+        let nodeSpec = this.state.selectedSlides.map((slideIdWithOrder) => {
+            let pos = slideIdWithOrder.lastIndexOf('-');
+            let slideId = slideIdWithOrder.substring(0,pos);
             return {
                 type:'slide',
                 id:slideId
