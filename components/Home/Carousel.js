@@ -49,23 +49,23 @@ class Carousel extends React.Component {
                                         <div className="glide__wrapper hide-element">
                                             <ul className="glide__track">
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/SW-deck.png" alt="Create slides with SlideWiki." />
+                                                    <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                                        <img src="/assets/images/carousel/slidewiki-300x106px.png" alt="Create slides with SlideWiki." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/OER-logo-squ-transparent.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
+                                                    <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                                        <img src="/assets/images/carousel/OER_Logo_300x92px.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/hands-squ-transparent.png" alt="Collaborative Content Authoring." />
+                                                    <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                                        <img src="/assets/images/carousel/handshake_300x145px.png" alt="Collaborative Content Authoring." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/globe-squ-transparent.png" alt="Supporting Knowledge Communities." />
+                                                    <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
+                                                        <img src="/assets/images/carousel/globe_300x134px.png" alt="Supporting Knowledge Communities." />
                                                     </a>
                                                 </li>
                                             </ul>
