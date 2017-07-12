@@ -27,7 +27,8 @@ class AttachSlides extends React.Component{
             deckSlides: this.props.AttachSubdeckModalStore.deckSlides,
             selectedSlides:this.props.AttachSubdeckModalStore.selectedSlides,
             deckSlidesTitles:this.props.AttachSubdeckModalStore.deckSlidesTitles,
-            selectedSlidesLabel: this.props.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length
+            selectedSlidesLabel: this.props.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length,
+            firstTime:true
 
         };
 
@@ -50,13 +51,17 @@ class AttachSlides extends React.Component{
 
     }
     componentDidUpdate(){
-        if(this.state.deckSlides.length !== 0) //We have the slides rendered
-            //$('#attachAllSlidesButtonId').focus();
+        if((this.state.deckSlides.length !== 0) && this.state.firstTime){ //We have the slides rendered
             $('#selectedDeckTitleId').focus();
+            this.setState({
+                firstTime:false
+            });
+        } else if (this.state.deckSlides.length === this.state.selectedSlides.length) {
+            //all slides selected...move to the attachButton
+            $('#attachAttachModal').focus();
+        }
 
-
-
-
+            //$('#attachAllSlidesButtonId').focus();
     }
 
 
@@ -86,10 +91,16 @@ class AttachSlides extends React.Component{
 
     }
     handleAllSlides(){
-        this.setState({
-            selectedSlides:this.state.deckSlides,
+
+        let selectedIds = this.state.deckSlides.map((slideId,index) => {
+            return slideId+'-'+index;
+
         });
-        this.context.executeAction(updateSelectedSlides,{selectedSlides:this.state.deckSlides},null);
+        this.setState({
+            selectedSlides:selectedIds,
+        });
+        this.context.executeAction(updateSelectedSlides,{selectedSlides:selectedIds},null);
+
     }
 
     handleNone(){
@@ -105,7 +116,6 @@ class AttachSlides extends React.Component{
         if(event.key === 'Enter'){
             event.preventDefault();
             this.handleOnclick(selectedSlide);
-
         }
     }
 
@@ -175,7 +185,7 @@ class AttachSlides extends React.Component{
 
         for(let i=0;i<numRows;i++){
             while((columnCount<this.numColumns) && (slidesShowed < this.state.deckSlides.length)){
-                slideId =this.state.deckSlides[slidesShowed];
+                slideId =this.state.deckSlides[slidesShowed]+'-'+slidesShowed; //we include the position. the same slideid can be more than one time
                 singleColumn =  <Grid.Column key={slidesShowed}
                                     id={'slide'+slidesShowed}
                                     onClick={this.handleOnclick.bind(this,slideId)}
@@ -185,7 +195,7 @@ class AttachSlides extends React.Component{
                                     role="gridcell"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
                                     tabIndex="0">
-                                    <Image src={Microservices.file.uri + '/slideThumbnail/' +slideId+'.jpeg'}
+                                    <Image src={Microservices.file.uri + '/slideThumbnail/' +this.state.deckSlides[slidesShowed]+'.jpeg'}
                                         alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
                                   </Grid.Column>;
                 columnsContent[columnCount] = singleColumn;
@@ -200,7 +210,9 @@ class AttachSlides extends React.Component{
             columnCount = 0;
             columnsContent=[];
         }
-
+        rowCount=0;
+        columnCount=0;
+        slidesShowed=0;
         return rowsContent;
 
     }
@@ -223,7 +235,7 @@ class AttachSlides extends React.Component{
                               </Segment>;
         }else{
 
-            let headerContent =  <Grid  aria-describedby="attachSlidesDescription2">                                    
+            let headerContent =  <Grid  aria-describedby="attachSlidesDescription2">
                                     <Grid.Row columns={1}>
                                       <Grid.Column>
                                         <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right" content='Selected Deck'/>
