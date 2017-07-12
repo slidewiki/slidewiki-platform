@@ -86,7 +86,7 @@ class Carousel extends React.Component {
                                     <div className="ui divided compact link items">      
                                         <NavLink className="item gslide-header gh1"  data-glide-trigger='.glide' href="/features" data-glide-dir='=1'>
                                             <div className="content">
-                                                <div className="tiny header">
+                                                <div className="ui small header">
                                                     Create Online Slide Decks
                                                 </div>
                                                 <div className="description">description</div>
@@ -94,22 +94,22 @@ class Carousel extends React.Component {
                                         </NavLink>
                                         <NavLink className="item gslide-header gh2" data-glide-trigger='.glide' data-glide-dir='=2' href="/features" >
                                             <div className="content">
-                                                <div className="tiny header">
-                                                    Repurpose and Reuse Educational Content
+                                                <div className="ui small header">
+                                                    Reuseable Educational Content
                                                 </div>
                                                 <div className="description">description</div>
                                             </div>
                                         </NavLink>
                                         <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/features" href="/features" data-glide-dir='=3'>
                                             <div className="content">
-                                                <div className="tiny header">Collaborative Content Authoring
+                                                <div className="ui small header">Collaborative Content Authoring
                                                 </div>
                                                 <div className="description">description</div>
                                             </div>
                                         </NavLink>
                                         <NavLink className="item gslide-header gh4"  href="/features" data-glide-trigger='.glide' data-glide-dir='=4'>
                                             <div className="content">
-                                                <div className="tiny header">Supporting Knowledge Communities
+                                                <div className="ui small header">Supporting Knowledge Communities
                                                 </div>
                                                 <div className="description">description</div>
                                             </div>
