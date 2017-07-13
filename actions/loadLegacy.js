@@ -11,7 +11,7 @@ export default function loadLegacy(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_FEATURED_FAILURE', err);
         } else {
-            done(null, res.new_id);
+            done({'statusCode':'301','redirectURL': '/deck/' + res.new_id});
         }
     });
 }
