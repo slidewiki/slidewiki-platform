@@ -8,6 +8,10 @@ class Carousel extends React.Component {
         this.state = {paused: 0};
     }
     componentDidMount(){
+        $('.gslide-header').removeClass('active');
+        $('.gh1').addClass('active');
+        //display carousel
+        $('.hide-element').removeClass('hide-element');
         this.slider = $('.glide').glide({
             type: 'slideshow',
             autoplay: 6000,
@@ -20,8 +24,6 @@ class Carousel extends React.Component {
                 $('.gh' + data.index).addClass('active');
             },
         });
-        //display carousel
-        $('.hide-element').removeClass('hide-element');
     }
     togglePause() {
         if(this.state.paused){
@@ -53,8 +55,8 @@ class Carousel extends React.Component {
                                         </div>
 
                                         <div className="glide__wrapper hide-element">
-                                            <ul className="glide__track">
-                                                <li className="glide__slide" >
+                                            <ul className="glide__track" style={{minHeight: '300px'}}>
+                                                <li className="glide__slide">
                                                     <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
                                                         <img src="/assets/images/carousel/slidewiki-300x106px.png" alt="Create slides with SlideWiki." />
                                                     </a>
@@ -75,15 +77,22 @@ class Carousel extends React.Component {
                                                     </a>
                                                 </li>
                                             </ul>
+
                                         </div>
 
+                                        <div onClick={this.togglePause.bind(this)} className="ui icon button" style={PauseStyle} role="button" tabIndex="0" aria-label= {this.state.paused ? 'Play'
+                                            : 'Pause'}>
+                                            {this.state.paused ? <i className="play blue icon"></i> : <i className="pause blue icon"></i>}
+                                        </div>
 
                                     </div>
 
+
                                 </div>
+
                                 <div className="left aligned five wide column">
                                     <h2>Discover SlideWiki</h2>
-                                    <div className="ui divided compact link items">      
+                                    <div className="ui right vertical fluid compact menu">
                                         <NavLink className="item gslide-header gh1"  data-glide-trigger='.glide' href="/features" data-glide-dir='=1'>
                                             <div className="content">
                                                 <div className="ui small header">
@@ -117,10 +126,6 @@ class Carousel extends React.Component {
                                     </div>
                                 </div>
                                   </div>
-                                    <div onClick={this.togglePause.bind(this)} className="ui icon button" style={PauseStyle} role="button" tabIndex="0" aria-label= {this.state.paused ? 'Play' 
-                                        : 'Pause'}>
-                                        {this.state.paused ? <i className="play blue icon"></i> : <i className="pause blue icon"></i>}
-                                    </div>
 
                         </div>
                     </div>
