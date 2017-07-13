@@ -11,7 +11,9 @@ const KEY_CODE = {
     LEFT:   37,
     UP:     38,
     RIGHT:  39,
-    DOWN:   40
+    DOWN:   40,
+    TAB: 9,
+    ENTER: 13
 };
 
 class AttachSlides extends React.Component{
@@ -60,8 +62,6 @@ class AttachSlides extends React.Component{
             //all slides selected...move to the attachButton
             $('#attachAttachModal').focus();
         }
-
-            //$('#attachAllSlidesButtonId').focus();
     }
 
 
@@ -162,6 +162,15 @@ class AttachSlides extends React.Component{
             let nextPos = this.getNextPos(pos,this.state.deckSlides.length,this.numColumns,numRows,event.keyCode);  //get next cell
              //get the id of the cell
             $('#slide'+nextPos).focus(); //move to the cell
+        } else if(event.keyCode === KEY_CODE.TAB){ //exit grid and go to button
+            event.preventDefault();
+            if ( this.state.selectedSlides.length > 0){
+                console.log('go attach');
+                $('#attachAttachModal').focus();
+            } else {
+                console.log('go previous');
+                $('#previousAttachModal').focus();
+            }
         }
 
     }
