@@ -4,26 +4,37 @@ class ContentQuestionEdit extends React.Component {
 
     constructor(props){
         super(props);
+        const numAnswers = this.props.question.answers.length;
         this.state = {
             id: this.props.question.id,
             title: this.props.question.title,
             difficulty: this.props.question.difficulty,
-            answer1: '',
-            answer2: '',
-            answer3: '',
-            answer4: '',
+            answer1: this.props.question.answers[0],
+            answer2: numAnswers > 1 ? this.props.question.answers[1]: '',
+            answer3: numAnswers > 2 ? this.props.question.answers[2]: '',
+            answer4: numAnswers > 3 ? this.props.question.answers[3]: '',
+            correct1: this.props.question.answers[0].correct,
+            correct2: this.props.question.answers[1].correct,
+            correct3: this.props.question.answers[2].correct,
+            correct4: this.props.question.answers[3].correct,
             userid: this.props.question.user_id,
             relatedObjectId: this.props.selector.sid,
             relatedObject: this.props.selector.stype,
         };
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
-        //this.updateQuestionAnswer1 = this.updateQuestionAnswer1.bind(this);
-        //this.updateQuestionAnswer2 = this.updateQuestionAnswer2.bind(this);
-        //this.updateQuestionAnswer3 = this.updateQuestionAnswer3.bind(this);
-        //this.updateQuestionAnswer4 = this.updateQuestionAnswer4.bind(this);
+        this.updateAnswer1 = this.updateAnswer1.bind(this);
+        this.updateAnswer2 = this.updateAnswer2.bind(this);
+        this.updateAnswer3 = this.updateAnswer3.bind(this);
+        this.updateAnswer4 = this.updateAnswer4.bind(this);
+
+        this.updateCorrect1 = this.updateCorrect1.bind(this);
+        this.updateCorrect2 = this.updateCorrect2.bind(this);
+        this.updateCorrect3 = this.updateCorrect3.bind(this);
+        this.updateCorrect4 = this.updateCorrect4.bind(this);
         //this.updateQuestionExplanation = this.updateQuestionExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
+        //console.log('Original difficulty:', this.state.difficulty);
     };
 
     saveButtonClick(e) {
@@ -34,6 +45,42 @@ class ContentQuestionEdit extends React.Component {
         e.preventDefault();
         console.log('Title:', this.state.title);
         console.log('Difficulty:', this.state.difficulty);
+        console.log('Answers:', this.state.answer1, this.state.answer2, this.state.answer3, this.state.answer4);
+        console.log('Correct:', this.state.correct1, this.state.correct2, this.state.correct3, this.state.correct4);
+    }
+
+    /* Update answer choice text */
+    updateAnswer1(e) {
+        this.setState({answer1: e.target.value});
+    }
+
+    updateAnswer2(e) {
+        this.setState({answer2: e.target.value});
+    }
+
+    updateAnswer3(e) {
+        this.setState({answer3: e.target.value});
+    }
+
+    updateAnswer4(e) {
+        this.setState({answer4: e.target.value});
+    }
+
+    /* Update correct choice among available answer choices */
+    updateCorrect1(e) {
+        this.setState({correct1: e.target.value});
+    }
+
+    updateCorrect2(e) {
+        this.setState({correct2: e.target.value});
+    }
+
+    updateCorrect3(e) {
+        this.setState({correct3: e.target.value});
+    }
+
+    updateCorrect4(e) {
+        this.setState({correct4: e.target.value});
     }
 
     updateQuestionTitle(e) {
@@ -41,16 +88,17 @@ class ContentQuestionEdit extends React.Component {
     };
 
     updateQuestionDifficulty(e) {
-        this.setState({difficulty: e.currentTarget.value});
+        console.log('Before resetting:', e.target.value);
+        this.setState({difficulty: e.target.value});
     }
 
     render() {
         console.log(this.props);
-        const answers = this.props.question.answers;
-        const numAnswers = answers.length;
+        const numAnswers = this.props.question.answers.length;
         const answerChoiceWidth = {
             width: '680px',
         };
+        //console.log(this.state.difficulty);
 
         return (
             <div className="ui bottom attached" data-reactid="637">
@@ -66,20 +114,30 @@ class ContentQuestionEdit extends React.Component {
                                     <div className="inline fields">
                                         <div className="field">
                                             <div className="ui radio checkbox">
-                                                <input type="radio" id="easy" name="difficulty" checked={this.state.difficulty === 1 ? 'checked': false} value={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                {this.state.difficulty === 1 ?
+                                                    <input type="radio" id="easy" name="difficulty" checked="checked" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                    : <input type="radio" id="easy" name="difficulty" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                }
                                                 <label htmlFor="easy">Easy</label>
                                             </div>
                                         </div>
                                         <div className="field">
                                             <div className="ui radio checkbox">
-                                                <input type="radio" id="moderate" name="difficulty" checked={this.state.difficulty === 2 ? 'checked': false} value={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="easy">Moderate</label>
+                                                {this.state.difficulty === 2 ?
+                                                    <input type="radio" id="moderate" name="difficulty" checked="checked" defaultValue={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                    : <input type="radio" id="moderate" name="difficulty" defaultValue={2} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                }
+                                                <label htmlFor="moderate">Moderate</label>
                                             </div>
-                                        </div><div className="field">
-                                        <div className="ui radio checkbox">
-                                                <input type="radio" id="hard" name="difficulty" checked={this.state.difficulty === 3 ? 'checked': false} value={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
-                                                <label htmlFor="easy">Hard</label>
                                         </div>
+                                        <div className="field">
+                                            <div className="ui radio checkbox">
+                                            {this.state.difficulty === 3 ?
+                                                <input type="radio" id="hard" name="difficulty" checked="checked" defaultValue={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                : <input type="radio" id="hard" name="difficulty" defaultValue={3} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                            }
+                                                <label htmlFor="hard">Hard</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -90,46 +148,46 @@ class ContentQuestionEdit extends React.Component {
                                 <legend>Answer Choices</legend>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {answers[0].correct ?
-                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" defaultChecked="checked"/> :
+                                        {this.state.correct1 ?
+                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect1}/> :
                                             <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden"/>
                                         }
                                         <label htmlFor="answer1"></label>
                                     </div>
-                                    <input style={answerChoiceWidth} type="text" name="response1" id="response1" defaultValue={answers[0].answer} />
+                                    <input style={answerChoiceWidth} type="text" name="response1" id="response1" defaultValue={this.state.answer1}  onChange={this.updateAnswer1}/>
                                     <label htmlFor="response1"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {numAnswers > 1 && answers[1].correct ?
-                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked="checked"/> :
+                                        {numAnswers > 1 && this.state.correct2 ?
+                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect2}/> :
                                             <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" />
                                         }
                                         <label htmlFor="answer2"></label>
                                     </div>
-                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" defaultValue={numAnswers > 1 ? answers[1].answer: ''}/>
+                                    <input style={answerChoiceWidth} type="text" name="response2" id="response2" defaultValue={numAnswers > 1 ? this.state.answer2: ''}  onChange={this.updateAnswer2}/>
                                     <label htmlFor="response2"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {numAnswers > 2 && answers[2].correct ?
-                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked="checked"/> :
+                                        {numAnswers > 2 && this.state.correct3 ?
+                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect3}/> :
                                             <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" />
                                         }
                                         <label htmlFor="answer3"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 2 ? answers[2].answer: ''}/>
+                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 2 ? this.state.answer3: ''} onChange={this.updateAnswer3}/>
                                     <label htmlFor="response3"></label>
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {numAnswers > 3 && answers[3].correct ?
-                                            <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked="checked"/> :
+                                        {numAnswers > 3 && this.state.correct4 ?
+                                            <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect4}/> :
                                             <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" />
                                         }
                                         <label htmlFor="answer4"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 3 ? answers[3].answer: ''}/>
+                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 3 ? this.state.answer4: ''} onChange={this.updateAnswer4}/>
                                     <label htmlFor="response4"></label>
                                 </div>
                             </fieldset>
