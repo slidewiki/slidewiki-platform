@@ -8,6 +8,7 @@ class Carousel extends React.Component {
         this.state = {paused: 0};
     }
     componentDidMount(){
+        let self = this;
         $('.gslide-header').removeClass('active');
         $('.gh1').addClass('active');
         //display carousel
@@ -22,6 +23,10 @@ class Carousel extends React.Component {
             afterTransition: function(data){
                 $('.gslide-header').removeClass('active');
                 $('.gh' + data.index).addClass('active');
+                //in case a user manually runs the carousel in pause mode
+                if(self.state.paused){
+                    self.setState({paused: 0});
+                }
             },
         });
     }
