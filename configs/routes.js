@@ -249,13 +249,11 @@ export default {
         }
     },
     legacydeck: {
-        path: '/deck/:oldid(\\d+_\\w+)',
+        path: '/deck/:oldid(\\d+_\\w+.*)',
         method: 'get',
         action: (context, payload, done) => {
-            context.executeAction(loadLegacy, payload, (err, result) => {
-                if (err) console.log(err);
-                context.executeAction(navigateAction, {'url': '/deck/'+result}, done);
-            });        }
+            context.executeAction(loadLegacy, payload, done);
+        }
     },
     contributors: {
         path: '/contributors/:stype/:sid',
