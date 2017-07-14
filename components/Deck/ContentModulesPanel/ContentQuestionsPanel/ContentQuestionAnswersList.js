@@ -96,7 +96,7 @@ class ContentQuestionAnswersList extends React.Component {
         return (
             <div>
                 { this.state.isEditButtonClicked ?
-                    <ContentQuestionEdit question={this.props.items} selector={this.props.selector}/> :
+                    <ContentQuestionEdit question={this.props.items} selector={this.props.selector} userId={userId} /> :
                     <div ref="contentquestionanswersList">
                         <div className="ui relaxed list">
                             {answers}
