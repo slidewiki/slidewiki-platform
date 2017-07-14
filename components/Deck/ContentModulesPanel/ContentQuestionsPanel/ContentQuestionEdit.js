@@ -5,7 +5,6 @@ class ContentQuestionEdit extends React.Component {
     constructor(props){
         super(props);
         const numAnswers = this.props.question.answers.length;
-        console.log(numAnswers);
         this.state = {
             id: this.props.question.id,
             title: this.props.question.title,
@@ -18,36 +17,30 @@ class ContentQuestionEdit extends React.Component {
             correct2: this.props.question.answers[1].correct,
             correct3: this.props.question.answers[2].correct,
             correct4: this.props.question.answers[3].correct,
-            userid: this.props.question.user_id,
+            explanation: 'Test explanation', //this.props.question.explanation,
+            userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
             relatedObject: this.props.selector.stype,
         };
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
+        /* update answers */
         this.updateAnswer1 = this.updateAnswer1.bind(this);
         this.updateAnswer2 = this.updateAnswer2.bind(this);
         this.updateAnswer3 = this.updateAnswer3.bind(this);
         this.updateAnswer4 = this.updateAnswer4.bind(this);
-
+        /* update correct answer choice */
         this.updateCorrect1 = this.updateCorrect1.bind(this);
         this.updateCorrect2 = this.updateCorrect2.bind(this);
         this.updateCorrect3 = this.updateCorrect3.bind(this);
         this.updateCorrect4 = this.updateCorrect4.bind(this);
-        //this.updateQuestionExplanation = this.updateQuestionExplanation.bind(this);
+
+        this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
-        //console.log('Original difficulty:', this.state.difficulty);
     };
 
     saveButtonClick(e) {
-        //this.context.executeAction(saveQuestion, {
-            // TODO collect values from input elements by id
-        //    qstid: this.props.question.id
-        //});
         e.preventDefault();
-        console.log('Title:', this.state.title);
-        console.log('Difficulty:', this.state.difficulty);
-        console.log('Answers:', this.state.answer1, this.state.answer2, this.state.answer3, this.state.answer4);
-        console.log('Correct:', this.state.correct1, this.state.correct2, this.state.correct3, this.state.correct4);
     }
 
     /* Update answer choice text */
@@ -84,6 +77,10 @@ class ContentQuestionEdit extends React.Component {
         this.setState({correct4: e.target.checked});
     }
 
+    updateExplanation(e) {
+        this.setState({explanation: e.target.value});
+    }
+
     updateQuestionTitle(e) {
         this.setState({title: e.target.value});
     };
@@ -93,7 +90,6 @@ class ContentQuestionEdit extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         const numAnswers = this.props.question.answers.length;
         const answerChoiceWidth = {
             width: '680px',
@@ -180,7 +176,7 @@ class ContentQuestionEdit extends React.Component {
                         </div>
                         <div className="field">
                             <label htmlFor="explanation">Explanation (optional)</label>
-                            <textarea rows="2" id="explanation"></textarea>
+                            <textarea rows="2" id="explanation" defaultValue={this.state.explanation} onChange={this.updateExplanation}></textarea>
                         </div>
                         <div className="field">
                             <div className="ui container">
