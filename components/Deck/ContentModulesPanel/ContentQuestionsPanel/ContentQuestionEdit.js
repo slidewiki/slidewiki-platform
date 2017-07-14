@@ -5,14 +5,15 @@ class ContentQuestionEdit extends React.Component {
     constructor(props){
         super(props);
         const numAnswers = this.props.question.answers.length;
+        console.log(numAnswers);
         this.state = {
             id: this.props.question.id,
             title: this.props.question.title,
             difficulty: this.props.question.difficulty,
-            answer1: this.props.question.answers[0],
-            answer2: numAnswers > 1 ? this.props.question.answers[1]: '',
-            answer3: numAnswers > 2 ? this.props.question.answers[2]: '',
-            answer4: numAnswers > 3 ? this.props.question.answers[3]: '',
+            answer1: this.props.question.answers[0].answer,
+            answer2: numAnswers > 1 ? this.props.question.answers[1].answer: '',
+            answer3: numAnswers > 2 ? this.props.question.answers[2].answer: '',
+            answer4: numAnswers > 3 ? this.props.question.answers[3].answer: '',
             correct1: this.props.question.answers[0].correct,
             correct2: this.props.question.answers[1].correct,
             correct3: this.props.question.answers[2].correct,
@@ -68,19 +69,19 @@ class ContentQuestionEdit extends React.Component {
 
     /* Update correct choice among available answer choices */
     updateCorrect1(e) {
-        this.setState({correct1: e.target.value});
+        this.setState({correct1: e.target.checked});
     }
 
     updateCorrect2(e) {
-        this.setState({correct2: e.target.value});
+        this.setState({correct2: e.target.checked});
     }
 
     updateCorrect3(e) {
-        this.setState({correct3: e.target.value});
+        this.setState({correct3: e.target.checked});
     }
 
     updateCorrect4(e) {
-        this.setState({correct4: e.target.value});
+        this.setState({correct4: e.target.checked});
     }
 
     updateQuestionTitle(e) {
@@ -88,7 +89,6 @@ class ContentQuestionEdit extends React.Component {
     };
 
     updateQuestionDifficulty(e) {
-        console.log('Before resetting:', e.target.value);
         this.setState({difficulty: e.target.value});
     }
 
@@ -98,8 +98,6 @@ class ContentQuestionEdit extends React.Component {
         const answerChoiceWidth = {
             width: '680px',
         };
-        //console.log(this.state.difficulty);
-
         return (
             <div className="ui bottom attached" data-reactid="637">
                 <div className="ui padded segment">
@@ -148,10 +146,7 @@ class ContentQuestionEdit extends React.Component {
                                 <legend>Answer Choices</legend>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {this.state.correct1 ?
-                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect1}/> :
-                                            <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden"/>
-                                        }
+                                        <input type="checkbox" name="example1" id="answer1" tabIndex="0" className="hidden" defaultChecked={this.state.correct1} onChange={this.updateCorrect1}/>
                                         <label htmlFor="answer1"></label>
                                     </div>
                                     <input style={answerChoiceWidth} type="text" name="response1" id="response1" defaultValue={this.state.answer1}  onChange={this.updateAnswer1}/>
@@ -159,10 +154,7 @@ class ContentQuestionEdit extends React.Component {
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {numAnswers > 1 && this.state.correct2 ?
-                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect2}/> :
-                                            <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" />
-                                        }
+                                        <input  type="checkbox" name="example2" id="answer2" tabIndex="0" className="hidden" defaultChecked={numAnswers > 2 && this.state.correct2} onChange={this.updateCorrect2}/>
                                         <label htmlFor="answer2"></label>
                                     </div>
                                     <input style={answerChoiceWidth} type="text" name="response2" id="response2" defaultValue={numAnswers > 1 ? this.state.answer2: ''}  onChange={this.updateAnswer2}/>
@@ -170,10 +162,7 @@ class ContentQuestionEdit extends React.Component {
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {numAnswers > 2 && this.state.correct3 ?
-                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect3}/> :
-                                            <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" />
-                                        }
+                                        <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked={numAnswers > 2 && this.state.correct3} onChange={this.updateCorrect3}/>
                                         <label htmlFor="answer3"></label>
                                     </div>
                                     <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 2 ? this.state.answer3: ''} onChange={this.updateAnswer3}/>
@@ -181,10 +170,7 @@ class ContentQuestionEdit extends React.Component {
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        {numAnswers > 3 && this.state.correct4 ?
-                                            <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked="checked" onChange={this.updateCorrect4}/> :
-                                            <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" />
-                                        }
+                                        <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" checked={(numAnswers > 3 && this.state.correct4)} onChange={this.updateCorrect4}/>
                                         <label htmlFor="answer4"></label>
                                     </div>
                                     <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 3 ? this.state.answer4: ''} onChange={this.updateAnswer4}/>
