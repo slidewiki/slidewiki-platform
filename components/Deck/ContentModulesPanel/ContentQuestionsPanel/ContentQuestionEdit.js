@@ -1,4 +1,5 @@
 import React from 'react';
+import saveQuestion from '../../../../actions/questions/saveQuestion';
 
 class ContentQuestionEdit extends React.Component {
 
@@ -41,6 +42,7 @@ class ContentQuestionEdit extends React.Component {
 
     saveButtonClick(e) {
         e.preventDefault();
+        this.context.executeAction(saveQuestion, {question: this.state});
     }
 
     /* Update answer choice text */
@@ -192,5 +194,9 @@ class ContentQuestionEdit extends React.Component {
         );
     }
 }
+
+ContentQuestionEdit.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 export default ContentQuestionEdit;
