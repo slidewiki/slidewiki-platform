@@ -462,11 +462,6 @@ class UserRegistration extends React.Component {
                 <div className="ten wide column">
                     <div className="ui blue padded center aligned segment">
                         <h2 className="ui dividing header">Sign Up</h2>
-            <div id="signupwelcome" className="ui message">
-            <h3 className="header">Welcome to SlideWiki beta</h3>
-            <p>This is the beta site for organisations involved with trialling SlideWiki. If you wish to add or edit decks on SlideWiki, use this form to sign up for an account. You will receive an email if your account is authorised.</p>
-            </div>
-
                         <h3 className="ui dividing header">Sign Up with a Social Provider</h3>
 
                             {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
