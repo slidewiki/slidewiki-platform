@@ -63,7 +63,7 @@ class Carousel extends React.Component {
                                             <ul className="glide__track" style={{minHeight: '300px'}}>
                                                 <li className="glide__slide">
                                                     <a href="/features" className="ui large image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/slidewiki_500x200px.png" alt="Create slides with SlideWiki." />
+                                                        <img src="/assets/images/carousel/SW-logo-squ.png" alt="Create slides with SlideWiki." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
@@ -78,7 +78,7 @@ class Carousel extends React.Component {
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <a href="/features" className="ui large  image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/globe-smartphone-600px.png" alt="Supporting Knowledge Communities." />
+                                                        <img src="/assets/images/carousel/globe-squ-transparent.png" alt="Supporting Knowledge Communities." />
                                                     </a>
                                                 </li>
                                             </ul>
