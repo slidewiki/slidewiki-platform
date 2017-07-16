@@ -155,20 +155,20 @@ class UserRegistration extends React.Component {
                 buttonsStyling: false
             })
                 .then((dismiss) => {
-                if (dismiss === 'cancel')
+                    if (dismiss === 'cancel')
+                        return true;
+
+                    this.context.executeAction(navigateAction, {
+                        url: '/'
+                    });
+
+                    $('.ui.login.modal').modal('show');
+
                     return true;
-
-                this.context.executeAction(navigateAction, {
-                    url: '/'
-                });
-
-                $('.ui.login.modal').modal('show');
-
-                return true;
-            })
+                })
                 .catch(() => {
-                return true;
-            });
+                    return true;
+                });
         }
         else if (nextProps.UserRegistrationStore.socialCredentialsTakenByDeactivatedAccount && !this.props.UserRegistrationStore.socialCredentialsTakenByDeactivatedAccount) {
             $(ReactDOM.findDOMNode(this.refs.modal_social.refs.wrappedElement.refs.SocialRegistration_Modal)).modal('hide');
@@ -185,11 +185,11 @@ class UserRegistration extends React.Component {
                 buttonsStyling: false
             })
                 .then((dismiss) => {
-                return true;
-            })
+                    return true;
+                })
                 .catch(() => {
-                return true;
-            });
+                    return true;
+                });
         }
         else if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'login_failed_register_now') {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
@@ -210,8 +210,8 @@ class UserRegistration extends React.Component {
                 buttonsStyling: false
             })
                 .then(() => {
-                return this.goHome();
-            });
+                    return this.goHome();
+                });
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
             swal({
                 title: 'Error!',
@@ -224,8 +224,8 @@ class UserRegistration extends React.Component {
                 buttonsStyling: false
             })
                 .then(() => {
-                return this.closeErrorDimmer();
-            });
+                    return this.closeErrorDimmer();
+                });
         }
     }
 
