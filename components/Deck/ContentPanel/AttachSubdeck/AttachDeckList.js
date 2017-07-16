@@ -8,6 +8,14 @@ import {Microservices} from '../../../../configs/microservices';
 import updateSelectedDeck  from '../../../../actions/attachSubdeck/updateSelectedDeck';
 
 
+const KEY_CODE = {
+    LEFT:   37,
+    UP:     38,
+    RIGHT:  39,
+    DOWN:   40,
+    TAB: 9,
+    ENTER: 13
+};
 
 class AttachDeckList extends React.Component {
     constructor(props){
@@ -40,15 +48,53 @@ class AttachDeckList extends React.Component {
         };
         this.context.executeAction(updateSelectedDeck,payload,null);
 
-        $(this.props.actionButtonId).focus();
+//        $(this.props.actionButtonId).focus();
+
 
     }
-    handleKeyPress(event,selectedDeck){
-
+    handleKeyPress(selectedDeck,event){
+        console.log('enter pressed key press');
         if(event.key === 'Enter'){
-            event.preventDefault();
+
             this.handleOnclick(selectedDeck);
         }
+    }
+
+    getNextPos(pos,numItems,eventKeyCode){
+        /*******************************************
+            Returns next position in a liat, taking into account
+            the arrow key pressed and the number of items of the list
+        ********************************************/
+        let nextPos = parseInt(pos); //In case of overflow, we stayed in the same position. Force working with integers
+                                    //right and left arrows: same position
+        switch (eventKeyCode) {
+            case KEY_CODE.UP:
+                if(nextPos !== 0)
+                    nextPos -- ;
+                break;
+            case KEY_CODE.DOWN:
+                if(nextPos !== (numItems-1))
+                    nextPos ++ ;
+                break;
+        }
+        return nextPos;
+
+    }
+    handleKeyDown(pos,event){
+
+        if(event.keyCode === KEY_CODE.RIGHT ||
+           event.keyCode === KEY_CODE.LEFT ||
+           event.keyCode === KEY_CODE.UP ||
+           event.keyCode === KEY_CODE.DOWN ){
+           //the user wants to navigate through the list
+
+            let nextPos = this.getNextPos(pos,this.props.decks.length,event.keyCode);  //get next item
+             //get the id of the cell
+            $('#deckItemList'+nextPos).focus(); //move to the cell
+        } else if(event.keyCode === KEY_CODE.TAB){ //exit list and go to button
+            $(this.props.actionButtonId).focus();
+        }
+
     }
 
     render() {
@@ -86,13 +132,15 @@ class AttachDeckList extends React.Component {
                         };
                         return (
                            <Item key={index}
+                                  id={'deckItemList'+index}
                                   onClick={this.handleOnclick.bind(this,selectedDeck)}
-                                  onKeyPress={(e) => { this.handleKeyPress(e,selectedDeck);}}
+                                  onKeyPress={this.handleKeyPress.bind(this,selectedDeck)}
+                                  onKeyDown={this.handleKeyDown.bind(this,index)}
                                   style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
                                   role="listitem"
                                   aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
                                   tabIndex="0">
-                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} size="small"/>
+                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} alt={deck.title} size="small"/>
                                 <Item.Content verticalAlign="middle" >
                                   <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
                                       {deck.title}
