@@ -62,23 +62,23 @@ class Carousel extends React.Component {
                                         <div className="glide__wrapper hide-element">
                                             <ul className="glide__track" style={{minHeight: '300px'}}>
                                                 <li className="glide__slide">
-                                                    <a href="http://slidewiki.org" className="ui large image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/slidewiki 500x200px.png" alt="Create slides with SlideWiki." />
+                                                    <a href="/features" className="ui large image" tabIndex="-1">
+                                                        <img src="/assets/images/carousel/slidewiki_500x200px.png" alt="Create slides with SlideWiki." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui large image" tabIndex="-1">
+                                                    <a href="/features" className="ui large image" tabIndex="-1">
                                                         <img src="/assets/images/carousel/OER-Logo.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui large image" tabIndex="-1">
+                                                    <a href="/features" className="ui large image" tabIndex="-1">
                                                         <img src="/assets/images/carousel/hands-1926704_640.png" alt="Collaborative Content Authoring." />
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <a href="http://slidewiki.org" className="ui large  image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/gglobe-smartphone-600px.png" alt="Supporting Knowledge Communities." />
+                                                    <a href="/features" className="ui large  image" tabIndex="-1">
+                                                        <img src="/assets/images/carousel/globe-smartphone-600px.png" alt="Supporting Knowledge Communities." />
                                                     </a>
                                                 </li>
                                             </ul>
