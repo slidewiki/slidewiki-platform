@@ -140,7 +140,7 @@ export default {
     welcome: {
         path: '/welcome',
         method: 'get',
-        page: 'welcome',
+        page: 'Welcome',
         title: 'SlideWiki -- Welcome',
         handler: require('../components/Home/Welcome'),
         action: (context, payload, done) => {
