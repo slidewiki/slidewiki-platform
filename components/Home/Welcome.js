@@ -23,7 +23,7 @@ class welcome extends React.Component {
 
                             </div>
                             <p>Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML slides to allow you to continue to edit and add new slides.</p>
-                            <p>To get inspiration for your slides, why not search the existing decks on SlideWiki?</p>
+                            <p>Need more inspiration to make your own slides? Why not search or browse throughexisting SlideWiki decks.</p>
                         </div>
                     </div>
                     <div className="four wide column">
@@ -82,7 +82,7 @@ class welcome extends React.Component {
                             </div>
                             <div className="ui list">
                                 <div className="item">
-                                    <div className="content">Use the <strong>Presentation mode</strong> to view a deck as a slideshow. Includes a timer and speaker notes view.
+                                    <div className="content">Use the <strong>Presentation mode</strong> to view a deck as a slideshow. Includes a timer and speaker notes' view.
                                     </div>
                                 </div>
                                 <div className="item">
