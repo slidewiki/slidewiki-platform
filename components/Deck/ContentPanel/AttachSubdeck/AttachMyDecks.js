@@ -46,8 +46,7 @@ class AttachMyDecks extends React.Component{
         }else{
             myDecksContent = <Segment id="panelMyDecksContent">
                                 <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} role='alert' aria-alert='polite' basic color="blue"/>
-
+                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} role='alert' aria-live='polite' basic color="blue"/>
                                 <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} actionButtonId={this.props.actionButtonId} maxHeight='400px'/>
                               </Segment>;
         }
