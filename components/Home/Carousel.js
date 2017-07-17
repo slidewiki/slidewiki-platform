@@ -102,7 +102,7 @@ class Carousel extends React.Component {
                                                 <div className="ui small header">
                                                     Create Online Slide Decks
                                                 </div>
-                                                <div className="description">Use our  slide creator or import your existing slides to form online HTML slide decks./div>
+                                                <div className="description">Use our  slide creator or import your existing slides to form online HTML slide decks.
                                                 </div>
                                             </div>
                                         </NavLink>
