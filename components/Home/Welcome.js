@@ -2,6 +2,9 @@ import React from 'react';
 
 class welcome extends React.Component {
     render() {
+        const compMessageStyle = {
+            background: '#1E78BB'
+        };
         return (
             <div className="ui fluid container" ref="welcome">
 
@@ -16,7 +19,7 @@ class welcome extends React.Component {
                         <div className="ui attached fluid segment">
                             <p>Start creating your own slide deck by selecting the Add deck button.
                             </p>
-                            <div className="ui message" style="background: #1E78BB">   
+                            <div className="ui message" style={compMessageStyle}>
                                 <button className="ui right labeled lightGrey icon button">
                                     <i className="right plus icon"></i>Add deck
                                 </button>
@@ -33,7 +36,7 @@ class welcome extends React.Component {
                         <div className="ui attached fluid segment">
                             <p>Want to enhance your decks? SlideWiki allows you to create your own slides based on decks that have been published on SlideWiki.
                             </p>
-                            <div className="ui relaxed list">   
+                            <div className="ui relaxed list">
                                 <div className="item">
                                     <i className="large fork blue middle aligned icon"></i>
                                     <div className="content">
@@ -90,11 +93,11 @@ class welcome extends React.Component {
                                     </div>
                                 </div>
                                 <div className="item">
-                                    <div className="content">Add <strong>Comments</strong> to decks and slides  to interact with other learners.   
+                                    <div className="content">Add <strong>Comments</strong> to decks and slides  to interact with other learners.
                                     </div>
                                 </div>
                                 <div className="item">
-                                    <div className="content"><strong>Download</strong> decks in PDF, ePub or SCROM format.   
+                                    <div className="content"><strong>Download</strong> decks in PDF, ePub or SCROM format.
                                     </div>
                                 </div>
                             </div>
