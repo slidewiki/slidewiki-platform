@@ -77,7 +77,7 @@ class Header extends React.Component {
             <div>
             {cookieBanner}
               <MediaQuery minDeviceWidth={768} values={{deviceWidth: 1600}}>
-                <div className="ui inverted blue menu" ref="header">
+                <div className="ui inverted blue menu" ref="header" style={{borderRadius: '0px'}}>
                     <div className="ui fluid container">
                         <a className="item" href='/'>
                             <img  src="/assets/images/slideWiki-logo-linear.png" alt="SlideWiki" style={{width: '200px'}}/>
@@ -87,7 +87,7 @@ class Header extends React.Component {
                         </div>
                         <div className="ui right inverted blue menu">
                             <div className="item">
-                              <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button">
+                              <NavLink routeName="addDeck" activeClass="active" className="ui right labeled icon button" role="button">
                                   <i className="right plus icon"></i>Add deck
                               </NavLink>
                             </div>
@@ -98,7 +98,7 @@ class Header extends React.Component {
                 </div>
               </MediaQuery>
               <MediaQuery maxDeviceWidth={767}>
-                <div className="ui inverted blue menu" ref="header">
+                <div className="ui inverted blue menu" style={{borderRadius: '0px'}} ref="header">
                   <button className="ui icon button item" onClick={this.toggleSidebar.bind(this)}><i className="content icon"/></button>
                   <div className="ui right inverted blue menu">
                     <NavLink className="item" href='/'>
