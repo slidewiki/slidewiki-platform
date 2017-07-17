@@ -7,7 +7,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.userDecks = [];
         this.recentDecks = [];
         this.searchDecks =[];
-        this.selectedDeckTitle='Select one deck...';
+        this.selectedDeckTitle='Select the deck you wish to attach...';
         this.selectedDeckId =-1;
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
@@ -122,7 +122,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.userDecks = [];
         this.recentDecks = [];
         this.searchDecks = [];
-        this.selectedDeckTitle = 'Select one deck...';
+        this.selectedDeckTitle = 'Select the deck you wish to attach...';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';
@@ -133,7 +133,7 @@ class AttachSubdeckModalStore extends BaseStore{
         this.emitChange();
     }
     initModal(){
-        this.selectedDeckTitle = 'Select one deck...';
+        this.selectedDeckTitle = 'Select the deck you wish to attach...';
         this.selectedDeckId = -1;
         this.showSearchResults = false;
         this.activeItem = 'MyDecks';

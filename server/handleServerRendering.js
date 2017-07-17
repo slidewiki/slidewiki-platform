@@ -68,7 +68,7 @@ export default function handleServerRendering(req, res, next){
     cookie.plugToRequest(req,res);
     debug('Executing loadIntl action');
     context.getActionContext().executeAction(loadIntlMessages, req.locale, (err) => {
-        if (err) { //Hello, Vinay =) 
+        if (err) { //Hello, Vinay =)
             err.statusCode = 503;
             let html = '<h1>Not found locale</h1>';
             debug('Sending markup');
@@ -82,6 +82,10 @@ export default function handleServerRendering(req, res, next){
                 reqId: req.reqId
             }, (err) => {
                 if (err) {
+                    if (err.statusCode && err.statusCode === '301') {
+                        //console.log('REDIRECTING to '+ JSON.stringify(err));
+                        res.redirect(err.redirectURL);
+                    }else
                     if (err.statusCode && err.statusCode === '404') {
                         let html = renderApp(req, res, context);
                         debug('Sending markup');
