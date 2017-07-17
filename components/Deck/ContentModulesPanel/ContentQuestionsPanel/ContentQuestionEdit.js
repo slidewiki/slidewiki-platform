@@ -7,7 +7,7 @@ class ContentQuestionEdit extends React.Component {
         super(props);
         const numAnswers = this.props.question.answers.length;
         this.state = {
-            id: this.props.question.id,
+            qid: this.props.question.id,
             title: this.props.question.title,
             difficulty: this.props.question.difficulty,
             answer1: this.props.question.answers[0].answer,
