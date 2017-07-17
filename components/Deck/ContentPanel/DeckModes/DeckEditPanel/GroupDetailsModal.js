@@ -27,7 +27,7 @@ class GroupDetailsModal extends React.Component {
                 <div className="fifteen wide column">
                   <a className="header" href={'/user/' + this.props.group.creator.username}>{this.props.group.creator.username}</a>
                   <div className="description">
-                    Group leader
+                    Group creator
                   </div>
                   {optionalText}
                 </div>
@@ -79,6 +79,8 @@ class GroupDetailsModal extends React.Component {
               </div>
             </div>
         );
+
+        window.scrollTo(0, 0);
     }
 }
 
