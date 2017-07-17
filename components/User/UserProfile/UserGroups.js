@@ -95,7 +95,7 @@ class UserGroups extends React.Component {
                         <div className="column">
                             <div className="ui header"><h3>{group.name}</h3></div>
                             <div
-                                 className="meta">{group.members.length} member{(group.members.length !== 1) ? 's': ''}</div>
+                                 className="meta">{group.members.length+1} member{((group.members.length+1) !== 1) ? 's': ''}</div>
                         </div>
 
                         <div className="right aligned column">
