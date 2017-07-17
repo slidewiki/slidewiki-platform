@@ -11,7 +11,8 @@ class ContentQuestionAnswersList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            isEditButtonClicked: false
+            isEditButtonClicked: false,
+	    showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
@@ -56,11 +57,11 @@ class ContentQuestionAnswersList extends React.Component {
             return (
               <div key={index}>
                 <a className="header">
-                  { node.answer }
+                  {node.answer}
                 </a>
                 <div className="description">
                   <p>
-                    { node.explanation }
+                    <label><strong>Explanation:</strong></label> {node.explanation}
                   </p>
                 </div>
               </div>
@@ -77,16 +78,14 @@ class ContentQuestionAnswersList extends React.Component {
                   </div>
                 </div>
                 <div className="column">
-                  <button className="ui compact button primary"
-                    onClick={ this.handleButtonClick }
-                    >
+                  <button className="ui compact button primary" onClick={this.handleButtonClick}>
                     <i className=" help circle icon" />
                     Show answer
                   </button>
                   {showEditButton()}
                   <div className="ui item">
                     <div className="content">
-                      { this.state.showCorrect ? correctAnswers : null }
+                      {this.state.showCorrect ? correctAnswers : null}
                     </div>
                   </div>
                 </div>

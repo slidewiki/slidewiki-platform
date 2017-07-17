@@ -1,9 +1,9 @@
 import React from 'react';
-import saveQuestion from '../../../../actions/questions/saveQuestion';
+import updateQuestion from '../../../../actions/questions/updateQuestion';
 
 class ContentQuestionEdit extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         const numAnswers = this.props.question.answers.length;
         this.state = {
@@ -15,9 +15,9 @@ class ContentQuestionEdit extends React.Component {
             answer3: numAnswers > 2 ? this.props.question.answers[2].answer: '',
             answer4: numAnswers > 3 ? this.props.question.answers[3].answer: '',
             correct1: this.props.question.answers[0].correct,
-            correct2: this.props.question.answers[1].correct,
-            correct3: this.props.question.answers[2].correct,
-            correct4: this.props.question.answers[3].correct,
+            correct2: numAnswers > 2 ? this.props.question.answers[1].correct: '',
+            correct3: numAnswers > 3 ? this.props.question.answers[2].correct: '',
+            correct4: numAnswers > 3 ? this.props.question.answers[3].correct: '',
             explanation: 'Test explanation', //this.props.question.explanation,
             userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
@@ -42,7 +42,7 @@ class ContentQuestionEdit extends React.Component {
 
     saveButtonClick(e) {
         e.preventDefault();
-        this.context.executeAction(saveQuestion, {question: this.state});
+        this.context.executeAction(updateQuestion, {question: this.state});
     }
 
     /* Update answer choice text */
@@ -59,6 +59,7 @@ class ContentQuestionEdit extends React.Component {
     }
 
     updateAnswer4(e) {
+        //console.log(e.target.value);
         this.setState({answer4: e.target.value});
     }
 
@@ -76,6 +77,7 @@ class ContentQuestionEdit extends React.Component {
     }
 
     updateCorrect4(e) {
+        console.log(e.target.value);
         this.setState({correct4: e.target.checked});
     }
 
@@ -168,7 +170,7 @@ class ContentQuestionEdit extends React.Component {
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input  type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" checked={(numAnswers > 3 && this.state.correct4)} onChange={this.updateCorrect4}/>
+                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked={(numAnswers > 3 && this.state.correct4)} onChange={this.updateCorrect4}/>
                                         <label htmlFor="answer4"></label>
                                     </div>
                                     <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 3 ? this.state.answer4: ''} onChange={this.updateAnswer4}/>

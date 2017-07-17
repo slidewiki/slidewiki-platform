@@ -75,12 +75,8 @@ class ContentQuestionsPanel extends React.Component {
             case 'deck':
                 buttonBar = (
                     <div className='ui buttons'>
-                        <button className='ui button'>
-                            Exam mode
-                        </button>
-                        <button className='ui button'>
-                            Test mode
-                        </button>
+                        <button className='ui button'>Exam mode</button>
+                        <button className='ui button'>Test mode</button>
                         <button className='ui button blue'>
                             <i className='file pdf outline icon'></i>
                             Export to PDF
@@ -100,7 +96,7 @@ class ContentQuestionsPanel extends React.Component {
         );
 
         const getUserButton = () => {
-            if(userId && creatorId === userId){
+            if(userId && creatorId === userId) {
                 return addQuestionButton;
             }
             return null;
