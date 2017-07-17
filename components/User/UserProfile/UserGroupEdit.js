@@ -162,7 +162,7 @@ class UserGroupEdit extends React.Component {
               <div className="fourteen wide column">
                 <div className="content">
                     <a className="header" href={'/user/' + this.props.UserProfileStore.username}>{this.props.UserProfileStore.username}</a>
-                    <div className="description">You are the creator, which makes you also a member.</div>
+                    <div className="description">Group owner</div>
                 </div>
               </div>
             </div>
