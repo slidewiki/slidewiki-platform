@@ -7,7 +7,7 @@ class features extends React.Component {
                 <div className="ui hidden divider"></div>
                 <h1 className="ui header">Discover SlideWiki</h1>
                 <div className="basic container">
-                    <p>>SlideWiki's goal is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics.</p>
+                    <p>SlideWiki's goal is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics.</p>
                 </div>
                 <div className="ui padded stackable grid">
                     <div className="eight wide column">
