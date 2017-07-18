@@ -4,10 +4,11 @@ class features extends React.Component {
     render() {
         return (
             <div className="ui container" ref="features">
-
-
+                <div className="ui hidden divider"></div>
                 <h1 className="ui header">Discover SlideWiki</h1>
-                <p>SlideWiki's goal is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics.</p>
+                <div className=basic container>
+                    <p>>SlideWiki's goal is to revolutionise how educational materials can be authored, shared and reused. By enabling authors and students to create and share slide decks as HTML in an open platform, communities around the world can benefit from materials created by world-leading educators on a wide range of topics.</p>
+                </div>
                 <div className="ui padded stackable grid">
                     <div className="eight wide column">
                         <div className="ui attached message">
@@ -82,9 +83,11 @@ class features extends React.Component {
                                     </div>
                                 </div>
                                 <div className="item">
-                                    <i className="large circle blue play center aligned icon"></i>
-                                    <div className="header">Presentation mode </div>
-                                    <div className="content">Use the <strong>Presentation mode</strong> to view a deck as a slideshow. Includes a timer and speaker notes' view.
+                                    <i className="large circle blue play middle aligned icon"></i>
+                                    <div className="content">
+                                        <div className="header">Presentation mode </div>
+                                        <div className="description">Use the Presentation mode to view a deck as a slideshow. Includes a timer and speaker notes' view.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +129,7 @@ class features extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="ui message">To find out more about how to use SlideWiki and its many features view our <a href="https://slidewiki.org/deck/77873">help file deck.</a></div>
+                <div className="ui message">To find out more about how to use SlideWiki and its many features, view our <a href="https://stable.slidewiki.org/deck/10467" target="_blank">help file deck.</a></div>
             </div>
         );
     }
