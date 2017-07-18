@@ -269,7 +269,7 @@ class AttachSubdeckModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>

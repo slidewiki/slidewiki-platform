@@ -165,10 +165,8 @@ class AttachSlides extends React.Component{
         } else if(event.keyCode === KEY_CODE.TAB){ //exit grid and go to button
             event.preventDefault();
             if ( this.state.selectedSlides.length > 0){
-                console.log('go attach');
                 $('#attachAttachModal').focus();
             } else {
-                console.log('go previous');
                 $('#previousAttachModal').focus();
             }
         }

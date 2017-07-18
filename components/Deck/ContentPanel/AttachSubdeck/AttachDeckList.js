@@ -22,14 +22,13 @@ class AttachDeckList extends React.Component {
         /* Receives:
           user: user info
           decks: array with the decks to showSlides
-          selectedDeckId: initial selected deck...if it was previosly selected
+          selectedDeckId: initial selected deck...if it was previosly selected, -1 in other case
           destinationDeckId: deck in which data will be appended.
           actionButtonId: buttonId which receives the focus. It was not possible to use ref to do that.
 
 
         */
         super(props);
-
 
         this.state = {
             selectedDeckId: this.props.selectedDeckId,
@@ -53,9 +52,8 @@ class AttachDeckList extends React.Component {
 
     }
     handleKeyPress(selectedDeck,event){
-        console.log('enter pressed key press');
-        if(event.key === 'Enter'){
 
+        if(event.key === 'Enter'){
             this.handleOnclick(selectedDeck);
         }
     }
@@ -80,26 +78,30 @@ class AttachDeckList extends React.Component {
         return nextPos;
 
     }
-    handleKeyDown(pos,event){
+    handleKeyDown(pos,numItems,event){
 
-        if(event.keyCode === KEY_CODE.RIGHT ||
-           event.keyCode === KEY_CODE.LEFT ||
-           event.keyCode === KEY_CODE.UP ||
+        if(event.keyCode === KEY_CODE.UP ||
            event.keyCode === KEY_CODE.DOWN ){
            //the user wants to navigate through the list
-
-            let nextPos = this.getNextPos(pos,this.props.decks.length,event.keyCode);  //get next item
+            event.preventDefault();
+            let nextPos = this.getNextPos(pos,numItems,event.keyCode);  //get next item
              //get the id of the cell
             $('#deckItemList'+nextPos).focus(); //move to the cell
         } else if(event.keyCode === KEY_CODE.TAB){ //exit list and go to button
-            $(this.props.actionButtonId).focus();
+            event.preventDefault();
+            if(this.state.selectedDeckId !==-1 ){
+                $(this.props.actionButtonId).focus();
+            } else { // deck is not selected
+                $('#cancelAttachModal').focus();
+            }
         }
 
     }
 
     render() {
 
-        let decks_to_show = this.props.decks;
+        let decks_ordered = this.props.decks;
+        let decks_to_show;
         let deck_list;
         let activeItemStyle = {
             backgroundColor:'#f8ffff',
@@ -107,75 +109,75 @@ class AttachDeckList extends React.Component {
 
         };
        //Order decks by updated data
-        decks_to_show = decks_to_show.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
-
+        decks_ordered = decks_ordered.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+        //filter the list, removing the same deck or revisions of theme
+        decks_to_show = [];
+        let destDeckId = this.props.destinationDeckId.toString().split('-');
+        for(let i=0;i<decks_ordered.length;i++ ){
+            if(parseInt(destDeckId[0]) !== decks_ordered[i].deckID){
+                decks_to_show.push(decks_ordered[i]);
+            }
+        }
 
         if (decks_to_show.length){
-            deck_list =
-                decks_to_show.map((deck, index) => {
+            deck_list = decks_to_show.map((deck, index) => {
+                    //From deck users, data is in props.user. From slideWiki, data is in the deck
+                let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
+                let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
+                let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
+                let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
+                let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+                // default English
+                deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+                //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
+                let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
+                let selectedDeck = {
+                    selectedDeckTitle:deck.title,
+                    selectedDeckId: deck.deckID+'-'+deck.countRevisions
+                };
+                return (
+                       <Item key={index}
+                              id={'deckItemList'+index}
+                              onClick={this.handleOnclick.bind(this,selectedDeck)}
+                              onKeyPress={this.handleKeyPress.bind(this,selectedDeck)}
+                              onKeyDown={this.handleKeyDown.bind(this,index,decks_to_show.length)}
+                              style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
+                              role="listitem"
+                              aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
+                              tabIndex="0">
+                            <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} alt={deck.title} size="small"/>
+                            <Item.Content verticalAlign="middle" >
+                              <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
+                                  {deck.title}
+                              </Item.Header>
 
-                    if(this.props.destinationDeckId.toString() !== deck.deckID.toString()){
-                      //From deck users, data is in props.user. From slideWiki, data is in the deck
-                        let deckCreatorid = deck.deckCreatorid === undefined ? this.props.user.userId : deck.deckCreatorid;
-                        let deckCreator = deck.deckCreator === undefined ? this.props.user.username:deck.deckCreator;
-
-                        let deckDate = CustomDate.format(deck.creationDate, 'Do MMMM YYYY');
-                        let deckLanguageCode = deck.language === undefined ? 'en' : deck.language;
-                        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
-                        // default English
-                        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-                        //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
-                        let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
-                        let selectedDeck = {
-                            selectedDeckTitle:deck.title,
-                            selectedDeckId: deck.deckID+'-'+deck.countRevisions
-                        };
-                        return (
-                           <Item key={index}
-                                  id={'deckItemList'+index}
-                                  onClick={this.handleOnclick.bind(this,selectedDeck)}
-                                  onKeyPress={this.handleKeyPress.bind(this,selectedDeck)}
-                                  onKeyDown={this.handleKeyDown.bind(this,index)}
-                                  style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}
-                                  role="listitem"
-                                  aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
-                                  tabIndex="0">
-                                <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} alt={deck.title} size="small"/>
-                                <Item.Content verticalAlign="middle" >
-                                  <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
-                                      {deck.title}
-                                  </Item.Header>
-
-                                  <Item.Meta>
-                                    <span className='meta'>Creator: {deckCreator}</span>
-                                    <br/>
-                                    <span className='meta'>Date: {deckDate}</span>
-                                  </Item.Meta>
-
-
-                                 <Item.Extra>
-                                   <Label  size="small">
-                                      <Icon name="comments outline" aria-label="Language"/>
-                                      {deckLanguage}
-                                    </Label>
-                                    <Label size="small">
-                                       <Icon name="fork" aria-label="Number of versions"/>
-                                       {deck.countRevisions}
-                                     </Label>
-
-                                 </Item.Extra>
-                                </Item.Content>
+                              <Item.Meta>
+                                <span className='meta'>Creator: {deckCreator}</span>
+                                <br/>
+                                <span className='meta'>Date: {deckDate}</span>
+                              </Item.Meta>
+                               <Item.Extra>
+                               <Label  size="small">
+                                  <Icon name="comments outline" aria-label="Language"/>
+                                  {deckLanguage}
+                                </Label>
+                                <Label size="small">
+                                   <Icon name="fork" aria-label="Number of versions"/>
+                                   {deck.countRevisions}
+                                 </Label>
+                               </Item.Extra>
+                             </Item.Content>
                             </Item>
 
-                        );
-                    }
-                });
+                );
+              //    }
+            });
         }
 
         return (
           <Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
              role="listbox" aria-expanded="true"  aria-describedby="listInstructions">
-             <TextArea className="sr-only" id="listInstructions" value="Use tab to navigate through the list and then enter to select a deck." tabIndex ='-1'/>
+             <TextArea className="sr-only" id="listInstructions" value="Use up and down arrow keys to navigate through the list and then enter to select a deck. Use tab to go out the list." tabIndex ='-1'/>
 
                 {deck_list}
           </Item.Group>
