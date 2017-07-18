@@ -180,7 +180,8 @@ class AttachSubdeckModal extends React.Component{
 
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
-            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck" tabIndex ='-1'/>;
+
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck." tabIndex ='-1'/>;
 
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
@@ -268,7 +269,7 @@ class AttachSubdeckModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>
