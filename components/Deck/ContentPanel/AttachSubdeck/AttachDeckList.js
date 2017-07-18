@@ -29,7 +29,7 @@ class AttachDeckList extends React.Component {
 
         */
         super(props);
-        
+
         this.state = {
             selectedDeckId: this.props.selectedDeckId,
         };
@@ -177,7 +177,7 @@ class AttachDeckList extends React.Component {
         return (
           <Item.Group divided relaxed style={{maxHeight:this.props.maxHeight,minHeight:'320px',overflowY:'auto'}}
              role="listbox" aria-expanded="true"  aria-describedby="listInstructions">
-             <TextArea className="sr-only" id="listInstructions" value="Use tab to navigate through the list and then enter to select a deck." tabIndex ='-1'/>
+             <TextArea className="sr-only" id="listInstructions" value="Use up and down arrow keys to navigate through the list and then enter to select a deck. Use tab to go out the list." tabIndex ='-1'/>
 
                 {deck_list}
           </Item.Group>
