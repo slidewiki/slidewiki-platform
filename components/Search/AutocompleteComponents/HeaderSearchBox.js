@@ -80,7 +80,7 @@ class HeaderSearchBox extends React.Component {
         // "ui small icon input
 
         return (
-            <div className={classes} ref="headerSearchBox" id="header_search_box_div">
+            <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}} aria-label="Search" >
                 <label htmlFor="searchString" hidden>Search</label>
                 <input type="text" placeholder="Search..." ref="searchstring" id="searchString" value={this.state.searchstring} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt" />
                 <i className="search link icon" onClick={this.handleRedirect.bind(this)}></i>
