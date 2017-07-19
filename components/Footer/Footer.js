@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
+import ContacUsForm from './ContactUsForm/ContactUsForm';
 
 class Footer extends React.Component {
     render() {
@@ -12,7 +13,8 @@ class Footer extends React.Component {
                             <h4 className="ui inverted header">About</h4>
                             <div className="ui inverted  link list">
                                 <NavLink className="item" routeName="about" href="/about">About Us</NavLink>
-                                <NavLink className="item" routeName="about" href="/about">Contact Us</NavLink>
+                                <NavLink className="item" routeName="contactus" href="/contactus">Contact Us</NavLink>
+                                <ContacUsForm />
                                 <a className="item" href="https://github.com/slidewiki">Github</a>
                             </div>
                         </div>
