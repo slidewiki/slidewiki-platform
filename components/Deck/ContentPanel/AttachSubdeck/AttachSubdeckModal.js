@@ -33,9 +33,6 @@ class AttachSubdeckModal extends React.Component{
             modalOpen: false,
             activeItem: 'MyDecks',
             activeTrap: false,
-
-
-
           //  selectedDeckTitle: 'Select one deck...',
           //  showSearchResults: false
         };
