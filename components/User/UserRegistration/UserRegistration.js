@@ -468,7 +468,7 @@ class UserRegistration extends React.Component {
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label="Sign up with Google"><i className="big google plus lnk icon"></i></button>
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label="Sign up with Github"><i className="big github icon"></i></button>
 
-                            <p>By clicking on a Social Provider, you agree to our <a href="" title="Sign-up terms and conditions">Terms</a>.</p>
+                            <p>By clicking on a Social Provider, you agree to our <a href="/imprint" title="Sign-up terms and conditions">Terms</a>.</p>
                             <div className="ui dividing header" ></div>
 
                             <h3 className="ui dividing header">Or complete the registration form</h3>
@@ -512,7 +512,7 @@ class UserRegistration extends React.Component {
                                 </button>
                             </form>
                             <div className="ui dividing header" ></div>
-                            By clicking Sign Up, you agree to our <a href="">Terms</a>.
+                            By clicking Sign Up, you agree to our <a href="/imprint">Terms</a>.
                             <br/><br/>
                             <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
                         </div>
