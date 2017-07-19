@@ -111,7 +111,7 @@ class ContacUsForm extends React.Component{
                                  <Form.Group>
                                     <Form.Field>
                                     <Label ribbon color='blue' htmlFor="type">Type of report:</Label>
-                                    <Dropdown selection name='type' id='type' ref={(type) => {this.type = type;}}  placeholder='Select type of report' options={typeOptions} role="listbox"  onChange={(e, {value }) => {this.handleTypeChange(value);}}/>
+                                    <Dropdown selection name='type' id='type'  placeholder='Select type of report' options={typeOptions} role="listbox"  onChange={(e, {value }) => {this.handleTypeChange(value);}}/>
                                     </Form.Field>
                                  </Form.Group>
                                 </Form>
