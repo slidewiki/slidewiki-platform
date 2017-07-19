@@ -45,7 +45,7 @@ class SearchPanel extends React.Component {
     onChange(event) {
         // console.log(event.target.name + ' -> \"' + event.target.value + '"');
         let curstate = {};
-        curstate[event.target.name] = event.target.value.trim();
+        curstate[event.target.name] = event.target.value;
         this.setState(curstate);
     }
     clearInput(){
@@ -64,14 +64,16 @@ class SearchPanel extends React.Component {
             this.handleRedirect();
         }
     }
-    handleRedirect(event){
-
-        if(event){
-            event.preventDefault();
+    handleRedirect(params){
+        
+        // form the query parameters to send to search service
+        let keywords;
+        if(params && params.keywords){
+            keywords = params.keywords;
+        } else {
+            keywords = ((this.state.keywords) ? this.state.keywords : '*:*');
         }
 
-        // form the query parameters to send to search service
-        let keywords = ((this.state.keywords) ? this.state.keywords : '*:*');
         let queryparams = `keywords=${encodeURIComponent(keywords)}`;
 
         if(this.state.field)
