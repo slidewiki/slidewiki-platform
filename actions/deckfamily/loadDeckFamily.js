@@ -18,7 +18,8 @@ export default function loadDeckFamily(context, payload, done) {
                 tag: decodeURIComponent(payload.params.tag),
                 numFound: res.numFound,
                 decks: res.docs,
-                start: res.start
+                page: res.page, 
+                hasMore: res.hasMore
             });
         }
 

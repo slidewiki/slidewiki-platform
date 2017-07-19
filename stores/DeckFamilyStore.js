@@ -13,8 +13,8 @@ class DeckFamilyStore extends BaseStore {
         this.loading = false;
 
         this.loadMoreLoading = false;
-        this.loadMore = false;
-        this.start = 0;
+        this.hasMore = false;
+        this.page = 1;
     }
     showLoading(payload){
         this.loading = true;
@@ -39,8 +39,8 @@ class DeckFamilyStore extends BaseStore {
 
         this.numFound = payload.numFound;
         this.error = payload.error;
-        this.loadMore = (this.numFound > this.decks.length);
-        this.start = payload.start;
+        this.hasMore = payload.hasMore;
+        this.page = payload.page;
 
         // hide loading
         this.loading = false;
@@ -54,8 +54,8 @@ class DeckFamilyStore extends BaseStore {
         this.numFound += payload.decks.length;
 
         this.error = payload.error;
-        this.loadMore = (payload.numFound > this.decks.length);
-        this.start = payload.start;
+        this.hasMore = payload.hasMore;
+        this.page = payload.page;
 
         // hide loading
         this.loading = false;
@@ -76,9 +76,9 @@ class DeckFamilyStore extends BaseStore {
             numFound: this.numFound,
             loading: this.loading,
             error: this.error,
-            loadMore: this.loadMore,
+            hasMore: this.hasMore,
             loadMoreLoading: this.loadMoreLoading,
-            start: this.start
+            page: this.page
         };
     }
     dehydrate() {
@@ -90,9 +90,9 @@ class DeckFamilyStore extends BaseStore {
         this.numFound = state.numFound;
         this.loading = state.loading;
         this.error = state.error;
-        this.loadMore = state.loadMore;
+        this.hasMore = state.hasMore;
         this.loadMoreLoading = state.loadMoreLoading;
-        this.start = state.start;
+        this.page = state.page;
     }
 }
 

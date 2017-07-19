@@ -2,7 +2,7 @@ import React from 'react';
 
 class SpellcheckPanel extends React.Component {
     renderSpellcheckCollations(){
-        if(this.props.spellcheckData === '')
+        if(this.props.spellcheckData.length === 0)
             return;
 
         const suggestion = this.props.spellcheckData;
