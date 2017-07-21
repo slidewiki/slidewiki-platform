@@ -50,12 +50,14 @@ class Home extends React.Component {
                                     <div className="ui attached fluid segment">
                                         <p>Start creating your own slide deck by selecting the Add deck button.
                                         </p>
-                                        <div className="ui message" style={compMessageStyle}>
-                                            <button className="ui right labeled lightGrey icon button">
-                                                <i className="right plus icon"></i>Add deck
-                                            </button>
+                                        <NavLink className="header" routeName="addDeck" href="/addDeck">
+                                            <div className="ui message" style={compMessageStyle}>
+                                                <button className="ui right labeled lightGrey icon button">
+                                                    <i className="right plus icon"></i>Add deck
+                                                </button>
 
-                                        </div>
+                                            </div>
+                                        </NavLink>
                                         <p>Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML slides to allow you to continue to edit and add new slides.</p>
                                         <p>Need more inspiration to make your own slides? Why not search or browse throughexisting SlideWiki decks.</p>
                                     </div>
