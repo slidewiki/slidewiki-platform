@@ -140,7 +140,7 @@ class UserProfile extends React.Component {
                   </div>
 
                   <div className="ui segment">
-                    <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+                    <ChangePassword failures={ this.props.UserProfileStore.failures } dimmer={this.props.UserProfileStore.dimmer}/>
                   </div>
                 </div>
             ) : '';
