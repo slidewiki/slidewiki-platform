@@ -12,9 +12,10 @@ export default function translateDeckRevision(context, payload, done) {
     log.info(context);
     console.log('action translateDeckRevision: got payload', payload);
     //enrich with user id
-    const user = context.getStore(UserProfileStore).userid;
+    let user = context.getStore(UserProfileStore).userid;
+    //if (!user) user = '3'; //NEED TO REMOVE THE LINE
 
-    payload.user = user;
+    payload.user = user.toString();
     payload.deckId = context.getStore(ContentStore).selector.id;
         //enrich with root deck id if deck to be revised is not uppermost deck
     //    let parent = TreeUtil.getParentId(payload.selector);
