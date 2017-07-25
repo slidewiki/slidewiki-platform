@@ -90,6 +90,10 @@ class DeckPropertiesEditor extends React.Component {
 
     componentDidUpdate() {
         this.handleDropboxes();
+
+        if (this.props.DeckEditStore.showGroupModal) {
+            $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
+        }
     }
 
     componentDidMount() {
@@ -262,8 +266,6 @@ class DeckPropertiesEditor extends React.Component {
 
         //call service
         this.context.executeAction(loadUsergroup, {groupid: groupid});
-
-        $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
     }
 
     getListOfAuthorized() {
@@ -429,7 +431,7 @@ class DeckPropertiesEditor extends React.Component {
                     name: group.name
                 };
                 groupsArray.push((
-                    <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length} member{(group.members.length !== 1) ? 's': ''})</div>
+                    <div key={group._id} className="item" data-value={encodeURIComponent(JSON.stringify(data))}>{group.name} ({group.members.length+1} member{((group.members.length+1) !== 1) ? 's': ''})</div>
                 ));
             });
         }

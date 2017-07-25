@@ -312,28 +312,6 @@ class Integrations extends React.Component {
                       <div className="ui three column vertically divided grid">
                         <div className="row">
                           <div className="one wide column">
-                            <i className={facebook_icon_classes} ></i>
-                          </div>
-                          <div className="ten wide column">
-                            <div className="ui large label">
-                              {(facebook) ? text_providerEnabled : text_providerDisabled}
-                            </div>
-                          </div>
-                          <div className="two wide column">
-                            {
-                              (facebook) ? (
-                                <button className={facebook_disable_classes} name="facebook" onClick={this.handleDisable.bind(this)} >Disable</button>
-                              ) : (
-                                <button className={facebook_enable_classes} name="facebook" onClick={this.handleEnable.bind(this)} >Enable</button>
-                              )
-                            }
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="ui three column vertically divided grid">
-                        <div className="row">
-                          <div className="one wide column">
                             <i className={google_icon_classes} ></i>
                           </div>
                           <div className="ten wide column">

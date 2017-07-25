@@ -138,7 +138,11 @@ class AttachSubdeckModal extends React.Component{
     handleAttachButton(){
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object { {type: "slide", id: 1245-2}, {type: "slide", id: 1585-2}}
-        let nodeSpec = this.state.selectedSlides.map((slideId) => {
+        //each element of the payload.selectedSlides array is like 11225-2-6 (slideId-revisionId-orderInDeck)
+        //we need to remove the order in Deck
+        let nodeSpec = this.state.selectedSlides.map((slideIdWithOrder) => {
+            let pos = slideIdWithOrder.lastIndexOf('-');
+            let slideId = slideIdWithOrder.substring(0,pos);
             return {
                 type:'slide',
                 id:slideId
@@ -173,9 +177,12 @@ class AttachSubdeckModal extends React.Component{
         let attachMenu;
         let modalDescription;
 
+
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
+
             modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck." tabIndex ='-1'/>;
+
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
                 segmentPanelContent = myDecksContent;
@@ -195,7 +202,8 @@ class AttachSubdeckModal extends React.Component{
         } else{ //deck selected, diplay its slides, previous and attach button
             attachMenu ='';
             searchForm ='';
-            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
+            modalDescription= <TextArea className="sr-only" id="attachSlidesDescription" value="Select slides to attach" tabIndex ='-1'/>;
+
             segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
                             data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
@@ -261,7 +269,7 @@ class AttachSubdeckModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>
