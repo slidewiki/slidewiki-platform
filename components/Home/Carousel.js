@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {NavLink} from 'fluxible-router';
+import { FormattedMessage, defineMessages} from 'react-intl';
 
 class Carousel extends React.Component {
     constructor(props) {
@@ -63,22 +64,50 @@ class Carousel extends React.Component {
                                             <ul className="glide__track" style={{minHeight: '300px'}}>
                                                 <li className="glide__slide">
                                                     <a href="/features" className="ui large image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/SW-logo-squ.png" alt="Create slides with SlideWiki." />
+                                                    <FormattedMessage id="carousel.create_alt" defaultMessage='Create slides with SlideWiki.'>
+                                                    {
+                                                        (alt) => <img
+                                                                    src="/assets/images/carousel/SW-logo-squ.png"
+                                                                    alt={alt}
+                                                                 />
+                                                    }
+                                                    </FormattedMessage>
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <a href="/features" className="ui large image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/OER-Logo.png" alt="Repurpose & Reuse Educational Content through open educational resources." />
+                                                        <FormattedMessage id="carousel.reuse_alt" defaultMessage='Repurpose & Reuse Educational Content through open educational resources.'>
+                                                        {
+                                                            (alt) => <img
+                                                                        src="/assets/images/carousel/OER-Logo.png"
+                                                                        alt={alt}
+                                                                     />
+                                                        }
+                                                        </FormattedMessage>
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <a href="/features" className="ui large image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/hands-1926704_640.png" alt="Collaborative Content Authoring." />
+                                                        <FormattedMessage id="carousel.collaborative_alt" defaultMessage='Collaborative Content Authoring.'>
+                                                        {
+                                                            (alt) => <img
+                                                                        src="/assets/images/carousel/hands-1926704_640.png"
+                                                                        alt={alt}
+                                                                     />
+                                                        }
+                                                        </FormattedMessage>
                                                     </a>
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <a href="/features" className="ui large  image" tabIndex="-1">
-                                                        <img src="/assets/images/carousel/globe-squ-transparent.png" alt="Supporting Knowledge Communities." />
+                                                        <FormattedMessage id="carousel.communities_alt" defaultMessage='Supporting Knowledge Communities.'>
+                                                        {
+                                                            (alt) => <img
+                                                                        src="/assets/images/carousel/globe-squ-transparent.png"
+                                                                        alt={alt}
+                                                                     />
+                                                        }
+                                                        </FormattedMessage>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -95,37 +124,37 @@ class Carousel extends React.Component {
                                 </div>
 
                                 <div className="left aligned five wide column">
-                                    <h2>Discover SlideWiki</h2>
+                                    <h2><FormattedMessage id="carousel.menu.title" defaultMessage='Discover SlideWiki'/></h2>
                                     <div className="ui right vertical fluid compact menu">
                                         <NavLink className="item gslide-header gh1"  data-glide-trigger='.glide' href="/features" data-glide-dir='=1'>
                                             <div className="content">
                                                 <div className="ui small header">
-                                                    Create Online Slide Decks
+                                                    <FormattedMessage id="carousel.menu.1" defaultMessage='Create Online Slide Decks'/>
                                                 </div>
-                                                <div className="description">Use our  slide creator or import your existing slides to form online HTML slide decks.
+                                                <div className="description"><FormattedMessage id="carousel.menu.1_desc" defaultMessage='Use our  slide creator or import your existing slides to form online HTML slide decks.'/>
                                                 </div>
                                             </div>
                                         </NavLink>
                                         <NavLink className="item gslide-header gh2" data-glide-trigger='.glide' data-glide-dir='=2' href="/features" >
                                             <div className="content">
                                                 <div className="ui small header">
-                                                    Reuseable Educational Content
+                                                    <FormattedMessage id="carousel.menu.2" defaultMessage='Reuseable Educational Content'/>
                                                 </div>
-                                                <div className="description">Discover a wide range of open educational slides and courses.</div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.2_desc" defaultMessage='Discover a wide range of open educational slides and courses.'/></div>
                                             </div>
                                         </NavLink>
                                         <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/features" href="/features" data-glide-dir='=3'>
                                             <div className="content">
-                                                <div className="ui small header">Collaborative Content Authoring
+                                                <div className="ui small header"><FormattedMessage id="carousel.menu.3" defaultMessage='Collaborative Content Authoring'/>
                                                 </div>
-                                                <div className="description">Create slides online together with peers and colleagues through our collaborative editing features.</div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.3_desc" defaultMessage='Create slides online together with peers and colleagues through our collaborative editing features.'/></div>
                                             </div>
                                         </NavLink>
                                         <NavLink className="item gslide-header gh4"  href="/features" data-glide-trigger='.glide' data-glide-dir='=4'>
                                             <div className="content">
-                                                <div className="ui small header">Supporting Knowledge Communities
+                                                <div className="ui small header"><FormattedMessage id="carousel.menu.4" defaultMessage='Supporting Knowledge Communities'/>
                                                 </div>
-                                                <div className="description">Using our search and tags features discover content and authors who share your interests. </div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.4_desc" defaultMessage='Using our search and tags features discover content and authors who share your interests.'/></div>
                                             </div>
                                         </NavLink>
                                     </div>
