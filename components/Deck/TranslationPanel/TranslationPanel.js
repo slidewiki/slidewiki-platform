@@ -7,6 +7,7 @@ import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
+import UserProfileStore from '../../../stores/UserProfileStore';
 
 // import TranslationStore from '../../../stores/TranslationStore';
 // import TranslationList from './TranslationList';
@@ -50,9 +51,9 @@ class TranslationPanel extends React.Component {
     }
 
     handleTranslateToClick(code){
-        
+
         this.context.executeAction(translateDeckRevision, {
-            language: code
+            language: code+'_'+code
         });
     }
 
@@ -93,6 +94,14 @@ class TranslationPanel extends React.Component {
         const deckLanguage = this.props.TranslationStore.currentLang.lang;
         const translations = this.props.TranslationStore.translations;
         const supported = this.props.TranslationStore.supportedLangs;
+        const user = this.props.UserProfileStore.userid;
+        let divider = user ? <Dropdown.Divider /> : '';
+        let translate_item = user ?
+        <Dropdown scrolling item trigger={ <span>Translate</span>}>
+            <Dropdown.Menu>
+                {supported.map(this.renderTranslateTo, this)}
+            </Dropdown.Menu>
+        </Dropdown>  : '';
 
         let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase())}</span>;
         return(
@@ -100,12 +109,8 @@ class TranslationPanel extends React.Component {
             <Dropdown item trigger={currentLang}>
                 <Dropdown.Menu>
                 { translations.map(this.renderAvailable, this) }
-                    <Dropdown.Divider />
-                    <Dropdown scrolling item trigger={ <span>Translate</span>}>
-                        <Dropdown.Menu>
-                            {supported.map(this.renderTranslateTo, this)}
-                        </Dropdown.Menu>
-                    </Dropdown>
+                        {divider}
+                        {translate_item}
                 </Dropdown.Menu>
             </Dropdown>
 
@@ -117,9 +122,10 @@ class TranslationPanel extends React.Component {
 TranslationPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TranslationPanel = connectToStores(TranslationPanel, [TranslationStore], (context, props) => {
+TranslationPanel = connectToStores(TranslationPanel, [TranslationStore, UserProfileStore], (context, props) => {
     return {
-        TranslationStore: context.getStore(TranslationStore).getState()
+        TranslationStore: context.getStore(TranslationStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState()
     };
 });
 export default TranslationPanel;
