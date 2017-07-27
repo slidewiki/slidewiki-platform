@@ -17,7 +17,7 @@ export default function loadTranslations(context, payload, done) {
         return;
     }
 
-    context.service.read('translation.list', payload, {timeout: 20 * 1000}, (err, res) => {        
+    context.service.read('translation.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename, err: err});
             context.executeAction(serviceUnavailable, payload, done);

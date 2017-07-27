@@ -13,28 +13,49 @@ export default {
             /*********connect to microservices*************/
             //todo
             /*********received data from microservices*************/
+            // let translations = [];
+            //
+            // if(args.sid%2===0){
+            //     translations=[
+            // 	                {'lang': 'EN', 'id': 343},
+            // 	                {'lang': 'DE', 'id': 32},
+            // 	                {'lang': 'FR', 'id': 64}
+            //     ];
+            // }
+            // else{
+            //     translations = [
+            //                   {'lang': 'EN', 'id': 343},
+            // 	                {'lang': 'ES', 'id': 56},
+            // 	                {'lang': 'GR', 'id': 71},
+            // 	                {'lang': 'FA', 'id': 81}
+            //     ];
+            // }
+            //
+            //
+            //
+            // let currentLang = {'lang': 'EN', 'id': 343};
+            // callback(null, {translations: translations, currentLang: currentLang});
+
+
             let translations = [];
+            let currentLang = {};
 
-            if(args.sid%2===0){
-                translations=[
-            	                {'lang': 'EN', 'id': 343},
-            	                {'lang': 'DE', 'id': 32},
-            	                {'lang': 'FR', 'id': 64}
-                ];
-            }
-            else{
-                translations = [
-                              {'lang': 'EN', 'id': 343},
-            	                {'lang': 'ES', 'id': 56},
-            	                {'lang': 'GR', 'id': 71},
-            	                {'lang': 'FA', 'id': 81}
-                ];
-            }
+            // rp({
+            //     method: 'GET',
+            //     uri: Microservices.deck.uri + '/deck/' + args.id + '/permissions',
+            //     headers: { '----jwt----': args.jwt },
+            //     json: true
+            // })
 
-
-
-            let currentLang = {'lang': 'EN', 'id': 343};
-            callback(null, {translations: translations, currentLang: currentLang});
+            rp({
+                method: 'GET',
+                json: true,
+                uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
+            }).then((res) => {            
+                callback(null, res);
+            }).catch((err) => {
+                callback(err, {translations: [], currentLang: currentLang});
+            });
         }
         if (resource === 'translation.supported'){
             rp.get({uri: Microservices.translation.uri + '/supported'}).then((res) => {
