@@ -46,7 +46,7 @@ class TranslationPanel extends React.Component {
     handleLanguageClick(id){
 
         this.context.executeAction(navigateAction, {
-            url: './deck/'+ id
+            url: '/deck/'+ id
         });
     }
 
@@ -58,13 +58,13 @@ class TranslationPanel extends React.Component {
     }
 
     renderAvailable(translation) {
-        if (translation.lang !== this.props.TranslationStore.currentLang.lang){
-            let languageName = ISO6391.getName(translation.lang.toLowerCase());
+        if (translation.language !== this.props.TranslationStore.currentLang.language){
+            let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
             if (languageName){
                 return (
                     <Dropdown.Item
-                    key = {translation.lang}
-                    onClick={ this.handleLanguageClick.bind(this, translation.id) }
+                    key = {translation.language}
+                    onClick={ this.handleLanguageClick.bind(this, translation.deck_id) }
                     //href={''}
                     >
                     {languageName}
@@ -75,7 +75,7 @@ class TranslationPanel extends React.Component {
     }
 
     renderTranslateTo(supported) {
-        if (supported.key !== this.props.TranslationStore.currentLang.lang){
+        if (supported.key !== this.props.TranslationStore.currentLang.language.substr(0,2)){
 
             return (
                 <Dropdown.Item
@@ -91,7 +91,7 @@ class TranslationPanel extends React.Component {
     }
 
     render() {
-        const deckLanguage = this.props.TranslationStore.currentLang.lang;
+        const deckLanguage = this.props.TranslationStore.currentLang.language;
         const translations = this.props.TranslationStore.translations;
         const supported = this.props.TranslationStore.supportedLangs;
         const user = this.props.UserProfileStore.userid;
@@ -103,7 +103,7 @@ class TranslationPanel extends React.Component {
             </Dropdown.Menu>
         </Dropdown>  : '';
 
-        let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase())}</span>;
+        let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>;
         return(
 
             <Dropdown item trigger={currentLang}>
