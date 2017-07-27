@@ -87,7 +87,7 @@ class DeckRevision extends React.Component {
                                     </Button.Group>
                                 }
                             </Header>
-                            <DeckRevisionChanges selector={this.props.selector} permissions={this.props.permissions}
+                            <DeckRevisionChanges selector={this.props.selector} allowUndoDelete={this.props.allowUndoDelete} permissions={this.props.permissions}
                                                  changes={this.props.changes}/>
                         </Segment>
                     }

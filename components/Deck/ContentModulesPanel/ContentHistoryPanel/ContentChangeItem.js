@@ -3,7 +3,6 @@ import {List, Icon, Button} from 'semantic-ui-react';
 //import moment from 'moment';
 import revertRevision from '../../../../actions/history/revertRevision';
 import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
-
 import {NavLink} from 'fluxible-router';
 
 class ContentChangeItem extends React.Component {
@@ -31,6 +30,26 @@ class ContentChangeItem extends React.Component {
     handleViewSlideClick() {
         //open the slide revision in a new tab
         window.open('/slideview/' + this.props.change.value.ref.id + '-' + this.props.change.value.ref.revision, '_blank');
+    }
+
+    handleUndoDelete() {
+        swal({
+            text: `This action will restore  ${this.props.change.value.kind} "${this.props.change.value.ref.title}". Do you want to continue?`,
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            confirmButtonClass: 'ui olive button',
+            cancelButtonText: 'No',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false
+        }).then((accepted) => {
+            this.context.executeAction(revertRevision, {
+                selector: this.props.selector, revisionId: this.props.change.oldValue.ref.revision
+            });
+        }, (reason) => {
+            //done(reason);
+        });
     }
 
     render() {
@@ -89,15 +108,16 @@ class ContentChangeItem extends React.Component {
                 description = <span>updated the deck</span>;
         }
 
-        let buttons;
-        if (this.props.selector.stype === 'slide' && ['add', 'attach', 'copy', 'edit', 'rename', 'revert'].includes(change.action) ) {
-            // buttons are shown only for slide history and only for changes that result in new slide revisions
+        let buttons, canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+        console.log(canEdit, this.props.key, this.props.selector.stype === 'deck', change.action === 'remove', this.props.allowUndoDelete);
+
+        if (this.props.selector.stype === 'slide' && ['add', 'attach', 'copy', 'edit', 'rename', 'revert'].includes(change.action)) {
+            // buttons are shown only for changes that result in new slide revisions
 
             const currentRev = parseInt(this.props.selector.sid.split('-')[1]);
             const shouldView = currentRev !== change.value.ref.revision;
 
-            const canRestore = this.props.permissions.edit && !this.props.permissions.readOnly 
-                && change.oldValue && currentRev !== change.oldValue.ref.revision;
+            const canRestore = canEdit && change.oldValue && currentRev !== change.oldValue.ref.revision;
 
             buttons = <Button.Group basic size='tiny' floated='right'>
                         <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
@@ -109,6 +129,10 @@ class ContentChangeItem extends React.Component {
                                 <Icon name='external' corner/>
                             </Icon.Group>
                         </Button>
+            </Button.Group>;
+        } else if (canEdit && this.props.selector.stype === 'deck' && change.action === 'remove' && this.props.allowUndoDelete) {
+            buttons = <Button.Group basic size='tiny' floated='right'>
+                <Button aria-label='Undo delete' icon='undo' onClick={this.handleUndoDelete.bind(this)} tabIndex='0'/>
             </Button.Group>;
         }
 

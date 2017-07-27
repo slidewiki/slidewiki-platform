@@ -32,9 +32,9 @@ class DeckHistoryPanel extends React.Component {
     render() {
         let selector = this.props.selector;
         let isRoot = selector.stype === 'deck' && selector.id === selector.sid;
-        let deckRevisions = this.props.DeckHistoryStore.revisions.map((revision) => {
+        let deckRevisions = this.props.DeckHistoryStore.revisions.map((revision, index) => {
             return (
-            <DeckRevision key={revision.id} revision={revision}
+            <DeckRevision key={revision.id} allowUndoDelete={index === 0} revision={revision}
                           changes={this.props.DeckHistoryStore.changes[revision.id]} selector={selector}
                           userid={this.props.UserProfileStore.userid}
                           permissions={this.props.PermissionsStore.permissions}/>
