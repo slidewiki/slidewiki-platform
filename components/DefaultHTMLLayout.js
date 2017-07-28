@@ -25,15 +25,15 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/glidejs/dist/css/glide.theme.min.css" rel="stylesheet" type="text/css" />
                 { user ?
                   <link href="/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-                  : ''
+                  : <meta name="placeholder" content="jquery-ui" />
                 }
                 { user ?
                   <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
-                  : ''
+                  : <meta name="placeholder" content="font-awesome" />
                 }
                 { user ?
                   <link href="/jquery-contextmenu/dist/jquery.contextMenu.min.css" rel="stylesheet" type="text/css" />
-                  : ''
+                  : <meta name="placeholder" content="jquery.contextMenu" />
                 }
                 {/* Vendors css bundle */
                     this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
