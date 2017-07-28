@@ -182,6 +182,9 @@ class ResetPassword extends React.Component {
                                 <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
                             </div>
                             <div className="ui error message"></div>
+
+                            {this.props.ResetPasswordStore.isLoading ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+
                             <button type="submit" className="ui blue labeled submit icon button" >
                                 <i className="icon send"/>Reset my password now
                             </button>

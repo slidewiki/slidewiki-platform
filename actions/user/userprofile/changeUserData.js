@@ -6,6 +6,7 @@ const log = require('../../log/clog');
 
 export default function changeUserData(context, payload, done) {
     log.info(context);
+    context.dispatch('SAVE_USERPROFILE_START', {});
     payload.params = {};
     payload.params.id = context.getStore(UserProfileStore).userid;
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
