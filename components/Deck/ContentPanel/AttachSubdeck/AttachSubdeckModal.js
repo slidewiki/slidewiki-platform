@@ -47,8 +47,6 @@ class AttachSubdeckModal extends React.Component{
     componentWillReceiveProps(nextProps){
 
         this.setState({
-
-
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
             activeItem: nextProps.AttachSubdeckModalStore.activeItem
         });

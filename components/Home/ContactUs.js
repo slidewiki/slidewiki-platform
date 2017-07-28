@@ -10,9 +10,7 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 class ContactUs extends React.Component {
     constructor(props){
         super(props);
-        //if we have userId and not this.props.UserProfileStore.user.fname, we need to reload that info.
-        // execute action fetchUser with the payload: {params: {id: <userid>, username: <username>}}
-        //we need also implement will receive props
+
         this.state ={
             type : '',
             firstName:this.props.UserProfileStore.user.fname,
@@ -20,15 +18,16 @@ class ContactUs extends React.Component {
             email: this.props.UserProfileStore.user.email
 
         };
-        console.log(this.props.UserProfileStore.username);
-        console.log(this.props.UserProfileStore.userid);
+
 
 
 
 
     }
     componentDidMount(){
-        this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username, id:this.props.UserProfileStore.userid}});
+      //Load user info, if user is conected.
+        if(this.props.UserProfileStore.username.length > 0)
+            this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username, id:this.props.UserProfileStore.userid}});
     }
     componentWillReceiveProps(nextProps){
         this.setState({
@@ -45,11 +44,55 @@ class ContactUs extends React.Component {
             type:value
         });
     }*/
+
     onRecaptchaChange(response) {
         this.setState({
             'grecaptcharesponse': response
         });
-        console.log(response);
+    }
+    /*Using react-semantic-ui Inputs, when we assign them an initial value,
+    the only way they can become editable is handling the onChange method.
+    If the user is not logged, they don't receive an initial value,
+    but the problem is the same, so we need to change by hand the value.
+    Now, only not logged users can edit name, surname and email. If we want to
+    allow all users to edit, we need to remove the if condition in each change method*/
+    onFirstNameChange(event,data){
+        if(this.props.UserProfileStore.username.length === 0){
+          //Not logged user, he can edit
+            this.setState({
+                firstName: data.value
+            });
+        }
+    }
+    onLastNameChange(event,data){
+        if(this.props.UserProfileStore.username.length === 0){
+          //Not logged user, he can edit
+            this.setState({
+                lastName: data.value
+            });
+        }
+    }
+    onEmailChange(event,data){
+        if(this.props.UserProfileStore.username.length === 0){
+          //Not logged user, he can edit
+            this.setState({
+                email: data.value
+            });
+        }
+    }
+
+    onSubmitHandler(event){
+        //email, first name and last name are stored in the state
+        console.log(this.state.firstName);
+        console.log(this.state.lastName);
+        console.log(this.state.email);
+        console.log(this.typeContact.state.value);
+        console.log(this.summaryContact.inputRef.value);
+        console.log(this.descriptionContact.ref.value);
+        console.log(this.grecaptcharesponse);
+
+
+
     }
 
     render() {
@@ -78,41 +121,39 @@ class ContactUs extends React.Component {
                   <Divider hidden />
                   <Segment attached="bottom" textAlign="left" >
                     <Header as='h3'>Feedback</Header>
-                    <Form>
-
+                    <Form onSubmit={this.onSubmitHandler.bind(this)}>
                       <Form.Field>
                       <Label as='label' style={labelStyle} ribbon color='blue' htmlFor="typeContact">Type of report*:</Label>
                       <Dropdown selection id='typeContact' name='typeContact' ref={(type) => {this.typeContact = type;}}  placeholder='Select type of report' options={typeOptions} aria-required="true" />
                       </Form.Field>
                       <Form.Field>
                         <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="firstNameContact">First Name:</Label>
-                        <Input type='text' id='firstNameContact'  ref={(input) => {this.firstNameContact = input;}} name="firstNameContact" placeholder='Your first name' value={this.state.firstName}/>
+                        <Input type='text' id='firstNameContact'   name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
+                         placeholder='Your first name' value={this.state.firstName} onChange ={this.onFirstNameChange.bind(this)}/>
                       </Form.Field>
                       <Form.Field>
                         <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="lastNameContact">Last Name:</Label>
-                        <Input type='text' id='firstNameContact' name="lastNameContact" placeholder='Your last name' value={this.state.lastName}/>
+                        <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
+                         placeholder='Your last name' value={this.state.lastName} onChange ={this.onLastNameChange.bind(this)}/>
                       </Form.Field>
                       <Form.Field>
                         <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="emailContact">Email*:</Label>
-                        <Input type='email' id='emailContact' name="emailContact" placeholder='user@server.com'  aria-required="true"  value={this.state.email}/>
+                        <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
+                        placeholder='user@server.com' aria-required="true" value={this.state.email} onChange ={this.onEmailChange.bind(this)}/>
                       </Form.Field>
                       <Form.Field>
                         <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="summaryContact">Summary*:</Label>
-                        <Input type='text' id='summaryContact' name="summaryContact" placeholder='Please, write us a one-sentence summary' aria-required="true" />
+                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}  placeholder='Please, write us a one-sentence summary' aria-required="true"  />
                       </Form.Field>
                       <Form.Field>
                         <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="descriptionContact">Context:</Label>
-                         <TextArea id='descriptionContact' name="descriptionContact" autoHeight placeholder='Please, give us more information about' />
+                         <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}  autoHeight placeholder='Please, give us more information about' />
                       </Form.Field>
                       <Form.Field>
                         <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
-                        <ReCAPTCHA style={recaptchaStyle} sitekey={publicRecaptchaKey}  onChange={this.onRecaptchaChange.bind(this)}  aria-required="true"/>
+                        <ReCAPTCHA style={recaptchaStyle} sitekey={publicRecaptchaKey}   onChange={this.onRecaptchaChange.bind(this)}  aria-required="true"/>
                       </Form.Field>
                       <Form.Button color='blue'>Send Feedback</Form.Button>
-
-
-
-
                    </Form>
                    </Segment>
 
