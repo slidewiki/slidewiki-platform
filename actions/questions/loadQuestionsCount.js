@@ -5,7 +5,7 @@ export default function loadQuestionsCount(context, payload, done) {
     log.info(context);
     context.service.read('questions.count', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('LOAD_AMOUNT_OF_QUESTIONS_FAILURE', err);
         } else {

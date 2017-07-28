@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ResizeAware from 'react-resize-aware';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import PresentationSlide from './PresentationSlide';
@@ -80,80 +81,65 @@ class Presentation extends React.Component{
 
             Reveal.addEventListener( 'ready', ( event ) => {
             	// event.currentSlide, event.indexh, event.indexv
-                if($('.present > .pptx2html').html()){
-                    pptxwidth = $('.present > .pptx2html').width();
-                    pptxheight = $('.present > .pptx2html').height();
-                } else {
-                    pptxwidth = '100%';
-                    pptxheight = '100%';
-                    //resize non-pptx2html slide content based on current height of window
-                    //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
-                    let presentwidth = $('.present').width();
-                    let presentheight = $('.present').height();
-                    //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                    let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth;
-                    let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.8);
-                    //console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
-                    let heightratio = screenheight / presentheight ;
-                    let widthratio = screenwidth / presentwidth;
-                    let scaleratio = 1;
-                    if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
-                    //console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
-                    //console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
-
-                    $('.present').css({'transform': '', 'transform-origin': ''});
-                    $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                }
-                //console.log('reveal ready dimensions: ' + pptxheight + ' by ' + pptxwidth);
-                Reveal.configure({
-                    width: pptxwidth,
-                    height: pptxheight
-                });
+                this.resize();
             } );
 
             Reveal.addEventListener( 'slidechanged', ( event ) => {
                 //console.log('slidechanged: ' + $('.present > .pptx2html').html());
-                if($('.present > .pptx2html').html()){
-                    pptxwidth = $('.present > .pptx2html').width();
-                    pptxheight = $('.present > .pptx2html').height();
-                } else {
-                    pptxwidth = '100%';
-                    pptxheight = '100%';
-                    //resize non-pptx2html slide content based on current height of window
-                    //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
-                    let presentwidth = $('.present').width();
-                    let presentheight = $('.present').height();
                     //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
-                    let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth;
-                    let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.8);
-                    //console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
-                    let heightratio = screenheight / presentheight ;
-                    let widthratio = screenwidth / presentwidth;
-                    let scaleratio = 1;
-                    if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
-                    //console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
-                    //console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
-
-                    $('.present').css({'transform': '', 'transform-origin': ''});
-                    $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
-                }
-                //console.log('slidechanged dimensions: ' + pptxheight + ' by ' + pptxwidth);
-                Reveal.configure({
-                    width: pptxwidth,
-                    height: pptxheight
-                });
-	            // event.previousSlide, event.currentSlide, event.indexh, event.indexv
-                //let state = Reveal.getState();
-                //console.log('state: ' + JSON.stringify(state));
+                this.resize();
             } );
 
         }
+        //listen to resize event and resize.
+        ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
+            {
+            //console.log('resize');
+            this.resize();
+        });
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the slide content
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'slides']);
 
     }
+    resize(){
+        if(process.env.BROWSER){
+            let pptxwidth;
+            let pptxheight;
+            if($('.present > .pptx2html').html()){
+                pptxwidth = $('.present > .pptx2html').width();
+                pptxheight = $('.present > .pptx2html').height();
+            } else {
+                pptxwidth = '100%';
+                pptxheight = '100%';
+                //resize non-pptx2html slide content based on current height of window
+                //reimplemented based on old SlideWiki https://github.com/AKSW/SlideWiki/blob/307e9e87aee08543e46d270fe267aeaa5cdbfe3b/slidewiki/static/js/scale.js
+                let presentwidth = $('.present').width();
+                let presentheight = $('.present').height();
+                //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
+                let screenwidth = document.getElementsByClassName('reveal')[0].offsetWidth * 0.85;
+                let screenheight = (document.getElementsByClassName('reveal')[0].offsetHeight * 0.85);
+                //console.log('resize non-pptx2html slide content - screenwidth: ' + screenwidth + ' and height: ' + screenheight);
+                let heightratio = screenheight / presentheight ;
+                let widthratio = screenwidth / presentwidth;
+                let scaleratio = 1;
+                if (widthratio < heightratio){scaleratio = widthratio;} else {scaleratio = heightratio;}
+                //console.log('resize non-pptx2html slide content - widthratio: ' + widthratio + ' and heightratioratio: ' + heightratio);
+                //console.log('resize non-pptx2html slide content - scaleratio: ' + scaleratio);
 
+                $('.present').css({'transform': '', 'transform-origin': ''});
+                $('.present').css({'transform': 'scale('+scaleratio+','+scaleratio+')', 'transform-origin': 'top left'});
+            }
+            // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+            //let state = Reveal.getState();
+            //console.log('state: ' + JSON.stringify(state));
+            //console.log('slidechanged dimensions: ' + pptxheight + ' by ' + pptxwidth);
+            Reveal.configure({
+                width: pptxwidth,
+                height: pptxheight
+            });
+        }
+    }
     componentDidUpdate(){
 
     }
@@ -174,14 +160,16 @@ class Presentation extends React.Component{
         //console.log(style);
         this.slides = this.getSlides();
         return(
-            <div>
-                <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
-                    <div className={['slides', style.slides].join(' ')}>
-        			     	{this.slides}
-        			      </div>
+            <ResizeAware ref='container' id='container'>
+                <div>
+                    <div className={['reveal', style.reveal].join(' ')} style={this.playerCss}  ref={(refToDiv) => this.revealDiv = refToDiv} data-transition="none" data-background-transition="none">
+                        <div className={['slides', style.slides].join(' ')}>
+            			     	{this.slides}
+            			      </div>
+                    </div>
+                    <br style={clearStyle} />
                 </div>
-                <br style={clearStyle} />
-            </div>
+            </ResizeAware>
         );
     }
 
@@ -197,7 +185,7 @@ class Presentation extends React.Component{
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
+                returnList.push(<PresentationSlide content={content} key={slide.id + '-' + i} id={'slide-' + slide.id + '-' + i} />);
             }
             return returnList;
 

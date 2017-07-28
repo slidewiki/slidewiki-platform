@@ -10,7 +10,7 @@ class TagsInput extends React.Component {
     initDropdown(){
         $('#tags_input_div').dropdown({
             fields: {
-                name: 'tagName',
+                name: 'defaultName',
                 value: 'tagName'
             },
             minCharacters: 1,

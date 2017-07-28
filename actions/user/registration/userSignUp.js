@@ -5,7 +5,7 @@ export default function userSignUp(context, payload, done) {
     log.info(context);
     context.service.create('user.registration', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('CREATE_USER_FAILURE', err); // not implemented in store
         } else {

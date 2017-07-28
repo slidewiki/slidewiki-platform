@@ -13,6 +13,7 @@ class DeckTreeStore extends BaseStore {
         this.error = 0;
         //used to check if the selector is valid and refers to a node that belongs to this deck tree
         this.isSelectorValid = true;
+        this.revisionId = null;
         this.latestRevisionId = null;
     }
     updateDeckTree(payload) {
@@ -44,6 +45,7 @@ class DeckTreeStore extends BaseStore {
         this.updatePrevNextSelectors();
         //reset error state
         this.error = 0;
+        this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
         this.emitChange();
     }
@@ -355,20 +357,32 @@ class DeckTreeStore extends BaseStore {
             //chain will be a list of all nodes in the same level
             chain = chain.get(item);
         });
-        if(chain.size > 0) {
-            //push back last item
-            selectedNodeIndex.push(lastItem[0]);
-            this.deckTree = this.deckTree.deleteIn(selectedNodeIndex);
-            selectedNodeIndex.splice(-1,1);
-            //should also update the path of all nodes which are in the same level
-            //update the sibling nodes after deleting the node
-            this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition);
-            //need to update flat tree for node absolute positions
-            this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
+        //push back last item
+        selectedNodeIndex.push(lastItem[0]);
+        this.deckTree = this.deckTree.deleteIn(selectedNodeIndex);
+        selectedNodeIndex.splice(-1,1);
+        //should also update the path of all nodes which are in the same level
+        //update the sibling nodes after deleting the node
+        this.updateSiblingNodes(selectedNodeIndex, selectedRelPosition);
+        //need to update flat tree for node absolute positions
+        this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
+
+        //should update the selector
+        let newSelector;
+        if (chain.size <= 1){
+            //if deleting the only child of a deck, set to parent node
+            newSelector = this.findParentNodeSelector(this.selector.get('spath'));
+        } else {
+            //select the node after the deleted one, or the node before, if it was the last one
+            if (selectedRelPosition === chain.size - 1) {
+                selectedRelPosition--;
+            }
+            selectedNodeIndex.push(selectedRelPosition);
+            newSelector = this.makeSelectorFromNode(this.getImmNodeFromImmSelector(selectedNodeIndex));
         }
-        //should deselect the currently selected node first
-        //should update the selector: set to parent node
-        this.switchSelector(this.selector, this.findParentNodeSelector(this.selector.get('spath')));
+
+        // update the selector
+        this.switchSelector(this.selector, newSelector);
 
         if (silent !== true){
             this.emitChange();
@@ -522,6 +536,7 @@ class DeckTreeStore extends BaseStore {
             nextSelector: this.nextSelector,
             error: this.error,
             isSelectorValid: this.isSelectorValid,
+            revisionId: this.revisionId,
             latestRevisionId: this.latestRevisionId
         };
     }
@@ -536,6 +551,7 @@ class DeckTreeStore extends BaseStore {
         this.nextSelector = Immutable.fromJS(state.nextSelector);
         this.error  = state.error;
         this.isSelectorValid = state.isSelectorValid;
+        this.revisionId = state.revisionId;
         this.latestRevisionId = state.latestRevisionId;
     }
     handleDeckTreeError(err){
