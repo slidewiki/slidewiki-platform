@@ -4,7 +4,6 @@ import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertRepl
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import AddReply from './AddReply';
 import {navigateAction} from 'fluxible-router';
-import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import TreeUtil from '../../TreePanel/util/TreeUtil';
