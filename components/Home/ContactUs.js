@@ -75,6 +75,26 @@ class ContactUs extends React.Component {
             });
         }
     }
+    checkType(){
+        let noTypeError = true;
+
+        if (this.typeContact.state.value === '' ){
+            noTypeError = false;
+            swal({
+                title:'Contact Us',
+                text: 'Please, please select the type of feedback',
+                type: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonClass: 'ui olive button',
+                buttonsStyling: false
+            }).then((accepted) => {
+
+                this.typeContact.focus();
+            });
+        }
+        return noTypeError;
+
+    }
     checkEmail(){
         let noEmailError = true;
         let regExp = /\S+@\S+\.\S+/;
@@ -88,7 +108,7 @@ class ContactUs extends React.Component {
                 confirmButtonClass: 'ui olive button',
                 buttonsStyling: false
             }).then((accepted) => {
-              //recaptcha-checkbox-checkmark
+
                 this.emailContact.focus();
             });
         }
@@ -108,7 +128,7 @@ class ContactUs extends React.Component {
                 confirmButtonClass: 'ui olive button',
                 buttonsStyling: false
             }).then((accepted) => {
-            //recaptcha-checkbox-checkmark
+
                 this.summaryContact.focus();
             });
         }
@@ -126,7 +146,7 @@ class ContactUs extends React.Component {
                 confirmButtonText: 'Ok',
                 confirmButtonClass: 'ui olive button',
                 buttonsStyling: false
-            }).then((accepted) => {                
+            }).then((accepted) => {
                 //recaptcha-checkbox-checkmark
                 ReactDOM.findDOMNode(this.recaptcha).focus();
                 //$('#recaptchaGoogleContact').focus();
