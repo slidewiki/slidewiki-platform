@@ -157,18 +157,22 @@ class ContactUs extends React.Component {
     checkForm(){
     //Checks if requiered fields are ok.
     // Returns true if all are ok
-        if(this.checkEmail())
-            if(this.checkSummary())
-                if(this.checkCaptcha())
-                    return true;
+        if(this.checkType())
+            if(this.checkEmail())
+                if(this.checkSummary())
+                    if(this.checkCaptcha())
+                        return true;
         return false;
     }
 
     onSubmitHandler(event){
         //email, first name and last name are stored in the state
         event.preventDefault();
-        this.checkForm();
+        if(this.checkForm()){
+          //all data is ok. Send info
 
+        }
+        /*
         console.log(this.state.firstName);
         console.log(this.state.lastName);
         console.log(this.state.email);
@@ -176,7 +180,7 @@ class ContactUs extends React.Component {
         console.log(this.summaryContact.inputRef.value);
         console.log(this.descriptionContact.ref.value);
         console.log(this.state.grecaptcharesponse);
-
+        */
 
 
     }
