@@ -7,6 +7,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import {publicRecaptchaKey} from '../../configs/general';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import sendContactForm from '../../actions/home/sendContactForm';
 
 class ContactUs extends React.Component {
     constructor(props){
@@ -86,6 +87,8 @@ class ContactUs extends React.Component {
                 type: 'error',
                 confirmButtonText: 'Ok',
                 confirmButtonClass: 'ui olive button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
                 buttonsStyling: false
             }).then((accepted) => {
 
@@ -106,6 +109,8 @@ class ContactUs extends React.Component {
                 type: 'error',
                 confirmButtonText: 'Ok',
                 confirmButtonClass: 'ui olive button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
                 buttonsStyling: false
             }).then((accepted) => {
 
@@ -126,6 +131,8 @@ class ContactUs extends React.Component {
                 type: 'error',
                 confirmButtonText: 'Ok',
                 confirmButtonClass: 'ui olive button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
                 buttonsStyling: false
             }).then((accepted) => {
 
@@ -145,6 +152,8 @@ class ContactUs extends React.Component {
                 type: 'error',
                 confirmButtonText: 'Ok',
                 confirmButtonClass: 'ui olive button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
                 buttonsStyling: false
             }).then((accepted) => {
                 //recaptcha-checkbox-checkmark
@@ -170,7 +179,18 @@ class ContactUs extends React.Component {
         event.preventDefault();
         if(this.checkForm()){
           //all data is ok. Send info
-
+            let payload = {
+                email: 'jira@slidewiki.atlassian.net',
+                title : this.summaryContact.inputRef.value,
+                text : 'First Name:'+this.state.firstName +'\n'+
+                       'Last Name:'+this.state.lastName +'\n'+
+                       'email:'+this.state.email+'\n'+
+                       'Feedback type:'+this.typeContact.state.value+'\n'+
+                       'Summary:'+this.summaryContact.inputRef.value+'\n'+
+                       'Description:'+this.descriptionContact.ref.value
+            };
+            console.log(payload);
+            this.context.executeAction(sendContactForm,payload);
         }
         /*
         console.log(this.state.firstName);
