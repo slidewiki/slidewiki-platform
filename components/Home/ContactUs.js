@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {connectToStores} from 'fluxible-addons-react';
 import { Container, Divider,Header,Segment,Form,Label,Dropdown,Input,TextArea} from 'semantic-ui-react';
 import UserProfileStore from '../../stores/UserProfileStore';
@@ -80,16 +81,71 @@ class ContactUs extends React.Component {
             });
         }
     }
+    checkEmail(){
+        let noEmailError = true;
+        let regExp = /\S+@\S+\.\S+/;
+        if (this.state.email === '' || !regExp.test(this.state.email)){
+            swal({
+                title:'Contact Us',
+                text: 'Please, use a valid email address',
+                type: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonClass: 'ui olive button',
+                buttonsStyling: false
+            }).then((accepted) => {
+                noEmailError = false;
+              //recaptcha-checkbox-checkmark
+                this.emailContact.focus();
+            });
+        }
+        return noEmailError;
+
+    }
+    checkSummary(){
+        return true;
+    }
+    checkCaptcha(){
+    // REturns true if everything is ok
+        let noCaptchaError = true;
+        if(this.state.grecaptcharesponse === undefined){
+            swal({
+                title:'Contact Us',
+                text: 'Please, confirm you are not a bot',
+                type: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonClass: 'ui olive button',
+                buttonsStyling: false
+            }).then((accepted) => {
+                noCaptchaError = false;
+                //recaptcha-checkbox-checkmark
+                ReactDOM.findDOMNode(this.recaptcha).focus();
+                //$('#recaptchaGoogleContact').focus();
+            });
+        }
+        return noCaptchaError;
+    }
+    checkForm(){
+    //Checks if requiered fields are ok.
+    // Returns true if all are ok
+        if(this.checkEmail())
+            if(this.checkSummary())
+                if(this.checkCaptcha())
+                    return true;
+        return false;
+    }
 
     onSubmitHandler(event){
         //email, first name and last name are stored in the state
+        event.preventDefault();
+        this.checkForm();
+
         console.log(this.state.firstName);
         console.log(this.state.lastName);
         console.log(this.state.email);
         console.log(this.typeContact.state.value);
         console.log(this.summaryContact.inputRef.value);
         console.log(this.descriptionContact.ref.value);
-        console.log(this.grecaptcharesponse);
+        console.log(this.state.grecaptcharesponse);
 
 
 
@@ -151,7 +207,9 @@ class ContactUs extends React.Component {
                       </Form.Field>
                       <Form.Field>
                         <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
-                        <ReCAPTCHA style={recaptchaStyle} sitekey={publicRecaptchaKey}   onChange={this.onRecaptchaChange.bind(this)}  aria-required="true"/>
+                        <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
+                         style={recaptchaStyle} sitekey={publicRecaptchaKey}   onChange={this.onRecaptchaChange.bind(this)}
+                         aria-required="true" tabIndex="0"/>
                       </Form.Field>
                       <Form.Button color='blue'>Send Feedback</Form.Button>
                    </Form>
