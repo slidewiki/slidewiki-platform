@@ -11,7 +11,6 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 class ContactUs extends React.Component {
     constructor(props){
         super(props);
-
         this.state ={
             type : '',
             firstName:this.props.UserProfileStore.user.fname,
@@ -19,11 +18,6 @@ class ContactUs extends React.Component {
             email: this.props.UserProfileStore.user.email
 
         };
-
-
-
-
-
     }
     componentDidMount(){
       //Load user info, if user is conected.
@@ -85,6 +79,7 @@ class ContactUs extends React.Component {
         let noEmailError = true;
         let regExp = /\S+@\S+\.\S+/;
         if (this.state.email === '' || !regExp.test(this.state.email)){
+            noEmailError = false;
             swal({
                 title:'Contact Us',
                 text: 'Please, use a valid email address',
@@ -93,7 +88,6 @@ class ContactUs extends React.Component {
                 confirmButtonClass: 'ui olive button',
                 buttonsStyling: false
             }).then((accepted) => {
-                noEmailError = false;
               //recaptcha-checkbox-checkmark
                 this.emailContact.focus();
             });
@@ -102,12 +96,29 @@ class ContactUs extends React.Component {
 
     }
     checkSummary(){
-        return true;
+        let noSummaryError = true;
+
+        if (this.summaryContact.inputRef.value === ''){
+            noSummaryError = false;
+            swal({
+                title:'Contact Us',
+                text: 'Please, provide us a summary of your issue',
+                type: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonClass: 'ui olive button',
+                buttonsStyling: false
+            }).then((accepted) => {
+            //recaptcha-checkbox-checkmark
+                this.summaryContact.focus();
+            });
+        }
+        return noSummaryError;
     }
     checkCaptcha(){
     // REturns true if everything is ok
         let noCaptchaError = true;
         if(this.state.grecaptcharesponse === undefined){
+            noCaptchaError = false;
             swal({
                 title:'Contact Us',
                 text: 'Please, confirm you are not a bot',
@@ -115,8 +126,7 @@ class ContactUs extends React.Component {
                 confirmButtonText: 'Ok',
                 confirmButtonClass: 'ui olive button',
                 buttonsStyling: false
-            }).then((accepted) => {
-                noCaptchaError = false;
+            }).then((accepted) => {                
                 //recaptcha-checkbox-checkmark
                 ReactDOM.findDOMNode(this.recaptcha).focus();
                 //$('#recaptchaGoogleContact').focus();
