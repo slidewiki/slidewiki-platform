@@ -4,8 +4,16 @@ import notFoundError from '../error/notFoundError';
 import methodNotAllowedError  from '../error/methodNotAllowedError';
 import searchSyntaxError from '../error/searchSyntaxError';
 
+
 export default function sendContactForm(context,payload,done){
     log.info(context);
+    /*
+    emailFrom: user email
+    emailTo: 'jira@slidewiki.atlassian.net',
+    title : form summary
+    text : all fields,
+    swal_messages: translated messages
+    */
     /* add the connection to the service
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
@@ -37,11 +45,12 @@ export default function sendContactForm(context,payload,done){
     */
     //Normal action: inform user and navigateAction
     //log.info(context,res);
+
     swal({
-        title: 'Contact Us',
-        text: 'Feedback sent. Thank you!',
+        title: payload.swal_messages.title,
+        text:payload.swal_messages.text,
         type: 'success',
-        confirmButtonText: 'Close',
+        confirmButtonText: payload.swal_messages.confirmButtonText,
         confirmButtonClass: 'positive ui button',
         allowEscapeKey: false,
         allowOutsideClick: false,
@@ -49,7 +58,8 @@ export default function sendContactForm(context,payload,done){
     })
     .then(() => {
         //go to homepage
-        this.context.executeAction(navigateAction, {//go to home page after password reset
+        context.executeAction(navigateAction, {
+          //go to home page after
             url: '/'
         });
 

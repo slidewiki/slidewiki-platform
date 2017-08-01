@@ -119,6 +119,14 @@ class ContactUs extends React.Component {
             form_button:{
                 id: 'contactUs.form_button',
                 defaultMessage:'Send Feedback'
+            },
+            send_swal_text:{
+                id: 'contactUs.send_swal_text',
+                defaultMessage:'Feedback sent. Thank you!'
+            },
+            send_swal_button:{
+                id: 'contactUs.send_swal_button',
+                defaultMessage:'Close'
             }
 
         });
@@ -277,22 +285,34 @@ class ContactUs extends React.Component {
         return false;
     }
 
+    getSwalMessages(){
+      //Get the messages which will show in the swal showed  when the form is sent
+        return {
+            title: this.context.intl.formatMessage(this.messages.swal_title),
+            text: this.context.intl.formatMessage(this.messages.send_swal_text),
+            confirmButtonText: this.context.intl.formatMessage(this.messages.send_swal_button)
+        };
+    }
+
     onSubmitHandler(event){
         //email, first name and last name are stored in the state
         event.preventDefault();
         if(this.checkForm()){
           //all data is ok. Send info
+            let swal_messages = this.getSwalMessages();
             let payload = {
-                email: 'jira@slidewiki.atlassian.net',
+                emailFrom: this.state.email,
+                emailTo: 'jira@slidewiki.atlassian.net',
                 title : this.summaryContact.inputRef.value,
                 text : 'First Name:'+this.state.firstName +'\n'+
                        'Last Name:'+this.state.lastName +'\n'+
                        'email:'+this.state.email+'\n'+
                        'Feedback type:'+this.typeContact.state.value+'\n'+
                        'Summary:'+this.summaryContact.inputRef.value+'\n'+
-                       'Description:'+this.descriptionContact.ref.value
+                       'Description:'+this.descriptionContact.ref.value,
+                swal_messages : swal_messages
             };
-
+            console.log(payload);
             this.context.executeAction(sendContactForm,payload);
         }
         /*
