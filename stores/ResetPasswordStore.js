@@ -5,17 +5,20 @@ class ResetPasswordStore extends BaseStore {
         super(dispatcher);
         this.errorMessage = '';
         this.componentStatus = 'guest';
+        this.isLoading = false;
     }
 
     handleSuccess(res) {
         this.componentStatus = 'pending';
         this.errorMessage = '';
+        this.isLoading = false;
         this.emitChange();
     }
 
     reset() {
         this.componentStatus = 'guest';
         this.errorMessage = '';
+        this.isLoading = false;
         this.emitChange();
     }
 
@@ -26,6 +29,7 @@ class ResetPasswordStore extends BaseStore {
         }
         this.errorMessage = this.extractMessage(rawMessage);
         this.componentStatus = 'error';
+        this.isLoading = false;
         this.emitChange();
     }
 
@@ -42,19 +46,27 @@ class ResetPasswordStore extends BaseStore {
     wrongAPIKeyUsed() {
         this.errorMessage = '';
         this.componentStatus = 'apikey';
+        this.isLoading = false;
         this.emitChange();
     }
 
     unknownEMail(err) {
         this.errorMessage = '';
         this.componentStatus = 'email';
+        this.isLoading = false;
+        this.emitChange();
+    }
+
+    start() {
+        this.isLoading = true;
         this.emitChange();
     }
 
     getState() {
         return {
             componentStatus: this.componentStatus,
-            errorMessage: this.errorMessage
+            errorMessage: this.errorMessage,
+            isLoading: this.isLoading
         };
     }
 
@@ -65,6 +77,7 @@ class ResetPasswordStore extends BaseStore {
     rehydrate(state) {
         this.componentStatus = state.componentStatus;
         this.errorMessage = state.errorMessage;
+        this.isLoading = state.isLoading;
     }
 }
 
@@ -75,7 +88,8 @@ ResetPasswordStore.handlers = {
     //error handling
     'RESET_PASSWORD_FAILURE': 'handleError',
     'RESET_PASSWORD_WRONG_APIKEY': 'wrongAPIKeyUsed',
-    'RESET_PASSWORD_UNKNOWN_EMAIL': 'unknownEMail'
+    'RESET_PASSWORD_UNKNOWN_EMAIL': 'unknownEMail',
+    'RESET_PASSWORD_START': 'start'
 };
 
 export default ResetPasswordStore;

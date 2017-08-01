@@ -111,6 +111,8 @@ class ChangePersonalData extends React.Component {
                         <textarea rows="2" maxLength="120" placeholder="A few words about yourself - max 120 characters" id="bio" name="description" defaultValue={this.props.user.description} ref="description"/>
                     </div>
 
+                    {this.props.saveProfileIsLoading ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+
                     <button type="submit" className="ui blue labeled submit icon button">
                         <i className="icon checkmark"/>Submit Changes
                     </button>
