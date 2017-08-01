@@ -10,48 +10,15 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         if(resource === 'translation.list'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
-            // let translations = [];
-            //
-            // if(args.sid%2===0){
-            //     translations=[
-            // 	                {'lang': 'EN', 'id': 343},
-            // 	                {'lang': 'DE', 'id': 32},
-            // 	                {'lang': 'FR', 'id': 64}
-            //     ];
-            // }
-            // else{
-            //     translations = [
-            //                   {'lang': 'EN', 'id': 343},
-            // 	                {'lang': 'ES', 'id': 56},
-            // 	                {'lang': 'GR', 'id': 71},
-            // 	                {'lang': 'FA', 'id': 81}
-            //     ];
-            // }
-            //
-            //
-            //
-            // let currentLang = {'lang': 'EN', 'id': 343};
-            // callback(null, {translations: translations, currentLang: currentLang});
 
-
+            let deck_id = parseInt(args.sid.split('-')[0]);
             let translations = [];
             let currentLang = {};
-
-            // rp({
-            //     method: 'GET',
-            //     uri: Microservices.deck.uri + '/deck/' + args.id + '/permissions',
-            //     headers: { '----jwt----': args.jwt },
-            //     json: true
-            // })
-
             rp({
                 method: 'GET',
                 json: true,
-                uri: Microservices.deck.uri + '/deck/' + args.id + '/translations',
-            }).then((res) => {            
+                uri: Microservices.deck.uri + '/deck/' + deck_id + '/translations',
+            }).then((res) => {
                 callback(null, res);
             }).catch((err) => {
                 callback(err, {translations: [], currentLang: currentLang});
