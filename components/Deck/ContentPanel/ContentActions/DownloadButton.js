@@ -84,7 +84,7 @@ class DownloadButton extends React.Component{
         return(
           <Dropdown
               button
-              icon='download large'
+              icon='download'
               aria-label='Download. Choose the export format.'
               data-tooltip='Download.Choose the export format.'
               item
