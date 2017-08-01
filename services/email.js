@@ -27,14 +27,14 @@ export default {
         }
         catch (e) {
             console.log(e);
-            return callback('Wrong SMTP configuration');
+            return callback({message: 'Wrong SMTP configuration', error: e});
         }
 
         connection.on('error', (err) => {
             console.log('ERROR on SMTP Client:', err);
             if (process.env.NODE_ENV === 'test')
                 return callback(null, {email: email, message:  'dummy'});//DEBUG
-            return callback(err);
+            return callback({message: 'Failed creating connection to SMTP server', error: err});
         });
 
         connection.connect((result) => {
@@ -53,19 +53,19 @@ export default {
                     connection.quit();
                 }
                 catch (e) {
-                    console.log('SMTP connection quit failed:', e);
+                    console.log({message: 'SMTP connection quit failed', error: e});
                 }
 
                 if (err !== null) {
-                    return callback(err);
+                    return callback({message: 'Sending failed', error: err});
                 }
 
                 //handle info object
                 if (info.rejected.length > 0) {
-                    return callback('Email was rejected');
+                    return callback({message: 'Email was rejected', error: info.rejected});
                 }
 
-                callback(null, {email: email, message: info.response});
+                callback(null, {email: params.to, message: info.response});
             });
         });
     }
