@@ -1,5 +1,5 @@
 import {Microservices} from '../configs/microservices';
-import secrets from '../configs/secrets';
+import {SMTP} from '../configs/secrets';
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import SMTPConnection from 'smtp-connection';
@@ -15,9 +15,9 @@ export default {
         let connection;
         try {
             connection = new SMTPConnection({
-                host: secrets.SMTP.host,
-                port: secrets.SMTP.port,
-                name: secrets.SMTP.clientName,
+                host: SMTP.host,
+                port: SMTP.port,
+                name: SMTP.clientName,
                 connectionTimeout: 4000,
                 opportunisticTLS: true,
                 tls: {
