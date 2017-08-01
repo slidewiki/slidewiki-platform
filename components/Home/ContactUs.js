@@ -19,6 +19,109 @@ class ContactUs extends React.Component {
             email: this.props.UserProfileStore.user.email
 
         };
+        this.messages = defineMessages({
+            swal_title:{
+                id: 'contactUs.swal_title',
+                defaultMessage:'Contact Us'
+            },
+            checkType_text:{
+                id: 'contactUs.checkType_text',
+                defaultMessage:'Please, please select the type of feedback'
+            },
+            swal_button:{
+                id: 'contactUs.swal_button',
+                defaultMessage:'Ok'
+            },
+            checkEmail_text:{
+                id: 'contactUs.checkEmail_text',
+                defaultMessage:'Please, use a valid email address'
+            },
+            checkSummary_text:{
+                id: 'contactUs.checkSummary_text',
+                defaultMessage:'Please, provide us a summary of your issue'
+            },
+            checkCaptcha_text:{
+                id: 'contactUs.checkCaptcha_text',
+                defaultMessage:'Please, confirm you are not a bot',
+            },
+            typeOption_suggestion:{
+                id: 'contactUs.typeOption_suggestion',
+                defaultMessage: 'Suggestion'
+            },
+            typeOption_support:{
+                id: 'contactUs.typeOption_support',
+                defaultMessage: 'Support Issue'
+            },
+            typeOption_account:{
+                id: 'contactUs.typeOption_account',
+                defaultMessage: 'Account Issue'
+            },
+            typeOption_other:{
+                id: 'contactUs.typeOption_other',
+                defaultMessage: 'Other'
+            },
+            form_explanation:{
+                id: 'contactUs.form_explanation',
+                defaultMessage:'If you wish to contact us, please complete the form below. If you wish to report an issue with a particular deck, please use the Reporting button on the deck.'
+            },
+            form_subheader:{
+                id: 'contactUs.form_subheader',
+                defaultMessage:'Feedback'
+            },
+            form_type_label:{
+                id: 'contactUs.form_type_label',
+                defaultMessage:'Type of report*:'
+            },
+            form_type_placeholder:{
+                id: 'contactUs.form_type_placeholder',
+                defaultMessage:'Select type of report'
+            },
+            form_firstName_label:{
+                id: 'contactUs.form_firstName_label',
+                defaultMessage:'First Name:'
+            },
+            form_firstName_placeholder:{
+                id: 'contactUs.form_firstName_placeholder',
+                defaultMessage:'Yout first name:'
+            },
+            form_lastName_label:{
+                id: 'contactUs.form_lastName_label',
+                defaultMessage:'Last Name:'
+            },
+            form_lastName_placeholder:{
+                id: 'contactUs.form_lastName_placeholder',
+                defaultMessage:'Yout last name:'
+            },
+            form_email_label:{
+                id: 'contactUs.form_email_label',
+                defaultMessage:'Email*:'
+            },
+            form_email_placeholder:{
+                id: 'contactUs.form_email_placeholder',
+                defaultMessage:'user@server.com'
+            },
+            form_summary_label:{
+                id: 'contactUs.form_summary_label',
+                defaultMessage:'Summary*:'
+            },
+            form_summary_placeholder:{
+                id: 'contactUs.form_summary_placeholder',
+                defaultMessage:'Please, write us a one-sentence summary'
+            },
+            form_description_label:{
+                id: 'contactUs.form_description_label',
+                defaultMessage:'Description:'
+            },
+            form_description_placeholder:{
+                id: 'contactUs.form_description_placeholder',
+                defaultMessage:'Please, give us more information about.'
+            },
+            form_button:{
+                id: 'contactUs.form_button',
+                defaultMessage:'Send Feedback'
+            }
+
+        });
     }
     componentDidMount(){
       //Load user info, if user is conected.
@@ -82,17 +185,17 @@ class ContactUs extends React.Component {
         if (this.typeContact.state.value === '' ){
             noTypeError = false;
             swal({
-                title:'Contact Us',
-                text: 'Please, please select the type of feedback',
+                title: this.context.intl.formatMessage(this.messages.swal_title),
+                text: this.context.intl.formatMessage(this.messages.checkType_text),
                 type: 'error',
-                confirmButtonText: 'Ok',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
                 confirmButtonClass: 'ui olive button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 buttonsStyling: false
             }).then((accepted) => {
 
-                this.typeContact.focus();
+                ReactDOM.findDOMNode(this.typeContact).focus();
             });
         }
         return noTypeError;
@@ -104,10 +207,10 @@ class ContactUs extends React.Component {
         if (this.state.email === '' || !regExp.test(this.state.email)){
             noEmailError = false;
             swal({
-                title:'Contact Us',
-                text: 'Please, use a valid email address',
+                title: this.context.intl.formatMessage(this.messages.swal_title),
+                text: this.context.intl.formatMessage(this.messages.checkEmail_text),
                 type: 'error',
-                confirmButtonText: 'Ok',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
                 confirmButtonClass: 'ui olive button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -126,10 +229,10 @@ class ContactUs extends React.Component {
         if (this.summaryContact.inputRef.value === ''){
             noSummaryError = false;
             swal({
-                title:'Contact Us',
-                text: 'Please, provide us a summary of your issue',
+                title: this.context.intl.formatMessage(this.messages.swal_title),
+                text: this.context.intl.formatMessage(this.messages.checkSummary_text),
                 type: 'error',
-                confirmButtonText: 'Ok',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
                 confirmButtonClass: 'ui olive button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -147,10 +250,10 @@ class ContactUs extends React.Component {
         if(this.state.grecaptcharesponse === undefined){
             noCaptchaError = false;
             swal({
-                title:'Contact Us',
-                text: 'Please, confirm you are not a bot',
+                title:this.context.intl.formatMessage(this.messages.swal_title),
+                text: this.context.intl.formatMessage(this.messages.checkCaptcha_text),
                 type: 'error',
-                confirmButtonText: 'Ok',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
                 confirmButtonClass: 'ui olive button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -189,7 +292,7 @@ class ContactUs extends React.Component {
                        'Summary:'+this.summaryContact.inputRef.value+'\n'+
                        'Description:'+this.descriptionContact.ref.value
             };
-            console.log(payload);
+
             this.context.executeAction(sendContactForm,payload);
         }
         /*
@@ -207,10 +310,10 @@ class ContactUs extends React.Component {
 
     render() {
         const typeOptions = [
-          {value:'Suggestion' , text:'Suggestion'},
-          {value:'Support' , text:'Support Issue'},
-          {value:'Account' , text:'Account Issue'},
-          {value:'Other' , text:'Other'},
+          {value:'Suggestion' , text:this.context.intl.formatMessage(this.messages.typeOption_suggestion)},
+          {value:'Support' , text:this.context.intl.formatMessage(this.messages.typeOption_support)},
+          {value:'Account' , text:this.context.intl.formatMessage(this.messages.typeOption_account)},
+          {value:'Other' , text:this.context.intl.formatMessage(this.messages.typeOption_other)},
 
         ];
         const labelStyle = {
@@ -225,47 +328,75 @@ class ContactUs extends React.Component {
             <Container text>
                 <Divider hidden />
 
-                <Header as="h2">Contact Us</Header>
-                <p>If you wish to contact us, please complete the form below. If you wish to report an issue with a particular deck, please use the Reporting button on the deck.</p>
+                <Header as="h2">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
+                <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
                   <Divider hidden />
                   <Segment attached="bottom" textAlign="left" >
-                    <Header as='h3'>Feedback</Header>
+                    <Header as='h3'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)}>
                       <Form.Field>
-                      <Label as='label' style={labelStyle} ribbon color='blue' htmlFor="typeContact">Type of report*:</Label>
-                      <Dropdown selection id='typeContact' name='typeContact' ref={(type) => {this.typeContact = type;}}  placeholder='Select type of report' options={typeOptions} aria-required="true" />
+                      <Label as='label' style={labelStyle} ribbon color='blue' htmlFor="typeContact">
+                       {this.context.intl.formatMessage(this.messages.form_type_label)}
+                      </Label>
+                      <Dropdown selection openOnFocus id='typeContact' name='typeContact' ref={(type) => {this.typeContact = type;}}
+                       placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} options={typeOptions}
+                       tabIndex="0" aria-required="true" />
                       </Form.Field>
                       <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="firstNameContact">First Name:</Label>
-                        <Input type='text' id='firstNameContact'   name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
-                         placeholder='Your first name' value={this.state.firstName} onChange ={this.onFirstNameChange.bind(this)}/>
+                        <Label as='label' style={labelStyle} ribbon color='blue'
+                         htmlFor="firstNameContact">
+                         {this.context.intl.formatMessage(this.messages.form_firstName_label)}
+                        </Label>
+                        <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
+                         placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
+                         value={this.state.firstName}
+                         onChange ={this.onFirstNameChange.bind(this)}/>
                       </Form.Field>
                       <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="lastNameContact">Last Name:</Label>
+                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="lastNameContact">
+                          {this.context.intl.formatMessage(this.messages.form_lastName_label)}
+                        </Label>
                         <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
-                         placeholder='Your last name' value={this.state.lastName} onChange ={this.onLastNameChange.bind(this)}/>
+                         placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
+                         value={this.state.lastName}
+                         onChange ={this.onLastNameChange.bind(this)}/>
                       </Form.Field>
                       <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="emailContact">Email*:</Label>
+                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="emailContact">
+                          {this.context.intl.formatMessage(this.messages.form_email_label)}
+                        </Label>
                         <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
-                        placeholder='user@server.com' aria-required="true" value={this.state.email} onChange ={this.onEmailChange.bind(this)}/>
+                         placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
+                         aria-required="true" value={this.state.email}
+                         onChange ={this.onEmailChange.bind(this)}/>
                       </Form.Field>
                       <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="summaryContact">Summary*:</Label>
-                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}  placeholder='Please, write us a one-sentence summary' aria-required="true"  />
+                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="summaryContact">
+                        {this.context.intl.formatMessage(this.messages.form_summary_label)}
+                        </Label>
+                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
+                        placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
+                        aria-required="true"  />
                       </Form.Field>
                       <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="descriptionContact">Context:</Label>
-                         <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}  autoHeight placeholder='Please, give us more information about' />
+                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="descriptionContact">
+                         {this.context.intl.formatMessage(this.messages.form_description_label)}
+                        </Label>
+                         <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
+                          autoHeight
+                          placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
                       </Form.Field>
                       <Form.Field>
                         <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
                         <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
-                         style={recaptchaStyle} sitekey={publicRecaptchaKey}   onChange={this.onRecaptchaChange.bind(this)}
+                         style={recaptchaStyle} sitekey={publicRecaptchaKey}
+                         onChange={this.onRecaptchaChange.bind(this)}
                          aria-required="true" tabIndex="0"/>
                       </Form.Field>
-                      <Form.Button color='blue'>Send Feedback</Form.Button>
+                      <Form.Button color='blue'>
+                        {this.context.intl.formatMessage(this.messages.form_button)}
+                      </Form.Button>
                    </Form>
                    </Segment>
 
