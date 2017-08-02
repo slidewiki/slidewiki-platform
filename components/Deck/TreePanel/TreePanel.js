@@ -22,7 +22,7 @@ class TreePanel extends React.Component {
         super(props);
         this.state = {
             isForkModalOpen: false
-        }
+        };
     }
 
     handleFocus() {
@@ -66,7 +66,7 @@ class TreePanel extends React.Component {
     }
 
     handleFork() {
-        this.setState({isForkModalOpen: true})
+        this.setState({isForkModalOpen: true});
     }
 
     handleTheme() {
