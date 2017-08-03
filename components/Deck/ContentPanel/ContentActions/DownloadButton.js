@@ -80,13 +80,15 @@ class DownloadButton extends React.Component{
           //{value:'' , text:''},
 
         ];
+
+        let icon_object = <Icon name='download' size='large'/>;
           /*icon='download large'*/
         return(
-          <Dropdown
-              button
-              icon='download'
+          <Dropdown as={Button}
+              icon
+              icon={icon_object}
               aria-label='Download. Choose the export format.'
-              data-tooltip='Download.Choose the export format.'
+              data-tooltip='Download. Choose the export format.'
               item
               options={downloadOptions}
               closeOnChange
