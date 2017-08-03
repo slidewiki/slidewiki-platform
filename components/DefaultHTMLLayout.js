@@ -80,6 +80,8 @@ class DefaultHTMLLayout extends React.Component {
                   <script src="/ckeditor/ckeditor.js"></script>
                   : ''
                 }
+                <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+                <script src="https://webrtc.github.io/adapter/adapter-4.2.0.js"></script>
                 <script src="/headjs/dist/1.0.0/head.min.js"></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js"></script>
