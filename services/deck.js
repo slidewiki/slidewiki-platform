@@ -214,6 +214,8 @@ export default {
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
+
+            
             let toSend = {
                 user: params.user,
                 language: params.language

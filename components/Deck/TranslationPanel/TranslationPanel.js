@@ -53,7 +53,7 @@ class TranslationPanel extends React.Component {
     handleTranslateToClick(code){
 
         this.context.executeAction(translateDeckRevision, {
-            language: code+'_'+code
+            language: code+'_'+code.toUpperCase()
         });
     }
 
@@ -75,25 +75,28 @@ class TranslationPanel extends React.Component {
     }
 
     renderTranslateTo(supported) {
-        if (supported.key !== this.props.TranslationStore.currentLang.language.substr(0,2)){
 
-            return (
-                <Dropdown.Item
-                key = {supported.code}
-                onClick={ this.handleTranslateToClick.bind(this, supported.code) }
-                //href={''}
-                >
-                {supported.name}
-                </Dropdown.Item>
-            );
-        }
-
+        return (
+            <Dropdown.Item
+            key = {supported.code}
+            onClick={ this.handleTranslateToClick.bind(this, supported.code) }
+            //href={''}
+            >
+            {supported.name}
+            </Dropdown.Item>
+        );
     }
 
     render() {
         const deckLanguage = this.props.TranslationStore.currentLang.language;
         const translations = this.props.TranslationStore.translations;
-        const supported = this.props.TranslationStore.supportedLangs;
+        const existing_codes = this.props.TranslationStore.translations.map((el) => {
+            return el.language.split('_')[0];
+        });
+        console.log(existing_codes);
+        const supported = this.props.TranslationStore.supportedLangs.filter((el) => {
+            return !existing_codes.includes(el.code);
+        });
         const user = this.props.UserProfileStore.userid;
         let divider = user ? <Dropdown.Divider /> : '';
         let translate_item = user ?
