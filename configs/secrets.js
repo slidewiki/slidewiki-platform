@@ -10,5 +10,7 @@ export default {
         host: 'localhost',
         port: 25,
         clientName: undefined,
+        from: 'no-reply@slidewiki.org',
+        to: 'jira@slidewiki.atlassian.net'
     }
 };

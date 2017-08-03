@@ -26,3 +26,5 @@ slidewikiplatform:
     - SMTP_HOST=localhost
     - SMTP_PORT=25
     #- SMTP_CLIENTNAME=
+    - SMTP_FROM=no-reply@slidewiki.org
+    - SMTP_To=jira@slidewiki.atlassian.net

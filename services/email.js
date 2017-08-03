@@ -9,8 +9,10 @@ export default {
     name: 'email',
     // At least one of the CRUD methods is Required
     create: (req, resource, params, body, config, callback) => {
-        if (!params.from || !params.to || !params.subject || !params.message)
+        if (!params.subject || !params.message)
             return callback('Error: Missing parameters', null);
+
+        const to = SMTP.to, from = SMTP.from;
 
         let connection;
         try {
@@ -26,34 +28,34 @@ export default {
             });
         }
         catch (e) {
-            console.log(e);
+            console.warn(e);
             return callback({message: 'Wrong SMTP configuration', error: e});
         }
 
         connection.on('error', (err) => {
-            console.log('ERROR on SMTP Client:', err);
-            if (process.env.NODE_ENV === 'test')
-                return callback(null, {email: params.to, message:  'dummy'});//DEBUG
+            console.warn('ERROR on SMTP Client:', err);
+            if (process.env.NODE_ENV !== 'production')
+                return callback(null, {email: to, message:  'dummy'});//DEBUG
             return callback({message: 'Failed creating connection to SMTP server', error: err});
         });
 
         connection.connect((result) => {
             //Result of connected event
-            console.log('Connection established with result', result, 'and connection details (options, secureConnection, alreadySecured, authenticated)', connection.options, connection.secureConnection, connection.alreadySecured, connection.authenticated);
+            // console.log('Connection established with result', result, 'and connection details (options, secureConnection, alreadySecured, authenticated)', connection.options, connection.secureConnection, connection.alreadySecured, connection.authenticated);
 
             connection.send({
-                from: params.from,
-                to: params.to
+                from: from,
+                to: to
             },
-            'From: <' + params.from + '>\r\n' + 'To: <' + params.to + '>\r\n' + 'Subject: ' + params.subject + '\r\nDate: ' + (new Date()).toGMTString() + '\r\n\r\n' + params.message,
+            'From: <' + from + '>\r\n' + 'To: <' + to + '>\r\n' + 'Subject: ' + params.subject + '\r\nDate: ' + (new Date()).toGMTString() + '\r\n\r\n' + params.message,
             (err, info) => {
-                console.log('tried to send the email:', err, info);
+                // console.log('tried to send the email:', err, info);
 
                 try {
                     connection.quit();
                 }
                 catch (e) {
-                    console.log({message: 'SMTP connection quit failed', error: e});
+                    console.warn({message: 'SMTP connection quit failed', error: e});
                 }
 
                 if (err !== null) {
@@ -65,7 +67,7 @@ export default {
                     return callback({message: 'Email was rejected', error: info.rejected});
                 }
 
-                callback(null, {email: params.to, message: info.response});
+                callback(null, {email: to, message: info.response});
             });
         });
     }
