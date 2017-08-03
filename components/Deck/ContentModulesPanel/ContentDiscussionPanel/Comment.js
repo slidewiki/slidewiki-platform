@@ -15,7 +15,9 @@ class Comment extends React.Component {
 
     //return the position of the node in the deck
     getPath(node){
-        const flatTree = this.props.DeckTreeStore.flatTree;
+        const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
+
+        const flatTree = savedDeckTreeStore.flatTree;
         let path = '';
         for (let i=0; i < flatTree.size; i++) {
             if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
@@ -33,7 +35,7 @@ class Comment extends React.Component {
         e.preventDefault();
 
         this.context.executeAction(navigateAction, {
-            url: this.getPath(this.props.activity)
+            url: this.getPath(this.props.comment)
         });
         // return false;
     }
@@ -46,9 +48,10 @@ class Comment extends React.Component {
             </div>
         );
 
-        const cheerioContentName = (node.content_name !== undefined) ? cheerio.load(node.content_name).text() : '';
-        const nodeRef = (node.content_kind !== this.props.selector.stype || node.content_id.split('-')[0] !== this.props.selector.sid.split('-')[0]) ? (<span>{' (from ' + node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>) : '';
+        const cheerioContentName = (comment.content_name) ? cheerio.load(comment.content_name).text() : '';
+        const nodeRef = (comment.content_kind !== this.props.selector.stype || comment.content_id.split('-')[0] !== this.props.selector.sid.split('-')[0]) ? (<span>{' (from ' + comment.content_kind + ' '}<a href={this.getPath(comment)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>) : '';
 
+        const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
         return (
             <div className="comment">
                 <a className="avatar">
@@ -67,7 +70,7 @@ class Comment extends React.Component {
                     { (String(this.props.userid) !== '') ? replyLink : ''}
                     { comment.replyBoxOpened ? (<AddReply comment={comment} userid={this.props.userid}/>) : '' }
                 </div>
-                {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
+                {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid} selector={this.props.selector} savedDeckTreeStore={savedDeckTreeStore}/>); })}</div> : ''}
             </div>
         );
     }
