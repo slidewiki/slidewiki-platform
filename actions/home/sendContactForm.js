@@ -7,62 +7,47 @@ import searchSyntaxError from '../error/searchSyntaxError';
 
 export default function sendContactForm(context,payload,done){
     log.info(context);
-    /*
-    emailFrom: user email
-    emailTo: 'jira@slidewiki.atlassian.net',
-    title : form summary
-    text : all fields,
-    swal_messages: translated messages
-    */
-    /* add the connection to the service
-    context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
+
+    context.service.create('email', {subject: payload.subject, message: payload.message}, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            if (err.statusCode === 404) {
-                context.executeAction(notFoundError, {}, done);
-                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', {docs:[]});
-                return;
-            } else if (err.statusCode === 401) {
-                context.executeAction(methodNotAllowedError, {}, done);
-                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', {docs:[]});
-                return;
-            } else if(err.statusCode === 400){ //bad request
-                context.executeAction(searchSyntaxError, {}, done);
-                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', {docs:[]});
-                return;
-            }
-            else{
-                log.error(context, {filepath: __filename});
-                res={docs:[]};
-                context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
-                return;
-            }
-        } else { //Normal action
+            swal({
+                title: payload.swal_messages.title,
+                text: payload.swal_messages.error_text,
+                type: 'error',
+                confirmButtonText: payload.swal_messages.error_confirmButtonText,
+                confirmButtonClass: 'positive ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+            .then(() => {
+                //go to homepage
+                context.executeAction(navigateAction, {
+                  //go to home page after
+                    url: '/'
+                });
 
-            log.info(context,res);
-            context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
+            });
+        } else {
+            swal({
+                title: payload.swal_messages.title,
+                text:payload.swal_messages.text,
+                type: 'success',
+                confirmButtonText: payload.swal_messages.confirmButtonText,
+                confirmButtonClass: 'positive ui button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false
+            })
+            .then(() => {
+                //go to homepage
+                context.executeAction(navigateAction, {
+                  //go to home page after
+                    url: '/'
+                });
+
+            });
         }
-
-    */
-    //Normal action: inform user and navigateAction
-    //log.info(context,res);
-
-    swal({
-        title: payload.swal_messages.title,
-        text:payload.swal_messages.text,
-        type: 'success',
-        confirmButtonText: payload.swal_messages.confirmButtonText,
-        confirmButtonClass: 'positive ui button',
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        buttonsStyling: false
-    })
-    .then(() => {
-        //go to homepage
-        context.executeAction(navigateAction, {
-          //go to home page after
-            url: '/'
-        });
-
+        done();
     });
-    done();
 }

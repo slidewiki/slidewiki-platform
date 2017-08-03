@@ -127,8 +127,15 @@ class ContactUs extends React.Component {
             send_swal_button:{
                 id: 'contactUs.send_swal_button',
                 defaultMessage:'Close'
+            },
+            send_swal_error_text: {
+                id: 'contactUs.send_swal_error_text',
+                defaultMessage:'An error occoured while contacting us. Please try again later.'
+            },
+            send_swal_error_button:{
+                id: 'contactUs.send_swal_error_button',
+                defaultMessage:'Close'
             }
-
         });
     }
     componentDidMount(){
@@ -290,7 +297,9 @@ class ContactUs extends React.Component {
         return {
             title: this.context.intl.formatMessage(this.messages.swal_title),
             text: this.context.intl.formatMessage(this.messages.send_swal_text),
-            confirmButtonText: this.context.intl.formatMessage(this.messages.send_swal_button)
+            confirmButtonText: this.context.intl.formatMessage(this.messages.send_swal_button),
+            error_text: this.context.intl.formatMessage(this.messages.send_swal_error_text),
+            error_confirmButtonText: this.context.intl.formatMessage(this.messages.send_swal_error_button)
         };
     }
 
@@ -299,33 +308,19 @@ class ContactUs extends React.Component {
         event.preventDefault();
         if(this.checkForm()){
           //all data is ok. Send info
-            let swal_messages = this.getSwalMessages();
             let payload = {
-                emailFrom: this.state.email,
-                emailTo: 'jira@slidewiki.atlassian.net',
-                title : this.summaryContact.inputRef.value,
-                text : 'First Name:'+this.state.firstName +'\n'+
-                       'Last Name:'+this.state.lastName +'\n'+
-                       'email:'+this.state.email+'\n'+
-                       'Feedback type:'+this.typeContact.state.value+'\n'+
-                       'Summary:'+this.summaryContact.inputRef.value+'\n'+
-                       'Description:'+this.descriptionContact.ref.value,
-                swal_messages : swal_messages
+                subject : this.summaryContact.inputRef.value,
+                text : 'First Name: '+this.state.firstName +'\n'+
+                       'Last Name: '+this.state.lastName +'\n'+
+                       'email: '+this.state.email+'\n'+
+                       'Feedback type: '+this.typeContact.state.value+'\n'+
+                       'Summary: '+this.summaryContact.inputRef.value+'\n'+
+                       'Description: '+this.descriptionContact.ref.value,
+                swal_messages : this.getSwalMessages()
             };
             console.log(payload);
             this.context.executeAction(sendContactForm,payload);
         }
-        /*
-        console.log(this.state.firstName);
-        console.log(this.state.lastName);
-        console.log(this.state.email);
-        console.log(this.typeContact.state.value);
-        console.log(this.summaryContact.inputRef.value);
-        console.log(this.descriptionContact.ref.value);
-        console.log(this.state.grecaptcharesponse);
-        */
-
-
     }
 
     render() {
