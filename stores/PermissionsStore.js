@@ -35,14 +35,17 @@ class PermissionsStore extends BaseStore {
     }
 
     showNoPermissionsModal(payload) {
-        payload = payload || {};
         this.isNoPermissionsModalShown = true;
-        this.ownedForks = payload.ownedForks;
         this.emitChange();
     }
 
     hideNoPermissionsModal(payload) {
         this.isNoPermissionsModalShown = false;
+        this.emitChange();
+    }
+
+    loadForks(payload) {
+        this.ownedForks = payload.ownedForks;
         this.emitChange();
     }
 
@@ -73,7 +76,7 @@ PermissionsStore.handlers = {
     'RESET_PERMISSIONS': 'resetPermissions',
     'SHOW_NO_PERMISSIONS_MODAL': 'showNoPermissionsModal',
     'HIDE_NO_PERMISSIONS_MODAL': 'hideNoPermissionsModal',
-
+    'LOAD_FORKS_SUCCESS': 'loadForks'
 };
 
 export default PermissionsStore;
