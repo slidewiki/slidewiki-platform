@@ -30,7 +30,7 @@ import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
-import {navigateAction} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router'
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
