@@ -1,9 +1,5 @@
 import log from '../log/clog';
 import {navigateAction} from 'fluxible-router';
-import notFoundError from '../error/notFoundError';
-import methodNotAllowedError  from '../error/methodNotAllowedError';
-import searchSyntaxError from '../error/searchSyntaxError';
-
 
 export default function sendContactForm(context,payload,done){
     log.info(context);
@@ -21,12 +17,7 @@ export default function sendContactForm(context,payload,done){
                 buttonsStyling: false
             })
             .then(() => {
-                //go to homepage
-                context.executeAction(navigateAction, {
-                  //go to home page after
-                    url: '/'
-                });
-
+                //nothing
             });
         } else {
             swal({

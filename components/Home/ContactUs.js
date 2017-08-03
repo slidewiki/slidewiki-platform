@@ -151,13 +151,6 @@ class ContactUs extends React.Component {
         });
 
     }
-    /*
-    onChange={(e, {value}) => {this.handleTypeChange(value);}
-    handleTypeChange(value){
-        this.setState({
-            type:value
-        });
-    }*/
 
     onRecaptchaChange(response) {
         this.setState({
