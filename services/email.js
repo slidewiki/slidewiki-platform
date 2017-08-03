@@ -10,7 +10,7 @@ export default {
     // At least one of the CRUD methods is Required
     create: (req, resource, params, body, config, callback) => {
         if (!params.from || !params.to || !params.subject || !params.message)
-            callback('Error: Missing parameters', null);
+            return callback('Error: Missing parameters', null);
 
         let connection;
         try {
@@ -33,7 +33,7 @@ export default {
         connection.on('error', (err) => {
             console.log('ERROR on SMTP Client:', err);
             if (process.env.NODE_ENV === 'test')
-                return callback(null, {email: email, message:  'dummy'});//DEBUG
+                return callback(null, {email: params.to, message:  'dummy'});//DEBUG
             return callback({message: 'Failed creating connection to SMTP server', error: err});
         });
 
