@@ -8,6 +8,7 @@ import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import TranslationPanel2 from './TranslationPanel2.js';
 
 // import TranslationStore from '../../../stores/TranslationStore';
 // import TranslationList from './TranslationList';
@@ -89,16 +90,21 @@ class TranslationPanel extends React.Component {
 
     render() {
         const deckLanguage = this.props.TranslationStore.currentLang.language;
-        const translations = this.props.TranslationStore.translations;
-        const existing_codes = this.props.TranslationStore.translations.map((el) => {
-            return el.language.split('_')[0];
-        });
-        console.log(existing_codes);
+        let translations = [];
+        let existing_codes = [];
+        if (this.props.TranslationStore.translations){
+            translations = this.props.TranslationStore.translations;
+            existing_codes = this.props.TranslationStore.translations.map((el) => {
+                return el.language.split('_')[0];
+            });
+        }
         const supported = this.props.TranslationStore.supportedLangs.filter((el) => {
             return !existing_codes.includes(el.code);
         });
         const user = this.props.UserProfileStore.userid;
-        let divider = user ? <Dropdown.Divider /> : '';
+        let divider = (user && translations.length) ? <Dropdown.Divider /> : '';
+        //let translate_item = user ? <TranslationPanel2/> : '';
+
         let translate_item = user ?
         <Dropdown scrolling item trigger={ <span>Translate</span>}>
             <Dropdown.Menu>
@@ -107,6 +113,7 @@ class TranslationPanel extends React.Component {
         </Dropdown>  : '';
 
         let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>;
+
         return(
 
             <Dropdown item trigger={currentLang}>

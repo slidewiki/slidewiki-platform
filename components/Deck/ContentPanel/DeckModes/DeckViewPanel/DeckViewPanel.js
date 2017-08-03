@@ -20,6 +20,7 @@ import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 
 import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
+import LanguagePanel from '../../../TranslationPanel/LanguagePanel.js';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -83,6 +84,8 @@ class DeckViewPanel extends React.Component {
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
+        const user = this.props.UserProfileStore.userid;
+
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
                 <NavLink href={'/deck/' + deckData.origin.id + '-' + deckData.origin.revision}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
         </div> : '';
@@ -125,7 +128,7 @@ class DeckViewPanel extends React.Component {
                                     <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
                                 <div className="ui label" tabIndex="0">
                                     <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
-                            </div>
+                                </div>
                             {tags.length > 0 ? <div className="ui divider"></div> : ''}
                             <div className="ui tag labels large meta">
                                 {tags.map((tag, index) => {
