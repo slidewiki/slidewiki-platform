@@ -608,19 +608,20 @@ class presentationBroadcast extends React.Component {
         if(!this.isInitiator){
             messageArea = <Grid columns={1}>
               <Grid.Column id="messageList" style={{'overflow-y': 'auto', 'white-space': 'nowrap', 'max-height': 500 + 'px'}}>
+                <h3>Your Questions:</h3>
                 {messages}
               </Grid.Column>
               <Grid.Column>
                 <Divider clearing />
                 <Form reply>
-                  <Form.TextArea id="messageToSend"/>
+                  <Form.TextArea id="messageToSend" placeholder='Ask a question...'/>
                   <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
                 </Form>
               </Grid.Column>
             </Grid>;
 
         } else
-            messageArea = <div id="messageList">{messages}</div>;
+            messageArea = <div id="messageList"><h3>Messages from peers:</h3>{messages}</div>;
         return (
           <Grid celled='internally'>
             <Grid.Row>
@@ -635,7 +636,7 @@ class presentationBroadcast extends React.Component {
 
             <Grid.Row>
               <Grid.Column width={16}>
-                <p>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</p>
+                <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
                 <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
                 <div id="videos" style={{'display': 'none'}}></div>
               </Grid.Column>
