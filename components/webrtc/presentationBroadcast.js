@@ -39,7 +39,7 @@ class presentationBroadcast extends React.Component {
         $('.footer:first').remove();
 
         let that = this;
-        that.socket = io('http://localhost:8080');
+        that.socket = io('https://stunservice.experimental.slidewiki.org');
 
         if (that.room !== '') {
             that.socket.emit('create or join', that.room);
