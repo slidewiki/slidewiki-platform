@@ -4,12 +4,12 @@ class presentationBroadcast extends React.Component {
 
     constructor(props) {
         super(props);
+        this.texts = {roleText: '', peerCountText: '', peerCount: ''};
         this.isInitiator = false;
         this.localStream = undefined;
         this.myID = undefined;
         this.presenterID = undefined;
-        this.pcs = {}; // {<that.socketID>: {RTCConnection: RPC, dataChannel: dataChannel}, <that.socketID>: {RTCConnection: RPC, dataChannel: dataChannel}}
-        this.remoteStreams = [];
+        this.pcs = {}; // {<socketID>: {RTCConnection: RPC, dataChannel: dataChannel}, <socketID>: {RTCConnection: RPC, dataChannel: dataChannel}}
         this.turnReady = undefined;
 
         this.pcConfig = {
@@ -26,17 +26,24 @@ class presentationBroadcast extends React.Component {
 
         this.room = 'foo';//TODO get it from the URL
         this.socket = undefined;
+
+        ////////////////////////////////////////////////////// SlideWiki specific stuff
+        this.iframesrc = '/Presentation/3-1/#/slide-36-2-0';//TODO get it from the URL
+        this.lastRemoteSlide = this.iframesrc;
+        this.paused = false; //user has manually paused slide transitions
+        this.currentSlide = this.iframesrc;
     }
     componentDidMount() {
+        //Remove menus as they shouldn't appear
         $('.menu:first').remove();
         $('.footer:first').remove();
-        let that = this;
 
+        let that = this;
         that.socket = io('http://localhost:8080');
 
         if (that.room !== '') {
             that.socket.emit('create or join', that.room);
-            console.log('Attempted to create or join that.room', that.room);
+            console.log('Attempted to create or join room', that.room);
         }
 
         function setmyID() {
@@ -48,15 +55,12 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
-            $('#roleText')
-                .text('You are the presenter, other poeple will hear your voice and reflect your presentation progress.');
-            $('#peerCounterText')
-                .text('Peers currently listening: ');
-            $('#peerCounter')
-                .text('0');
+            that.texts.roleText = 'You are the presenter, other poeple will hear your voice and reflect your presentation progress. ';
+            that.texts.peerCountText = 'Peers currently listening: ';
+            that.texts.peerCount = 0;
+            that.forceUpdate();
             setmyID();
-            $('#slidewikiPresentation')
-                .on('load', activateIframeListeners);
+            $('#slidewikiPresentation').on('load', activateIframeListeners);
             requestStreams({
                 audio: true,
                 // video: {
@@ -66,17 +70,16 @@ class presentationBroadcast extends React.Component {
                 // }
             });
             swal({
-                title: '<p>that.room <i>' + that.room + '</i> successfully created!</p>',
+                title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
                 html: '<p>Other people are free to join it. At the bottom of the page is a peer counter. The current limit is 10 people.</p>',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Check'
-            })
-            .then(() => { activateSpeechRecognition(); });
+            }).then(() => { activateSpeechRecognition(); $('body>a#atlwdg-trigger').remove();});
         });
 
-        that.socket.on('join', (room, socketID) => { //whole that.room recieves this, except for the peer that tries to join
-            // a listener will join the that.room
+        that.socket.on('join', (room, socketID) => { //whole room recieves this, except for the peer that tries to join
+            // a listener will join the room
             console.log('Another peer made a request to join room ' + that.room);
             if (that.isInitiator) {
                 console.log('This peer is the initiator of room ' + that.room + '!');
@@ -85,13 +88,12 @@ class presentationBroadcast extends React.Component {
         });
 
         that.socket.on('joined', (room) => { //only recieved by peer that tries to join
-            // a listener has joined the that.room
+            // a listener has joined the room
             console.log('joined: ' + that.room);
             setmyID();
-            $('#roleText')
-                .text('You are now listening to the presenter. The presentation you see will reflect his progress.');
-            $('#slidewikiPresentation')
-                .on('load', activateIframeListeners);
+            that.texts.roleText = 'You are now listening to the presenter. The presentation you see will reflect his progress.';
+            that.forceUpdate();
+            $('#slidewikiPresentation').on('load', activateIframeListeners);
             requestStreams({
                 audio: false,
                 video: false
@@ -99,11 +101,11 @@ class presentationBroadcast extends React.Component {
         });
 
         that.socket.on('full', (room) => { //only recieved by peer that tries to join
-            console.log('that.room ' + that.room + ' is full');
+            console.log('Room ' + that.room + ' is full');
             that.socket.close();
             swal({
-                title: 'that.room full',
-                html: 'This that.room is already full - sorry!',
+                title: 'Room full',
+                html: 'This room is already full - sorry!',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay'
@@ -131,7 +133,7 @@ class presentationBroadcast extends React.Component {
             if (receiver) { //send to one peer only
                 that.pcs[receiver].dataChannel.send(message);
             } else { //broadcast from initiator
-                for (var i in that.pcs) {
+                for (let i in that.pcs) {
                     if (that.pcs[i].dataChannel) {
                         console.log('Sending Message to peer: ', i);
                         that.pcs[i].dataChannel.send(message);
@@ -143,8 +145,7 @@ class presentationBroadcast extends React.Component {
         // This client receives a message
         that.socket.on('message', (message) => {
             if (message.sender === that.myID) { //Filter for messages from myself
-                if (message.cmd === 'peer wants to connect' && Object.keys(that.pcs)
-                    .length === 0) { //peer triggers itself
+                if (message.cmd === 'peer wants to connect' && Object.keys(that.pcs).length === 0) { //peer triggers itself
                     start(that.presenterID);
                 }
             } else if (message.receiver === that.myID) { //adressed to me
@@ -158,12 +159,11 @@ class presentationBroadcast extends React.Component {
                 }
                 if (message.cmd === 'candidate') {
                     try { //Catch defective candidates
-                        var candidate = new RTCIceCandidate({
+                        let candidate = new RTCIceCandidate({
                             sdpMLineIndex: message.data.label,
                             candidate: message.data.candidate
                         });
-                        that.pcs[message.sender].RTCconnection.addIceCandidate(candidate)
-                            .catch((e) => {}); //Catch defective candidates
+                        that.pcs[message.sender].RTCconnection.addIceCandidate(candidate).catch((e) => {}); //Catch defective candidates
                     } catch (e) {}
                 }
             }
@@ -186,8 +186,7 @@ class presentationBroadcast extends React.Component {
                 //$('#videos').append('<video id="localVideo" autoplay></video>');
                 //let localVideo = document.querySelector('#localVideo');
                 //localVideo.srcObject = stream;
-                $('#videos')
-                    .remove();
+                $('#videos').remove();
             }
             that.localStream = stream;
 
@@ -241,10 +240,10 @@ class presentationBroadcast extends React.Component {
                     that.pcs[peerID].RTCconnection.ondatachannel = handleDataChannelEvent.bind(that, peerID);
                 }
                 console.log('Created RTCPeerConnnection');
-                if (that.isInitiator)
-                    $('#peerCounter')
-                    .text(Object.keys(that.pcs)
-                        .length);
+                if (that.isInitiator){
+                    that.texts.peerCount = Object.keys(that.pcs).length;
+                    that.forceUpdate();
+                }
             } catch (e) {
                 console.log('Failed to create PeerConnection, exception: ' + e.message);
                 console.log('Cannot create RTCPeerConnection object.');
@@ -268,8 +267,10 @@ class presentationBroadcast extends React.Component {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Check'
                 });
-                $('#roleText')
-                    .text('This presentation has ended. Feel free to look at the deck as long as you want.');
+                that.texts.roleText = 'This presentation has ended. Feel free to look at the deck as long as you want.';
+                that.texts.peerCountText = '';
+                that.texts.peerCount = '';
+                that.forceUpdate();
                 handleRemoteHangup(that.presenterID);
             }
         }
@@ -286,7 +287,7 @@ class presentationBroadcast extends React.Component {
             channel.onopen = function() {
                 console.log('Data Channel opened');
                 if (that.isInitiator)
-                    sendRTCMessage('gotoslide', currentSlide, peerID);
+                    sendRTCMessage('gotoslide', that.currentSlide, peerID);
             };
 
             channel.onmessage = handleMessage.bind(that, channel);
@@ -325,11 +326,9 @@ class presentationBroadcast extends React.Component {
 
         function handleRemoteStreamAdded(event) {
             if (that.isInitiator === false) {
-                $('#videos')
-                    .append('<video class="remoteVideos" autoplay></video>');
+                $('#videos').append('<video class="remoteVideos" autoplay></video>');
                 let remoteVideos = $('.remoteVideos');
                 remoteVideos[remoteVideos.length - 1].srcObject = event.stream;
-                that.remoteStreams[remoteVideos.length - 1] = event.stream;
             }
         }
 
@@ -361,8 +360,8 @@ class presentationBroadcast extends React.Component {
         }
 
         function requestTurn(turnURL) {
-            var turnExists = false;
-            for (var i in that.pcConfig.iceServers) {
+            let turnExists = false;
+            for (let i in that.pcConfig.iceServers) {
                 if (that.pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
                     turnExists = true;
                     that.turnReady = true;
@@ -372,10 +371,10 @@ class presentationBroadcast extends React.Component {
             if (!turnExists) {
                 console.log('Getting TURN server from ', turnURL);
                 // No TURN server. Get one from computeengineondemand.appspot.com:
-                var xhr = new XMLHttpRequest();
+                let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        var turnServer = JSON.parse(xhr.responseText);
+                        let turnServer = JSON.parse(xhr.responseText);
                         console.log('Got TURN server: ', turnServer);
                         that.pcConfig.iceServers.push({
                             'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
@@ -401,7 +400,7 @@ class presentationBroadcast extends React.Component {
                 sendRTCMessage('bye', that.myID, that.presenterID);
                 stop(that.presenterID);
             }
-            //NOTE Don't need to close the that.socket, as the browser does this automatically if the window closes
+            //NOTE Don't need to close the socket, as the browser does this automatically if the window closes
         }
 
         function handleRemoteHangup(peerID) { //called by initiator
@@ -411,7 +410,7 @@ class presentationBroadcast extends React.Component {
 
         function stop(peerID, presenter = false) {
             if (presenter) {
-                for (var i in that.pcs) {
+                for (let i in that.pcs) {
                     that.pcs[i].dataChannel.close();
                     that.pcs[i].RTCconnection.close();
                     delete that.pcs[i];
@@ -421,20 +420,20 @@ class presentationBroadcast extends React.Component {
                 that.pcs[peerID].RTCconnection.close();
                 delete that.pcs[peerID];
             }
-            if (that.isInitiator)
-                $('#peerCounter')
-                .text(Object.keys(that.pcs)
-                    .length);
+            if (that.isInitiator){
+                that.texts.peerCount = Object.keys(that.pcs).length;
+                that.forceUpdate();
+            }
         }
 
         /////////////////////////////////////////// Codec specific stuff
 
         // Set Opus as the default audio codec if it's present.
         function preferOpus(sdp) {
-            var sdpLines = sdp.split('\r\n');
-            var mLineIndex;
+            let sdpLines = sdp.split('\r\n');
+            let mLineIndex;
             // Search for m line.
-            for (var i = 0; i < sdpLines.length; i++) {
+            for (let i = 0; i < sdpLines.length; i++) {
                 if (sdpLines[i].search('m=audio') !== -1) {
                     mLineIndex = i;
                     break;
@@ -445,9 +444,9 @@ class presentationBroadcast extends React.Component {
             }
 
             // If Opus is available, set it as the default in m line.
-            for (i = 0; i < sdpLines.length; i++) {
+            for (let i = 0; i < sdpLines.length; i++) {
                 if (sdpLines[i].search('opus/48000') !== -1) {
-                    var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
+                    let opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
                     if (opusPayload) {
                         sdpLines[mLineIndex] = setDefaultCodec(sdpLines[mLineIndex],
                             opusPayload);
@@ -464,16 +463,16 @@ class presentationBroadcast extends React.Component {
         }
 
         function extractSdp(sdpLine, pattern) {
-            var result = sdpLine.match(pattern);
+            let result = sdpLine.match(pattern);
             return result && result.length === 2 ? result[1] : null;
         }
 
         // Set the selected codec to the first in m line.
         function setDefaultCodec(mLine, payload) {
-            var elements = mLine.split(' ');
-            var newLine = [];
-            var index = 0;
-            for (var i = 0; i < elements.length; i++) {
+            let elements = mLine.split(' ');
+            let newLine = [];
+            let index = 0;
+            for (let i = 0; i < elements.length; i++) {
                 if (index === 3) { // Format of media starts from the fourth.
                     newLine[index++] = payload; // Put target payload to the first.
                 }
@@ -486,12 +485,12 @@ class presentationBroadcast extends React.Component {
 
         // Strip CN from sdp before CN constraints is ready.
         function removeCN(sdpLines, mLineIndex) {
-            var mLineElements = sdpLines[mLineIndex].split(' ');
+            let mLineElements = sdpLines[mLineIndex].split(' ');
             // Scan from end for the convenience of removing an item.
-            for (var i = sdpLines.length - 1; i >= 0; i--) {
-                var payload = extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
+            for (let i = sdpLines.length - 1; i >= 0; i--) {
+                let payload = extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
                 if (payload) {
-                    var cnPos = mLineElements.indexOf(payload);
+                    let cnPos = mLineElements.indexOf(payload);
                     if (cnPos !== -1) {
                         // Remove CN payload from m line.
                         mLineElements.splice(cnPos, 1);
@@ -508,28 +507,15 @@ class presentationBroadcast extends React.Component {
 
         /////////////////////////////////////////// SlideWiki specific stuff
 
-        let lastRemoteSlide = document.getElementById('slidewikiPresentation')
-            .src;
-        let paused = false; //user has manually paused slide transitions
-        let currentSlide = document.getElementById('slidewikiPresentation')
-            .src;
-
-        $('#resumeRemoteControl')
-            .click(() => {
-                resumeRemoteControl();
-            });
-
-        function resumeRemoteControl() {
-            paused = false;
-            $('#resumeRemoteControl')
-                .hide();
-            changeSlide(lastRemoteSlide);
-        }
+        $('#resumeRemoteControl').click(() => {
+            that.paused = false;
+            that.forceUpdate();
+            changeSlide(that.lastRemoteSlide);
+        });
 
         function activateIframeListeners() {
             console.log('Adding iframe listeners');
-            let iframe = $('#slidewikiPresentation')
-                .contents();
+            let iframe = $('#slidewikiPresentation').contents();
             /* Currently doesn't work - Stackoverflow Question:
              * https://stackoverflow.com/questions/45457271/forward-a-keydown-event-from-the-parent-window-to-an-iframe
              */
@@ -544,98 +530,29 @@ class presentationBroadcast extends React.Component {
             // });
             if (that.isInitiator) {
                 iframe.on('slidechanged', () => {
-                    currentSlide = document.getElementById('slidewikiPresentation')
-                        .contentWindow.location.href;
-                    sendRTCMessage('gotoslide', currentSlide);
+                    that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    sendRTCMessage('gotoslide', that.currentSlide);
                 });
             } else {
                 iframe.on('slidechanged', () => {
-                    if (document.getElementById('slidewikiPresentation')
-                        .contentWindow.location.href !== lastRemoteSlide) {
-                        paused = true;
-                        $('#resumeRemoteControl')
-                            .show();
+                    if (document.getElementById('slidewikiPresentation').contentWindow.location.href !== that.lastRemoteSlide) {
+                        that.paused = true;
+                        that.forceUpdate();
                     }
                 });
             }
         }
 
         function changeSlide(slideID) { // called by peers
-            lastRemoteSlide = slideID;
-            if (!paused) {
+            that.lastRemoteSlide = slideID;
+            if (!that.paused) {
                 console.log('Changing to slide: ', slideID);
-                $('#slidewikiPresentation')
-                    .attr('src', slideID);
+                that.iframesrc = slideID;
+                that.forceUpdate();
             }
         }
 
-        function activateSpeechRecognition() {
-            var recognition;
-
-            // if (window.hasOwnProperty('webkitSpeechRecognition')) {
-            //     recognition = new webkitSpeechRecognition();
-            // } else if (window.hasOwnProperty('SpeechRecognition')) {
-            //     recognition = new SpeechRecognition();
-            // }
-            //
-            // if (recognition) {
-            //     $('body')
-            //         .append('<p style="color: red" id="recognitionText">Alpha Feature: Speech Recognition is enabled. Peers will recieve a transcoded version of your voice as a subtitle</p>');
-            //     recognition.continuous = true;
-            //     recognition.interimResults = true;
-            //     recognition.lang = navigator.language || navigator.userLanguage;
-            //     recognition.maxAlternatives = 0;
-            //     recognition.start();
-            //
-            //     recognition.onresult = function(e) {
-            //         if (e.results[e.results.length - 1][0].confidence >= 0.01) {
-            //             console.log(e.results[e.results.length - 1][0].transcript);
-            //             console.log('Confidence: ', e.results[e.results.length - 1][0].confidence);
-            //         }
-            //         if (Object.keys(that.pcs)
-            //             .length > 0)
-            //             sendRTCMessage('log', e.results[e.results.length - 1][0].transcript);
-            //     };
-            //
-            //     recognition.onerror = function(e) {
-            //         console.log('Recognition error:(');
-            //         recognition.stop();
-            //     };
-            //
-            //     recognition.onend = function(e) {
-            //         console.log('Recognition ended itself - stupid thing! Restarting ....');
-            //         recognition.start();
-            //     };
-            //
-            //     swal({
-            //         title: 'Speech recognition enabled',
-            //         html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p>',
-            //         type: 'info',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: 'Okay',
-            //         cancelButtonText: 'Disable'
-            //     })
-            //     .then(() => {}, (dismiss) => {
-            //         if (dismiss === 'cancel') {
-            //             recognition.stop();
-            //             console.log('Recognition disabled');
-            //             $('#recognitionText')
-            //                 .remove();
-            //         }
-            //     });
-            // } else {
-            //     swal({
-            //         title: 'Speech recognition disabled',
-            //         html: '<p>Your browser is not able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that support speech recognition.</p>',
-            //         type: 'error',
-            //         confirmButtonColor: '#3085d6',
-            //         confirmButtonText: 'Okay',
-            //     });
-            // }
-        }
-
+        function activateSpeechRecognition() {}
     }
 
     componentDidUpdate() {}
@@ -643,14 +560,10 @@ class presentationBroadcast extends React.Component {
     render() {
         return (
           <div>
-            <iframe id = "slidewikiPresentation"
-            src = "/Presentation/3-1/#/slide-36-2-0"
-            height = "850px"
-            width = "100%"
-            frameBorder = "0"
-            style={{border: 0}}></iframe>
-            <p><span id="roleText"></span><span id="peerCounterText"></span> <span id="peerCounter"> </span></p>
-            <button id = "resumeRemoteControl" className="float" style={{display: 'none'}}>Resume</button>
+            <iframe id="slidewikiPresentation" src={this.iframesrc}
+            height="850px" width="100%" frameBorder="0" style={{border: 0}}></iframe>
+            <p>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</p>
+            <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
             <div id="videos"></div>
           </div>
         );
