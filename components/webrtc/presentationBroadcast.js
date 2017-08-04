@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
 
@@ -32,7 +33,9 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc;
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc;
+        this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
     }
+
     componentDidMount() {
         //Remove menus as they shouldn't appear
         $('.menu:first').remove();
@@ -129,7 +132,7 @@ class presentationBroadcast extends React.Component {
         }
 
         function sendRTCMessage(cmd, data = undefined, receiver = undefined) {
-            let message = JSON.stringify({ 'cmd': cmd, 'data': data });
+            let message = JSON.stringify({ 'cmd': cmd, 'data': data, sender: that.myID });
             if (receiver) { //send to one peer only
                 that.pcs[receiver].dataChannel.send(message);
             } else { //broadcast from initiator
@@ -141,6 +144,8 @@ class presentationBroadcast extends React.Component {
                 }
             }
         }
+
+        that.sendRTCMessage = sendRTCMessage;
 
         // This client receives a message
         that.socket.on('message', (message) => {
@@ -299,6 +304,10 @@ class presentationBroadcast extends React.Component {
                 case 'gotoslide':
                     if (!that.isInitiator)
                         changeSlide(data.data);
+                    break;
+                case 'message':
+                    if (that.isInitiator)
+                        addMessage(data);
                     break;
                 case 'log':
                     console.log('Recieved message from peer: ', data.data);
@@ -553,19 +562,85 @@ class presentationBroadcast extends React.Component {
         }
 
         function activateSpeechRecognition() {}
+
+        function addMessage(data, fromMyself = false) {
+            let currentTime = new Date().getTime();
+            that.commentList[currentTime] = {};
+            if(!fromMyself)
+                that.commentList[currentTime].peer = Object.keys(that.pcs).indexOf(data.sender);
+            else
+                that.commentList[currentTime].peer = 'Me';
+            that.commentList[currentTime].message = data.data;
+            that.forceUpdate();
+            //sendRTCMessage('message', 'Blubb', that.presenterID);
+        }
+
+        that.addMessage = addMessage;
     }
 
     componentDidUpdate() {}
 
+    sendMessage(event) {
+        event.preventDefault();
+        this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
+        this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
+        return false;
+    }
+
     render() {
+        let messages = [];
+        let messageArea = '';
+        for(let i in this.commentList) {
+            messages.push(
+              <Message floating key={i}>
+                <Comment.Group>
+                  <Comment>
+                    <Comment.Content>
+                      <Comment.Author>{this.commentList[i].peer.toString() === 'Me' ? '' : 'Peer'} {this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                      <Comment.Text>
+                        {this.commentList[i].message}
+                      </Comment.Text>
+                    </Comment.Content>
+                  </Comment>
+                </Comment.Group>
+              </Message>);
+        }
+        if(!this.isInitiator){
+            messageArea = <Grid columns={1}>
+              <Grid.Column id="messageList" style={{'overflow-y': 'auto', 'white-space': 'nowrap', 'max-height': 500 + 'px'}}>
+                {messages}
+              </Grid.Column>
+              <Grid.Column>
+                <Divider clearing />
+                <Form reply>
+                  <Form.TextArea id="messageToSend"/>
+                  <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
+                </Form>
+              </Grid.Column>
+            </Grid>;
+
+        } else
+            messageArea = <div id="messageList">{messages}</div>;
         return (
-          <div>
-            <iframe id="slidewikiPresentation" src={this.iframesrc}
-            height="850px" width="100%" frameBorder="0" style={{border: 0}}></iframe>
-            <p>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</p>
-            <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
-            <div id="videos"></div>
-          </div>
+          <Grid celled='internally'>
+            <Grid.Row>
+              <Grid.Column width={13}>
+                <iframe id="slidewikiPresentation" src={this.iframesrc}
+                height={980*0.8 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>{/*TODO Get window height for size*/}
+              </Grid.Column>
+              <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
+                {messageArea}
+              </Grid.Column>
+            </Grid.Row>
+
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <p>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</p>
+                <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
+                <div id="videos" style={{'display': 'none'}}></div>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         );
     }
 }
