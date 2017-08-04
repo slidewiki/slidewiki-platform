@@ -25,6 +25,15 @@ class DeckViewStore extends BaseStore {
         this.emitChange();
     }
 
+    incrementDeckViewCounter(payload) {
+        if (payload.type === 'download') {
+            this.deckData.downloadCount++;
+        } else if (payload.type === 'share') {
+            this.deckData.shareCount++;
+        }
+        this.emitChange();
+    }
+
     getState() {
         return {
             deckData: this.deckData,
@@ -52,6 +61,7 @@ DeckViewStore.storeName = 'DeckViewStore';
 DeckViewStore.handlers = {
     'LOAD_DECK_CONTENT_SUCCESS': 'updateContent',
     'UPDATE_DECK_VIEW_PANEL_HEIGHT': 'updateDeckViewPanelHeight',
+    'INCREMENT_DECK_VIEW_COUNTER': 'incrementDeckViewCounter'
 };
 
 export default DeckViewStore;
