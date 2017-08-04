@@ -34,6 +34,8 @@ class presentationBroadcast extends React.Component {
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc;
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
+
+        this.subtitle = '';
     }
 
     componentDidMount() {
@@ -315,9 +317,17 @@ class presentationBroadcast extends React.Component {
                 case 'bye':
                     handleRemoteHangup(data.data);
                     break;
+                case 'subtitle':
+                    handleSubtitle(data.data);
+                    break;
                 default:
 
             }
+        }
+
+        function handleSubtitle(subtitle) {
+            that.subtitle = subtitle;
+            that.forceUpdate();
         }
 
         function handleIceCandidate(peerID, event) {
@@ -561,7 +571,75 @@ class presentationBroadcast extends React.Component {
             }
         }
 
-        function activateSpeechRecognition() {}
+        function activateSpeechRecognition() {
+            var recognition;
+            let final_transcript = '';
+
+            var first_char = /\S/;
+
+            function capitalize(s) {
+                return s.replace(first_char, (m) => {
+                    return m.toUpperCase();
+                });
+            }
+
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                recognition = new webkitSpeechRecognition();
+            } else if (window.hasOwnProperty('SpeechRecognition')) {
+                recognition = new SpeechRecognition();
+            }
+
+            if (recognition) {
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'de-DE';
+                recognition.maxAlternatives = 0;
+                recognition.start();
+
+                recognition.onresult = function (e) {
+                    // if(e.results[e.results.length - 1][0].confidence >= 0.01){
+                    //   console.log(e.results[e.results.length - 1][0].transcript);
+                    //   console.log("Confidence: ", e.results[e.results.length - 1][0].confidence);
+                    // }
+
+                    var interim_transcript = '';
+                    let event = e;
+                    if (typeof (event.results) == 'undefined') {
+                        recognition.onend = null;
+                        recognition.stop();
+                        console.warn('error:', e);
+                        alert('disabled recognition');
+                        return;
+                    }
+                    for (var i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            final_transcript += event.results[i][0].transcript;
+                        } else {
+                            interim_transcript += event.results[i][0].transcript;
+                        }
+                    }
+                    final_transcript = capitalize(final_transcript);
+                    console.log('Final text: ', final_transcript);
+                    console.log('Interim text: ', interim_transcript);
+
+                    sendRTCMessage('subtitle', (final_transcript || interim_transcript).substr(0, 300));
+                };
+
+                recognition.onerror = function (e) {
+                    console.warn('Recognition error:', e);
+                    recognition.stop();
+                };
+
+                recognition.onend = function (e) {
+                    console.warn('Recognition ended itself - stupid thing! Restarting ....', e);
+                    recognition.start();
+                };
+
+                alert('Speech recognition enabled!');
+            } else {
+                alert('No Speech recognition available');
+            }
+        }
 
         function addMessage(data, fromMyself = false) {
             let currentTime = new Date().getTime();
@@ -638,6 +716,7 @@ class presentationBroadcast extends React.Component {
                 <p>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</p>
                 <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
                 <div id="videos" style={{'display': 'none'}}></div>
+                <div>{this.subtitle}</div>
               </Grid.Column>
             </Grid.Row>
           </Grid>
