@@ -4,7 +4,8 @@ import {navigateAction} from 'fluxible-router';
 export default function sendContactForm(context,payload,done){
     log.info(context);
 
-    context.service.create('email', {subject: payload.subject, message: payload.message}, { timeout: 20 * 1000 }, (err, res) => {
+    context.service.create('email', {subject: payload.subject, message: payload.text}, { timeout: 20 * 1000 }, (err, res) => {
+        // console.log('action got:', err, res);
         if (err) {
             swal({
                 title: payload.swal_messages.title,
