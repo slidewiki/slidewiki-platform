@@ -326,8 +326,10 @@ class presentationBroadcast extends React.Component {
         }
 
         function handleSubtitle(subtitle) {
-            that.subtitle = subtitle;
-            that.forceUpdate();
+            $('#input_subtitle').val(subtitle);
+            $('#input_subtitle').animate({
+                scrollLeft: $('#input_subtitle')[0].scrollLeft+1000
+            }, 1000);
         }
 
         function handleIceCandidate(peerID, event) {
@@ -592,7 +594,7 @@ class presentationBroadcast extends React.Component {
             if (recognition) {
                 recognition.continuous = true;
                 recognition.interimResults = true;
-                recognition.lang = 'de-DE';
+                recognition.lang = 'en-US';
                 recognition.maxAlternatives = 0;
                 recognition.start();
 
@@ -622,7 +624,8 @@ class presentationBroadcast extends React.Component {
                     console.log('Final text: ', final_transcript);
                     console.log('Interim text: ', interim_transcript);
 
-                    sendRTCMessage('subtitle', (final_transcript || interim_transcript).substr(0, 300));
+                    let m = (final_transcript || interim_transcript);
+                    sendRTCMessage('subtitle', m.substr((m.length-300) > 0 ? m.length-300 : 0, 300));
                 };
 
                 recognition.onerror = function (e) {
@@ -717,7 +720,12 @@ class presentationBroadcast extends React.Component {
                 <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
                 <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
                 <div id="videos" style={{'display': 'none'}}></div>
-                <div>{this.subtitle}</div>
+                {(!this.isInitiator) ? (
+                  <div>
+                    <b>Speech recognition:</b>
+                    <Input fluid transparent id="input_subtitle" />
+                  </div>
+                ) : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>
