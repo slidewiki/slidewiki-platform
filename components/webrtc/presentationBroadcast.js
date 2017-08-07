@@ -575,10 +575,11 @@ class presentationBroadcast extends React.Component {
         }
 
         function activateSpeechRecognition() {
-            var recognition;
+            let recognition;
+            let disabled = false;
             let final_transcript = '';
 
-            var first_char = /\S/;
+            let first_char = /\S/;
 
             function capitalize(s) {
                 return s.replace(first_char, (m) => {
@@ -595,26 +596,21 @@ class presentationBroadcast extends React.Component {
             if (recognition) {
                 recognition.continuous = true;
                 recognition.interimResults = true;
-                recognition.lang = 'en-US';
+                recognition.lang = navigator.language || navigator.userLanguage;
                 recognition.maxAlternatives = 0;
                 recognition.start();
 
-                recognition.onresult = function (e) {
-                    // if(e.results[e.results.length - 1][0].confidence >= 0.01){
-                    //   console.log(e.results[e.results.length - 1][0].transcript);
-                    //   console.log("Confidence: ", e.results[e.results.length - 1][0].confidence);
-                    // }
+                recognition.onresult = function (event) {
 
-                    var interim_transcript = '';
-                    let event = e;
+                    let interim_transcript = '';
                     if (typeof (event.results) == 'undefined') {
                         recognition.onend = null;
                         recognition.stop();
                         console.warn('error:', e);
-                        alert('disabled recognition');
+                        //TODO implement error handling
                         return;
                     }
-                    for (var i = event.resultIndex; i < event.results.length; ++i) {
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
                         if (event.results[i].isFinal) {
                             final_transcript += event.results[i][0].transcript;
                         } else {
@@ -635,13 +631,38 @@ class presentationBroadcast extends React.Component {
                 };
 
                 recognition.onend = function (e) {
-                    console.warn('Recognition ended itself - stupid thing! Restarting ....', e);
-                    recognition.start();
+                    if(!disabled){
+                        console.warn('Recognition ended itself - stupid thing! Restarting ....', e);
+                        recognition.start();
+                    }
                 };
 
-                alert('Speech recognition enabled!');
+                swal({
+                    title: 'Speech recognition enabled',
+                    html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p>',
+                    type: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Okay',
+                    cancelButtonText: 'Disable'
+                }).then(() => {}, (dismiss) => {
+                    if (dismiss === 'cancel') {
+                        disabled = true;
+                        recognition.stop();
+                        console.log('Recognition disabled');
+                    }
+                });
+
+                //TODO implement error handling
             } else {
-                alert('No Speech recognition available');
+                swal({
+                    title: 'Speech recognition disabled',
+                    html: '<p>Your browser isn\'t able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that support speech recognition.</p>',
+                    type: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Okay',
+                });
             }
         }
 
@@ -654,7 +675,6 @@ class presentationBroadcast extends React.Component {
                 that.commentList[currentTime].peer = 'Me';
             that.commentList[currentTime].message = data.data;
             that.forceUpdate();
-            //sendRTCMessage('message', 'Blubb', that.presenterID);
         }
 
         that.addMessage = addMessage;
