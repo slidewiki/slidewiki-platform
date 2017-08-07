@@ -26,14 +26,14 @@ class presentationBroadcast extends React.Component {
             offerToReceiveVideo: true
         };
 
-        this.room = this.props.currentRoute.query.room;//TODO Navigate away if not provided
+        this.room = this.props.currentRoute.query.room + '';//TODO Navigate away if not provided
         this.socket = undefined;
 
         ////////////////////////////////////////////////////// SlideWiki specific stuff
-        this.iframesrc = this.props.currentRoute.query.presentation;//TODO Navigate away if not provided
-        this.lastRemoteSlide = this.iframesrc;
+        this.iframesrc = this.props.currentRoute.query.presentation + '';//TODO Navigate away if not provided
+        this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
-        this.currentSlide = this.iframesrc;
+        this.currentSlide = this.iframesrc + '';
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
 
         this.subtitle = '';
@@ -529,27 +529,23 @@ class presentationBroadcast extends React.Component {
 
         /////////////////////////////////////////// SlideWiki specific stuff
 
-        $('#resumeRemoteControl').click(() => {
+        $('#resumeRemoteControl').click(() => {//TODO fkt. nicht richtig
             that.paused = false;
-            that.forceUpdate();
             changeSlide(that.lastRemoteSlide);
         });
 
         function activateIframeListeners() {
             console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
-            /* Currently doesn't work - Stackoverflow Question:
-             * https://stackoverflow.com/questions/45457271/forward-a-keydown-event-from-the-parent-window-to-an-iframe
-             */
-            // $(document).keydown((event) => {
-            //   console.log(event, event.keyCode);
-            //   var newEvent = new KeyboardEvent("keydown", {key: event.originalEvent.key, code: event.originalEvent.code, charCode: event.originalEvent.charCode, keyCode: event.originalEvent.keyCode, which: event.originalEvent.which});
-            //   //frames['slidewikiPresentation'].document.dispatchEvent(newEvent);
-            //   document.getElementById("slidewikiPresentation").contentWindow.document.dispatchEvent(newEvent);
-            //   //elem.dispatchEvent(event);
-            //   //var e = jQuery.Event( "keydown", { keyCode: event.keyCode } );
-            //   //$('#slidewikiPresentation')[0].contentWindow.$('body').trigger(e);
-            // });
+
+            document.addEventListener('keydown', (e) => {
+                let frame = document.getElementById('slidewikiPresentation').contentDocument;
+                let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
+                newEvent.keyCode = e.keyCode;
+                newEvent.which = e.keyCode;
+                frame.dispatchEvent(newEvent);
+            });
+
             if (that.isInitiator) {
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
