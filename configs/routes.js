@@ -470,7 +470,7 @@ export default {
         }
     },
     webrtc: {
-        path: '/presentationbroadcast/:room',
+        path: '/presentationbroadcast',//Example: ...broadcast?room=foo&presentation=/Presentation/386-1/
         method: 'get',
         page: 'presentationBroadcast',
         handler: require('../components/webrtc/presentationBroadcast')

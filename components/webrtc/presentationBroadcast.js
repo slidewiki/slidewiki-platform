@@ -1,4 +1,5 @@
 import React from 'react';
+import { handleRoute } from 'fluxible-router';
 import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
@@ -25,11 +26,11 @@ class presentationBroadcast extends React.Component {
             offerToReceiveVideo: true
         };
 
-        this.room = 'foo';//TODO get it from the URL
+        this.room = this.props.currentRoute.query.room;//TODO Navigate away if not provided
         this.socket = undefined;
 
         ////////////////////////////////////////////////////// SlideWiki specific stuff
-        this.iframesrc = '/Presentation/3-1/#/slide-36-2-0';//TODO get it from the URL
+        this.iframesrc = this.props.currentRoute.query.presentation;//TODO Navigate away if not provided
         this.lastRemoteSlide = this.iframesrc;
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc;
@@ -607,7 +608,7 @@ class presentationBroadcast extends React.Component {
         }
         if(!this.isInitiator){
             messageArea = <Grid columns={1}>
-              <Grid.Column id="messageList" style={{'overflow-y': 'auto', 'white-space': 'nowrap', 'max-height': 500 + 'px'}}>
+              <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 500 + 'px'}}>
                 <h3>Your Questions:</h3>
                 {messages}
               </Grid.Column>
@@ -649,5 +650,7 @@ class presentationBroadcast extends React.Component {
 presentationBroadcast.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+presentationBroadcast = handleRoute(presentationBroadcast);
 
 export default presentationBroadcast;
