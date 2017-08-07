@@ -8,6 +8,7 @@ class presentationBroadcast extends React.Component {
   * TODO add share button that copies the URL into the Zwischenablage (down right corner)
   * TODO Use Username instead of "Peer X" if available
   * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
+  * TODO this.props.currentRoute.query.presentation is not filled correctly if a "#" is in the path
   */
 
     constructor(props) {
