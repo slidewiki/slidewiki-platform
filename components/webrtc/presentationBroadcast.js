@@ -4,6 +4,12 @@ import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-u
 
 class presentationBroadcast extends React.Component {
 
+  /*
+  * TODO add share button that copies the URL into the Zwischenablage (down right corner)
+  * TODO Use Username instead of "Peer X" if available
+  * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
+  */
+
     constructor(props) {
         super(props);
         this.texts = {roleText: '', peerCountText: '', peerCount: ''};
@@ -80,7 +86,8 @@ class presentationBroadcast extends React.Component {
                 html: '<p>Other people are free to join it. At the bottom of the page is a peer counter. The current limit is 10 people.</p>',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Check'
+                confirmButtonText: 'Check',
+                allowOutsideClick: false
             }).then(() => { activateSpeechRecognition(); $('body>a#atlwdg-trigger').remove();});
         });
 
@@ -114,7 +121,8 @@ class presentationBroadcast extends React.Component {
                 html: 'This room is already full - sorry!',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Okay'
+                confirmButtonText: 'Okay',
+                allowOutsideClick: false
             });
         });
 
@@ -273,7 +281,8 @@ class presentationBroadcast extends React.Component {
                     html: '<p>This presentation has ended. Feel free to look at the deck as long as you want.</p>',
                     type: 'warning',
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Check'
+                    confirmButtonText: 'Check',
+                    allowOutsideClick: false
                 });
                 that.texts.roleText = 'This presentation has ended. Feel free to look at the deck as long as you want.';
                 that.texts.peerCountText = '';
@@ -529,7 +538,7 @@ class presentationBroadcast extends React.Component {
 
         /////////////////////////////////////////// SlideWiki specific stuff
 
-        $('#resumeRemoteControl').click(() => {//TODO fkt. nicht richtig
+        $('#resumeRemoteControl').click(() => {//TODO does not correctly work
             that.paused = false;
             changeSlide(that.lastRemoteSlide);
         });
@@ -559,6 +568,7 @@ class presentationBroadcast extends React.Component {
                     }
                 });
             }
+            //TODO also listen for events like the black out presenation, ....
         }
 
         function changeSlide(slideID) { // called by peers
@@ -641,13 +651,23 @@ class presentationBroadcast extends React.Component {
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Okay',
-                    cancelButtonText: 'Disable'
+                    cancelButtonText: 'Disable',
+                    allowOutsideClick: false
                 }).then(() => {}, (dismiss) => {
                     if (dismiss === 'cancel') {
                         disabled = true;
                         recognition.stop();
                         console.log('Recognition disabled');
                     }
+                }).then(() => {
+                    swal({
+                        title: 'Invite others!',
+                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong></p>',
+                        type: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false
+                    });
                 });
 
                 //TODO implement error handling
@@ -658,6 +678,7 @@ class presentationBroadcast extends React.Component {
                     type: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Okay',
+                    allowOutsideClick: false
                 });
             }
         }
@@ -712,7 +733,13 @@ class presentationBroadcast extends React.Component {
               <Grid.Column>
                 <Divider clearing />
                 <Form reply>
-                  <Form.TextArea id="messageToSend" placeholder='Ask a question...'/>
+                  <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength="300"/>
+                  {/*
+                    * TODO Add a visible char counter,e .g. 234/300 next to the send button
+                    * TODO Don't send empty messages or those with too few words (and show notification about it)
+                    * TODO move the input box to the bottom of the element (so it doesn't move)
+                    * TODO disable keydown listener if textarea is focused
+                    */}
                   <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
                 </Form>
               </Grid.Column>
@@ -739,7 +766,7 @@ class presentationBroadcast extends React.Component {
                 <div id="videos" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
-                    <b>Speech recognition:</b>
+                    <b>Speech recognition:</b>{/*TODO Find a better heading and add a boarder to the input*/}
                     <Input fluid transparent id="input_subtitle" />
                   </div>
                 ) : ''}

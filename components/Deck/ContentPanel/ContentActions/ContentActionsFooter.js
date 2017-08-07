@@ -48,6 +48,20 @@ class ContentActionsFooter extends React.Component {
             window.open(this.getPresentationHref());
         }
     }
+    handlePresentationRoomClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            swal({
+                title: 'Please enter a room name',
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonText: 'Next',
+                allowOutsideClick: false
+            }).then((roomName) => {
+                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref());
+            }).catch();
+        }
+    }
     /*
     getPrintHref(){
         return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
@@ -156,6 +170,11 @@ class ContentActionsFooter extends React.Component {
                             <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
                                 <button className="ui button" type="button" aria-label="Presentation Mode" data-tooltip="Presentation Mode">
                                     <i className="circle play large icon"></i>
+                                </button>
+                            </NavLink>
+                            <NavLink onClick={this.handlePresentationRoomClick.bind(this)} href={this.getPresentationHref()} target="_blank">
+                                <button className="ui button" type="button" aria-label="Presentation Room Mode" data-tooltip="Create a room and invite other via a link to your presentation">
+                                    <i className="users large icon"></i>
                                 </button>
                             </NavLink>
                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
