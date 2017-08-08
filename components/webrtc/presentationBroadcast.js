@@ -1,5 +1,6 @@
 import React from 'react';
-import { handleRoute } from 'fluxible-router';
+import { handleRoute, navigateAction} from 'fluxible-router';
+import { isEmpty } from '../../common';
 import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
@@ -27,11 +28,11 @@ class presentationBroadcast extends React.Component {
             }]
         };
 
-        this.room = this.props.currentRoute.query.room + '';//TODO Navigate away if not provided
+        this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
 
         //******** SlideWiki specific variables ********
-        this.iframesrc = this.props.currentRoute.query.presentation + '';//TODO Navigate away if not provided
+        this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc + '';
@@ -40,17 +41,21 @@ class presentationBroadcast extends React.Component {
     }
 
     componentDidMount() {
+
+        let that = this;
+        if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
+            console.log('Navigating away because of missing paramenters in URL');//TODO Maybe notify users in a more friendly way
+            that.context.executeAction(navigateAction, {'url': '/'});
+            return;
+        }
         //Remove menus as they shouldn't appear
         $('.menu:first').remove();
         $('.footer:first').remove();
 
-        let that = this;
         that.socket = io('https://stunservice.experimental.slidewiki.org');//TODO remove hardcoded URL
 
-        if (that.room !== '') {
-            that.socket.emit('create or join', that.room);
-            console.log('Attempted to create or join room', that.room);
-        }
+        that.socket.emit('create or join', that.room);
+        console.log('Attempted to create or join room', that.room);
 
         function setmyID() {
             if (that.myID === undefined)
