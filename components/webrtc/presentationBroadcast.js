@@ -5,7 +5,7 @@ import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-u
 class presentationBroadcast extends React.Component {
 
   /*
-  * TODO add share button that copies the URL into the Zwischenablage (down right corner)
+  * TODO add share button that copies the URL into the clipboard (down right corner)
   * TODO Use Username instead of "Peer X" if available
   * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
   * TODO this.props.currentRoute.query.presentation is not filled correctly if a "#" is in the path
@@ -23,27 +23,20 @@ class presentationBroadcast extends React.Component {
 
         this.pcConfig = {
             'iceServers': [{
-                'urls': 'stun:stun.l.google.com:19302' //TODO host own STUN (and TURN?) Server?
+                'urls': 'stun:stun.l.google.com:19302' //TODO host own STUN (and TURN?) Server? --> Socket.io is a stun server...What's this needed for?
             }]
-        };
-
-        // Set up audio and video regardless of what devices are present.
-        this.sdpConstraints = {
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: true
         };
 
         this.room = this.props.currentRoute.query.room + '';//TODO Navigate away if not provided
         this.socket = undefined;
 
-        ////////////////////////////////////////////////////// SlideWiki specific stuff
+        //******** SlideWiki specific variables ********
         this.iframesrc = this.props.currentRoute.query.presentation + '';//TODO Navigate away if not provided
         this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc + '';
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
-
-        this.subtitle = '';
+        this.subtitle = '';//used for speech recognition results
     }
 
     componentDidMount() {
@@ -52,7 +45,7 @@ class presentationBroadcast extends React.Component {
         $('.footer:first').remove();
 
         let that = this;
-        that.socket = io('https://stunservice.experimental.slidewiki.org');
+        that.socket = io('https://stunservice.experimental.slidewiki.org');//TODO remove hardcoded URL
 
         if (that.room !== '') {
             that.socket.emit('create or join', that.room);
@@ -68,8 +61,8 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
-            that.texts.roleText = 'You are the presenter, other poeple will hear your voice and reflect your presentation progress. ';
-            that.texts.peerCountText = 'Peers currently listening: ';
+            that.texts.roleText = 'You are the presenter. Other poeple will hear your voice and reflect your presentation progress. ';
+            that.texts.peerCountText = 'People currently listening: ';
             that.texts.peerCount = 0;
             that.forceUpdate();
             setmyID();
@@ -84,7 +77,7 @@ class presentationBroadcast extends React.Component {
             });
             swal({
                 title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                html: '<p>Other people are free to join it. At the bottom of the page is a peer counter. The current limit is 10 people.</p>',
+                html: '<p>Other people are free to join the room. Rooms are currently limited to 10 people. See the counter at the bottom of the page for information about currently listening people.</p>',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Check',
@@ -94,21 +87,20 @@ class presentationBroadcast extends React.Component {
 
         that.socket.on('join', (room, socketID) => { //whole room recieves this, except for the peer that tries to join
             // a listener will join the room
-            console.log('Another peer made a request to join room ' + that.room);
+            console.log('Another peer made a request to join room ' + room);
             if (that.isInitiator) {
                 console.log('This peer is the initiator of room ' + that.room + '!');
                 that.socket.emit('ID of presenter', that.room, that.myID);
             }
         });
 
-        that.socket.on('joined', (room) => { //only recieved by peer that tries to join
-            // a listener has joined the room
+        that.socket.on('joined', (room) => { //only recieved by peer that tries to join - a peer has joined the room
             console.log('joined: ' + that.room);
             setmyID();
-            that.texts.roleText = 'You are now listening to the presenter. The presentation you see will reflect his progress.';
+            that.texts.roleText = 'You are now listening to the presenter and your presentation will reflect his actions.';
             that.forceUpdate();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
-            requestStreams({
+            requestStreams({//TODO Maybe skip requesting streams for the listeners
                 audio: false,
                 video: false
             });
@@ -118,8 +110,8 @@ class presentationBroadcast extends React.Component {
             console.log('Room ' + that.room + ' is full');
             that.socket.close();
             swal({
-                title: 'Room full',
-                html: 'This room is already full - sorry!',
+                title: 'Room ' + room + ' is full',
+                html: 'Rooms have limited capacities for people. The room you tried to join is already full.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
@@ -139,7 +131,7 @@ class presentationBroadcast extends React.Component {
         ////////////////////////////////////////////////
 
         function sendMessage(cmd, data = undefined, receiver = undefined) {
-            console.log('Sending message: ', cmd, data, receiver);
+            console.log('Sending message over socket: ', cmd, data, receiver);
             that.socket.emit('message', { 'cmd': cmd, 'data': data, 'sender': that.myID, 'receiver': receiver }, that.room);
         }
 
