@@ -1,5 +1,6 @@
 import React from 'react';
-import { handleRoute } from 'fluxible-router';
+import { handleRoute, navigateAction} from 'fluxible-router';
+import { isEmpty } from '../../common';
 import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
@@ -27,11 +28,11 @@ class presentationBroadcast extends React.Component {
             }]
         };
 
-        this.room = this.props.currentRoute.query.room + '';//TODO Navigate away if not provided
+        this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
 
         //******** SlideWiki specific variables ********
-        this.iframesrc = this.props.currentRoute.query.presentation + '';//TODO Navigate away if not provided
+        this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc + '';
@@ -40,17 +41,21 @@ class presentationBroadcast extends React.Component {
     }
 
     componentDidMount() {
+
+        let that = this;
+        if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
+            console.log('Navigating away because of missing paramenters in URL');//TODO Maybe notify users in a more friendly way
+            that.context.executeAction(navigateAction, {'url': '/'});
+            return;
+        }
         //Remove menus as they shouldn't appear
         $('.menu:first').remove();
         $('.footer:first').remove();
 
-        let that = this;
         that.socket = io('https://stunservice.experimental.slidewiki.org');//TODO remove hardcoded URL
 
-        if (that.room !== '') {
-            that.socket.emit('create or join', that.room);
-            console.log('Attempted to create or join room', that.room);
-        }
+        that.socket.emit('create or join', that.room);
+        console.log('Attempted to create or join room', that.room);
 
         function setmyID() {
             if (that.myID === undefined)
@@ -100,10 +105,7 @@ class presentationBroadcast extends React.Component {
             that.texts.roleText = 'You are now listening to the presenter and your presentation will reflect his actions.';
             that.forceUpdate();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
-            requestStreams({//TODO Maybe skip requesting streams for the listeners
-                audio: false,
-                video: false
-            });
+            gotStream('');//NOTE Skip requesting streams for the listeners, as they do not need them
         });
 
         that.socket.on('full', (room) => { //only recieved by peer that tries to join
@@ -183,7 +185,6 @@ class presentationBroadcast extends React.Component {
             navigator.mediaDevices.getUserMedia(options)
                 .then(gotStream)
                 .catch((err) => {
-                    gotStream('');//TODO This has been implemented for listener peers. Maybe skip requestStreams for listeners completely in order to have a better error handling. See a comment above.
                     console.log('getUserMedia() error: ' + err.name);
                 });
         }
@@ -191,10 +192,10 @@ class presentationBroadcast extends React.Component {
         function gotStream(stream) {
             console.log('Adding local stream');
             if (that.isInitiator) {
-                //$('#videos').append('<video id="localVideo" autoplay></video>');
+                //$('#media').append('<video id="localVideo" autoplay></video>');
                 //let localVideo = document.querySelector('#localVideo');
                 //localVideo.srcObject = stream;
-                $('#videos').remove();
+                $('#media').remove();
             }
             that.localStream = stream;
 
@@ -254,9 +255,20 @@ class presentationBroadcast extends React.Component {
                     that.texts.peerCount = Object.keys(that.pcs).length;
                     that.forceUpdate();
                 }
-            } catch (e) {//TODO handle this better - e.g. show a message and close the window
+            } catch (e) {
                 console.log('Failed to create PeerConnection, exception: ' + e.message);
                 console.log('Cannot create RTCPeerConnection object.');
+                swal({
+                    title: 'An error occured',
+                    html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
+                    type: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Okay',
+                    allowOutsideClick: false
+                }).then(() => {
+                    cleanup();
+                    that.context.executeAction(navigateAction, {'url': '/'});
+                });
                 return;
             }
         }
@@ -319,9 +331,9 @@ class presentationBroadcast extends React.Component {
 
         function handleRemoteStreamAdded(event) {
             if (that.isInitiator === false) {
-                $('#videos').append('<video class="remoteVideos" autoplay></video>');//TODO Maybe exchange for audio only?!
-                let remoteVideos = $('.remoteVideos');
-                remoteVideos[remoteVideos.length - 1].srcObject = event.stream;
+                $('#media').append('<audio class="remoteAudio" autoplay></audio>');
+                let remoteAudios = $('.remoteAudio');
+                remoteAudios[remoteAudios.length - 1].srcObject = event.stream;
             }
         }
 
@@ -385,7 +397,7 @@ class presentationBroadcast extends React.Component {
                     that.pcs[peerID].RTCconnection.close();
                     delete that.pcs[peerID];
                 }
-            } catch (e) {//TODO
+            } catch (e) {//TODO add better error handling
                 console.log('Error when deleteing RTC connections', e);
             } finally {
                 if (that.isInitiator){
@@ -395,12 +407,25 @@ class presentationBroadcast extends React.Component {
             }
         }
 
+        function cleanup() {
+            try {
+                that.socket.close();
+            } catch (e) {}
+            try {
+                stop(undefined, true);
+            } catch (e) {}
+        }
+
         function handleMessage(channel, event) {
             let data = JSON.parse(event.data);
             switch (data.cmd) {
                 case 'gotoslide':
                     if (!that.isInitiator)
                         changeSlide(data.data);
+                    break;
+                case 'toggleblackscreen':
+                    if (!that.isInitiator)
+                        toggleBlackScreen();
                     break;
                 case 'message':
                     if (that.isInitiator)
@@ -531,11 +556,19 @@ class presentationBroadcast extends React.Component {
             changeSlide(that.lastRemoteSlide);
         });
 
+        function toggleBlackScreen() {//TODO won't unpause the screen - I have no idea why...
+            let frame = document.getElementById('slidewikiPresentation').contentDocument;
+            let newEvent = new Event('keydown', {keyCode: 58});
+            newEvent.keyCode = 58;
+            newEvent.which = 58;
+            // frame.dispatchEvent(newEvent);
+        }
+
         function activateIframeListeners() {
             console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
 
-            document.addEventListener('keydown', (e) => {
+            document.addEventListener('keydown', (e) => {//NOTE used for arrow keys
                 let frame = document.getElementById('slidewikiPresentation').contentDocument;
                 let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
                 newEvent.keyCode = e.keyCode;
@@ -548,6 +581,12 @@ class presentationBroadcast extends React.Component {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
+                iframe.on('paused', () => {
+                    sendRTCMessage('toggleblackscreen');
+                });
+                iframe.on('resumed', () => {
+                    sendRTCMessage('toggleblackscreen');
+                });
             } else {
                 iframe.on('slidechanged', () => {
                     if (document.getElementById('slidewikiPresentation').contentWindow.location.href !== that.lastRemoteSlide) {
@@ -556,7 +595,6 @@ class presentationBroadcast extends React.Component {
                     }
                 });
             }
-            //TODO also listen for events like the black out presenation, ....
         }
 
         function changeSlide(slideID) { // called by peers
@@ -757,7 +795,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={16}>
                 <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
                 <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
-                <div id="videos" style={{'display': 'none'}}></div>
+                <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
                     <b>Speech recognition:</b>{/*TODO Find a better heading and add a boarder to the input*/}
