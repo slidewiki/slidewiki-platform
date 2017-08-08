@@ -1,5 +1,6 @@
 import React from 'react';
 import { handleRoute, navigateAction} from 'fluxible-router';
+import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
 import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
 
@@ -810,7 +811,8 @@ class presentationBroadcast extends React.Component {
 }
 
 presentationBroadcast.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    getUser: React.PropTypes.func
 };
 
 presentationBroadcast = handleRoute(presentationBroadcast);
