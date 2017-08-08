@@ -313,6 +313,16 @@ class presentationBroadcast extends React.Component {
                 console.log('Data Channel opened');
                 if (that.isInitiator)
                     sendRTCMessage('gotoslide', document.getElementById('slidewikiPresentation').contentWindow.location.href, peerID);// using href instead of currentSlide because it could be bad initialized
+                else {
+                    swal({
+                        title: 'You\'ve joined a live presentation',
+                        html: 'Nice to see you here! You will hear the presenters voice and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.',
+                        type: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false
+                    });
+                }
             };
 
             channel.onmessage = handleMessage.bind(that, channel);
@@ -814,7 +824,7 @@ class presentationBroadcast extends React.Component {
                         <div>
                           <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
                           <Form.Field>
-                            <Button content='Send' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
+                            <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
                             <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
                           </Form.Field>
                         </div>
