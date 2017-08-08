@@ -813,7 +813,7 @@ class presentationBroadcast extends React.Component {
                         <div>
                           <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
                           <Form.Field>
-                            <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
+                            <Button content='Send' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
                             <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
                           </Form.Field>
                         </div>
@@ -827,9 +827,8 @@ class presentationBroadcast extends React.Component {
             </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column width={16}>
+              <Grid.Column width={13}>
                 <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
-                <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
                 <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
@@ -837,6 +836,13 @@ class presentationBroadcast extends React.Component {
                     <Input fluid transparent id="input_subtitle" />
                   </div>
                 ) : ''}
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <Button.Group vertical>
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add Comment to Deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Correct current Slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
+                  <Button id="resumeRemoteControl" content='Resume' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red'/>
+                </Button.Group>
               </Grid.Column>
             </Grid.Row>
           </Grid>
