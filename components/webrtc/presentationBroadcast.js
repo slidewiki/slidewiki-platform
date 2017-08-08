@@ -553,11 +553,6 @@ class presentationBroadcast extends React.Component {
 
         //******** SlideWiki specific methods ********
 
-        $('#resumeRemoteControl').click(() => {
-            that.paused = false;
-            changeSlide(that.lastRemoteSlide);
-        });
-
         function toggleBlackScreen() {//TODO won't unpause the screen - I have no idea why...
             let frame = document.getElementById('slidewikiPresentation').contentDocument;
             let newEvent = new Event('keydown', {keyCode: 58});
@@ -616,6 +611,7 @@ class presentationBroadcast extends React.Component {
                 that.forceUpdate();
             }
         }
+        that.changeSlide = changeSlide;
 
         function activateSpeechRecognition() {
             let recognition;
@@ -775,6 +771,11 @@ class presentationBroadcast extends React.Component {
         $('#textCharCount').text($('#messageToSend').val().length + '/' + this.textInputLength);
     }
 
+    resumePlayback(){
+        this.paused = false;
+        this.changeSlide(this.lastRemoteSlide);
+    }
+
     render() {
         let messages = [];
         for(let i in this.commentList) {
@@ -832,16 +833,19 @@ class presentationBroadcast extends React.Component {
                 <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
-                    <b>Speech recognition:</b>{/*TODO Find a better heading and add a boarder to the input*/}
-                    <Input fluid transparent id="input_subtitle" />
+                    <Label pointing='below'>Transcoded Speaker Voice</Label>
+                    <Input labelPosition='left' type='text' fluid>
+                      <Label>Subtitle:</Label>
+                      <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' />
+                    </Input>
                   </div>
                 ) : ''}
               </Grid.Column>
               <Grid.Column width={3}>
-                <Button.Group vertical>
+                <Button.Group vertical fluid>
                   <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add Comment to Deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
                   <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Correct current Slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
-                  <Button id="resumeRemoteControl" content='Resume' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red'/>
+                  <Button content='Resume Playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>
