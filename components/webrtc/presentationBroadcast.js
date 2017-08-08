@@ -192,10 +192,10 @@ class presentationBroadcast extends React.Component {
         function gotStream(stream) {
             console.log('Adding local stream');
             if (that.isInitiator) {
-                //$('#videos').append('<video id="localVideo" autoplay></video>');
+                //$('#media').append('<video id="localVideo" autoplay></video>');
                 //let localVideo = document.querySelector('#localVideo');
                 //localVideo.srcObject = stream;
-                $('#videos').remove();
+                $('#media').remove();
             }
             that.localStream = stream;
 
@@ -255,9 +255,20 @@ class presentationBroadcast extends React.Component {
                     that.texts.peerCount = Object.keys(that.pcs).length;
                     that.forceUpdate();
                 }
-            } catch (e) {//TODO handle this better - e.g. show a message and close the window
+            } catch (e) {
                 console.log('Failed to create PeerConnection, exception: ' + e.message);
                 console.log('Cannot create RTCPeerConnection object.');
+                swal({
+                    title: 'An error occured',
+                    html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
+                    type: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Okay',
+                    allowOutsideClick: false
+                }).then(() => {
+                    cleanup();
+                    that.context.executeAction(navigateAction, {'url': '/'});
+                });
                 return;
             }
         }
@@ -320,9 +331,9 @@ class presentationBroadcast extends React.Component {
 
         function handleRemoteStreamAdded(event) {
             if (that.isInitiator === false) {
-                $('#videos').append('<video class="remoteVideos" autoplay></video>');//TODO Maybe exchange for audio only?!
-                let remoteVideos = $('.remoteVideos');
-                remoteVideos[remoteVideos.length - 1].srcObject = event.stream;
+                $('#media').append('<audio class="remoteAudio" autoplay></audio>');
+                let remoteAudios = $('.remoteAudio');
+                remoteAudios[remoteAudios.length - 1].srcObject = event.stream;
             }
         }
 
@@ -386,7 +397,7 @@ class presentationBroadcast extends React.Component {
                     that.pcs[peerID].RTCconnection.close();
                     delete that.pcs[peerID];
                 }
-            } catch (e) {//TODO
+            } catch (e) {//TODO add better error handling
                 console.log('Error when deleteing RTC connections', e);
             } finally {
                 if (that.isInitiator){
@@ -396,12 +407,25 @@ class presentationBroadcast extends React.Component {
             }
         }
 
+        function cleanup() {
+            try {
+                that.socket.close();
+            } catch (e) {}
+            try {
+                stop(undefined, true);
+            } catch (e) {}
+        }
+
         function handleMessage(channel, event) {
             let data = JSON.parse(event.data);
             switch (data.cmd) {
                 case 'gotoslide':
                     if (!that.isInitiator)
                         changeSlide(data.data);
+                    break;
+                case 'toggleblackscreen':
+                    if (!that.isInitiator)
+                        toggleBlackScreen();
                     break;
                 case 'message':
                     if (that.isInitiator)
@@ -532,11 +556,19 @@ class presentationBroadcast extends React.Component {
             changeSlide(that.lastRemoteSlide);
         });
 
+        function toggleBlackScreen() {//TODO won't unpause the screen - I have no idea why...
+            let frame = document.getElementById('slidewikiPresentation').contentDocument;
+            let newEvent = new Event('keydown', {keyCode: 58});
+            newEvent.keyCode = 58;
+            newEvent.which = 58;
+            // frame.dispatchEvent(newEvent);
+        }
+
         function activateIframeListeners() {
             console.log('Adding iframe listeners');
             let iframe = $('#slidewikiPresentation').contents();
 
-            document.addEventListener('keydown', (e) => {
+            document.addEventListener('keydown', (e) => {//NOTE used for arrow keys
                 let frame = document.getElementById('slidewikiPresentation').contentDocument;
                 let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
                 newEvent.keyCode = e.keyCode;
@@ -549,6 +581,12 @@ class presentationBroadcast extends React.Component {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
+                iframe.on('paused', () => {
+                    sendRTCMessage('toggleblackscreen');
+                });
+                iframe.on('resumed', () => {
+                    sendRTCMessage('toggleblackscreen');
+                });
             } else {
                 iframe.on('slidechanged', () => {
                     if (document.getElementById('slidewikiPresentation').contentWindow.location.href !== that.lastRemoteSlide) {
@@ -557,7 +595,6 @@ class presentationBroadcast extends React.Component {
                     }
                 });
             }
-            //TODO also listen for events like the black out presenation, ....
         }
 
         function changeSlide(slideID) { // called by peers
@@ -757,7 +794,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={16}>
                 <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
                 <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
-                <div id="videos" style={{'display': 'none'}}></div>
+                <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
                     <b>Speech recognition:</b>{/*TODO Find a better heading and add a boarder to the input*/}
