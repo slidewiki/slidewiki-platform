@@ -6,7 +6,6 @@ import { Grid, Message, Comment, Input, Button, Form, Divider, Label } from 'sem
 class presentationBroadcast extends React.Component {
 
   /*
-  * TODO add share button that copies the URL into the clipboard (down right corner)
   * TODO Use Username instead of "Peer X" if available
   * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
   * TODO this.props.currentRoute.query.presentation is not filled correctly if a "#" is in the path
@@ -716,12 +715,43 @@ class presentationBroadcast extends React.Component {
                 }).then(() => {
                     swal({
                         title: 'Invite others people',
-                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong></p>',//TODO add a copy to clipboard button
+                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
                         type: 'info',
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Okay',
-                        allowOutsideClick: false
-                    });
+                        confirmButtonText: 'Copy to Clipboard',
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        allowOutsideClick: false,
+                        preConfirm: function () {
+                            return new Promise((resolve, reject) => {
+                                let toCopy = document.createElement('input');
+                                toCopy.style.position = 'fixed';
+                                toCopy.style.top = 0;
+                                toCopy.style.left = 0;
+                                toCopy.style.width = '2em';
+                                toCopy.style.height = '2em';
+                                toCopy.style.padding = 0;
+                                toCopy.style.border = 'none';
+                                toCopy.style.outline = 'none';
+                                toCopy.style.boxShadow = 'none';
+                                toCopy.style.background = 'transparent';
+                                toCopy.value = window.location.href;
+                                document.getElementById('clipboardtarget').appendChild(toCopy);
+                                toCopy.value = window.location.href;
+                                toCopy.select();
+
+                                try {
+                                    let successful = document.execCommand('copy');
+                                    if(!successful)
+                                        throw 'Unable to copy';
+                                    resolve('Copied to clipboard');
+                                } catch (err) {
+                                    console.log('Oops, unable to copy');
+                                    reject('Oops, unable to copy');
+                                }
+                            });
+                        }
+                    }).then(() => {}, () => {});
                 });
 
             } else {
@@ -784,6 +814,50 @@ class presentationBroadcast extends React.Component {
     resumePlayback(){
         this.paused = false;
         this.changeSlide(this.lastRemoteSlide);
+    }
+
+    copyURLToClipboard() {
+        let toCopy = document.createElement('input');
+        toCopy.style.position = 'fixed';
+        toCopy.style.top = 0;
+        toCopy.style.left = 0;
+        toCopy.style.width = '2em';
+        toCopy.style.height = '2em';
+        toCopy.style.padding = 0;
+        toCopy.style.border = 'none';
+        toCopy.style.outline = 'none';
+        toCopy.style.boxShadow = 'none';
+        toCopy.style.background = 'transparent';
+        toCopy.value = window.location.href;
+        document.body.appendChild(toCopy);
+        toCopy.value = window.location.href;
+        toCopy.select();
+
+        try {
+            let successful = document.execCommand('copy');
+            if(!successful)
+                throw 'Unable to copy';
+            else{
+                swal({
+                    title: 'URL copied to clipboard',
+                    type: 'success',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timer: 1500
+                }).then(() => {}, () => {});
+            }
+        } catch (err) {
+            console.log('Oops, unable to copy');
+            swal({
+                title: 'Can\'t copy URL to clipboard',
+                text: 'Please select the URL in your browser and share it manually.',
+                type: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Check',
+                allowOutsideClick: false
+            });
+        }
+        document.body.removeChild(toCopy);
     }
 
     render() {
@@ -855,7 +929,11 @@ class presentationBroadcast extends React.Component {
                 <Button.Group vertical fluid>
                   <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add Comment to Deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
                   <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Correct current Slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
-                  <Button content='Resume Playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                  {(this.isInitiator) ? (
+                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
+                  ) : (
+                    <Button content='Resume Playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                  )}
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>
