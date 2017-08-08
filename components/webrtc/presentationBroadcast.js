@@ -138,17 +138,16 @@ class presentationBroadcast extends React.Component {
         function sendRTCMessage(cmd, data = undefined, receiver = undefined) {
             let message = JSON.stringify({ 'cmd': cmd, 'data': data, sender: that.myID });
             if (receiver) { //send to one peer only
+                console.log('Sending message to peer: ', receiver);
                 that.pcs[receiver].dataChannel.send(message);
             } else { //broadcast from initiator
+                console.log('Broadcasting message to peers');
                 for (let i in that.pcs) {
-                    if (that.pcs[i].dataChannel) {
-                        console.log('Sending Message to peer: ', i);
+                    if (that.pcs[i].dataChannel)
                         that.pcs[i].dataChannel.send(message);
-                    }
                 }
             }
         }
-
         that.sendRTCMessage = sendRTCMessage;
 
         // This client receives a message
@@ -172,25 +171,25 @@ class presentationBroadcast extends React.Component {
                             sdpMLineIndex: message.data.label,
                             candidate: message.data.candidate
                         });
-                        that.pcs[message.sender].RTCconnection.addIceCandidate(candidate).catch((e) => {}); //Catch defective candidates
-                    } catch (e) {}
+                        that.pcs[message.sender].RTCconnection.addIceCandidate(candidate).catch((e) => {}); //Catch defective candidates, TODO add better exception handling
+                    } catch (e) {}//TODO add better exception handling
                 }
             }
         });
 
-        ////////////////////////////////////////////////////
+        //******** Media specific methods ********
 
         function requestStreams(options) {
             navigator.mediaDevices.getUserMedia(options)
                 .then(gotStream)
-                .catch((e) => {
-                    gotStream('');
-                    console.log('getUserMedia() error: ' + e.name);
+                .catch((err) => {
+                    gotStream('');//TODO This has been implemented for listener peers. Maybe skip requestStreams for listeners completely in order to have a better error handling. See a comment above.
+                    console.log('getUserMedia() error: ' + err.name);
                 });
         }
 
         function gotStream(stream) {
-            console.log('Adding local stream.');
+            console.log('Adding local stream');
             if (that.isInitiator) {
                 //$('#videos').append('<video id="localVideo" autoplay></video>');
                 //let localVideo = document.querySelector('#localVideo');
@@ -200,11 +199,12 @@ class presentationBroadcast extends React.Component {
             that.localStream = stream;
 
             function sendASAP() {
-                if (that.presenterID)
+                if (that.presenterID) //wait for presenterID before sending the message
                     sendMessage('peer wants to connect', undefined, that.presenterID);
                 else
                     setTimeout(() => { sendASAP(); }, 10);
             }
+
             if (!that.isInitiator) {
                 sendASAP();
             }
@@ -220,10 +220,10 @@ class presentationBroadcast extends React.Component {
             if (typeof that.localStream !== 'undefined') {
                 console.log('creating RTCPeerConnnection for', (that.isInitiator) ? 'initiator' : 'peer');
                 createPeerConnection(peerID);
-                if (that.isInitiator)
+                if (that.isInitiator){
                     that.pcs[peerID].RTCconnection.addStream(that.localStream);
-                if (that.isInitiator)
                     doCall(peerID);
+                }
             }
         }
 
@@ -231,7 +231,7 @@ class presentationBroadcast extends React.Component {
             hangup();
         };
 
-        /////////////////////////////////////////////////////////
+        //******** WebRTC specific methods ********
 
         function createPeerConnection(peerID) {
             try {
@@ -241,19 +241,20 @@ class presentationBroadcast extends React.Component {
                 that.pcs[peerID].RTCconnection.onaddstream = handleRemoteStreamAdded;
                 that.pcs[peerID].RTCconnection.onremovestream = handleRemoteStreamRemoved;
                 if (that.isInitiator) {
-                    that.pcs[peerID].dataChannel = that.pcs[peerID].RTCconnection.createDataChannel('messages', {
-                        ordered: true
-                    });
+                    that.pcs[peerID].dataChannel = that.pcs[peerID].RTCconnection
+                        .createDataChannel('messages', {
+                            ordered: true
+                        });
                     onDataChannelCreated(that.pcs[peerID].dataChannel, peerID);
-                } else {
+                } else
                     that.pcs[peerID].RTCconnection.ondatachannel = handleDataChannelEvent.bind(that, peerID);
-                }
+
                 console.log('Created RTCPeerConnnection');
                 if (that.isInitiator){
                     that.texts.peerCount = Object.keys(that.pcs).length;
                     that.forceUpdate();
                 }
-            } catch (e) {
+            } catch (e) {//TODO handle this better - e.g. show a message and close the window
                 console.log('Failed to create PeerConnection, exception: ' + e.message);
                 console.log('Cannot create RTCPeerConnection object.');
                 return;
@@ -270,7 +271,7 @@ class presentationBroadcast extends React.Component {
         function handleRPCClose() {
             if (!that.isInitiator) {
                 swal({
-                    title: '<p>The presenter closed the session!</p>',
+                    title: '<p>The presenter closed the session</p>',
                     html: '<p>This presentation has ended. Feel free to look at the deck as long as you want.</p>',
                     type: 'warning',
                     confirmButtonColor: '#3085d6',
@@ -291,7 +292,7 @@ class presentationBroadcast extends React.Component {
              * Browsers do currenty not support events that indicate whether ICE exchange has finished or not and the RPC connection has been fully established. Thus, I'm waiting for latest event onDataChannelCreated in order to close the that.socket after some time. This should be relativly safe.
              */
             if (!that.isInitiator && that.socket.disconnected === false) {
-                setTimeout(() => { that.socket.close(); }, 5000); //close that.socket after 5 secs
+                setTimeout(() => { that.socket.close(); }, 5000); //close that.socket after 5 secs, TODO maybe come up with a better solution
             }
 
             channel.onopen = function() {
@@ -301,38 +302,6 @@ class presentationBroadcast extends React.Component {
             };
 
             channel.onmessage = handleMessage.bind(that, channel);
-        }
-
-        function handleMessage(channel, event) {
-            let data = JSON.parse(event.data);
-            switch (data.cmd) {
-                case 'gotoslide':
-                    if (!that.isInitiator)
-                        changeSlide(data.data);
-                    break;
-                case 'message':
-                    if (that.isInitiator)
-                        addMessage(data);
-                    break;
-                case 'log':
-                    console.log('Recieved message from peer: ', data.data);
-                    break;
-                case 'bye':
-                    handleRemoteHangup(data.data);
-                    break;
-                case 'subtitle':
-                    handleSubtitle(data.data);
-                    break;
-                default:
-
-            }
-        }
-
-        function handleSubtitle(subtitle) {
-            $('#input_subtitle').val(subtitle);
-            $('#input_subtitle').animate({
-                scrollLeft: $('#input_subtitle')[0].scrollLeft+1000
-            }, 1000);
         }
 
         function handleIceCandidate(peerID, event) {
@@ -350,14 +319,14 @@ class presentationBroadcast extends React.Component {
 
         function handleRemoteStreamAdded(event) {
             if (that.isInitiator === false) {
-                $('#videos').append('<video class="remoteVideos" autoplay></video>');
+                $('#videos').append('<video class="remoteVideos" autoplay></video>');//TODO Maybe exchange for audio only?!
                 let remoteVideos = $('.remoteVideos');
                 remoteVideos[remoteVideos.length - 1].srcObject = event.stream;
             }
         }
 
         function handleCreateOfferError(event) {
-            console.log('createOffer() error: ', event);
+            console.log('createOffer() error: ', event);//TODO add better error handling for this - maybe close the window if this is fatal
         }
 
         function doCall(peerID) { //calledy by initiatior
@@ -379,11 +348,79 @@ class presentationBroadcast extends React.Component {
             sendMessage(sessionDescription.type, sessionDescription, peerID);
         }
 
-        function onCreateSessionDescriptionError(error) {
+        function onCreateSessionDescriptionError(error) {//TODO add better error handling for this - maybe close the window if this is fatal
             trace('Failed to create session description: ' + error.toString());
         }
 
-        function requestTurn(turnURL) {
+        function handleRemoteStreamRemoved(event) {
+            console.log('Remote stream removed. Event: ', event);
+        }
+
+        function hangup() { //calledy by peer and by initiatior
+            console.log('Hanging up.');
+            if (that.isInitiator) {
+                stop(undefined, true);
+            } else {
+                sendRTCMessage('bye', that.myID, that.presenterID);
+                stop(that.presenterID);
+            }
+            //NOTE Don't need to close the socket, as the browser does this automatically if the window closes
+        }
+
+        function handleRemoteHangup(peerID) { //called by initiator
+            console.log('Terminating session for ', peerID);
+            stop(peerID);
+        }
+
+        function stop(peerID, presenter = false) {
+            try {
+                if (presenter) {
+                    for (let i in that.pcs) {
+                        that.pcs[i].dataChannel.close();
+                        that.pcs[i].RTCconnection.close();
+                        delete that.pcs[i];
+                    }
+                } else {
+                    that.pcs[peerID].dataChannel.close();
+                    that.pcs[peerID].RTCconnection.close();
+                    delete that.pcs[peerID];
+                }
+            } catch (e) {//TODO
+                console.log('Error when deleteing RTC connections', e);
+            } finally {
+                if (that.isInitiator){
+                    that.texts.peerCount = Object.keys(that.pcs).length;
+                    that.forceUpdate();
+                }
+            }
+        }
+
+        function handleMessage(channel, event) {
+            let data = JSON.parse(event.data);
+            switch (data.cmd) {
+                case 'gotoslide':
+                    if (!that.isInitiator)
+                        changeSlide(data.data);
+                    break;
+                case 'message':
+                    if (that.isInitiator)
+                        addMessage(data);
+                    break;
+                case 'log':
+                    console.log('Recieved log message from peer: ', data.data);
+                    break;
+                case 'bye':
+                    handleRemoteHangup(data.data);
+                    break;
+                case 'subtitle':
+                    handleSubtitle(data.data);
+                    break;
+                default:
+
+            }
+        }
+
+        function requestTurn(turnURL) {//NOTE currently not used
             let turnExists = false;
             for (let i in that.pcConfig.iceServers) {
                 if (that.pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
@@ -412,48 +449,9 @@ class presentationBroadcast extends React.Component {
             }
         }
 
-        function handleRemoteStreamRemoved(event) {
-            console.log('Remote stream removed. Event: ', event);
-        }
+        //******** Media Codec specific methods (like Opus) ********
 
-        function hangup() { //calledy by peer and by initiatior
-            console.log('Hanging up.');
-            if (that.isInitiator) {
-                stop(undefined, true);
-            } else {
-                sendRTCMessage('bye', that.myID, that.presenterID);
-                stop(that.presenterID);
-            }
-            //NOTE Don't need to close the socket, as the browser does this automatically if the window closes
-        }
-
-        function handleRemoteHangup(peerID) { //called by initiator
-            console.log('Terminating session for ', peerID);
-            stop(peerID);
-        }
-
-        function stop(peerID, presenter = false) {
-            if (presenter) {
-                for (let i in that.pcs) {
-                    that.pcs[i].dataChannel.close();
-                    that.pcs[i].RTCconnection.close();
-                    delete that.pcs[i];
-                }
-            } else {
-                that.pcs[peerID].dataChannel.close();
-                that.pcs[peerID].RTCconnection.close();
-                delete that.pcs[peerID];
-            }
-            if (that.isInitiator){
-                that.texts.peerCount = Object.keys(that.pcs).length;
-                that.forceUpdate();
-            }
-        }
-
-        /////////////////////////////////////////// Codec specific stuff
-
-        // Set Opus as the default audio codec if it's present.
-        function preferOpus(sdp) {
+        function preferOpus(sdp) { // Set Opus as the default audio codec if it's present.
             let sdpLines = sdp.split('\r\n');
             let mLineIndex;
             // Search for m line.
@@ -491,8 +489,7 @@ class presentationBroadcast extends React.Component {
             return result && result.length === 2 ? result[1] : null;
         }
 
-        // Set the selected codec to the first in m line.
-        function setDefaultCodec(mLine, payload) {
+        function setDefaultCodec(mLine, payload) { // Set the selected codec to the first in m line.
             let elements = mLine.split(' ');
             let newLine = [];
             let index = 0;
@@ -507,8 +504,7 @@ class presentationBroadcast extends React.Component {
             return newLine.join(' ');
         }
 
-        // Strip CN from sdp before CN constraints is ready.
-        function removeCN(sdpLines, mLineIndex) {
+        function removeCN(sdpLines, mLineIndex) { // Strip CN from sdp before CN constraints is ready.
             let mLineElements = sdpLines[mLineIndex].split(' ');
             // Scan from end for the convenience of removing an item.
             for (let i = sdpLines.length - 1; i >= 0; i--) {
@@ -528,8 +524,7 @@ class presentationBroadcast extends React.Component {
             return sdpLines;
         }
 
-
-        /////////////////////////////////////////// SlideWiki specific stuff
+        //******** SlideWiki specific methods ********
 
         $('#resumeRemoteControl').click(() => {//TODO does not correctly work
             that.paused = false;
@@ -626,7 +621,7 @@ class presentationBroadcast extends React.Component {
 
                 recognition.onerror = function (e) {
                     console.warn('Recognition error:', e);
-                    recognition.stop();
+                    recognition.stop();//TODO Really stop recognition in case of a fatal error. Pay attention to not restarting it via the onend listener
                 };
 
                 recognition.onend = function (e) {
@@ -654,8 +649,8 @@ class presentationBroadcast extends React.Component {
                     }
                 }).then(() => {
                     swal({
-                        title: 'Invite others!',
-                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong></p>',
+                        title: 'Invite others people',
+                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong></p>',//TODO add a copy to clipboard button
                         type: 'info',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Okay',
@@ -663,11 +658,11 @@ class presentationBroadcast extends React.Component {
                     });
                 });
 
-                //TODO implement error handling
+                //TODO implement proper error handling
             } else {
                 swal({
                     title: 'Speech recognition disabled',
-                    html: '<p>Your browser isn\'t able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that support speech recognition.</p>',
+                    html: '<p>Your browser isn\'t able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that supports speech recognition.</p>',
                     type: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Okay',
@@ -686,8 +681,14 @@ class presentationBroadcast extends React.Component {
             that.commentList[currentTime].message = data.data;
             that.forceUpdate();
         }
-
         that.addMessage = addMessage;
+
+        function handleSubtitle(subtitle) {
+            $('#input_subtitle').val(subtitle);
+            $('#input_subtitle').animate({
+                scrollLeft: $('#input_subtitle')[0].scrollLeft+1000
+            }, 1000);
+        }
     }
 
     componentDidUpdate() {}
@@ -701,7 +702,6 @@ class presentationBroadcast extends React.Component {
 
     render() {
         let messages = [];
-        let messageArea = '';
         for(let i in this.commentList) {
             messages.push(
               <Message floating key={i}>
@@ -717,29 +717,7 @@ class presentationBroadcast extends React.Component {
                 </Comment.Group>
               </Message>);
         }
-        if(!this.isInitiator){
-            messageArea = <Grid columns={1}>
-              <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 500 + 'px'}}>
-                <h3>Your Questions:</h3>
-                {messages}
-              </Grid.Column>
-              <Grid.Column>
-                <Divider clearing />
-                <Form reply>
-                  <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength="300"/>
-                  {/*
-                    * TODO Add a visible char counter,e .g. 234/300 next to the send button
-                    * TODO Don't send empty messages or those with too few words (and show notification about it)
-                    * TODO move the input box to the bottom of the element (so it doesn't move)
-                    * TODO disable keydown listener if textarea is focused
-                    */}
-                  <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
-                </Form>
-              </Grid.Column>
-            </Grid>;
 
-        } else
-            messageArea = <div id="messageList"><h3>Messages from peers:</h3>{messages}</div>;
         return (
           <Grid celled='internally'>
             <Grid.Row>
@@ -748,7 +726,29 @@ class presentationBroadcast extends React.Component {
                 height={980*0.8 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>{/*TODO Get window height for size*/}
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
-                {messageArea}
+                {(!this.isInitiator) ? (
+                  <Grid columns={1}>
+                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 500 + 'px'}}>
+                      <h3>Your Questions:</h3>
+                      {messages}
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Divider clearing />
+                      <Form reply>
+                        <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength="300"/>
+                        {/*
+                          * TODO Add a visible char counter,e .g. 234/300 next to the send button
+                          * TODO Don't send empty messages or those with too few words (and show notification about it)
+                          * TODO move the input box to the bottom of the element (so it doesn't move)
+                          * TODO disable keydown listener if textarea is focused
+                          */}
+                        <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
+                      </Form>
+                    </Grid.Column>
+                  </Grid>
+                ) : (
+                  <div id="messageList"><h3>Messages from peers:</h3>{messages}</div>
+                )}
               </Grid.Column>
             </Grid.Row>
 
