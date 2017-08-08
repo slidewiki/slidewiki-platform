@@ -105,10 +105,7 @@ class presentationBroadcast extends React.Component {
             that.texts.roleText = 'You are now listening to the presenter and your presentation will reflect his actions.';
             that.forceUpdate();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
-            requestStreams({//TODO Maybe skip requesting streams for the listeners
-                audio: false,
-                video: false
-            });
+            gotStream('');//NOTE Skip requesting streams for the listeners, as they do not need them
         });
 
         that.socket.on('full', (room) => { //only recieved by peer that tries to join
@@ -188,7 +185,6 @@ class presentationBroadcast extends React.Component {
             navigator.mediaDevices.getUserMedia(options)
                 .then(gotStream)
                 .catch((err) => {
-                    gotStream('');//TODO This has been implemented for listener peers. Maybe skip requestStreams for listeners completely in order to have a better error handling. See a comment above.
                     console.log('getUserMedia() error: ' + err.name);
                 });
         }
