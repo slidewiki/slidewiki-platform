@@ -745,8 +745,20 @@ class presentationBroadcast extends React.Component {
 
     sendMessage(event) {
         event.preventDefault();
-        this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
-        this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
+        if($('#messageToSend:first').val().length < 15){
+            swal({
+                title: 'Message too short',
+                html: 'The message you tried to send is too short. Please write more than 15 characters.',
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Okay',
+                allowOutsideClick: false
+            });
+        } else {
+            this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
+            this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
+            $('#messageToSend:first').val('');
+        }
         return false;
     }
 
@@ -791,7 +803,6 @@ class presentationBroadcast extends React.Component {
                       <Form reply>
                         <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
                         {/*
-                          * TODO Don't send empty messages or those with too few words (and show notification about it)
                           * TODO move the input box to the bottom of the element (so it doesn't move)
                           * TODO disable keydown listener if textarea is focused
                           */}
