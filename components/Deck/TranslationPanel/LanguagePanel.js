@@ -8,6 +8,8 @@ import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 
+import TranslationPanel2 from './TranslationPanel2.js';
+
 // import TranslationStore from '../../../stores/TranslationStore';
 // import TranslationList from './TranslationList';
 
@@ -44,6 +46,8 @@ class LanguagePanel extends React.Component {
         let options = translations.map(this.renderAvailable, this).filter((option) => {
             return option;
         });
+
+        options.push(<TranslationPanel2/>);
 
         return(
 

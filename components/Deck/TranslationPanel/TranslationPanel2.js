@@ -46,6 +46,7 @@ class TranslationPanel2 extends React.Component {
                 as={Button}
                 item
                 scrolling
+                floating
                 options = {options}
                 onChange = {this.handleTranslateToClick.bind(this)}
                 ref = {(dropDown) => {this.dropDown = dropDown;}}

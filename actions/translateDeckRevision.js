@@ -9,6 +9,7 @@ const log = require('./log/clog');
 const common = require('../common.js');
 
 export default function translateDeckRevision(context, payload, done) {
+    context.dispatch('START_TRANSLATION', 'success');
     log.info(context);
     console.log('action translateDeckRevision: got payload', payload);
     //enrich with user id
@@ -38,9 +39,12 @@ export default function translateDeckRevision(context, payload, done) {
             // };
             // context.executeAction(addActivity, {activity: activity});
 
+            context.dispatch('END_TRANSLATION', 'success');
+
             context.executeAction(navigateAction, {
                 url: '/deck/' + res.root_deck //ADD HERE NEW DECK ID
             });
+
             done();
 
         }

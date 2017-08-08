@@ -10,40 +10,9 @@ import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import TranslationPanel2 from './TranslationPanel2.js';
 
-// import TranslationStore from '../../../stores/TranslationStore';
-// import TranslationList from './TranslationList';
 
 class TranslationPanel extends React.Component {
 
-        /*componentDidMount() {
-        this.enableDropdown();
-    }
-    componentDidUpdate(){
-        this.enableDropdown();
-    }
-    enableDropdown(status) {
-        let panelDIV = this.refs.translationPanel;
-        $(panelDIV).find('.ui.selection.dropdown').dropdown({
-            onChange: (value) => {
-                this.context.executeAction(navigateAction, {
-                    //todo: define how we are going to handle URIs for translations
-                    url: '/deck/' + value
-                });
-            }
-        });
-    }
-    render() {
-        return (
-            <div className="ui left aligned" ref="translationPanel">
-                <div className="ui fluid search selection dropdown">
-                    <div className="default text">{this.props.TranslationStore.currentLang.lang}</div>
-                    <i className="dropdown icon"></i>
-                        <TranslationList items={this.props.TranslationStore.translations} />
-                </div>
-            </div>
-        );
-    }
-    */
     handleLanguageClick(id){
 
         this.context.executeAction(navigateAction, {
@@ -51,11 +20,16 @@ class TranslationPanel extends React.Component {
         });
     }
 
-    handleTranslateToClick(code){
 
+    handleTranslateToClick(event,data){
+        //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
         this.context.executeAction(translateDeckRevision, {
-            language: code+'_'+code.toUpperCase()
+            language: data.value+'_'+data.value.toUpperCase()
         });
+        this.dropDown.setValue('');
+
+
+        //
     }
 
     renderAvailable(translation) {
@@ -78,14 +52,9 @@ class TranslationPanel extends React.Component {
     renderTranslateTo(supported) {
 
         return (
-            <Dropdown.Item
-            key = {supported.code}
-            onClick={ this.handleTranslateToClick.bind(this, supported.code) }
-            //href={''}
-            >
-            {supported.name}
-            </Dropdown.Item>
+            {value:supported.code , text: supported.name}
         );
+
     }
 
     render() {
@@ -103,14 +72,24 @@ class TranslationPanel extends React.Component {
         });
         const user = this.props.UserProfileStore.userid;
         let divider = (user && translations.length) ? <Dropdown.Divider /> : '';
-        //let translate_item = user ? <TranslationPanel2/> : '';
+
+        let languageOptions = supported.map(this.renderTranslateTo, this);
 
         let translate_item = user ?
-        <Dropdown scrolling item trigger={ <span>Translate</span>}>
-            <Dropdown.Menu>
-                {supported.map(this.renderTranslateTo, this)}
-            </Dropdown.Menu>
-        </Dropdown>  : '';
+
+        <Dropdown text='Translate...'
+            floating
+            labeled
+            button
+            scrolling
+            className='icon primary small'
+            icon='world'
+            options={languageOptions}
+            onChange = {this.handleTranslateToClick.bind(this)}
+            ref = {(dropDown) => {this.dropDown = dropDown;}}
+          />
+
+        : '';
 
         let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>;
 

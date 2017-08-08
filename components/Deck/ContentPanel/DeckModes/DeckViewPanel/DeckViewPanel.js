@@ -91,9 +91,11 @@ class DeckViewPanel extends React.Component {
         </div> : '';
 
         return (
-        <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
+        <div ref="deckViewPanel" id='deckViewPanel' className="ui container bottom attached" style={heightStyle}>
+
                 <main role="main">
             <div className="ui segment" style={heightStyle}>
+            {(this.props.TranslationStore.inProgress) ? <div className="ui active dimmer"><div className="ui text loader">Translating</div></div> : ''}
                 <div className="ui two column grid container">
                 {(deckTitle === undefined) ? <div className="ui active dimmer">
                         <div className="ui text loader">Loading</div></div> : ''}
