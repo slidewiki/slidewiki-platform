@@ -1,7 +1,7 @@
 import React from 'react';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { isEmpty } from '../../common';
-import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
+import { Grid, Message, Comment, Input, Button, Form, Divider, Label } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
 
@@ -15,6 +15,7 @@ class presentationBroadcast extends React.Component {
     constructor(props) {
         super(props);
         this.texts = {roleText: '', peerCountText: '', peerCount: ''};
+        this.textInputLength = 300;
         this.isInitiator = false;
         this.localStream = undefined;
         this.myID = undefined;
@@ -659,8 +660,19 @@ class presentationBroadcast extends React.Component {
                 };
 
                 recognition.onerror = function (e) {
-                    console.warn('Recognition error:', e);
-                    recognition.stop();//TODO Really stop recognition in case of a fatal error. Pay attention to not restarting it via the onend listener
+                    if(e.type === 'error' && e.error !== 'no-speech'){
+                        disabled = true;
+                        recognition.stop();
+                        swal({
+                            title: 'Speech recognition disabled',
+                            html: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any subtitles anymore.',
+                            type: 'error',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Okay',
+                            allowOutsideClick: false
+                        });
+                    } else
+                        recognition.stop();
                 };
 
                 recognition.onend = function (e) {
@@ -697,7 +709,6 @@ class presentationBroadcast extends React.Component {
                     });
                 });
 
-                //TODO implement proper error handling
             } else {
                 swal({
                     title: 'Speech recognition disabled',
@@ -739,6 +750,10 @@ class presentationBroadcast extends React.Component {
         return false;
     }
 
+    updateCharCount(){
+        $('#textCharCount').text($('#messageToSend').val().length + '/' + this.textInputLength);
+    }
+
     render() {
         let messages = [];
         for(let i in this.commentList) {
@@ -774,14 +789,16 @@ class presentationBroadcast extends React.Component {
                     <Grid.Column>
                       <Divider clearing />
                       <Form reply>
-                        <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength="300"/>
+                        <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
                         {/*
-                          * TODO Add a visible char counter,e .g. 234/300 next to the send button
                           * TODO Don't send empty messages or those with too few words (and show notification about it)
                           * TODO move the input box to the bottom of the element (so it doesn't move)
                           * TODO disable keydown listener if textarea is focused
                           */}
-                        <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
+                          <Form.Field>
+                            <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
+                            <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
+                          </Form.Field>
                       </Form>
                     </Grid.Column>
                   </Grid>
