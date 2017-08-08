@@ -168,7 +168,7 @@ export default {
             rp({
                 method: 'GET',
                 uri: Microservices.deck.uri + '/deck/' + args.id.split('-')[0] + '/forks',
-                qs: args.user != null ? {user: args.user} : {},
+                qs: args.user ? {user: args.user} : {},
                 json: true
             }).then((body) => {
                 callback(null, body);
