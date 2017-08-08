@@ -298,7 +298,7 @@ class presentationBroadcast extends React.Component {
             channel.onopen = function() {
                 console.log('Data Channel opened');
                 if (that.isInitiator)
-                    sendRTCMessage('gotoslide', that.currentSlide, peerID);
+                    sendRTCMessage('gotoslide', document.getElementById('slidewikiPresentation').contentWindow.location.href, peerID);// using href instead of currentSlide because it could be bad initialized
             };
 
             channel.onmessage = handleMessage.bind(that, channel);
@@ -526,7 +526,7 @@ class presentationBroadcast extends React.Component {
 
         //******** SlideWiki specific methods ********
 
-        $('#resumeRemoteControl').click(() => {//TODO does not correctly work
+        $('#resumeRemoteControl').click(() => {
             that.paused = false;
             changeSlide(that.lastRemoteSlide);
         });
@@ -564,6 +564,7 @@ class presentationBroadcast extends React.Component {
             if (!that.paused) {
                 console.log('Changing to slide: ', slideID);
                 that.iframesrc = slideID;
+                document.getElementById('slidewikiPresentation').contentWindow.location.assign(slideID);
                 that.forceUpdate();
             }
         }
