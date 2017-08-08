@@ -33,6 +33,7 @@ class presentationBroadcast extends React.Component {
         this.socket = undefined;
 
         //******** SlideWiki specific variables ********
+        this.eventForwarding = true;
         this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
@@ -574,7 +575,8 @@ class presentationBroadcast extends React.Component {
                 let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
                 newEvent.keyCode = e.keyCode;
                 newEvent.which = e.keyCode;
-                frame.dispatchEvent(newEvent);
+                if(that.eventForwarding)
+                    frame.dispatchEvent(newEvent);
             });
 
             if (that.isInitiator) {
@@ -594,6 +596,13 @@ class presentationBroadcast extends React.Component {
                         that.paused = true;
                         that.forceUpdate();
                     }
+                });
+                let textArea = $('#messageToSend');
+                textArea.on('focus', () => {
+                    that.eventForwarding = false;
+                });
+                textArea.on('focusout', () => {
+                    that.eventForwarding = true;
                 });
             }
         }
@@ -794,22 +803,20 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
                 {(!this.isInitiator) ? (
                   <Grid columns={1}>
-                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 500 + 'px'}}>
+                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '500px', 'minHeight': '500px', 'height': '500px'}}>{/*TODO calculate heights somehow*/}
                       <h3>Your Questions:</h3>
                       {messages}
                     </Grid.Column>
                     <Grid.Column>
                       <Divider clearing />
                       <Form reply>
-                        <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
-                        {/*
-                          * TODO move the input box to the bottom of the element (so it doesn't move)
-                          * TODO disable keydown listener if textarea is focused
-                          */}
+                        <div>
+                          <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
                           <Form.Field>
                             <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
                             <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
                           </Form.Field>
+                        </div>
                       </Form>
                     </Grid.Column>
                   </Grid>
