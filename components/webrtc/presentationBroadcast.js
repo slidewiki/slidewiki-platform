@@ -2,7 +2,7 @@ import React from 'react';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
-import { Grid, Message, Comment, Input, Button, Form, Divider } from 'semantic-ui-react';
+import { Grid, Message, Comment, Input, Button, Form, Divider, Label } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
 
@@ -16,6 +16,7 @@ class presentationBroadcast extends React.Component {
     constructor(props) {
         super(props);
         this.texts = {roleText: '', peerCountText: '', peerCount: ''};
+        this.textInputLength = 300;
         this.isInitiator = false;
         this.localStream = undefined;
         this.myID = undefined;
@@ -33,6 +34,7 @@ class presentationBroadcast extends React.Component {
         this.socket = undefined;
 
         //******** SlideWiki specific variables ********
+        this.eventForwarding = true;
         this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
@@ -574,7 +576,8 @@ class presentationBroadcast extends React.Component {
                 let newEvent = new Event('keydown', {key: e.key, code: e.code, composed: true, charCode: e.charCode, keyCode: e.keyCode, which: e.which, bubbles: true, cancelable: true, which: e.keyCode});
                 newEvent.keyCode = e.keyCode;
                 newEvent.which = e.keyCode;
-                frame.dispatchEvent(newEvent);
+                if(that.eventForwarding)
+                    frame.dispatchEvent(newEvent);
             });
 
             if (that.isInitiator) {
@@ -594,6 +597,13 @@ class presentationBroadcast extends React.Component {
                         that.paused = true;
                         that.forceUpdate();
                     }
+                });
+                let textArea = $('#messageToSend');
+                textArea.on('focus', () => {
+                    that.eventForwarding = false;
+                });
+                textArea.on('focusout', () => {
+                    that.eventForwarding = true;
                 });
             }
         }
@@ -660,8 +670,19 @@ class presentationBroadcast extends React.Component {
                 };
 
                 recognition.onerror = function (e) {
-                    console.warn('Recognition error:', e);
-                    recognition.stop();//TODO Really stop recognition in case of a fatal error. Pay attention to not restarting it via the onend listener
+                    if(e.type === 'error' && e.error !== 'no-speech'){
+                        disabled = true;
+                        recognition.stop();
+                        swal({
+                            title: 'Speech recognition disabled',
+                            html: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any subtitles anymore.',
+                            type: 'error',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Okay',
+                            allowOutsideClick: false
+                        });
+                    } else
+                        recognition.stop();
                 };
 
                 recognition.onend = function (e) {
@@ -698,7 +719,6 @@ class presentationBroadcast extends React.Component {
                     });
                 });
 
-                //TODO implement proper error handling
             } else {
                 swal({
                     title: 'Speech recognition disabled',
@@ -735,9 +755,25 @@ class presentationBroadcast extends React.Component {
 
     sendMessage(event) {
         event.preventDefault();
-        this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
-        this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
+        if($('#messageToSend:first').val().length < 15){
+            swal({
+                title: 'Message too short',
+                html: 'The message you tried to send is too short. Please write more than 15 characters.',
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Okay',
+                allowOutsideClick: false
+            });
+        } else {
+            this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
+            this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
+            $('#messageToSend:first').val('');
+        }
         return false;
+    }
+
+    updateCharCount(){
+        $('#textCharCount').text($('#messageToSend').val().length + '/' + this.textInputLength);
     }
 
     render() {
@@ -768,21 +804,20 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
                 {(!this.isInitiator) ? (
                   <Grid columns={1}>
-                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 500 + 'px'}}>
+                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '500px', 'minHeight': '500px', 'height': '500px'}}>{/*TODO calculate heights somehow*/}
                       <h3>Your Questions:</h3>
                       {messages}
                     </Grid.Column>
                     <Grid.Column>
                       <Divider clearing />
                       <Form reply>
-                        <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength="300"/>
-                        {/*
-                          * TODO Add a visible char counter,e .g. 234/300 next to the send button
-                          * TODO Don't send empty messages or those with too few words (and show notification about it)
-                          * TODO move the input box to the bottom of the element (so it doesn't move)
-                          * TODO disable keydown listener if textarea is focused
-                          */}
-                        <Button content='Send' labelPosition='right' icon='upload' primary onClick={this.sendMessage.bind(this)}/>
+                        <div>
+                          <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
+                          <Form.Field>
+                            <Button content='Send' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
+                            <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
+                          </Form.Field>
+                        </div>
                       </Form>
                     </Grid.Column>
                   </Grid>
@@ -793,9 +828,8 @@ class presentationBroadcast extends React.Component {
             </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column width={16}>
+              <Grid.Column width={13}>
                 <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
-                <button id="resumeRemoteControl" style={(this.paused) ? {} : {display: 'none'}}>Resume</button>
                 <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
@@ -803,6 +837,13 @@ class presentationBroadcast extends React.Component {
                     <Input fluid transparent id="input_subtitle" />
                   </div>
                 ) : ''}
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <Button.Group vertical>
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add Comment to Deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Correct current Slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
+                  <Button id="resumeRemoteControl" content='Resume' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red'/>
+                </Button.Group>
               </Grid.Column>
             </Grid.Row>
           </Grid>
