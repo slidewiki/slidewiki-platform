@@ -2,7 +2,7 @@ import React from 'react';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
-import { Grid, Message, Comment, Input, Button, Form, Divider, Label } from 'semantic-ui-react';
+import { Grid, Message, Comment, Input, Button, Form, Divider, Label, Popup } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
 
@@ -20,7 +20,7 @@ class presentationBroadcast extends React.Component {
         this.localStream = undefined;
         this.myID = undefined;
         this.presenterID = undefined;
-        this.pcs = {}; // {<socketID>: {RTCConnection: RPC, dataChannel: dataChannel}, <socketID>: {RTCConnection: RPC, dataChannel: dataChannel}}
+        this.pcs = {}; // {<socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}, <socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}}
         this.turnReady = undefined;
 
         this.pcConfig = {
@@ -40,6 +40,7 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
         this.subtitle = '';//used for speech recognition results
+        this.isUsernamePublished = true;
     }
 
     componentDidMount() {
@@ -108,6 +109,9 @@ class presentationBroadcast extends React.Component {
             that.forceUpdate();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             gotStream('');//NOTE Skip requesting streams for the listeners, as they do not need them
+
+            that.isUsernamePublished = false;
+            that.forceUpdate();
         });
 
         that.socket.on('full', (room) => { //only recieved by peer that tries to join
@@ -325,7 +329,7 @@ class presentationBroadcast extends React.Component {
                 }
             };
 
-            channel.onmessage = handleMessage.bind(that, channel);
+            channel.onmessage = handleMessage.bind(that, channel, peerID);
         }
 
         function handleIceCandidate(peerID, event) {
@@ -428,7 +432,10 @@ class presentationBroadcast extends React.Component {
             } catch (e) {}
         }
 
-        function handleMessage(channel, event) {
+        function handleMessage(channel, peerID, event) {
+            console.log(event.data);
+            if (event.data === undefined)
+                return;
             let data = JSON.parse(event.data);
             switch (data.cmd) {
                 case 'gotoslide':
@@ -441,7 +448,7 @@ class presentationBroadcast extends React.Component {
                     break;
                 case 'message':
                     if (that.isInitiator)
-                        addMessage(data);
+                        addMessage(data, false, peerID);
                     break;
                 case 'log':
                     console.log('Recieved log message from peer: ', data.data);
@@ -451,6 +458,9 @@ class presentationBroadcast extends React.Component {
                     break;
                 case 'subtitle':
                     handleSubtitle(data.data);
+                    break;
+                case 'newUsername':
+                    handleNewUsername(data.data, peerID);
                     break;
                 default:
 
@@ -767,11 +777,11 @@ class presentationBroadcast extends React.Component {
             }
         }
 
-        function addMessage(data, fromMyself = false) {
+        function addMessage(data, fromMyself = false, peerID = null) {
             let currentTime = new Date().getTime();
             that.commentList[currentTime] = {};
             if(!fromMyself)
-                that.commentList[currentTime].peer = Object.keys(that.pcs).indexOf(data.sender);
+                that.commentList[currentTime].peer = that.pcs[peerID].username || Object.keys(that.pcs).indexOf(data.sender);
             else
                 that.commentList[currentTime].peer = 'Me';
             that.commentList[currentTime].message = data.data;
@@ -784,6 +794,11 @@ class presentationBroadcast extends React.Component {
             $('#input_subtitle').animate({
                 scrollLeft: $('#input_subtitle')[0].scrollLeft+1000
             }, 1000);
+        }
+
+        function handleNewUsername(username, peerID) {
+            that.pcs[peerID].username = username;
+            that.forceUpdate();
         }
     }
 
@@ -805,6 +820,20 @@ class presentationBroadcast extends React.Component {
             this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
             $('#messageToSend:first').val('');
         }
+        return false;
+    }
+
+    sendUsername(event) {
+        event.preventDefault();
+
+        let username = this.context.getUser().username;
+        console.log('sendUsername got called - username: '+username);
+        if (username !== undefined && username !== '' && username !== null) {
+            this.sendRTCMessage('newUsername', username, this.presenterID);
+        }
+        this.isUsernamePublished = true;
+        this.forceUpdate();
+
         return false;
     }
 
@@ -869,7 +898,7 @@ class presentationBroadcast extends React.Component {
                 <Comment.Group>
                   <Comment>
                     <Comment.Content>
-                      <Comment.Author>{this.commentList[i].peer.toString() === 'Me' ? '' : 'Peer'} {this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                      <Comment.Author>{this.commentList[i].peer.toString() === 'Me' ? '' : 'Peer - '} {this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
                       <Comment.Text>
                         {this.commentList[i].message}
                       </Comment.Text>
@@ -877,6 +906,14 @@ class presentationBroadcast extends React.Component {
                   </Comment>
                 </Comment.Group>
               </Message>);
+        }
+
+        let peernames = new Set();
+        if (this.isInitiator && this.pcs) {
+            for (let k in this.pcs) {
+                if (this.pcs[k].username)
+                    peernames.add(this.pcs[k].username);
+            }
         }
 
         return (
@@ -889,7 +926,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
                 {(!this.isInitiator) ? (
                   <Grid columns={1}>
-                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '500px', 'minHeight': '500px', 'height': '500px'}}>{/*TODO calculate heights somehow*/}
+                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '500px', 'minHeight': '465px', 'height': '465px'}}>{/*TODO calculate heights somehow*/}
                       <h3>Your Questions:</h3>
                       {messages}
                     </Grid.Column>
@@ -902,6 +939,11 @@ class presentationBroadcast extends React.Component {
                             <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
                             <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
                           </Form.Field>
+                          {(!this.isUsernamePublished && this.context.getUser() && this.context.getUser().username) ? (
+                            <Form.Field>
+                              <Button content='Publish username' labelPosition='right' icon='send' primary onClick={this.sendUsername.bind(this)}/>
+                            </Form.Field>
+                          ) : ''}
                         </div>
                       </Form>
                     </Grid.Column>
@@ -914,7 +956,13 @@ class presentationBroadcast extends React.Component {
 
             <Grid.Row>
               <Grid.Column width={13}>
-                <h4>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</h4>
+                <h4>{/* TODO remove line break */}
+                  {this.isInitiator ? (<div>{this.texts.roleText}{this.texts.peerCountText}<Popup
+                      trigger={<div>{this.texts.peerCount}</div>}
+                      content={Array.from(peernames).reduce((a, pn) => {return a + pn + ', ';}, '')}
+                      basic
+                    /></div>) : <div>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</div>}
+                </h4>
                 <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
