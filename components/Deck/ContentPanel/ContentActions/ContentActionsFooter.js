@@ -58,7 +58,7 @@ class ContentActionsFooter extends React.Component {
                 confirmButtonText: 'Next',
                 allowOutsideClick: false
             }).then((roomName) => {
-                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref());
+                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
             }).catch();
         }
     }

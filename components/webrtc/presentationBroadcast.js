@@ -7,9 +7,7 @@ import { Grid, Message, Comment, Input, Button, Form, Divider, Label, Popup } fr
 class presentationBroadcast extends React.Component {
 
   /*
-  * TODO Use Username instead of "Peer X" if available
   * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
-  * TODO this.props.currentRoute.query.presentation is not filled correctly if a "#" is in the path
   */
 
     constructor(props) {
@@ -310,7 +308,7 @@ class presentationBroadcast extends React.Component {
              * Browsers do currenty not support events that indicate whether ICE exchange has finished or not and the RPC connection has been fully established. Thus, I'm waiting for latest event onDataChannelCreated in order to close the that.socket after some time. This should be relativly safe.
              */
             if (!that.isInitiator && that.socket.disconnected === false) {
-                setTimeout(() => { that.socket.close(); }, 5000); //close that.socket after 5 secs, TODO maybe come up with a better solution
+                setTimeout(() => { that.socket.close(); }, 10000); //close that.socket after 10 secs, TODO maybe come up with a better solution
             }
 
             channel.onopen = function() {
