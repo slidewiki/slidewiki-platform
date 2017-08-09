@@ -39,6 +39,8 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
         this.subtitle = '';//used for speech recognition results
+        this.speechRecognitionDisabled = false;
+        this.recognition = undefined;
     }
 
     componentDidMount() {
@@ -320,7 +322,7 @@ class presentationBroadcast extends React.Component {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Okay',
                         allowOutsideClick: false
-                    });
+                    }).then(() => {$('body>a#atlwdg-trigger').remove();});
                 }
             };
 
@@ -628,8 +630,7 @@ class presentationBroadcast extends React.Component {
         that.changeSlide = changeSlide;
 
         function activateSpeechRecognition() {
-            let recognition;
-            let disabled = false;
+            that.recognition;
             let final_transcript = '';
 
             let first_char = /\S/;
@@ -641,24 +642,24 @@ class presentationBroadcast extends React.Component {
             }
 
             if (window.hasOwnProperty('webkitSpeechRecognition')) {
-                recognition = new webkitSpeechRecognition();
+                that.recognition = new webkitSpeechRecognition();
             } else if (window.hasOwnProperty('SpeechRecognition')) {
-                recognition = new SpeechRecognition();
+                that.recognition = new SpeechRecognition();
             }
 
-            if (recognition) {
-                recognition.continuous = true;
-                recognition.interimResults = true;
-                recognition.lang = navigator.language || navigator.userLanguage;
-                recognition.maxAlternatives = 0;
-                recognition.start();
+            if (that.recognition) {
+                that.recognition.continuous = true;
+                that.recognition.interimResults = true;
+                that.recognition.lang = navigator.language || navigator.userLanguage;
+                that.recognition.maxAlternatives = 0;
+                that.recognition.start();
 
-                recognition.onresult = function (event) {
+                that.recognition.onresult = function (event) {
 
                     let interim_transcript = '';
                     if (typeof (event.results) == 'undefined') {
-                        recognition.onend = null;
-                        recognition.stop();
+                        that.recognition.onend = null;
+                        that.recognition.stop();
                         console.warn('error:', e);
                         //TODO implement error handling
                         return;
@@ -675,13 +676,15 @@ class presentationBroadcast extends React.Component {
                     console.log('Interim text: ', interim_transcript);
 
                     let m = (final_transcript || interim_transcript);
-                    sendRTCMessage('subtitle', m.substr((m.length-300) > 0 ? m.length-300 : 0, 300));
+                    let tosend = m.substr((m.length-300) > 0 ? m.length-300 : 0, 300);
+                    sendRTCMessage('subtitle', tosend);
+                    handleSubtitle(tosend);
                 };
 
-                recognition.onerror = function (e) {
+                that.recognition.onerror = function (e) {
                     if(e.type === 'error' && e.error !== 'no-speech'){
-                        disabled = true;
-                        recognition.stop();
+                        that.speechRecognitionDisabled = true;
+                        that.recognition.stop();
                         swal({
                             title: 'Speech recognition disabled',
                             html: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any subtitles anymore.',
@@ -690,14 +693,17 @@ class presentationBroadcast extends React.Component {
                             confirmButtonText: 'Okay',
                             allowOutsideClick: false
                         });
+                        that.forceUpdate();
                     } else
-                        recognition.stop();
+                        that.recognition.stop();
                 };
 
-                recognition.onend = function (e) {
-                    if(!disabled){
+                that.recognition.onend = function (e) {
+                    if(!that.speechRecognitionDisabled){
                         console.warn('Recognition ended itself - stupid thing! Restarting ....', e);
-                        recognition.start();
+                        that.recognition.start();
+                    } else {
+                        that.sendRTCMessage('subtitle', 'Subtitle has been disabled by presenter');
                     }
                 };
 
@@ -711,7 +717,7 @@ class presentationBroadcast extends React.Component {
                     html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p><p>Please select the language in which you will talk or disable the feature.</p>',
                     type: 'info',
                     input: 'select',
-                    inputValue: recognition.lang,
+                    inputValue: that.recognition.lang,
                     inputOptions: tmp,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -721,14 +727,14 @@ class presentationBroadcast extends React.Component {
                     allowOutsideClick: false,
                     preConfirm: function (lang) {
                         return new Promise((resolve, reject) => {
-                            recognition.lang = lang;
+                            that.recognition.lang = lang;
                             resolve();
                         });
                     }
                 }).then(() => {}, (dismiss) => {
                     if (dismiss === 'cancel') {
-                        disabled = true;
-                        recognition.stop();
+                        that.speechRecognitionDisabled = true;
+                        that.recognition.stop();
                         console.log('Recognition disabled');
                     }
                 }).then(() => {
@@ -770,7 +776,7 @@ class presentationBroadcast extends React.Component {
                                 }
                             });
                         }
-                    }).then(() => {}, () => {});
+                    }).then(() => {that.forceUpdate();}, () => {});
                 });
 
             } else {
@@ -810,7 +816,22 @@ class presentationBroadcast extends React.Component {
         }
     }
 
-    componentDidUpdate() {}
+    stopSpeechRecognition() {
+        swal({
+            title: 'Disable Speech Recognition',
+            html: 'You will deactivate speech recognition for this presentation. You will not be able to turn it back on.',
+            type: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Disable',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            allowOutsideClick: false
+        }).then(() => {
+            this.speechRecognitionDisabled = true;
+            this.recognition.stop();
+            this.forceUpdate();
+        }, () => {});
+    }
 
     sendMessage(event) {
         event.preventDefault();
@@ -927,17 +948,19 @@ class presentationBroadcast extends React.Component {
             }
         }
 
+        let height = window ? window.innerHeight : 961;
+
         return (
           <Grid celled='internally'>
             <Grid.Row>
               <Grid.Column width={13}>
                 <iframe id="slidewikiPresentation" src={this.iframesrc}
-                height={980*0.8 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>{/*TODO Get window height for size*/}
+                height={height*0.8 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
                 {(!this.isInitiator) ? (
                   <Grid columns={1}>
-                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '505px', 'minHeight': '505px', 'height': '505px'}}>{/*TODO calculate heights somehow*/}
+                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.52+'px', 'minHeight': height*0.52+'px', 'height': height*0.52+'px'}}>
                       <h3>Your Questions:</h3>
                       {messages}
                     </Grid.Column>
@@ -955,7 +978,7 @@ class presentationBroadcast extends React.Component {
                     </Grid.Column>
                   </Grid>
                 ) : (
-                  <div id="messageList"><h3>Questions from peers:</h3>{messages}</div>
+                  <div id="messageList"><h3>Questions from Audience:</h3>{messages}</div>
                 )}
               </Grid.Column>
             </Grid.Row>
@@ -969,15 +992,14 @@ class presentationBroadcast extends React.Component {
                     /></p>) : <p>{this.texts.roleText}</p>}
                 </h4>
                 <div id="media" style={{'display': 'none'}}></div>
-                {(!this.isInitiator) ? (
                   <div>
-                    <Label pointing='below'>Transcoded Speaker Voice</Label>
+                    <Label pointing='below'> {this.isInitiator ? 'Your Transcoded Voice' : 'Transcoded Speaker Voice'}</Label>
                     <Input labelPosition='left' type='text' fluid>
                       <Label>Subtitle:</Label>
-                      <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' />
+                      <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...'/>
+                      {this.isInitiator ? (<Button color='red' icon='stop' disabled={this.speechRecognitionDisabled ? true : false} onClick={this.stopSpeechRecognition.bind(this)}/>) : ('')}
                     </Input>
                   </div>
-                ) : ''}
               </Grid.Column>
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
@@ -986,7 +1008,7 @@ class presentationBroadcast extends React.Component {
                   {(this.isInitiator) ? (
                     <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
                   ) : (
-                    <Button content='Resume playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                    <Button content='Resume to presenter progress' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                   )}
                 </Button.Group>
               </Grid.Column>
