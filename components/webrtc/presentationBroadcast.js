@@ -4,12 +4,9 @@ import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
 import ISO6391 from 'iso-639-1';
 import { Grid, Message, Comment, Input, Button, Form, Divider, Label, Popup } from 'semantic-ui-react';
+import {Microservices} from '../../configs/microservices';
 
 class presentationBroadcast extends React.Component {
-
-  /*
-  * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
-  */
 
     constructor(props) {
         super(props);
@@ -47,15 +44,22 @@ class presentationBroadcast extends React.Component {
 
         let that = this;
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
-            console.log('Navigating away because of missing paramenters in URL');//TODO Maybe notify users in a more friendly way
-            that.context.executeAction(navigateAction, {'url': '/'});
+            console.log('Navigating away because of missing paramenters in URL');
+            swal({
+                title: 'Something went terribly wrong',
+                html: 'It seems like your URL isn\'t correct. Please report this as a bug. You will now be redirected to the homepage.',
+                type: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Okay',
+                allowOutsideClick: false
+            }).then(() => {that.context.executeAction(navigateAction, {'url': '/'});});
             return;
         }
         //Remove menus as they shouldn't appear
         $('.menu:first').remove();
         $('.footer:first').remove();
 
-        that.socket = io('https://stunservice.experimental.slidewiki.org');//TODO remove hardcoded URL
+        that.socket = io(Microservices.stun.uri);
 
         that.socket.emit('create or join', that.room);
         console.log('Attempted to create or join room', that.room);
@@ -302,8 +306,7 @@ class presentationBroadcast extends React.Component {
 
         function onDataChannelCreated(channel, peerID) { //called by peer and by initiatior
             console.log('Created data channel: ', channel, 'for ', peerID);
-            /*NOTE
-             * Browsers do currenty not support events that indicate whether ICE exchange has finished or not and the RPC connection has been fully established. Thus, I'm waiting for latest event onDataChannelCreated in order to close the that.socket after some time. This should be relativly safe.
+            /*NOTE Browsers do currenty not support events that indicate whether ICE exchange has finished or not and the RPC connection has been fully established. Thus, I'm waiting for latest event onDataChannelCreated in order to close the that.socket after some time. This should be relativly safe.
              */
             if (!that.isInitiator && that.socket.disconnected === false) {
                 setTimeout(() => { that.socket.close(); }, 10000); //close that.socket after 10 secs, TODO maybe come up with a better solution
@@ -948,7 +951,7 @@ class presentationBroadcast extends React.Component {
             }
         }
 
-        let height = window ? window.innerHeight : 961;
+        let height = typeof window !== 'undefined' ? window.innerHeight : 961;
 
         return (
           <Grid celled='internally'>

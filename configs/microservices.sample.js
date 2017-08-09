@@ -67,6 +67,9 @@ export default {
         },
         'tag': {
             uri : 'https://tagservice.experimental.slidewiki.org'
+        },
+        'stun' : {
+            uri : 'https://stunservice.experimental.slidewiki.org'
         }
     }
 };
