@@ -156,7 +156,8 @@ export default function loadDeck(context, payload, done) {
             }
         },
         (callback) => {
-            if(runNonContentActions){
+            //if user is logged is and root deck changed load forks of this deck owned by the user
+            if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
                 context.executeAction(loadForks, {
                     selector: payload.params,
                     user: context.getStore(UserProfileStore).getState().userid
