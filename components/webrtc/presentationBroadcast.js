@@ -2,6 +2,7 @@ import React from 'react';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
+import ISO6391 from 'iso-639-1';
 import { Grid, Message, Comment, Input, Button, Form, Divider, Label, Popup } from 'semantic-ui-react';
 
 class presentationBroadcast extends React.Component {
@@ -12,7 +13,7 @@ class presentationBroadcast extends React.Component {
 
     constructor(props) {
         super(props);
-        this.texts = {roleText: '', peerCountText: '', peerCount: ''};
+        this.texts = {roleText: '', peerCountText: ''};
         this.textInputLength = 300;
         this.isInitiator = false;
         this.localStream = undefined;
@@ -68,7 +69,6 @@ class presentationBroadcast extends React.Component {
             that.isInitiator = true;
             that.texts.roleText = 'You are the presenter. Other poeple will hear your voice and reflect your presentation progress. ';
             that.texts.peerCountText = 'People currently listening: ';
-            that.texts.peerCount = 0;
             that.forceUpdate();
             setmyID();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
@@ -254,7 +254,6 @@ class presentationBroadcast extends React.Component {
 
                 console.log('Created RTCPeerConnnection');
                 if (that.isInitiator){
-                    that.texts.peerCount = Object.keys(that.pcs).length;
                     that.forceUpdate();
                 }
             } catch (e) {
@@ -294,7 +293,6 @@ class presentationBroadcast extends React.Component {
                 });
                 that.texts.roleText = 'This presentation has ended. Feel free to look at the deck as long as you want.';
                 that.texts.peerCountText = '';
-                that.texts.peerCount = '';
                 that.forceUpdate();
                 handleRemoteHangup(that.presenterID);
             }
@@ -414,7 +412,6 @@ class presentationBroadcast extends React.Component {
                 console.log('Error when deleteing RTC connections', e);
             } finally {
                 if (that.isInitiator){
-                    that.texts.peerCount = Object.keys(that.pcs).length;
                     that.forceUpdate();
                 }
             }
@@ -704,16 +701,30 @@ class presentationBroadcast extends React.Component {
                     }
                 };
 
+                let tmp = {};
+                ISO6391.getAllCodes().forEach((code) => {
+                    tmp[''+code] = ISO6391.getName(code);
+                });
+
                 swal({
                     title: 'Speech recognition enabled',
-                    html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p>',
+                    html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p><p>Please select the language in which you will talk or disable the feature.</p>',
                     type: 'info',
+                    input: 'select',
+                    inputValue: recognition.lang,
+                    inputOptions: tmp,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Okay',
                     cancelButtonText: 'Disable',
-                    allowOutsideClick: false
+                    allowOutsideClick: false,
+                    preConfirm: function (lang) {
+                        return new Promise((resolve, reject) => {
+                            recognition.lang = lang;
+                            resolve();
+                        });
+                    }
                 }).then(() => {}, (dismiss) => {
                     if (dismiss === 'cancel') {
                         disabled = true;
@@ -816,6 +827,7 @@ class presentationBroadcast extends React.Component {
             this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
             this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
             $('#messageToSend:first').val('');
+            this.updateCharCount();
         }
         return false;
     }
@@ -885,18 +897,24 @@ class presentationBroadcast extends React.Component {
         let messages = [];
         for(let i in this.commentList) {
             messages.push(
-              <Message floating key={i}>
-                <Comment.Group>
-                  <Comment>
-                    <Comment.Content>
-                      <Comment.Author>{this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                      <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
-                        {this.commentList[i].message}
-                      </Comment.Text>
-                    </Comment.Content>
-                  </Comment>
-                </Comment.Group>
-              </Message>);
+              <Popup key={i}
+                trigger={
+                  <Message floating>
+                    <Comment.Group>
+                      <Comment>
+                        <Comment.Content>
+                          <Comment.Author>{this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
+                            {this.commentList[i].message}
+                          </Comment.Text>
+                        </Comment.Content>
+                      </Comment>
+                    </Comment.Group>
+                  </Message>
+                }
+                content={this.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
+                position='bottom right'
+              />);
         }
 
         let peernames = new Set();
@@ -904,6 +922,8 @@ class presentationBroadcast extends React.Component {
             for (let k in this.pcs) {
                 if (this.pcs[k].username)
                     peernames.add(this.pcs[k].username);
+                else
+                    peernames.add('Anonymous Rabbits');
             }
         }
 
@@ -917,7 +937,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
                 {(!this.isInitiator) ? (
                   <Grid columns={1}>
-                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '500px', 'minHeight': '465px', 'height': '465px'}}>{/*TODO calculate heights somehow*/}
+                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': '505px', 'minHeight': '505px', 'height': '505px'}}>{/*TODO calculate heights somehow*/}
                       <h3>Your Questions:</h3>
                       {messages}
                     </Grid.Column>
@@ -935,19 +955,18 @@ class presentationBroadcast extends React.Component {
                     </Grid.Column>
                   </Grid>
                 ) : (
-                  <div id="messageList"><h3>Messages from peers:</h3>{messages}</div>
+                  <div id="messageList"><h3>Questions from peers:</h3>{messages}</div>
                 )}
               </Grid.Column>
             </Grid.Row>
 
             <Grid.Row>
               <Grid.Column width={13}>
-                <h4>{/* TODO remove line break */}
-                  {this.isInitiator ? (<div>{this.texts.roleText}{this.texts.peerCountText}<Popup
-                      trigger={<div>{this.texts.peerCount}</div>}
+                <h4>
+                  {this.isInitiator ? (<p>{this.texts.roleText}{this.texts.peerCountText}<Popup
+                      trigger={<span>{Object.keys(this.pcs).length}</span>}
                       content={Array.from(peernames).reduce((a, pn) => {return a + pn + ', ';}, '')}
-                      basic
-                    /></div>) : <div>{this.texts.roleText}{this.texts.peerCountText}{this.texts.peerCount}</div>}
+                    /></p>) : <p>{this.texts.roleText}</p>}
                 </h4>
                 <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
@@ -962,12 +981,12 @@ class presentationBroadcast extends React.Component {
               </Grid.Column>
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
-                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add Comment to Deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
-                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Correct current Slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Edit current slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
                   {(this.isInitiator) ? (
                     <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
                   ) : (
-                    <Button content='Resume Playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                    <Button content='Resume playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                   )}
                 </Button.Group>
               </Grid.Column>
