@@ -7,7 +7,6 @@ import { Grid, Message, Comment, Input, Button, Form, Divider, Label } from 'sem
 class presentationBroadcast extends React.Component {
 
   /*
-  * TODO add share button that copies the URL into the clipboard (down right corner)
   * TODO Use Username instead of "Peer X" if available
   * TODO Add some explaining texts for peers with swal or ToolTips(like that it's not a chat, ...)
   * TODO this.props.currentRoute.query.presentation is not filled correctly if a "#" is in the path
@@ -314,6 +313,16 @@ class presentationBroadcast extends React.Component {
                 console.log('Data Channel opened');
                 if (that.isInitiator)
                     sendRTCMessage('gotoslide', document.getElementById('slidewikiPresentation').contentWindow.location.href, peerID);// using href instead of currentSlide because it could be bad initialized
+                else {
+                    swal({
+                        title: 'You\'ve joined a live presentation',
+                        html: 'Nice to see you here! You will hear the presenters voice and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.',
+                        type: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Okay',
+                        allowOutsideClick: false
+                    });
+                }
             };
 
             channel.onmessage = handleMessage.bind(that, channel);
@@ -554,11 +563,6 @@ class presentationBroadcast extends React.Component {
 
         //******** SlideWiki specific methods ********
 
-        $('#resumeRemoteControl').click(() => {
-            that.paused = false;
-            changeSlide(that.lastRemoteSlide);
-        });
-
         function toggleBlackScreen() {//TODO won't unpause the screen - I have no idea why...
             let frame = document.getElementById('slidewikiPresentation').contentDocument;
             let newEvent = new Event('keydown', {keyCode: 58});
@@ -617,6 +621,7 @@ class presentationBroadcast extends React.Component {
                 that.forceUpdate();
             }
         }
+        that.changeSlide = changeSlide;
 
         function activateSpeechRecognition() {
             let recognition;
@@ -711,12 +716,43 @@ class presentationBroadcast extends React.Component {
                 }).then(() => {
                     swal({
                         title: 'Invite others people',
-                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong></p>',//TODO add a copy to clipboard button
+                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
                         type: 'info',
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Okay',
-                        allowOutsideClick: false
-                    });
+                        confirmButtonText: 'Copy to Clipboard',
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        allowOutsideClick: false,
+                        preConfirm: function () {
+                            return new Promise((resolve, reject) => {
+                                let toCopy = document.createElement('input');
+                                toCopy.style.position = 'fixed';
+                                toCopy.style.top = 0;
+                                toCopy.style.left = 0;
+                                toCopy.style.width = '2em';
+                                toCopy.style.height = '2em';
+                                toCopy.style.padding = 0;
+                                toCopy.style.border = 'none';
+                                toCopy.style.outline = 'none';
+                                toCopy.style.boxShadow = 'none';
+                                toCopy.style.background = 'transparent';
+                                toCopy.value = window.location.href;
+                                document.getElementById('clipboardtarget').appendChild(toCopy);
+                                toCopy.value = window.location.href;
+                                toCopy.select();
+
+                                try {
+                                    let successful = document.execCommand('copy');
+                                    if(!successful)
+                                        throw 'Unable to copy';
+                                    resolve('Copied to clipboard');
+                                } catch (err) {
+                                    console.log('Oops, unable to copy');
+                                    reject('Oops, unable to copy');
+                                }
+                            });
+                        }
+                    }).then(() => {}, () => {});
                 });
 
             } else {
@@ -776,6 +812,55 @@ class presentationBroadcast extends React.Component {
         $('#textCharCount').text($('#messageToSend').val().length + '/' + this.textInputLength);
     }
 
+    resumePlayback(){
+        this.paused = false;
+        this.changeSlide(this.lastRemoteSlide);
+    }
+
+    copyURLToClipboard() {
+        let toCopy = document.createElement('input');
+        toCopy.style.position = 'fixed';
+        toCopy.style.top = 0;
+        toCopy.style.left = 0;
+        toCopy.style.width = '2em';
+        toCopy.style.height = '2em';
+        toCopy.style.padding = 0;
+        toCopy.style.border = 'none';
+        toCopy.style.outline = 'none';
+        toCopy.style.boxShadow = 'none';
+        toCopy.style.background = 'transparent';
+        toCopy.value = window.location.href;
+        document.body.appendChild(toCopy);
+        toCopy.value = window.location.href;
+        toCopy.select();
+
+        try {
+            let successful = document.execCommand('copy');
+            if(!successful)
+                throw 'Unable to copy';
+            else{
+                swal({
+                    title: 'URL copied to clipboard',
+                    type: 'success',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timer: 1500
+                }).then(() => {}, () => {});
+            }
+        } catch (err) {
+            console.log('Oops, unable to copy');
+            swal({
+                title: 'Can\'t copy URL to clipboard',
+                text: 'Please select the URL in your browser and share it manually.',
+                type: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Check',
+                allowOutsideClick: false
+            });
+        }
+        document.body.removeChild(toCopy);
+    }
+
     render() {
         let messages = [];
         for(let i in this.commentList) {
@@ -814,7 +899,7 @@ class presentationBroadcast extends React.Component {
                         <div>
                           <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
                           <Form.Field>
-                            <Button content='Send' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
+                            <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
                             <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
                           </Form.Field>
                         </div>
@@ -833,16 +918,23 @@ class presentationBroadcast extends React.Component {
                 <div id="media" style={{'display': 'none'}}></div>
                 {(!this.isInitiator) ? (
                   <div>
-                    <b>Speech recognition:</b>{/*TODO Find a better heading and add a boarder to the input*/}
-                    <Input fluid transparent id="input_subtitle" />
+                    <Label pointing='below'>Transcoded Speaker Voice</Label>
+                    <Input labelPosition='left' type='text' fluid>
+                      <Label>Subtitle:</Label>
+                      <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' />
+                    </Input>
                   </div>
                 ) : ''}
               </Grid.Column>
               <Grid.Column width={3}>
-                <Button.Group vertical>
+                <Button.Group vertical fluid>
                   <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add Comment to Deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
                   <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Correct current Slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
-                  <Button id="resumeRemoteControl" content='Resume' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red'/>
+                  {(this.isInitiator) ? (
+                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
+                  ) : (
+                    <Button content='Resume Playback' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                  )}
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>
