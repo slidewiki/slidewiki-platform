@@ -899,7 +899,7 @@ class presentationBroadcast extends React.Component {
                   <Comment>
                     <Comment.Content>
                       <Comment.Author>{this.commentList[i].peer.toString() === 'Me' ? '' : 'Peer - '} {this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                      <Comment.Text>
+                      <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
                         {this.commentList[i].message}
                       </Comment.Text>
                     </Comment.Content>
