@@ -38,7 +38,6 @@ class presentationBroadcast extends React.Component {
         this.currentSlide = this.iframesrc + '';
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
         this.subtitle = '';//used for speech recognition results
-        this.isUsernamePublished = true;
     }
 
     componentDidMount() {
@@ -108,7 +107,6 @@ class presentationBroadcast extends React.Component {
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             gotStream('');//NOTE Skip requesting streams for the listeners, as they do not need them
 
-            that.isUsernamePublished = false;
             that.forceUpdate();
         });
 
@@ -316,6 +314,7 @@ class presentationBroadcast extends React.Component {
                 if (that.isInitiator)
                     sendRTCMessage('gotoslide', document.getElementById('slidewikiPresentation').contentWindow.location.href, peerID);// using href instead of currentSlide because it could be bad initialized
                 else {
+                    that.sendUsername();
                     swal({
                         title: 'You\'ve joined a live presentation',
                         html: 'Nice to see you here! You will hear the presenters voice and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.',
@@ -779,7 +778,7 @@ class presentationBroadcast extends React.Component {
             let currentTime = new Date().getTime();
             that.commentList[currentTime] = {};
             if(!fromMyself)
-                that.commentList[currentTime].peer = that.pcs[peerID].username || Object.keys(that.pcs).indexOf(data.sender);
+                that.commentList[currentTime].peer = 'Peer ' + (that.pcs[peerID].username || Object.keys(that.pcs).indexOf(data.sender));
             else
                 that.commentList[currentTime].peer = 'Me';
             that.commentList[currentTime].message = data.data;
@@ -821,18 +820,12 @@ class presentationBroadcast extends React.Component {
         return false;
     }
 
-    sendUsername(event) {
-        event.preventDefault();
-
+    sendUsername() {
         let username = this.context.getUser().username;
         console.log('sendUsername got called - username: '+username);
         if (username !== undefined && username !== '' && username !== null) {
             this.sendRTCMessage('newUsername', username, this.presenterID);
         }
-        this.isUsernamePublished = true;
-        this.forceUpdate();
-
-        return false;
     }
 
     updateCharCount(){
@@ -896,7 +889,7 @@ class presentationBroadcast extends React.Component {
                 <Comment.Group>
                   <Comment>
                     <Comment.Content>
-                      <Comment.Author>{this.commentList[i].peer.toString() === 'Me' ? '' : 'Peer - '} {this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                      <Comment.Author>{this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
                       <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
                         {this.commentList[i].message}
                       </Comment.Text>
@@ -937,11 +930,6 @@ class presentationBroadcast extends React.Component {
                             <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
                             <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
                           </Form.Field>
-                          {(!this.isUsernamePublished && this.context.getUser() && this.context.getUser().username) ? (
-                            <Form.Field>
-                              <Button content='Publish username' labelPosition='right' icon='send' primary onClick={this.sendUsername.bind(this)}/>
-                            </Form.Field>
-                          ) : ''}
                         </div>
                       </Form>
                     </Grid.Column>
