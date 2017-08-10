@@ -34,6 +34,17 @@ class LoginModal extends React.Component {
         this.signin = this.signin.bind(this);
         this.provider = '';
         this.isLoading = false;
+
+        this.errorMessages = defineMessages({
+            error404: {
+                id: 'userSignIn.errormessage.notFound',
+                defaultMessage: 'The credentials are unknown. Please retry with another input.'
+            },
+            error423: {
+                id: 'userSignIn.errormessage.deactivatedOrUnactivated',
+                defaultMessage: 'Your user account either have to be activated via the activation link in your email or is deactivated in general.'
+            }
+        });
     }
 
     isModalShown() {
@@ -60,7 +71,11 @@ class LoginModal extends React.Component {
         } else {
             this.context.executeAction(userSignIn, {
                 email: this.refs.email1.value,
-                password: hashPassword(this.refs.password1.value)
+                password: hashPassword(this.refs.password1.value),
+                errorMessages: {
+                    error404: this.context.intl.formatMessage(this.errorMessages.error404),
+                    error423: this.context.intl.formatMessage(this.errorMessages.error423)
+                }
             });
 
             this.isLoading = true;
