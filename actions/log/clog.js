@@ -1,4 +1,7 @@
 exports.error = function(context, message='') {
+    if (!isAllowedLogLevel('error'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -14,7 +17,10 @@ exports.error = function(context, message='') {
     return;
 };
 
-exports.warning = function(context, msg='') {
+exports.warning = function(context, message='') {
+    if (!isAllowedLogLevel('warning'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -31,6 +37,9 @@ exports.warning = function(context, msg='') {
 };
 
 exports.info = function(context, message='') {
+    if (!isAllowedLogLevel('info'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -46,7 +55,10 @@ exports.info = function(context, message='') {
     return;
 };
 
-exports.crit = function(context, msg='') {
+exports.crit = function(context, message='') {
+    if (!isAllowedLogLevel('crit'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -62,7 +74,10 @@ exports.crit = function(context, msg='') {
     return;
 };
 
-exports.debug = function(context, msg='') {
+exports.debug = function(context, message='') {
+    if (!isAllowedLogLevel('debug'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -78,7 +93,10 @@ exports.debug = function(context, msg='') {
     return;
 };
 
-exports.notice = function(context, msg='') {
+exports.notice = function(context, message='') {
+    if (!isAllowedLogLevel('notice'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -94,7 +112,10 @@ exports.notice = function(context, msg='') {
     return;
 };
 
-exports.emerg = function(context, msg='') {
+exports.emerg = function(context, message='') {
+    if (!isAllowedLogLevel('emerg'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -110,7 +131,10 @@ exports.emerg = function(context, msg='') {
     return;
 };
 
-exports.alert = function(context, msg='') {
+exports.alert = function(context, message='') {
+    if (!isAllowedLogLevel('alert'))
+        return;
+
     let logFields = {};
     logFields.Actions = context.stack.slice();
     if (context.getUser() !== undefined)
@@ -125,3 +149,9 @@ exports.alert = function(context, msg='') {
     });
     return;
 };
+
+function isAllowedLogLevel(level) {
+    const allLevel = ['emerg', 'alert', 'crit', 'err', 'warning', 'notice', 'info', 'debug'];
+    const allowed = require('../../configs/general.js').loglevel;
+    return allLevel.indexOf(level) <= allLevel.indexOf(allowed);
+}
