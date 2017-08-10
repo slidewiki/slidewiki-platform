@@ -2,6 +2,7 @@ const log = require('../log/clog');
 
 export default function resetPassword(context, payload, done) {
     log.info(context);
+    context.dispatch('RESET_PASSWORD_START', {});
     context.service.update('user.resetPassword', payload, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             switch (err.statusCode) {
