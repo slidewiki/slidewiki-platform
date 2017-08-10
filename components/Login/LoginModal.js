@@ -242,15 +242,25 @@ class LoginModal extends React.Component {
         if ( (data.email === undefined || data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1 || data.email.length < 5) ) {
             //show hint
             const provider = this.getProviderName();
+            let messages = defineMessages({
+                swal_text:{
+                    id: 'LoginModal.text.incompleteProviderData',
+                    defaultMessage: 'The data from {provider} was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.'
+                },
+            });
             swal({
                 title: this.context.intl.formatMessage({
                     id: 'LoginModal.title.error',
                     defaultMessage: 'Error',
                 }),
-                //TODO
-                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again at SlideWiki.',
+                text: this.context.intl.formatMessage(messages.swal_text, {
+                    provider: provider
+                }),
                 type: 'error',
-                confirmButtonText: 'Confirm',
+                confirmButtonText: this.context.intl.formatMessage({
+                    id: 'LoginModal.button.confirm',
+                    defaultMessage: 'Confirm',
+                }),
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             }).then().catch();
