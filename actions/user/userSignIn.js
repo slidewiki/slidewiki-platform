@@ -7,7 +7,7 @@ export default function userSignIn(context, payload, done) {
     log.info(context);
     context.service.read('user.signin', {email: payload.email, password: payload.password}, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
-            console.log(err, err.statusCode, err.message);
+            // console.log(err, err.statusCode, err.message);
             switch (err.statusCode) {
                 case 404:
                     context.dispatch('SIGNIN_FAILURE', {statusCode: 404, message: payload.errorMessages.error404});
