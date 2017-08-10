@@ -51,7 +51,8 @@ class presentationBroadcast extends React.Component {
                 type: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then(() => {that.context.executeAction(navigateAction, {'url': '/'});});
             return;
         }
@@ -92,7 +93,8 @@ class presentationBroadcast extends React.Component {
                 type: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Check',
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then(() => { activateSpeechRecognition(); $('body>a#atlwdg-trigger').remove();});
         });
 
@@ -125,7 +127,8 @@ class presentationBroadcast extends React.Component {
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                allowEscapeKey: false
             });
         });
 
@@ -271,7 +274,8 @@ class presentationBroadcast extends React.Component {
                     type: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Okay',
-                    allowOutsideClick: false
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
                 }).then(() => {
                     cleanup();
                     that.context.executeAction(navigateAction, {'url': '/'});
@@ -295,7 +299,8 @@ class presentationBroadcast extends React.Component {
                     type: 'warning',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Check',
-                    allowOutsideClick: false
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
                 });
                 that.texts.roleText = 'This presentation has ended. Feel free to look at the deck as long as you want.';
                 that.texts.peerCountText = '';
@@ -324,7 +329,8 @@ class presentationBroadcast extends React.Component {
                         type: 'info',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Okay',
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
                     }).then(() => {$('body>a#atlwdg-trigger').remove();});
                 }
             };
@@ -460,6 +466,15 @@ class presentationBroadcast extends React.Component {
                     break;
                 case 'newUsername':
                     handleNewUsername(data.data, peerID);
+                    break;
+                case 'completeTask':
+                    showCompleteTaskModal();
+                    break;
+                case 'taskCompleted':
+                    checkUser(data.sender);
+                    break;
+                case 'closeAndProceed':
+                    closeModal();
                     break;
                 default:
 
@@ -686,6 +701,7 @@ class presentationBroadcast extends React.Component {
 
                 that.recognition.onerror = function (e) {
                     if(e.type === 'error' && e.error !== 'no-speech'){
+                        console.log('SpeechRecognition error: ', e);
                         that.speechRecognitionDisabled = true;
                         that.recognition.stop();
                         swal({
@@ -694,7 +710,8 @@ class presentationBroadcast extends React.Component {
                             type: 'error',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Okay',
-                            allowOutsideClick: false
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
                         });
                         that.forceUpdate();
                     } else
@@ -728,6 +745,7 @@ class presentationBroadcast extends React.Component {
                     confirmButtonText: 'Okay',
                     cancelButtonText: 'Disable',
                     allowOutsideClick: false,
+                    allowEscapeKey: false,
                     preConfirm: function (lang) {
                         return new Promise((resolve, reject) => {
                             that.recognition.lang = lang;
@@ -742,7 +760,7 @@ class presentationBroadcast extends React.Component {
                     }
                 }).then(() => {
                     swal({
-                        title: 'Invite others people',
+                        title: 'Invite other people',
                         html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
                         type: 'info',
                         confirmButtonColor: '#3085d6',
@@ -750,6 +768,7 @@ class presentationBroadcast extends React.Component {
                         showCancelButton: true,
                         cancelButtonColor: '#d33',
                         allowOutsideClick: false,
+                        allowEscapeKey: false,
                         preConfirm: function () {
                             return new Promise((resolve, reject) => {
                                 let toCopy = document.createElement('input');
@@ -789,7 +808,8 @@ class presentationBroadcast extends React.Component {
                     type: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Okay',
-                    allowOutsideClick: false
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
                 });
             }
         }
@@ -816,6 +836,28 @@ class presentationBroadcast extends React.Component {
         function handleNewUsername(username, peerID) {
             that.pcs[peerID].username = username;
             that.forceUpdate();
+        }
+
+        function showCompleteTaskModal() {
+            swal({
+                title: 'Complete the given Task',
+                text: 'The presenter asked you to complete a task. As soon as you have completed the task, click on "Completed" and wait for the presenter to proceed.',
+                type: 'info',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Completed',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then(() => {
+                sendRTCMessage('taskCompleted',undefined, that.presenterID);
+            });
+        }
+
+        function checkUser(id) {
+            $('input#'+id).prop('checked', true);
+        }
+
+        function closeModal() {
+            swal.closeModal();
         }
     }
 
@@ -857,11 +899,32 @@ class presentationBroadcast extends React.Component {
     }
 
     sendUsername() {
-        let username = this.context.getUser().username;
-        console.log('sendUsername got called - username: '+username);
-        if (username !== undefined && username !== '' && username !== null) {
-            this.sendRTCMessage('newUsername', username, this.presenterID);
+        try {
+            if (!isEmpty(this.context.getUser().username))
+                this.sendRTCMessage('newUsername', username, this.presenterID);
+        } catch (e) {
+            console.log('sendUsername failed: ' + e);
         }
+    }
+
+    audienceCompleteTask (event) {
+        let toInsert = Object.keys(this.pcs).map((key) => {
+            let username = this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbit';
+            return '<div><input type="checkbox" disabled id="' + key + '"> ' + username + '</input><br/></div>';
+        }).reduce((a,b) => a + b, '');
+        toInsert = (toInsert.length > 0) ? toInsert : '<p>There is currently no audience</p>';
+        swal({
+            title: 'Audience Progress',
+            html: toInsert,
+            type: 'info',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'End Task',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then(() => {
+            this.sendRTCMessage('closeAndProceed');
+        });
+        this.sendRTCMessage('completeTask');
     }
 
     updateCharCount(){
@@ -941,15 +1004,10 @@ class presentationBroadcast extends React.Component {
               />);
         }
 
-        let peernames = new Set();
-        if (this.isInitiator && this.pcs) {
-            for (let k in this.pcs) {
-                if (this.pcs[k].username)
-                    peernames.add(this.pcs[k].username);
-                else
-                    peernames.add('Anonymous Rabbits');
-            }
-        }
+        let peernames = new Set(Object.keys(this.pcs).map((key) => {
+            return this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbits';
+        }));
+        peernames = Array.from(peernames).reduce((a,b) => a+', '+b, '').substring(1);
 
         let height = typeof window !== 'undefined' ? window.innerHeight : 961;
 
@@ -991,7 +1049,7 @@ class presentationBroadcast extends React.Component {
                 <h4>
                   {this.isInitiator ? (<p>{this.texts.roleText}{this.texts.peerCountText}<Popup
                       trigger={<span>{Object.keys(this.pcs).length}</span>}
-                      content={Array.from(peernames).reduce((a, pn) => {return a + pn + ', ';}, '')}
+                      content={peernames}
                     /></p>) : <p>{this.texts.roleText}</p>}
                 </h4>
                 <div id="media" style={{'display': 'none'}}></div>
@@ -1006,8 +1064,9 @@ class presentationBroadcast extends React.Component {
               </Grid.Column>
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
-                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}
-                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Edit current slide' labelPosition='right' icon='pencil' primary/></a>{/*TODO open up the right functionality*/}
+                  {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
+                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Edit current slide' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
+                  <Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>
                   {(this.isInitiator) ? (
                     <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
                   ) : (
