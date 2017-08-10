@@ -5,6 +5,7 @@ import ContentStore from '../../../../stores/ContentStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
+import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 
 class DownloadButton extends React.Component{
     constructor(props) {
@@ -56,6 +57,7 @@ class DownloadButton extends React.Component{
             content_kind: 'deck'
         };
         this.context.executeAction(addActivity, {activity: activity});
+        context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
     handleDownloadSelection(event,data){
 
