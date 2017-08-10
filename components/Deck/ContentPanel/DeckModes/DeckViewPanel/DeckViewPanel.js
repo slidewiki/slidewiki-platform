@@ -105,7 +105,7 @@ class DeckViewPanel extends React.Component {
                     </div>
                     </div>
                     </div>
-                    <div className="column">
+                    <div className="right aligned column">
 
                             <div className="ui hidden divider"></div>
                             <div className="ui large labels">
