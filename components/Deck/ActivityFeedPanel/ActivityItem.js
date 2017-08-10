@@ -202,6 +202,12 @@ class ActivityItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'fork':
+
+
+                // <user> deleted a slide in this deck (in deck <...>)
+
+
             default:
                 IconNode = (<i className="ui large warning icon"></i>);
                 SummaryNode = (
