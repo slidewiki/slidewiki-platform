@@ -39,11 +39,11 @@ class AddReply extends React.Component {
         return (
           <form className="ui form reply">
               <div className="ui seven wide required field">
-                  <label>Reply title</label>
-                  <input type="text" ref="replytitle" id="replytitle" name="replytitle" defaultValue={replyTitle} required/>
+                  <label htmlFor="replytitle">Reply title</label>
+                  <input type="text" ref="replytitle" id="replytitle" name="replytitle" defaultValue={replyTitle} aria-required="true" required/>
               </div>
               <div className="ui field">
-                  <label>Reply text</label>
+                  <label htmlFor="replytext">Reply text</label>
                   <textarea ref="replytext" id="replytext" name="replytext" style={{minHeight: '6em', height: '6em'}} placeholder="Text" autoFocus></textarea>
               </div>
               <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
