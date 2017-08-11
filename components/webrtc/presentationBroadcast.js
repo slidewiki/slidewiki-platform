@@ -929,7 +929,7 @@ class presentationBroadcast extends React.Component {
 
     sendUsername() {
         if (this.context && this.context.getUser() && this.context.getUser().username)
-            this.sendRTCMessage('newUsername', username, this.presenterID);
+            this.sendRTCMessage('newUsername', this.context.getUser().username, this.presenterID);
     }
 
     audienceCompleteTask (event) {
