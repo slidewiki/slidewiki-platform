@@ -96,7 +96,7 @@ class ContentChangeItem extends React.Component {
             const currentRev = parseInt(this.props.selector.sid.split('-')[1]);
             const shouldView = currentRev !== change.value.ref.revision;
 
-            const canRestore = this.props.permissions.edit && !this.props.permissions.readOnly 
+            const canRestore = this.props.permissions.edit && !this.props.permissions.readOnly
                 && change.oldValue && currentRev !== change.oldValue.ref.revision;
 
             buttons = <Button.Group basic size='tiny' floated='right'>
