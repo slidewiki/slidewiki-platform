@@ -309,7 +309,7 @@ class presentationBroadcast extends React.Component {
                         break;
                     case 'failed':
                         console.warn('The connection has failed');
-                        if(!isInitiator)
+                        if(!that.isInitiator)
                             connectionFailureHandler();
                         else
                             stop(peerID);
