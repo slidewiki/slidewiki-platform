@@ -148,12 +148,20 @@ class presentationBroadcast extends React.Component {
             let message = JSON.stringify({ 'cmd': cmd, 'data': data, sender: that.myID });
             if (receiver) { //send to one peer only
                 console.log('Sending message to peer: ', receiver);
-                that.pcs[receiver].dataChannel.send(message);
+                try {
+                    that.pcs[receiver].dataChannel.send(message);
+                } catch (e){
+                    console.log('SendRTCMessage error: ', e);
+                }
             } else { //broadcast from initiator
                 console.log('Broadcasting message to peers');
                 for (let i in that.pcs) {
                     if (that.pcs[i].dataChannel)
-                        that.pcs[i].dataChannel.send(message);
+                        try {
+                            that.pcs[i].dataChannel.send(message);
+                        } catch (e){
+                            console.log('SendRTCMessage error: ', e);
+                        }
                 }
             }
         }
