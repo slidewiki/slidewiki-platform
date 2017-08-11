@@ -81,7 +81,7 @@ class DefaultHTMLLayout extends React.Component {
                   : ''
                 }
                 <script src="https://stunservice.experimental.slidewiki.org/socket.io/socket.io.js"></script>
-                <script src="https://webrtc.github.io/adapter/adapter-4.2.0.js"></script>
+                <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
                 <script src="/headjs/dist/1.0.0/head.min.js"></script>
                 {/* Adding for dependency loading with reveal.js*/}
                 <script src="/custom_modules/reveal.js/js/reveal.js"></script>

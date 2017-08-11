@@ -59,7 +59,7 @@ class presentationBroadcast extends React.Component {
         that.socket = io(Microservices.webrtc.uri);
 
         that.socket.emit('create or join', that.room);
-        console.log('Attempted to create or join room', that.room);
+        console.log('Attempt to create or join room', that.room);
 
         function setmyID() {
             if (that.myID === undefined)
@@ -98,7 +98,7 @@ class presentationBroadcast extends React.Component {
             // a listener will join the room
             console.log('Another peer made a request to join room ' + room);
             if (that.isInitiator) {
-                console.log('This peer is the initiator of room ' + that.room + '!');
+                // console.log('This peer is the initiator of room ' + that.room + '!');
                 that.socket.emit('ID of presenter', that.room, that.myID);
             }
         });
@@ -129,7 +129,8 @@ class presentationBroadcast extends React.Component {
         });
 
         that.socket.on('ID of presenter', (id) => {
-            console.log('Received ID of presenter: ', id);
+            if(!that.isInitiator)
+                console.log('Received ID of presenter: ', id);
             that.presenterID = id;
         });
 
@@ -137,24 +138,28 @@ class presentationBroadcast extends React.Component {
             setmyID();
         });
 
+        that.socket.on('disconnect', () => {
+            console.info('Closed socket');
+        });
+
         ////////////////////////////////////////////////
 
         function sendMessage(cmd, data = undefined, receiver = undefined) {
-            console.log('Sending message over socket: ', cmd, data, receiver);
+            // console.log('Sending message over socket: ', cmd, data, receiver);
             that.socket.emit('message', { 'cmd': cmd, 'data': data, 'sender': that.myID, 'receiver': receiver }, that.room);
         }
 
         function sendRTCMessage(cmd, data = undefined, receiver = undefined) {
             let message = JSON.stringify({ 'cmd': cmd, 'data': data, sender: that.myID });
             if (receiver) { //send to one peer only
-                console.log('Sending message to peer: ', receiver);
+                // console.log('Sending message to peer: ', receiver);
                 try {
                     that.pcs[receiver].dataChannel.send(message);
                 } catch (e){
                     console.log('SendRTCMessage error: ', e);
                 }
             } else { //broadcast from initiator
-                console.log('Broadcasting message to peers');
+                // console.log('Broadcasting message to peers');
                 for (let i in that.pcs) {
                     if (that.pcs[i].dataChannel)
                         try {
@@ -174,7 +179,7 @@ class presentationBroadcast extends React.Component {
                     start(that.presenterID);
                 }
             } else if (message.receiver === that.myID) { //adressed to me
-                console.log('Recieved message from peer: ', message);
+                // console.log('Recieved message from peer: ', message);
                 if (message.cmd === 'peer wants to connect' && that.isInitiator) { //Everyone recieves this, except for the peer itself, as soon as a peer joins, only from peer
                     start(message.sender);
                 } else if (message.cmd === 'offer' || (message.cmd === 'answer' && that.isInitiator)) { //offer by initiator, answer by peer
@@ -256,6 +261,7 @@ class presentationBroadcast extends React.Component {
                 that.pcs[peerID].RTCconnection.onicecandidate = handleIceCandidate.bind(that, peerID);
                 that.pcs[peerID].RTCconnection.onaddstream = handleRemoteStreamAdded;
                 that.pcs[peerID].RTCconnection.onremovestream = handleRemoteStreamRemoved;
+                that.pcs[peerID].RTCconnection.oniceconnectionstatechange = handleICEConnectionStateChange.bind(that, peerID);
                 if (that.isInitiator) {
                     that.pcs[peerID].dataChannel = that.pcs[peerID].RTCconnection
                         .createDataChannel('messages', {
@@ -288,8 +294,27 @@ class presentationBroadcast extends React.Component {
             }
         }
 
+        function handleICEConnectionStateChange(peerID, event) {
+            if(that.pcs[peerID] && that.pcs[peerID].RTCconnection){
+                switch(that.pcs[peerID].RTCconnection.iceConnectionState) {
+                    case 'connected':
+                        console.log('The connection has been successfully established');
+                        break;
+                    case 'disconnected':
+                        console.warn('The connection has been terminated');
+                        break;
+                    case 'failed':
+                        console.warn('The connection has failed');
+                        break;
+                    case 'closed':
+                        console.warn('The connection has been closed');
+                        break;
+                }
+            }
+        }
+
         function handleDataChannelEvent(peerID, event) { //called by peer
-            console.log('ondatachannel:', event.channel);
+            // console.log('ondatachannel:', event.channel);
             that.pcs[peerID].dataChannel = event.channel;
             that.pcs[peerID].dataChannel.onclose = handleRPCClose; //NOTE dirty workaround as browser are currently not implementing RPC.onconnectionstatechange
             onDataChannelCreated(that.pcs[peerID].dataChannel, peerID);
@@ -314,11 +339,11 @@ class presentationBroadcast extends React.Component {
         }
 
         function onDataChannelCreated(channel, peerID) { //called by peer and by initiatior
-            console.log('Created data channel: ', channel, 'for ', peerID);
+            console.log('Created data channel for ', peerID);
             /*NOTE Browsers do currenty not support events that indicate whether ICE exchange has finished or not and the RPC connection has been fully established. Thus, I'm waiting for latest event onDataChannelCreated in order to close the that.socket after some time. This should be relativly safe.
              */
             if (!that.isInitiator && that.socket.disconnected === false) {
-                setTimeout(() => { that.socket.close(); }, 10000); //close that.socket after 10 secs, TODO maybe come up with a better solution
+                setTimeout(() => that.socket.close(), 10000); //close that.socket after 10 secs, TODO maybe come up with a better solution
             }
 
             channel.onopen = function() {
@@ -442,7 +467,7 @@ class presentationBroadcast extends React.Component {
         }
 
         function handleMessage(channel, peerID, event) {
-            console.log(event.data);
+            // console.log(event.data);
             if (event.data === undefined)
                 return;
             let data = JSON.parse(event.data);
@@ -903,12 +928,8 @@ class presentationBroadcast extends React.Component {
     }
 
     sendUsername() {
-        try {
-            if (!isEmpty(this.context.getUser().username))
-                this.sendRTCMessage('newUsername', username, this.presenterID);
-        } catch (e) {
-            console.log('sendUsername failed: ' + e);
-        }
+        if (this.context && this.context.getUser() && this.context.getUser().username)
+            this.sendRTCMessage('newUsername', username, this.presenterID);
     }
 
     audienceCompleteTask (event) {
