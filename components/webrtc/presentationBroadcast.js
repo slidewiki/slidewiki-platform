@@ -278,20 +278,24 @@ class presentationBroadcast extends React.Component {
             } catch (e) {
                 console.log('Failed to create PeerConnection, exception: ' + e.message);
                 console.log('Cannot create RTCPeerConnection object.');
-                swal({
-                    title: 'An error occured',
-                    html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
-                    type: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Okay',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-                }).then(() => {
-                    cleanup();
-                    that.context.executeAction(navigateAction, {'url': '/'});
-                });
+                connectionFailureHandler();
                 return;
             }
+        }
+
+        function connectionFailureHandler() {
+            swal({
+                title: 'An error occured',
+                html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
+                type: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Okay',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then(() => {
+                cleanup();
+                that.context.executeAction(navigateAction, {'url': '/'});
+            });
         }
 
         function handleICEConnectionStateChange(peerID, event) {
@@ -301,13 +305,17 @@ class presentationBroadcast extends React.Component {
                         console.log('The connection has been successfully established');
                         break;
                     case 'disconnected':
-                        console.warn('The connection has been terminated');
+                        console.log('The connection has been terminated');
                         break;
                     case 'failed':
                         console.warn('The connection has failed');
+                        if(!isInitiator)
+                            connectionFailureHandler();
+                        else
+                            stop(peerID);
                         break;
                     case 'closed':
-                        console.warn('The connection has been closed');
+                        console.log('The connection has been closed');
                         break;
                 }
             }
