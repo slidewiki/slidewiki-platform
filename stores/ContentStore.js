@@ -7,6 +7,7 @@ class ContentStore extends BaseStore {
         this.mode = 'view';
     }
     updateContent(payload) {
+        console.log('updateContent');
         this.selector= {
             'id': payload.params.id,
             'spath': payload.params.spath,
@@ -14,18 +15,19 @@ class ContentStore extends BaseStore {
             'stype': payload.params.stype,
             'page': payload.page,
             'theme': payload.params.theme,
-            'subdeck': this.getCurrentSubdeck()
+            'subdeck': this.getCurrentSubdeck({'id': payload.params.id, 'spath': payload.params.spath, 'stype': payload.params.stype})
         };
         this.mode = payload.params.mode;
         this.emitChange();
     }
     updateSelector(selector) {
+        console.log('updateSelector');
         this.selector.id = selector.id;
         this.selector.spath = selector.spath;
         this.selector.sid = selector.sid;
         this.selector.stype = selector.stype;
         this.selector.theme = selector.theme;
-        this.selector.currentSubDeck = selector.currentSubDeck;
+        this.selector.currentSubDeck = this.getCurrentSubdeck();
         this.emitChange();
     }
     getState() {
@@ -41,20 +43,21 @@ class ContentStore extends BaseStore {
         this.selector = state.selector;
         this.mode = state.mode;
     }
-    getCurrentSubdeck(){
-        let selector = this.selector;
-        console.log('selector', selector);
+    getCurrentSubdeck(selector){
+
+        // console.log('getCurrentSubdeck selector', selector);
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
-        console.log('stype: ', selector.stype);
-        if(selector.spath === ''){
-            return selector.id;
+        // console.log('ContentStore stype: ', selector.stype);
+        if(!selector.spath){
+            // console.log('!selector.spath');
+            return null;
         }
         else if(selector.stype === 'deck' && selector.spath){
-            console.log('spath ', selector.spath);
+            // console.log('ContentStore spath ', selector.spath);
             currentSubDeck = splitSpath[splitSpath.length - 1].split(':')[0];
             // console.log('length: ', currentSubDeck.length);
-            console.log('currentSubDeck: ', currentSubDeck);
+            // console.log('ContentStore currentSubDeck: ', currentSubDeck);
         }
         else if(selector.stype === 'slide' && selector.spath){
             // Since the last one in the list will be the slide ID, we use -2
