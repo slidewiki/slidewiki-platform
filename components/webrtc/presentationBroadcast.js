@@ -248,7 +248,7 @@ class presentationBroadcast extends React.Component {
         function createPeerConnection(peerID) {
             try {
                 that.pcs[peerID] = {};
-                that.pcs[peerID].RTCconnection = new RTCPeerConnection(null);
+                that.pcs[peerID].RTCconnection = new RTCPeerConnection(that.pcConfig);
                 that.pcs[peerID].RTCconnection.onicecandidate = handleIceCandidate.bind(that, peerID);
                 that.pcs[peerID].RTCconnection.onaddstream = handleRemoteStreamAdded;
                 that.pcs[peerID].RTCconnection.onremovestream = handleRemoteStreamRemoved;
