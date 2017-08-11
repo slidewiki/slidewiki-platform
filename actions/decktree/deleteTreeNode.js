@@ -1,4 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import DeckTreeStore from '../../stores/DeckTreeStore';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 
@@ -15,49 +16,36 @@ export default function deleteTreeNode(context, payload, done) {
                 //context.dispatch('DELETE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('DELETE_TREE_NODE_SUCCESS', payload);
-console.log('delpayload', payload);
-console.log('res', res);
 
-                //find parent id
+                //Create a 'delete' activity
+                //find parent deck id
                 let parentId = payload.id;
                 const pathArray = payload.spath.split(';');
                 if (pathArray.length > 1) {
                     const parentDeck = pathArray[pathArray.length - 2];
                     parentId = parentDeck.split(':')[0];
                 }
+                //find parent deck name
+                const flatTree = context.getStore(DeckTreeStore).flatTree;
+                let parentName = '';
+                for (let i=0; i < flatTree.size; i++) {
+                    if (flatTree.get(i).get('type') === 'deck' && flatTree.get(i).get('id') === parentId) {
+                        parentName = flatTree.get(i).get('title');
+                    }
+                }
+
                 let activity = {
                     activity_type: 'delete',
                     user_id: payload.userid,
                     content_id: payload.sid,
                     content_kind: payload.stype,
-
-
-
-                    //content_name:??? - ne mora da se posalje jer ce activityservice da iskopa
-
-
-
                     delete_info: {
-                      parent_id: parentId,
-
-
-
-
-
-                        // parent_name? - kako? mozda moze da se iskopa iz decktreestore? ili da se napravi novi action koji ce da pozove deck service
-
+                        parent_id: parentId,
+                        parent_name: parentName
                     }
                 };
 
-
-
-                //context.executeAction(addActivity, {activity: activity});
-
-
-
-
-
-
+                context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);
         });
