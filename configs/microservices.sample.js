@@ -68,8 +68,12 @@ export default {
         'tag': {
             uri : 'https://tagservice.experimental.slidewiki.org'
         },
-        'stun' : {
-            uri : 'https://stunservice.experimental.slidewiki.org'
+        'webrtc' : {
+            uri : 'https://stunservice.experimental.slidewiki.org',
+            iceServers: [//Firefox complained that more than two STUN servers makes discovery slow
+                {'urls': 'stun:stun.l.google.com:19302'},
+                {'urls': 'stun:stun.schlund.de'},
+            ]
         }
     }
 };

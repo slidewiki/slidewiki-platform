@@ -19,11 +19,7 @@ class presentationBroadcast extends React.Component {
         this.pcs = {}; // {<socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}, <socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}}
         this.turnReady = undefined;
 
-        this.pcConfig = {
-            'iceServers': [{
-                'urls': 'stun:stun.l.google.com:19302' //TODO host own STUN (and TURN?) Server? --> Socket.io is a stun server...What's this needed for?
-            }]
-        };
+        this.pcConfig = {'iceServers': Microservices.webrtc.iceServers};
 
         this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
@@ -60,7 +56,7 @@ class presentationBroadcast extends React.Component {
         $('.menu:first').remove();
         $('.footer:first').remove();
 
-        that.socket = io(Microservices.stun.uri);
+        that.socket = io(Microservices.webrtc.uri);
 
         that.socket.emit('create or join', that.room);
         console.log('Attempted to create or join room', that.room);
