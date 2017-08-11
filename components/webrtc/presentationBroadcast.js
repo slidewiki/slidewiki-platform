@@ -237,7 +237,7 @@ class presentationBroadcast extends React.Component {
                 console.log('creating RTCPeerConnnection for', (that.isInitiator) ? 'initiator' : 'peer');
                 createPeerConnection(peerID);
                 if (that.isInitiator){
-                    that.pcs[peerID].RTCconnection.addStream(that.localStream);
+                    that.localStream.getTracks().forEach((track) => that.pcs[peerID].RTCconnection.addTrack(track, that.localStream));
                     doCall(peerID);
                 }
             }
