@@ -231,12 +231,6 @@ class presentationBroadcast extends React.Component {
             }
         }
 
-        // if (location.hostname !== 'localhost') {
-        //   requestTurn(
-        //     'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-        //   );
-        // }
-
         function start(peerID) {
             if (typeof that.localStream !== 'undefined') {
                 console.log('creating RTCPeerConnnection for', (that.isInitiator) ? 'initiator' : 'peer');
@@ -515,35 +509,6 @@ class presentationBroadcast extends React.Component {
                     break;
                 default:
 
-            }
-        }
-
-        function requestTurn(turnURL) {//NOTE currently not used
-            let turnExists = false;
-            for (let i in that.pcConfig.iceServers) {
-                if (that.pcConfig.iceServers[i].url.substr(0, 5) === 'turn:') {
-                    turnExists = true;
-                    that.turnReady = true;
-                    break;
-                }
-            }
-            if (!turnExists) {
-                console.log('Getting TURN server from ', turnURL);
-                // No TURN server. Get one from computeengineondemand.appspot.com:
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let turnServer = JSON.parse(xhr.responseText);
-                        console.log('Got TURN server: ', turnServer);
-                        that.pcConfig.iceServers.push({
-                            'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
-                            'credential': turnServer.password
-                        });
-                        that.turnReady = true;
-                    }
-                };
-                xhr.open('GET', turnURL, true);
-                xhr.send();
             }
         }
 
