@@ -253,7 +253,7 @@ class presentationBroadcast extends React.Component {
                 that.pcs[peerID] = {};
                 that.pcs[peerID].RTCconnection = new RTCPeerConnection(that.pcConfig);
                 that.pcs[peerID].RTCconnection.onicecandidate = handleIceCandidate.bind(that, peerID);
-                that.pcs[peerID].RTCconnection.onaddstream = handleRemoteStreamAdded;
+                that.pcs[peerID].RTCconnection.ontrack = handleRemoteStreamAdded;
                 that.pcs[peerID].RTCconnection.onremovestream = handleRemoteStreamRemoved;
                 that.pcs[peerID].RTCconnection.oniceconnectionstatechange = handleICEConnectionStateChange.bind(that, peerID);
                 if (that.isInitiator) {
@@ -386,7 +386,7 @@ class presentationBroadcast extends React.Component {
             if (that.isInitiator === false) {
                 $('#media').append('<audio class="remoteAudio" autoplay></audio>');
                 let remoteAudios = $('.remoteAudio');
-                remoteAudios[remoteAudios.length - 1].srcObject = event.stream;
+                remoteAudios[remoteAudios.length - 1].srcObject = event.streams[0];
             }
         }
 
