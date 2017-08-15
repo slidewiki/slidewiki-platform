@@ -20,20 +20,10 @@ export default function deleteTreeNode(context, payload, done) {
             parentId = parentDeck.split(':')[0];
         }
         //find parent deck name and deleted name
-        const flatTree = context.getStore(DeckTreeStore).flatTree;
-        let parentName = '';
-        let deletedName = '';
-        for (let i=0; i < flatTree.size; i++) {
-            if (flatTree.get(i).get('type') === 'deck' && flatTree.get(i).get('id') === parentId) {
-                parentName = flatTree.get(i).get('title');
-            }
-            if (flatTree.get(i).get('type') === payload.stype && flatTree.get(i).get('id') === payload.sid) {
-                deletedName = flatTree.get(i).get('title');
-            }
-        }
+        const deckTree = context.getStore(DeckTreeStore).deckTree;
         payload.parentId = parentId;
-        payload.parentName = parentName;
-        payload.deletedName = deletedName;
+        payload.parentName = getTitle(deckTree, 'deck', parentId);
+        payload.deletedName = getTitle(deckTree, payload.stype, payload.sid);
 
         context.service.delete('decktree.node', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
@@ -56,11 +46,24 @@ export default function deleteTreeNode(context, payload, done) {
                         content_name: payload.deletedName
                     }
                 };
-                console.log(activity);
 
                 context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);
         });
     }
+}
+
+//find node title
+function getTitle(deckTree, type, id) {
+    let title = '';
+    if (deckTree.get('type') === type && deckTree.get('id') === id) {
+        title = deckTree.get('title');
+    } else if (deckTree.get('type') === 'deck') {
+        deckTree.get('children').forEach((item, index) => {
+            title = getTitle(item, type, id);
+        });
+    }
+
+    return title;
 }
