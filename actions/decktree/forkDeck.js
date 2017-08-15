@@ -58,7 +58,10 @@ export default function forkDeck(context, payload, done) {
                     activity_type: 'fork',
                     user_id: String(userid),
                     content_id: selector.id,
-                    content_kind: 'deck'
+                    content_kind: 'deck',
+                    fork_info: {
+                        content_id: newId
+                    }
                 };
                 context.executeAction(addActivity, {activity: activity});
             }

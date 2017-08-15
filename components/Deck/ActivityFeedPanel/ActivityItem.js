@@ -192,11 +192,12 @@ class ActivityItem extends React.Component {
                 break;
             case 'fork':
                 IconNode = (<i className="ui large fork icon"></i>);
+                const forkRef = (node.fork_info) ? (<span>, creating a <a href={'/deck/' + node.fork_info.content_id}>new deck</a></span>) : '';
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'forked '} {nodeRef}
+                        </a> {'forked '} {nodeRef} {forkRef}
                         <br/>
                         {DateDiv}
                     </div>

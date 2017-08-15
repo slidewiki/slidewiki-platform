@@ -193,12 +193,14 @@ class UserNotificationsItem extends React.Component {
             case 'fork':
                 const forkIconClass = allIconClass.concat(' fork');
                 iconNotification = (<i className={forkIconClass}></i>);
+                const forkRef = (notification.fork_info) ? (<span>, creating a <a href={'/deck/' + notification.fork_info.content_id}>new deck</a></span>) : '';
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'forked ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
+                        {forkRef}
                         <br/>
                         {DateDiv}
                     </div>
