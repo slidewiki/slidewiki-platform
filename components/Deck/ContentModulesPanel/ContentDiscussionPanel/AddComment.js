@@ -45,11 +45,11 @@ class AddComment extends React.Component {
         return (
           <form className="ui form comment">
               <div className="ui seven wide required field">
-                  <label>Comment title</label>
-                  <input type="text" ref="title" id="title" name="title" placeholder="Title" autoFocus required />
+                  <label htmlFor="title">Comment title</label>
+                  <input type="text" ref="title" id="title" name="title" placeholder="Title" aria-required="true" autoFocus required />
               </div>
               <div className="ui field">
-                  <label>Comment text</label>
+                  <label htmlFor="text">Comment text</label>
                   <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" ></textarea>
               </div>
 
