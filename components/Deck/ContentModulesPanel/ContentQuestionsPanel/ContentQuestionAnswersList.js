@@ -4,15 +4,18 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
+import ContentQuestionEdit from './ContentQuestionEdit';
 
 class ContentQuestionAnswersList extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            showCorrect: false,
+            isEditButtonClicked: false,
+	    showCorrect: false,
         };
-        //this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
     }
 
     handleButtonClick() {
@@ -22,14 +25,14 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
-        console.log(this);
+        this.setState({
+            isEditButtonClicked: true
+        });
     }
 
     render() {
         const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
-        console.log('creator id:', creatorId);
-        console.log('user id:', userId);
         const editButton = (
             <button className="ui compact button primary" onClick={this.handleEditButtonClick.bind(this)}>
                 <i className="edit icon" />
@@ -44,13 +47,13 @@ class ContentQuestionAnswersList extends React.Component {
             return null;
         };
 
-        let list = this.props.items.map((node, index) => {
+        let list = this.props.items.answers.map((node, index) => {
             return (
                 <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index}/>
             );
         });
 
-        let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
+        let correctAnswers = this.props.items.answers.filter((item) => item.correct).map((node, index) => {
             return (
               <div key={index}>
                 <a className="header">
@@ -58,7 +61,7 @@ class ContentQuestionAnswersList extends React.Component {
                 </a>
                 <div className="description">
                   <p>
-                    {node.explanation}
+                    <label><strong>Explanation:</strong></label> {node.explanation}
                   </p>
                 </div>
               </div>
@@ -75,9 +78,7 @@ class ContentQuestionAnswersList extends React.Component {
                   </div>
                 </div>
                 <div className="column">
-                  <button className="ui compact button primary"
-                    onClick={this.handleButtonClick}
-                    >
+                  <button className="ui compact button primary" onClick={this.handleButtonClick}>
                     <i className=" help circle icon" />
                     Show answer
                   </button>
@@ -92,11 +93,15 @@ class ContentQuestionAnswersList extends React.Component {
         );
 
         return (
-            <div ref="contentquestionanswersList">
-                <div className="ui relaxed list">
-                    {answers}
-                </div>
-             </div>
+            <div>
+                { this.state.isEditButtonClicked ?
+                    <ContentQuestionEdit question={this.props.items} selector={this.props.selector} userId={userId} /> :
+                    <div ref="contentquestionanswersList">
+                        <div className="ui relaxed list">
+                            {answers}
+                        </div>
+                    </div> }
+            </div>
         );
     }
 }
