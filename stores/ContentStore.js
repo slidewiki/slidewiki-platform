@@ -7,7 +7,6 @@ class ContentStore extends BaseStore {
         this.mode = 'view';
     }
     updateContent(payload) {
-        console.log('updateContent');
         this.selector= {
             'id': payload.params.id,
             'spath': payload.params.spath,
@@ -21,7 +20,6 @@ class ContentStore extends BaseStore {
         this.emitChange();
     }
     updateSelector(selector) {
-        console.log('updateSelector');
         this.selector.id = selector.id;
         this.selector.spath = selector.spath;
         this.selector.sid = selector.sid;
@@ -44,29 +42,20 @@ class ContentStore extends BaseStore {
         this.mode = state.mode;
     }
     getCurrentSubdeck(selector){
-
-        console.log('getCurrentSubdeck selector', selector);
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
-        console.log('splitSpath', splitSpath);
-        // console.log('ContentStore stype: ', selector.stype);
+
         if(!selector.spath){
-            // console.log('!selector.spath');
             return null;
         }
         else if(selector.stype === 'deck' && selector.spath){
-            // console.log('ContentStore spath ', selector.spath);
             currentSubDeck = splitSpath[splitSpath.length - 1].split(':')[0];
-            // console.log('length: ', currentSubDeck.length);
-            // console.log('ContentStore currentSubDeck: ', currentSubDeck);
         }
         else if(selector.stype === 'slide' && selector.spath){
             // Since the last one in the list will be the slide ID, we use -2
             let index = splitSpath.length === 1 ? 0 : splitSpath.length - 2;
-            console.log('splitSpath[index].split(\':\')', splitSpath[index].split(':'));
             currentSubDeck = splitSpath[index].split(':')[0];
         }
-        console.log('getCurrentSubdeck end');
         return currentSubDeck;
 
     }

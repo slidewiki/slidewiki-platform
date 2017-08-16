@@ -6,14 +6,11 @@ export default {
     name: 'presentation',
     // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
-        // console.log('req:', req, '\n\n');
-        // console.log('resource': resource, '\n\n');
-        console.log('params', params.params);
-        console.log('this ', this);
+
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-        // console.log('args', args);
+
         let selector = {
             'id': args.id, 'subdeck': args.subdeck, 'spath': args.spath,
             'sid': args.sid, 'stype': args.stype, 'mode': args.mode,
@@ -39,7 +36,7 @@ export default {
 
                 // TODO: A subdeck will have the wrong ID, so we'll only attempt this if it's a parent deck for now
                 if(afterDeck.limit > 0 && !isSubdeck){
-                    console.log('There is a limit > 0');
+
                     selector.limit = afterDeck.limit;
                     selector.pushObj = getAdditionalSlideObject(id, afterDeck.nextDeck);
                     returnContent(id, selector, callback);
@@ -97,21 +94,20 @@ function getParentDeckNextSlideOrDeck(subDeckId, parentDeck){
     // This is used for the condition where we have a subdeck with slides/deck after it in the parent deck
     // This function returns the ID of the next Deck, and says if it is a slide or a deck
     // Note, the first argument is an integer, the second is a JSON string from /deck/{id}
-    console.log('getParentDeckNextSlideOrDeck', subDeckId, parentDeck.id);
+
     parentDeck = JSON.parse(parentDeck);
 
     let next = false;
     let nextDeck, limit = 0;
     let items = parentDeck.revisions[0].contentItems;
-    // console.log('parentDeck items', items, '\n\n');
 
     for(let i = 0; i < items.length; i++){
         let refId = items[i].ref.id;
         let revision = items[i].ref.revision;
-        console.log('items[i].ref.id', refId);
+
         if(next){
             nextDeck = String(refId) + '-' + String(revision);
-            console.log('Next deck/slide is ID ' + nextDeck + ' and is a ' + items[i].kind);
+
             return {'nextDeck': nextDeck, kind: items[i].kind};
         }
 
@@ -128,12 +124,12 @@ function getSubdeckInsideDeck(res){
     // It returns the limit, to say how many slides to load
     let nextDeck, limit = 0;
     let items = res.revisions[0].contentItems;
-    console.log('items', items, '\n\n');
+
     for(let i = 0; i < items.length; i++){
         if(items[i].kind === 'deck'){
             limit = i;
             nextDeck = items[i].ref.id;
-            console.log('breaking');
+
             break;
         }
     }
@@ -160,7 +156,6 @@ function getAdditionalSlideObject (parentDeck, nextDeck, isSlide=false){
         'type': 'slide',
         'id': 'next'
     };
-    console.log('nextSlide: ', nextSlide);
 
     return nextSlide;
 

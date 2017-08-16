@@ -37,10 +37,9 @@ class ContentActionsFooter extends React.Component {
         return false;
     }
     getPresentationHref(){
-        console.log('getPresentationHref', this.props);
+
         let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
         if(this.props.ContentStore.selector.subdeck && this.props.ContentStore.selector.stype !== 'slide'){
-            console.log('this.props.ContentStore.selector.subdeck', this.props.ContentStore.selector.spath);
             presLocation += this.props.ContentStore.selector.spath + '/';
         }
         if(this.props.ContentStore.selector.stype === 'slide'){
@@ -81,7 +80,7 @@ class ContentActionsFooter extends React.Component {
         }
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0)
         {
-            //console.log(this.props.ContentStore.selector.id);
+
             let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
             let pdfHref = Microservices.pdf.uri + '/export' + type + '/' + splittedId[0];
 
