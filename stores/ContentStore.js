@@ -45,9 +45,10 @@ class ContentStore extends BaseStore {
     }
     getCurrentSubdeck(selector){
 
-        // console.log('getCurrentSubdeck selector', selector);
+        console.log('getCurrentSubdeck selector', selector);
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
+        console.log('splitSpath', splitSpath);
         // console.log('ContentStore stype: ', selector.stype);
         if(!selector.spath){
             // console.log('!selector.spath');
@@ -61,8 +62,11 @@ class ContentStore extends BaseStore {
         }
         else if(selector.stype === 'slide' && selector.spath){
             // Since the last one in the list will be the slide ID, we use -2
-            currentSubDeck = splitSpath[splitSpath.length - 2].split(':')[0];
+            let index = splitSpath.length === 1 ? 0 : splitSpath.length - 2;
+            console.log('splitSpath[index].split(\':\')', splitSpath[index].split(':'));
+            currentSubDeck = splitSpath[index].split(':')[0];
         }
+        console.log('getCurrentSubdeck end');
         return currentSubDeck;
 
     }

@@ -22,7 +22,11 @@ class Deck extends React.Component {
         this.context.executeAction(restoreDeckPageLayout, {});
         return false;
     }
+    currentSubDeck(){
+
+    }
     render() {
+
         const error = this.props.ServiceErrorStore.error;
         let status = this.props.DeckPageStore.componentsStatus;
         let navigationPanelClass = classNames({
@@ -151,9 +155,10 @@ class Deck extends React.Component {
 Deck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore], (context, props) => {
+Deck = connectToStores(Deck, [DeckPageStore,ServiceErrorStore], (context, props) => {
     return {
         DeckPageStore: context.getStore(DeckPageStore).getState(),
+
         ServiceErrorStore: context.getStore(ServiceErrorStore).getState(),
     };
 });
