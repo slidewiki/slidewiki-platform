@@ -1,5 +1,5 @@
 import React from 'react';
-import updateQuestion from '../../../../actions/questions/updateQuestion';
+import addQuestion from '../../../../actions/questions/addQuestion';
 
 class ContentQuestionAdd extends React.Component {
 
