@@ -8,6 +8,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentModulesStore from '../../../../stores/ContentModulesStore';
 import loadContentQuestions from '../../../../actions/loadContentQuestions';
 import ContentQuestionsList from './ContentQuestionsList';
+import ContentQuestionAdd from './ContentQuestionAdd';
 // import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
@@ -16,10 +17,12 @@ class ContentQuestionsPanel extends React.Component {
         super(props);
         this.state = {
             pageNo: props.ContentModulesStore.selector.pageNum,
+            isAddButtonClicked: false,
         };
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handlePreviousClick = this.handlePreviousClick.bind(this);
         this.updateQuestionsList = this.updateQuestionsList.bind(this);
+        this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
     }
 
     updateQuestionsList(){
@@ -50,6 +53,12 @@ class ContentQuestionsPanel extends React.Component {
                 pageNo: this.state.pageNo + 1,
             }, this.updateQuestionsList);
         }
+    }
+
+    handleAddButtonClick() {
+        this.setState({
+            isAddButtonClicked: true
+        });
     }
 
     render() {
@@ -88,7 +97,7 @@ class ContentQuestionsPanel extends React.Component {
 
         let addQuestionButton = (
             <div className="column right aligned">
-                <button className="ui right floated compact button primary">
+                <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                     <i className="small plus icon" data-reactid={640} />
                     {/* react-text: 641 */}Add question{/* /react-text */}
                 </button>
@@ -150,13 +159,8 @@ class ContentQuestionsPanel extends React.Component {
             let pageNo = 1;
             for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
                 items.push(
-                  <PaginationItem
-                    key={pageNo}
-                    isActiveItem={this.state.pageNo === pageNo}
-                    pageNo={pageNo++}
-                    onItemClick={this.handlePageClick}
-                    />
-                  );
+                  <PaginationItem key={pageNo} isActiveItem={this.state.pageNo === pageNo} pageNo={pageNo++} onItemClick={this.handlePageClick} />
+                );
             }
             return items;
         };
@@ -194,7 +198,7 @@ class ContentQuestionsPanel extends React.Component {
 
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
-                {content}
+                { this.state.isAddButtonClicked ? <ContentQuestionAdd question={this.props.items} selector={this.props.selector} userId={userId} /> : content }
             </div>
         );
     }
