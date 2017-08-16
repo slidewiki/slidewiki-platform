@@ -23,6 +23,7 @@ export default function forkDeck(context, payload, done) {
                 }
             } else {
                 context.dispatch('FORK_DECK_SUCCESS', res);
+                console.log('res', res);
                 let newURL, newId = res.root_deck;
                 // by default after forking a deck, navigate to the same position that was shown before
                 // unless the navigateToRoot parameter is set
@@ -53,8 +54,8 @@ export default function forkDeck(context, payload, done) {
                     url: newURL
                 });
 
-                //create new activity
-                let activity = {
+                //create a fork activity for the origin deck
+                let activity1 = {
                     activity_type: 'fork',
                     user_id: String(userid),
                     content_id: selector.id,
@@ -63,7 +64,17 @@ export default function forkDeck(context, payload, done) {
                         content_id: newId
                     }
                 };
-                context.executeAction(addActivity, {activity: activity});
+                context.executeAction(addActivity, {activity: activity1});
+
+                //create an add activity for the new deck
+                let activity2 = {
+                    activity_type: 'add',
+                    user_id: String(userid),
+                    content_id: newId,
+                    content_owner_id: String(userid),
+                    content_kind: 'deck'
+                };
+                context.executeAction(addActivity, {activity: activity2});
             }
             done();
         }
