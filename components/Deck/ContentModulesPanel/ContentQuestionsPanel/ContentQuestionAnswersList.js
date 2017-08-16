@@ -12,7 +12,7 @@ class ContentQuestionAnswersList extends React.Component {
         super(props);
         this.state = {
             isEditButtonClicked: false,
-	    showCorrect: false,
+	        showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
