@@ -77,7 +77,6 @@ class ContentQuestionEdit extends React.Component {
     }
 
     updateCorrect4(e) {
-        console.log(e.target.value);
         this.setState({correct4: e.target.checked});
     }
 
