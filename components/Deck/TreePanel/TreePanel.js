@@ -1,5 +1,4 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
@@ -12,11 +11,20 @@ import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
-import forkDeck from '../../../actions/decktree/forkDeck';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 import PermissionsStore from '../../../stores/PermissionsStore';
+import ForkModal from './ForkModal';
+
 
 class TreePanel extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isForkModalOpen: false
+        };
+    }
+
     handleFocus() {
 
     }
@@ -58,18 +66,7 @@ class TreePanel extends React.Component {
     }
 
     handleFork() {
-        swal({
-            title: 'New Fork',
-            text: 'We are forking the deck...',
-            type: 'success',
-            timer: 2000,
-            showCloseButton: false,
-            showCancelButton: false,
-            allowEscapeKey: false,
-            showConfirmButton: false
-        })
-            .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-        this.context.executeAction(forkDeck, {selector: this.props.DeckTreeStore.selector.toJS(), navigateToRoot: true});
+        this.setState({isForkModalOpen: true});
     }
 
     handleTheme() {
@@ -82,7 +79,6 @@ class TreePanel extends React.Component {
             buttonsStyling: false
         })
             .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
     }
 
     handleTranslation() {
@@ -179,6 +175,7 @@ class TreePanel extends React.Component {
                             permissions={this.props.PermissionsStore.permissions}/>
                     </div>
                 </div>
+                <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
             </div>
         );
     }

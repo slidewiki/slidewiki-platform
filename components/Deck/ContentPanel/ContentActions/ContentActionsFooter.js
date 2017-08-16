@@ -12,6 +12,7 @@ import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
+import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
@@ -109,6 +110,7 @@ class ContentActionsFooter extends React.Component {
             content_kind: 'deck'
         };
         this.context.executeAction(addActivity, {activity: activity});
+        context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
 
     handleLikeClick(e){
