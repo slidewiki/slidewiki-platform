@@ -214,16 +214,16 @@ class MailShareModal extends React.Component {
                                    <div className="sr-only" id="mailShareModalDescription">Select email recepient, subject and content.</div>
                                 <Form id="mailShareForm">
                                     <div className={fieldClass_address} style={{width:'auto'}} >
-                                        <label>To</label>
+                                        <label htmlFor="address_label">To</label>
                                         <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="address_label" name="address" ref="address" placeholder="E-mail address" autoFocus aria-required="true"/></div>
                                     </div>
 
                                     <div className={fieldClass_subject} style={{width:'auto'}} >
-                                        <label>Subject</label>
+                                        <label htmlFor="subject_label">Subject</label>
                                         <div className="ui icon input" style={{width:'50%'}} ><input type="text" id="subject_label" name="subject" ref="subject" aria-required="true" defaultValue={shareSubject} /></div>
                                     </div>
                                     <div className={fieldClass_text}>
-                                        <label>Text</label>
+                                        <label htmlFor="mailShareComment">Text</label>
                                         <textarea ref="text" id="mailShareComment" name="text" defaultValue={shareMessage} style={{width:'50%', minHeight: '6em', height: '6em'}} ></textarea>
                                     </div>
                                     {(this.props.userid === '') ? captchaField: ''}
