@@ -96,7 +96,7 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         let addQuestionButton = (
-            <div className="column right aligned">
+            <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                     <i className="small plus icon" data-reactid={640} />
                     {/* react-text: 641 */}Add question{/* /react-text */}
