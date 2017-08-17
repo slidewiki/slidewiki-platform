@@ -58,7 +58,8 @@ class presentationBroadcast extends React.Component {
 
         that.socket = io(Microservices.webrtc.uri);
 
-        that.socket.emit('create or join', that.room);
+        let deckID = that.iframesrc.toLowerCase().split('presentation')[1].split('/')[1].split('-')[0];//TODO implement a better version to get the deckID
+        that.socket.emit('create or join', that.room, deckID);
         console.log('Attempt to create or join room', that.room);
 
         function setmyID() {
