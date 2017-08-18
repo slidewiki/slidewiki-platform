@@ -682,7 +682,25 @@ class presentationBroadcast extends React.Component {
                         that.recognition.onend = null;
                         that.recognition.stop();
                         console.warn('error:', e);
-                        //TODO implement error handling
+
+												swal({
+				                    title: 'Speech recognition disabled',
+				                    html: 'There was an error with the speech recognition API. This should be an edge case. You could restart it.',
+				                    type: 'info',
+				                    showCancelButton: true,
+				                    confirmButtonColor: '#3085d6',
+				                    cancelButtonColor: '#d33',
+				                    confirmButtonText: 'Enable it',
+				                    cancelButtonText: 'Keep it disabled',
+				                    allowOutsideClick: false,
+				                    allowEscapeKey: false,
+				                }).then(() => {}, (dismiss) => {
+				                    if (dismiss === 'cancel') {
+				                        that.recognition.start();
+				                    }
+				                }).then(() => {
+				                });
+
                         return;
                     }
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -762,46 +780,7 @@ class presentationBroadcast extends React.Component {
                         console.log('Recognition disabled');
                     }
                 }).then(() => {
-                    swal({
-                        title: 'Invite other people',
-                        html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
-                        type: 'info',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Copy to Clipboard',
-                        showCancelButton: true,
-                        cancelButtonColor: '#d33',
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        preConfirm: function () {
-                            return new Promise((resolve, reject) => {
-                                let toCopy = document.createElement('input');
-                                toCopy.style.position = 'fixed';
-                                toCopy.style.top = 0;
-                                toCopy.style.left = 0;
-                                toCopy.style.width = '2em';
-                                toCopy.style.height = '2em';
-                                toCopy.style.padding = 0;
-                                toCopy.style.border = 'none';
-                                toCopy.style.outline = 'none';
-                                toCopy.style.boxShadow = 'none';
-                                toCopy.style.background = 'transparent';
-                                toCopy.value = window.location.href;
-                                document.getElementById('clipboardtarget').appendChild(toCopy);
-                                toCopy.value = window.location.href;
-                                toCopy.select();
-
-                                try {
-                                    let successful = document.execCommand('copy');
-                                    if(!successful)
-                                        throw 'Unable to copy';
-                                    resolve('Copied to clipboard');
-                                } catch (err) {
-                                    console.log('Oops, unable to copy');
-                                    reject('Oops, unable to copy');
-                                }
-                            });
-                        }
-                    }).then(() => {that.forceUpdate();}, () => {});
+                    showInviteSwal();
                 });
 
             } else {
@@ -813,9 +792,54 @@ class presentationBroadcast extends React.Component {
                     confirmButtonText: 'Okay',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                });//TODO even if this fails the dialog with copying the URL to clipboard should be shown at the end
+                }).then(() => {
+                    showInviteSwal();
+                });
             }
         }
+
+				function showInviteSwal() {
+						swal({
+								title: 'Invite other people',
+								html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
+								type: 'info',
+								confirmButtonColor: '#3085d6',
+								confirmButtonText: 'Copy to Clipboard',
+								showCancelButton: true,
+								cancelButtonColor: '#d33',
+								allowOutsideClick: false,
+								allowEscapeKey: false,
+								preConfirm: function () {
+										return new Promise((resolve, reject) => {
+												let toCopy = document.createElement('input');
+												toCopy.style.position = 'fixed';
+												toCopy.style.top = 0;
+												toCopy.style.left = 0;
+												toCopy.style.width = '2em';
+												toCopy.style.height = '2em';
+												toCopy.style.padding = 0;
+												toCopy.style.border = 'none';
+												toCopy.style.outline = 'none';
+												toCopy.style.boxShadow = 'none';
+												toCopy.style.background = 'transparent';
+												toCopy.value = window.location.href;
+												document.getElementById('clipboardtarget').appendChild(toCopy);
+												toCopy.value = window.location.href;
+												toCopy.select();
+
+												try {
+														let successful = document.execCommand('copy');
+														if(!successful)
+																throw 'Unable to copy';
+														resolve('Copied to clipboard');
+												} catch (err) {
+														console.log('Oops, unable to copy');
+														reject('Oops, unable to copy');
+												}
+										});
+								}
+						}).then(() => {that.forceUpdate();}, () => {});
+				}
 
         function addMessage(data, fromMyself = false, peerID = null) {
             let currentTime = new Date().getTime();
