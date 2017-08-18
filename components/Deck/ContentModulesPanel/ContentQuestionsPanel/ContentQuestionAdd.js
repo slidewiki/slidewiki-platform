@@ -13,10 +13,10 @@ class ContentQuestionAdd extends React.Component {
             answer2: '',
             answer3: '',
             answer4: '',
-            correct1: '',
-            correct2: '',
-            correct3: '',
-            correct4: '',
+            correct1: false,
+            correct2: false,
+            correct3: false,
+            correct4: false,
             explanation: '', //this.props.question.explanation,
             userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
@@ -41,7 +41,7 @@ class ContentQuestionAdd extends React.Component {
 
     saveButtonClick(e) {
         e.preventDefault();
-        this.context.executeAction(updateQuestion, {question: this.state});
+        this.context.executeAction(addQuestion, {question: this.state});
     }
 
     /* Update answer choice text */
