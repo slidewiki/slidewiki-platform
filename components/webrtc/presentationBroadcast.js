@@ -813,7 +813,7 @@ class presentationBroadcast extends React.Component {
                     confirmButtonText: 'Okay',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                });
+                });//TODO even if this fails the dialog with copying the URL to clipboard should be shown at the end
             }
         }
 
