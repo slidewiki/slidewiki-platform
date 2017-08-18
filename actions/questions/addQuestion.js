@@ -3,8 +3,7 @@ import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function addQuestion(context, payload, done) {
     log.info(context, payload);
-    context.dispatch('SAVE_QUESTION', payload);
-    context.service.update('questions.create', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.create('questions.add', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
