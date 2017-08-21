@@ -141,8 +141,7 @@ class UserNotificationsItem extends React.Component {
                         {notification.author ? notification.author.username : 'unknown'}
                         </a> {'used ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
-                        {/*{' in deck '}<a href={'/slideview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>*/}
-                        {' in deck '}<a href={'/deckview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>
                         <br/>
                         {DateDiv}
                     </div>

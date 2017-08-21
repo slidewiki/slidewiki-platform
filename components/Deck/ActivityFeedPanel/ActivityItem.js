@@ -148,7 +148,7 @@ class ActivityItem extends React.Component {
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'used '} {nodeRef}
-                        {' in deck '}<a href={'/deckview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + node.use_info.target_id}>{node.use_info.target_name}</a>
                         <br/>
                         {DateDiv}
                     </div>
