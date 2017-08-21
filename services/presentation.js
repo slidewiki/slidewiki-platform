@@ -29,10 +29,10 @@ export default {
         }//If presentation.content
         else if(resource === 'presentation.live'){
             rp.get({uri: Microservices.webrtc.uri + '/rooms/' + String(args.id)}).then((res) => {
-                console.log('presentation.live returned', res);
+                // console.log('presentation.live returned', res);
                 callback(null, JSON.parse(res));
             }).catch((err) => {
-                console.log('Error:', err);
+                // console.log('Error:', err);
                 callback(err);
             });
         }

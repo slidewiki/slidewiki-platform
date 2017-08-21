@@ -115,7 +115,7 @@ class ActivityFeedStore extends BaseStore {
         }
     }
     updatePresentations(payload) {
-        console.log('ActivityFeedStore: updatePresentations', payload);
+        // console.log('ActivityFeedStore: updatePresentations', payload);
         this.presentations = payload;
         this.emitChange();
     }
