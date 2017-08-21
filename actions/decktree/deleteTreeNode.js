@@ -61,7 +61,9 @@ function getTitle(deckTree, type, id) {
         title = deckTree.get('title');
     } else if (deckTree.get('type') === 'deck') {
         deckTree.get('children').forEach((item, index) => {
-            title = getTitle(item, type, id);
+            if (title === '') {
+                title = getTitle(item, type, id);
+            }
         });
     }
 
