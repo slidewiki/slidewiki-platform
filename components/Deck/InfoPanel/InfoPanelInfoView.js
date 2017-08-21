@@ -7,7 +7,8 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import cheerio from 'cheerio';
-import ContentModulesStore from '../../../stores/ContentModulesStore';
+import PresentationPanel from './PresentationsPanel';
+import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 
 
 class InfoPanelInfoView extends React.Component {
@@ -42,7 +43,7 @@ class InfoPanelInfoView extends React.Component {
         //    'grey file text': (this.props.DeckTreeStore.get('type') === 'slide'),
         //    'yellow folder link': (this.props.DeckTreeStore.get('type') === //'deck'),
         //});
-        
+
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let self = this;
         let nodes = [];
@@ -89,6 +90,12 @@ class InfoPanelInfoView extends React.Component {
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
                 </div>
+                {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
+                  <div className="ui attached segment">
+                      <PresentationPanel />
+                  </div>
+                ) : ''}
+
                 <div className="ui attached segment">
                     <div className={['ui', 'image']}>
                         <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
@@ -107,10 +114,10 @@ class InfoPanelInfoView extends React.Component {
 InfoPanelInfoView.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [DeckTreeStore,ContentModulesStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore], (context, props) => {
     return {
-        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default InfoPanelInfoView;
