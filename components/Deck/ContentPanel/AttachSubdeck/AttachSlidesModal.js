@@ -156,8 +156,11 @@ class AttachSubdeckModal extends React.Component{
             if (pathArray.length > 1) {
                 const parentDeck = pathArray[pathArray.length - 2];
                 targetDeckId = parentDeck.split(':')[0];
+            } else {
+                targetDeckId = this.props.selector.id;
             }
         }
+
         let activities = nodeSpec.map((node) => {
             return {
                 activity_type: 'use',
@@ -170,7 +173,7 @@ class AttachSubdeckModal extends React.Component{
                 }
             };
         });
-console.log(activities);
+
         this.context.executeAction(addActivities, {activities: activities});
 
         this.handleClose();
