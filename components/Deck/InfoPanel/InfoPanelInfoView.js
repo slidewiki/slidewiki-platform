@@ -1,7 +1,6 @@
 import React from 'react';
-//import {NavLink} from 'fluxible-router';
+import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
-import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 //import ActivityList from '../ActivityFeedPanel/ActivityList';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
@@ -76,9 +75,12 @@ class InfoPanelInfoView extends React.Component {
         else {
             title = rootNode.title;
         }
-
         return (
             <div className="ui container" >
+                {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
+                    <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
+                        Updated version available</NavLink>
+                    </div>}
                 <div className="ui attached segment">
                     <h4 className="header ui medium" aria-describedby="InfoTitle" tabIndex="0">
                             {title}</h4>

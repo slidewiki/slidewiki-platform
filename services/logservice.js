@@ -34,6 +34,6 @@ export default {
                 clog.emerg(logObject);
                 break;
         }
-        return;
+        return callback();
     }
 };
