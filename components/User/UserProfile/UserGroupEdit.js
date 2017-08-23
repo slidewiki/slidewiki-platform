@@ -170,7 +170,7 @@ class UserGroupEdit extends React.Component {
 
         // console.log('render UserGroupEdit:', this.props.currentUsergroup.members);
         if (this.props.currentUsergroup.members !== undefined && this.props.currentUsergroup.members.length > 0) {
-            this.props.UserProfileStore.currentUsergroup.members.forEach((member) => {
+            this.props.currentUsergroup.members.forEach((member) => {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
