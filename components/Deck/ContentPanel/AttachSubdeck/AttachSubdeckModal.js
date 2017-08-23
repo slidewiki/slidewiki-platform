@@ -1,6 +1,6 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, TextArea} from 'semantic-ui-react';
+import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
@@ -144,21 +144,20 @@ class AttachSubdeckModal extends React.Component{
 
         }
 
+        let attachDeckBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
+                                                    type="button"
+                                                    aria-label="Attach Deck"
+                                                    aria-hidden={this.state.modalOpen}
+                                                    basic icon onClick={this.handleOpen}
+                                                    tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
+            <Icon.Group size={this.props.buttonStyle.iconSize}>
+                <Icon className="yellow" name="folder" />
+                <Icon className="corner" name="attach" />
+            </Icon.Group>
+        </Button>} content='Attach Deck' on='hover'/>;
+
         return (
-           <Modal trigger={
-                    <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button"
-                      aria-label="Attach Deck"
-                      data-tooltip="Attach Deck"
-                      aria-hidden={this.state.modalOpen}
-                      basic icon onClick={this.handleOpen}
-                      tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
-                        <Icon.Group size={this.props.buttonStyle.iconSize}>
-                            <Icon className="yellow" name="folder" />
-                            <Icon className="corner" name="attach" />
-                        </Icon.Group>
-                    </Button>
-                   }
+           <Modal trigger={attachDeckBtn}
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 role="dialog"
@@ -196,7 +195,7 @@ class AttachSubdeckModal extends React.Component{
                                   Attach
                                   <Icon name="attach"/>
                               </Button>
-                              <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>

@@ -1,25 +1,22 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, TextArea} from 'semantic-ui-react';
+import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
 import FocusTrap from 'focus-trap-react';
-import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
-import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
+import loadUserDecks from '../../../../actions/attachSubdeck/loadUserDecks';
+import loadRecentDecks from '../../../../actions/attachSubdeck/loadRecentDecks';
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
-import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
+import updateSelectedSlides from '../../../../actions/attachSubdeck/updateSelectedSlides';
 import updateSelectedDeck from '../../../../actions/attachSubdeck/updateSelectedDeck';
-import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
 import AttachSearchForm from './AttachSearchForm';
 import AttachSlides from './AttachSlides';
-
-
 
 
 class AttachSubdeckModal extends React.Component{
@@ -180,7 +177,8 @@ class AttachSubdeckModal extends React.Component{
 
         if(!this.state.showSlides){//no deck selected, displaying next button
             attachMenu = <AttachMenu activeItem={this.state.activeItem}/>;
-            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck" tabIndex ='-1'/>;
+
+            modalDescription =  <TextArea className="sr-only" id="attachSlidesDescription" value="You can attach one or more slides from another deck. First select your deck containing the slides or search SlideWiki for a deck." tabIndex ='-1'/>;
 
             if (this.state.activeItem === 'MyDecks'){
                 searchForm ='';
@@ -219,22 +217,20 @@ class AttachSubdeckModal extends React.Component{
 
         }
 
+        let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
+                                                     type="button" aria-label="Attach Slides"
+                                                     aria-hidden={this.state.modalOpen}
+                                                     basic icon onClick={this.handleOpen}
+                                                     tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
+            <Icon.Group size={this.props.buttonStyle.iconSize}>
+                <Icon className="grey" name="file text outline"/>
+                <Icon className="corner black" name="attach"/>
+            </Icon.Group>
+        </Button>} content='Attach Slides' on='hover'/>;
+
 
         return (
-           <Modal trigger={
-                    <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button"
-                      aria-label="Attach Slides"
-                      data-tooltip="Attach Slides"
-                      aria-hidden={this.state.modalOpen}
-                      basic icon onClick={this.handleOpen}
-                      tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
-                        <Icon.Group size={this.props.buttonStyle.iconSize}>
-                            <Icon className="grey" name="file text outline" />
-                            <Icon className="corner black" name="attach" />
-                        </Icon.Group>
-                    </Button>
-                   }
+           <Modal trigger={attachSlideBtn}
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 role="dialog"
@@ -268,7 +264,7 @@ class AttachSubdeckModal extends React.Component{
                             <Modal.Actions>
                               {actionButton}
                               {actionButton2}
-                              <Button color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
                               </Button>
                             </Modal.Actions>
