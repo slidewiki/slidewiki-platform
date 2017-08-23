@@ -56,6 +56,14 @@ export default {
                 console.log(err);
                 callback(null, {newNotifications: []});
             });
+        } else if (resource === 'notifications.countnew'){
+            rp.get({uri: Microservices.notification.uri + '/notifications/countnew/' + uid}).then((res) => {
+                let count = JSON.parse(res);
+                callback(null, {count: count});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {count: 0});
+            });
         }
     },
     delete: (req, resource, params, config, callback) => {
@@ -82,7 +90,7 @@ export default {
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
             let uid = String(args.uid);
-            
+
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',
