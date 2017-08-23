@@ -76,8 +76,8 @@ function getUsers(userIdsSet){
 
     // request usernames of user ids found
     for(let userId of userIdsSet){
-        userPromises.push(rp.get({uri: `${Microservices.user.uri}/user/${userId}`}).then((userRes) => {
-            usernames[userId] = JSON.parse(userRes).username;
+        userPromises.push(rp.get({uri: `${Microservices.user.uri}/user/${userId}`, json: true}).then((userRes) => {
+            usernames[userId] = userRes.username;
         }).catch( (err) => {
             usernames[userId] = 'Unknown user';
         }));
@@ -91,8 +91,8 @@ function getDecks(deckIdsSet){
     let deckPromises = [];
 
     for(let deckId of deckIdsSet){
-        deckPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`}).then( (deckRes) => {
-            decks[deckId] = JSON.parse(deckRes);
+        deckPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}`, json: true}).then( (deckRes) => {
+            decks[deckId] = deckRes;
             decks[deckId].revisions.forEach( (rev) => {
                 deckRevisions[deckId + '-' + rev.id] = rev;
             });
@@ -102,6 +102,20 @@ function getDecks(deckIdsSet){
     }
 
     return Promise.all(deckPromises).then( () => { return {decks, deckRevisions}; });
+}
+
+function getForks(deckIdsSet){
+    let forks = {};
+    let forkPromises = [];
+
+    for(let deckId of deckIdsSet){
+        forkPromises.push(rp.get({uri: `${Microservices.deck.uri}/deck/${deckId}/forks`, json: true}).then((deckForks) => {
+            forks[deckId] = deckForks;
+        }).catch( (err) => {
+            forks[deckId] = [];
+        }));
+    }
+    return Promise.all(forkPromises).then( () => { return forks; });
 }
 
 export default {
@@ -165,8 +179,14 @@ export default {
                     deckRevisions = decksFromService.deckRevisions;
                 });
 
+                // get deck forks to show as deck other versions
+                let forks = {}; 
+                let forksPromise = getForks(deckIds).then( (forksFromService) => {
+                    forks = forksFromService;
+                });
 
-                Promise.all([userPromise, deckPromise]).then( () => {
+
+                Promise.all([userPromise, deckPromise, forksPromise]).then( () => {
                     searchResults.response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
@@ -179,18 +199,15 @@ export default {
                             returnItem.firstSlide = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
                                                         deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
 
-                            // fill deck subitems (revisions of the deck)
-                            if(decks[returnItem.db_id]){
-                                returnItem.subItems = decks[returnItem.db_id].revisions.filter( (rev) => {
-                                    // do not contain revision presented in result title
-                                    return (rev.id !== returnItem.db_revision_id);
-                                }).map( (rev) => {
+                            // fill deck subitems (forks of the deck)
+                            if(forks[returnItem.db_id].length > 0){
+                                returnItem.subItems = forks[returnItem.db_id].map( (fork) => {
                                     return {
-                                        id: rev.id,
-                                        title: rev.title,
-                                        link: '/deck/' + returnItem.db_id + '-' + rev.id
+                                        id: fork.id, 
+                                        title: fork.title, 
+                                        link: `/deck/${fork.id}`
                                     };
-                                }).reverse();
+                                });
                             }
                         }
                         else if(returnItem.kind === 'Slide'){

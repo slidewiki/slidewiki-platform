@@ -11,7 +11,7 @@ export default function loadDeckFamily(context, payload, done) {
     // fetch results from search-service
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
         } else {
             context.dispatch('LOAD_DECKFAMILY_DECKS', {

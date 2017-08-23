@@ -21,6 +21,7 @@ class DeckEditStore extends BaseStore {
             users: [],
             groups: []
         };
+        this.showGroupModal = false;
     }
 
     updateProperties(payload) {
@@ -53,7 +54,8 @@ class DeckEditStore extends BaseStore {
             authorizedGroups: this.authorizedGroups,
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
-            originalEditors: this.originalEditors
+            originalEditors: this.originalEditors,
+            showGroupModal: this.showGroupModal
         };
     }
 
@@ -69,6 +71,7 @@ class DeckEditStore extends BaseStore {
         this.authorizedGroups = state.authorizedGroups;
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
+        this.showGroupModal = state.showGroupModal;
     }
 
     updateAuthorizedUsers(users) {
@@ -88,7 +91,9 @@ class DeckEditStore extends BaseStore {
 
     loadUsergroup(group) {
         this.detailedGroup = group;
+        this.showGroupModal = true;
         this.emitChange();
+        this.showGroupModal = false;
     }
 }
 

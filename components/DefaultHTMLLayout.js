@@ -21,17 +21,19 @@ class DefaultHTMLLayout extends React.Component {
                 <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
                 <link href="/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" type="text/css" />
                 <link href="/custom_modules/reveal.js/css/reveal.css" rel="stylesheet" type="text/css" />
+                <link href="/glidejs/dist/css/glide.core.min.css" rel="stylesheet" type="text/css" />
+                <link href="/glidejs/dist/css/glide.theme.min.css" rel="stylesheet" type="text/css" />
                 { user ?
                   <link href="/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-                  : ''
+                  : <meta name="placeholder" content="jquery-ui" />
                 }
                 { user ?
                   <link href="/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
-                  : ''
+                  : <meta name="placeholder" content="font-awesome" />
                 }
                 { user ?
                   <link href="/jquery-contextmenu/dist/jquery.contextMenu.min.css" rel="stylesheet" type="text/css" />
-                  : ''
+                  : <meta name="placeholder" content="jquery.contextMenu" />
                 }
                 {/* Vendors css bundle */
                     this.props.addAssets ? <link href="/public/css/vendor.bundle.css" rel="stylesheet" type="text/css" />: <style></style>
@@ -57,6 +59,7 @@ class DefaultHTMLLayout extends React.Component {
                   <script src="/jquery-ui-dist/jquery-ui.min.js"></script>
                   : ''
                 }
+                <script src="/glidejs/dist/glide.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/progress.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js"></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js"></script>

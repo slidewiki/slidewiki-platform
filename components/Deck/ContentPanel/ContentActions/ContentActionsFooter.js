@@ -12,9 +12,11 @@ import {Microservices} from '../../../../configs/microservices';
 import ContentActionsFooterStore from '../../../../stores/ContentActionsFooterStore.js';
 import likeActivity from '../../../../actions/activityfeed/likeActivity.js';
 import addActivity from '../../../../actions/activityfeed/addActivity';
+import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
+import DownloadButton from './DownloadButton';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -69,7 +71,7 @@ class ContentActionsFooter extends React.Component {
     }
 
     getExportHref(type){
-        if (type !== 'EPub' && type !== 'PDF') {
+        if (type !== 'PDF') {//only for print now
             return;
         }
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0)
@@ -87,14 +89,7 @@ class ContentActionsFooter extends React.Component {
         }
     }
 
-    handleDownloadClick(e){
 
-        if(process.env.BROWSER){
-            e.preventDefault();
-            window.open(this.getExportHref('EPub'));
-        }
-        this.createDownloadActivity();
-    }
 
     createDownloadActivity() {
         //create new activity
@@ -110,6 +105,7 @@ class ContentActionsFooter extends React.Component {
             content_kind: 'deck'
         };
         this.context.executeAction(addActivity, {activity: activity});
+        context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
 
     handleLikeClick(e){
@@ -163,11 +159,7 @@ class ContentActionsFooter extends React.Component {
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
-                            <NavLink onClick={this.handleDownloadClick.bind(this)} href={this.getExportHref('EPub')} target="_blank">
-                                <button className="ui button" type="button" aria-label="Download" data-tooltip="Download" >
-                                    <i className="download large icon"></i>
-                                </button>
-                            </NavLink>
+                            <DownloadButton/>
                             <ReportModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
@@ -182,12 +174,6 @@ class ContentActionsFooter extends React.Component {
         );
     }
 }
-/*                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getPrintHref()} target="_blank">
-                                <button className="ui button">
-                                    <i className="print large icon"></i>
-                                </button>
-                            </NavLink>
-                            */
 
 ContentActionsFooter.contextTypes = {
     executeAction: React.PropTypes.func.isRequired

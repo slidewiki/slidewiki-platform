@@ -21,6 +21,7 @@ import resetPermissions from './permissions/resetPermissions';
 import loadLikes from './activityfeed/loadLikes';
 import PermissionsStore from '../stores/PermissionsStore';
 import loadContributors from './loadContributors';
+import loadForks from './permissions/loadForks';
 
 const log = require('./log/clog');
 
@@ -153,12 +154,23 @@ export default function loadDeck(context, payload, done) {
             }else{
                 callback();
             }
+        },
+        (callback) => {
+            //if user is logged is and root deck changed load forks of this deck owned by the user
+            if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
+                context.executeAction(loadForks, {
+                    selector: payload.params,
+                    user: context.getStore(UserProfileStore).getState().userid
+                }, callback);
+            }else{
+                callback();
+            }
         }
     ],
     // final callback
     (err, results) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             return;
         }

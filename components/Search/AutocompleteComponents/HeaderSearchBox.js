@@ -39,16 +39,13 @@ class HeaderSearchBox extends React.Component {
     componentDidUpdate(){
         this.initAutocomplete();
     }
-    handleRedirect(searchstring){
-        let querystring = (searchstring) ? searchstring : this.refs.searchstring.value;
-
-        let searchstr = '*:*';
-        if(querystring.trim() !== ''){
-            searchstr = querystring;
-        }
+    handleRedirect(){
+        // when no keywords are given, fetch all results
+        let keywords = (this.state.searchstring.trim() !== '')
+            ? this.state.searchstring : '*:*';
 
         this.context.executeAction(navigateAction, {
-            url: '/search/keywords=' + encodeURIComponent(searchstr)
+            url: '/search/keywords=' + encodeURIComponent(keywords)
         });
 
         // unfocus input element
@@ -67,7 +64,10 @@ class HeaderSearchBox extends React.Component {
         this.setState({searchstring: this.refs.searchstring.value});
     }
     onSelect(result, response){
-        this.handleRedirect(result.key);
+        this.setState({
+            searchstring: result.key
+        });
+        this.handleRedirect();
     }
     render() {
         let classes = classNames({
@@ -80,10 +80,10 @@ class HeaderSearchBox extends React.Component {
         // "ui small icon input
 
         return (
-            <div className={classes} ref="headerSearchBox" id="header_search_box_div">
+            <div className={classes} ref="headerSearchBox" role="search" id="header_search_box_div" style={{borderRadius: '0.286rem'}} aria-label="Search" >
                 <label htmlFor="searchString" hidden>Search</label>
                 <input type="text" placeholder="Search..." ref="searchstring" id="searchString" value={this.state.searchstring} onChange={this.onChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} className="prompt" />
-                <i className="search link icon" onClick={this.handleRedirect.bind(this)} onChange={this.handleRedirect.bind(this)}></i>
+                <i className="search link icon" onClick={this.handleRedirect.bind(this)}></i>
                 <div className="results"></div>
             </div>
         );

@@ -111,6 +111,19 @@ export default {
             done();
         }
     },
+    features: {
+        path: '/features',
+        method: 'get',
+        page: 'features',
+        title: 'SlideWiki -- Features',
+        handler: require('../components/Home/Features'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Features'
+            });
+            done();
+        }
+    },
     imprint: {
         path: '/imprint',
         method: 'get',
@@ -120,6 +133,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Imprint'
+            });
+            done();
+        }
+    },
+    welcome: {
+        path: '/welcome',
+        method: 'get',
+        page: 'Welcome',
+        title: 'SlideWiki -- Welcome',
+        handler: require('../components/Home/Welcome'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Welcome'
             });
             done();
         }
@@ -223,13 +249,11 @@ export default {
         }
     },
     legacydeck: {
-        path: '/deck/:oldid(\\d+_\\w+)',
+        path: '/deck/:oldid(\\d+_\\w+.*)',
         method: 'get',
         action: (context, payload, done) => {
-            context.executeAction(loadLegacy, payload, (err, result) => {
-                if (err) console.log(err);
-                context.executeAction(navigateAction, {'url': '/deck/'+result}, done);
-            });        }
+            context.executeAction(loadLegacy, payload, done);
+        }
     },
     contributors: {
         path: '/contributors/:stype/:sid',

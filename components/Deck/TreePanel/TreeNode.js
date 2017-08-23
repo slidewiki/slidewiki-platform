@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
 import TreeUtil from './util/TreeUtil';
-import {DragSource, DropTarget} from 'react-dnd';
+import {DragSource} from 'react-dnd';
 import TreeNodeList from './TreeNodeList';
 import TreeNodeTarget from './TreeNodeTarget';
 import cheerio from 'cheerio';
@@ -11,6 +11,7 @@ import AttachSubdeck from '../ContentPanel/AttachSubdeck/AttachSubdeckModal';
 import AttachSlides from '../ContentPanel/AttachSubdeck/AttachSlidesModal';
 import {connectToStores} from 'fluxible-addons-react';
 import ContentStore from '../../../stores/ContentStore';
+import {Button, Popup, Icon} from 'semantic-ui-react';
 
 
 const findAllDescendants = (node) => Immutable.Set.of(node).union(node.get('children') ? node.get('children').flatMap(findAllDescendants) : Immutable.List());
@@ -124,6 +125,7 @@ class TreeNode extends React.Component {
             sid: this.props.item.get('id'),
             spath: this.props.item.get('path')
         };
+        let canEdit = !this.props.permissions.readOnly && this.props.permissions.edit && this.props.ContentStore.mode !== 'edit';
         let nodeURL = TreeUtil.makeNodeURL(nodeSelector, this.props.page, this.props.mode);
         let childNodesDIV = '';
         let actionSigClass;
@@ -147,72 +149,63 @@ class TreeNode extends React.Component {
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
         });
-        const buttonItemClass = classNames({
-            'ui basic icon button': true,
-            'disabled': this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
-        });
 
-        const duplicateItemClass = classNames({
-            'ui basic icon button': true,
-            'disabled': this.props.item.get('type') === 'deck'|| this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode=== 'edit'
-        });
         let buttonStyle = {
             classNames : classNames({
                 'ui':true,
-                'disabled': this.props.permissions.readOnly || !this.props.permissions.edit || this.props.ContentStore.mode === 'edit'
+                'disabled': !canEdit
             }),
             iconSize : 'small',
             attached : '',
-            noTabIndex : this.props.ContentStore.mode ==='edit'
+            noTabIndex : !canEdit
 
         };
         let actionBtns = (
             <div className={actionBtnsClass}>
-                <div className="ui small basic icon compact fluid buttons">
-                    <button className={buttonItemClass}
-                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: '0'})}
-                            aria-label="Add Slide"
-                            data-tooltip="Add Slide"
-                            tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
-                        <i className="icons">
-                            <i className="file text icon"></i>
-                            <i className="inverted corner plus icon"></i>
-                        </i>
-                    </button>
+                <Button.Group basic size='small' fluid compact icon>
+                    <Popup trigger={<Button as='button' basic icon
+                                     disabled={!canEdit}
+                                     onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'slide', id: '0'})}
+                                     aria-label="Add Slide"
+                                     tabIndex={!canEdit ? -1 : 0}>
+                        <Icon.Group>
+                            <Icon name='file text'/>
+                            <Icon corner inverted name='plus'/>
+                        </Icon.Group>
+                    </Button>}
+                    content='Add Slide'
+                    on='hover' />
                     <AttachSlides buttonStyle={buttonStyle} selector={nodeSelector} />
-                    <button className={buttonItemClass}
-                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: '0'})}
-                            aria-label="Add deck"
-                            data-tooltip="Add deck"
-                            tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
-                        <i className="medium icons">
-                            <i className="yellow folder icon"></i>
-                            <i className="inverted corner plus icon"></i>
-                        </i>
-                    </button>
+                    <Popup trigger={<Button as='button' basic icon
+                                            disabled={!canEdit}
+                                            onClick={this.handleAddClick.bind(this, nodeSelector, {type: 'deck', id: '0'})}
+                                            aria-label="Add deck"
+                                            tabIndex={!canEdit ? -1 : 0}>
+                        <Icon.Group size='medium'>
+                            <Icon color='yellow' name='folder'/>
+                            <Icon corner inverted name='plus'/>
+                        </Icon.Group>
+                    </Button>} content='Add deck' on='hover'/>
                     <AttachSubdeck buttonStyle={buttonStyle} selector={nodeSelector}/>
-                    <button className={duplicateItemClass} title="Duplicate"
-                            onClick={this.handleAddClick.bind(this, nodeSelector, {
-                                type: this.props.item.get('type'),
-                                id: this.props.item.get('id')
-                            })}
-                            aria-label="Duplicate"
-                            data-tooltip="Duplicate"
-                            tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
-                        <i className="copy icon"></i>
-                    </button>
-                    <button className={buttonItemClass} onClick={this.handleDeleteClick.bind(this, nodeSelector)}
-                          aria-label="Delete"
-                          data-tooltip="Delete"
-                          tabIndex={this.props.ContentStore.mode ==='edit'?-1:0}>
-                        <i className="red trash circle icon"></i>
-                    </button>
-                    {/*
-                     <button className="ui disabled button" aria-label="Settings" data-tooltip="Settings">
-                     <i className="black setting icon"></i>
-                     </button>
-                     */}
-                </div>
+                    <Popup trigger={<Button as='button' basic icon
+                                            disabled={this.props.item.get('type') === 'deck' || !canEdit}
+                                            onClick={this.handleAddClick.bind(this, nodeSelector, {
+                                                type: this.props.item.get('type'),
+                                                id: this.props.item.get('id')
+                                            })}
+                                            title="Duplicate"
+                                            aria-label="Duplicate"
+                                            tabIndex={this.props.item.get('type') === 'deck' || !canEdit ? -1 : 0}>
+                        <Icon name='copy'/>
+                    </Button>} content='Duplicate' on='hover'/>
+                    <Popup trigger={<Button as='button' basic icon
+                                            disabled={!canEdit}
+                                            onClick={this.handleDeleteClick.bind(this, nodeSelector)}
+                                            aria-label="Delete"
+                                            tabIndex={!canEdit ? -1 : 0}>
+                        <Icon color='red' name='trash'/>
+                    </Button>} content='Delete' on='hover'/>
+                </Button.Group>
             </div>
         );
         //change the node title style if it is selected

@@ -21,7 +21,7 @@ export default function loadSearchedDecks(context,payload,done){
                 return;
             }
             else{
-                log.error(context, {filepath: __filename, err: err});
+                log.error(context, {filepath: __filename});
                 res={docs:[]};
                 context.dispatch('ATTACHSUBDECK_LOAD_SEARCHDECKS', res);
                 return;

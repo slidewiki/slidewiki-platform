@@ -58,6 +58,7 @@ server.use('/es6-shim', express.static(path.join(__dirname, '/node_modules/es6-s
 server.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery')));
 server.use('/sweetalert2', express.static(path.join(__dirname, '/node_modules/sweetalert2')));
 server.use('/headjs', express.static(path.join(__dirname, '/node_modules/headjs')));
+server.use('/glidejs', express.static(path.join(__dirname, '/node_modules/glidejs')));
 
 server.use('/ckeditor', express.static(path.join(__dirname, 'node_modules/ckeditor')));
 server.use('/ckeditor-plugins/youtube', express.static(path.join(__dirname, 'node_modules/ckeditor-youtube-plugin/youtube')));
@@ -97,6 +98,7 @@ fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 fetchrPlugin.registerService(require('./services/logservice'));
 fetchrPlugin.registerService(require('./services/like'));
+fetchrPlugin.registerService(require('./services/email'));
 
 
 // ************************** UI Internationalisation routines ***************************************
