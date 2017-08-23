@@ -1,5 +1,4 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
@@ -12,11 +11,20 @@ import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
 import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
-import forkDeck from '../../../actions/decktree/forkDeck';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 import PermissionsStore from '../../../stores/PermissionsStore';
+import ForkModal from './ForkModal';
+
 
 class TreePanel extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isForkModalOpen: false
+        };
+    }
+
     handleFocus() {
 
     }
@@ -58,18 +66,7 @@ class TreePanel extends React.Component {
     }
 
     handleFork() {
-        swal({
-            title: 'New Fork',
-            text: 'We are forking the deck...',
-            type: 'success',
-            timer: 2000,
-            showCloseButton: false,
-            showCancelButton: false,
-            allowEscapeKey: false,
-            showConfirmButton: false
-        })
-        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-        this.context.executeAction(forkDeck, {selector: this.props.DeckTreeStore.selector.toJS(), navigateToRoot: true});
+        this.setState({isForkModalOpen: true});
     }
 
     handleTheme() {
@@ -81,8 +78,7 @@ class TreePanel extends React.Component {
             confirmButtonClass: 'positive ui button',
             buttonsStyling: false
         })
-        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
-        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+            .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
     }
 
     handleTranslation() {
@@ -113,12 +109,14 @@ class TreePanel extends React.Component {
             fontSize: '1.06em'
         };
         const treeDIVStyles = {
-            maxHeight: 400,
+            maxHeight: 600,
             minHeight: 320,
             overflowY: 'auto',
             padding: 5
         };
-
+        const SegmentStyles = {
+            padding: 0
+        };
         let classes_forksbtn = classNames({
             'ui': true,
             'basic': true,
@@ -132,50 +130,52 @@ class TreePanel extends React.Component {
         let prevSelector = this.props.DeckTreeStore.prevSelector;
         let nextSelector = this.props.DeckTreeStore.nextSelector;
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
-        let rootNodeTitle = <strong> {rootNode.title} </strong>;
+        let rootNodeTitle = <strong>{rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
-            <div className="ui panel sw-tree-panel" ref="treePanel" onFocus={this.handleFocus} onBlur={this.handleBlur}>
-                <div className="ui segments">
-                    <div className="ui secondary segment">
-                        <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink>
-                    </div>
-                    {this.props.UserProfileStore.username === '' ? '' :
-                        <div className="3 fluid ui icon large buttons">
-                            <div className="ui basic disabled attached button" aria-label="Theme" data-tooltip="Theme"
-                                 onClick={this.handleTheme.bind(this)}>
-                                <i className="theme black icon"></i>
-                            </div>
-                            <div className={classes_forksbtn} aria-label="Fork" data-tooltip="Fork" onClick={this.handleFork.bind(this)}>
-                                <i className="fork black icon"></i>
-                            </div>
-                            <div className="ui basic disabled attached button" aria-label="Translate" data-tooltip="Translate"
-                                 onClick={this.handleTranslation.bind(this)}>
-                                <i className="translate black icon"></i>
-                            </div>
-                        </div>
-                    }
-                    
-                    <div className="ui segment" style={treeDIVStyles}>
+            <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
+                <div className="ui top attached tabular menu" >
+                    <a className="active item" >
+                        <i className="counterclockwise rotated sitemap large icon"></i>Deck Explorer
+                    </a>
+                </div>
+                <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
+                    {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
+
+                    {this.props.UserProfileStore.username === '' ? '' :
+                        <div className="ui icon fluid buttons">
+                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
+                            <i className="large blue fork icon"></i>
+                        </div>
+                        <div className="ui basic attached disabled button" role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck"
+                            onClick={this.handleTranslation.bind(this)} tabIndex="-1">
+                            <i className="translate blue large icon"></i>
+                        </div>
+                    </div>
+                    }
+
+
+                    <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
                             'wordBreak': 'break-all',
                             'wordWrap': 'break-word'
                         }}> {decktreeError} </div> : ''}
 
                         <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
-                              prevSelector={prevSelector} page={this.props.page}
-                              mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
-                              onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
-                              onRename={this.handleRenameNode.bind(this)}
-                              onUndoRename={this.handleUndoRenameNode.bind(this)}
-                              onSave={this.handleSaveNode.bind(this)}
-                              onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
-                              onMoveNode={this.handleMoveNode.bind(this)}
-                              username={this.props.UserProfileStore.username}
-                              permissions={this.props.PermissionsStore.permissions}/>
+                            prevSelector={prevSelector} page={this.props.page}
+                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
+                            onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
+                            onRename={this.handleRenameNode.bind(this)}
+                            onUndoRename={this.handleUndoRenameNode.bind(this)}
+                            onSave={this.handleSaveNode.bind(this)}
+                            onAddNode={this.handleAddNode.bind(this)} onDeleteNode={this.handleDeleteNode.bind(this)}
+                            onMoveNode={this.handleMoveNode.bind(this)}
+                            username={this.props.UserProfileStore.username}
+                            permissions={this.props.PermissionsStore.permissions}/>
                     </div>
                 </div>
+                <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
             </div>
         );
     }

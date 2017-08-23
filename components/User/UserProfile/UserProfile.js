@@ -125,7 +125,7 @@ class UserProfile extends React.Component {
                       <h3>Alter my personal data</h3>
                   </div>
                   <div className="ui segment">
-                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures }/>
+                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
                   </div>
 
               </div>
@@ -140,7 +140,7 @@ class UserProfile extends React.Component {
                   </div>
 
                   <div className="ui segment">
-                    <ChangePassword failures={ this.props.UserProfileStore.failures }/>
+                    <ChangePassword failures={ this.props.UserProfileStore.failures } dimmer={this.props.UserProfileStore.dimmer}/>
                   </div>
                 </div>
             ) : '';
@@ -174,7 +174,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroupedit() {
-        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} />);
+        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
     notImplemented() {

@@ -50,6 +50,9 @@ class HeaderDropdown extends React.Component {
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
                         <i className="user icon link"  /> My Decks
                     </div>
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="0" >
+                        <i className="icon users" /> My Groups
+                    </div>
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
                         <i className="setting icon" /> My Settings
                     </div>

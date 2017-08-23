@@ -151,9 +151,26 @@ class UserGroupEdit extends React.Component {
             header = 'Edit Group';
         }
 
+        //add creator as default member
+        userlist.push(
+          <div className="item" key={this.props.userid}>
+            <div className="ui grid">
+              <div className="one wide column middle aligned">
+                <UserPicture picture={ this.props.picture } username={ this.props.username } avatar={ true } width= { 24 } />
+              </div>
+              <div className="fourteen wide column">
+                <div className="content">
+                    <a className="header" href={'/user/' + this.props.username}>{this.props.username}</a>
+                    <div className="description">Group owner</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
         // console.log('render UserGroupEdit:', this.props.currentUsergroup.members);
         if (this.props.currentUsergroup.members !== undefined && this.props.currentUsergroup.members.length > 0) {
-            this.props.currentUsergroup.members.forEach((member) => {
+            this.props.UserProfileStore.currentUsergroup.members.forEach((member) => {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
