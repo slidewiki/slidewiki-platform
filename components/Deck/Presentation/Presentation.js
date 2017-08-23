@@ -184,7 +184,7 @@ class Presentation extends React.Component{
                 if(slide.speakernotes){
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
-                let content = slide.content + notes;
+                let content = slide.content.replace(' src="', ' data-src="') + notes;
                 returnList.push(<PresentationSlide content={content} key={slide.id + '-' + i} id={'slide-' + slide.id + '-' + i} />);
             }
             return returnList;
