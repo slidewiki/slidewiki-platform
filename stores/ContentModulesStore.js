@@ -21,17 +21,23 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount.datasource = payload.count;
         this.emitChange();
     }
-    updateTagCount(payload) {
+    updateTagAndDatasourceCount(payload) {
         let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
         this.moduleCount.tags = lastRevision.tags?
             lastRevision.tags.length : 0;
 
+        this.moduleCount.datasource = lastRevision.dataSources?
+            lastRevision.dataSources.length : 0;
+
         this.emitChange();
     }
-    updateTagCountDeck(payload) {
+    updateTagAndDatasourceCountDeck(payload) {
         let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
         this.moduleCount.tags = lastRevision.tags?
             lastRevision.tags.length : 0;
+
+        this.moduleCount.datasource = lastRevision.dataSources?
+            lastRevision.dataSources.length : 0;
 
         this.emitChange();
     }
@@ -95,8 +101,8 @@ ContentModulesStore.handlers = {
     'LOAD_AMOUNT_OF_DATA_SOURCES_SUCCESS': 'updateDataSourceCount',
     'LOAD_AMOUNT_OF_QUESTIONS_SUCCESS': 'updateQuestionsCount',
     'LOAD_AMOUNT_OF_COMMENTS_SUCCESS': 'updateCommentsCount',
-    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateTagCount',
-    'LOAD_DECK_CONTENT_SUCCESS': 'updateTagCountDeck',
+    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateTagAndDatasourceCount',
+    'LOAD_DECK_CONTENT_SUCCESS': 'updateTagAndDatasourceCountDeck',
     'ADD_REPLY_SUCCESS': 'addCommentSuccess',
     'REMOVE_TAG': 'removeTagSuccess',
     'NEW_TAG': 'addTagSuccess',
