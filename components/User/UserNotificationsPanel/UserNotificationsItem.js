@@ -133,7 +133,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'use':
-                const useIconClass = allIconClass.concat(' copy');
+                const useIconClass = allIconClass.concat(' attach');
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">

@@ -142,7 +142,7 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui large copy icon"></i>);
+                IconNode = (<i className="ui large attach icon"></i>);
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
