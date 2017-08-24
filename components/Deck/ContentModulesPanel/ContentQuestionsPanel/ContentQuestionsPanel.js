@@ -8,6 +8,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentModulesStore from '../../../../stores/ContentModulesStore';
 import loadContentQuestions from '../../../../actions/loadContentQuestions';
 import ContentQuestionsList from './ContentQuestionsList';
+import ContentQuestionAdd from './ContentQuestionAdd';
 // import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
@@ -16,10 +17,12 @@ class ContentQuestionsPanel extends React.Component {
         super(props);
         this.state = {
             pageNo: props.ContentModulesStore.selector.pageNum,
+            isAddButtonClicked: false,
         };
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handlePreviousClick = this.handlePreviousClick.bind(this);
         this.updateQuestionsList = this.updateQuestionsList.bind(this);
+        this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
     }
 
     updateQuestionsList(){
@@ -52,6 +55,12 @@ class ContentQuestionsPanel extends React.Component {
         }
     }
 
+    handleAddButtonClick() {
+        this.setState({
+            isAddButtonClicked: true
+        });
+    }
+
     render() {
         const questions = this.props.ContentQuestionsStore.questions;
         const question = this.props.ContentQuestionsStore.question;
@@ -61,82 +70,68 @@ class ContentQuestionsPanel extends React.Component {
         const totalLength = this.props.ContentQuestionsStore.totalLength;
         const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
 
-
-    // Button bar differs for Slide and Folder
+        // Button bar differs for Slide and Folder
         let buttonBar = '';
-        switch(selector.stype){
+        switch(selector.stype) {
             case 'slide':
                 buttonBar = (
-        <button className='ui button blue'>
-          <i className='plus icon'>
-          </i>
-          Add question
-        </button>
-      );
+                    <button className='ui button blue'>
+                        <i className='plus icon'></i>
+                        Add question
+                    </button>
+                );
                 break;
             case 'deck':
                 buttonBar = (
-        <div className='ui buttons'>
-          <button className='ui button'>
-            Exam mode
-          </button>
-          <button className='ui button'>
-            Test mode
-          </button>
-          <button className='ui button blue'>
-            <i className='file pdf outline icon'>
-            </i>
-            Export to PDF
-          </button>
-        </div>
-      );
+                    <div className='ui buttons'>
+                        <button className='ui button'>Exam mode</button>
+                        <button className='ui button'>Test mode</button>
+                        <button className='ui button blue'>
+                            <i className='file pdf outline icon'></i>
+                            Export to PDF
+                        </button>
+                    </div>
+                );
                 break;
         }
 
         let addQuestionButton = (
-          <div className="column right aligned">
-            <button className="ui right floated compact button primary">
-              <i
-                className="small plus icon"
-                data-reactid={640} />
-              {/* react-text: 641 */}Add question{/* /react-text */}
-            </button>
-          </div>
+            <div className="column right aligned" data-reactid={655}>
+                <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
+                    <i className="small plus icon" data-reactid={640} />
+                    {/* react-text: 641 */}Add question{/* /react-text */}
+                </button>
+            </div>
         );
 
         const getUserButton = () => {
-            if(userId && creatorId === userId){
+            if(userId && creatorId === userId) {
                 return addQuestionButton;
             }
             return null;
         };
 
         let questionsHeader = (
-      <div
-        className="ui segment attached"
-        data-reactid={636}>
-        <div
-          className="ui bottom attached"
-          data-reactid={637}>
-          <div data-reactid={638}>
-            <div className="ui vertical segment">
-              <div className="ui two column stackable grid">
-                <div className="column">
-                  <h3 className="ui  header">Questions
-            <div className="ui label red">Prototype interface - not functional</div></h3>
+            <div className="ui segment attached" data-reactid={636}>
+                <div className="ui bottom attached" data-reactid={637}>
+                    <div data-reactid={638}>
+                        <div className="ui vertical segment">
+                            <div className="ui two column stackable grid">
+                                <div className="column">
+                                    <h3 className="ui  header">Questions
+                                        <div className="ui label red">Prototype interface - not functional</div>
+                                    </h3>
+                                </div>
+                                {getUserButton()}
+                            </div>
+                        </div>
+                        {content}
+                    </div>
                 </div>
-                {getUserButton()}
-              </div>
             </div>
-            {content}
-          </div>
-        </div>
-      </div>
+        );
 
-    );
-
-        class PaginationItem extends React.Component
-        {
+        class PaginationItem extends React.Component {
             constructor(props){
                 super(props);
                 this._onClick = this._onClick.bind(this);
@@ -151,11 +146,8 @@ class ContentQuestionsPanel extends React.Component {
                     className += ' active';
                 }
                 return (
-                  <a
-                    className={className}
-                    onClick={this._onClick}
-                  >
-                  {this.props.pageNo}
+                  <a className={className} onClick={this._onClick} >
+                    {this.props.pageNo}
                   </a>
                 );
             }
@@ -167,55 +159,47 @@ class ContentQuestionsPanel extends React.Component {
             let pageNo = 1;
             for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
                 items.push(
-                  <PaginationItem
-                    key={pageNo}
-                    isActiveItem={this.state.pageNo === pageNo}
-                    pageNo={pageNo++}
-                    onItemClick={this.handlePageClick}
-                    />
-                  );
+                  <PaginationItem key={pageNo} isActiveItem={this.state.pageNo === pageNo} pageNo={pageNo++} onItemClick={this.handlePageClick} />
+                );
             }
             return items;
         };
 
         let lastPageNo = parseInt(totalLength / itemsPerPage) + 1;
         let pagination = (
-          <div className="ui centered pagination menu">
-            <a className="icon item" onClick={this.handlePreviousClick}>
-              <i className="left chevron icon" />
-            </a>
-            {getItems()}
-            <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
-              <i className="right chevron icon" />
-            </a>
-          </div>
-
-    );
+            <div className="ui centered pagination menu">
+                <a className="icon item" onClick={this.handlePreviousClick}>
+                    <i className="left chevron icon" />
+                </a>
+                {getItems()}
+                <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
+                    <i className="right chevron icon" />
+                </a>
+            </div>
+        );
 
         let content = (
-      <div>
-        {buttonBar}
-        {questionsHeader}
-        <ContentQuestionsList items={questions} />
-        {/* {pagination} */}
-      </div>
-    );
+            <div>
+                {buttonBar}
+                {questionsHeader}
+                <ContentQuestionsList items={questions} selector={selector} />
+                {/* {pagination} */}
+            </div>
+        );
 
-    //   if (question !== undefined && question !== null) {
-    // //Question is selected -> show its data
-    //       content = (
-    //   <div>
-    //     <ContentQuestionForm question={question} />
-    //   </div>
-    // );
-    //   }
+        //   if (question !== undefined && question !== null) {
+        // //Question is selected -> show its data
+        //       content = (
+        //   <div>
+        //     <ContentQuestionForm question={question} />
+        //   </div>
+        // );
+        //   }
 
         return (
-      <div
-        ref="contentQuestionsPanel"
-        className="ui bottom attached">
-        {content}
-      </div>
+            <div ref="contentQuestionsPanel" className="ui bottom attached">
+                { this.state.isAddButtonClicked ? <ContentQuestionAdd question={this.props.items} selector={this.props.selector} userId={userId} /> : content }
+            </div>
         );
     }
 }
