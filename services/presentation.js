@@ -1,6 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
+import async from 'async';
 
 export default {
     name: 'presentation',
@@ -25,116 +26,202 @@ export default {
             let id = args.subdeck ? args.subdeck : args.id;
             let isSubdeck = (id === args.subdeck);
             // let subdeck = args.subdeck;
-            let slideServiceRes;
-            // Get the full structure of the deck first
-            let uri = Microservices.deck.uri + '/deck/' + String(id);
+            let allSlides, deckInfo;
+
+            async.parallel([
+                (done) => {
+                    rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((all) => {
+                        allSlides = JSON.parse(all);
+                        done();
+                    }).catch((err) => {
+                        console.log('Error retrieving the slides', err);
+                    });
+                },
+                (done) => {
+                    rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id)}).then((deck) => {
+                        deckInfo = JSON.parse(deck);
+                        done();
+                    }).catch((err) => {
+                        console.log('Error getting deck information', err);
+                    });
+                }
+            ], (err, results) => {
+                if(err){
+                    console.log(err);
+                }
+                console.log('About to return content');
+
+                let isSubdeckInside = isSubdeckInsideDeck(deckInfo, allSlides);
 
 
-            rp.get({uri: uri}).then((res) => {
-                slideServiceRes = JSON.parse(res);
-                let afterDeck = getSubdeckInsideDeck(slideServiceRes);
-
-                // TODO: A subdeck will have the wrong ID, so we'll only attempt this if it's a parent deck for now
-                if(afterDeck.limit > 0 && !isSubdeck){
-
-                    selector.limit = afterDeck.limit;
-                    selector.pushObj = getAdditionalSlideObject(id, afterDeck.nextDeck);
-                    returnContent(id, selector, callback);
+                if(!isSubdeck && !isSubdeckInside){
+                    // Load all content for a parent deck with no subdecks
+                    console.log('\n\n\n\n!isSubdeck && !isSubdeckInside\n\n\n\n');
+                    returnContent(id, selector, allSlides, callback);
                 }
                 else{
-                    if(isSubdeck){
-                        // Check to see if there are any slides/decks after the subdeck
-                        rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id)}).then((parentDeck) => {
+                    let paramsAndNextDeck = getParamsAndNextDeck(deckInfo, allSlides);
+                    selector.pushObj = getAdditionalSlideObject (args.id, paramsAndNextDeck.nextDeck);
+                    selector.limit = paramsAndNextDeck.limit;
+                    selector.offset = paramsAndNextDeck.offset;
 
-                            let nextSlideOrDeck = getParentDeckNextSlideOrDeck(id, parentDeck);
-                            // Only push if there is an extra slide/deck
-                            if(nextSlideOrDeck){
-                                let isSlide = nextSlideOrDeck.kind === 'slide';
-                                selector.pushObj = getAdditionalSlideObject(parentDeck.id, nextSlideOrDeck.nextDeck, isSlide);
-                            }
-
-                            returnContent(id, selector, callback);
-
-                        }).catch((err) => {
-                            console.log('Error in the stuff after the subdeck', err);
-                        });
+                    if(!isSubdeck){
+                        // If we are between a subdeck and the end, set offset to first slide after the subdeck
+                        // params = getParams(deck, allSlides);
+                        returnContent(id, selector, allSlides, callback);
                     }
-                    else{
-                        // The parent deck won't have any slides/decks after it in this part of the tree
-                        // Don't need to change selector for this one
-                        returnContent(args.id, selector, callback);
-                        // callback(null, {content: slideServiceRes.children, theme: slideServiceRes.theme, selector: selector});
+                    else {
+                        // Find the next deck, and load add the slide to all slides
+                        // selector.nextDeck = getNextSubdeck(deckInfo, id);
+                        returnContent(id, selector, allSlides, callback);
                     }
                 }
-            }).catch((err) => {
-                console.log('There was an error :-(', err);
             });
+
         }//If presentation.content
     }
-
 };
 
 
-function returnContent(id, selector, callback){
+function returnContent(id, selector, slides, callback){
+    console.log('inside returnContent');
     let limit = selector.limit;
+    let offset = selector.offset;
     let pushObj = selector.pushObj;
-    let params = limit === 0 ? '' : '?limit=' + limit;
-    rp.get(Microservices.deck.uri + '/deck/' + String(id) + '/slides' + params).then((slides) => {
-        slides = JSON.parse(slides);
-        if(pushObj !== null){
-            slides.children.push(pushObj);
-        }
-        callback(null, {content: slides.children, theme: slides.theme, selector: selector});
-    }).catch((err) => {
-        console.log('returnContent', err);
-    });
-}
-
-function getParentDeckNextSlideOrDeck(subDeckId, parentDeck){
-    // This is used for the condition where we have a subdeck with slides/deck after it in the parent deck
-    // This function returns the ID of the next Deck, and says if it is a slide or a deck
-    // Note, the first argument is an integer, the second is a JSON string from /deck/{id}
-
-    parentDeck = JSON.parse(parentDeck);
-
-    let next = false;
-    let nextDeck, limit = 0;
-    let items = parentDeck.revisions[0].contentItems;
-
-    for(let i = 0; i < items.length; i++){
-        let refId = items[i].ref.id;
-        let revision = items[i].ref.revision;
-
-        if(next){
-            nextDeck = String(refId) + '-' + String(revision);
-
-            return {'nextDeck': nextDeck, kind: items[i].kind};
-        }
-
-        if(refId === subDeckId || String(refId) + '-' + items[i].ref.revision === subDeckId){
-            next = true;
-        }
+    let params = '';
+    // let params = '?offset=' + selector.offset;
+    // params = limit === 0 ? params : params + '&limit=' + selector.limit;
+    let slideContent = limit === 0 ? slides.children.slice(offset, limit) : slides.children.slice(offset);
+    if(pushObj !== null){
+        slideContent.push(pushObj);
     }
-
+    callback(null, {content: slides.children, theme: slides.theme, selector: selector});
+    // rp.get(Microservices.deck.uri + '/deck/' + String(id) + '/slides' + params).then((slides) => {
+    //     slides = JSON.parse(slides);
+    //     if(pushObj !== null){
+    //         slides.children.push(pushObj);
+    //     }
+    //     callback(null, {content: slides.children, theme: slides.theme, selector: selector});
+    // }).catch((err) => {
+    //     console.log('returnContent', err);
+    // });
 }
 
-
-function getSubdeckInsideDeck(res){
-    // Use this function for a deck, where you are trying to see if there is a subdeck
-    // It returns the limit, to say how many slides to load
-    let nextDeck, limit = 0;
-    let items = res.revisions[0].contentItems;
+function isSubdeckInsideDeck(deck, slidesInfo){
+    console.log('deck: ', deck);
+    let nextDeck, limit, offset = 0;
+    // if we have a deck (currentId = 0) then we don't need to worry about the offset
+    let items = deck.revisions[0].contentItems;
 
     for(let i = 0; i < items.length; i++){
+        // let refId = String(items[i].ref.id) + '-' + String(items[i].ref.revision);
         if(items[i].kind === 'deck'){
-            limit = i;
-            nextDeck = items[i].ref.id;
-
-            break;
+            // deckIndex = i;
+            return i;
         }
     }
-    return {'limit': limit, 'nextDeck': nextDeck};
+    return 0;
 }
+
+function getNextSubdeck(deck, currentDeck){
+    // For the condition where we have a subdeck, in a parent deck which might have more than one subdeck
+    let seenDeck = false;
+    let items = deck.revisions[0].contentItems;
+    console.log('getNextSubdeck items', items);
+    for(let i=0; i< items.length; i++){
+        let refId = String(items[i].ref.id) + '-' + String(items[i].ref.revision);
+        console.log('getNextSubdeck comparison refId: ' + refId + 'currentDeck: ', currentDeck);
+        if(seenDeck && items.kind === 'deck'){
+            return refId;
+        }
+        if(currentDeck === refId && items.kind === 'deck'){
+            seenDeck = true;
+        }
+    }
+    return 0;
+}
+
+function getParamsAndNextDeck(deck, allSlides, currentId=0){
+    // This function sorts out the parameters and gets the nextDeck for decks with subdecks
+
+    let nextDeck = 0;
+    let limit = 0;
+    let offset = 0;
+    let lastSlideParent = 0;
+    let lastSlideSub = 0;
+    // if we have a deck (currentId = 0) then we don't need to worry about the offset
+    let seenCurrentPos = currentId > 0 ? false : true;
+    let items = deck.revisions[0].contentItems;
+    let contentAfterDeck = false;
+
+    for(let i = 0; i < items.length; i++){
+        let refId = String(items[i].ref.id) + '-' + String(items[i].ref.revision);
+        console.log('getParamsAndNextDeck', refId, limit, offset);
+        if(!seenCurrentPos){
+            if(refId === currentId || items[i].ref.id === currentId){ // Use or in case there's no revision
+                seenCurrentPos = true;
+            }
+        }
+        if(items[i].kind === 'deck'){
+            if(seenCurrentPos && nextDeck !== 0){
+                // limit = i;
+                nextDeck = refId;
+                console.log('The next subdeck ID is: ', nextDeck);
+            }
+            else{
+                // offset = i;
+            }
+        }
+        else{
+            if(nextDeck !== 0){
+                // This means we do have other content after this deck, so need to set a limit
+                contentAfterDeck = true;
+                console.log('setting contentAfterDeck = true');
+                lastSlideSub = refId;
+                break;
+            }
+            else if (!seenCurrentPos) {
+                offset += 1;
+            }
+            else{
+                // This is the last slide before the extra content
+                lastSlideParent = refId;
+            }
+        }
+    }
+    if(!contentAfterDeck){
+        // We can just load the whole deck after the offset
+        console.log('No content after deck');
+        return {'offset': offset, 'limit': 0, 'nextDeck': null};
+    }
+    else{
+        console.log('There IS content after deck');
+        limit = getLimit(lastSlideParent, lastSlideSub, allSlides);
+    }
+    return {'limit': limit, 'offset': offset, 'nextDeck': nextDeck};
+
+}
+
+function getLimit(limit, lastParent, lastSubdeck, allSlides){
+    // Iterate through allSlides, and select slides between these two.
+    let seenLastParent, seenLastSubdeck = false;
+    let count = 0;
+    for(let i=0; i < allSlides.children.length; i++){
+        count += 1;
+        let slide = allSlides.children[i];
+        if(!seenLastParent){
+            if(slide.id === lastParent){
+                seenLastParent = true;
+            }
+        }
+        else{
+            if(seenLastSubdeck){
+                return count;
+            }
+        }
+    }
+}
+
 
 function getAdditionalSlideObject (parentDeck, nextDeck, isSlide=false){
     let nextDeckURL = '/Presentation/';
