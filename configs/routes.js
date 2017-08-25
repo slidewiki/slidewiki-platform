@@ -211,6 +211,17 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
+    userprofilereview: {
+        path: '/Sfn87Pfew9Af09aM/user/:username/:category?/:item?',
+        // path: '/Sfn87Pfew9Af09aM/',
+        method: 'get',
+        page: 'userprofilereview',
+        title: 'SlideWiki -- user review',
+        handler: require('../components/User/UserProfile/UserProfileReview'),
+        action: (context, payload, done) => {
+            context.executeAction(chooseAction, payload, done);
+        }
+    },
     search: {
         path: '/search/:queryparams?',
         method: 'get',
