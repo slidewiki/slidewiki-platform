@@ -1,5 +1,6 @@
 import React from 'react';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
+import deleteQuestion from '../../../../actions/questions/deleteQuestion';
 
 class ContentQuestionEdit extends React.Component {
 
@@ -38,11 +39,17 @@ class ContentQuestionEdit extends React.Component {
 
         this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
+        this.deleteButtonClick = this.deleteButtonClick.bind(this);
     };
 
     saveButtonClick(e) {
         e.preventDefault();
         this.context.executeAction(updateQuestion, {question: this.state});
+    }
+
+    deleteButtonClick(e) {
+        e.preventDefault();
+        this.context.executeAction(deleteQuestion, {qid: this.state.qid});
     }
 
     /* Update answer choice text */
@@ -183,6 +190,9 @@ class ContentQuestionEdit extends React.Component {
                         </div>
                         <div className="field">
                             <div className="ui container">
+                                <div className="ui left floated buttons">
+                                    <button className="ui red button" onClick={this.deleteButtonClick}>Delete</button>
+                                </div>
                                 <div className="ui right floated buttons">
                                     <button className="ui primary button" onClick={this.saveButtonClick}>Save</button>
                                     <button className="ui secondary button">Cancel</button>
