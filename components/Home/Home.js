@@ -156,7 +156,7 @@ class Home extends React.Component {
                                                                             id='home.3.strong4'
                                                                             defaultMessage='Download'/></strong>
                                                     }}
-                                                    defaultMessage="{strong} decks in PDF, ePub or SCROM format."/>
+                                                    defaultMessage="{strong} decks in PDF, ePub or SCORM format."/>
                                                 </div>
                                             </div>
                                         </div>
