@@ -122,7 +122,7 @@ class features extends React.Component {
                                     </div>
                                 </div>
                                 <div className="item">
-                                    <div className="content"><strong>Download</strong> decks in PDF, ePub or SCROM format.
+                                    <div className="content"><strong>Download</strong> decks in PDF, ePub or SCORM format.
                                     </div>
                                 </div>
                             </div>
