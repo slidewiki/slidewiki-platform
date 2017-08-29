@@ -2,8 +2,8 @@
 // to the client
 
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react/dist/react.min';
+import ReactDOM from 'react/dist/react.min';
 import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
 
