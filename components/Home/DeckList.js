@@ -8,6 +8,7 @@ import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';
+import { NavLink } from 'fluxible-router';
 
 class DeckList extends React.Component {
 
@@ -32,8 +33,8 @@ class DeckList extends React.Component {
                         <div className="ui vertical segment " key={'deck_meta' + deck._id}>
                             <div className="ui two column stackable grid">
                                 <div className="column">
-                                    <div className="ui header"><a href={'./deck/' + deck._id}>{deck.title}</a></div>
-                                    <div className="meta">Creator: <a href={'./user/' + deckCreatorid}>{deckCreator}</a></div>
+                                    <div className="ui header"><NavLink href={'./deck/' + deck._id}>{deck.title}</NavLink></div>
+                                    <div className="meta">Creator: <NavLink href={'./user/' + deckCreatorid}>{deckCreator}</NavLink></div>
                                     <div className="meta">Date: {deckDate}</div>
                                 </div>
                                 <div className="column right aligned">
