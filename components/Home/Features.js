@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'fluxible-router';
 
 class features extends React.Component {
     render() {
@@ -17,7 +16,7 @@ class features extends React.Component {
                         </div>
                         <div className="ui attached fluid segment">
                             <div className="ui medium right floated image"><img src="assets/images/features/slide-edit.png" alt="screenshot of slide editor interface."></img></div>
-                            <p>Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML to allow you to continue to edit and add new content.</p>
+                            <p>Create a new deck or import existing slides from PowerPoint (*.pptx) or OpenDocument Presentation (*.odp) files. Your imported slides will be converted into HTML to allow you to continue to edit and add new content.</p> 
                             <p>SlideWiki's editor offers many formatting tools, including being able to add images, videos, equations and code snippet.</p>
                         </div>
                     </div>
@@ -26,7 +25,7 @@ class features extends React.Component {
                             <h2 className="header">Reusable educational content</h2>
                         </div>
                         <div className="ui attached fluid segment">
-                            <p>SlideWiki is built on the Open Educational Resources (OER) ethos and all content is published under <NavLink href="/license">Creative Commons licenses</NavLink>. This means you can reuse and repurpose content from SlideWiki decks. SlideWiki allows you to create your own slides based on decks that have been published on SlideWiki by:
+                            <p>SlideWiki is built on the Open Educational Resources (OER) ethos and all content is published under <a href="/license">Creative Commons licenses</a>. This means you can reuse and repurpose content from SlideWiki decks. SlideWiki allows you to create your own slides based on decks that have been published on SlideWiki by:
                             </p>
                             <div className="ui relaxed list">
                                 <div className="item">
