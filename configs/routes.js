@@ -31,6 +31,7 @@ import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
+import loadUserReview from '../actions/userReview/loadUserReview';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -212,14 +213,35 @@ export default {
         }
     },
     userprofilereview: {
-        path: '/Sfn87Pfew9Af09aM/user/:username/:category?/:item?',
-        // path: '/Sfn87Pfew9Af09aM/',
+        path: '/Sfn87Pfew9Af09aM',
         method: 'get',
         page: 'userprofilereview',
         title: 'SlideWiki -- user review',
         handler: require('../components/User/UserProfile/UserProfileReview'),
         action: (context, payload, done) => {
-            context.executeAction(chooseAction, payload, done);
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | User review'});
+            done();
+        }
+    },
+    userprofilereviewuser: {
+        path: '/Sfn87Pfew9Af09aM/user/:username/',
+        method: 'get',
+        page: 'userprofilereview',
+        title: 'SlideWiki -- user review',
+        handler: require('../components/User/UserProfile/UserProfileReviewUser'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(loadUserReview, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(chooseAction, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
         }
     },
     search: {

@@ -1,6 +1,11 @@
 import React from 'react';
 import PopularDecks from './PopularDecks';
 import PublicUserData from './PublicUserData';
+import approveUser from '../../../actions/userReview/approveUser';
+import suspendUser from '../../../actions/userReview/suspendUser';
+import keepReviewingUser from '../../../actions/userReview/keepReviewingUser';
+import { connectToStores } from 'fluxible-addons-react';
+import UserReviewStore from '../../../stores/UserReviewStore';
 let classNames = require('classnames');
 
 class UserProfileReviewDecks extends React.Component {
@@ -19,19 +24,27 @@ class UserProfileReviewDecks extends React.Component {
         this.forceUpdate();
     }
 
-
     handleApproveClick() {
-
+        this.context.executeAction(approveUser, {
+            userid: this.props.user.id,
+            secret: this.props.UserReviewStore.secret
+        });
     }
     handleSuspendClick() {
-
+        this.context.executeAction(suspendUser, {
+            userid: this.props.user.id,
+            secret: this.props.UserReviewStore.secret
+        });
     }
     handleKeepReviewingClick() {
-
+        this.context.executeAction(keepReviewingUser, {
+            userid: this.props.user.id,
+            secret: this.props.UserReviewStore.secret
+        });
     }
     render() {
-        // check if we should disable buttons?
-        let disabled = false;
+        // check if we should disable buttons
+        let disabled = !this.props.UserReviewStore.reviewable;
 
         let btn_classes = classNames({
             'ui': true,
@@ -92,5 +105,11 @@ class UserProfileReviewDecks extends React.Component {
 UserProfileReviewDecks.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+UserProfileReviewDecks = connectToStores(UserProfileReviewDecks, [UserReviewStore], (context, props) => {
+    return {
+        UserReviewStore: context.getStore(UserReviewStore).getState()
+    };
+});
 
 export default UserProfileReviewDecks;
