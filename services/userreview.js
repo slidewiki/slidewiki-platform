@@ -46,7 +46,7 @@ export default {
                 console.log(err.StatusCodeError, err.message, err.options);
                 callback(null, {secret: secret, secretCorrect: false});
             });
-          } else if (resource === 'userreview.user') {
+        } else if (resource === 'userreview.user') {
 
 
 
@@ -57,11 +57,11 @@ export default {
 
 
 //for testing
-              let username = 'dpaun';
-              let userid = '16';
-              let reviewable = true;
-              //jwt
-              callback(null, {username: username, userid: userid, reviewable: reviewable});
+            let username = 'dpaun';
+            let userid = '16';
+            let reviewable = true;
+            //jwt
+            callback(null, {username: username, userid: userid, reviewable: reviewable});
 
                 //WHAT IS THE PATH?
               // rp.get({uri: Microservices.user.uri + '/user/' + args.userid + '/getReviewableUser', headers: {'----jwt----': args.jwt }}).then((res) => {
@@ -70,7 +70,7 @@ export default {
               //     console.log(err.StatusCodeError, err.message, err.options);
               //     callback(null, {});
               // });
-          } else if (resource === 'userreview.approve') {
+        } else if (resource === 'userreview.approve') {
 
 
 
@@ -88,7 +88,7 @@ export default {
 
 
 
-                      callback(null, {});
+            callback(null, {});
 
 
 
@@ -102,7 +102,7 @@ export default {
         } else if (resource === 'userreview.keepreviewing') {
 
 
-                      callback(null, {});
+            callback(null, {});
 
 
 

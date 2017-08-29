@@ -32,9 +32,9 @@ class UserProfileReviewUser extends React.Component {
                 showCancelButton: true
             })
             .then((secret) => {
-              this.context.executeAction(saveSecret, {
-                  secret: secret
-              });
+                this.context.executeAction(saveSecret, {
+                    secret: secret
+                });
             }).catch(swal.noop);
         }
     }
@@ -48,9 +48,9 @@ class UserProfileReviewUser extends React.Component {
                 showCancelButton: true
             })
             .then((secret) => {
-              this.context.executeAction(saveSecret, {
-                  secret: secret
-              });
+                this.context.executeAction(saveSecret, {
+                    secret: secret
+                });
             }).catch(swal.noop);
         }
         if (this.props.UserReviewStore.dimmer.approve === true) {
@@ -59,8 +59,8 @@ class UserProfileReviewUser extends React.Component {
                 text: 'Do you want to review another?',
                 title: 'User approved',
                 showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No"
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
             })
             .then(() => {
                 this.context.executeAction(getNextReviewableUser, {
@@ -68,7 +68,7 @@ class UserProfileReviewUser extends React.Component {
 
 
 
-                  new: true,
+                    new: true,
 
 
 
@@ -81,8 +81,8 @@ class UserProfileReviewUser extends React.Component {
                 text: 'Do you want to review another?',
                 title: 'User suspended',
                 showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No"
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
             })
             .then(() => {
                 this.context.executeAction(getNextReviewableUser, {
@@ -95,8 +95,8 @@ class UserProfileReviewUser extends React.Component {
                 text: 'Do you want to review another?',
                 title: 'User returned to the queue',
                 showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No"
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
             })
             .then(() => {
                 this.context.executeAction(getNextReviewableUser, {

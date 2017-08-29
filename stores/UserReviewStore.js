@@ -97,7 +97,7 @@ class UserReviewStore extends BaseStore {
 
 
 //////////////////////////////////
-this.secretCorrect = true;
+        this.secretCorrect = true;
 
 
     }
