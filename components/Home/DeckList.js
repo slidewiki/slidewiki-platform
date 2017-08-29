@@ -8,6 +8,7 @@ import ISO6391 from 'iso-639-1';
 import cheerio from 'cheerio';
 import lodash from 'lodash';
 import { Microservices } from '../../configs/microservices';
+import { NavLink } from 'fluxible-router';
 
 class DeckList extends React.Component {
 
@@ -32,18 +33,18 @@ class DeckList extends React.Component {
                         <div className="ui vertical segment " key={'deck_meta' + deck._id}>
                             <div className="ui two column stackable grid">
                                 <div className="column">
-                                    <h3 className="ui header"><a href={'./deck/' + deck._id}>{deck.title}</a></h3>
-                                    <div className="meta">Creator: <a href={'./user/' + deckCreatorid}>{deckCreator}</a></div>
+                                    <div className="ui header"><NavLink href={'./deck/' + deck._id}>{deck.title}</NavLink></div>
+                                    <div className="meta">Creator: <NavLink href={'./user/' + deckCreatorid}>{deckCreator}</NavLink></div>
                                     <div className="meta">Date: {deckDate}</div>
                                 </div>
                                 <div className="column right aligned">
-                                        <div className="ui large label" >
-                                        <i className="ui comments outline icon"></i>
+                                        <div className="ui large label" tabIndex="0">
+                                        <i className="ui comments outline icon" aria-label="Deck language"></i>
                                             {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
                                         {/*<div className="ui large label" tabIndex="0" >
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>*/}
                                        <div className="ui large label" tabIndex="0" >
-                                            <i className="fork icon" aria-label="Number of versions"></i>{deck.forkCount}</div>
+                                            <i className="fork icon" aria-label="Number of forks"></i>{deck.forkCount}</div>
                                 </div>
                             </div>
                         </div>
