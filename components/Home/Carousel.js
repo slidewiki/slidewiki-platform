@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import { NavLink } from 'fluxible-router';
+import {NavLink} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 
 class Carousel extends React.Component {
@@ -63,7 +63,7 @@ class Carousel extends React.Component {
                                         <div className="glide__wrapper hide-element">
                                             <ul className="glide__track" style={{minHeight: '300px'}}>
                                                 <li className="glide__slide">
-                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <a href="/features" className="ui large image" tabIndex="-1">
                                                     <FormattedMessage id="carousel.create_alt" defaultMessage='Create slides with SlideWiki.'>
                                                     {
                                                         (alt) => <img
@@ -72,10 +72,10 @@ class Carousel extends React.Component {
                                                                  />
                                                     }
                                                     </FormattedMessage>
-                                                    </NavLink>
+                                                    </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <a href="/features" className="ui large image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.reuse_alt" defaultMessage='Repurpose & Reuse Educational Content through open educational resources.'>
                                                         {
                                                             (alt) => <img
@@ -84,10 +84,10 @@ class Carousel extends React.Component {
                                                                      />
                                                         }
                                                         </FormattedMessage>
-                                                    </NavLink>
+                                                    </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <a href="/features" className="ui large image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.collaborative_alt" defaultMessage='Collaborative Content Authoring.'>
                                                         {
                                                             (alt) => <img
@@ -96,10 +96,10 @@ class Carousel extends React.Component {
                                                                      />
                                                         }
                                                         </FormattedMessage>
-                                                    </NavLink>
+                                                    </a>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <NavLink href="/features" className="ui large  image" tabIndex="-1">
+                                                    <a href="/features" className="ui large  image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.communities_alt" defaultMessage='Supporting Knowledge Communities.'>
                                                         {
                                                             (alt) => <img
@@ -108,7 +108,7 @@ class Carousel extends React.Component {
                                                                      />
                                                         }
                                                         </FormattedMessage>
-                                                    </NavLink>
+                                                    </a>
                                                 </li>
                                             </ul>
 
