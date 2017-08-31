@@ -1,5 +1,6 @@
 import React from 'react';
 import DeckList from './DeckList';
+import { NavLink } from 'fluxible-router';
 
 class Recent extends React.Component {
     render() {
@@ -16,9 +17,9 @@ class Recent extends React.Component {
                         <NavLink href={'/recent'}>View All</NavLink>
                     </button>
                     <div className="ui divided list animated ">
-                         <a className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</a>
-                         <a className="item" href="/deck/5">Deck created from scratch &raquo;</a>
-                         <a className="item" href="/deck/372">TODO:See documentation deck&raquo;</a>
+                         <NavLink className="item" href="/deck/8">Try Sample Deck Imported from SlideWiki.org &raquo;</NavLink>
+                         <NavLink className="item" href="/deck/5">Deck created from scratch &raquo;</NavLink>
+                         <NavLink className="item" href="/deck/372">TODO:See documentation deck&raquo;</NavLink>
                      </div> */}
                 </div>
             </div>
