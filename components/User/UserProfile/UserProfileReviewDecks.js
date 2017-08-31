@@ -27,19 +27,22 @@ class UserProfileReviewDecks extends React.Component {
     handleApproveClick() {
         this.context.executeAction(approveUser, {
             userid: this.props.user.id,
-            secret: this.props.UserReviewStore.secret
+            secret: this.props.UserReviewStore.secret,
+            jwt: this.props.jwt
         });
     }
     handleSuspendClick() {
         this.context.executeAction(suspendUser, {
             userid: this.props.user.id,
-            secret: this.props.UserReviewStore.secret
+            secret: this.props.UserReviewStore.secret,
+            jwt: this.props.jwt
         });
     }
     handleKeepReviewingClick() {
         this.context.executeAction(keepReviewingUser, {
             userid: this.props.user.id,
-            secret: this.props.UserReviewStore.secret
+            secret: this.props.UserReviewStore.secret,
+            jwt: this.props.jwt
         });
     }
     render() {
