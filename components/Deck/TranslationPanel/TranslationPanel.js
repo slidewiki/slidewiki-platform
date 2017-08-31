@@ -24,6 +24,7 @@ class TranslationPanel extends React.Component {
     handleTranslateToClick(event,data){
         //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
         this.context.executeAction(translateDeckRevision, {
+            // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
             language: data.value+'_'+data.value.toUpperCase()
         });
         this.dropDown.setValue('');
