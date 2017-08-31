@@ -4,7 +4,7 @@ const log = require('../log/clog');
 export default function approveUser(context, payload, done) {
     log.info(context);
 
-    context.service.read('userreview.approve', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.update('userreview.approve', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);

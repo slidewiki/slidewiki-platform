@@ -4,7 +4,7 @@ const log = require('../log/clog');
 export default function suspendUser(context, payload, done) {
     log.info(context);
 
-    context.service.read('userreview.suspend', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.update('userreview.suspend', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
