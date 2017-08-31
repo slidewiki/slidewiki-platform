@@ -31,7 +31,7 @@ import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
-import loadUserReview from '../actions/userReview/loadUserReview';
+import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -232,7 +232,7 @@ export default {
         action: (context, payload, done) => {
             async.series([
                 (callback) => {
-                    context.executeAction(loadUserReview, payload, callback);
+                    context.executeAction(checkReviewableUser, payload, callback);
                 },
                 (callback) => {
                     context.executeAction(chooseAction, payload, callback);
