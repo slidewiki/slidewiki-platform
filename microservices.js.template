@@ -35,6 +35,9 @@ export default {
         },
         'tag': {
             uri : '${SERVICE_URL_TAG}'
+        },
+        'translation': {
+            uri: '${SERVICE_URL_TRANSLATION}'
         }
 
     }
