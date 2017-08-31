@@ -279,18 +279,28 @@ class presentationBroadcast extends React.Component {
         }
 
         function connectionFailureHandler() {
-            swal({
+            let dialog = {
                 title: 'An error occured',
                 html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
                 type: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
                 allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then(() => {
-                cleanup();
-                that.context.executeAction(navigateAction, {'url': '/'});
-            });
+                allowEscapeKey: false,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        cleanup();
+                        that.context.executeAction(navigateAction, {'url': '/'});
+                        resolve();
+                    });
+                }
+            };
+            if(swal.isVisible){
+                swal.hideLoading();
+                swal.insertQueueStep(dialog);
+                swal.clickConfirm();
+            } else
+              swal(dialog);
         }
 
         function handleICEConnectionStateChange(peerID, event) {
@@ -298,6 +308,9 @@ class presentationBroadcast extends React.Component {
                 switch(that.pcs[peerID].RTCconnection.iceConnectionState) {
                     case 'connected':
                         console.log('The connection has been successfully established');
+                        if(!that.isInitiator){
+                            swal.hideLoading();
+                        }
                         break;
                     case 'disconnected':
                         console.log('The connection has been terminated');
@@ -355,15 +368,25 @@ class presentationBroadcast extends React.Component {
                     sendRTCMessage('gotoslide', document.getElementById('slidewikiPresentation').contentWindow.location.href, peerID);// using href instead of currentSlide because it could be bad initialized
                 else {
                     that.sendUsername();
-                    swal({
-                        title: 'You\'ve joined a live presentation',
-                        html: 'Nice to see you here! You will hear the presenters voice and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.',
+                    swal.queue([{
+                        title: 'You\'re about to join a live presentation',
+                        html: 'Nice to see you here! You will hear the presenters voice in a few moments and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.',
                         type: 'info',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Okay',
                         allowOutsideClick: false,
-                        allowEscapeKey: false
-                    }).then(() => {$('body>a#atlwdg-trigger').remove();});
+                        allowEscapeKey: false,
+                        onOpen: () => {
+                            if(that.pcs[peerID].RTCconnection.iceConnectionState !== 'connected')
+                                swal.showLoading();
+                        },
+                        preConfirm: () => {
+                            return new Promise((resolve) => {
+                                $('body>a#atlwdg-trigger').remove();
+                                resolve();
+                            });
+                        }
+                    }]);
                 }
             };
 
