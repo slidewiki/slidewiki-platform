@@ -11,20 +11,19 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'id': args.id, 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype, 'mode': args.mode};
 
-        // const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;//TODO solve these ID issues
         const content_kind = selector.stype;
         const content_id = selector.sid;
         if(resource === 'discussion.list'){
             /*********connect to microservices*************/
-            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id}).then((res) => {
-                callback(null, {discussion: JSON.parse(res), selector: selector});
+            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=false'}).then((res) => {
+                callback(null, {discussion: JSON.parse(res).items, selector: selector});
             }).catch((err) => {
                 // console.log(err);
                 callback(err, {discussion: [], selector: selector});
             });
         } else if(resource === 'discussion.count'){
-            rp.get({uri: Microservices.discussion.uri + '/discussion/count/' + content_kind + '/' + content_id}).then((res) => {
-                callback(null, {count: res, selector: selector});
+            rp.get({uri: Microservices.discussion.uri + '/discussion/' + content_kind + '/' + content_id + '?metaonly=true'}).then((res) => {
+                callback(null, {count: JSON.parse(res).count, selector: selector});
             }).catch((err) => {
                 console.log('Error while getting discussion count of deck:', err.StatusCodeError, err.message, err.options);
                 callback(null, {count: 0, selector: selector});
@@ -38,7 +37,6 @@ export default {
         let args = params.params? params.params : params;
         let selector= args.selector;
         if(resource === 'discussion.comment'){
-            // const content_id = (!selector.sid.startsWith('1122334455')) ? ('112233445566778899000000'.substring(0, 24 - selector.sid.length) + selector.sid) : selector.sid;
             const content_id = selector.sid;
             rp.post({
                 uri: Microservices.discussion.uri + '/comment/new',
