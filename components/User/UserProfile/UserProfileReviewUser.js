@@ -14,7 +14,6 @@ import UserProfileReviewDecks from './UserProfileReviewDecks';
 import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 import getNextReviewableUser from '../../../actions/userreview/getNextReviewableUser';
-import saveSecret from '../../../actions/userreview/saveSecret';
 
 class UserProfileReviewUser extends React.Component {
     componentDidMount() {
@@ -25,37 +24,21 @@ class UserProfileReviewUser extends React.Component {
 
             $('.ui.login.modal').modal('show');
         } else if (!this.props.UserReviewStore.secretCorrect) {
-            swal({
-                input: 'password',
-                text: 'What is the secret?',
-                title: 'Secret',
-                showCancelButton: true
-            })
-            .then((secret) => {
-                this.context.executeAction(saveSecret, {
-                    secret: secret
-                });
-            }).catch(swal.noop);
+            this.context.executeAction(navigateAction, {
+                url: '/Sfn87Pfew9Af09aM'
+            });
         }
     }
 
     componentDidUpdate() {
         if (!this.props.UserReviewStore.secretCorrect) {
-            swal({
-                input: 'password',
-                text: 'What is the secret?',
-                title: 'Secret',
-                showCancelButton: true
-            })
-            .then((secret) => {
-                this.context.executeAction(saveSecret, {
-                    secret: secret
-                });
-            }).catch(swal.noop);
+            this.context.executeAction(navigateAction, {
+                url: '/Sfn87Pfew9Af09aM'
+            });
         }
-        if (this.props.UserReviewStore.dimmer.approve === true) {
+        if (this.props.UserReviewStore.dimmer.approve) {
             swal({
-                type: 'warning',
+                type: 'success',
                 text: 'Do you want to review another?',
                 title: 'User approved',
                 showCancelButton: true,
@@ -64,20 +47,13 @@ class UserProfileReviewUser extends React.Component {
             })
             .then(() => {
                 this.context.executeAction(getNextReviewableUser, {
-
-
-
-
-                    new: true,
-
-
-
-                    secret: this.props.UserReviewStore.secret
+                    secret: this.props.UserReviewStore.secret,
+                    jwt: this.props.UserProfileStore.jwt
                 });
             },).catch(swal.noop);
-        } else if (this.props.UserReviewStore.dimmer.suspend === true) {
+        } else if (this.props.UserReviewStore.dimmer.suspend) {
             swal({
-                type: 'warning',
+                type: 'success',
                 text: 'Do you want to review another?',
                 title: 'User suspended',
                 showCancelButton: true,
@@ -86,12 +62,13 @@ class UserProfileReviewUser extends React.Component {
             })
             .then(() => {
                 this.context.executeAction(getNextReviewableUser, {
-                    secret: this.props.UserReviewStore.secret
+                    secret: this.props.UserReviewStore.secret,
+                    jwt: this.props.UserProfileStore.jwt
                 });
             },).catch(swal.noop);
-        } else if (this.props.UserReviewStore.dimmer.keepreviewing === true) {
+        } else if (this.props.UserReviewStore.dimmer.keepreviewing) {
             swal({
-                type: 'warning',
+                type: 'success',
                 text: 'Do you want to review another?',
                 title: 'User returned to the queue',
                 showCancelButton: true,
@@ -100,14 +77,26 @@ class UserProfileReviewUser extends React.Component {
             })
             .then(() => {
                 this.context.executeAction(getNextReviewableUser, {
-                    secret: this.props.UserReviewStore.secret
+                    secret: this.props.UserReviewStore.secret,
+                    jwt: this.props.UserProfileStore.jwt
                 });
             },).catch(swal.noop);
+        } else if (this.props.UserReviewStore.dimmer.noreviewables) {
+            swal({
+                type: 'success',
+                text: 'There are no users for review.',
+                title: 'No users',
+                timer: 4000,
+                showCloseButton: false,
+                showCancelButton: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            });
         }
     }
 
     render() {
-        return (<UserProfileReviewDecks user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} />);
+        return (<UserProfileReviewDecks user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} jwt={this.props.UserProfileStore.jwt} />);
     }
 }
 

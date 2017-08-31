@@ -7,8 +7,14 @@ export default function getNextReviewableUser(context, payload, done) {
 
     context.service.read('userreview.nextreviewable', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename});
-            context.executeAction(serviceUnavailable, payload, done);
+            if (err.statusCode === 404) {
+                context.dispatch('NO_REVIEWABLES', []);
+            } else if (err.statusCode === 403) {
+                context.dispatch('NEXT_REVIEWABLE_UNAUTHORIZED', {secret: payload.secret, secretCorrect: false});
+            } else {
+                log.error(context, {filepath: __filename});
+                context.executeAction(serviceUnavailable, payload, done);
+            }
             return;
         } else {
             context.dispatch('NEXT_REVIEWABLE_USER_SUCCESS', res);

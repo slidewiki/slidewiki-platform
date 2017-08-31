@@ -82,24 +82,18 @@ class UserReviewStore extends BaseStore {
         this.emitChange();
     }
 
-    readUserSuccess(payload) {
-        this.username = payload.username;
-        this.userid = payload.userid;
-        this.reviewable = payload.reviewable;
-        this.dimmer.noreviewables = false;
-
+    nextReviewableUnauthorized(payload) {
+        this.secretCorrect = false;
+        this.secret = payload.secret;
         this.emitChange();
     }
 
-    saveSecret(payload) {
-        this.secret = payload.secret;
-
-
-
-//////////////////////////////////
+    noReviewables(payload) {
+        this.username = '';
+        this.userid = '';
+        this.dimmer.noreviewables = true;
         this.secretCorrect = true;
-
-
+        this.emitChange();
     }
 }
 
@@ -109,8 +103,8 @@ UserReviewStore.handlers = {
     'SUSPEND_SUCCESS': 'suspendSuccess',
     'KEEP_REVIEWING_SUCCESS': 'keepReviewingSuccess',
     'NEXT_REVIEWABLE_USER_SUCCESS': 'nextReviewableUserSuccess',
-    'READ_USER_SUCCESS': 'readUserSuccess',
-    'SAVE_SECRET': 'saveSecret'
+    'NEXT_REVIEWABLE_UNAUTHORIZED': 'nextReviewableUnauthorized',
+    'NO_REVIEWABLES': 'noReviewables'
 };
 
 export default UserReviewStore;
