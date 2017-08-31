@@ -1,6 +1,7 @@
 import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
 import addActivity from '../../actions/activityfeed/addActivity';
+import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
 import MailShareModal from './MailShareModal';
 
 class SocialShare extends React.Component {
@@ -50,6 +51,7 @@ class SocialShare extends React.Component {
             }
         };
         context.executeAction(addActivity, {activity: activity});
+        context.executeAction(incrementDeckViewCounter, {type: 'share'});
     }
 
     render() {

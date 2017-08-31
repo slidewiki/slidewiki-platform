@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
-import {NavLink} from 'fluxible-router';
+import { NavLink } from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 
@@ -156,7 +156,7 @@ class Home extends React.Component {
                                                                             id='home.3.strong4'
                                                                             defaultMessage='Download'/></strong>
                                                     }}
-                                                    defaultMessage="{strong} decks in PDF, ePub or SCROM format."/>
+                                                    defaultMessage="{strong} decks in PDF, ePub or SCORM format."/>
                                                 </div>
                                             </div>
                                         </div>
@@ -186,7 +186,7 @@ class Home extends React.Component {
                                         </div>
                                         <div className="item">
                                             <div className="content">
-                                                <a className="header" href="/features"><FormattedMessage id='home.learn' defaultMessage='Learn about SlideWiki'/></a>
+                                                <NavLink className="header" href="/features"><FormattedMessage id='home.learn' defaultMessage='Learn about SlideWiki'/></NavLink>
                                                 <div className="description">
                                                     <p><FormattedMessage id='home.learn_desc' defaultMessage="Find out more about SlideWiki's features and how it can be used to create, share and adapt slides, decks and open educational resources."/></p>
                                                 </div>

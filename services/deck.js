@@ -68,6 +68,26 @@ export default {
                 }, {});
             });
 
+            let shareCountPromise = rp.get({
+                uri: Microservices.activities.uri + '/activities/allrevisions/count/share/deck/' + deckId,
+                simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
+            }).catch((err) => {
+                callback({
+                    msg: 'Error in retrieving share count',
+                    content: err
+                }, {});
+            });
+
+            let downloadCountPromise = rp.get({
+                uri: Microservices.activities.uri + '/activities/allrevisions/count/download/deck/' + deckId,
+                simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
+            }).catch((err) => {
+                callback({
+                    msg: 'Error in retrieving download count',
+                    content: err
+                }, {});
+            });
+
             /* Create user data promise which is dependent on deck data promise */
             let usersPromise = deckPromise.then((deckRes) => {
                 // This should be done when deckservice and userservice data is in sync;
@@ -89,9 +109,12 @@ export default {
             });
 
             /* Create promise which resolves when all the three promises are resolved or fails when any one of the three promises fails */
-            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise]).then((data) => {
+            Promise.all([deckPromise, slidesPromise, forkCountPromise, usersPromise, shareCountPromise, downloadCountPromise]).then((data) => {
                 let deckData = JSON.parse(data[0]);
                 deckData.forkCount = JSON.parse(data[2]);
+                deckData.shareCount = JSON.parse(data[4]);
+                deckData.downloadCount = JSON.parse(data[5]);
+
                 callback(null, {
                     deckData: deckData,
                     slidesData: JSON.parse(data[1]),
