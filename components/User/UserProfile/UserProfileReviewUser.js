@@ -13,7 +13,7 @@ import UserReviewStore from '../../../stores/UserReviewStore';
 import UserProfileReviewDecks from './UserProfileReviewDecks';
 import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
-import getNextReviewableUser from '../../../actions/userreview/getNextReviewableUser';
+import getNextReviewableUser from '../../../actions/userReview/getNextReviewableUser';
 
 class UserProfileReviewUser extends React.Component {
     componentDidMount() {
@@ -91,7 +91,7 @@ class UserProfileReviewUser extends React.Component {
                 showCancelButton: false,
                 allowEscapeKey: false,
                 showConfirmButton: false
-            });
+            }).then(() => {});
         }
     }
 

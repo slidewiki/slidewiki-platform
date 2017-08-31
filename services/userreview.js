@@ -28,7 +28,7 @@ export default {
 
         if (resource === 'userreview.keepreviewing') {
             rp.post({uri: Microservices.user.uri + '/reviewqueue/' + args.userid + '?secret=' + secret, headers: {'----jwt----': args.jwt }}).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, res);
             }).catch((err) => {
                 console.log(err.StatusCodeError, err.message, err.options);
                 callback(err, {});
@@ -43,14 +43,14 @@ export default {
 
         if (resource === 'userreview.approve') {
             rp.patch({uri: Microservices.user.uri + '/user/' + args.userid + '/approve?secret=' + secret, headers: {'----jwt----': args.jwt }}).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, res);
             }).catch((err) => {
                 console.log(err.StatusCodeError, err.message, err.options);
                 callback(err, {});
             });
         } else if (resource === 'userreview.suspend') {
             rp.post({uri: Microservices.user.uri + '/user/' + args.userid + '/suspend?secret=' + secret, headers: {'----jwt----': args.jwt }}).then((res) => {
-                callback(null, JSON.parse(res));
+                callback(null, res);
             }).catch((err) => {
                 console.log(err.StatusCodeError, err.message, err.options);
                 callback(err, {});

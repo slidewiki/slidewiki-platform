@@ -2,7 +2,7 @@ import React from 'react';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import UserReviewStore from '../../../stores/UserReviewStore';
-import getNextReviewableUser from '../../../actions/userreview/getNextReviewableUser';
+import getNextReviewableUser from '../../../actions/userReview/getNextReviewableUser';
 
 class UserProfileReview extends React.Component {
     componentDidMount() {
@@ -45,7 +45,7 @@ class UserProfileReview extends React.Component {
                 showCancelButton: false,
                 allowEscapeKey: false,
                 showConfirmButton: false
-            });
+            }).then(() => {});
         }
     }
 
