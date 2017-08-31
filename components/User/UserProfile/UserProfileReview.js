@@ -17,10 +17,11 @@ class UserProfileReview extends React.Component {
 
     componentDidUpdate() {
         if (!this.props.UserReviewStore.secretCorrect) {
+            let title = ( this.props.UserReviewStore.secret === '') ? 'Secret' : 'Authorization failed. Try again.'
             swal({
                 input: 'password',
                 text: 'What is the secret?',
-                title: 'Secret',
+                title: title,
                 showCancelButton: true
             })
             .then((secret) => {
