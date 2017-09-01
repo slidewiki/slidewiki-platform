@@ -82,7 +82,7 @@ class ContactUs extends React.Component {
             },
             form_firstName_placeholder:{
                 id: 'contactUs.form_firstName_placeholder',
-                defaultMessage:'First name:'
+                defaultMessage:'First name'
             },
             form_lastName_label:{
                 id: 'contactUs.form_lastName_label',
@@ -90,7 +90,7 @@ class ContactUs extends React.Component {
             },
             form_lastName_placeholder:{
                 id: 'contactUs.form_lastName_placeholder',
-                defaultMessage:'Last name:'
+                defaultMessage:'Last name'
             },
             form_email_label:{
                 id: 'contactUs.form_email_label',
@@ -332,6 +332,7 @@ class ContactUs extends React.Component {
 
         //Short way. It creates symple labels. If they don't like ribbons, we can change to this:
         //     <Form.Input id='NameContact' label='Name:' placeholder='Your name' />
+
         return (
             <Container text>
                 <Divider hidden />
@@ -344,55 +345,43 @@ class ContactUs extends React.Component {
                     <Header as='h3'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)}>
                       <Form.Field>
-                      <Label as='label' style={labelStyle} ribbon color='blue' htmlFor="typeContact">
+                      <label htmlFor="typeContact">
                        {this.context.intl.formatMessage(this.messages.form_type_label)}
-                      </Label>
+                      </label>
                       <Dropdown selection openOnFocus id='typeContact' name='typeContact'
-                       as='input'
                        ref={(type) => {this.typeContact = type;}}
                        placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} options={typeOptions}
                        tabIndex="0" aria-required="true" />
                       </Form.Field>
-                      <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'
-                         htmlFor="firstNameContact">
-                         {this.context.intl.formatMessage(this.messages.form_firstName_label)}
-                        </Label>
-                        <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
+
+                      <Form.Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
+                         label={this.context.intl.formatMessage(this.messages.form_firstName_label)}
                          placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
                          value={this.state.firstName}
-                         onChange ={this.onFirstNameChange.bind(this)}/>
-                      </Form.Field>
-                      <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="lastNameContact">
-                          {this.context.intl.formatMessage(this.messages.form_lastName_label)}
-                        </Label>
-                        <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
+                         onChange ={this.onFirstNameChange.bind(this)}
+                      />
+
+                      <Form.Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
+                         label={this.context.intl.formatMessage(this.messages.form_lastName_label)}
                          placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
                          value={this.state.lastName}
                          onChange ={this.onLastNameChange.bind(this)}/>
-                      </Form.Field>
-                      <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="emailContact">
-                          {this.context.intl.formatMessage(this.messages.form_email_label)}
-                        </Label>
-                        <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
+
+                      <Form.Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
+                         label={this.context.intl.formatMessage(this.messages.form_email_label)}
                          placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
                          aria-required="true" value={this.state.email}
                          onChange ={this.onEmailChange.bind(this)}/>
-                      </Form.Field>
-                      <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="summaryContact">
-                        {this.context.intl.formatMessage(this.messages.form_summary_label)}
-                        </Label>
-                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
+
+                      <Form.Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
+                        label={this.context.intl.formatMessage(this.messages.form_summary_label)}
                         placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
                         aria-required="true"  />
-                      </Form.Field>
+
                       <Form.Field>
-                        <Label as='label' style={labelStyle} ribbon color='blue'  htmlFor="descriptionContact">
+                        <label  htmlFor="descriptionContact">
                          {this.context.intl.formatMessage(this.messages.form_description_label)}
-                        </Label>
+                        </label>
                          <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
                           autoHeight
                           placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
