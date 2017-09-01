@@ -380,7 +380,7 @@ class ContactUs extends React.Component {
 
                     */}
                       <Form.Field>
-                        <label> {this.context.intl.formatMessage(this.messages.form_type_label)}</label>
+                        <label htmlFor='typeContact2'> => {this.context.intl.formatMessage(this.messages.form_type_label)}</label>
                         <Input list='typeOptions' id='typeContact2' name="typeContact2"
                           ref={(input) => {this.typeContact2 = input;}}
                           placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)}
@@ -394,7 +394,7 @@ class ContactUs extends React.Component {
                       </Form.Field>
 
                       <Form.Field>
-                       <label>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
+                       <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
                        <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
                          placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
                          value={this.state.firstName}
@@ -403,7 +403,7 @@ class ContactUs extends React.Component {
                       </Form.Field>
 
                       <Form.Field>
-                         <label>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
+                         <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
                          <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
                          placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
                          value={this.state.lastName}
@@ -411,7 +411,7 @@ class ContactUs extends React.Component {
                       </Form.Field>
 
                       <Form.Field>
-                         <label>{this.context.intl.formatMessage(this.messages.form_email_label)}</label>
+                         <label htmlFor='emailContact'>{this.context.intl.formatMessage(this.messages.form_email_label)}</label>
                          <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
                          placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
                          aria-required="true" value={this.state.email}
@@ -419,7 +419,7 @@ class ContactUs extends React.Component {
                       </Form.Field>
 
                       <Form.Field>
-                        <label>{this.context.intl.formatMessage(this.messages.form_summary_label)}</label>
+                        <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}</label>
                         <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
                         placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
                         aria-required="true"  />
