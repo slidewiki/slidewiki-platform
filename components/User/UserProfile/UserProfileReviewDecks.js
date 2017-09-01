@@ -18,10 +18,12 @@ class UserProfileReviewDecks extends React.Component {
 
         let that = this;
         window.onbeforeunload = (e) => {
-          // that.handleKeepReviewingClick(); //not doing this because it is executed after the reviwer clicks "stay on page" and not when clicked on "leave page"
-          const message = 'Please finish this user before closing the tab.';
-          e.returnValue = message;
-          return message;
+            if (!this.props.UserReviewStore.reviewable)
+                return;
+            // that.handleKeepReviewingClick(); //not doing this because it is executed after the reviwer clicks "stay on page" and not when clicked on "leave page"
+            const message = 'Please finish this user before closing the tab.';
+            e.returnValue = message;
+            return message;
         };
     }
 
