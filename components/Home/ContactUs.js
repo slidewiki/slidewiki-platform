@@ -82,7 +82,7 @@ class ContactUs extends React.Component {
             },
             form_firstName_placeholder:{
                 id: 'contactUs.form_firstName_placeholder',
-                defaultMessage:'Yout first name:'
+                defaultMessage:'First name:'
             },
             form_lastName_label:{
                 id: 'contactUs.form_lastName_label',
@@ -90,7 +90,7 @@ class ContactUs extends React.Component {
             },
             form_lastName_placeholder:{
                 id: 'contactUs.form_lastName_placeholder',
-                defaultMessage:'Yout last name:'
+                defaultMessage:'Last name:'
             },
             form_email_label:{
                 id: 'contactUs.form_email_label',
@@ -347,7 +347,9 @@ class ContactUs extends React.Component {
                       <Label as='label' style={labelStyle} ribbon color='blue' htmlFor="typeContact">
                        {this.context.intl.formatMessage(this.messages.form_type_label)}
                       </Label>
-                      <Dropdown selection openOnFocus id='typeContact' name='typeContact' ref={(type) => {this.typeContact = type;}}
+                      <Dropdown selection openOnFocus id='typeContact' name='typeContact'
+                       as='input'
+                       ref={(type) => {this.typeContact = type;}}
                        placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} options={typeOptions}
                        tabIndex="0" aria-required="true" />
                       </Form.Field>
