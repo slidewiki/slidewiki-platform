@@ -11,7 +11,7 @@ class DeckCard extends React.Component {
 
     render() {
         // console.log('DeckCard: cardContent', this.props);
-
+        
         let thumbnailURL = Microservices.file.uri + '/slideThumbnail/';
         if (this.props.cardContent.firstSlide)
             thumbnailURL += this.props.cardContent.firstSlide + '.jpeg';
@@ -19,12 +19,26 @@ class DeckCard extends React.Component {
             thumbnailURL = this.props.cardContent.picture;
         return (
             <div className='card'>
+              {this.props.newTab === true ? (
+                <a className="ui medium centered spaced image" href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
+                  <Thumbnail url={thumbnailURL}
+                      slideId={this.props.cardContent.deckID} />
+                </a>
+              ) : (
                 <NavLink className="ui medium centered spaced image" href={'/deck/' + this.props.cardContent.deckID}>
-                    <Thumbnail url={thumbnailURL}
-                        slideId={this.props.cardContent.deckID} />
+                  <Thumbnail url={thumbnailURL}
+                      slideId={this.props.cardContent.deckID} />
                 </NavLink>
+              )}
+
                 <div className="content">
-                    <div className="header"><NavLink href={'/deck/' + this.props.cardContent.deckID} >{this.props.cardContent.title}</NavLink></div>
+                    <div className="header">
+                      {this.props.newTab === true ? (
+                        <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
+                      ) : (
+                        <NavLink href={'/deck/' + this.props.cardContent.deckID} >{this.props.cardContent.title}</NavLink>
+                      )}
+                    </div>
                     <div className="meta">
                         <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
                     </div>

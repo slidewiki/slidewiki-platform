@@ -95,7 +95,7 @@ class UserProfileReviewDecks extends React.Component {
                           </div>
                       </div>
                       <div className="ui segment">
-                          <PopularDecks size={0} decks={this.props.decks} sort={this.sortBy}/>
+                          <PopularDecks size={0} decks={this.props.decks} sort={this.sortBy} newTab={true}/>
                       </div>
                   </div>
               </div>
