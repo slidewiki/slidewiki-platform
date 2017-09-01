@@ -11,7 +11,6 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
-import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
@@ -30,6 +29,7 @@ import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
+import loadDiffview from '../actions/loadDiffview';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -266,6 +266,15 @@ export default {
         method: 'get',
         action: (context, payload, done) => {
             context.executeAction(loadLegacy, payload, done);
+        }
+    },
+    diffview: {
+        path: '/diffview/:stype/:sid/:did',
+        method: 'get',
+        page: 'diffview',
+        handler: require('../components/Deck/Diffview/Diffview'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDiffview, payload, done);
         }
     },
     contributors: {

@@ -5,7 +5,7 @@ import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import cheerio from 'cheerio';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
-import TreeUtil from '../../../components/Deck/TreePanel/util/TreeUtil';
+import TreeUtil from '../TreePanel/util/TreeUtil';
 
 class ActivityItem extends React.Component {
     handleLike() {
@@ -53,7 +53,7 @@ class ActivityItem extends React.Component {
             fontStyle: 'italic',
             fontWeight: 400
         };
-        const cheerioContentName = (node.content_name !== undefined) ? cheerio.load(node.content_name).text() : '';
+        const cheerioContentName = (node.content_name) ? cheerio.load(node.content_name).text() : '';
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
         const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
 

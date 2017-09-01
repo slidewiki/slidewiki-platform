@@ -38,7 +38,7 @@ class ContentDiscussionPanel extends React.Component {
                     <div>There are currently no comments for this {selector.stype}.</div>
                     :
                     <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
-                        {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} userid={this.props.UserProfileStore.userid} />); })}
+                        {this.props.ContentDiscussionStore.discussion.map((comment, index) => { return (<Comment key={index} comment={comment} userid={this.props.UserProfileStore.userid} selector={selector}/>); })}
                     </div>
                 }
             </div>
