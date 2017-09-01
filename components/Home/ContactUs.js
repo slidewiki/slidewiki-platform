@@ -332,6 +332,17 @@ class ContactUs extends React.Component {
 
         //Short way. It creates symple labels. If they don't like ribbons, we can change to this:
         //     <Form.Input id='NameContact' label='Name:' placeholder='Your name' />
+        /*
+        <Form.Input list='typeOptions' id='typeContact2'
+          label= {this.context.intl.formatMessage(this.messages.form_type_label)}
+          placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} />
+          <datalist id='typeOptions'>
+            <option value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} />
+            <option value={this.context.intl.formatMessage(this.messages.typeOption_support)} />
+            <option value={this.context.intl.formatMessage(this.messages.typeOption_account)} />
+            <option value={this.context.intl.formatMessage(this.messages.typeOption_other)} />
+          </datalist>
+          */
 
         return (
             <Container text>
@@ -352,6 +363,20 @@ class ContactUs extends React.Component {
                        ref={(type) => {this.typeContact = type;}}
                        placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} options={typeOptions}
                        tabIndex="0" aria-required="true" />
+                      </Form.Field>
+
+                      <Form.Field>
+                        <label htmlFor="typeContact2">
+                        {this.context.intl.formatMessage(this.messages.form_type_label)}
+                        </label>
+                        <Input list='typeOptions' id='typeContact2'
+                          placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)} />
+                          <datalist id='typeOptions'>
+                            <option value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} />
+                            <option value={this.context.intl.formatMessage(this.messages.typeOption_support)} />
+                            <option value={this.context.intl.formatMessage(this.messages.typeOption_account)} />
+                            <option value={this.context.intl.formatMessage(this.messages.typeOption_other)} />
+                          </datalist>
                       </Form.Field>
 
                       <Form.Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
