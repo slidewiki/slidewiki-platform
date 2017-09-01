@@ -380,7 +380,7 @@ class ContactUs extends React.Component {
 
                     */}
                       <Form.Field>
-                        <label htmlFor='typeContact2'> => {this.context.intl.formatMessage(this.messages.form_type_label)}</label>
+                        <label htmlFor='typeContact2'> {this.context.intl.formatMessage(this.messages.form_type_label)}</label>
                         <Input list='typeOptions' id='typeContact2' name="typeContact2"
                           ref={(input) => {this.typeContact2 = input;}}
                           placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)}
