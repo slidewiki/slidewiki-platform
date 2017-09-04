@@ -117,14 +117,11 @@ module.exports = function userStoragePlugin(options) {
                             res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, user, {
                                 expires: new Date(0),
                                 maxAge: 1,
-                                // domain: host,
                                 sameSite: true
                             }));
                         }
                         else {
-                            cookie.remove(user_cookieName, {
-                                domain: location.hostname
-                            });
+                            cookie.remove(user_cookieName);
                         }
                     };
                 },
