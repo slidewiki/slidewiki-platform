@@ -9,6 +9,10 @@ export default function userSignIn(context, payload, done) {
         if (err) {
             // console.log(err, err.statusCode, err.message);
             switch (err.statusCode) {
+                case 403:
+                    context.dispatch('SIGNIN_FAILURE', {statusCode: 403, message: payload.errorMessages.error403});
+                    break;
+
                 case 404:
                     context.dispatch('SIGNIN_FAILURE', {statusCode: 404, message: payload.errorMessages.error404});
                     break;
