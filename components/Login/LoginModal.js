@@ -36,6 +36,10 @@ class LoginModal extends React.Component {
         this.isLoading = false;
 
         this.errorMessages = defineMessages({
+            error403: {
+                id: 'userSignIn.errormessage.isSPAM',
+                defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
+            },
             error404: {
                 id: 'userSignIn.errormessage.notFound',
                 defaultMessage: 'The credentials are unknown. Please retry with another input.'
@@ -73,6 +77,7 @@ class LoginModal extends React.Component {
                 email: this.refs.email1.value,
                 password: hashPassword(this.refs.password1.value),
                 errorMessages: {
+                    error403: this.context.intl.formatMessage(this.errorMessages.error403),
                     error404: this.context.intl.formatMessage(this.errorMessages.error404),
                     error423: this.context.intl.formatMessage(this.errorMessages.error423)
                 }
