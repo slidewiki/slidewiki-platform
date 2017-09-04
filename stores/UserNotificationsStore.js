@@ -5,6 +5,7 @@ class UserNotificationsStore extends BaseStore {
         super(dispatcher);
         this.notifications = undefined;
         this.newNotifications = [];
+        this.newNotificationsCount = 0;
         this.subscriptions = [];
         this.activityTypes = [
             {type:'add', selected: true},
@@ -28,12 +29,18 @@ class UserNotificationsStore extends BaseStore {
         this.subscriptions = payload.subscriptions;
 
         this.markNewNotifications();
+        this.newNotificationsCount = this.newNotifications.length;
         this.addVisibleParameterToNotifications();
 
         this.emitChange();
     }
     loadNewNotifications(payload) {
         this.newNotifications = payload.newNotifications;
+        this.newNotificationsCount = this.newNotifications.length;
+        this.emitChange();
+    }
+    loadNewNotificationsCount(payload) {
+        this.newNotificationsCount = payload.count;
         this.emitChange();
     }
     markNewNotifications() {
@@ -64,7 +71,7 @@ class UserNotificationsStore extends BaseStore {
     }
     clearNotificationNewParameter(payload) {
         let index = this.newNotifications.findIndex((newNotification) => {return (newNotification.id === payload.newNotificationId);});
-        if (index >=0) {
+        if (index >= 0) {
             this.newNotifications.splice(index, 1);
 
             let notification = this.notifications.find((notification) => {return (notification.newNotificationId === payload.newNotificationId);});
@@ -74,14 +81,14 @@ class UserNotificationsStore extends BaseStore {
 
             this.emitChange();
         }
+        this.newNotificationsCount = this.newNotifications.length;
     }
     clearAllNotificationsNewParameter(payload) {
         this.notifications.forEach((notification) => {notification.newNotificationId = '';});
         this.newNotifications = [];
-
+        this.newNotificationsCount = 0;
         this.emitChange();
     }
-
     updateNotificationsVisibility(payload) {
         let clickedSubscription = (payload.changedId === 0) ? this.activityTypes.find((at) => {return (at.type === payload.changedType);}) : this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
         if (clickedSubscription !== undefined) {
@@ -169,6 +176,7 @@ class UserNotificationsStore extends BaseStore {
         return {
             notifications: this.notifications,
             newNotifications: this.newNotifications,
+            newNotificationsCount: this.newNotificationsCount,
             subscriptions: this.subscriptions,
             activityTypes: this.activityTypes
         };
@@ -179,6 +187,7 @@ class UserNotificationsStore extends BaseStore {
     rehydrate(state) {
         this.notifications = state.notifications;
         this.newNotifications = state.newNotifications;
+        this.newNotificationsCount = state.newNotificationsCount;
         this.subscriptions = state.subscriptions;
         this.activityTypes = state.activityTypes;
     }
@@ -188,6 +197,7 @@ UserNotificationsStore.storeName = 'UserNotificationsStore';
 UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
     'LOAD_NEW_USER_NOTIFICATIONS_SUCCESS': 'loadNewNotifications',
+    'LOAD_NEW_USER_NOTIFICATIONS_COUNT_SUCCESS': 'loadNewNotificationsCount',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
     'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
     'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter'
