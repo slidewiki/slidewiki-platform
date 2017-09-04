@@ -1,6 +1,6 @@
 import UserProfileStore from '../../../stores/UserProfileStore';
 import notFoundError from '../../error/notFoundError';
-import methodNotAllowedError from '../../error/methodNotAllowedError';
+import spamDetectedError from '../../error/spamDetectedError';
 import serviceUnavailable from '../../error/serviceUnavailable';
 import { isEmpty } from '../../../common.js';
 const log = require('../../log/clog');
@@ -37,7 +37,7 @@ export default function fetchUser(context, payload, done) {
                     return;
                 }
             } else if (err.statusCode === 403) {
-                context.executeAction(methodNotAllowedError, {}, done);
+                context.executeAction(spamDetectedError, {message: 'SPAM'}, done);
                 return;
             } else {
                 context.executeAction(serviceUnavailable, payload, done);
