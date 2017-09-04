@@ -84,6 +84,7 @@ fetchrPlugin.registerService(require('./services/activities'));
 fetchrPlugin.registerService(require('./services/decktree'));
 fetchrPlugin.registerService(require('./services/translation'));
 fetchrPlugin.registerService(require('./services/history'));
+fetchrPlugin.registerService(require('./services/diffview'));
 fetchrPlugin.registerService(require('./services/usage'));
 fetchrPlugin.registerService(require('./services/questions'));
 fetchrPlugin.registerService(require('./services/discussion'));
