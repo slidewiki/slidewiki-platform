@@ -194,8 +194,12 @@ class presentationBroadcast extends React.Component {
                             sdpMLineIndex: message.data.label,
                             candidate: message.data.candidate
                         });
-                        that.pcs[message.sender].RTCconnection.addIceCandidate(candidate).catch((e) => {}); //Catch defective candidates, TODO add better exception handling
-                    } catch (e) {}//TODO add better exception handling
+                        that.pcs[message.sender].RTCconnection.addIceCandidate(candidate).catch((e) => {
+                          console.log('Error: was unable to add Ice candidate:', candidate, 'to sender', message.sender);
+                        }); //Catch defective candidates, TODO add better exception handling
+                    } catch (e) {
+                      console.log('Error: building the candiate failed with', message);
+                    }//TODO add better exception handling
                 }
             }
         });
@@ -309,7 +313,11 @@ class presentationBroadcast extends React.Component {
                     case 'connected':
                         console.log('The connection has been successfully established');
                         if(!that.isInitiator){
-                            swal.hideLoading();
+                            try {
+                              swal.hideLoading();
+                            } catch (e) {
+                              console.log('Error: swal was not defined', e);
+                            }
                         }
                         break;
                     case 'disconnected':
@@ -475,7 +483,7 @@ class presentationBroadcast extends React.Component {
                     delete that.pcs[peerID];
                 }
             } catch (e) {//TODO add better error handling
-                console.log('Error when deleteing RTC connections', e);
+                console.log('Error when deleting RTC connections', e);
             } finally {
                 if (that.isInitiator){
                     that.forceUpdate();
