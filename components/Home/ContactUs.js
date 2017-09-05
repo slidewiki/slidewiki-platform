@@ -9,14 +9,24 @@ import fetchUser from '../../actions/user/userprofile/fetchUser';
 import {FormattedMessage, defineMessages} from 'react-intl';
 import sendContactForm from '../../actions/home/sendContactForm';
 
+const REPORT_TYPE ={
+    NONE: 0,
+    SUGGESTION : 1,
+    SUPPORT: 2,
+    ACCOUNT: 3,
+    OTHER: 4,
+
+
+};
 class ContactUs extends React.Component {
     constructor(props){
         super(props);
         this.state ={
-            type : '',
+            type : REPORT_TYPE.NONE,
             firstName:this.props.UserProfileStore.user.fname,
             lastName:this.props.UserProfileStore.user.lname,
-            email: this.props.UserProfileStore.user.email
+            email: this.props.UserProfileStore.user.email,
+
 
         };
         this.messages = defineMessages({
@@ -70,7 +80,7 @@ class ContactUs extends React.Component {
             },
             form_type_label:{
                 id: 'contactUs.form_type_label',
-                defaultMessage:'Type of report*:'
+                defaultMessage:'Type of report:'
             },
             form_type_placeholder:{
                 id: 'contactUs.form_type_placeholder',
@@ -94,7 +104,7 @@ class ContactUs extends React.Component {
             },
             form_email_label:{
                 id: 'contactUs.form_email_label',
-                defaultMessage:'Email*:'
+                defaultMessage:'Email:'
             },
             form_email_placeholder:{
                 id: 'contactUs.form_email_placeholder',
@@ -102,7 +112,7 @@ class ContactUs extends React.Component {
             },
             form_summary_label:{
                 id: 'contactUs.form_summary_label',
-                defaultMessage:'Summary*:'
+                defaultMessage:'Summary:'
             },
             form_summary_placeholder:{
                 id: 'contactUs.form_summary_placeholder',
@@ -187,25 +197,50 @@ class ContactUs extends React.Component {
             });
         }
     }
+    onTypeChange(event,data){
+        //updte the type selected: needed to set aria-selected property in each option
+        if(this.context.intl.formatMessage(this.messages.typeOption_suggestion)===this.typeContact2.inputRef.value){
+            this.setState({
+                type : REPORT_TYPE.SUGGESTION
+            });
+
+        } else if(this.context.intl.formatMessage(this.messages.typeOption_support)===this.typeContact2.inputRef.value){
+            this.setState({
+                type : REPORT_TYPE.SUPPORT
+            });
+        } else if(this.context.intl.formatMessage(this.messages.typeOption_account)===this.typeContact2.inputRef.value){
+            this.setState({
+                type : REPORT_TYPE.ACCOUNT
+            });
+        } else if(this.context.intl.formatMessage(this.messages.typeOption_other)===this.typeContact2.inputRef.value){
+            this.setState({
+                type : REPORT_TYPE.OTHER
+            });
+        }
+
+    }
+    /* Screen readers doesn't read aloud the options when we use input+datalist. For this reason, we don't require that element to send the form
     checkType(){
         let noTypeError = true;
-        /*
-        if (this.typeContact.state.value === '' ){
-            noTypeError = false;
-            swal({
-                title: this.context.intl.formatMessage(this.messages.swal_title),
-                text: this.context.intl.formatMessage(this.messages.checkType_text),
-                type: 'error',
-                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
-                confirmButtonClass: 'ui olive button',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                buttonsStyling: false
-            }).then((accepted) => {
+        //The following  code is needed if we implement the type of report using Dropdown
+        //Begin Dropdown
+        //if (this.typeContact.state.value === '' ){
+        //    noTypeError = false;
+        //    swal({
+        //        title: this.context.intl.formatMessage(this.messages.swal_title),
+        //        text: this.context.intl.formatMessage(this.messages.checkType_text),
+        //        type: 'error',
+        //        confirmButtonText: this.context.intl.formatMessage(this.messages.swal_button),
+        //        confirmButtonClass: 'ui olive button',
+        //        allowEscapeKey: false,
+        //        allowOutsideClick: false,
+        //        buttonsStyling: false
+        //    }).then((accepted) => {
 
-                ReactDOM.findDOMNode(this.typeContact).focus();
-            });
-        }*/
+        //        ReactDOM.findDOMNode(this.typeContact).focus();
+        //    });
+        //}
+        //End Dropdown
         if (this.typeContact2.inputRef.value === '' ){
             noTypeError = false;
             swal({
@@ -226,6 +261,7 @@ class ContactUs extends React.Component {
         return noTypeError;
 
     }
+    */
     checkEmail(){
         let noEmailError = true;
         let regExp = /\S+@\S+\.\S+/;
@@ -295,11 +331,10 @@ class ContactUs extends React.Component {
     //Checks if requiered fields are ok.
     // Returns true if all are ok
 
-        if(this.checkType())
-            if(this.checkEmail())
-                if(this.checkSummary())
-                    if(this.checkCaptcha())
-                        return true;
+        if(this.checkEmail())
+            if(this.checkSummary())
+                if(this.checkCaptcha())
+                    return true;
         return false;
     }
 
@@ -337,6 +372,7 @@ class ContactUs extends React.Component {
     }
 
     render() {
+      /* only needed if we use dropdown
         const typeOptions = [
           {value:'Suggestion' , text:this.context.intl.formatMessage(this.messages.typeOption_suggestion)},
           {value:'Support' , text:this.context.intl.formatMessage(this.messages.typeOption_support)},
@@ -344,6 +380,7 @@ class ContactUs extends React.Component {
           {value:'Other' , text:this.context.intl.formatMessage(this.messages.typeOption_other)},
 
         ];
+        */
         const labelStyle = {
             width:20+'px'
         };
@@ -367,7 +404,7 @@ class ContactUs extends React.Component {
                   <Segment attached="bottom" textAlign="left" >
                     <Header as='h3'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)}>
-                    {/*
+                    {/* code needed if we decide use the componet Dropdown for the type
                       <Form.Field>
                       <label htmlFor="typeContact">
                        {this.context.intl.formatMessage(this.messages.form_type_label)}
@@ -379,21 +416,22 @@ class ContactUs extends React.Component {
                       </Form.Field>
 
                     */}
-                      <Form.Field>
-                        <label htmlFor='typeContact2'> {this.context.intl.formatMessage(this.messages.form_type_label)}</label>
+                      <Form.Field key='1'>
+                        <label htmlFor='typeContact2'> {this.context.intl.formatMessage(this.messages.form_type_label)}*</label>
                         <Input list='typeOptions' id='typeContact2' name="typeContact2"
                           ref={(input) => {this.typeContact2 = input;}}
                           placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)}
+                          onChange ={this.onTypeChange.bind(this)}
                         />
-                        <datalist id='typeOptions'>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} />
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_support)} />
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_account)} />
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_other)} />
+                        <datalist id='typeOptions' role='listbox'>
+                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUGGESTION}/>
+                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_support)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUPPORT}/>
+                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_account)} role='option' aria-selected={this.state.type === REPORT_TYPE.ACCOUNT}/>
+                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_other)} role='option' aria-selected={this.state.type === REPORT_TYPE.OTHER}/>
                         </datalist>
                       </Form.Field>
 
-                      <Form.Field>
+                      <Form.Field key='2'>
                        <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
                        <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
                          placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
@@ -402,7 +440,7 @@ class ContactUs extends React.Component {
                        />
                       </Form.Field>
 
-                      <Form.Field>
+                      <Form.Field key='3'>
                          <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
                          <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
                          placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
@@ -410,29 +448,29 @@ class ContactUs extends React.Component {
                          onChange ={this.onLastNameChange.bind(this)}/>
                       </Form.Field>
 
-                      <Form.Field>
-                         <label htmlFor='emailContact'>{this.context.intl.formatMessage(this.messages.form_email_label)}</label>
+                      <Form.Field key='4'>
+                         <label htmlFor='emailContact'>{this.context.intl.formatMessage(this.messages.form_email_label)}*</label>
                          <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
                          placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
                          aria-required="true" value={this.state.email}
                          onChange ={this.onEmailChange.bind(this)}/>
                       </Form.Field>
 
-                      <Form.Field>
-                        <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}</label>
+                      <Form.Field key='5'>
+                        <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>
                         <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
                         placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
                         aria-required="true"  />
                       </Form.Field>
 
-                      <Form.Field>
+                      <Form.Field key='6'>
                         <label  htmlFor="descriptionContact"> {this.context.intl.formatMessage(this.messages.form_description_label)} </label>
                          <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
                           autoHeight
                           placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
                       </Form.Field>
 
-                      <Form.Field>
+                      <Form.Field key='7'>
                         <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
                         <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
                          style={recaptchaStyle} sitekey={publicRecaptchaKey}
@@ -440,7 +478,7 @@ class ContactUs extends React.Component {
                          aria-required="true" tabIndex="0"/>
                       </Form.Field>
 
-                      <Form.Button color='blue'>
+                      <Form.Button color='blue' key='8'>
                         {this.context.intl.formatMessage(this.messages.form_button)}
                       </Form.Button>
                    </Form>
