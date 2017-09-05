@@ -26,12 +26,12 @@ class SpeechRecognition extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('componentDidUpdate', this.props.subtitle, this.props.start);
+        // console.log('componentDidUpdate', this.props.subtitle, this.props.start);
         this.handleSubtitle(this.props.subtitle);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('componentWillReceiveProps ', this.props.start, nextProps.start);
+        // console.log('componentWillReceiveProps ', this.props.start, nextProps.start);
         if (this.props.start === false && nextProps.start === true) {
             this.activateSpeechRecognition();
         }
@@ -98,8 +98,8 @@ class SpeechRecognition extends React.Component {
                     }
                 }
                 final_transcript = capitalize(final_transcript);
-                console.log('Final text: ', final_transcript);
-                console.log('Interim text: ', interim_transcript);
+                // console.log('Final text: ', final_transcript);
+                // console.log('Interim text: ', interim_transcript);
 
                 let m = (final_transcript || interim_transcript);
                 let tosend = m.substr((m.length-300) > 0 ? m.length-300 : 0, 300);
