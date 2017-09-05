@@ -24,7 +24,7 @@ export default {
             }).catch((err) => {
                 console.log('There was an error!', err);
                 returnErr = true;
-                callback(null, {content: slideServiceRes, theme: theme, selector: selector});
+                callback(null, {content: slideServiceRes, theme: undefined, selector: selector});
             });
         }//If presentation.content
         else if(resource === 'presentation.live'){

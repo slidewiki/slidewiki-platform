@@ -2,27 +2,26 @@ import React from 'react';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
-import { Grid, Message, Comment, Input, Button, Form, Divider, Label, Popup } from 'semantic-ui-react';
+import { Grid, Button, Popup } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
+import Chat from './Chat.js';
 
 class presentationBroadcast extends React.Component {
 
     constructor(props) {
         super(props);
         this.texts = {roleText: '', peerCountText: ''};
-        this.textInputLength = 300;
         this.isInitiator = false;
         this.localStream = undefined;
         this.myID = undefined;
         this.presenterID = undefined;
         this.pcs = {}; // {<socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}, <socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}}
         this.turnReady = undefined;
-
         this.pcConfig = {'iceServers': Microservices.webrtc.iceServers};
-
         this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
+        this.lastMessage = {};
 
         //******** SlideWiki specific variables ********
         this.eventForwarding = true;
@@ -30,7 +29,6 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc + '';
         this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc + '';
-        this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
         this.subtitle = '';//used for speech recognition results
         this.speechRecognitionDisabled = false;
         this.startSpeechrecognition = false;
@@ -515,8 +513,13 @@ class presentationBroadcast extends React.Component {
                         toggleBlackScreen();
                     break;
                 case 'message':
-                    if (that.isInitiator)
-                        addMessage(data, false, peerID);
+                    if (that.isInitiator) {
+                        this.lastMessage = {
+                          data: data,
+                          peerID: peerID
+                        };
+                        this.forceUpdate();
+                    }
                     break;
                 case 'log':
                     console.log('Recieved log message from peer: ', data.data);
@@ -682,17 +685,6 @@ class presentationBroadcast extends React.Component {
         }
         that.changeSlide = changeSlide;
 
-        function addMessage(data, fromMyself = false, peerID = null) {
-            let currentTime = new Date().getTime();
-            that.commentList[currentTime] = {};
-            if(!fromMyself)
-                that.commentList[currentTime].peer = 'Peer ' + (that.pcs[peerID].username || Object.keys(that.pcs).indexOf(data.sender));
-            else
-                that.commentList[currentTime].peer = 'Me';
-            that.commentList[currentTime].message = data.data;
-            that.forceUpdate();
-        }
-        that.addMessage = addMessage;
 
         function handleNewUsername(username, peerID) {
             that.pcs[peerID].username = username;
@@ -722,25 +714,7 @@ class presentationBroadcast extends React.Component {
         }
     }
 
-    sendMessage(event) {
-        event.preventDefault();
-        if($('#messageToSend:first').val().length < 15){
-            swal({
-                title: 'Message too short',
-                html: 'The message you tried to send is too short. Please write more than 15 characters.',
-                type: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Okay',
-                allowOutsideClick: false
-            });
-        } else {
-            this.sendRTCMessage('message', $('#messageToSend:first').val(), this.presenterID);
-            this.addMessage({sender: this.myID, data: $('#messageToSend:first').val()}, true);
-            $('#messageToSend:first').val('');
-            this.updateCharCount();
-        }
-        return false;
-    }
+
 
     sendUsername() {
         if (this.context && this.context.getUser() && this.context.getUser().username)
@@ -767,9 +741,7 @@ class presentationBroadcast extends React.Component {
         this.sendRTCMessage('completeTask');
     }
 
-    updateCharCount(){
-        $('#textCharCount').text($('#messageToSend').val().length + '/' + this.textInputLength);
-    }
+
 
     resumePlayback(){
         this.paused = false;
@@ -821,29 +793,6 @@ class presentationBroadcast extends React.Component {
     }
 
     render() {
-        let messages = [];
-        for(let i in this.commentList) {
-            messages.push(
-              <Popup key={i}
-                trigger={
-                  <Message floating>
-                    <Comment.Group>
-                      <Comment>
-                        <Comment.Content>
-                          <Comment.Author>{this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
-                            {this.commentList[i].message}
-                          </Comment.Text>
-                        </Comment.Content>
-                      </Comment>
-                    </Comment.Group>
-                  </Message>
-                }
-                content={this.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
-                position='bottom right'
-              />);
-        }
-
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
             return this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbits';
         }));
@@ -859,28 +808,13 @@ class presentationBroadcast extends React.Component {
                 height={height*0.8 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
-                {(!this.isInitiator) ? (
-                  <Grid columns={1}>
-                    <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.52+'px', 'minHeight': height*0.52+'px', 'height': height*0.52+'px'}}>
-                      <h3>Your Questions:</h3>
-                      {messages}
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Divider clearing />
-                      <Form reply>
-                        <div>
-                          <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
-                          <Form.Field>
-                            <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
-                            <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
-                          </Form.Field>
-                        </div>
-                      </Form>
-                    </Grid.Column>
-                  </Grid>
-                ) : (
-                  <div id="messageList"><h3>Questions from Audience:</h3>{messages}</div>
-                )}
+                <Chat isInitiator={this.isInitiator}
+                  height={height}
+                  sendRTCMessage={this.sendRTCMessage}
+                  presenterID={this.presenterID}
+                  myID={this.myID}
+                  pcs={this.pcs}
+                  lastMessage={this.lastMessage} />
               </Grid.Column>
             </Grid.Row>
 
