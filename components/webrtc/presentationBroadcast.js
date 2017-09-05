@@ -69,7 +69,7 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
-            that.texts.roleText = 'You are the presenter. Other poeple will hear your voice and reflect your presentation progress. ';
+            that.texts.roleText = 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ';
             that.texts.peerCountText = 'People currently listening: ';
             that.forceUpdate();
             setmyID();
