@@ -202,6 +202,23 @@ class ActivityItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'delete':
+                IconNode = (<i className="ui large remove circle outline icon"></i>);
+                const cheerioDeletedName = (node.delete_info.content_name) ? cheerio.load(node.delete_info.content_name).text() : '';
+
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> <span>{'deleted ' + node.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}</span>
+                        <br/>
+                        <span>{'from '} {nodeRef}</span>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+
+                break;
             default:
                 IconNode = (<i className="ui large warning icon"></i>);
                 SummaryNode = (
