@@ -11,7 +11,7 @@ import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
-import PresentationStore from '../../../../../stores/PresentationStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 
@@ -1443,8 +1443,8 @@ class SlideContentEditor extends React.Component {
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
+        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
+            styleName = this.props.DeckTreeStore.theme;
         }
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {
@@ -1522,14 +1522,14 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        PresentationStore: context.getStore(PresentationStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default SlideContentEditor;

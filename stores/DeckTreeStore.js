@@ -15,6 +15,7 @@ class DeckTreeStore extends BaseStore {
         this.isSelectorValid = true;
         this.revisionId = null;
         this.latestRevisionId = null;
+        this.theme = null;
     }
     updateDeckTree(payload) {
         this.isSelectorValid = true;
@@ -47,6 +48,7 @@ class DeckTreeStore extends BaseStore {
         this.error = 0;
         this.revisionId = payload.deckTree.revisionId;
         this.latestRevisionId = payload.deckTree.latestRevisionId;
+        this.theme = payload.deckTree.theme;
         this.emitChange();
     }
     updatePrevNextSelectors() {
@@ -537,7 +539,8 @@ class DeckTreeStore extends BaseStore {
             error: this.error,
             isSelectorValid: this.isSelectorValid,
             revisionId: this.revisionId,
-            latestRevisionId: this.latestRevisionId
+            latestRevisionId: this.latestRevisionId,
+            theme: this.theme
         };
     }
     dehydrate() {
@@ -553,6 +556,7 @@ class DeckTreeStore extends BaseStore {
         this.isSelectorValid = state.isSelectorValid;
         this.revisionId = state.revisionId;
         this.latestRevisionId = state.latestRevisionId;
+        this.theme = state.theme;
     }
     handleDeckTreeError(err){
         this.error = err;
