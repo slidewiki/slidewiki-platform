@@ -13,10 +13,12 @@ export default {
         let args = params.params? params.params : params;
 
         let selector = {
-            'id': args.id, 'subdeck': args.subdeck, 'spath': args.spath,
-            'sid': args.sid, 'stype': args.stype, 'mode': args.mode,
+            'id': args.id, 'subdeck': args.subdeck, 'sid': args.sid.replace('slide-', ''), //'spath': args.spath,
+            // 'stype': args.stype, 'mode': args.mode,
             'limit': 0, 'pushObj': null
         };
+        console.log('selector: ', selector);
+        // console.log('params', params);
         //Load the whole presentation
         let presentation = [];
         if(resource === 'presentation.content'){
@@ -27,198 +29,176 @@ export default {
             let isSubdeck = (id === args.subdeck);
             // let subdeck = args.subdeck;
             let allSlides, deckInfo;
-
-            async.parallel([
-                (done) => {
-                    rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((all) => {
-                        allSlides = JSON.parse(all);
-                        done();
-                    }).catch((err) => {
-                        console.log('Error retrieving the slides', err);
-                    });
-                },
-                (done) => {
-                    rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id)}).then((deck) => {
-                        deckInfo = JSON.parse(deck);
-                        done();
-                    }).catch((err) => {
-                        console.log('Error getting deck information', err);
-                    });
-                }
-            ], (err, results) => {
-                if(err){
-                    console.log(err);
-                }
-                console.log('About to return content');
-
-                let isSubdeckInside = isSubdeckInsideDeck(deckInfo, allSlides);
-
-
-                if(!isSubdeck && !isSubdeckInside){
-                    // Load all content for a parent deck with no subdecks
-                    console.log('\n\n\n\n!isSubdeck && !isSubdeckInside\n\n\n\n');
-                    returnContent(id, selector, allSlides, callback);
-                }
-                else{
-                    let paramsAndNextDeck = getParamsAndNextDeck(deckInfo, allSlides);
-                    selector.pushObj = getAdditionalSlideObject (args.id, paramsAndNextDeck.nextDeck);
-                    selector.limit = paramsAndNextDeck.limit;
-                    selector.offset = paramsAndNextDeck.offset;
-
-                    if(!isSubdeck){
-                        // If we are between a subdeck and the end, set offset to first slide after the subdeck
-                        // params = getParams(deck, allSlides);
-                        returnContent(id, selector, allSlides, callback);
+            // console.log('args: ', args, '\n\nid:', id);
+            if(isSubdeck){
+                console.log('isSubdeck is true');
+                rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((all) => {
+                    allSlides = JSON.parse(all);
+                    callback(null, {content: allSlides.children, theme: allSlides.theme, selector: selector});
+                }).catch((err) => {
+                    console.log('Error retrieving the slides', err);
+                });
+            }
+            else {
+                async.parallel([
+                    (done) => {
+                        rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((all) => {
+                            allSlides = JSON.parse(all);
+                            done();
+                        }).catch((err) => {
+                            console.log('Error retrieving the slides', err);
+                        });
+                    },
+                    (done) => {
+                        rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id)}).then((deck) => {
+                            deckInfo = JSON.parse(deck);
+                            done();
+                        }).catch((err) => {
+                            console.log('Error getting deck information', err);
+                        });
                     }
-                    else {
-                        // Find the next deck, and load add the slide to all slides
-                        // selector.nextDeck = getNextSubdeck(deckInfo, id);
-                        returnContent(id, selector, allSlides, callback);
+                ], (err, results) => {
+                    if(err){
+                        console.log(err);
                     }
-                }
-            });
+                    console.log('About to return content');
+
+                    let nextSubdeckInside = isSubdeckInsideDeck(deckInfo, allSlides);
+
+                    if(nextSubdeckInside === 0){
+                        // Load all content for a parent deck with no subdecks
+                        console.log('No subdeck inside, so loading all content');
+                        callback(null, {content: allSlides.children, theme: allSlides.theme, selector: selector});
+                    }
+                    else{
+                        console.log('There is a subdeck inside the deck');
+                        // There is a subdeck inside this deck.
+                        // We need to check if it's from deck view (load from the start to next subdeck)
+                        // Or a slide view (load from end of previous deck to next subdeck)
+
+                        let sid = selector.sid ? selector.sid : 0;
+
+
+                        if(!sid){
+                            // Should be loading from the start
+                            let pushObj = getAdditionalSlideObject (args.id, nextSubdeckInside.nextDeck);
+                            console.log('pushObj', pushObj);
+                            allSlides.children = allSlides.children.slice(0, nextSubdeckInside.limit);
+                            allSlides.children.push(pushObj);
+                            callback(null, {content: allSlides.children, theme: allSlides.theme, selector: selector});
+                        }
+                        else{
+                            console.log('Slide view, so need to check more carefully');
+                            let nextDeckParams = getNextSubdeck(deckInfo, allSlides, sid);
+
+                            let pushObj = getAdditionalSlideObject (args.id, nextDeckParams.nextDeck);
+                            console.log('pushObj', pushObj);
+                            allSlides.children = allSlides.children.slice(nextDeckParams.offset, nextDeckParams.limit);
+                            allSlides.children.push(pushObj);
+
+
+                            callback(null, {content: allSlides.children, theme: allSlides.theme, selector: selector});
+                        }
+                    }
+                });
+            }
+
 
         }//If presentation.content
     }
 };
 
-
-function returnContent(id, selector, slides, callback){
-    console.log('inside returnContent');
-    let limit = selector.limit;
-    let offset = selector.offset;
-    let pushObj = selector.pushObj;
-    let params = '';
-    // let params = '?offset=' + selector.offset;
-    // params = limit === 0 ? params : params + '&limit=' + selector.limit;
-    let slideContent = limit === 0 ? slides.children.slice(offset, limit) : slides.children.slice(offset);
-    if(pushObj !== null){
-        slideContent.push(pushObj);
-    }
-    callback(null, {content: slides.children, theme: slides.theme, selector: selector});
-    // rp.get(Microservices.deck.uri + '/deck/' + String(id) + '/slides' + params).then((slides) => {
-    //     slides = JSON.parse(slides);
-    //     if(pushObj !== null){
-    //         slides.children.push(pushObj);
-    //     }
-    //     callback(null, {content: slides.children, theme: slides.theme, selector: selector});
-    // }).catch((err) => {
-    //     console.log('returnContent', err);
-    // });
-}
-
 function isSubdeckInsideDeck(deck, slidesInfo){
-    console.log('deck: ', deck);
-    let nextDeck, limit, offset = 0;
-    // if we have a deck (currentId = 0) then we don't need to worry about the offset
     let items = deck.revisions[0].contentItems;
 
     for(let i = 0; i < items.length; i++){
-        // let refId = String(items[i].ref.id) + '-' + String(items[i].ref.revision);
-        if(items[i].kind === 'deck'){
-            // deckIndex = i;
-            return i;
+        let item = items[i];
+        if(item.kind === 'deck'){
+            let refId = String(item.ref.id) + '-' + String(item.ref.revision);
+            console.log('subdeck inside index ', i);
+            return {nextDeck: refId, limit: i};
         }
     }
     return 0;
 }
 
-function getNextSubdeck(deck, currentDeck){
-    // For the condition where we have a subdeck, in a parent deck which might have more than one subdeck
-    let seenDeck = false;
-    let items = deck.revisions[0].contentItems;
-    console.log('getNextSubdeck items', items);
-    for(let i=0; i< items.length; i++){
-        let refId = String(items[i].ref.id) + '-' + String(items[i].ref.revision);
-        console.log('getNextSubdeck comparison refId: ' + refId + 'currentDeck: ', currentDeck);
-        if(seenDeck && items.kind === 'deck'){
-            return refId;
-        }
-        if(currentDeck === refId && items.kind === 'deck'){
-            seenDeck = true;
-        }
-    }
-    return 0;
-}
-
-function getParamsAndNextDeck(deck, allSlides, currentId=0){
-    // This function sorts out the parameters and gets the nextDeck for decks with subdecks
-
+function getNextSubdeck(deck, allSlides, currentId=0){
+    console.log('getNextSubdeck params currentId: ', currentId);
+    // If currentId > 0, we are on a slide view, and so need to check the previous and next decks
+    // It might not be the start
+    let seenCurrentId = currentId > 0 ? true : false;
+    // let seenNextDeck = false;
+    // let seenPreviousDeck = false;
+    let firstSlide = 0;
+    // let setOffsetNext = false;
+    let lastSlide = 0;
     let nextDeck = 0;
-    let limit = 0;
-    let offset = 0;
-    let lastSlideParent = 0;
-    let lastSlideSub = 0;
-    // if we have a deck (currentId = 0) then we don't need to worry about the offset
-    let seenCurrentPos = currentId > 0 ? false : true;
+    let deckOffsetId = 0;
+    let deckLimitId = 0;
+    let lastItemDeck = true;
+    // let nextSlideOffset = false;
+    // if(currentId > 0){
     let items = deck.revisions[0].contentItems;
-    let contentAfterDeck = false;
+    for(let i=0; i < items.length; i++){
+        let item = items[i];
+        let refId = String(item.ref.id) + '-' + String(item.ref.revision);
+        console.log('lastItemDeck: ', lastItemDeck, 'index: ', i);
+        // Calculate offset
+        // if we haven't seen the current slide, and it's a deck, change the offset to the deck
+        if(item.kind === 'deck'){
 
-    for(let i = 0; i < items.length; i++){
-        let refId = String(items[i].ref.id) + '-' + String(items[i].ref.revision);
-        console.log('getParamsAndNextDeck', refId, limit, offset);
-        if(!seenCurrentPos){
-            if(refId === currentId || items[i].ref.id === currentId){ // Use or in case there's no revision
-                seenCurrentPos = true;
-            }
-        }
-        if(items[i].kind === 'deck'){
-            if(seenCurrentPos && nextDeck !== 0){
-                // limit = i;
-                nextDeck = refId;
-                console.log('The next subdeck ID is: ', nextDeck);
-            }
-            else{
-                // offset = i;
-            }
-        }
-        else{
-            if(nextDeck !== 0){
-                // This means we do have other content after this deck, so need to set a limit
-                contentAfterDeck = true;
-                console.log('setting contentAfterDeck = true');
-                lastSlideSub = refId;
-                break;
-            }
-            else if (!seenCurrentPos) {
-                offset += 1;
-            }
-            else{
-                // This is the last slide before the extra content
-                lastSlideParent = refId;
-            }
-        }
-    }
-    if(!contentAfterDeck){
-        // We can just load the whole deck after the offset
-        console.log('No content after deck');
-        return {'offset': offset, 'limit': 0, 'nextDeck': null};
-    }
-    else{
-        console.log('There IS content after deck');
-        limit = getLimit(lastSlideParent, lastSlideSub, allSlides);
-    }
-    return {'limit': limit, 'offset': offset, 'nextDeck': nextDeck};
+            // console.log('item.kind === deck');
+            // if(!seenCurrentId){
+            //     console.log('!seenCurrentId');
+            //
+            //
+            // }
+            if(seenCurrentId){
+                deckOffsetId = firstSlide;
+                deckLimitId = lastSlide;
+                let returnVal = {'limit': 0, 'offset': 0, nextDeck: refId};
+                for(let j=0; j < allSlides.children.length; j++){
+                    console.log('\ndeckOffsetId: ', deckOffsetId, 'deckLimitId: ', deckLimitId, 'current iteration: ', allSlides.children[j].id);
+                    if(allSlides.children[j].id === deckOffsetId){
+                        // console.log('MATCH! deckOffsetId: ', deckOffsetId, ' === allSlides.children[j]', allSlides.children[j]);
+                        returnVal.offset = j;
+                    }
+                    if(allSlides.children[j].id === deckLimitId){
+                        // console.log('MATCH! deckLimitId: ', deckLimitId, ' === allSlides.children[j]', allSlides.children[j]);
+                        returnVal.limit = j + 1;
+                        console.log('returnVal', returnVal);
+                        return returnVal;
+                    }
+                }
 
-}
+            }
+            console.log('last item: deck at index ', i);
+            lastItemDeck = true;
+        }
+        else if(item.kind === 'slide'){
+            console.log('lastItemDeck: ', lastItemDeck, '!seenCurrentId', !seenCurrentId);
+            if(lastItemDeck && !seenCurrentId){
+                firstSlide = refId;
+                console.log('firstSlide: ', firstSlide, 'at index ', i);
+            }
+            lastSlide = refId;
+            if(currentId === refId){
+                seenCurrentId = true;
+            }
+            console.log('last item: slide at index ', i);
+            //     console.log('lastItemDeck: ', lastItemDeck);
+            //     if(lastItemDeck){
+            //         firstSlide = refId;
+            //         console.log('firstSlide = refId', refId);
+            //     }
+            // }
+            // if(!seenCurrentId){
+            //     firstSlide = refId;
+            //     console.log('firstSlide: ', firstSlide, 'at index ', i);
+            // }
+            lastItemDeck = false;
+        }
 
-function getLimit(limit, lastParent, lastSubdeck, allSlides){
-    // Iterate through allSlides, and select slides between these two.
-    let seenLastParent, seenLastSubdeck = false;
-    let count = 0;
-    for(let i=0; i < allSlides.children.length; i++){
-        count += 1;
-        let slide = allSlides.children[i];
-        if(!seenLastParent){
-            if(slide.id === lastParent){
-                seenLastParent = true;
-            }
-        }
-        else{
-            if(seenLastSubdeck){
-                return count;
-            }
-        }
     }
 }
 

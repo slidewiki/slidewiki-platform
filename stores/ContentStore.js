@@ -45,18 +45,27 @@ class ContentStore extends BaseStore {
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
 
-        if(!selector.spath){
+        if(!selector.spath || (splitSpath.length === 1 && selector.stype === 'slide')){
             return null;
         }
-        else if(selector.stype === 'deck' && selector.spath){
-            currentSubDeck = splitSpath[splitSpath.length - 1].split(':')[0];
+        else if(selector.stype === 'deck'){
+            return selector.sid;
         }
-        else if(selector.stype === 'slide' && selector.spath){
-            // Since the last one in the list will be the slide ID, we use -2
-            let index = splitSpath.length === 1 ? 0 : splitSpath.length - 2;
-            currentSubDeck = splitSpath[index].split(':')[0];
+        else{
+            return splitSpath[0].split(':')[0];
         }
-        return currentSubDeck;
+        // else if(splitSpath.length === 1){
+        //     return splitSpath[0];
+        // }
+        // else if(selector.stype === 'deck'){
+        //     currentSubDeck = splitSpath[splitSpath.length - 1].split(':')[0];
+        // }
+        // else if(selector.stype === 'slide' && selector.spath){
+        //     // Since the last one in the list will be the slide ID, we use -2
+        //     let index = splitSpath.length === 1 ? 0 : splitSpath.length - 2;
+        //     currentSubDeck = splitSpath[index].split(':')[0];
+        // }
+        // return currentSubDeck;
 
     }
 
