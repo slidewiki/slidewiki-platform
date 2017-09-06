@@ -805,9 +805,9 @@ class presentationBroadcast extends React.Component {
             <Grid.Row>
               <Grid.Column width={13}>
                 <iframe id="slidewikiPresentation" src={this.iframesrc}
-                height={height*0.8 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
+                height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
               </Grid.Column>
-              <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': 980*0.8 + 'px'}}>
+              <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
                 <Chat isInitiator={this.isInitiator}
                   height={height}
                   sendRTCMessage={this.sendRTCMessage}

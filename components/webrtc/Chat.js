@@ -111,7 +111,7 @@ class Chat extends React.Component {
           <div>
             {(!this.props.isInitiator) ? (
               <Grid columns={1}>
-                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.52+'px', 'minHeight': this.props.height*0.52+'px', 'height': this.props.height*0.52+'px'}}>
+                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.5+'px', 'minHeight': this.props.height*0.5+'px', 'height': this.props.height*0.5+'px'}}>
                   <h3>Your Questions:</h3>
                   {messages}
                 </Grid.Column>
