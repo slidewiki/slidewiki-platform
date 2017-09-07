@@ -24,7 +24,7 @@ class ChangePicture extends React.Component {
         this.filePath = URL.createObjectURL(e.target.files[0]);
         let toCheck = e.target.files[0].name.toLowerCase().trim();
         this.filesize = e.target.files[0].size;
-        this.filetype = toCheck.substr(toCheck.length - 3)
+        this.filetype = toCheck.substr(toCheck.length - 3);
         if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png')) {
             this.forceUpdate();
             $('#ChangePictureModalOpenButton').click();
