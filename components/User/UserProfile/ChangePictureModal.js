@@ -2,6 +2,7 @@ import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'react-image-cropper';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
+import uploadPicture from '../../../actions/user/userprofile/uploadPicture';
 import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
 
 class ChangePictureModal extends React.Component {
@@ -47,8 +48,11 @@ class ChangePictureModal extends React.Component {
         let payload = {};
         Object.assign(payload, this.props.user);
         payload.picture = this.refs.cropper.crop({ maxWidth: 170 });
+        payload.fileurl = this.props.filePath;
+        payload.filesize = this.props.filesize;
+        payload.filetype = this.props.filetype;
         if(payload.picture.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
-            this.context.executeAction(changeUserData, payload);
+            this.context.executeAction(uploadPicture, payload);
             this.handleClose();
         } else {
             this.handleClose();
