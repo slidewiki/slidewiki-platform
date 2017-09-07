@@ -22,6 +22,7 @@ class presentationBroadcast extends React.Component {
         this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
         this.lastMessage = {};
+        this.maxPeers = 100;
 
         //******** SlideWiki specific variables ********
         this.eventForwarding = true;
@@ -98,7 +99,12 @@ class presentationBroadcast extends React.Component {
             console.log('Another peer made a request to join room ' + room);
             if (that.isInitiator) {
                 // console.log('This peer is the initiator of room ' + that.room + '!');
-                that.socket.emit('ID of presenter', that.room, that.myID);
+                let numberOfPeers = Object.keys(this.pcs).length;
+                console.log(numberOfPeers, this.maxPeers);
+                if (numberOfPeers >= this.maxPeers)
+                    that.socket.emit('room is full', that.room, socketID);
+                else
+                    that.socket.emit('ID of presenter', that.room, that.myID);
             }
         });
 
@@ -131,6 +137,22 @@ class presentationBroadcast extends React.Component {
             if(!that.isInitiator)
                 console.log('Received ID of presenter: ', id);
             that.presenterID = id;
+        });
+
+        that.socket.on('room is full', (id) => {
+            console.log('Received room is full: ', id);
+            if (id === this.myID) {
+                swal({
+                    title: '<p>The presentation room is full.</p>',
+                    html: '<p>The maximium number of listeners is already reached. Please try again later.</p>',
+                    type: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Check',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+                that.socket.close();
+            }
         });
 
         that.socket.on('log', (array) => {
