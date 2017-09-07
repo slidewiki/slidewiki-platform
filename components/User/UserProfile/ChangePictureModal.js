@@ -1,9 +1,8 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'react-image-cropper';
-import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import uploadPicture from '../../../actions/user/userprofile/uploadPicture';
-import { Button, Icon, Modal, Container, Segment, Menu,Label,Input,Divider, TextArea} from 'semantic-ui-react';
+import { Button, Modal, Divider, TextArea} from 'semantic-ui-react';
 
 class ChangePictureModal extends React.Component {
 
