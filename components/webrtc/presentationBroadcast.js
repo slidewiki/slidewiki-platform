@@ -85,7 +85,7 @@ class presentationBroadcast extends React.Component {
             });
             swal({
                 title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                html: '<p>Other people are free to join the room. Rooms are currently limited to 10 people. See the counter at the bottom of the page for information about currently listening people.</p>',
+                html: '<p>Other people are free to join the room. Rooms are currently limited to '+this.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Check',
@@ -102,9 +102,9 @@ class presentationBroadcast extends React.Component {
                 let numberOfPeers = Object.keys(this.pcs).length;
                 console.log(numberOfPeers, this.maxPeers);
                 if (numberOfPeers >= this.maxPeers)
-                    that.socket.emit('room is full', that.room, socketID);
+                    that.socket.emit('room is full', socketID);
                 else
-                    that.socket.emit('ID of presenter', that.room, that.myID);
+                    that.socket.emit('ID of presenter', that.myID, socketID);
             }
         });
 
@@ -139,20 +139,18 @@ class presentationBroadcast extends React.Component {
             that.presenterID = id;
         });
 
-        that.socket.on('room is full', (id) => {
-            console.log('Received room is full: ', id);
-            if (id === this.myID) {
-                swal({
-                    title: '<p>The presentation room is full.</p>',
-                    html: '<p>The maximium number of listeners is already reached. Please try again later.</p>',
-                    type: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Check',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-                });
-                that.socket.close();
-            }
+        that.socket.on('room is full', () => {
+            console.log('Received room is full');
+            swal({
+                title: '<p>The presentation room is full.</p>',
+                html: '<p>The maximium number of listeners is already reached. Please try again later.</p>',
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Check',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+            that.socket.close();
         });
 
         that.socket.on('log', (array) => {
@@ -167,7 +165,7 @@ class presentationBroadcast extends React.Component {
 
         function sendMessage(cmd, data = undefined, receiver = undefined) {
             // console.log('Sending message over socket: ', cmd, data, receiver);
-            that.socket.emit('message', { 'cmd': cmd, 'data': data, 'sender': that.myID, 'receiver': receiver }, that.room);
+            that.socket.emit('message', { 'cmd': cmd, 'data': data, 'sender': that.myID, 'receiver': receiver });
         }
 
         function sendRTCMessage(cmd, data = undefined, receiver = undefined) {
