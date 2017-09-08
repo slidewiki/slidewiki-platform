@@ -28,16 +28,6 @@ class DataSourceStore extends BaseStore {
 
         this.emitChange();
     }
-    updateDatasourcesFromDeckData(payload) {
-        let lastRevision = payload.deckData.revisions[payload.deckData.revisions.length - 1];
-        this.dataSources = lastRevision.dataSources ? lastRevision.dataSources : [];
-        this.selector = {stype: 'deck', sid: payload.deckData._id, id: payload.deckData._id};
-        this.dataSource = undefined;
-        this.selectedIndex = -1;
-        this.contentOwner = lastRevision.user;
-
-        this.emitChange();
-    }
     loadDataSource(payload) {
         this.dataSource = this.dataSources[payload.dsindex];
         this.selectedIndex = payload.dsindex;
@@ -89,7 +79,6 @@ DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
     'LOAD_SLIDE_CONTENT_SUCCESS': 'updateDatasourcesFromSlideData',
-    'LOAD_DECK_CONTENT_SUCCESS': 'updateDatasourcesFromDeckData',
     'LOAD_DATASOURCE': 'loadDataSource',
     'NEW_DATASOURCE': 'newDataSource',
     'SHOW_ALL_DATASOURCES': 'handleShowAllDataSources',

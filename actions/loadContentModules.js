@@ -26,9 +26,9 @@ export default function loadContentModules(context, payload, done) {
 
         //load all required actions in parallel
     async.parallel([
-        // (callback) => {
-        //     context.executeAction(loadDataSources, payload, callback);
-        // },
+        (callback) => {
+            context.executeAction(loadDataSources, payload, callback);
+        },
         // (callback) => {
         //     context.executeAction(loadContentDiscussion, payload, callback);
         // },
