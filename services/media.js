@@ -35,5 +35,26 @@ export default {
                     callback(err, null);
                 });
         }
+        else if (resource === 'media.uploadProfilePicture') {
+            let url = Microservices.file.uri + '/profilepicture/' + params.username;
+            let headers = {
+                '----jwt----': params.jwt,
+                'content-type': params.type
+            };
+            rp.put({
+                uri: url,
+                body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
+                headers: headers,
+                json: false
+            })
+                .then((res) => {
+                    console.log('response from saving image:', res);
+                    callback(null, Microservices.file.uri + res);
+                })
+                .catch((err) => {
+                    console.log('Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
+                    callback(err, null);
+                });
+        }
     }
 };
