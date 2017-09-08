@@ -12,6 +12,13 @@ class UserNotificationsItem extends React.Component {
             });
         }
     }
+    handleDelete(notification) {
+        // if (notification.newNotificationId !== undefined && notification.newNotificationId !== '') {
+        //     this.context.executeAction(readUserNotification, {
+        //         newNotificationId: notification.newNotificationId
+        //     });
+        // }
+    }
     render() {
         const notification = this.props.notification;
 
@@ -270,6 +277,12 @@ class UserNotificationsItem extends React.Component {
                     <i tabIndex="0" className="ui checkmark box icon link"></i>
                 </a>
             </div>) : '';
+        let deleteButton = (
+            <div className="one wide column">
+                <a className="item" onClick={this.handleDelete.bind(this, notification)} title='Delete' >
+                    <i tabIndex="0" className="ui remove circle outline icon link"></i>
+                </a>
+            </div>);
         return (
             <div className="ui feed">
                 <div className={itemClass} role="listitem" tabIndex="0">
@@ -282,6 +295,7 @@ class UserNotificationsItem extends React.Component {
                         </div>
                     </div>
                     {markAsReadButton}
+                    {deleteButton}
                 </div>
             </div>
         );

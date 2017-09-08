@@ -102,6 +102,14 @@ class UserNotificationsStore extends BaseStore {
 
         this.emitChange();
     }
+    selectAllActivityTypes(payload) {
+        this.activityTypes.forEach((at) => {at.selected = payload.value;});
+        this.notifications.forEach((notification) => {
+            notification.visible = this.isVisible(notification);
+        });
+
+        this.emitChange();
+    }
     // isVisibleWhenChangedSubscription(notification, changedSubscription) {
     //     switch (changedSubscription.type) {
     //         case 'user':
@@ -200,6 +208,7 @@ UserNotificationsStore.handlers = {
     'LOAD_NEW_USER_NOTIFICATIONS_SUCCESS': 'loadNewNotifications',
     'LOAD_NEW_USER_NOTIFICATIONS_COUNT_SUCCESS': 'loadNewNotificationsCount',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
+    'SELECT_ALL_ACTIVITY_TYPES': 'selectAllActivityTypes',
     'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
     'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter'
 };

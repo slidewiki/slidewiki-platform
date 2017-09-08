@@ -7,6 +7,7 @@ import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
+import selectAllActivityTypes from '../../../actions/user/notifications/selectAllActivityTypes';
 
 class UserNotificationsPanel extends React.Component {
     constructor() {
@@ -35,12 +36,30 @@ class UserNotificationsPanel extends React.Component {
             changedType: type,
             changedId: id
         });
+        //set value of selectAll
+        let value = true;
+        this.props.UserNotificationsStore.activityTypes.forEach((at) => {if (! $('#' + at.type).prop('checked')) value = false;});
+        $('#all').prop('checked', value);
+    }
+
+    handleChangeAll() {
+        let value = $('#all').prop('checked');
+        this.props.UserNotificationsStore.activityTypes.forEach((at) => {$('#' + at.type).prop('checked', value);});
+        this.context.executeAction(selectAllActivityTypes, {
+            value: value
+        });
     }
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {
             uid: this.props.UserProfileStore.userid
         });
+    }
+
+    handleDelete() {
+        // this.context.executeAction(markAsReadUserNotifications, {
+        //     uid: this.props.UserProfileStore.userid
+        // });
     }
 
     render() {
@@ -82,7 +101,7 @@ class UserNotificationsPanel extends React.Component {
             const label = labelName.charAt(0).toUpperCase() + labelName.slice(1);
             return (
                 <div className="ui item toggle checkbox" key={index} role="listitem" tabIndex="0">
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={at.selected} onChange={this.handleChangeToggle.bind(this, at.type, 0)} />
+                    <input name={at.type} id={at.type} type="checkbox" defaultChecked={at.selected} onChange={this.handleChangeToggle.bind(this, at.type, 0)} />
                     <label>{label}</label>
                 </div>
             );
@@ -98,14 +117,25 @@ class UserNotificationsPanel extends React.Component {
                 <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
             </a>
         );
+        const iconDeleteAllTitle = (newNotifications.length > 0) ? 'Delete all ' + newNotifications.length + ' notifications' : 'Delete all';
+        let iconDeleteAll = (//disabled icon
+            <a className="item" title={iconDeleteAllTitle}>
+                <i tabIndex="0" className="ui large disabled remove circle outline icon"></i>
+            </a>
+        );
         if(newNotifications.length > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
-              <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
-                  <i tabIndex="0" className="ui large checkmark box icon"></i>
-              </a>
+                <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
+                    <i tabIndex="0" className="ui large checkmark box icon"></i>
+                </a>
+            );
+            iconDeleteAll = (//disabled icon
+                <a className="item" onClick={this.handleDelete.bind(this)} title={iconDeleteAllTitle}>
+                    <i tabIndex="0" className="ui large remove circle outline icon"></i>
+                </a>
             );
         };
-        // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
+
         const filters = (
             <div className="five wide column">
                 <div className="ui basic segment">
@@ -114,6 +144,11 @@ class UserNotificationsPanel extends React.Component {
                     <div className="activityTypes">
                         <div ref="activityTypeList">
                             <div className="ui relaxed list" role="list" >
+                                <div className="ui toggle checkbox">
+                                    <input name="all" id="all" type="checkbox" defaultChecked={true} onChange={this.handleChangeAll.bind(this)}/>
+                                    <label>Select all</label>
+                                </div>
+                                <div className="ui hidden divider" />
                                 {activityTypeList}
                             </div>
                          </div>
@@ -162,11 +197,11 @@ class UserNotificationsPanel extends React.Component {
         // );
         return (
             <div ref="userNotificationsPanel">
-                <div className="ui hidden divider"></div>
+                <div className="ui hidden divider" />
                 <div className="ui container stackable two columm grid">
                     <div className="six wide column">
                       <div className="ui huge header">
-                          Notifications <div className="ui mini label" >{iconMarkAsRead} {newNotifications.length}</div>
+                          Notifications <div className="ui mini label" >{iconDeleteAll} {iconMarkAsRead} {newNotifications.length} </div>
                       </div>
                       <div className="ui basic segment">
                           {filters}
