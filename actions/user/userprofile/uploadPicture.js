@@ -9,7 +9,7 @@ export default function uploadPicture(context, payload, done) {
 
     //prepare file
     let file = {
-        type: 'image/' + payload.filetype.replace('jpg', 'jpeg'),
+        type: 'image/' + payload.filetype,
         title: 'profile picture of '+payload.uname,
         filesize: payload.filesize,
         filename: payload.fileurl,
@@ -17,7 +17,7 @@ export default function uploadPicture(context, payload, done) {
     };
 
     context.executeAction(uploadProfilePicture, file, () => {
-        console.log('uploaded media file', context.getStore(MediaStore).file, context.getStore(MediaStore).file.url, context.getStore(MediaStore).file.thumbnailUrl);
+        // console.log('uploaded media file', context.getStore(MediaStore).file, context.getStore(MediaStore).file.url, context.getStore(MediaStore).file.thumbnailUrl);
 
         if (context.getStore(MediaStore).status !== 'success') {
             //show error
@@ -30,7 +30,7 @@ export default function uploadPicture(context, payload, done) {
         delete payload.fileurl;
         delete payload.filetype;
         payload.picture = context.getStore(MediaStore).file.url;
-        console.log('Now saving user', payload, context.getStore(MediaStore).file.filename);
+        // console.log('Now saving user', payload, context.getStore(MediaStore).file.filename);
 
         context.executeAction(changeUserData, payload, () => {
             done();

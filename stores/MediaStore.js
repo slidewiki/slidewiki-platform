@@ -61,7 +61,7 @@ class MediaStore extends BaseStore {
     }
 
     successUpload(data) {
-        console.log('MediaStore: successUpload()', data);
+        // console.log('MediaStore: successUpload()', data);
         this.status = 'success';
         this.file = data;
         this.emitChange();

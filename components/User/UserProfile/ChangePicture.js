@@ -24,10 +24,25 @@ class ChangePicture extends React.Component {
         this.filePath = URL.createObjectURL(e.target.files[0]);
         let toCheck = e.target.files[0].name.toLowerCase().trim();
         this.filesize = e.target.files[0].size;
+        // console.log('filesize:', this.filesize);
         this.filetype = toCheck.substr(toCheck.length - 3);
         if(toCheck.endsWith('.jpg') || toCheck.endsWith('.jpeg') || toCheck.endsWith('.png')) {
-            this.forceUpdate();
-            $('#ChangePictureModalOpenButton').click();
+            if (this.filesize > 10000000) {
+                swal({
+                    title: 'Big file',
+                    text: 'The selected file is quite big (> 10MB). This could cause problems like a white profile picture. You should upload a smaller picture if you notice strange things.',
+                    type: 'warning',
+                    confirmButtonClass: 'ui primary button',
+                    buttonsStyling: false
+                }).then(() => {
+                    this.forceUpdate();
+                    $('#ChangePictureModalOpenButton').click();
+                });
+            }
+            else {
+                this.forceUpdate();
+                $('#ChangePictureModalOpenButton').click();
+            }
         } else
             swal({
                 title: 'Wrong file type',
@@ -35,7 +50,7 @@ class ChangePicture extends React.Component {
                 type: 'error',
                 confirmButtonClass: 'ui primary button',
                 buttonsStyling: false
-            });
+            }).then(() => {});
         //The actual processing of the picture is implemented in the modal
     }
 

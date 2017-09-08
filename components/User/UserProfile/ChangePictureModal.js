@@ -46,10 +46,10 @@ class ChangePictureModal extends React.Component {
     uploadCroppedPicture(e) {
         let payload = {};
         Object.assign(payload, this.props.user);
-        payload.picture = this.refs.cropper.crop({ maxWidth: 170 });
+        payload.picture = this.refs.cropper.crop({ maxWidth: 170 });//NOTE maxWidth is not used by the cropper
         payload.fileurl = this.props.filePath;
-        payload.filesize = this.props.filesize;
-        payload.filetype = this.props.filetype;
+        payload.filesize = payload.picture.length - 22;// minus 22 for data:image/png;base64, which is the prefix
+        payload.filetype = 'png';
         if(payload.picture.length > 50){ //check if this is a picture or not - if not, the base64 repesentation is about 5 chars
             this.context.executeAction(uploadPicture, payload);
             this.handleClose();

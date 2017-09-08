@@ -9,7 +9,7 @@ export default function uploadProfilePicture(context, payload, done) {
     payload.jwt = context.getStore(UserProfileStore).jwt;
     payload.username = context.getStore(UserProfileStore).username;
 
-    console.log('uploadProfilePicture', payload);
+    // console.log('uploadProfilePicture', payload);
     context.dispatch('START_UPLOADING_MEDIA_FILE', {type: payload.type, name: 'profile picture'});
 
     context.service.create('media.uploadProfilePicture', payload, { timeout: 20 * 1000 }, { timeout: 20 * 1000 }, (err, res) => {

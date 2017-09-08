@@ -27,7 +27,7 @@ export default {
                 json: false
             })
                 .then((res) => {
-                    console.log('response from saving image:', res);
+                    // console.log('response from saving image:', res);
                     callback(null, JSON.parse(res));
                 })
                 .catch((err) => {
@@ -48,7 +48,7 @@ export default {
                 json: false
             })
                 .then((res) => {
-                    console.log('response from saving image:', res);
+                    // console.log('response from saving image:', res);
                     callback(null, Microservices.file.uri + res);
                 })
                 .catch((err) => {
