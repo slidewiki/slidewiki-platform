@@ -6,6 +6,7 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
+import deleteAllUserNotifications from '../../../actions/user/notifications/deleteAllUserNotifications';
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
 import selectAllActivityTypes from '../../../actions/user/notifications/selectAllActivityTypes';
 
@@ -57,9 +58,9 @@ class UserNotificationsPanel extends React.Component {
     }
 
     handleDelete() {
-        // this.context.executeAction(markAsReadUserNotifications, {
-        //     uid: this.props.UserProfileStore.userid
-        // });
+        this.context.executeAction(deleteAllUserNotifications, {
+            uid: this.props.UserProfileStore.userid
+        });
     }
 
     render() {
@@ -108,22 +109,22 @@ class UserNotificationsPanel extends React.Component {
         });
 
         const notifications = this.props.UserNotificationsStore.notifications;
-        const newNotifications = this.props.UserNotificationsStore.newNotifications;
+        const newNotificationsCount = this.props.UserNotificationsStore.newNotificationsCount;
         const selector = this.props.UserNotificationsStore.selector;
 
-        const iconMarkAsReadTitle = (newNotifications.length > 0) ? 'Mark all ' + newNotifications.length + ' new notifications as read' : 'Mark all as read';
+        const iconMarkAsReadTitle = (newNotificationsCount > 0) ? 'Mark all ' + newNotificationsCount + ' new notifications as read' : 'Mark all as read';
         let iconMarkAsRead = (//disabled icon
             <a className="item" title={iconMarkAsReadTitle}>
                 <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
             </a>
         );
-        const iconDeleteAllTitle = (newNotifications.length > 0) ? 'Delete all ' + newNotifications.length + ' notifications' : 'Delete all';
+        const iconDeleteAllTitle = (newNotificationsCount > 0) ? 'Delete all ' + newNotificationsCount + ' notifications' : 'Delete all';
         let iconDeleteAll = (//disabled icon
             <a className="item" title={iconDeleteAllTitle}>
                 <i tabIndex="0" className="ui large disabled remove circle outline icon"></i>
             </a>
         );
-        if(newNotifications.length > 0) {//if there are new notifications -> enable it
+        if(newNotificationsCount > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
                 <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
                     <i tabIndex="0" className="ui large checkmark box icon"></i>
@@ -201,7 +202,7 @@ class UserNotificationsPanel extends React.Component {
                 <div className="ui container stackable two columm grid">
                     <div className="six wide column">
                       <div className="ui huge header">
-                          Notifications <div className="ui mini label" >{iconDeleteAll} {iconMarkAsRead} {newNotifications.length} </div>
+                          Notifications <div className="ui mini label" >{iconDeleteAll} {iconMarkAsRead} {newNotificationsCount} </div>
                       </div>
                       <div className="ui basic segment">
                           {filters}

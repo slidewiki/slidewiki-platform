@@ -3,21 +3,22 @@ import {formatDate} from '../../Deck/ActivityFeedPanel/util/ActivityFeedUtil';
 import classNames from 'classnames/bind';
 import cheerio from 'cheerio';
 import readUserNotification from '../../../actions/user/notifications/readUserNotification';
+import deleteUserNotification from '../../../actions/user/notifications/deleteUserNotification';
 
 class UserNotificationsItem extends React.Component {
     handleMarkAsRead(notification) {
-        if (notification.newNotificationId !== undefined && notification.newNotificationId !== '') {
+        if (notification.id !== undefined && notification.id !== '') {
             this.context.executeAction(readUserNotification, {
-                newNotificationId: notification.newNotificationId
+                id: notification.id
             });
         }
     }
     handleDelete(notification) {
-        // if (notification.newNotificationId !== undefined && notification.newNotificationId !== '') {
-        //     this.context.executeAction(readUserNotification, {
-        //         newNotificationId: notification.newNotificationId
-        //     });
-        // }
+        if (notification.id !== undefined && notification.id !== '') {
+            this.context.executeAction(deleteUserNotification, {
+                id: notification.id
+            });
+        }
     }
     render() {
         const notification = this.props.notification;
@@ -266,12 +267,11 @@ class UserNotificationsItem extends React.Component {
                 );
         }
 
-        let notificationIsNew = (notification.newNotificationId !== undefined && notification.newNotificationId !== '');
         let itemClass = classNames({
             'event': true,
-            'ui raised segment': notificationIsNew
+            'ui raised segment': notification.new
         });
-        let markAsReadButton = (notificationIsNew) ? (
+        let markAsReadButton = (notification.new) ? (
             <div className="one wide column">
                 <a className="item" onClick={this.handleMarkAsRead.bind(this, notification)} title='Mark as read' >
                     <i tabIndex="0" className="ui checkmark box icon link"></i>

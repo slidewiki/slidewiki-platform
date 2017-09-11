@@ -17,44 +17,21 @@ export default {
         if (resource === 'notifications.list'){
 
             let subscriptionsString = '';
-
             // let mockupSubscriptions = [
             //   {id:'2', type: 'user', name: 'Nikola T.', selected: true},
             //   {id:'1', type: 'user', name: 'Dejan P.', selected: true},
             //   {id:'9', type: 'deck', name: 'Collaborative authoring of presentations', selected: true},
             //   {id:'8', type: 'slide', name: 'Introduction', selected: true}
             // ];
-
             // mockupSubscriptions.push({id:String(uid), type: 'owner', name: 'My decks and slides', selected: true});
             let subscriptions = [{id:String(uid), type: 'owner', name: 'My decks and slides', selected: true}];
 
-            subscriptionsString += '/o' + uid;
-
-            let notificationsPromise = rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).promise().bind(this);
-            let newNotificationsPromise = rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=false'}).promise().bind(this);
-
-            //callback to execute when both requests are successful
-            Promise.all([notificationsPromise, newNotificationsPromise]).then((res) => {
-
-                let notifications = JSON.parse(res[0]);
-                let newNotifications = JSON.parse(res[1]).items;
-
-                callback(null, {notifications: notifications, newNotifications: newNotifications, subscriptions: subscriptions});
-            }).catch((err) => {
-                console.log(err);
-                callback(null, {notifications: [], newNotifications: [], subscriptions: subscriptions});
-            });
-        } else if (resource === 'notifications.listnew'){
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=false'}).then((res) => {
-                let newNotifications = JSON.parse(res).items;
-                newNotifications.forEach((notification) => {
-                    notification.newNotificationId = notification.id;
-                });
-
-                callback(null, {newNotifications: newNotifications});
+                let notifications = JSON.parse(res).items;
+                callback(null, {notifications: notifications, subscriptions: subscriptions});
             }).catch((err) => {
                 console.log(err);
-                callback(null, {newNotifications: []});
+                callback(null, {notifications: [], subscriptions: subscriptions});
             });
         } else if (resource === 'notifications.countnew'){
             rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=true'}).then((res) => {
@@ -63,6 +40,21 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 callback(null, {count: 0});
+            });
+        } else if (resource === 'notifications.read'){
+            let id = args.id;
+            rp.get({uri: Microservices.notification.uri + '/notification/markasread/' + id}).then(() => {
+                callback(null, {id: id});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {});
+            });
+        } else if (resource === 'notifications.readall'){
+            rp.get({uri: Microservices.notification.uri + '/notifications/markallasread/' + uid}).then(() => {
+                callback(null, {args: args});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {});
             });
         }
     },
@@ -73,7 +65,7 @@ export default {
 
         if (resource === 'notifications.item'){
             /*********connect to microservices*************/
-            const nid = args.newNotificationId;
+            const nid = args.notificationId;
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notification/delete',
