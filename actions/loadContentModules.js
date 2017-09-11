@@ -25,10 +25,7 @@ export default function loadContentModules(context, payload, done) {
     }
 
         //load all required actions in parallel
-    async.parallel([
-        (callback) => {
-            context.executeAction(loadDataSources, payload, callback);
-        },
+    let actions = [
         // (callback) => {
         //     context.executeAction(loadContentDiscussion, payload, callback);
         // },
@@ -42,10 +39,19 @@ export default function loadContentModules(context, payload, done) {
         */
         (callback) => {
             context.executeAction(loadCommentsCount, payload, callback);
-        }
-    ],
-    // final callback
-    (err, results) => {
+        },
+    ];
+
+    if (payload.params.stype !== 'slide') {
+        // explicitly load the data sources if it's a deck
+        // if it's a slide the panel will be updated via the loadContent action
+        actions.push((callback) => {
+            context.executeAction(loadDataSources, payload, callback);
+        });
+    }
+
+    async.parallel(actions, (err, results) => {
+        // final callback
         if (err){
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
