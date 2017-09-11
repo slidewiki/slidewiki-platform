@@ -9,7 +9,7 @@ export default function revertRevision(context, payload, done) {
     payload.jwt = context.getStore(UserProfileStore).jwt;
     context.service.update('history.revert', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            log.error(context, {filepath: __filename, err: err});
+            log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             //context.dispatch('REVERT_REVISION_FAILURE', err);
         } else {

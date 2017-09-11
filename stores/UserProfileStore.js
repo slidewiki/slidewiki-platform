@@ -40,6 +40,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
+        this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
 
@@ -87,6 +88,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = {};
         this.saveUsergroupError = '';
         this.saveUsergroupIsLoading = false;
+        this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
 
@@ -117,6 +119,7 @@ class UserProfileStore extends BaseStore {
             currentUsergroup: this.currentUsergroup,
             saveUsergroupError: this.saveUsergroupError,
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
+            saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
             usergroupsViewStatus: this.usergroupsViewStatus
         };
@@ -148,6 +151,7 @@ class UserProfileStore extends BaseStore {
         this.currentUsergroup = state.currentUsergroup;
         this.saveUsergroupError = state.saveUsergroupError;
         this.saveUsergroupIsLoading = state.saveUsergroupIsLoading;
+        this.saveProfileIsLoading = state.saveProfileIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
     }
@@ -183,6 +187,7 @@ class UserProfileStore extends BaseStore {
         Object.assign(this.user, payload);
         if(this.username === payload.uname)
             this.userpicture = payload.picture;
+        this.saveProfileIsLoading = false;
         this.successMessage();
     }
 
@@ -195,6 +200,7 @@ class UserProfileStore extends BaseStore {
 
     actionFailed(payload) {
         this.dimmer.failure = true;
+        this.saveProfileIsLoading = false;
         this.emitChange();
         this.dimmer.failure = false;
     }
@@ -341,6 +347,11 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
+    saveProfileStart() {
+        this.saveProfileIsLoading = true;
+        this.emitChange();
+    }
+
     deleteUsergroupFailed(error) {
         this.deleteUsergroupError = {
             action: 'delete',
@@ -405,6 +416,7 @@ UserProfileStore.handlers = {
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
+    'SAVE_USERPROFILE_START': 'saveProfileStart'
 };
 
 export default UserProfileStore;

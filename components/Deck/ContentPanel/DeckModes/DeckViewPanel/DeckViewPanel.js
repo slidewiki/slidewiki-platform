@@ -47,6 +47,9 @@ class DeckViewPanel extends React.Component {
         }
 
         const forkCount = deckData.forkCount;
+        const shareCount = deckData.shareCount;
+        const downloadCount = deckData.downloadCount;
+
         //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
         const deckTheme = currentRevision.theme;
         const deckLicense = deckData.license;
@@ -102,7 +105,7 @@ class DeckViewPanel extends React.Component {
                     </div>
                     </div>
                     </div>
-                    <div className="column">
+                    <div className="right aligned column">
 
                             <div className="ui hidden divider"></div>
                             <div className="ui large labels">
@@ -118,6 +121,10 @@ class DeckViewPanel extends React.Component {
                                     <i className="fork icon" aria-label="Number of forks"></i>{forkCount}</div>
                                 <div className="ui label" tabIndex="0">
                                     <i className="thumbs up icon" aria-label="Number of likes"></i>{totalLikes}</div>
+                                <div className="ui label" tabIndex="0">
+                                    <i className="share alternate icon" aria-label="Number of shares"></i>{shareCount}</div>
+                                <div className="ui label" tabIndex="0">
+                                    <i className="download icon" aria-label="Number of downloads"></i>{downloadCount}</div>
                             </div>
                             {tags.length > 0 ? <div className="ui divider"></div> : ''}
                             <div className="ui tag labels large meta">

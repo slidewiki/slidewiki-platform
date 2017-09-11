@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import {NavLink} from 'fluxible-router';
+import { NavLink } from 'fluxible-router';
+import { FormattedMessage, defineMessages} from 'react-intl';
 
 class Carousel extends React.Component {
     constructor(props) {
@@ -8,14 +9,26 @@ class Carousel extends React.Component {
         this.state = {paused: 0};
     }
     componentDidMount(){
+        let self = this;
+        $('.gslide-header').removeClass('active');
+        $('.gh1').addClass('active');
+        //display carousel
+        $('.hide-element').removeClass('hide-element');
         this.slider = $('.glide').glide({
-            type: 'carousel',
-            autoplay: 4000,
+            type: 'slideshow',
+            autoplay: 6000,
+            centered: true,
+            keyboard: true,
+            autoheight: true,
             centered: true,
             afterTransition: function(data){
                 $('.gslide-header').removeClass('active');
                 $('.gh' + data.index).addClass('active');
-				    },
+                //in case a user manually runs the carousel in pause mode
+                if(self.state.paused){
+                    self.setState({paused: 0});
+                }
+            },
         });
     }
     togglePause() {
@@ -27,67 +40,134 @@ class Carousel extends React.Component {
         this.setState({paused: !this.state.paused});
     }
     render() {
+        const PauseStyle = {
+            backgroundColor: '#FFFFFF',
+            opacity: '1.0',
+            boxShadow: '0 0 0 1px rgba(34,36,38,.15) inset',
+            borderColor: '#1E78BB'
+        };
         return (
-          <div ref="carousel">
-            <div className="ui fluid container two column grid" style={{minHeight: '200px'}}>
+            <div ref="carousel">
+                <div className="ui grid " >
+                    <div className="one wide column"></div>
+                    <div className="fourteen wide column center aligned">
+                        <div className="ui segment" >
+                            <div className="ui two column fluid stackable grid">
+                                <div className="eleven wide column">
+                                    <div className="glide" tabIndex="-1">
+                                        <div className="glide__arrows hide-element">
+                                            <button className="glide__arrow prev ui basic icon button" data-glide-dir="<" tabIndex="-1"><i className="ui big icon chevron left"></i></button>
+                                            <button className="glide__arrow next ui basic icon button" data-glide-dir=">" tabIndex="-1"><i className="ui big icon chevron right"></i></button>
+                                        </div>
 
-                <div className="twelve wide column center aligned">
-                    <div className="glide" tabIndex="-1">
-                      <div className="glide__arrows">
-                          <button className="glide__arrow prev ui basic icon button" data-glide-dir="<" tabIndex="-1"><i className="ui big icon chevron left"></i></button>
-                          <button className="glide__arrow next ui basic icon button" data-glide-dir=">" tabIndex="-1"><i className="ui big icon chevron right"></i></button>
-                      </div>
+                                        <div className="glide__wrapper hide-element">
+                                            <ul className="glide__track" style={{minHeight: '300px'}}>
+                                                <li className="glide__slide">
+                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <FormattedMessage id="carousel.create_alt" defaultMessage='Create slides with SlideWiki.'>
+                                                    {
+                                                        (alt) => <img
+                                                                    src="/assets/images/carousel/SW-logo-squ.png"
+                                                                    alt={alt}
+                                                                 />
+                                                    }
+                                                    </FormattedMessage>
+                                                    </NavLink>
+                                                </li>
+                                                <li className="glide__slide" >
+                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                        <FormattedMessage id="carousel.reuse_alt" defaultMessage='Repurpose & Reuse Educational Content through open educational resources.'>
+                                                        {
+                                                            (alt) => <img
+                                                                        src="/assets/images/carousel/OER-Logo.png"
+                                                                        alt={alt}
+                                                                     />
+                                                        }
+                                                        </FormattedMessage>
+                                                    </NavLink>
+                                                </li>
+                                                <li className="glide__slide" >
+                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                        <FormattedMessage id="carousel.collaborative_alt" defaultMessage='Collaborative Content Authoring.'>
+                                                        {
+                                                            (alt) => <img
+                                                                        src="/assets/images/carousel/hands-1926704_640.png"
+                                                                        alt={alt}
+                                                                     />
+                                                        }
+                                                        </FormattedMessage>
+                                                    </NavLink>
+                                                </li>
+                                                <li className="glide__slide" >
+                                                    <NavLink href="/features" className="ui large  image" tabIndex="-1">
+                                                        <FormattedMessage id="carousel.communities_alt" defaultMessage='Supporting Knowledge Communities.'>
+                                                        {
+                                                            (alt) => <img
+                                                                        src="/assets/images/carousel/globe-squ-transparent.png"
+                                                                        alt={alt}
+                                                                     />
+                                                        }
+                                                        </FormattedMessage>
+                                                    </NavLink>
+                                                </li>
+                                            </ul>
 
-                      <div className="glide__wrapper">
-                          <ul className="glide__track">
-                              <li className="glide__slide" >
-                                <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
-                                  <img src="/assets/images/carousel/slide1.png" alt="multilingual" />
-                                </a>
-                              </li>
-                              <li className="glide__slide" >
-                                <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
-                                  <img src="/assets/images/carousel/slide2.png" alt="feature2" />
-                                </a>
-                              </li>
-                              <li className="glide__slide" >
-                                <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
-                                  <img src="/assets/images/carousel/slide3.png" alt="feature3" />
-                                </a>
-                              </li>
-                              <li className="glide__slide" >
-                                <a href="http://slidewiki.org" className="ui medium image" tabIndex="-1">
-                                  <img src="/assets/images/carousel/slide4.png" alt="feature4" />
-                                </a>
-                              </li>
-                          </ul>
-                      </div>
+                                        </div>
 
-                      <div className="glide__bullets"></div>
+                                        <div onClick={this.togglePause.bind(this)} className="ui icon button" style={PauseStyle} role="button" tabIndex="0" aria-label= {this.state.paused ? 'Play'
+                                            : 'Pause'}>
+                                            {this.state.paused ? <i className="play blue icon"></i> : <i className="pause blue icon"></i>}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div className="left aligned five wide column">
+                                    <h2><FormattedMessage id="carousel.menu.title" defaultMessage='Discover SlideWiki'/></h2>
+                                    <div className="ui right vertical fluid compact menu">
+                                        <NavLink className="item gslide-header gh1"  data-glide-trigger='.glide' href="/features" data-glide-dir='=1'>
+                                            <div className="content">
+                                                <div className="ui small header">
+                                                    <FormattedMessage id="carousel.menu.1" defaultMessage='Create Online Slide Decks'/>
+                                                </div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.1_desc" defaultMessage='Use our  slide creator or import your existing slides to form online HTML slide decks.'/>
+                                                </div>
+                                            </div>
+                                        </NavLink>
+                                        <NavLink className="item gslide-header gh2" data-glide-trigger='.glide' data-glide-dir='=2' href="/features" >
+                                            <div className="content">
+                                                <div className="ui small header">
+                                                    <FormattedMessage id="carousel.menu.2" defaultMessage='Reuseable Educational Content'/>
+                                                </div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.2_desc" defaultMessage='Discover a wide range of open educational slides and courses.'/></div>
+                                            </div>
+                                        </NavLink>
+                                        <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/features" href="/features" data-glide-dir='=3'>
+                                            <div className="content">
+                                                <div className="ui small header"><FormattedMessage id="carousel.menu.3" defaultMessage='Collaborative Content Authoring'/>
+                                                </div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.3_desc" defaultMessage='Create slides online together with peers and colleagues through our collaborative editing features.'/></div>
+                                            </div>
+                                        </NavLink>
+                                        <NavLink className="item gslide-header gh4"  href="/features" data-glide-trigger='.glide' data-glide-dir='=4'>
+                                            <div className="content">
+                                                <div className="ui small header"><FormattedMessage id="carousel.menu.4" defaultMessage='Supporting Knowledge Communities'/>
+                                                </div>
+                                                <div className="description"><FormattedMessage id="carousel.menu.4_desc" defaultMessage='Using our search and tags features discover content and authors who share your interests.'/></div>
+                                            </div>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                    <button onClick={this.togglePause.bind(this)} className="ui tiny primary icon button" aria-label="pause carousel">{this.state.paused ? <i className="ui play small icon"></i> : <i className="ui pause small icon"></i>}</button>
-                </div>
 
-                <div className="four wide column">
-                  <div className="ui fluid vertical divided menu">
-                    <a className="item gslide-header gh1" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=1'>
-                      Multilingual Content
-                    </a>
-                    <a className="item gslide-header gh2" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=2'>
-                      Content Reuse and Repurpose
-                    </a>
-                    <a className="item gslide-header gh3" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=3'>
-                      Collaborative Content Authoring
-                    </a>
-                    <a className="item gslide-header gh4" tabIndex="0" data-glide-trigger='.glide' data-glide-dir='=4'>
-                      Knowledge Communities
-                    </a>
-                  </div>
-
+                    <div className="one wide column"></div>
                 </div>
             </div>
 
-          </div>
         );
     }
 }

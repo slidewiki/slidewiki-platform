@@ -2,6 +2,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import mailShareShowWrongFields from '../../actions/socialshare/mailShareShowWrongFields';
 import addActivity from '../../actions/activityfeed/addActivity';
+import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
 import FocusTrap from 'focus-trap-react';
 import SocialShareStore from '../../stores/SocialShareStore';
 import { Button, Container, Form, Modal, Icon, Segment } from 'semantic-ui-react';
@@ -111,6 +112,7 @@ class MailShareModal extends React.Component {
                 }
             };
             context.executeAction(addActivity, {activity: activity});
+            context.executeAction(incrementDeckViewCounter, {type: 'share'});
         }
     }
 

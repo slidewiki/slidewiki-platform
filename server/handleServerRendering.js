@@ -2,12 +2,10 @@
 // to the client
 
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import ReactDOM from 'react-dom/server';
 import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
 
-import { createElementWithContext } from 'fluxible-addons-react';
 import serialize from 'serialize-javascript';
 import debugLib from 'debug';
 const debug = debugLib('slidewiki-platform');
@@ -19,8 +17,6 @@ import cookie from 'react-cookie';
 
 const uuidV4 = require('uuid/v4');
 const log = require('../configs/log').log;
-
-
 const env = process.env.NODE_ENV;
 
 let renderApp = function(req, res, context){
@@ -68,7 +64,7 @@ export default function handleServerRendering(req, res, next){
     cookie.plugToRequest(req,res);
     debug('Executing loadIntl action');
     context.getActionContext().executeAction(loadIntlMessages, req.locale, (err) => {
-        if (err) { //Hello, Vinay =) 
+        if (err) { //Hello, Vinay =)
             err.statusCode = 503;
             let html = '<h1>Not found locale</h1>';
             debug('Sending markup');
@@ -82,6 +78,10 @@ export default function handleServerRendering(req, res, next){
                 reqId: req.reqId
             }, (err) => {
                 if (err) {
+                    if (err.statusCode && err.statusCode === '301') {
+                        //console.log('REDIRECTING to '+ JSON.stringify(err));
+                        res.redirect(err.redirectURL);
+                    }else
                     if (err.statusCode && err.statusCode === '404') {
                         let html = renderApp(req, res, context);
                         debug('Sending markup');

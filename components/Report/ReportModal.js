@@ -119,7 +119,7 @@ class ReportModal extends React.Component {
                 + 'Reason of the report: ' + this.refs.reason.value + '\n'
                 + 'Description of the report: \n\n' + this.refs.text.value + '\n\n\n';
 
-            let toEmail = 'ka.de.graaf@vu.nl';
+            let toEmail = 'jira@slidewiki.atlassian.net';
 
             let link = 'mailto:' + escape(toEmail)
                 // + "?cc=myCCaddress@example.com"

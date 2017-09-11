@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
+import { NavLink } from 'fluxible-router';
 
 class SearchResultsItem extends React.Component {
 
@@ -21,20 +22,20 @@ class SearchResultsItem extends React.Component {
         if(result.subItems && result.subItems.length > 0){
             expandButton = <button className="ui small button">Other versions</button>;
 
-            subList = result.subItems.map( (item) => {
+            subList = result.subItems.map( (item, index) => {
                 if(result.kind === 'Deck'){
-                    return <div className="row" key={item.id}><a href={item.link}>Deck Revision {item.id}: {item.title}</a></div>;
+                    return <div className="row" key={item.id}><NavLink href={item.link}>Deck Version {index+1}: {item.title}</NavLink></div>;
                 }
                 else if(result.kind === 'Slide'){
-                    return <div className="row" key={item.id}><a href={item.link}>Also in deck: {item.title}</a></div>;
+                    return <div className="row" key={item.id}><NavLink href={item.link}>Also in Deck: {item.title}</NavLink></div>;
                 }
             });
         }
 
         // form last line of the result item containing user info
         let userLine = (result.kind === 'Slide')
-            ?   <span>in <a href={result.deck.link}>{result.deck.title}</a> by user <a href={result.user.link}>{result.user.username}</a></span>
-            :   <span>Owner: <a href={result.user.link}>{result.user.username}</a></span>;
+            ?   <span>in <NavLink href={result.deck.link}>{result.deck.title}</NavLink> by user <NavLink href={result.user.link}>{result.user.username}</NavLink></span>
+            :   <span>Owner: <NavLink href={result.user.link}>{result.user.username}</NavLink></span>;
 
 
         return (
@@ -46,7 +47,7 @@ class SearchResultsItem extends React.Component {
                                 <div className="ui grid">
                                     <div className="sixteen wide left aligned column">
                                         <div className="row">
-                                            <h3><a href={result.link}>{kindIcon}{result.title}</a></h3>
+                                            <h3><NavLink href={result.link}>{kindIcon}{result.title}</NavLink></h3>
                                         </div>
                                         <div className="row">
                                             {result.description}

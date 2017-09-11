@@ -28,7 +28,6 @@ let webpackConfig = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules\/(?!identicons)/ ,
                 loader: 'babel-loader'
-
             },
             // Getting URLs for font files otherwise we get encoding errors in css-loader
             { test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/, loader: 'file-loader'},// 'url-loader?limit=100000'},

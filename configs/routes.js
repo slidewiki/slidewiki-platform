@@ -11,7 +11,6 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
-import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
@@ -30,6 +29,7 @@ import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
+import loadDiffview from '../actions/loadDiffview';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -98,6 +98,19 @@ export default {
             done();
         }
     },
+    contactus: {
+        path: '/contactus',
+        method: 'get',
+        page: 'contactus',
+        title: 'SlideWiki -- Contact Us',
+        handler: require('../components/Home/ContactUs'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Contact Us'
+            });
+            done();
+        }
+    },
     license: {
         path: '/license',
         method: 'get',
@@ -111,6 +124,19 @@ export default {
             done();
         }
     },
+    features: {
+        path: '/features',
+        method: 'get',
+        page: 'features',
+        title: 'SlideWiki -- Features',
+        handler: require('../components/Home/Features'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Features'
+            });
+            done();
+        }
+    },
     imprint: {
         path: '/imprint',
         method: 'get',
@@ -120,6 +146,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Imprint'
+            });
+            done();
+        }
+    },
+    welcome: {
+        path: '/welcome',
+        method: 'get',
+        page: 'Welcome',
+        title: 'SlideWiki -- Welcome',
+        handler: require('../components/Home/Welcome'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Welcome'
             });
             done();
         }
@@ -223,13 +262,20 @@ export default {
         }
     },
     legacydeck: {
-        path: '/deck/:oldid(\\d+_\\w+)',
+        path: '/deck/:oldid(\\d+_\\w+.*)',
         method: 'get',
         action: (context, payload, done) => {
-            context.executeAction(loadLegacy, payload, (err, result) => {
-                if (err) console.log(err);
-                context.executeAction(navigateAction, {'url': '/deck/'+result}, done);
-            });        }
+            context.executeAction(loadLegacy, payload, done);
+        }
+    },
+    diffview: {
+        path: '/diffview/:stype/:sid/:did',
+        method: 'get',
+        page: 'diffview',
+        handler: require('../components/Deck/Diffview/Diffview'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDiffview, payload, done);
+        }
     },
     contributors: {
         path: '/contributors/:stype/:sid',

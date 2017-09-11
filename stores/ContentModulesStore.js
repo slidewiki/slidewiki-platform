@@ -23,7 +23,7 @@ class ContentModulesStore extends BaseStore {
     }
     updateTagCount(payload) {
         let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
-        this.moduleCount.tags = lastRevision.tags? 
+        this.moduleCount.tags = lastRevision.tags?
             lastRevision.tags.length : 0;
 
         this.emitChange();
@@ -33,6 +33,10 @@ class ContentModulesStore extends BaseStore {
         this.moduleCount.tags = lastRevision.tags?
             lastRevision.tags.length : 0;
 
+        this.emitChange();
+    }
+    updateTagsCount(payload){
+        this.moduleCount.tags = payload.tagsCount;
         this.emitChange();
     }
     updateQuestionsCount(payload){
@@ -98,7 +102,8 @@ ContentModulesStore.handlers = {
     'NEW_TAG': 'addTagSuccess',
     'ADD_COMMENT_SUCCESS': 'addCommentSuccess',
     'UPDATE_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
-    'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess'
+    'LOAD_DATASOURCES_SUCCESS': 'updateDataSourcesSuccess',
+    'LOAD_AMOUNT_OF_TAGS_SUCCESS': 'updateTagsCount'
 };
 
 export default ContentModulesStore;
