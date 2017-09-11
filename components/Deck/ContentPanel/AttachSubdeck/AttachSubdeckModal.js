@@ -35,9 +35,6 @@ class AttachSubdeckModal extends React.Component{
             modalOpen: false,
             activeItem: 'MyDecks',
             activeTrap: false,
-
-
-
           //  selectedDeckTitle: 'Select one deck...',
           //  showSearchResults: false
         };
@@ -52,8 +49,6 @@ class AttachSubdeckModal extends React.Component{
     componentWillReceiveProps(nextProps){
 
         this.setState({
-
-
             selectedDeckId: nextProps.AttachSubdeckModalStore.selectedDeckId,
             activeItem: nextProps.AttachSubdeckModalStore.activeItem
         });
