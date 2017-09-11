@@ -40,6 +40,7 @@ ErrorStore.handlers = {
     'SEARCH_SYNTAX_ERROR'       : 'handleError',
     //'SERVICE_UNAVAILABLE'       : 'handleError',
     'TOO_MANY_REQUESTS_ERROR'   : 'handleError',
+    'SPAM_DETECTED_ERROR'       : 'handleError'
 };
 
 export default ErrorStore;

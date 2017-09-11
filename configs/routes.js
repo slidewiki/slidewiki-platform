@@ -99,6 +99,19 @@ export default {
             done();
         }
     },
+    contactus: {
+        path: '/contactus',
+        method: 'get',
+        page: 'contactus',
+        title: 'SlideWiki -- Contact Us',
+        handler: require('../components/Home/ContactUs'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Contact Us'
+            });
+            done();
+        }
+    },
     license: {
         path: '/license',
         method: 'get',
