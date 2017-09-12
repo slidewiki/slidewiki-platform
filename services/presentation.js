@@ -9,15 +9,20 @@ export default {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
-        let selector= {'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'mode': args.mode};
-        //Load the whole presentation
+        let selector = {
+            'id': args.id, 'subdeck': args.subdeck, 'sid': args.sid
+
+        };
         let presentation = [];
         if(resource === 'presentation.content'){
             /*********connect to microservices*************/
             let returnErr = false;
             let slideServiceRes;
             //let theme = get_sample_theme();
-            rp.get({uri: Microservices.deck.uri + '/deck/' + String(args.id) + '/slides'}).then((res) => {
+            let isSubdeck = args.id === args.subdeck;
+            let id = isSubdeck ? args.subdeck : args.id;
+
+            rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((res) => {
                 slideServiceRes = JSON.parse(res);
                 callback(null, {content: slideServiceRes.children, theme: slideServiceRes.theme, selector: selector});
 
