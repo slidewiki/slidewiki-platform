@@ -46,12 +46,15 @@ class ContentStore extends BaseStore {
         let splitSpath = selector.spath.split(';');
 
         if(!selector.spath || (splitSpath.length === 1 && selector.stype === 'slide')){
+            console.log('return null');
             return null;
         }
         else if(selector.stype === 'deck'){
+            console.log('selector.sid', selector.sid);
             return selector.sid;
         }
         else{
+            console.log('splitSpath[0]', splitSpath[0].split(':')[0]);
             return splitSpath[0].split(':')[0];
         }
         // else if(splitSpath.length === 1){

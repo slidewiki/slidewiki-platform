@@ -170,6 +170,7 @@ export default function loadDeck(context, payload, done) {
     // final callback
     (err, results) => {
         if (err) {
+            console.log('loadDeck error', err);
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             return;

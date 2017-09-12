@@ -13,7 +13,7 @@ export default {
         let args = params.params? params.params : params;
 
         let selector = {
-            'id': args.id, 'subdeck': args.subdeck, 'sid': args.sid.replace('slide-', ''), //'spath': args.spath,
+            'id': args.id, 'subdeck': args.subdeck, 'sid': args.sid, //'spath': args.spath,
             // 'stype': args.stype, 'mode': args.mode,
             'limit': 0, 'pushObj': null
         };

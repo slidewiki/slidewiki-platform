@@ -238,9 +238,9 @@ export default {
                 (callback) => {
                     context.executeAction(loadDeck, payload, callback);
                 },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                }
+                // (callback) => {
+                //     context.executeAction(loadPresentation, payload, callback);
+                // }
             ],
             (err, result) => {
                 if(err) console.log(err);
@@ -416,8 +416,7 @@ export default {
     },
 
     presentation: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/:subdeck?/slide-:sid?',
+        path: '/presentation/:id/:subdeck?/(slide)?/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
