@@ -416,7 +416,7 @@ export default {
     },
 
     presentation: {
-        path: '/presentation/:id/:subdeck?/(slide)?/:sid?',
+        path: '/presentation/:id/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),

@@ -42,6 +42,7 @@ class ContentStore extends BaseStore {
         this.mode = state.mode;
     }
     getCurrentSubdeck(selector){
+        console.log('\n\n\ngetCurrentSubdeck\n\n\n');
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
 
@@ -49,7 +50,7 @@ class ContentStore extends BaseStore {
             console.log('return null');
             return null;
         }
-        else if(selector.stype === 'deck'){
+        else if(selector.stype === 'deck' && selector.sid){
             console.log('selector.sid', selector.sid);
             return selector.sid;
         }

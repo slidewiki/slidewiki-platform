@@ -17,6 +17,9 @@ export default {
             // 'stype': args.stype, 'mode': args.mode,
             'limit': 0, 'pushObj': null
         };
+        if(args.sid){
+            args.sid = args.sid.replace('slide-', '')
+        }
         console.log('selector: ', selector);
         // console.log('params', params);
         //Load the whole presentation
@@ -25,14 +28,19 @@ export default {
             /*********connect to microservices*************/
             let returnErr = false;
 
-            let id = args.subdeck ? args.subdeck : args.id;
-            let isSubdeck = (id === args.subdeck);
+            // let id = args.subdeck === args.id ? args.id : args.subdeck;
+            let isSubdeck = (args.id !== args.subdeck);
+            let id = isSubdeck ? args.subdeck : args.id;
+            console.log('args: ', args, 'id: ', id, 'isSubdeck: ', isSubdeck);
+
             // let subdeck = args.subdeck;
             let allSlides, deckInfo;
             // console.log('args: ', args, '\n\nid:', id);
             if(isSubdeck){
                 console.log('isSubdeck is true');
-                rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((all) => {
+                let uri = Microservices.deck.uri + '/deck/' + String(id) + '/slides';
+                console.log('uri: ', uri);
+                rp.get({uri: uri}).then((all) => {
                     allSlides = JSON.parse(all);
                     callback(null, {content: allSlides.children, theme: allSlides.theme, selector: selector});
                 }).catch((err) => {
@@ -91,11 +99,12 @@ export default {
                             console.log('Slide view, so need to check more carefully');
                             let nextDeckParams = getNextSubdeck(deckInfo, allSlides, sid);
 
-                            let pushObj = getAdditionalSlideObject (args.id, nextDeckParams.nextDeck);
-                            console.log('pushObj', pushObj);
                             allSlides.children = allSlides.children.slice(nextDeckParams.offset, nextDeckParams.limit);
-                            allSlides.children.push(pushObj);
-
+                            if(nextDeckParams.nextDeck){
+                                let pushObj = getAdditionalSlideObject (args.id, nextDeckParams.nextDeck);
+                                console.log('pushObj', pushObj);
+                                allSlides.children.push(pushObj);
+                            }
 
                             callback(null, {content: allSlides.children, theme: allSlides.theme, selector: selector});
                         }
@@ -200,6 +209,7 @@ function getNextSubdeck(deck, allSlides, currentId=0){
         }
 
     }
+    return {'limit': allSlides.children.length, 'offset': deckOffsetId};
 }
 
 
