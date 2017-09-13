@@ -2,12 +2,10 @@
 // to the client
 
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import ReactDOM from 'react-dom/server';
 import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
 
-import { createElementWithContext } from 'fluxible-addons-react';
 import serialize from 'serialize-javascript';
 import debugLib from 'debug';
 const debug = debugLib('slidewiki-platform');
@@ -19,8 +17,6 @@ import cookie from 'react-cookie';
 
 const uuidV4 = require('uuid/v4');
 const log = require('../configs/log').log;
-
-
 const env = process.env.NODE_ENV;
 
 let renderApp = function(req, res, context){
