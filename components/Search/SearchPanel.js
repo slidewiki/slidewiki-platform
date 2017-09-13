@@ -1,6 +1,6 @@
 import React from 'react';
-import {connectToStores} from 'fluxible-addons-react';
-import {NavLink, navigateAction} from 'fluxible-router';
+import { connectToStores } from 'fluxible-addons-react';
+import { navigateAction } from 'fluxible-router';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../stores/SearchResultsStore';
 import SearchParamsStore from '../../stores/SearchParamsStore';
@@ -11,6 +11,7 @@ import loadSearchResults from '../../actions/search/loadSearchResults';
 import UsersInput from './AutocompleteComponents/UsersInput';
 import TagsInput from './AutocompleteComponents/TagsInput';
 import KeywordsInput from './AutocompleteComponents/KeywordsInput';
+import loadMoreResults from '../../actions/search/loadMoreResults';
 
 class SearchPanel extends React.Component {
     constructor(props){
@@ -22,7 +23,7 @@ class SearchPanel extends React.Component {
             field: this.props.SearchParamsStore.field,
             user: this.props.SearchParamsStore.user,
             tag: this.props.SearchParamsStore.tag,
-            revisions: this.props.SearchParamsStore.revisions,
+            sort: this.props.SearchParamsStore.sort, 
         };
     }
     initDropdown(){
@@ -42,17 +43,20 @@ class SearchPanel extends React.Component {
         this.setState(nextProps.SearchParamsStore);
     }
     onChange(event) {
-        // console.log(event.target.name + ' -> ' + event.target.value);
+        // console.log(event.target.name + ' -> \"' + event.target.value + '"');
         let curstate = {};
         curstate[event.target.name] = event.target.value;
         this.setState(curstate);
     }
     clearInput(){
-        this.setState({searchstring: ''});
+        this.setState({keywords: ''});
         this.refs.keywords.focus();
     }
     onSelect(searchstring){
-        this.setState({keywords: searchstring});
+        this.setState({
+            keywords: searchstring
+        });
+
         this.handleRedirect();
     }
     handleKeyPress(event){
@@ -60,52 +64,70 @@ class SearchPanel extends React.Component {
             this.handleRedirect();
         }
     }
-    getEncodedParams(params){
-        let queryparams = {
-            keywords: (params && params.keywords)
-                        ? params.keywords       // if keywords are set from redirection
-                        : (this.refs.keywords.getSelected().trim() || '*:*'),   //else get keywords from input, and if empty set wildcard to fetch all
-            field: this.refs.field.value.trim(),
-            kind: this.refs.kind.value.trim(),
-            language: this.refs.language.value.trim(),
-            user: this.refs.user.getSelected().split(','),
-            tag: this.refs.tag.getSelected().split(','),
-            // revisions: $('.ui.checkbox.revisions').checkbox('is checked')
-            sort: (params && params.sort) ? params.sort : ''
-        };
-
-        // encode params
-        let encodedParams = '';
-        for(let key in queryparams){
-            if(queryparams[key] instanceof Array){
-                for(let el in queryparams[key]){
-                    encodedParams += this.encodeParam(encodedParams, key, queryparams[key][el]);
-                }
-            }
-            else{
-                encodedParams += this.encodeParam(encodedParams, key, queryparams[key]);
-            }
+    handleRedirect(params){
+        
+        // form the query parameters to send to search service
+        let keywords;
+        if(params && params.keywords){
+            keywords = params.keywords;
+        } else {
+            keywords = ((this.state.keywords) ? this.state.keywords : '*:*');
         }
 
-        return encodedParams;
-    }
-    encodeParam(encodedParams, key, value){
-        if(value.trim() === '')
-            return '';
+        let queryparams = `keywords=${encodeURIComponent(keywords)}`;
 
-        return ((encodedParams) ? '&' : '')
-                + encodeURIComponent(key) + '=' + encodeURIComponent(value);
-    }
-    handleRedirect(params){
+        if(this.state.field)
+            queryparams += `&field=${this.state.field}`;
+
+        if(this.state.kind){
+            queryparams += `&kind=${this.state.kind}`;
+        }
+
+        if(this.state.language)
+            queryparams += `&language=${this.state.language}`;
+
+        if(this.state.license)
+            queryparams += `&license=${this.state.license}`;
+
+        let users = this.refs.user.getSelected();
+        if(users){
+            queryparams += users.split(',').map( (u) => { return `&user=${u}`; }).join('');
+        }
+
+        let tags = this.refs.tag.getSelected();
+        if(tags){
+            queryparams += tags.split(',').map( (t) => { return `&tag=${t}`; }).join('');
+        }
+
+        if(this.state.sort){
+            queryparams += `&sort=${this.state.sort}`;
+        }
+
+        // redirect with query params
         this.context.executeAction(navigateAction, {
-            url:  '/search/' + this.getEncodedParams(params)
+            url: `/search/${queryparams}`
         });
 
         this.refs.keywords.blur();
 
         return false;
     }
+    changeSort(_sort){
+        this.setState({
+            sort: _sort
+        });
+
+        this.handleRedirect();
+    }
+    loadMore(){
+        let nextPage = this.props.SearchResultsStore.page + 1;
+
+        this.context.executeAction(loadMoreResults, {
+            queryparams: `${this.props.SearchParamsStore.queryparams}&page=${nextPage}`
+        });
+    }
     render() {
+
         let loadingDiv = <div className="ui basic segment">
             <div className="ui active text loader">Loading</div>
         </div>;
@@ -129,10 +151,11 @@ class SearchPanel extends React.Component {
                 numFound={this.props.SearchResultsStore.numFound}
                 sort={this.props.SearchParamsStore.sort}
                 handleRedirect={this.handleRedirect.bind(this)}
-                queryparams={this.props.SearchParamsStore.queryparams}
-                loadMore={this.props.SearchResultsStore.loadMore}
+                changeSort={this.changeSort.bind(this)}
+                hasMore={this.props.SearchResultsStore.hasMore}
+                loadMore={this.loadMore.bind(this)}
                 loadMoreLoading={this.props.SearchResultsStore.loadMoreLoading}
-                start={this.props.SearchResultsStore.start}
+                
             />;
         }
         return (
@@ -193,14 +216,6 @@ class SearchPanel extends React.Component {
                                 </div>
 
                             </div>
-    {
-                            // <div className="field">
-                            //     <div className="ui checkbox revisions" style={{marginTop: '1em', marginBottom: '1em'}}>
-                            //         <input name='revisions' id='revisions' onChange={this.onChange.bind(this)} tabIndex="0" type="checkbox" ref='revisions'></input>
-                            //     <label htmlFor="revisions">Include revisions</label>
-                            //     </div>
-                            // </div>
-    }
                             <div role="button"  className="ui primary submit button" tabIndex="0" onClick={this.handleRedirect.bind(this)}>
                                  Submit
                             </div>
