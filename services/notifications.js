@@ -65,16 +65,16 @@ export default {
 
         if (resource === 'notifications.item'){
             /*********connect to microservices*************/
-            const nid = args.notificationId;
+            const id = args.notificationId;
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notification/delete',
                 body:JSON.stringify({
-                    id: nid
+                    id: id
                 })
             };
             rp(options).then((res) => {
-                callback(null, params);
+                callback(null, {id: id});
             }).catch((err) => {
                 console.log(err);
                 callback(err, params);
