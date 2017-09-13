@@ -82,7 +82,7 @@ class ContentQuestionAnswersList extends React.Component {
                     <i className=" help circle icon" />
                     Show answer
                   </button>
-                  {showEditButton()}
+                  {/*showEditButton()*/}
                   <div className="ui item">
                     <div className="content">
                       {this.state.showCorrect ? correctAnswers : null}

@@ -11,7 +11,6 @@ import ContentQuestionsList from './ContentQuestionsList';
 // import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
-
     constructor(props){
         super(props);
         this.state = {

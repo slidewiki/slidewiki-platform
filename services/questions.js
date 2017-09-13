@@ -119,8 +119,8 @@ export default {
                     related_object_id: args.sid,
                     related_object: args.stype,
                     difficulty: args.difficulty,
-                    choices: choices,
-                    question: args.title})
+                    choices: args.choices,
+                    question: args.question})
             }).then((res) => {
                 console.log('Question create method should be successful. Check via swagger for following oid, otype, and qid:', args.sid, args.stype, args.questionId);
                 callback(null, {});
@@ -159,6 +159,7 @@ export default {
                 })
             }).then((res) => {
                 console.log('Question update should be successful. Check via swagger for questionId:', args.question.qid);
+
                 callback(null, {});
             }).catch((err) => {
                 console.log(err);
