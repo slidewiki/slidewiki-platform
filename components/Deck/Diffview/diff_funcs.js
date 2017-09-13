@@ -43,12 +43,12 @@ const compareWrapperIds = (initSrc, finalSrc) => {
 
 const getParentId = (finalSrc, id) => {
     if(id !== undefined){
-      const finalRoot = toHTML(finalSrc);
-      const parent = $(finalRoot).find(`#${id}`).parent();
+        const finalRoot = toHTML(finalSrc);
+        const parent = $(finalRoot).find(`#${id}`).parent();
 
-      return parent[0].id;
+        return parent[0].id;
     } else {
-      return null;
+        return null;
     }
 };
 
