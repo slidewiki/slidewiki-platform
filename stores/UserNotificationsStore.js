@@ -38,7 +38,7 @@ class UserNotificationsStore extends BaseStore {
     }
     countNewNotifications() {
         let count = 0;
-        notifications.forEach((notification) => {if (notification.new) count++;});
+        this.notifications.forEach((notification) => {if (notification.new) count++;});
         return count;
     }
     readUserNotificationSuccess(payload) {

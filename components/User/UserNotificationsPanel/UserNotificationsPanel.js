@@ -58,9 +58,18 @@ class UserNotificationsPanel extends React.Component {
     }
 
     handleDelete() {
-        this.context.executeAction(deleteAllUserNotifications, {
-            uid: this.props.UserProfileStore.userid
-        });
+        swal({
+            title: 'Delete all notifications. Are you sure?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete!'
+        }).then((accepted) => {
+            this.context.executeAction(deleteAllUserNotifications, {
+                uid: this.props.UserProfileStore.userid
+            });
+        }, (reason) => {/*do nothing*/}).catch(swal.noop);
     }
 
     render() {
