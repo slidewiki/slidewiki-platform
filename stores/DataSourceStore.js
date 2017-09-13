@@ -7,7 +7,6 @@ class DataSourceStore extends BaseStore {
         this.showAllDataSources = false;
         this.dataSource = undefined;
         this.selectedIndex = -1;
-        this.contentOwner = 0;
         this.selector = {};
     }
     loadDataSources(payload) {
@@ -15,7 +14,6 @@ class DataSourceStore extends BaseStore {
         this.selector = payload.selector;
         this.dataSource = undefined;
         this.selectedIndex = -1;
-        this.contentOwner = payload.owner;
         this.emitChange();
     }
     loadDataSource(payload) {
@@ -48,7 +46,6 @@ class DataSourceStore extends BaseStore {
             showAllDataSources: this.showAllDataSources,
             dataSource: this.dataSource,
             selectedIndex: this.selectedIndex,
-            contentOwner: this.contentOwner,
             selector: this.selector,
         };
     }
@@ -60,7 +57,6 @@ class DataSourceStore extends BaseStore {
         this.showAllDataSources = state.showAllDataSources;
         this.dataSource = state.dataSource;
         this.selectedIndex = state.selectedIndex;
-        this.contentOwner = state.contentOwner;
         this.selector = state.selector;
     }
 }
