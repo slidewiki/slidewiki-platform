@@ -236,102 +236,6 @@ class SlideContentEditor extends React.Component {
         this.resizeDrag();
         this.forceUpdate();
     }
-    handleCKeditorModeButton(noswitch){
-        if(noswitch !== 'noswitch')
-        {
-            if (this.CKeditorMode === 'advanced toolbar'){
-                console.log('current CKeditor toolbar mode is basic - set to advanced');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-
-                this.CKeditorMode = 'basic toolbar';
-            }
-            else {
-                console.log('current CKeditor toolbar mode is advanced - set to basic');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config_basic.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-                this.CKeditorMode = 'advanced toolbar';
-            }
-        } else {
-            if (this.CKeditorMode === 'advanced toolbar'){
-                console.log('current CKeditor toolbar mode is basic - refreshed');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config_basic.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-            } else {
-                console.log('current CKeditor toolbar mode is advanced - refreshed');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-            }
-        }
-        CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
-            if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
-            {
-                this.forceUpdate();
-                //this.addBorders();
-                this.resizeDrag();
-                //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
-                $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
-                    //remove resize and drag interaction because it generates HTML in slide editor content
-                    this.disableResizeDrag();
-                    console.log('====ckeditor on change====');
-                    //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
-                    setTimeout(() => {
-                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
-                            console.log('====ckeditor save button ok==== - refresh drag and menus');
-                            //this.addBorders();
-                            setTimeout(() => {
-                                this.resizeDrag();
-                                this.emitChange();
-                                //this.forceUpdate();
-                            }, 500);
-                        });
-                    }, 500);
-                });
-            }
-            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
-            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
-                console.log('====ckeditor image dialog onclick====');
-                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
-                setTimeout(() => {
-                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
-                        console.log('====ckeditor image save button ok==== refresh CKeditor');
-                        //this.addBorders();
-                        setTimeout(() => {
-                            this.handleCKeditorModeButton('noswitch');
-                            this.resizeDrag();
-                            this.forceUpdate();
-                            this.emitChange();
-                        }, 500);
-                    });
-                }, 500);
-            });
-        });
-
-    }
     uniqueIDAllElements(){
         let allElements = this.refs.inlineContent.getElementsByTagName('*');
         let allIds = [];
@@ -544,17 +448,11 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         });
-        //}
-        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
-            //const userId = this.props.UserProfileStore.userid;
-            // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+
         CKEDITOR.inline('inlineContent', {
             //CKEDITOR.replace('inlineContent', {
             //customConfig: '/assets/ckeditor_config.js',
-            customConfig: '/assets/ckeditor_config_basic.js',
+            customConfig: '/assets/ckeditor_config.js',
             toolbarGroups: [
                 //needed for Chrome initialization
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
@@ -570,28 +468,36 @@ class SlideContentEditor extends React.Component {
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             this.resize();
             this.uniqueIDAllElements();
-
-            //SWIK-1238 - detect change to source code via source dialog plugin
-            //console.log($( ".cke_dialog_ui_button_ok" ).innerHTML);
-            //$( ".cke_dialog_ui_button_ok" ).click(function() {
-            //    console.log( "Handler for .click() called." );
-            //});
-            //CKEDITOR.instances.inlineContent.on('change', function(){console.log('change');});
-            //console.log('inlineConent CKeditor ready' + CKEDITOR.instances.inlineContent);
-            //if (!CKEDITOR.instances.inlineContent)
-
-            /*
-            if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
+            if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
-                //CKEDITOR.instances.inlineContent.destroy();
-                CKEDITOR.inline('inlineContent', {
-                    //customConfig: '/assets/ckeditor_config.js',
-                    customConfig: '/assets/ckeditor_config_basic.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
+                this.forceUpdate();
+                //this.addBorders();
+                this.resizeDrag();
 
+                //console.log('resizeDrag and borders');
+                //show that content is outside of pptx2html box
+                //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+                $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+
+                //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
+                $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
+                    //remove resize and drag interaction because it generates HTML in slide editor content
+                    this.disableResizeDrag();
+                    console.log('====ckeditor on change====');
+                    //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                    setTimeout(() => {
+                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
+                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //this.addBorders();
+                            setTimeout(() => {
+                                this.resizeDrag();
+                                this.emitChange();
+                                //this.forceUpdate();
+                            }, 500);
+                        });
+                    }, 500);
+                });
             }
-            */
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
@@ -604,21 +510,11 @@ class SlideContentEditor extends React.Component {
                             this.handleCKeditorModeButton('noswitch');
                             this.resizeDrag();
                             this.forceUpdate();
+                            this.emitChange();
                         }, 500);
                     });
                 }, 500);
             });
-            if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
-            {
-                this.forceUpdate();
-                //this.addBorders();
-                this.resizeDrag();
-
-                //console.log('resizeDrag and borders');
-                //show that content is outside of pptx2html box
-                //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
-                $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
-            }
             if(document.domain !== 'localhost')
             {
                 document.domain = 'slidewiki.org';
