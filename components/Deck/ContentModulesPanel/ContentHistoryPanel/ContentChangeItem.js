@@ -2,6 +2,8 @@ import React from 'react';
 import {List, Icon, Button} from 'semantic-ui-react';
 //import moment from 'moment';
 import revertRevision from '../../../../actions/history/revertRevision';
+import addTreeNode from '../../../../actions/decktree/addTreeNode';
+
 import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO move to common
 import {NavLink} from 'fluxible-router';
 
@@ -44,9 +46,35 @@ class ContentChangeItem extends React.Component {
             cancelButtonClass: 'ui red button',
             buttonsStyling: false
         }).then((accepted) => {
-            this.context.executeAction(revertRevision, {
-                selector: this.props.selector, revisionId: this.props.change.oldValue.ref.revision
-            });
+            // we want to re-attach a removed slide/deck
+            let removedId = formatRef(this.props.change.value.ref);
+
+            // we need to set the parent correctly according to the change.path
+            // change.path should always be >= 2, so we take the second to last for the parent
+            let [parentNode] = this.props.change.path.slice(-2);
+            let [indexNode] = this.props.change.path.slice(-1);
+            let parentId = formatRef(parentNode);
+
+            let reinsertPayload = {
+                selector: {
+                    // root deck is always the same as in the selector
+                    id: this.props.selector.id,
+                    // parent deck is always a deck
+                    stype: 'deck',
+                    sid: parentId,
+                    // we decrement the (zero-based) indexNode.index by one and then add on to make it 1-based, so no-op in the end :)
+                    spath: `${parentId}:${indexNode.index}`,
+                },
+                nodeSpec: {
+                    id: removedId,
+                    type: this.props.change.value.kind,
+                },
+                // TODO experiment
+                isMove: true,
+            };
+
+            console.log(reinsertPayload);
+            this.context.executeAction(addTreeNode, reinsertPayload);
         }, (reason) => {
             //done(reason);
         });
@@ -156,5 +184,22 @@ class ContentChangeItem extends React.Component {
 ContentChangeItem.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
+
+// private methods for spath generation from changes
+function formatPath(path) {
+    return path ? path.map(formatPathPart).join(';') : '';
+}
+
+function formatPathPart(pathPart) {
+    let suffix = _.isNumber(pathPart.index) ? `${pathPart.index + 1}` : undefined;
+    // possibly undefined stuff will render as empty string
+    return [formatRef(pathPart), suffix].join(':');
+}
+
+function formatRef(ref) {
+    if (!ref.id || !ref.revision) return undefined;
+    return `${ref.id}-${ref.revision}`;
+}
+
 
 export default ContentChangeItem;

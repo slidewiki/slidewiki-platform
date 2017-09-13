@@ -34,6 +34,7 @@ export default {
                     selector: selector,
                     //nodeSpec: nodeSpec,
                     nodeSpec:args.nodeSpec,
+                    isMove: args.isMove,
                     user: args.userid.toString()
                 })
             }).then((res) => {
