@@ -236,6 +236,60 @@ class SlideContentEditor extends React.Component {
         this.resizeDrag();
         this.forceUpdate();
     }
+    refreshCKeditor(){
+        if (CKEDITOR.instances.inlineContent != null) {
+            //console.log('destroy CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
+        }
+        CKEDITOR.inline('inlineContent', {
+            customConfig: '/assets/ckeditor_config.js',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+
+        CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+            if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
+            {
+                this.forceUpdate();
+                //this.addBorders();
+                this.resizeDrag();
+                //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
+                $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
+                    //remove resize and drag interaction because it generates HTML in slide editor content
+                    this.disableResizeDrag();
+                    console.log('====ckeditor on change====');
+                    //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                    setTimeout(() => {
+                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
+                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //this.addBorders();
+                            setTimeout(() => {
+                                this.resizeDrag();
+                                this.emitChange();
+                                //this.forceUpdate();
+                            }, 500);
+                        });
+                    }, 500);
+                });
+            }
+            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
+                console.log('====ckeditor image dialog onclick====');
+                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.refreshCKeditor();
+                            this.resizeDrag();
+                            this.forceUpdate();
+                            this.emitChange();
+                        }, 500);
+                    });
+                }, 500);
+            });
+        });
+    }
     uniqueIDAllElements(){
         let allElements = this.refs.inlineContent.getElementsByTagName('*');
         let allIds = [];
@@ -507,7 +561,7 @@ class SlideContentEditor extends React.Component {
                         console.log('====ckeditor image save button ok==== refresh CKeditor');
                         //this.addBorders();
                         setTimeout(() => {
-                            this.handleCKeditorModeButton('noswitch');
+                            this.refreshCKeditor();
                             this.resizeDrag();
                             this.forceUpdate();
                             this.emitChange();
@@ -1376,10 +1430,6 @@ class SlideContentEditor extends React.Component {
                     <a style={buttonColorBlack}>Use template</a>
                 </button>
                 <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/> */}
-                <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
-                 <i className="outline tasks icon black"></i>
-                 <a style={buttonColorBlack}>{this.CKeditorMode}</a>
-                </button>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
