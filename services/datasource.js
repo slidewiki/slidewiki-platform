@@ -12,9 +12,12 @@ export default {
         let selector= {'id': parseInt(args.id), 'spath': args.spath, 'sid': args.sid, 'stype': args.stype, 'page': params.page};
 
         if (resource === 'datasource.count') {
-            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let dataSources = getDataSourcesFromDeckOrSlide(selector.sid, JSON.parse(res));
-                callback(null, {'count' : dataSources.length, 'selector': selector, 'mode': args.mode});
+            rp.get({
+                uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources',
+                qs: { countOnly: true },
+                json: true,
+            }).then((res) => {
+                callback(null, {'count' : res.totalCount, 'selector': selector, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {'count' : 0, 'selector': selector, 'mode': args.mode});
@@ -23,10 +26,11 @@ export default {
 
         if (resource === 'datasource.list') {
             //request specific content item from deck service
-            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let parsedRes = JSON.parse(res);
-                let dataSources = getDataSourcesFromDeckOrSlide(selector.sid, parsedRes);
-                callback(null, {dataSources: dataSources, selector: selector});
+            rp.get({
+                uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources',
+                json: true,
+            }).then((res) => {
+                callback(null, {dataSources: res.items, selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {dataSources: [], selector: selector});
@@ -57,18 +61,3 @@ export default {
     // update: (req, resource, params, body, config, callback) => {}
     // delete: (req, resource, params, config, callback) => {}
 };
-
-function getDataSourcesFromDeckOrSlide(id, deckOrSlide) {
-    let dataSources = [];
-
-    let contentIdParts = id.split('-');
-    let contentRevisionId = (contentIdParts.length > 1) ? contentIdParts[contentIdParts.length - 1] : deckOrSlide.active;
-
-    if (deckOrSlide.revisions !== undefined && deckOrSlide.revisions.length > 0 && deckOrSlide.revisions[0] !== null) {
-        let contentRevision = (contentRevisionId !== undefined) ? deckOrSlide.revisions.find((revision) => String(revision.id) === String(contentRevisionId)) : undefined;
-        if (contentRevision !== undefined) {
-            dataSources = (contentRevision.dataSources !== undefined && contentRevision.dataSources !== null) ? contentRevision.dataSources : [];
-        }
-    }
-    return dataSources;
-}
