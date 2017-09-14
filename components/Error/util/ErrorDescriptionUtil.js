@@ -64,6 +64,11 @@ export default {
             type: 'Too Many Requests',
             description: 'Too many requests are sent in a given amount of time.',
             actionRequired: 'Please try again after some time.'
+        },
+        SPAM_DETECTED_ERROR: {
+            type: 'SPAM Detected',
+            description: 'The content was marked as SPAM and could not be shown.',
+            actionRequired: 'Please contact us if you want to change the assessement.'
         }
     }
 };

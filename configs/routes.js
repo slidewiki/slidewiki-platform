@@ -11,7 +11,6 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
-import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
@@ -95,6 +94,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | About'
+            });
+            done();
+        }
+    },
+    contactus: {
+        path: '/contactus',
+        method: 'get',
+        page: 'contactus',
+        title: 'SlideWiki -- Contact Us',
+        handler: require('../components/Home/ContactUs'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Contact Us'
             });
             done();
         }

@@ -55,7 +55,7 @@ class ActivityItem extends React.Component {
         };
         const cheerioContentName = (node.content_name) ? cheerio.load(node.content_name).text() : '';
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
-        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
+        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span>{'this ' + node.content_kind}</span>) : (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
 
         if (node.user_id === '0') {
             node.user_id = undefined;
@@ -192,15 +192,33 @@ class ActivityItem extends React.Component {
                 break;
             case 'fork':
                 IconNode = (<i className="ui large fork icon"></i>);
+                const forkRef = (node.fork_info) ? (<span>, creating a <a href={'/deck/' + node.fork_info.content_id}>new deck</a></span>) : '';
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'forked '} {nodeRef}
+                        </a> {'forked '}{nodeRef}{forkRef}
                         <br/>
                         {DateDiv}
                     </div>
                 );
+                break;
+            case 'delete':
+                IconNode = (<i className="ui large remove circle outline icon"></i>);
+                const cheerioDeletedName = (node.delete_info.content_name) ? cheerio.load(node.delete_info.content_name).text() : '';
+
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> <span>{'deleted ' + node.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}</span>
+                        <br/>
+                        <span>{'from '} {nodeRef}</span>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+
                 break;
             default:
                 IconNode = (<i className="ui large warning icon"></i>);
