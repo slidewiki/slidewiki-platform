@@ -1,6 +1,9 @@
 import React from 'react';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
 import deleteQuestion from '../../../../actions/questions/deleteQuestion';
+import loadContentQuestions from '../../../../actions/loadContentQuestions';
+import ContentModulesStore from '../../../../stores/ContentModulesStore';
+import {connectToStores} from 'fluxible-addons-react';
 
 class ContentQuestionEdit extends React.Component {
 
@@ -23,6 +26,7 @@ class ContentQuestionEdit extends React.Component {
             userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
             relatedObject: this.props.selector.stype,
+            selector: this.props.ContentModulesStore.selector
         };
         this.updateQuestionTitle = this.updateQuestionTitle.bind(this);
         this.updateQuestionDifficulty = this.updateQuestionDifficulty.bind(this);
@@ -39,17 +43,25 @@ class ContentQuestionEdit extends React.Component {
 
         this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
-        this.deleteButtonClick = this.deleteButtonClick.bind(this);
+        this.deleteConfirmation = this.deleteConfirmation.bind(this);
+
+        this.showConfirmDialog = this.showConfirmDialog.bind(this);
     };
+
+    showConfirmDialog(e) {
+        e.preventDefault();
+        $(this.refs.qmodal).modal('show');
+    }
 
     saveButtonClick(e) {
         e.preventDefault();
         this.context.executeAction(updateQuestion, {question: this.state});
     }
 
-    deleteButtonClick(e) {
+    deleteConfirmation(e) {
         e.preventDefault();
-        this.context.executeAction(deleteQuestion, {qid: this.state.qid});
+        this.context.executeAction(deleteQuestion, {question: this.state});
+        $(this.refs.qmodal).modal('hide');
     }
 
     /* Update answer choice text */
@@ -191,7 +203,7 @@ class ContentQuestionEdit extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div className="ui left floated buttons">
-                                    <button className="ui red button" onClick={this.deleteButtonClick}>Delete</button>
+                                    <button className="ui red button" onClick={this.showConfirmDialog}>Delete</button>
                                 </div>
                                 <div className="ui right floated buttons">
                                     <button className="ui primary button" onClick={this.saveButtonClick}>Save</button>
@@ -200,6 +212,24 @@ class ContentQuestionEdit extends React.Component {
                             </div>
                         </div>
                     </form>
+                    <div className="ui modal" ref="qmodal">
+                        <div className="ui red header">Are you sure you want to delete this question?</div>
+                        <div className="image content">
+                            <i className="ui massive warning sign icon"/>
+                            <div className="description">
+                                <div className="ui header">Are you sure you want to delete this question?</div>
+                                <p>Please note that this action can not be undone if confirmed yes.</p>
+                            </div>
+                        </div>
+                        <div className="actions">
+                            <div className="ui green right labeled icon deny button">
+                                <i className="checkmark icon"></i> No
+                            </div>
+                            <div className="ui red right labeled icon button" onClick={ this.deleteConfirmation }>
+                            <i className="sign out icon"></i> Yes
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -210,4 +240,9 @@ ContentQuestionEdit.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
+ContentQuestionEdit = connectToStores(ContentQuestionEdit, [ContentModulesStore], (context, props) => {
+    return {
+        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+    };
+});
 export default ContentQuestionEdit;
