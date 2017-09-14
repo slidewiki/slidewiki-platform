@@ -99,6 +99,7 @@ class DiffView extends Component {
 
         //REDUCE complex Object into flat Array
         const elements = Object.keys(diff_results).reduce((arr, key) => arr.concat(diff_results[key]), []);
+        console.log(elements);
 
         //LOG
         // console.group();
