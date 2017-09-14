@@ -44,7 +44,7 @@ function parseSlide(slide){
         title: '',
         link: ''
     };
-    slide.link = '/deck/' + slide.usage[0] + '/slide/' + slide.db_id + '-' + slide.db_revision_id;
+    slide.link = `/deck/${slide.usage[0]}/slide/${slide.db_id}-${slide.db_revision_id}`;
     slide.kind = 'Slide';
     slide.title = (slide.title && slide.title.length > 70) ? slide.title.substring(0,70)+'...' : slide.title;
     slide.description = (slide.content && slide.content.length > 85) ? slide.content.substring(0,85)+'...' : slide.content;
@@ -57,7 +57,8 @@ function parseSlide(slide){
 }
 
 function parseDeck(deck){
-    deck.link = '/deck/' + deck.db_id + '-' + deck.db_revision_id;
+    // different link if this is a root deck or a sub-deck
+    deck.link = (deck.isRoot || !deck.usage) ? `/deck/${deck.db_id}-${deck.db_revision_id}` : `/deck/${deck.usage[0]}/deck/${deck.db_id}-${deck.db_revision_id}`;
     deck.kind = 'Deck';
     deck.title = (deck.title && deck.title.length > 70) ? deck.title.substring(0,70)+'...' : deck.title;
     deck.description = (deck.description && deck.description.length > 85) ? deck.description.substring(0,85)+'...' : deck.description;
@@ -128,18 +129,20 @@ export default {
 
         if(resource === 'searchresults.list'){
 
-            // get start results in defined in params (needed for lazy loading results)
-            params.start = (params.start) ? params.start : 0;
+            // extra options for enabling results expansion, spellcheck and faceting
+            let requestOptions = '&expand=true&spellcheck=true&facets=false';
 
-            // fetch results from search-microservice
-            rp.get({uri: Microservices.search.uri + '/search?' + args.queryparams + '&start=' + params.start}).then((results) => {
+            // console.log(args.queryparams);
 
-                // console.log(JSON.stringify(JSON.parse(results), null, 2));
+            // request search results from search service
+            rp.get({
+                uri: `${Microservices.search.uri}/search/v2?${args.queryparams}${requestOptions}`, 
+                json: true
+            }).then( (response) => {
 
-                let searchResults = JSON.parse(results);
                 let userIds = new Set(), deckIds = new Set();
 
-                searchResults.response.docs.forEach( (res) => {
+                response.docs.forEach( (res) => {
 
                     // keep user id to request later
                     if(res.creator !== null){
@@ -165,7 +168,7 @@ export default {
                     }
 
                 });
-
+                
                 // get required usernames
                 let usernames = {};
                 let userPromise = getUsers(userIds).then( (usernamesFromService) => {
@@ -187,7 +190,7 @@ export default {
 
 
                 Promise.all([userPromise, deckPromise, forksPromise]).then( () => {
-                    searchResults.response.docs.forEach( (returnItem) => {
+                    response.docs.forEach( (returnItem) => {
 
                         // fill extra user info
                         returnItem.user.username = usernames[returnItem.user.id];
@@ -229,10 +232,12 @@ export default {
                     });
 
                     callback(null, {
-                        numFound: searchResults.response.numFound,
-                        docs: searchResults.response.docs,
-                        start: params.start + 50,
-                        spellcheck: extractSpellcheckSuggestion(searchResults.spellcheck)
+                        numFound: response.numFound,
+                        hasMore: response.hasMore, 
+                        page: response.page,
+                        spellcheck: response.spellcheck, 
+                        facets: response.facets,
+                        docs: response.docs
                     });
                 });
 

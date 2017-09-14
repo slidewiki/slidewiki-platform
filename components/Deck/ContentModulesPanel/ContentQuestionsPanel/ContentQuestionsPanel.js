@@ -11,7 +11,6 @@ import ContentQuestionsList from './ContentQuestionsList';
 // import ContentQuestionForm from './ContentQuestionForm';
 
 class ContentQuestionsPanel extends React.Component {
-
     constructor(props){
         super(props);
         this.state = {
@@ -61,35 +60,28 @@ class ContentQuestionsPanel extends React.Component {
         const totalLength = this.props.ContentQuestionsStore.totalLength;
         const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
 
-
-    // Button bar differs for Slide and Folder
+        // Button bar differs for Slide and Folder
         let buttonBar = '';
-        switch(selector.stype){
+        switch(selector.stype) {
             case 'slide':
                 buttonBar = (
-        <button className='ui button blue'>
-          <i className='plus icon'>
-          </i>
-          Add question
-        </button>
-      );
+                    <button className='ui button blue'>
+                        <i className='plus icon'></i>
+                        Add question
+                    </button>
+                );
                 break;
             case 'deck':
                 buttonBar = (
-        <div className='ui buttons'>
-          <button className='ui button'>
-            Exam mode
-          </button>
-          <button className='ui button'>
-            Test mode
-          </button>
-          <button className='ui button blue'>
-            <i className='file pdf outline icon'>
-            </i>
-            Export to PDF
-          </button>
-        </div>
-      );
+                    <div className='ui buttons'>
+                        <button className='ui button'>Exam mode</button>
+                        <button className='ui button'>Test mode</button>
+                        <button className='ui button blue'>
+                            <i className='file pdf outline icon'></i>
+                            Export to PDF
+                        </button>
+                    </div>
+            );
                 break;
         }
 
@@ -105,7 +97,7 @@ class ContentQuestionsPanel extends React.Component {
         );
 
         const getUserButton = () => {
-            if(userId && creatorId === userId){
+            if(userId && creatorId === userId) {
                 return addQuestionButton;
             }
             return null;
