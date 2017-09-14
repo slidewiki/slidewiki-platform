@@ -4,7 +4,6 @@ import DataSourceStore from '../../../../stores/DataSourceStore';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import DataSourceList from './DataSourceList';
 import EditDataSource from './EditDataSource';
-import ShadowScrollbars from './Scrollbars/ShadowScrollbars';
 import newDataSource from '../../../../actions/datasource/newDataSource';
 import showMoreDataSources from '../../../../actions/datasource/showMoreDataSources';
 
