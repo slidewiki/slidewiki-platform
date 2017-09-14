@@ -14,25 +14,19 @@ class ContentQuestionAnswersItem extends React.Component {
         // }
 
         return (
-            // <div className="item">
-            //   {rightIcon}
-            //   <div className="content">
-            //     {answer.answer}
-            //   </div>
-            // </div>
+            //<div className="item"> {rightIcon}
+            //        <div className="content"> {answer.answer} </div>
+            //    </div>
+
             <div className="field">
               <div className="ui checkbox">
-                <input
-                  type="checkbox"
-                  name={name}
-                  id={name}
-                  defaultChecked={answer.correct} />
+                <input type="checkbox" name={name} id={name} /> {/* defaultChecked={answer.correct} */}
                 <label htmlFor={name}>
                   {answer.answer}
                 </label>
               </div>
             </div>
-            
+
         );
     }
 }
