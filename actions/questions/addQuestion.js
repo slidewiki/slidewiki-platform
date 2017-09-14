@@ -6,10 +6,11 @@ export default function addQuestion(context, payload, done) {
     context.service.create('questions.add', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
-            context.executeAction(serviceUnavailable, payload, done);
-            context.dispatch('ADD_QUESTION_FAILED');
+            //context.executeAction(serviceUnavailable, payload, done);
+            context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {moduleType: 'question', selector:payload.question.selector});
         } else {
-            context.dispatch('ADD_QUESTION', res);
+            context.dispatch('LOAD_CONTENT_MODULES_SUCCESS', {moduleType: 'question', selector:payload.question.selector});
+            context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'questions'});
         }
         done();
     });
