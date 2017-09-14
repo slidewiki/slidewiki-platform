@@ -134,11 +134,10 @@ export default {
                 callback(null, {});
             }).catch((err) => {
                 console.log('Question create method errored. Check via swagger for following oid and qid:', args.sid, args.questionId);
-                console.log(err);
+                //console.log(err);
                 callback(err, {});
             });
         }
-
     },
 
     update: (req, resource, params, body, config, callback) => {
@@ -176,17 +175,18 @@ export default {
     },
 
     delete: (req, resource, params, config, callback) => {
+        //console.log('From question service, delete op:', params);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         let args = params.params? params.params : params;
         if (resource === 'questions.delete') {
             rp.delete({
-                uri: Microservices.questions.uri + '/question/' + args.qid
+                uri: Microservices.questions.uri + '/question/' + args.question.qid
             }).then((res) => {
-                console.log('Question delete should be successful. Check via swagger for questionId:', args.qid);
+                console.log('Question delete should be successful. Check via swagger for questionId:', args.question.qid);
                 callback(null, {});
             }).catch((err) => {
-                console.log(err);
+                //console.log(err);
                 callback(err, {});
             });
         }
