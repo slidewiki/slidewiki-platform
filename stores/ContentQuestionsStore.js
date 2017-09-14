@@ -59,8 +59,12 @@ ContentQuestionsStore.handlers = {
     'LOAD_QUESTION': 'loadQuestion',
     'CANCEL_QUESTION': 'cancelQuestion',
     'TOGGLE_ANSWERS': 'toggleAnswers',
-    'SAVE_QUESTION': 'loadQuestions',
-    'ADD_QUESTION': 'loadQuestions',
+    //'UPDATE_QUESTION': 'loadQuestions',
+    //'SAVE_QUESTION_FAILED': 'cancelQuestion',
+    //'ADD_QUESTION_FAILED': 'cancelQuestion',
+    //'ADD_QUESTION': 'loadQuestions',
+    'DELETE_QUESTION': 'loadQuestions',
+    //'DELETE_QUESTION_FAILED': 'loadQuestions',
 };
 
 export default ContentQuestionsStore;
