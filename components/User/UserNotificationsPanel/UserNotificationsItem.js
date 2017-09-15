@@ -133,7 +133,8 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'use':
-                const useIconClass = allIconClass.concat(' copy');
+                const useIconClass = allIconClass.concat(' attach');
+                const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
@@ -141,8 +142,7 @@ class UserNotificationsItem extends React.Component {
                             {notification.author ? notification.author.username : 'unknown'}
                         </a> {'used ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
-                        {/*{' in deck '}<a href={'/slideview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>*/}
-                        {' in deck '}<a href={'/deckview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + notification.use_info.target_id}>{title}</a>
                         <br/>
                         {DateDiv}
                     </div>

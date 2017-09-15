@@ -142,13 +142,14 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui large copy icon"></i>);
+                IconNode = (<i className="ui large attach icon"></i>);
+                const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'used '} {nodeRef}
-                        {' in deck '}<a href={'/deckview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + node.use_info.target_id}>{title}</a>
                         <br/>
                         {DateDiv}
                     </div>
