@@ -234,7 +234,7 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            async.series([
+            async.parallel([
                 (callback) => {
                     context.executeAction(loadDeck, payload, callback);
                 },
