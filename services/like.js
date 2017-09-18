@@ -31,7 +31,7 @@ export default {
                 }
                 //console.log("LOAD Deck id: " + targetDeckID);
                   /*********connect to microservices*************/
-                rp.get({uri: Microservices.activities.uri + '/activities/allrevisions/react/deck/' + targetDeckID}).then((res) => {
+                rp.get({uri: Microservices.activities.uri + '/activities/deck/' + targetDeckID + '?metaonly=false&activity_type=react&all_revisions=true'}).then((res) => {
                     let activities = JSON.parse(res);
                     let listOfUserIDs = [];
 

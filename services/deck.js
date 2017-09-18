@@ -69,7 +69,7 @@ export default {
             });
 
             let shareCountPromise = rp.get({
-                uri: Microservices.activities.uri + '/activities/allrevisions/count/share/deck/' + deckId,
+                uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=share&all_revisions=true',
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -79,7 +79,7 @@ export default {
             });
 
             let downloadCountPromise = rp.get({
-                uri: Microservices.activities.uri + '/activities/allrevisions/count/download/deck/' + deckId,
+                uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=download&all_revisions=true',
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
