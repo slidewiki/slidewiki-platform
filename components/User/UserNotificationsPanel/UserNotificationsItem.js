@@ -45,8 +45,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={translateIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'translated ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>{' to '}
                         {/*<a href={'/slideview/' + notification.translation_info.content_id}>{notification.translation_info.language}</a>*/}
@@ -62,8 +62,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={shareIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'shared ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a> {onPlatform}
                         <br/>
@@ -76,8 +76,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={addIconClass}></i>);
                 summaryNotification = (
                     <div className="summary" >
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'created ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
@@ -90,8 +90,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={editIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'edited ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
@@ -104,8 +104,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={commentIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'commented on ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
@@ -120,8 +120,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={replyIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a>
                         <span> replied to a comment </span>{'on ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
@@ -133,16 +133,16 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'use':
-                const useIconClass = allIconClass.concat(' copy');
+                const useIconClass = allIconClass.concat(' attach');
+                const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'used ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
-                        {/*{' in deck '}<a href={'/slideview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>*/}
-                        {' in deck '}<a href={'/deckview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + notification.use_info.target_id}>{title}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -153,8 +153,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={rateIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'rated ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
@@ -167,8 +167,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={reactIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'liked ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
@@ -181,8 +181,8 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={downloadIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'downloaded ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
@@ -193,25 +193,44 @@ class UserNotificationsItem extends React.Component {
             case 'fork':
                 const forkIconClass = allIconClass.concat(' fork');
                 iconNotification = (<i className={forkIconClass}></i>);
+                const forkRef = (notification.fork_info) ? (<span>, creating a <a href={'/deck/' + notification.fork_info.content_id}>new deck</a></span>) : '';
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
                         </a> {'forked ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{cheerioContentName}</a>
+                        {forkRef}
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'delete':
+                const deleteIconClass = allIconClass.concat(' remove circle outline');
+                iconNotification = (<i className={deleteIconClass}></i>);
+                const cheerioDeletedName = (notification.delete_info.content_name) ? cheerio.load(notification.delete_info.content_name).text() : '';
+                summaryNotification = (
+                    <div className="summary">
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'deleted ' + notification.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}
+                        {'from ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}
                     </div>
                 );
+
                 break;
             case 'joined':
                 const joinedIconClass = allIconClass.concat(' add user');
                 iconNotification = (<i className={joinedIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
-                      </a> {'made changes in ' + notification.content_kind + ': '}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'made changes in ' + notification.content_kind + ': '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}
@@ -223,9 +242,9 @@ class UserNotificationsItem extends React.Component {
                 iconNotification = (<i className={leftIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
-                    <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
-                        {notification.author ? notification.author.username : 'unknown'}
-                      </a> {'made changes in ' + notification.content_kind + ': '}
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'made changes in ' + notification.content_kind + ': '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}

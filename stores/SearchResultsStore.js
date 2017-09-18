@@ -8,14 +8,15 @@ class SearchResultsStore extends BaseStore {
         // solr results
         this.numFound = '';
         this.docs = [];
-        this.spellcheck = '';
+        this.spellcheck = [];
+        this.facets = {}; 
 
         this.error = false;
         this.loading = false;
 
         this.loadMoreLoading = false;
-        this.loadMore = false;
-        this.start = 0;
+        this.hasMore = false;
+        this.page = 1;
     }
     showLoading(payload){
         this.loading = true;
@@ -29,9 +30,10 @@ class SearchResultsStore extends BaseStore {
         this.numFound = payload.numFound;
         this.docs = payload.docs;
         this.spellcheck = payload.spellcheck;
+        this.facets = payload.facets;
         this.error = payload.error;
-        this.loadMore = (this.numFound > this.docs.length);
-        this.start = payload.start;
+        this.hasMore = payload.hasMore;
+        this.page = payload.page;
 
         // hide loading
         this.loading = false;
@@ -43,9 +45,10 @@ class SearchResultsStore extends BaseStore {
         this.numFound = payload.numFound;
         this.docs = this.docs.concat(payload.docs);     // append more results
         this.spellcheck = payload.spellcheck;
+        this.facets = payload.facets;
         this.error = payload.error;
-        this.loadMore = (this.numFound > this.docs.length);
-        this.start = payload.start;
+        this.hasMore = payload.hasMore;
+        this.page = payload.page;
 
         // hide loading
         this.loading = false;
@@ -57,12 +60,14 @@ class SearchResultsStore extends BaseStore {
         // solr results
         this.numFound= '' ;
         this.docs = [];
-        this.spellcheck = '';
+        this.spellcheck = [];
+        this.facets = {};
         this.loading = false;
         this.error = false;
-        this.loadMore = false;
+        this.hasMore = false;
         this.loadMoreLoading = false;
-
+        this.page = 1;
+        
         this.emitChange();
     }
     displayError(){
@@ -76,11 +81,12 @@ class SearchResultsStore extends BaseStore {
             numFound: this.numFound,
             docs: this.docs,
             spellcheck: this.spellcheck,
+            facets: this.facets,
             loading: this.loading,
             error: this.error,
-            loadMore: this.loadMore,
+            hasMore: this.hasMore,
             loadMoreLoading: this.loadMoreLoading,
-            start: this.start
+            page: this.page
         };
     }
     dehydrate() {
@@ -90,11 +96,12 @@ class SearchResultsStore extends BaseStore {
         this.numFound = state.numFound;
         this.docs = state.docs;
         this.spellcheck = state.spellcheck;
+        this.facets = state.facets;
         this.loading = state.loading;
         this.error = state.error;
-        this.loadMore = state.loadMore;
+        this.hasMore = state.hasMore;
         this.loadMoreLoading = state.loadMoreLoading;
-        this.start = state.start;
+        this.page = state.page;
     }
 }
 
