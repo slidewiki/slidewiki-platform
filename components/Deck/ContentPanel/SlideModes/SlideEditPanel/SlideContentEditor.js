@@ -618,7 +618,10 @@ class SlideContentEditor extends React.Component {
                             let newTop = ui.originalPosition.top + changeTop / slideEditorContext.scaleratio; // adjust new top by our zoomScale
                             ui.position.left = newLeft;
                             ui.position.top = newTop;
-                            slideEditorContext.emitChange();
+
+                        },
+                        stop: function(event, ui) {
+                            slideEditorContext.emitChange(); //
                         }
                     });
                 }
