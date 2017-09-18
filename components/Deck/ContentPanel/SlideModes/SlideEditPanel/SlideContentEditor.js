@@ -739,7 +739,7 @@ class SlideContentEditor extends React.Component {
                             //CKEDITOR.instances.inlineContent.hide();
                         }
                         else {
-                            context.removeEditMode();
+                            slideEditorContext.removeEditMode();
                         }
                         //$(this).focus();
                     }
