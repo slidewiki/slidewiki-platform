@@ -640,7 +640,9 @@ class SlideContentEditor extends React.Component {
                             //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
-                            slideEditorContext.emitChange();
+                        },
+                        stop: function(event, ui) {
+                            slideEditorContext.emitChange(); //
                         }
                     });
                 };
