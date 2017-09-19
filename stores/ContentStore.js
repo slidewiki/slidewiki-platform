@@ -42,20 +42,16 @@ class ContentStore extends BaseStore {
         this.mode = state.mode;
     }
     getCurrentSubdeck(selector){
-        console.log('\n\n\ngetCurrentSubdeck\n\n\n');
         let currentSubDeck;
         let splitSpath = selector.spath.split(';');
 
         if(!selector.spath || (splitSpath.length === 1 && selector.stype === 'slide')){
-            console.log('return null');
             return null;
         }
         else if(selector.stype === 'deck' && selector.sid){
-            console.log('selector.sid', selector.sid);
             return selector.sid;
         }
         else{
-            console.log('splitSpath[0]', splitSpath[0].split(':')[0]);
             return splitSpath[0].split(':')[0];
         }
     }
