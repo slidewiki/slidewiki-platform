@@ -63,10 +63,10 @@ export default {
         let args = params.params? params.params : params;
         if(resource === 'datasource.array') {
             rp.put({
-                uri: Microservices.deck.uri + '/slide/datasources/' + args.sid,
-                body:JSON.stringify({
-                    dataSources: args.dataSources
-                })
+                uri: `${Microservices.deck.uri}/slide/${args.sid}/datasources`,
+                headers: {'----jwt----': args.jwt},
+                body: args.dataSources,
+                json: true,
             }).then((res) => {
                 callback(null, args);
             }).catch((err) => {
