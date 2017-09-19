@@ -315,9 +315,6 @@ export default {
                 uri: Microservices.deck.uri + '/deck/' + params.deckId + '/fork',
                 json: true,
                 headers: {'----jwt----': params.jwt},
-                body: {
-                    user: params.userid.toString()
-                }
             }).then((res) => callback(false, res))
             .catch((err) => callback(err));
         }
