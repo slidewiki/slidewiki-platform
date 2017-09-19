@@ -27,9 +27,12 @@ export default {
         //     callback(null, {datasource: dataSource});
         // }
         if (resource === 'datasource.count') {
-            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let dataSources = getDataSourcesFromDeckOrSlide(selector.sid, JSON.parse(res)).dataSources;
-                callback(null, {'count' : dataSources.length, 'selector': selector, 'mode': args.mode});
+            rp.get({
+                uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources',
+                qs: { countOnly: true },
+                json: true,
+            }).then((res) => {
+                callback(null, {'count' : res.totalCount, 'selector': selector, 'mode': args.mode});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {'count' : 0, 'selector': selector, 'mode': args.mode});
@@ -40,12 +43,11 @@ export default {
 
         if (resource === 'datasource.list') {
             //request specific content item from deck service
-            rp.get({uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid}).then((res) => {
-                let parsedRes = JSON.parse(res);
-                let dataSourcesObject = getDataSourcesFromDeckOrSlide(selector.sid, parsedRes);
-                let dataSources = dataSourcesObject.dataSources;
-                let revisionOwner = dataSourcesObject.revisionOwner;
-                callback(null, {dataSources: dataSources, owner: revisionOwner, selector: selector});
+            rp.get({
+                uri: Microservices.deck.uri + '/' + selector.stype + '/' + selector.sid + '/datasources',
+                json: true,
+            }).then((res) => {
+                callback(null, {dataSources: res.items, owner: res.revisionOwner, selector: selector});
             }).catch((err) => {
                 console.log(err);
                 callback(null, {dataSources: [], selector: selector});
