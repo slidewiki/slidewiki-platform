@@ -55,7 +55,7 @@ class ActivityItem extends React.Component {
         };
         const cheerioContentName = (node.content_name) ? cheerio.load(node.content_name).text() : '';
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
-        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span> {'this ' + node.content_kind} </span>) :  (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
+        const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span>{'this ' + node.content_kind}</span>) : (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
 
         if (node.user_id === '0') {
             node.user_id = undefined;
@@ -142,13 +142,14 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui large copy icon"></i>);
+                IconNode = (<i className="ui large attach icon"></i>);
+                const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'used '} {nodeRef}
-                        {' in deck '}<a href={'/deckview/' + node.use_info.target_id}>{node.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + node.use_info.target_id}>{title}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -192,11 +193,12 @@ class ActivityItem extends React.Component {
                 break;
             case 'fork':
                 IconNode = (<i className="ui large fork icon"></i>);
+                const forkRef = (node.fork_info) ? (<span>, creating a <a href={'/deck/' + node.fork_info.content_id}>new deck</a></span>) : '';
                 SummaryNode = (
                     <div className="summary">
                         <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
                             {node.author ? node.author.username : 'unknown'}
-                        </a> {'forked '} {nodeRef}
+                        </a> {'forked '}{nodeRef}{forkRef}
                         <br/>
                         {DateDiv}
                     </div>
