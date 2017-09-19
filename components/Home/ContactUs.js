@@ -36,7 +36,7 @@ class ContactUs extends React.Component {
             },
             checkType_text:{
                 id: 'contactUs.checkType_text',
-                defaultMessage:'Please, please select the type of feedback'
+                defaultMessage:'Please select the type of feedback'
             },
             swal_button:{
                 id: 'contactUs.swal_button',
@@ -44,15 +44,15 @@ class ContactUs extends React.Component {
             },
             checkEmail_text:{
                 id: 'contactUs.checkEmail_text',
-                defaultMessage:'Please, use a valid email address'
+                defaultMessage:'Please use a valid email address'
             },
             checkSummary_text:{
                 id: 'contactUs.checkSummary_text',
-                defaultMessage:'Please, provide us a summary of your issue'
+                defaultMessage:'Please provide us a summary of your issue'
             },
             checkCaptcha_text:{
                 id: 'contactUs.checkCaptcha_text',
-                defaultMessage:'Please, confirm you are not a bot',
+                defaultMessage:'Please confirm you are not a bot',
             },
             typeOption_suggestion:{
                 id: 'contactUs.typeOption_suggestion',
@@ -84,7 +84,7 @@ class ContactUs extends React.Component {
             },
             form_type_placeholder:{
                 id: 'contactUs.form_type_placeholder',
-                defaultMessage:'Select type of report'
+                defaultMessage:'Select type of the report'
             },
             form_firstName_label:{
                 id: 'contactUs.form_firstName_label',
@@ -116,7 +116,7 @@ class ContactUs extends React.Component {
             },
             form_summary_placeholder:{
                 id: 'contactUs.form_summary_placeholder',
-                defaultMessage:'Please, write us a one-sentence summary'
+                defaultMessage:'Please write us a one-sentence summary'
             },
             form_description_label:{
                 id: 'contactUs.form_description_label',
@@ -124,7 +124,7 @@ class ContactUs extends React.Component {
             },
             form_description_placeholder:{
                 id: 'contactUs.form_description_placeholder',
-                defaultMessage:'Please, give us more information about.'
+                defaultMessage:'Please give us more information about.'
             },
             form_button:{
                 id: 'contactUs.form_button',
@@ -140,7 +140,7 @@ class ContactUs extends React.Component {
             },
             send_swal_error_text: {
                 id: 'contactUs.send_swal_error_text',
-                defaultMessage:'An error occoured while contacting us. Please try again later.'
+                defaultMessage:'An error occured while contacting us. Please try again later.'
             },
             send_swal_error_button:{
                 id: 'contactUs.send_swal_error_button',
