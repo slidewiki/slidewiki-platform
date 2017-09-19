@@ -56,6 +56,7 @@ export default function loadDeck(context, payload, done) {
 
     //we should store the current content state in order to avoid duplicate load of actions
     let currentState = context.getStore(DeckPageStore).getState();
+    let user_state = context.getStore(UserProfileStore).getState();
     let runNonContentActions = 1;
     let pageTitle = shortTitle + ' | Deck | ' + payload.params.id;
     let payloadCustom = payload;
@@ -101,12 +102,13 @@ export default function loadDeck(context, payload, done) {
         runNonContentActions = 0;
     }
 
+
     //load all required actions in parallel
     async.parallel([
         (callback) => {
             context.executeAction(fetchUser, {
                 params: {
-                    username: context.getStore(UserProfileStore).getState().username
+                    username: user_state.username
                 }
             }, callback);
         },
@@ -160,7 +162,7 @@ export default function loadDeck(context, payload, done) {
             if(payload.params.jwt && currentState.selector.id !== payloadCustom.params.id){
                 context.executeAction(loadForks, {
                     selector: payload.params,
-                    user: context.getStore(UserProfileStore).getState().userid
+                    user: user_state.userid
                 }, callback);
             }else{
                 callback();
