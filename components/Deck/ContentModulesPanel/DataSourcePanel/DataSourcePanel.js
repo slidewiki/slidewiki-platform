@@ -25,7 +25,7 @@ class DataSourcePanel extends React.Component {
         const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
 
-        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
+        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit) && (selector.stype === 'slide');
         let newDataSourceButton = (editPermission) ?
             <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
                 <i className="icon plus"></i> Add source
