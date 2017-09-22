@@ -11,6 +11,7 @@ class DownloadButton extends React.Component{
         super(props);
         this.dropDown = null;
         //this.getExportHref = this.getExportHref.bind(this);
+        this.selectedFormat = null;
     }
     getExportHref(type){
         let splittedId;
@@ -57,10 +58,12 @@ class DownloadButton extends React.Component{
         };
         this.context.executeAction(addActivity, {activity: activity});
     }
-    handleDownloadSelection(event,data){
+    handleOnChange(event,data){
         console.log('onChange');
         console.log('data');
         console.log(data.value);
+        console.log(data);
+        this.selectedFormat = data.value;
         /*
         if(process.env.BROWSER){
             //event.preventDefault();
@@ -70,16 +73,23 @@ class DownloadButton extends React.Component{
         this.createDownloadActivity();
 */
     }
-    handleOnclick(event,data){
+    handleOnClick(event,data){
         console.log('onClik');
         console.log('data');
         console.log(data.value);
+        console.log(data);
+
 
     }
     handleOnClose(event, data){
         console.log('onClose');
         console.log('data');
         console.log(data.value);
+        console.log(data);
+        if(this.selectedFormat !== undefined){
+            console.log(this.selectedFormat);
+        }
+
     }
 
     render(){
@@ -105,8 +115,9 @@ class DownloadButton extends React.Component{
               options={downloadOptions}
               closeOnChange
               defaultValue = ""
-              onChange = {this.handleDownloadSelection.bind(this)}
-              onClick = {this.handleOnclick}
+              onChange = {this.handleOnChange.bind(this)}
+              onClick = {this.handleOnClick.bind(this)}
+              onClose = {this.handleOnClose.bind(this)}
               ref = {(dropDown) => {this.dropDown = dropDown;}}
               >
 
