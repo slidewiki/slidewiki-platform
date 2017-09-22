@@ -395,6 +395,7 @@ class SlideContentEditor extends React.Component {
             }
         });
         //cEl.style.zIndex = index_highest + 10;
+        console.log(index_highest);
         return index_highest;
     }
     getLowestZIndex(){
@@ -406,6 +407,7 @@ class SlideContentEditor extends React.Component {
             }
         });
         //cEl.style.zIndex = index_highest + 10;
+        console.log(index_lowest);
         return index_lowest;
     }
     addAbsoluteDiv() {
@@ -603,7 +605,10 @@ class SlideContentEditor extends React.Component {
         $('.pptx2html [style*="absolute"]').not('.drawing').hover(function() { //no dragging of SVG - makes them go away
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
-                if (!($('.ui-resizable-resizing')[0] || $('.ui-draggable-dragging')[0])){
+                if (!(
+                    $('.ui-resizable-resizing')[0]
+                    || $('.ui-draggable-dragging')[0])
+                   ){
                     //if there is nothing being dragged/resized currently
                     $('.'+$(this).attr('id')).show();
                     $('.'+$(this).attr('id')+'dragdiv').show();
@@ -674,7 +679,8 @@ class SlideContentEditor extends React.Component {
         }, function() {
             if (!$(this).hasClass('editMode')
             && !$(this).hasClass('ui-resizable-resizing')
-            && !$(this).hasClass('ui-draggable-dragging'))
+            && !$(this).hasClass('ui-draggable-dragging')
+            && !$('.context-menu-list')[0])
             {
                 //if this class is not being dragged/resized currently
                 $('.'+$(this).attr('id')).hide(); //hide contextmenu for this element
