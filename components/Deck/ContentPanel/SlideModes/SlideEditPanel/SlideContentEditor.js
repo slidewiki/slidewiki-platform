@@ -669,6 +669,11 @@ class SlideContentEditor extends React.Component {
                             let zIndex = $('.ui-resizable-resizing').css('z-index');
                             $('.ui-resizable-resizing').css('z-index', zIndex - 100000);
                             slideEditorContext.emitChange();
+                            if($(this).find('img:first').length)
+                            {
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight - 25);
+                            }
                         }
                     });
                 };
