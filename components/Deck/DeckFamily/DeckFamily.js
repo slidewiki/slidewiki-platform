@@ -26,7 +26,7 @@ class DeckFamily extends React.Component {
             params: {
                 tag: this.props.DeckFamilyStore.tag
             },
-            start: this.props.DeckFamilyStore.start
+            page: this.props.DeckFamilyStore.page + 1
         });
     }
     render() {
@@ -34,7 +34,7 @@ class DeckFamily extends React.Component {
         // define load more results div
         let loadMoreDiv = '';
 
-        if(this.props.DeckFamilyStore.loadMore){
+        if(this.props.DeckFamilyStore.hasMore){
             let loadMoreContent = <button className="ui button" onClick={this.loadMore.bind(this)}>Load More</button>;
             if(this.props.DeckFamilyStore.loadMoreLoading){
                 loadMoreContent = <div className="ui active text loader">Loading</div>;

@@ -11,7 +11,7 @@ import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
-import PresentationStore from '../../../../../stores/PresentationStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 
@@ -236,57 +236,16 @@ class SlideContentEditor extends React.Component {
         this.resizeDrag();
         this.forceUpdate();
     }
-    handleCKeditorModeButton(noswitch){
-        if(noswitch !== 'noswitch')
-        {
-            if (this.CKeditorMode === 'advanced toolbar'){
-                console.log('current CKeditor toolbar mode is basic - set to advanced');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-
-                this.CKeditorMode = 'basic toolbar';
-            }
-            else {
-                console.log('current CKeditor toolbar mode is advanced - set to basic');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config_basic.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-                this.CKeditorMode = 'advanced toolbar';
-            }
-        } else {
-            if (this.CKeditorMode === 'advanced toolbar'){
-                console.log('current CKeditor toolbar mode is basic - refreshed');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config_basic.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-            } else {
-                console.log('current CKeditor toolbar mode is advanced - refreshed');
-                if (CKEDITOR.instances.inlineContent != null) {
-                    //console.log('destroy CKEDITOR instance');
-                    CKEDITOR.instances.inlineContent.destroy();
-                }
-                CKEDITOR.inline('inlineContent', {
-                    customConfig: '/assets/ckeditor_config.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
-            }
+    refreshCKeditor(){
+        if (CKEDITOR.instances.inlineContent != null) {
+            //console.log('destroy CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
         }
+        CKEDITOR.inline('inlineContent', {
+            customConfig: '/assets/ckeditor_config.js',
+            filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + this.props.UserProfileStore.userid,
+            uploadUrl: Microservices.import.uri + '/importImagePaste/' + this.props.UserProfileStore.userid}); //leave all buttons
+
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
@@ -321,7 +280,7 @@ class SlideContentEditor extends React.Component {
                         console.log('====ckeditor image save button ok==== refresh CKeditor');
                         //this.addBorders();
                         setTimeout(() => {
-                            this.handleCKeditorModeButton('noswitch');
+                            this.refreshCKeditor();
                             this.resizeDrag();
                             this.forceUpdate();
                             this.emitChange();
@@ -330,7 +289,6 @@ class SlideContentEditor extends React.Component {
                 }, 500);
             });
         });
-
     }
     uniqueIDAllElements(){
         let allElements = this.refs.inlineContent.getElementsByTagName('*');
@@ -544,17 +502,11 @@ class SlideContentEditor extends React.Component {
             filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         });
-        //}
-        //if (typeof(CKEDITOR.instances.inlineContent) === 'undefined'){
-            //const userId = this.props.UserProfileStore.userid;
-            // CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: 'http://localhost:4000/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //CKEDITOR.inline('inlineContent', {customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../assets/ckeditor_config.js'});
-            //CKEDITOR.inline('inlineContent', {filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId, customConfig: '../../../../../../custom_modules/ckeditor/config.js'});
+
         CKEDITOR.inline('inlineContent', {
             //CKEDITOR.replace('inlineContent', {
             //customConfig: '/assets/ckeditor_config.js',
-            customConfig: '/assets/ckeditor_config_basic.js',
+            customConfig: '/assets/ckeditor_config.js',
             toolbarGroups: [
                 //needed for Chrome initialization
                 { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
@@ -570,44 +522,6 @@ class SlideContentEditor extends React.Component {
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             this.resize();
             this.uniqueIDAllElements();
-
-            //SWIK-1238 - detect change to source code via source dialog plugin
-            //console.log($( ".cke_dialog_ui_button_ok" ).innerHTML);
-            //$( ".cke_dialog_ui_button_ok" ).click(function() {
-            //    console.log( "Handler for .click() called." );
-            //});
-            //CKEDITOR.instances.inlineContent.on('change', function(){console.log('change');});
-            //console.log('inlineConent CKeditor ready' + CKEDITOR.instances.inlineContent);
-            //if (!CKEDITOR.instances.inlineContent)
-
-            /*
-            if (typeof(CKEDITOR.instances.inlineContent) === 'undefined')
-            {
-                //CKEDITOR.instances.inlineContent.destroy();
-                CKEDITOR.inline('inlineContent', {
-                    //customConfig: '/assets/ckeditor_config.js',
-                    customConfig: '/assets/ckeditor_config_basic.js',
-                    filebrowserUploadUrl: Microservices.import.uri + '/importImage/' + userId,
-                    uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId}); //leave all buttons
-
-            }
-            */
-            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
-            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
-                console.log('====ckeditor image dialog onclick====');
-                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
-                setTimeout(() => {
-                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
-                        console.log('====ckeditor image save button ok==== refresh CKeditor');
-                        //this.addBorders();
-                        setTimeout(() => {
-                            this.handleCKeditorModeButton('noswitch');
-                            this.resizeDrag();
-                            this.forceUpdate();
-                        }, 500);
-                    });
-                }, 500);
-            });
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
             {
                 this.forceUpdate();
@@ -618,7 +532,43 @@ class SlideContentEditor extends React.Component {
                 //show that content is outside of pptx2html box
                 //$('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
                 $('.pptx2html').css({'borderStyle': 'double', 'borderColor': 'rgba(218,102,25,0.5)'});
+
+                //ugly fix for SWIK-1218-After using source dialog in CKeditor - input box controls (and template + input box button) do not work
+                $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
+                    //remove resize and drag interaction because it generates HTML in slide editor content
+                    this.disableResizeDrag();
+                    console.log('====ckeditor on change====');
+                    //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                    setTimeout(() => {
+                        $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
+                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //this.addBorders();
+                            setTimeout(() => {
+                                this.resizeDrag();
+                                this.emitChange();
+                                //this.forceUpdate();
+                            }, 500);
+                        });
+                    }, 500);
+                });
             }
+            //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
+            $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
+                console.log('====ckeditor image dialog onclick====');
+                //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
+                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.refreshCKeditor();
+                            this.resizeDrag();
+                            this.forceUpdate();
+                            this.emitChange();
+                        }, 500);
+                    });
+                }, 500);
+            });
             if(document.domain !== 'localhost')
             {
                 document.domain = 'slidewiki.org';
@@ -688,6 +638,11 @@ class SlideContentEditor extends React.Component {
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
                             slideEditorContext.emitChange();
+                            if($(this).find('img:first').length)
+                            {
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight - 25);
+                            }
                         }
                     });
                 };
@@ -789,7 +744,7 @@ class SlideContentEditor extends React.Component {
                             //CKEDITOR.instances.inlineContent.hide();
                         }
                         else {
-                            context.removeEditMode();
+                            slideEditorContext.removeEditMode();
                         }
                         //$(this).focus();
                     }
@@ -1026,8 +981,8 @@ class SlideContentEditor extends React.Component {
                         case 'back':
                             slideEditorContext.sendToBack(slideEditorContext, false);
                             break;
-                        case 'copy':
-                            slideEditorContext.CopyNode(slideEditorContext, false);
+                        case 'duplicate':
+                            slideEditorContext.duplicateNode(slideEditorContext, false);
                             break;
                         case 'delete':
                             slideEditorContext.deleteNode(slideEditorContext, false);
@@ -1042,7 +997,7 @@ class SlideContentEditor extends React.Component {
                     //'move': {name: 'Move around', icon: 'fa-arrows',},
                     'front': {name: 'Bring to front (Ctrl-shift +)', icon: 'fa-arrow-circle-up'},
                     'back': {name: 'Send to back (Ctrl-shift -)', icon: 'fa-arrow-circle-o-down'},
-                    'copy': {name: 'Copy (key: Ctrl c)', icon: 'copy'},
+                    'duplicate': {name: 'Duplicate (key: Ctrl d)', icon: 'copy'},
                     'delete': {name: 'Delete (key: Delete)', icon: 'delete'},
                     //'sep1': '---------',
                     'quit': {name: 'Close menu (key: Esc)', icon: 'quit', accesskey: 'esc'}
@@ -1168,11 +1123,11 @@ class SlideContentEditor extends React.Component {
             context.emitChange(); //confirm non-save on-leave
         }
     }
-    CopyNode(context, event){
+    duplicateNode(context, event){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
-        console.log('copy node' + id);
+        console.log('duplicate node' + id);
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length){
             if(event){event.preventDefault();}
             $('#'+id).clone().appendTo('.pptx2html');
@@ -1310,7 +1265,7 @@ class SlideContentEditor extends React.Component {
             'moveRight': ['right'],
             'bringToFront': [ 'ctrl+shift+plus'],
             'bringToBack': ['ctrl+shift+-'],
-            'copy': ['ctrl+c'],
+            'duplicate': ['ctrl+d'],
             'enter': ['ctrl+enter'],
             'escape': ['escape']
         };
@@ -1327,7 +1282,7 @@ class SlideContentEditor extends React.Component {
             'moveRight': (event) => this.keyMoveRight(slideEditorContext, event),
             'bringToFront': (event) => this.bringToFront(slideEditorContext, event),
             'bringToBack': (event) => this.sendToBack(slideEditorContext, event),
-            'copy': (event) => this.CopyNode(slideEditorContext, event),
+            'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
         let templateOptions = <div className="menu">
@@ -1443,8 +1398,8 @@ class SlideContentEditor extends React.Component {
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
+        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
+            styleName = this.props.DeckTreeStore.theme;
         }
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {
@@ -1480,10 +1435,6 @@ class SlideContentEditor extends React.Component {
                     <a style={buttonColorBlack}>Use template</a>
                 </button>
                 <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/> */}
-                <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
-                 <i className="outline tasks icon black"></i>
-                 <a style={buttonColorBlack}>{this.CKeditorMode}</a>
-                </button>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
@@ -1522,14 +1473,14 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        PresentationStore: context.getStore(PresentationStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default SlideContentEditor;
