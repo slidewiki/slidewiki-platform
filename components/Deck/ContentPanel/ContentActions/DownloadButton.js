@@ -58,14 +58,28 @@ class DownloadButton extends React.Component{
         this.context.executeAction(addActivity, {activity: activity});
     }
     handleDownloadSelection(event,data){
-
+        console.log('onChange');
+        console.log('data');
+        console.log(data.value);
+        /*
         if(process.env.BROWSER){
             //event.preventDefault();
             window.open(this.getExportHref(data.value));
         }
         this.dropDown.setValue('');
         this.createDownloadActivity();
+*/
+    }
+    handleOnclick(event,data){
+        console.log('onClik');
+        console.log('data');
+        console.log(data.value);
 
+    }
+    handleOnClose(event, data){
+        console.log('onClose');
+        console.log('data');
+        console.log(data.value);
     }
 
     render(){
@@ -86,12 +100,13 @@ class DownloadButton extends React.Component{
               button
               icon='download large'
               aria-label='Download. Choose the export format.'
-              data-tooltip='Download.Choose the export format.'
+              data-tooltip='Download. Choose the export format.'
               item
               options={downloadOptions}
               closeOnChange
               defaultValue = ""
               onChange = {this.handleDownloadSelection.bind(this)}
+              onClick = {this.handleOnclick}
               ref = {(dropDown) => {this.dropDown = dropDown;}}
               >
 
