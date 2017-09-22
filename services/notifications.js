@@ -31,13 +31,13 @@ export default {
             subscriptionsString += '/o' + uid;
 
             let notificationsPromise = rp.get({uri: Microservices.activities.uri + '/activities/subscribed' + subscriptionsString}).promise().bind(this);
-            let newNotificationsPromise = rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).promise().bind(this);
+            let newNotificationsPromise = rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=false'}).promise().bind(this);
 
             //callback to execute when both requests are successful
             Promise.all([notificationsPromise, newNotificationsPromise]).then((res) => {
 
                 let notifications = JSON.parse(res[0]);
-                let newNotifications = JSON.parse(res[1]);
+                let newNotifications = JSON.parse(res[1]).items;
 
                 callback(null, {notifications: notifications, newNotifications: newNotifications, subscriptions: subscriptions});
             }).catch((err) => {
@@ -45,8 +45,8 @@ export default {
                 callback(null, {notifications: [], newNotifications: [], subscriptions: subscriptions});
             });
         } else if (resource === 'notifications.listnew'){
-            rp.get({uri: Microservices.notification.uri + '/notifications/' + uid}).then((res) => {
-                let newNotifications = JSON.parse(res);
+            rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=false'}).then((res) => {
+                let newNotifications = JSON.parse(res).items;
                 newNotifications.forEach((notification) => {
                     notification.newNotificationId = notification.id;
                 });
@@ -55,6 +55,14 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 callback(null, {newNotifications: []});
+            });
+        } else if (resource === 'notifications.countnew'){
+            rp.get({uri: Microservices.notification.uri + '/notifications/' + uid + '?metaonly=true'}).then((res) => {
+                let count = JSON.parse(res).count;
+                callback(null, {count: count});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {count: 0});
             });
         }
     },
@@ -82,7 +90,7 @@ export default {
         } else if (resource === 'notifications.all'){
             /*********connect to microservices*************/
             let uid = String(args.uid);
-            
+
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notifications/delete',

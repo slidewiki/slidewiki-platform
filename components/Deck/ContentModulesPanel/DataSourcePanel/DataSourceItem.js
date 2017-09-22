@@ -8,10 +8,12 @@ import TreeUtil from '../../../../components/Deck/TreePanel/util/TreeUtil';
 import loadDataSource from '../../../../actions/datasource/loadDataSource';
 
 class DataSourceItem extends React.Component {
-    handleEdit() {
+    handleEdit(e) {
+        e.preventDefault();
         this.context.executeAction(loadDataSource, {
             dsindex: this.props.index
         });
+        return false;
     }
 
     static get urlRegEx() {
@@ -137,7 +139,7 @@ class DataSourceItem extends React.Component {
         const appendOrigin = (selector.stype === 'deck') ? <span><i>(originally from slide <a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioSlideName}</a>)</i> </span> : '';
 
         const appendEdit = (this.props.editable) ? (
-            <a className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
+            <a href="#" className="edit" onClick={this.handleEdit.bind(this)} title="Edit">
                 <i tabIndex="0" className="edit icon" />
             </a>
         ) : '';

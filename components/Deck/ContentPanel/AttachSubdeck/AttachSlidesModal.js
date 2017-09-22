@@ -1,25 +1,24 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { Button, Icon, Modal, Container, Segment, TextArea} from 'semantic-ui-react';
+import {Button, Icon, Modal, Container, Segment, TextArea, Popup} from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import FocusTrap from 'focus-trap-react';
-import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
-import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
+import loadUserDecks from '../../../../actions/attachSubdeck/loadUserDecks';
+import loadRecentDecks from '../../../../actions/attachSubdeck/loadRecentDecks';
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import loadSlides from '../../../../actions/attachSubdeck/loadSlides';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeListAndNavigate from '../../../../actions/decktree/addTreeNodeListAndNavigate';
-import updateSelectedSlides  from '../../../../actions/attachSubdeck/updateSelectedSlides';
+import updateSelectedSlides from '../../../../actions/attachSubdeck/updateSelectedSlides';
 import updateSelectedDeck from '../../../../actions/attachSubdeck/updateSelectedDeck';
-import AttachDeckList from './AttachDeckList';
+import addActivities from '../../../../actions/activityfeed/addActivities';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
 import AttachSlideWiki from './AttachSlideWiki';
 import AttachSearchForm from './AttachSearchForm';
 import AttachSlides from './AttachSlides';
-
-
 
 
 class AttachSubdeckModal extends React.Component{
@@ -149,6 +148,34 @@ class AttachSubdeckModal extends React.Component{
             };
         });
         this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec});
+
+        //find target deck id
+        let targetDeckId = this.props.selector.sid;
+        if (this.props.selector.stype === 'slide') {
+            const pathArray = this.props.selector.spath.split(';');
+            if (pathArray.length > 1) {
+                const parentDeck = pathArray[pathArray.length - 2];
+                targetDeckId = parentDeck.split(':')[0];
+            } else {
+                targetDeckId = this.props.selector.id;
+            }
+        }
+
+        let activities = nodeSpec.map((node) => {
+            return {
+                activity_type: 'use',
+                user_id: String(this.props.UserProfileStore.userid),
+                content_id: node.id,
+                content_kind: 'slide',
+                use_info: {
+                    target_id:  targetDeckId,
+                    target_name: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', targetDeckId)
+                }
+            };
+        });
+
+        this.context.executeAction(addActivities, {activities: activities});
+
         this.handleClose();
 
     }
@@ -161,6 +188,21 @@ class AttachSubdeckModal extends React.Component{
 
     }
 
+    //find node title
+    getTitle(deckTree, type, id) {
+        let title = '';
+        if (deckTree.get('type') === type && deckTree.get('id') === id) {
+            title = deckTree.get('title');
+        } else if (deckTree.get('type') === 'deck') {
+            deckTree.get('children').forEach((item, index) => {
+                if (title === '') {
+                    title = this.getTitle(item, type, id);
+                }
+            });
+        }
+
+        return title;
+    }
 
     render() {
 
@@ -220,22 +262,20 @@ class AttachSubdeckModal extends React.Component{
 
         }
 
+        let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
+                                                     type="button" aria-label="Attach Slides"
+                                                     aria-hidden={this.state.modalOpen}
+                                                     basic icon onClick={this.handleOpen}
+                                                     tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
+            <Icon.Group size={this.props.buttonStyle.iconSize}>
+                <Icon className="grey" name="file text outline"/>
+                <Icon className="corner black" name="attach"/>
+            </Icon.Group>
+        </Button>} content='Attach Slides' on='hover'/>;
+
 
         return (
-           <Modal trigger={
-                    <Button as="button" className={this.props.buttonStyle.classNames}
-                      type="button"
-                      aria-label="Attach Slides"
-                      data-tooltip="Attach Slides"
-                      aria-hidden={this.state.modalOpen}
-                      basic icon onClick={this.handleOpen}
-                      tabIndex={this.props.buttonStyle.noTabIndex?-1:0} >
-                        <Icon.Group size={this.props.buttonStyle.iconSize}>
-                            <Icon className="grey" name="file text outline" />
-                            <Icon className="corner black" name="attach" />
-                        </Icon.Group>
-                    </Button>
-                   }
+           <Modal trigger={attachSlideBtn}
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 role="dialog"
@@ -290,10 +330,11 @@ AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 

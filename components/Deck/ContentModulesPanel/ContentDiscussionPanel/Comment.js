@@ -3,20 +3,57 @@ import {connectToStores} from 'fluxible-addons-react';
 import invertReplyBoxFlag from '../../../../actions/contentdiscussion/invertReplyBoxFlag';
 import ActivityFeedUtil from '../util/ActivityFeedUtil';
 import AddReply from './AddReply';
+import {navigateAction} from 'fluxible-router';
+import cheerio from 'cheerio';
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import TreeUtil from '../../TreePanel/util/TreeUtil';
 
 class Comment extends React.Component {
-    handleReply() {
+    handleReply(e) {
+        e.preventDefault();
         this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
+        return false;
+    }
+
+    //return the position of the node in the deck
+    getPath(node){
+        const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
+
+        const flatTree = savedDeckTreeStore.flatTree;
+        let path = '';
+        for (let i=0; i < flatTree.size; i++) {
+            if (flatTree.get(i).get('type') === node.content_kind && flatTree.get(i).get('id') === node.content_id) {
+                path = flatTree.get(i).get('path');
+                let nodeSelector = {id: this.props.selector.id, stype: node.content_kind, sid: node.content_id, spath: path};
+                let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
+
+                return nodeURL;
+            }
+        }
+        return path;
+    }
+
+    handleRefClick(e) {
+        e.preventDefault();
+
+        this.context.executeAction(navigateAction, {
+            url: this.getPath(this.props.comment)
+        });
+        // return false;
     }
 
     render() {
         const comment = this.props.comment;
         const replyLink = (
             <div className="actions">
-                <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+                <a href="#" tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
             </div>
         );
 
+        const cheerioContentName = (comment.content_name) ? cheerio.load(comment.content_name).text() : '';
+        const nodeRef = (comment.content_kind !== this.props.selector.stype || comment.content_id.split('-')[0] !== this.props.selector.sid.split('-')[0]) ? (<span>{' (from ' + comment.content_kind + ' '}<a href={this.getPath(comment)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>) : '';
+
+        const savedDeckTreeStore = (this.props.DeckTreeStore) ? this.props.DeckTreeStore : this.props.savedDeckTreeStore;
         return (
             <div className="comment">
                 <a className="avatar">
@@ -26,6 +63,7 @@ class Comment extends React.Component {
                     <a className="author" href={'/user/' + comment.author.username}>{comment.author.username}</a>
                     <div className="metadata">
                         <span className="date">{ActivityFeedUtil.formatDate(comment.timestamp)}</span>
+                        {nodeRef}
                     </div>
                     <div className="text">
                         <strong>{comment.title}</strong><br/>
@@ -34,7 +72,7 @@ class Comment extends React.Component {
                     { (String(this.props.userid) !== '') ? replyLink : ''}
                     { comment.replyBoxOpened ? (<AddReply comment={comment} userid={this.props.userid}/>) : '' }
                 </div>
-                {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid}/>); })}</div> : ''}
+                {comment.replies ? <div className="comments">{comment.replies.map((reply, index) => { return (<Comment key={index} comment={reply} userid={this.props.userid} selector={this.props.selector} savedDeckTreeStore={savedDeckTreeStore}/>); })}</div> : ''}
             </div>
         );
     }
@@ -43,5 +81,9 @@ class Comment extends React.Component {
 Comment.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
+Comment = connectToStores(Comment, [DeckTreeStore], (context, props) => {
+    return {
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+    };
+});
 export default Comment;
