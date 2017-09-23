@@ -1,7 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
+import {isEmpty} from '../common.js';
 const log = require('../configs/log').log;
-import { isEmpty } from '../common.js';
 
 export default {
     name: 'decktree',
@@ -30,11 +30,10 @@ export default {
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/decktree/node/create',
+                headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
                     selector: selector,
-                    //nodeSpec: nodeSpec,
-                    nodeSpec:args.nodeSpec,
-                    user: args.userid.toString()
+                    nodeSpec:args.nodeSpec
                 })
             }).then((res) => {
                 callback(null, {node: JSON.parse(res), selector: args.selector});
@@ -57,8 +56,8 @@ export default {
             /*********connect to microservices*************/
             rp.put({
                 uri: Microservices.deck.uri + '/decktree/node/rename',
+                headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
-                    user: args.userid.toString(),
                     selector: selector,
                     name: params.newValue
                 })
@@ -72,8 +71,8 @@ export default {
             let {sourceSelector, targetSelector, targetIndex, userid} = args;
             rp.put({
                 uri: Microservices.deck.uri + '/decktree/node/move',
+                headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
-                    user: userid.toString(),
                     sourceSelector: sourceSelector,
                     targetSelector: targetSelector,
                     targetIndex: targetIndex
@@ -96,8 +95,8 @@ export default {
             let options = {
                 method: 'DELETE',
                 uri: Microservices.deck.uri + '/decktree/node/delete',
+                headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
-                    user: args.userid.toString(),
                     selector: selector
                 })
             };

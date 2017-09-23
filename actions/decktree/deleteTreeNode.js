@@ -8,8 +8,8 @@ export default function deleteTreeNode(context, payload, done) {
     log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
-        //enrich with user id
-        payload.userid = userid;
+        //enrich with jwt
+        payload.jwt = context.getStore(UserProfileStore).jwt;
 
         //enrich with data required for 'delete' activity creation
         //find parent deck id
