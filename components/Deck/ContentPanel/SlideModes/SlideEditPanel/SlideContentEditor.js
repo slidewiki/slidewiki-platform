@@ -600,7 +600,8 @@ class SlideContentEditor extends React.Component {
 
         let slideEditorContext = this; //set slideEditorContext inside doubleclick callbacks
 
-        $('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'move');
+        //$('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'move');
+        $('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'auto');
 
         $('.pptx2html [style*="absolute"]').not('.drawing').hover(function() { //no dragging of SVG - makes them go away
             if (!$(this).hasClass('editMode')) {
@@ -703,15 +704,16 @@ class SlideContentEditor extends React.Component {
                 if (!id || id === 'inlineContent'){id = this.menuFocus; console.log('used menuFocus');}
                 if (id && id !== 'inlineContent')
                 {
+                    /*
                     if(!$('#'+id).hasClass('editMode')){
                         if($('.editMode').length)
                         {   //there is one or more editMode element (earlier via doubleclick)
                             //we disable edit mode from the(se) element(s).
                             this.removeEditMode();
                         }
-                    }
+                    }*/
                     this.menuFocus = id;
-                    console.log('tabFocus set to: ' + id + ' - this.menufocus:'+ this.menuFocus + 'slideEditorContext.menufocus:'+  slideEditorContext.menuFocus);
+                    //console.log('tabFocus set to: ' + id + ' - this.menufocus:'+ this.menuFocus + 'slideEditorContext.menufocus:'+  slideEditorContext.menuFocus);
                     $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
                     //$('#' + id).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
                     $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
@@ -728,6 +730,7 @@ class SlideContentEditor extends React.Component {
         */
 
         //$('.pptx2html [style*="absolute"]').click(function() {
+        /*
         $('.pptx2html [style*="absolute"]').not('.drawing').mousedown(function(event) {
             switch (event.which) {
                 case 1:
@@ -741,11 +744,13 @@ class SlideContentEditor extends React.Component {
                         { //the clicked element is not editMode
                             console.log('hide ckeditor context menu');
                             $('.cke_menu').hide();
+                            /*
                             if($('.editMode').length)
                             {   //there is one or more editMode element (earlier via doubleclick)
                                 //we disable edit mode from the(se) element(s).
                                 slideEditorContext.removeEditMode();
                             }
+                            *//*
                         }
                     }
                     break;
@@ -789,6 +794,7 @@ class SlideContentEditor extends React.Component {
             }
 
         });
+        */
 
 
         //give each input element a tab index
@@ -806,13 +812,16 @@ class SlideContentEditor extends React.Component {
         //TODO: if you select an element and starty typing: then directly switch to edit mode
 
         //set double click event for input box - ondoubleclick - remove dragable and set cursor to auto for editing content
+        /*
         $('.pptx2html [style*="absolute"]').not('.drawing').dblclick(function(evt) {
             if (!$(this).hasClass('editMode'))
             {
                 slideEditorContext.setEditMode(evt, slideEditorContext, $(this).attr('id'), false);
             }
         });
+        */
     }
+    /*
     removeEditMode(){
         //$(this).focus();
         // re-apply draggable to editMode element
@@ -826,6 +835,54 @@ class SlideContentEditor extends React.Component {
             $('.editMode').removeClass('editMode');
         }
     }
+    */
+    enterEditKey(evt, slideEditorContext, clickMenuFocus, previousCaret){
+        console.log('editmode with event: ' + evt);
+        let id = $(':focus').attr('id');
+        //let id = this.currentfocus;
+        //let id = $('.currentFocus').attr('id');
+        if (slideEditorContext.menuFocus) {
+            id = slideEditorContext.menuFocus;
+            console.log('menufocus via shortkey and/or tabindex - clickMenuFocusId: ' + id);
+        }
+        //id on which edit mode is applied
+        console.log('enterEditKey with id: ' + id);
+        if(id !== 'inlineContent')
+        {
+
+            if(!$('#'+id).hasClass('.editMode') &&
+               !$('#'+id).hasClass('drawing-container') &&
+                id !== 'inlineContent')
+            { //if not already in edit mode or is not SVG in drawing-container
+                $('.cke_menu').show();
+
+                if (evt)
+                {//if not already in input mode
+                    if(evt.keyCode){ //if keyboard event
+                        evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
+                        //set caret to start of text (span) in last selected div element
+                        slideEditorContext.placeCaretAtStart(id);
+                    }
+                }
+                else {
+                    //event is false = right-click context menu was used
+                    if (previousCaret){
+                        slideEditorContext.selectRange(previousCaret);
+                    } else {
+                        //set caret to start of text (span) in last selected div element
+                        slideEditorContext.placeCaretAtStart(id);
+                    }
+                }
+                $('#' + id).css('cursor', 'auto');
+                $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
+                console.log('set edit mode end, with currentfocus: ' + id);
+            }
+        }
+        else {
+            console.log('editmode canceled due to selection of inlineContent');
+        }
+    }
+    /*
     setEditMode(evt, slideEditorContext, clickMenuFocus, previousCaret){
         console.log('editmode with event: ' + evt);
         let id = $(':focus').attr('id');
@@ -895,7 +952,7 @@ class SlideContentEditor extends React.Component {
         else {
             console.log('editmode canceled due to selection of inlineContent');
         }
-    }
+    }*/
     placeCaretAtStart(id) {
         console.log('placeCaretAtStart');
         let el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
@@ -1312,10 +1369,10 @@ class SlideContentEditor extends React.Component {
                 'shift+del', 'shift+backspace',
                 'ctrl+del', 'ctrl+backspace',
                 'alt+del', 'alt+backspace'],
-            'moveUp': ['ctrl+up'],
-            'moveDown': ['ctrl+down'],
-            'moveLeft': ['ctrl+left'],
-            'moveRight': ['ctrl+right'],
+            'moveUp': ['ctrl+alt+up'],
+            'moveDown': ['ctrl+alt+down'],
+            'moveLeft': ['ctrl+alt+left'],
+            'moveRight': ['ctrl+alt+right'],
             'bringToFront': [ 'ctrl+shift+plus'],
             'bringToBack': ['ctrl+shift+-'],
             'duplicate': ['ctrl+d'],
@@ -1327,7 +1384,8 @@ class SlideContentEditor extends React.Component {
             //'menuOptions': (event) => this.menuOptionsPreventDefault(event, slideEditorContext),
             'contextmenu': (event) => this.keyContextMenu(event, slideEditorContext),
             //'tabFocus': (event) => this.setTabFocus(event, slideEditorContext),
-            'enter': (event) => this.setEditMode(event, slideEditorContext, false , false),
+            //'enter': (event) => this.setEditMode(event, slideEditorContext, false , false),
+            'enter': (event) => this.enterEditKey(event, slideEditorContext, false , false),
             'deleteNode': (event) => this.deleteNode(slideEditorContext),
             'moveUp': (event) => this.keyMoveUp(slideEditorContext, event),
             'moveDown': (event) => this.keyMoveDown(slideEditorContext, event),
@@ -1336,7 +1394,7 @@ class SlideContentEditor extends React.Component {
             'bringToFront': (event) => this.bringToFront(slideEditorContext, event),
             'bringToBack': (event) => this.sendToBack(slideEditorContext, event),
             'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
-            'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
+            //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
         let templateOptions = <div className="menu">
             <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
