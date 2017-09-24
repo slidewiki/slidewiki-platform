@@ -39,6 +39,32 @@ class SlideContentEditor extends React.Component {
         this.CKeditorMode = 'advanced toolbar';
     }
 
+    keymapInfoButton(){
+        let message = '&#8226; Enter text in input box: control + enter <br/>'+
+                '&#8226; Move input box around: press control + alt and then the up, down, left, right keys <br/>' +
+                '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
+                '&#8226; Duplicate an input box: control + d <br/>'+
+                '&#8226; Delete an input box: control + delete <br/>'+
+                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>';
+        swal({
+            title: 'Keyboard shortcuts',
+            html: message,
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'ok',
+            confirmButtonClass: 'ui olive button',
+            cancelButtonText: 'No',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false
+        }).then((accepted) => {
+            //this.applyTemplate(template);
+        }, (reason) => {
+            //done(reason);
+        });
+
+    }
+
     handleTemplatechange(){
         /*
         if (this.showTemplates === false){
@@ -82,7 +108,7 @@ class SlideContentEditor extends React.Component {
                     '<h3>Title</h3></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up" style="position: absolute; top: 191.667px; left: 66px; width: 828px; height: 456.833px; z-index: 23520;">'+
                     '<ul>'+
-                    '	<li class="h-left">Text bullet 1</span></li>'+
+                    '	<li class="h-left">Text bullet 1</span>'+
                     '	<li class="h-left">Text bullet 2</span></li>'+
                     '</ul>'+
                     '<div class="h-left">&nbsp;</div>'+
@@ -290,8 +316,10 @@ class SlideContentEditor extends React.Component {
             });
         });
     }
-    uniqueIDAllElements(){
-        let allElements = this.refs.inlineContent.getElementsByTagName('*');
+    uniqueIDAllElements(givenContext){
+        let allElements;
+        if(givenContext !== undefined){allElements = givenContext.refs.inlineContent.getElementsByTagName('*');}
+        else{allElements = this.refs.inlineContent.getElementsByTagName('*');}
         let allIds = [];
         for (let i = 0, n = allElements.length; i < n; ++i) {
             let random = Math.floor((Math.random() * 100000) + 1);
@@ -333,8 +361,8 @@ class SlideContentEditor extends React.Component {
             .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
             //reset scaling of pptx2html element to get original size
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            this.removeEditMode();
-            this.contextMenuAllRemove();
+            //this.removeEditMode();
+            this.contextMenuAndDragDivAllRemove();
             this.disableResizeDrag();
             if (CKEDITOR.instances.inlineContent != null) {
                 console.log('destroy previous CKEDITOR instance');
@@ -865,13 +893,9 @@ class SlideContentEditor extends React.Component {
                     }
                 }
                 else {
-                    //event is false = right-click context menu was used
-                    if (previousCaret){
-                        slideEditorContext.selectRange(previousCaret);
-                    } else {
-                        //set caret to start of text (span) in last selected div element
-                        slideEditorContext.placeCaretAtStart(id);
-                    }
+
+                    //set caret to start of text (span) in last selected div element
+                    slideEditorContext.placeCaretAtStart(id);
                 }
                 $('#' + id).css('cursor', 'auto');
                 $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
@@ -1002,6 +1026,7 @@ class SlideContentEditor extends React.Component {
             textRange.select();
         }
     }
+    /*
     getMouseEventCaretRange(evt) {
         let range, x = evt.clientX, y = evt.clientY;
         // Try the simple IE way first
@@ -1042,9 +1067,12 @@ class SlideContentEditor extends React.Component {
             }
         }
     }
-    contextMenuAllRemove(){
+    */
+    contextMenuAndDragDivAllRemove(){
         $('.pptx2html [style*="absolute"]').each(function () {
             $(this).contextMenu(false);
+            $('.'+$(this).attr('id')+'dragdiv').remove();
+            $('.'+$(this).attr('id')).remove();
         });
     }
     contextMenuAll(){
@@ -1052,10 +1080,10 @@ class SlideContentEditor extends React.Component {
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $('.pptx2html [style*="absolute"]').each(function () {
-            this.innerHTML = '<div><button tabIndex="0" class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'" style="left: 60px; position: absolute; z-index: 90000000;"><i class="tasks icon"></i></button></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1"><button tabIndex="-1" class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'" style="left: 60px; position: absolute; z-index: 90000000;"><i tabIndex="-1" class="tasks icon"></i></button></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
-            this.innerHTML = '<div tabIndex="0" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"  style="position: absolute; z-index: 90000000;"><i class="move icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"  style="position: absolute; z-index: 90000000;"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
             //let menuID = $(this).attr('id');
             //if(!$(this).draggable( 'instance' )){
@@ -1083,16 +1111,16 @@ class SlideContentEditor extends React.Component {
                                     //slideEditorContext.setEditMode(false, slideEditorContext, slideEditorContext.menuFocus, slideEditorContext.previousCaretRange);
                                     //break;
                                 case 'front':
-                                    slideEditorContext.bringToFront(slideEditorContext, false);
+                                    slideEditorContext.bringToFront(slideEditorContext, false, $(this).attr('id'));
                                     break;
                                 case 'back':
-                                    slideEditorContext.sendToBack(slideEditorContext, false);
+                                    slideEditorContext.sendToBack(slideEditorContext, false, $(this).attr('id'));
                                     break;
                                 case 'duplicate':
-                                    slideEditorContext.duplicateNode(slideEditorContext, false);
+                                    slideEditorContext.duplicateNode(slideEditorContext, false, $(this).attr('id'));
                                     break;
                                 case 'delete':
-                                    slideEditorContext.deleteNode(slideEditorContext, false);
+                                    slideEditorContext.deleteNode(slideEditorContext, false, $(this).attr('id'));
                                     break;
                                 case 'quit':
                                     break;
@@ -1140,42 +1168,18 @@ class SlideContentEditor extends React.Component {
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         console.log('keyContextMenu id: ' + id);
-        if(!$('#'+id).hasClass('editMode')){
-            if(event){event.preventDefault();}
-            $('#'+id).contextMenu();
-        }
+        if(event){event.preventDefault();}
+        //$('#'+id).contextMenu(true);
+        //$('.context-menu-list').trigger('contextmenu:show');
+        $('.'+id).show();
+        $('#'+id).contextMenu(true);
+        $('.'+id).contextMenu(true);
+        $('#'+id).contextMenu();
+        $('.'+id).contextMenu();
+        //$('#'+id).trigger('contextmenu:show');
     }
-
-    /*
-    setTabFocus(event, context){
-        //if($('.pptx2html [style*="absolute"]:focus').length)
-        //{
-        console.log('tabFocus');
-        let id = $(':focus').attr('id');
-        if (!id || id === 'inlineContent'){id = context.menuFocus; console.log('used menuFocus');}
-        if(!$('#'+id).hasClass('editMode')){
-            if($('.editMode').length)
-            {   //there is one or more editMode element (earlier via doubleclick)
-                //we disable edit mode from the(se) element(s).
-                context.removeEditMode();
-            }
-        }
-        context.menuFocus = id;
-        console.log('tabFocus set for: ' + $(':focus').attr('id'));
-        $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
-        //$('#' + id).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
-        $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
-        //else {
-            //set caret at start position
-        //    setEditMode(event, context);
-        //}
-    }
-    */
     keyMoveUp(context, event){
-        //TODO: detect whether context menu is shown
-        console.log('keyup');
         let id = $(':focus').attr('id');
-        //if(!$('#'+id).hasClass('editMode')){
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
             //console.log('keyup not in edit mode + preventdefault');
@@ -1185,7 +1189,6 @@ class SlideContentEditor extends React.Component {
         }
     }
     keyMoveDown(context, event){
-        console.log('keyup');
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('.editMode').length && !$('#'+id).hasClass('context-menu-active') && id !== 'inlineContent'){
@@ -1213,9 +1216,10 @@ class SlideContentEditor extends React.Component {
             context.emitChange(); //confirm non-save on-leave
         }
     }
-    bringToFront(context, event){
+    bringToFront(context, event, idContext){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
-        let id = $(':focus').attr('id');
+        let id = idContext;
+        if (!id){id = $(':focus').attr('id');}
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') &&  id !== 'inlineContent'){
             if(event){event.preventDefault();}
@@ -1223,9 +1227,10 @@ class SlideContentEditor extends React.Component {
             context.emitChange(); //confirm non-save on-leave
         }
     }
-    sendToBack(context, event){
+    sendToBack(context, event, idContext){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
-        let id = $(':focus').attr('id');
+        let id = idContext;
+        if (!id){id = $(':focus').attr('id');}
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode')){
             if(event){event.preventDefault();}
@@ -1233,24 +1238,26 @@ class SlideContentEditor extends React.Component {
             context.emitChange(); //confirm non-save on-leave
         }
     }
-    duplicateNode(context, event){
+    duplicateNode(context, event, idContext){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
-        let id = $(':focus').attr('id');
+        let id = idContext;
+        if (!id){id = $(':focus').attr('id');}
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
         console.log('duplicate node' + id);
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length){
             if(event){event.preventDefault();}
             $('#'+id).clone().appendTo('.pptx2html');
             $('#'+id).css('top', '+=50');
-            context.uniqueIDAllElements();
+            context.uniqueIDAllElements(context);
             context.resizeDrag();
             context.emitChange(); //confirm non-save on-leave
             //this.forceUpdate();
         }
     }
-    deleteNode(context, event){
+    deleteNode(context, event, idContext){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
-        let id = $(':focus').attr('id');
+        let id = idContext;
+        if (!id){id = $(':focus').attr('id');}
         if (!id){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length && !$('#'+id).hasClass('pptx2html') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
@@ -1301,18 +1308,20 @@ class SlideContentEditor extends React.Component {
             console.log('prevent default 1-5 key');
         }
     }
-    */
-    keyEnter(event){
-        $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
+
+    keyEnter(context, event){
+        //$('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
-        console.log('prevent default enter key if not in edit mode' + !$('.editMode').length + $('#'+id).hasClass('context-menu-active') + id);
+        if (!id){id = context.menuFocus;}
+        console.log('prevent default enter key when context menu shows' +  $('#'+id).hasClass('context-menu-active') + id);
         //if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
         //if(!$('.editMode').length){
-        if(!$('.editMode').length && $('#'+id).hasClass('context-menu-active')){
+        if($('#'+id).hasClass('context-menu-active')){
             if(event){event.preventDefault();}
             console.log('prevent default enter key');
         }
     }
+    */
     resize() {
         if($('.pptx2html').length)
         {
@@ -1364,8 +1373,8 @@ class SlideContentEditor extends React.Component {
         const keyMap = {
             //'menuOptions': ['1', '2', '3', '4', '5', ],
             //'tabFocus': ['tab'],
-            'contextmenu': ['ctrl+alt', 'alt+ctrl'],
-            'deleteNode': ['ctrl+del', 'backspace',
+            //'contextmenu': ['ctrl+alt+shift', 'alt+ctrl+shift', 'shift+alt+ctrl'],
+            'deleteNode': ['ctrl+del',
                 'shift+del', 'shift+backspace',
                 'ctrl+del', 'ctrl+backspace',
                 'alt+del', 'alt+backspace'],
@@ -1376,16 +1385,18 @@ class SlideContentEditor extends React.Component {
             'bringToFront': [ 'ctrl+shift+plus'],
             'bringToBack': ['ctrl+shift+-'],
             'duplicate': ['ctrl+d'],
-            'enter': ['ctrl+enter'],
-            'escape': ['ctrl+escape']
+            'enter': ['ctrl+enter']
+            //'defaultEnter': ['enter'],
+            //'escape': ['ctrl+escape']
         };
         let slideEditorContext = this;
         const handlers = {
             //'menuOptions': (event) => this.menuOptionsPreventDefault(event, slideEditorContext),
-            'contextmenu': (event) => this.keyContextMenu(event, slideEditorContext),
+            //'contextmenu': (event) => this.keyContextMenu(event, slideEditorContext),
             //'tabFocus': (event) => this.setTabFocus(event, slideEditorContext),
             //'enter': (event) => this.setEditMode(event, slideEditorContext, false , false),
             'enter': (event) => this.enterEditKey(event, slideEditorContext, false , false),
+            //'defaultEnter': (event) => this.keyEnter(slideEditorContext, event),
             'deleteNode': (event) => this.deleteNode(slideEditorContext),
             'moveUp': (event) => this.keyMoveUp(slideEditorContext, event),
             'moveDown': (event) => this.keyMoveDown(slideEditorContext, event),
@@ -1522,19 +1533,25 @@ class SlideContentEditor extends React.Component {
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon"></i>
+                 <i className="save icon large"></i>
                  Save
                 </button>
                 <button tabIndex="0" ref="submitbutton" className="ui orange button " onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
-                    <i className="plus square outline icon black"></i>
+                    <i className="plus square outline icon black large"></i>
                     <a style={buttonColorBlack}>{this.inputBoxButtonTitle}</a>
                 </button>
                 <div className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
                     <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
-                    <i className="dropdown icon"/>
+                    <i className="dropdown icon large"/>
                     <div className="default text">Use template</div>
                     {templateOptions}
-                </div> {/*
+                </div>
+                <button tabIndex="0" ref="helpbutton" className="ui orange button " onClick={this.keymapInfoButton.bind(this)} onChange={this.keymapInfoButton.bind(this)}>
+                    <i className="help circle icon black large"></i>
+                    <a style={buttonColorBlack}>keys</a>
+                </button>
+
+                {/*
                     'ui': true,
                     'field': true,
                     'search': true,
