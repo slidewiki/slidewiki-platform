@@ -41,8 +41,7 @@ class ContentChangeItem extends React.Component {
 
     render() {
         const change = this.props.change;
-        const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
-        const isCurrent = this.props.selector.sid === `${this.props.change.value.ref.id}-${this.props.change.value.ref.revision}`;
+
         let description;
         let iconName = 'write';
 
@@ -96,20 +95,12 @@ class ContentChangeItem extends React.Component {
                 description = <span>updated the deck</span>;
         }
 
-/*
-<<<<<<< HEAD
-        // buttons are shown only for slide history and only for changes that result in new slide revisions
-        let buttons = this.props.selector.stype === 'slide' && ['add', 'edit', 'rename'].includes(change.action) &&
-            <Button.Group basic size='tiny' floated='right'>
-                        <Button aria-label='Compare to current slide version' icon='exchange' disabled={isCurrent} onClick={this.handleDiffViewClick.bind(this)}/>
-                        <Button aria-label='Restore slide' icon='history' disabled={!canEdit}
-=======
-//                        <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
-//                        <Button aria-label='Restore slide' icon='history' disabled={!canRestore}
-*/
         let buttons;
         if (this.props.selector.stype === 'slide' && ['add', 'attach', 'copy', 'edit', 'rename', 'revert'].includes(change.action) ) {
             // buttons are shown only for slide history and only for changes that result in new slide revisions
+
+            const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+            const isCurrent = this.props.selector.sid === `${this.props.change.value.ref.id}-${this.props.change.value.ref.revision}`;
 
             const currentRev = parseInt(this.props.selector.sid.split('-')[1]);
             const shouldView = currentRev !== change.value.ref.revision;
