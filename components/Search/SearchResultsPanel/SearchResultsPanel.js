@@ -1,6 +1,5 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
-import { NavLink } from 'fluxible-router';
 import classNames from 'classnames/bind';
 import SearchResultsStore from '../../../stores/SearchResultsStore';
 import SearchResultsList from './SearchResultsList';
@@ -11,12 +10,10 @@ import loadMoreResults from '../../../actions/search/loadMoreResults';
 class SearchResultsPanel extends React.Component {
 
     initSortDropdown(){
-        let changeSort = this.props.handleRedirect.bind(this);
+        let changeSort = this.props.changeSort.bind(this);
         $('#sortDropdown').dropdown({
             onChange: function(value, text, $choice){
-                changeSort({
-                    sort: value
-                });
+                changeSort(value);
             }
         });
     }
@@ -39,12 +36,6 @@ class SearchResultsPanel extends React.Component {
                 <div className="item" data-value="lastUpdate">Last updated</div>
             </div>;
         }
-    }
-    loadMore(){
-        context.executeAction(loadMoreResults, {
-            queryparams: this.props.queryparams,
-            start: this.props.start
-        });
     }
     render() {
         const results = this.props.results;
@@ -73,14 +64,14 @@ class SearchResultsPanel extends React.Component {
 
         // define no results div
         let noResultsDiv = <div key="noResultsDiv" className="ui basic segment center aligned">
-            <h3>No results found for the specified input parameters.</h3>
+            <h3>No results found for the specified input parameters</h3>
         </div>;
 
         // define load more results div
         let loadMoreDiv = '';
 
-        if(this.props.loadMore){
-            let loadMoreContent = <button className="ui button" onClick={this.loadMore.bind(this, this.props.start)}>Load More</button>;
+        if(this.props.hasMore){
+            let loadMoreContent = <button className="ui button" onClick={this.props.loadMore.bind(this)}>Load More</button>;
             if(this.props.loadMoreLoading){
                 loadMoreContent = <div className="ui active text loader">Loading</div>;
             }
@@ -90,7 +81,7 @@ class SearchResultsPanel extends React.Component {
         }
 
         let resultsPanel = (numFound === 0) ? noResultsDiv : resultsDiv;
-        let spellcheckDiv = (this.props.spellcheck) ? <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} /> : '';
+        let spellcheckDiv = <SpellcheckPanel spellcheckData={this.props.spellcheck} handleRedirect={this.props.handleRedirect} />;
 
         return (
             <div ref="searchResultsPanel">

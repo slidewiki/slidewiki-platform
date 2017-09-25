@@ -1,25 +1,53 @@
+import {Microservices} from '../configs/microservices';
+import rp from 'request-promise';
 const log = require('../configs/log').log;
 
 export default {
     name: 'questions',
-    // At least one of the CRUD methods is Required
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'sid': args.sid, 'stype': args.stype};
 
-        if (resource === 'questions.count'){
-
+        if (resource === 'questions.count') {
             let randomNumber = Math.round(Math.random() * 20);
             callback(null, {'count' : randomNumber, 'selector': selector, 'mode': args.mode});
-
         }
 
-        if(resource === 'questions.list'){
-            /*********connect to microservices*************/
-            //todo
-            /*********received data from microservices*************/
+        if(resource === 'questions.list') {
+            rp.get({
+                uri: 'https://questionservice.experimental.slidewiki.org/questions',
+                //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
+            }).then((res) => {
+                /* This is what we get from microservice */
+                /*
+                [{"related_object":"slide","related_object_id":"10678","question":"string","user_id":"17","difficulty":1,"choices":[{"choice":"string","is_correct":true,"explanation":"string"}],"id":10},
+                 {"related_object":"slide","related_object_id":"1141","question":"question 2","user_id":"17","difficulty":2,"choices":[{"choice":"string","is_correct":true,"explanation":"string"},
+                 {"choice":"string","is_correct":true,"explanation":"string"}],"id":11}]
+                */
+                let questions = JSON.parse(res)
+                    .map((item, index) => {
+                        return {
+                            id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
+                            answers: item.choices
+                                .map((ans, ansIndex) => {
+                                    return {answer: ans.choice, correct: ans.is_correct, explanation: ans.explanation};
+                                }),
+                            userId: item.user_id,
+                        };
+                    }
+                );
+                callback(null, {questions: questions, totalLength: 2, selector: selector});
+            }).catch((err) => {
+                console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
+                console.log(err);
+                callback(err, {});
+            });
+        }
+
+        /* Hard coded sample work follows */
+        /*
             let questions = [
                 {id: 12, title: 'Super exciting question', username: 'Ilya B.', userID: 66, difficulty: 2, Date: 'yesterday',
                     answers: [{answer: 'Yes', correct: true, explanation: 'Obvious'},
@@ -74,9 +102,78 @@ export default {
             questions = questions.slice(lowerBound, upperBound);
             callback(null, {questions: questions, totalLength: length, selector: selector});
         }
-    }
-    // other methods
-    // create: (req, resource, params, body, config, callback) => {},
-    // update: (req, resource, params, body, config, callback) => {}
-    // delete: (req, resource, params, config, callback) => {}
+    },
+    */
+    },
+
+    create: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'questions.add') {
+            rp.post({
+                uri: Microservices.questions.uri + '/question',
+                body:JSON.stringify({
+                    user_id: args.userId,
+                    related_object_id: args.sid,
+                    related_object: args.stype,
+                    difficulty: args.difficulty,
+                    choices: args.choices,
+                    question: args.question})
+            }).then((res) => {
+                console.log('Question create method should be successful. Check via swagger for following oid, otype, and qid:', args.sid, args.stype, args.questionId);
+                callback(null, {});
+            }).catch((err) => {
+                console.log('Question create method errored. Check via swagger for following oid and qid:', args.sid, args.questionId);
+                console.log(err);
+                callback(err, {});
+            });
+        }
+
+    },
+
+    update: (req, resource, params, body, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'questions.update') {
+            rp.put({
+                uri: Microservices.questions.uri + '/question/' + args.questionId,
+                body:JSON.stringify({
+                    user_id: args.userId,
+                    related_object_id: args.sid,
+                    related_object: args.stype,
+                    difficulty: args.difficulty,
+                    choices: args.choices,
+                    question: args.question})
+            }).then((res) => {
+                console.log('Question update should be successful. Check via swagger for questionId:', args.questionId);
+                callback(null, {});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
+
+    },
+
+    delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'questions.delete') {
+            rp.delete({
+                uri: Microservices.questions.uri + '/question/' + args.questionId
+            }).then((res) => {
+                console.log('Question delete should be successful. Check via swagger for questionId:', args.questionId);
+                callback(null, {});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
+        }
+    },
 };

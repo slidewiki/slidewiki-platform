@@ -8,8 +8,8 @@ export default function addTreeNodeList(context, payload, done) {
     log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
-        //enrich with user id
-        payload.userid = userid;
+        //enrich with jwt
+        payload.jwt = context.getStore(UserProfileStore).jwt;
         context.service.create('decktree.node', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
@@ -30,7 +30,7 @@ export default function addTreeNodeList(context, payload, done) {
                 } else {  //Only a slide/deck was added
                     let activity = {
                         activity_type: 'add',
-                        user_id: String(context.getStore(UserProfileStore).userid),
+                        user_id: String(userid),
                         content_id: String(res.node.id),
                         content_kind: res.node.type
                     };
