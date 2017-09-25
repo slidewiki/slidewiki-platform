@@ -1130,12 +1130,12 @@ class SlideContentEditor extends React.Component {
                         items: {
                             //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
                             //'move': {name: 'Move around', icon: 'fa-arrows',},
-                            'front': {name: 'Bring to front (Ctrl-shift +)', icon: 'fa-arrow-circle-up'},
-                            'back': {name: 'Send to back (Ctrl-shift -)', icon: 'fa-arrow-circle-o-down'},
-                            'duplicate': {name: 'Duplicate (key: Ctrl d)', icon: 'copy'},
-                            'delete': {name: 'Delete (key: Delete)', icon: 'delete'},
+                            'front': {name: 'Bring to front (Ctrl shift +)', icon: 'fa-arrow-circle-up'},
+                            'back': {name: 'Send to back (Ctrl shift -)', icon: 'fa-arrow-circle-o-down'},
+                            'duplicate': {name: 'Duplicate (Ctrl d)', icon: 'copy'},
+                            'delete': {name: 'Delete (ctrl Del)', icon: 'delete'},
                             //'sep1': '---------',
-                            'quit': {name: 'Close menu (key: Esc)', icon: 'quit', accesskey: 'esc'}
+                            'quit': {name: 'Close menu (Esc)', icon: 'quit', accesskey: 'esc'}
                             //'quit': {name: 'Send to back', icon: 'quit'},
                         }
                     };
