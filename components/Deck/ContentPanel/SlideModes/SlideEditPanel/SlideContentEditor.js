@@ -1249,6 +1249,7 @@ class SlideContentEditor extends React.Component {
             $('#'+id).clone().appendTo('.pptx2html');
             $('#'+id).css('top', '+=50');
             context.uniqueIDAllElements(context);
+            context.contextMenuAndDragDivAllRemove();
             context.resizeDrag();
             context.emitChange(); //confirm non-save on-leave
             //this.forceUpdate();
