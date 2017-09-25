@@ -81,7 +81,7 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         if (resource === 'history.revert') {
             rp.post({
-                uri: Microservices.deck.uri + '/' + params.selector.stype + '/revert/' + params.selector.sid.split('-')[0],
+                uri: Microservices.deck.uri + '/' + params.selector.stype + '/' + params.selector.sid.split('-')[0] + '/revert',
                 json: true,
                 body: {
                     revision_id: String(params.revisionId),
