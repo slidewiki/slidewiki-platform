@@ -130,7 +130,6 @@ class AddDeck extends React.Component {
                 theme: theme,
                 license: license,
                 tags: tags,
-                userid: this.props.UserProfileStore.userid,
                 deckId: this.props.ImportStore.deckId,
                 selector: {id: this.props.ImportStore.deckId}
             });
