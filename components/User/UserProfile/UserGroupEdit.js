@@ -2,6 +2,7 @@ import React from 'react';
 import { Microservices } from '../../../configs/microservices';
 import { connectToStores } from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
+import { TextArea } from 'semantic-ui-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { timeSince } from '../../../common';
 import UserPicture from '../../common/UserPicture';
@@ -161,6 +162,7 @@ class UserGroupEdit extends React.Component {
               </div>
               <div className="fourteen wide column">
                 <div className="content">
+                    <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a direct link. Following such a link and then returning to this site will reset the form and list." tabIndex ='-1'/>
                     <a className="header" href={'/user/' + this.props.UserProfileStore.username}>{this.props.UserProfileStore.username}</a>
                     <div className="description">Group owner</div>
                 </div>
@@ -191,6 +193,7 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
+                              <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a direct link. Following such a link and then returning to this site will reset the form and list." tabIndex ='-1'/>
                               <a className="header" href={'/user/' + member.username}>{member.username}</a>
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
