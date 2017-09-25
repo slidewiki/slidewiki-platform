@@ -64,10 +64,10 @@ class Presentation extends React.Component{
                 pptxheight = '100%';
             }
 
-            //console.log('presentation.js dimension: ' + pptxheight + ' by ' + pptxwidth);
+            window.location.hash = '#slide-' + this.startingSlide;
             Reveal.initialize({
                 width: pptxwidth,
-    			height: pptxheight,
+			         height: pptxheight,
                 margin: 0.2,
                 transition: 'none',
                 backgroundTransition: 'none',
@@ -79,6 +79,7 @@ class Presentation extends React.Component{
                 ]
             });
 
+
             Reveal.addEventListener( 'ready', ( event ) => {
             	// event.currentSlide, event.indexh, event.indexv
                 this.resize();
@@ -89,6 +90,7 @@ class Presentation extends React.Component{
                     //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
                 this.resize();
             } );
+
 
         }
         //listen to resize event and resize.
@@ -138,6 +140,7 @@ class Presentation extends React.Component{
                 width: pptxwidth,
                 height: pptxheight
             });
+
         }
     }
     componentDidUpdate(){
@@ -185,7 +188,7 @@ class Presentation extends React.Component{
                     notes =  '<aside class="notes">' + slide.speakernotes + '</aside>';
                 }
                 let content = slide.content.replace(' src=', ' data-src=') + notes;
-                returnList.push(<PresentationSlide content={content} key={slide.id + '-' + i} id={'slide-' + slide.id + '-' + i} />);
+                returnList.push(<PresentationSlide content={content} key={slide.id} id={'slide-' + slide.id} />);
             }
             return returnList;
 
