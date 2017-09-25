@@ -5,6 +5,7 @@ export default function moveTreeNode(context, payload, done) {
     log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
+        let jwt = context.getStore(UserProfileStore).jwt;
         let {selector, sourceNode, targetNode, targetIndex} = payload;
         let sourceSelector = {
             'id': selector.id,
@@ -30,7 +31,7 @@ export default function moveTreeNode(context, payload, done) {
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
         context.service.update('decktree.move', {
-            userid,
+            jwt,
             selector,
             sourceSelector,
             targetSelector,

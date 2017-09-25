@@ -50,6 +50,7 @@ export default {
             /*********connect to microservices*************/
             rp.post({
                 uri: Microservices.deck.uri + '/slide/new',
+                headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
                     //id: args.id,
                     title: args.title,
@@ -61,7 +62,6 @@ export default {
                         args.speakernotes: ' ',
                     //args.content
                     //TODO: speaker notes + in object model database in deck microservice
-                    user: args.userid.toString(),
                     root_deck: args.root_deck,
                     parent_slide: {
                         id: content_id,
@@ -125,6 +125,7 @@ export default {
 
             rp.put({
                 uri: url,
+                headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
                     //id: args.id,
                     title: args.title,
@@ -134,7 +135,6 @@ export default {
                     speakernotes: args.speakernotes? args.speakernotes: ' ',
                     //args.content
                     //TODO: speaker notes + in object model database in deck microservice
-                    user: args.userid.toString(),
                     root_deck: args.root_deck,
                     top_root_deck: selector.id,
                     parent_slide: {
