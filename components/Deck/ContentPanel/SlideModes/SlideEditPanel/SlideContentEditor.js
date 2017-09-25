@@ -1239,6 +1239,7 @@ class SlideContentEditor extends React.Component {
         }
     }
     duplicateNode(context, event, idContext){
+        let localContext = context;
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = idContext;
         if (!id){id = $(':focus').attr('id');}
@@ -1248,10 +1249,10 @@ class SlideContentEditor extends React.Component {
             if(event){event.preventDefault();}
             $('#'+id).clone().appendTo('.pptx2html');
             $('#'+id).css('top', '+=50');
-            context.uniqueIDAllElements(context);
             context.contextMenuAndDragDivAllRemove();
             context.resizeDrag();
             context.emitChange(); //confirm non-save on-leave
+            context.uniqueIDAllElements(localContext);
             //this.forceUpdate();
         }
     }
