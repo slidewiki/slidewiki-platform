@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { TextArea } from 'semantic-ui-react';
 import UserPicture from '../../../../common/UserPicture';
 let classNames = require('classnames');
 
