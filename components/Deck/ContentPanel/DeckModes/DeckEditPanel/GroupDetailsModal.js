@@ -25,8 +25,8 @@ class GroupDetailsModal extends React.Component {
                   <UserPicture picture={ this.props.group.creator.picture } username={ this.props.group.creator.username } avatar={ true } width= { 24 } />
                 </div>
                 <div className="fifteen wide column">
-                  <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a direct link. Following such a link and then returning to the deck edit view will reset the changes." tabIndex ='-1'/>
-                  <a className="header" href={'/user/' + this.props.group.creator.username}>{this.props.group.creator.username}</a>
+                  <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                  <a className="header" href={'/user/' + this.props.group.creator.username} target="_blank">{this.props.group.creator.username}</a>
                   <div className="description">
                     Group creator
                   </div>
@@ -49,8 +49,8 @@ class GroupDetailsModal extends React.Component {
                           <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
                         </div>
                         <div className="fifteen wide column">
-                          <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a direct link. Following such a link and then returning to the deck edit view will reset the changes." tabIndex ='-1'/>
-                          <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                          <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                          <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
                           {optionalText}
                         </div>
                       </div>
