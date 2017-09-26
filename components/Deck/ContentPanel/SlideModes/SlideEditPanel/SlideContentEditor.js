@@ -37,6 +37,7 @@ class SlideContentEditor extends React.Component {
         this.menuFocus;
         this.previousCaretRange;
         this.CKeditorMode = 'advanced toolbar';
+        this.loading = '';
     }
 
     keymapInfoButton(){
@@ -45,7 +46,8 @@ class SlideContentEditor extends React.Component {
                 '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
                 '&#8226; Duplicate an input box: control + d <br/>'+
                 '&#8226; Delete an input box: control + delete <br/>'+
-                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>';
+                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>' +
+                '&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>';
         swal({
             title: 'Keyboard shortcuts',
             html: message,
@@ -347,6 +349,7 @@ class SlideContentEditor extends React.Component {
         if (this.props.UserProfileStore.username !== '') {
             // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             // TODO: wait for successfull save signal from
+            /*
             swal({
                 title: 'Saving Content...',
                 text: '',
@@ -357,6 +360,7 @@ class SlideContentEditor extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             });
+            */
             //remove editing borders input boxes:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
@@ -406,6 +410,8 @@ class SlideContentEditor extends React.Component {
                 tags: tags
             });
             this.resize();
+            this.loading = 'loading';
+            this.forceUpdate();
         }
         return false;
     }
@@ -1562,6 +1568,7 @@ class SlideContentEditor extends React.Component {
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
                  <i className="save icon large"></i>
                  Save
