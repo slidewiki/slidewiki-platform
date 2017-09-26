@@ -99,8 +99,10 @@ class LoginModal extends React.Component {
     }
 
     componentDidUpdate() {
+        if (this.props.errorMessage.length > 2)
+            $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
         // console.log('componentDidUpdate:', this.props.errorMessage, this.props.socialLoginError, this.props.userid, this.props.username);
-        if (!(this.props.errorMessage) && this.isLoading) {
+        if ((this.props.errorMessage !== '') && this.isLoading) {
             $('.ui.form.signin').form('add errors', [this.props.errorMessage]);
             this.isLoading = false;
             this.forceUpdate();
