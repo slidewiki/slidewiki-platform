@@ -98,6 +98,19 @@ export default {
             done();
         }
     },
+    contactus: {
+        path: '/contactus',
+        method: 'get',
+        page: 'contactus',
+        title: 'SlideWiki -- Contact Us',
+        handler: require('../components/Home/ContactUs'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Contact Us'
+            });
+            done();
+        }
+    },
     license: {
         path: '/license',
         method: 'get',
@@ -234,18 +247,7 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            async.series([
-                (callback) => {
-                    context.executeAction(loadDeck, payload, callback);
-                },
-                (callback) => {
-                    context.executeAction(loadPresentation, payload, callback);
-                }
-            ],
-            (err, result) => {
-                if(err) console.log(err);
-                done();
-            });
+            context.executeAction(loadDeck, payload, done);
         }
     },
     legacydeck: {
@@ -424,30 +426,9 @@ export default {
 
     },
 
+
     presentation: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/',
-        method: 'get',
-        page: 'presentation',
-        handler: require('../components/Deck/Presentation/Presentation'),
-        action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
-        }
-    },
-    /*
-    presentationPrint: {
-        path: '/presentationprint/:id/*',
-        method: 'get',
-        page: 'presentationprint',
-        handler: require('../components/Deck/Presentation/PresentationPrint'),
-        action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
-        }
-    },
-    */
-    presentationSlide: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/*/:sid?/',
+        path: '/presentation/:id/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
