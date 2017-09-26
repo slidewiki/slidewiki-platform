@@ -18,8 +18,8 @@ export default function saveSlide(context, payload, done) {
 
 
     if (userid != null && userid !== '') {
-        //enrich with user id
-        payload.userid = userid;
+        //enrich with jwt
+        payload.jwt = context.getStore(UserProfileStore).jwt;
         context.service.update('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 context.dispatch('SAVE_SLIDE_EDIT_FAILURE', err);

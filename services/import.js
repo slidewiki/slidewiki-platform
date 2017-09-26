@@ -17,8 +17,6 @@ export default {
         //create a HTTP POST form request
         form.append('file', params.base64);
         form.append('filename', params.filename ? params.filename : 'unknown');
-        form.append('user', params.user);
-        form.append('jwt', params.jwt);
         form.append('language', params.language);
         form.append('title', params.title);
         form.append('description', params.description);
@@ -35,7 +33,8 @@ export default {
             host: Microservices.import.host,
             path: Microservices.import.path ? Microservices.import.path : '/',
             protocol: Microservices.import.protocol ? Microservices.import.protocol : 'https:',
-            timeout: body.timeout
+            timeout: body.timeout,
+            headers: { '----jwt----': params.jwt },
         }, (err, res) => {
             //res.setTimeout(body.timeout);
 
