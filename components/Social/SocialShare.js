@@ -2,7 +2,6 @@ import React from 'react';
 import {ShareButtons, generateShareIcon} from 'react-share';
 import addActivity from '../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../actions/activityfeed/incrementDeckViewCounter';
-import MailShareModal from './MailShareModal';
 
 class SocialShare extends React.Component {
 
@@ -17,6 +16,10 @@ class SocialShare extends React.Component {
     onEnterAndClick(text, value) {
         $(this.refs.shareDropDown).dropdown('hide');
         return false;
+    }
+
+    handleEmailClick(){
+        this.createShareActivity('E-mail');
     }
 
     handleTwitterClick(){
@@ -84,8 +87,7 @@ class SocialShare extends React.Component {
                     </button>
                 </div>
                 <div className="menu" role="menu" >
-                    <MailShareModal userid={this.props.userid} selector={this.props.selector} />
-                    <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleTwitterClick.bind(this)}>
+                    <div className="item" data-value="E-mail" role="menuitem" aria-label="E-mail" data-tooltip="E-mail" tabIndex="0" onClick={this.handleEmailClick.bind(this)}>
                         <EmailShareButton
                             url={shareUrl}
                             subject={emailShareSubject}
