@@ -76,18 +76,17 @@ class SearchPanel extends React.Component {
 
         let queryparams = `keywords=${encodeURIComponent(keywords)}`;
 
-        if(this.state.field)
+        if(this.state.field && this.state.field.trim()){
             queryparams += `&field=${this.state.field}`;
+        }
 
-        if(this.state.kind){
+        if(this.state.kind && this.state.kind.trim()){
             queryparams += `&kind=${this.state.kind}`;
         }
 
-        if(this.state.language)
+        if(this.state.language && this.state.language.trim()){
             queryparams += `&language=${this.state.language}`;
-
-        if(this.state.license)
-            queryparams += `&license=${this.state.license}`;
+        }
 
         let users = this.refs.user.getSelected();
         if(users){
