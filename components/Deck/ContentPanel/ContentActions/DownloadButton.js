@@ -6,6 +6,7 @@ import UserProfileStore from '../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class DownloadButton extends React.Component{
     constructor(props) {
@@ -13,6 +14,27 @@ class DownloadButton extends React.Component{
         this.dropDown = null;
         //this.getExportHref = this.getExportHref.bind(this);
         this.selectedFormat = null;
+        this.messages = defineMessages({
+            swal_title:{
+                id: 'DownloadButton.swal_title',
+                defaultMessage:'Deck Download'
+            },
+            swal_text:{
+                id: 'DownloadButton.swal_text',
+                defaultMessage:'Do you want to download the deck in '
+            },
+            swal_acept:{
+                id: 'DownloadButton.swal_acept',
+                defaultMessage:'Yes'
+            },
+            swal_reject:{
+                id: 'DownloadButton.swal_reject',
+                defaultMessage:'No'
+
+            }
+
+
+        });
     }
     getExportHref(type){
         let splittedId;
@@ -66,31 +88,49 @@ class DownloadButton extends React.Component{
         console.log(data.value);
         console.log(data);
         this.selectedFormat = data.value;
-        /*
-        if(process.env.BROWSER){
-            //event.preventDefault();
-            window.open(this.getExportHref(data.value));
-        }
-        this.dropDown.setValue('');
-        this.createDownloadActivity();
-*/
-    }
-    handleOnClick(event,data){
-        console.log('onClik');
-        console.log('data');
-        console.log(data.value);
-        console.log(data);
-
 
     }
+
     handleOnClose(event, data){
         console.log('onClose');
-        console.log('data');
-        console.log(data.value);
-        console.log(data);
+        console.log(this.selectedFormat);
         if(this.selectedFormat !== undefined){
             console.log(this.selectedFormat);
+
+            swal({
+                title: this.context.intl.formatMessage(this.messages.swal_title),
+                text:this.context.intl.formatMessage(this.messages.swal_text) +' '+this.selectedFormat+'?',
+                type: 'warning',
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_acept),
+                confirmButtonAriaLabel:this.context.intl.formatMessage(this.messages.swal_acept),
+                cancelButtonText:this.context.intl.formatMessage(this.messages.swal_reject),
+                cancelButtonAriaLabel:this.context.intl.formatMessage(this.messages.swal_reject),
+                confirmButtonClass: 'ui olive button',
+                cancelButtonClass: 'ui red button',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                buttonsStyling: false,
+
+            })
+            .then((accepted) => {
+                //download
+                if(process.env.BROWSER){
+                    //event.preventDefault();
+                    window.open(this.getExportHref(this.selectedFormat));
+                }
+
+                this.selectedFormat = undefined;
+                this.createDownloadActivity();
+
+            },(reason) => {
+                //done(reason);
+
+                this.selectedFormat = undefined;
+            });
         }
+
 
     }
 
@@ -119,8 +159,7 @@ class DownloadButton extends React.Component{
               options={downloadOptions}
               closeOnChange
               defaultValue = ""
-              onChange = {this.handleOnChange.bind(this)}
-              onClick = {this.handleOnClick.bind(this)}
+              onChange = {this.handleOnChange.bind(this)}            
               onClose = {this.handleOnClose.bind(this)}
               ref = {(dropDown) => {this.dropDown = dropDown;}}
               >
@@ -149,8 +188,10 @@ class DownloadButton extends React.Component{
 }
 
 DownloadButton.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
+
 
 DownloadButton = connectToStores(DownloadButton,[ContentStore,UserProfileStore],(context,props) => {
     return{

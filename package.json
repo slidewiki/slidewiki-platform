@@ -146,7 +146,7 @@
     "superagent": "^3.5.0",
     "superagent-csrf": "^1.0.0",
     "superagent-csrf-middleware": "^0.3.0",
-    "sweetalert2": "^6.4.2",
+    "sweetalert2": "^6.9.1",
     "url-loader": "^0.5.8",
     "uuid": "^3.0.1",
     "virtual-dom": "2.1.1",
