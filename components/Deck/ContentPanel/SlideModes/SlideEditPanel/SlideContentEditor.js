@@ -37,6 +37,7 @@ class SlideContentEditor extends React.Component {
         this.menuFocus;
         this.previousCaretRange;
         this.CKeditorMode = 'advanced toolbar';
+        this.loading = '';
     }
 
     keymapInfoButton(){
@@ -45,7 +46,8 @@ class SlideContentEditor extends React.Component {
                 '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
                 '&#8226; Duplicate an input box: control + d <br/>'+
                 '&#8226; Delete an input box: control + delete <br/>'+
-                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>';
+                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>' +
+                '&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>';
         swal({
             title: 'Keyboard shortcuts',
             html: message,
@@ -316,10 +318,13 @@ class SlideContentEditor extends React.Component {
             });
         });
     }
-    uniqueIDAllElements(givenContext){
+    //uniqueIDAllElements(givenContext){
+    uniqueIDAllElements(){
         let allElements;
-        if(givenContext !== undefined){allElements = givenContext.refs.inlineContent.getElementsByTagName('*');}
-        else{allElements = this.refs.inlineContent.getElementsByTagName('*');}
+        //if(givenContext !== undefined){allElements = givenContext.refs.inlineContent.getElementsByTagName('*');}
+        //else{
+        allElements = this.refs.inlineContent.getElementsByTagName('*');
+        //}
         let allIds = [];
         for (let i = 0, n = allElements.length; i < n; ++i) {
             let random = Math.floor((Math.random() * 100000) + 1);
@@ -344,6 +349,7 @@ class SlideContentEditor extends React.Component {
         if (this.props.UserProfileStore.username !== '') {
             // Replace the onbeforeunload function by a Blank Function because it is not neccesary when saved.
             // TODO: wait for successfull save signal from
+            /*
             swal({
                 title: 'Saving Content...',
                 text: '',
@@ -354,6 +360,7 @@ class SlideContentEditor extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             });
+            */
             //remove editing borders input boxes:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
@@ -403,6 +410,8 @@ class SlideContentEditor extends React.Component {
                 tags: tags
             });
             this.resize();
+            this.loading = 'loading';
+            this.forceUpdate();
         }
         return false;
     }
@@ -613,7 +622,31 @@ class SlideContentEditor extends React.Component {
                 //this.forceUpdate();
             }
         });
+
+        this.correctImageBoxes();
     }
+    correctImageBoxes(){
+        $('.pptx2html [style*="absolute"]').each(function () {
+            if($(this).find('img:first').length)
+            { //find boxes with images inside
+                //console.log('adjust image');
+                //console.log('image width' + $(this).find('img:first').width());
+                //console.log('image width attr' + $(this).find('img:first').attr('width'));
+                //console.log('box width' + $(this).width());
+                if($(this).width() < $(this).find('img:first').width()+8)
+                { //check if box width is smaller than image width/height
+                    $(this).width($(this).find('img:first').width() + 8);
+                //    console.log('adjust image width');
+                }
+                if($(this).height() < $(this).find('img:first').height()+8)
+                { //check if box height is smaller than image width/height
+                    $(this).height($(this).find('img:first').height() + 8);
+                //    console.log('adjust image height');
+                }
+            }
+        });
+    }
+
     resizeDrag(){
         //http://jqueryui.com/resizable/
         //http://interface.eyecon.ro/docs/resizable
@@ -630,7 +663,6 @@ class SlideContentEditor extends React.Component {
 
         //$('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'move');
         $('.pptx2html [style*="absolute"]').not('.drawing').css('cursor', 'auto');
-
         $('.pptx2html [style*="absolute"]').not('.drawing').hover(function() { //no dragging of SVG - makes them go away
             if (!$(this).hasClass('editMode')) {
                 //console.log('resize/drag? ' + $('.pptx2html').find('ui-resizable-resizing').length);
@@ -653,6 +685,7 @@ class SlideContentEditor extends React.Component {
                         handle: '.dragdiv',
                         //handle: '#'+$(this).attr('id')+'dragdiv',
                         //handle: '.'+$(this).attr('id'),
+                        //handle: '.'+$(this).attr('id')+'dragdiv',
                         start: function(event, ui) {
                             ui.position.left = 0;
                             ui.position.top = 0;
@@ -693,16 +726,16 @@ class SlideContentEditor extends React.Component {
                             //console.log(ui.size.width + ' ' + newWidth + ' ' + ui.size.height + ' ' + newHeight);
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
+                            if($(this).find('img:first').length)
+                            {
+                                $(this).find('img:first').width(newWidth - 8);
+                                $(this).find('img:first').height(newHeight - 8);
+                            }
                         },
                         stop: function(event, ui) {
                             let zIndex = $('.ui-resizable-resizing').css('z-index');
                             $('.ui-resizable-resizing').css('z-index', zIndex - 100000);
                             slideEditorContext.emitChange();
-                            if($(this).find('img:first').length)
-                            {
-                                $(this).find('img:first').width(newWidth);
-                                $(this).find('img:first').height(newHeight - 25);
-                            }
                         }
                     });
                 };
@@ -1080,11 +1113,11 @@ class SlideContentEditor extends React.Component {
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $('.pptx2html [style*="absolute"]').each(function () {
-            this.innerHTML = '<div tabIndex="-1"><button tabIndex="-1" class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'" style="top: -32px; left: 60px; position: absolute; z-index: 90000000;"><i tabIndex="-1" class="tasks icon"></i></button></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: 0px; position: absolute; z-index: 90000000;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
+            $('.'+$(this).attr('id')+'dragdiv').hide();
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 60px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
-            this.innerHTML = '<div tabIndex="-1" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"  style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
-            $('.'+$(this).attr('id')+'dragdiv').hide();
             //let menuID = $(this).attr('id');
             //if(!$(this).draggable( 'instance' )){
             //console.log('menu for: ' + $(this).attr('id'));
@@ -1247,12 +1280,13 @@ class SlideContentEditor extends React.Component {
         console.log('duplicate node' + id);
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length){
             if(event){event.preventDefault();}
+            context.contextMenuAndDragDivAllRemove();
             $('#'+id).clone().appendTo('.pptx2html');
             $('#'+id).css('top', '+=50');
-            context.contextMenuAndDragDivAllRemove();
-            context.resizeDrag();
             context.emitChange(); //confirm non-save on-leave
-            context.uniqueIDAllElements(localContext);
+            //context.uniqueIDAllElements(localContext);
+            context.uniqueIDAllElements();
+            context.resizeDrag();
             //this.forceUpdate();
         }
     }
@@ -1534,6 +1568,7 @@ class SlideContentEditor extends React.Component {
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
+            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
                  <i className="save icon large"></i>
                  Save
