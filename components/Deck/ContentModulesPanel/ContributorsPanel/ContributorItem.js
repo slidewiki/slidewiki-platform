@@ -8,7 +8,7 @@ class ContributorItem extends React.Component {
         let link = '/user/' + this.props.data.id;
         let func = () => {
             window.open(link);return false;
-        }
+        };
         return (
             <a className="item" href="#" onClick={func}>
                     <div className="ui image">
