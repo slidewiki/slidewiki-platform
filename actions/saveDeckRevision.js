@@ -54,8 +54,8 @@ export default function saveDeckRevision(context, payload, done) {
         });
         done();
     } else {
-        //enrich with user id
-        payload.userid = userid;
+        //enrich with jwt
+        payload.jwt = context.getStore(UserProfileStore).jwt;
         //enrich with root deck id if deck to be revised is not uppermost deck
         let parent = TreeUtil.getParentId(payload.selector);
         payload.root_deck = parent;
