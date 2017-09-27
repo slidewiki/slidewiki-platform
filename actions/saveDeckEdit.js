@@ -47,8 +47,8 @@ export default function saveDeckEdit(context, payload, done) {
         });
         done();
     } else {
-        //enrich with user id
-        payload.userid = userid;
+        //enrich with jwt
+        payload.jwt = context.getStore(UserProfileStore).jwt;
         context.service.update('deck.update', payload, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 context.dispatch('UPDATE_DECKEDIT_VIEW_STATE', 'error');

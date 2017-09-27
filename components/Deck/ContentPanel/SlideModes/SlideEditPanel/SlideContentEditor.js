@@ -11,7 +11,7 @@ import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
 import {Microservices} from '../../../../../configs/microservices';
-import PresentationStore from '../../../../../stores/PresentationStore';
+import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 
@@ -638,6 +638,11 @@ class SlideContentEditor extends React.Component {
                             ui.size.width = newWidth;
                             ui.size.height = newHeight;
                             slideEditorContext.emitChange();
+                            if($(this).find('img:first').length)
+                            {
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight - 25);
+                            }
                         }
                     });
                 };
@@ -976,8 +981,8 @@ class SlideContentEditor extends React.Component {
                         case 'back':
                             slideEditorContext.sendToBack(slideEditorContext, false);
                             break;
-                        case 'copy':
-                            slideEditorContext.CopyNode(slideEditorContext, false);
+                        case 'duplicate':
+                            slideEditorContext.duplicateNode(slideEditorContext, false);
                             break;
                         case 'delete':
                             slideEditorContext.deleteNode(slideEditorContext, false);
@@ -992,7 +997,7 @@ class SlideContentEditor extends React.Component {
                     //'move': {name: 'Move around', icon: 'fa-arrows',},
                     'front': {name: 'Bring to front (Ctrl-shift +)', icon: 'fa-arrow-circle-up'},
                     'back': {name: 'Send to back (Ctrl-shift -)', icon: 'fa-arrow-circle-o-down'},
-                    'copy': {name: 'Copy (key: Ctrl c)', icon: 'copy'},
+                    'duplicate': {name: 'Duplicate (key: Ctrl d)', icon: 'copy'},
                     'delete': {name: 'Delete (key: Delete)', icon: 'delete'},
                     //'sep1': '---------',
                     'quit': {name: 'Close menu (key: Esc)', icon: 'quit', accesskey: 'esc'}
@@ -1118,11 +1123,11 @@ class SlideContentEditor extends React.Component {
             context.emitChange(); //confirm non-save on-leave
         }
     }
-    CopyNode(context, event){
+    duplicateNode(context, event){
         $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
         let id = $(':focus').attr('id');
         if (!id || id === 'inlineContent'){id = context.menuFocus;}
-        console.log('copy node' + id);
+        console.log('duplicate node' + id);
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length){
             if(event){event.preventDefault();}
             $('#'+id).clone().appendTo('.pptx2html');
@@ -1260,7 +1265,7 @@ class SlideContentEditor extends React.Component {
             'moveRight': ['right'],
             'bringToFront': [ 'ctrl+shift+plus'],
             'bringToBack': ['ctrl+shift+-'],
-            'copy': ['ctrl+c'],
+            'duplicate': ['ctrl+d'],
             'enter': ['ctrl+enter'],
             'escape': ['escape']
         };
@@ -1277,7 +1282,7 @@ class SlideContentEditor extends React.Component {
             'moveRight': (event) => this.keyMoveRight(slideEditorContext, event),
             'bringToFront': (event) => this.bringToFront(slideEditorContext, event),
             'bringToBack': (event) => this.sendToBack(slideEditorContext, event),
-            'copy': (event) => this.CopyNode(slideEditorContext, event),
+            'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
         let templateOptions = <div className="menu">
@@ -1393,8 +1398,8 @@ class SlideContentEditor extends React.Component {
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
         }
-        else if(this.props.PresentationStore.theme && typeof this.props.PresentationStore.theme !== 'undefined'){
-            styleName = this.props.PresentationStore.theme;
+        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
+            styleName = this.props.DeckTreeStore.theme;
         }
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {
@@ -1468,14 +1473,14 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, PresentationStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        PresentationStore: context.getStore(PresentationStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default SlideContentEditor;
