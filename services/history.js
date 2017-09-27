@@ -20,10 +20,11 @@ export default {
                     return changes;
                 }
                 //find unique user ids in change log
-                let userIds = [... new Set(changes.map((changeOp) => changeOp.user))];
+                let userIds = [... new Set(changes.map((changeOp) => changeOp.user).filter((u) => !!u))];
                 return rp.post({uri: Microservices.user.uri + '/users', body: userIds, json: true}).then((users) => {
                     changes.forEach((changeOp) => {
-                        changeOp.username = users.find((user) => user._id === changeOp.user).username;
+                        let opUser = users.find((user) => user._id === changeOp.user);
+                        if (opUser) changeOp.username = opUser.username;
                     });
                     return changes;
                 });

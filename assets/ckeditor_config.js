@@ -28,6 +28,9 @@ CKEDITOR.editorConfig = function( config ) {
 
     // Set the most common block elements.
     config.format_tags = 'p;h3;h4;h5;pre';
+    config.fillEmptyBlocks = false;
+    config.enterMode = CKEDITOR.ENTER_DIV;
+
 
     config.toolbar = [
             { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
