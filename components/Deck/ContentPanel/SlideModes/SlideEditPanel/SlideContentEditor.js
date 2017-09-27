@@ -323,7 +323,8 @@ class SlideContentEditor extends React.Component {
         let allElements;
         //if(givenContext !== undefined){allElements = givenContext.refs.inlineContent.getElementsByTagName('*');}
         //else{
-        allElements = this.refs.inlineContent.getElementsByTagName('*');
+        //allElements = this.refs.inlineContent.getElementsByTagName('*');
+        allElements = document.getElementsByTagName('*');
         //}
         let allIds = [];
         for (let i = 0, n = allElements.length; i < n; ++i) {
@@ -361,6 +362,7 @@ class SlideContentEditor extends React.Component {
                 showConfirmButton: false
             });
             */
+            this.loading = 'loading';
             //remove editing borders input boxes:
             $('.pptx2html [style*="absolute"]')
             .css({'borderStyle': '', 'borderColor': ''});
@@ -369,17 +371,19 @@ class SlideContentEditor extends React.Component {
             //reset scaling of pptx2html element to get original size
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             //this.removeEditMode();
-            this.contextMenuAndDragDivAllRemove();
+            $('.pptx2html [style*="absolute"]').find('.cke_widget_drag_handler_container').remove();
+            $('.pptx2html [style*="absolute"]').find('.widget').remove();
+            //if (CKEDITOR.instances.inlineContent != null) {
+            //    console.log('destroy previous CKEDITOR instance');
+            CKEDITOR.instances.inlineContent.destroy();
+            //}
+            //if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
+            //    console.log('destroy previous CKEDITOR instance');
+            CKEDITOR.instances.inlineSpeakerNotes.destroy();
+            //}
+            //this.refreshCKeditor();
             this.disableResizeDrag();
-            if (CKEDITOR.instances.inlineContent != null) {
-                console.log('destroy previous CKEDITOR instance');
-                CKEDITOR.instances.inlineContent.destroy();
-            }
-            if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
-                console.log('destroy previous CKEDITOR instance');
-                CKEDITOR.instances.inlineSpeakerNotes.destroy();
-            }
-
+            this.contextMenuAndDragDivAllRemove();
             //remove all ui-resizable-handles
             let elements = document.getElementsByClassName('ui-resizable-handle');
             while(elements.length > 0){
@@ -399,6 +403,7 @@ class SlideContentEditor extends React.Component {
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
 
+            //setTimeout(function() {
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
@@ -409,8 +414,9 @@ class SlideContentEditor extends React.Component {
                 selector: currentSelector,
                 tags: tags
             });
+            //},500);
+
             this.resize();
-            this.loading = 'loading';
             this.forceUpdate();
         }
         return false;
@@ -1106,6 +1112,7 @@ class SlideContentEditor extends React.Component {
             $(this).contextMenu(false);
             $('.'+$(this).attr('id')+'dragdiv').remove();
             $('.'+$(this).attr('id')).remove();
+            //$(this).find('.cke_widget_wrapper').remove();
         });
     }
     contextMenuAll(){
