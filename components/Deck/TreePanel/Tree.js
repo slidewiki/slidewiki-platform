@@ -5,6 +5,7 @@ import TreeUtil from './util/TreeUtil';
 import TreeNodeList from './TreeNodeList';
 
 class Tree extends React.Component {
+
     getKeyMap() {
         const keyMap = {
             'moveUp': 'up',
@@ -19,8 +20,8 @@ class Tree extends React.Component {
 
     getKeyMapHandlers() {
         const handlers = {
-            'moveUp': (event) => this.handleUpKey(this.props.prevSelector, this.props.page, this.props.mode),
-            'moveDown': (event) => this.handleDownKey(this.props.nextSelector, this.props.page, this.props.mode),
+            'moveUp': (event) => this.handleUpKey(),
+            'moveDown': (event) => this.handleDownKey(),
             'fastForward': (event) => this.handleForwardClick(),
             'fastBackward': (event) => this.handleBackwardClick(),
             'expandOrMenu': (event) => this.handleRightKey(),
@@ -137,36 +138,14 @@ class Tree extends React.Component {
         return false;
     }
 
-    handleUpKey(prevSelector, page, mode) {
-        let selector = {
-            id: prevSelector.get('id'),
-            stype: prevSelector.get('stype'),
-            sid: prevSelector.get('sid'),
-            spath: prevSelector.get('spath')
-        };
-        let prevPath = TreeUtil.makeNodeURL(selector, page, mode);
-        if (prevPath) {
-            this.context.executeAction(navigateAction, {
-                url: prevPath
-            });
-        }
+    handleUpKey() {
+        this.props.onFocusNode(this.props.prevSelector.toJS());
         //returning false stops the event and prevents default browser events
         return false;
     }
 
-    handleDownKey(nextSelector, page, mode) {
-        let selector = {
-            id: nextSelector.get('id'),
-            stype: nextSelector.get('stype'),
-            sid: nextSelector.get('sid'),
-            spath: nextSelector.get('spath')
-        };
-        let nextPath = TreeUtil.makeNodeURL(selector, page, mode);
-        if (nextPath) {
-            this.context.executeAction(navigateAction, {
-                url: nextPath
-            });
-        }
+    handleDownKey() {
+        this.props.onFocusNode(this.props.nextSelector.toJS());
         //returning false stops the event and prevents default browser events
         return false;
     }

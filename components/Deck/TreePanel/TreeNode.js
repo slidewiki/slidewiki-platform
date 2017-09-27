@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
@@ -41,12 +42,19 @@ class TreeNode extends React.Component {
         return !(Immutable.is(nextProps.item, this.props.item) && nextProps === this.props.mode);
     }
 
+    // Explicitly focus the node link in view mode
+    focusNode() {
+        ReactDOM.findDOMNode(this.nodeLink).focus();
+    }
+
     componentDidMount() {
 
     }
 
     componentDidUpdate() {
-
+        if (this.props.item.get('focused')) {
+            this.focusNode();
+        }
     }
 
     handleExpandIconClick(selector, e) {
@@ -220,7 +228,7 @@ class TreeNode extends React.Component {
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
             actionSignifier = '';
         } else {
-            nodeDIV = <NavLink href={nodeURL} tabIndex={this.props.item.get('selected') ? 0 : -1} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
+            nodeDIV = <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
                 {nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
