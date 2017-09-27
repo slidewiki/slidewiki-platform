@@ -21,6 +21,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableAutoInline = true;
     CKEDITOR.disableAutoInline = true;
 
+
     //config.uiColor = '#4183C4';
     //config.extraPlugins = 'sourcedialog',
     //config.extraPlugins = 'sourcedialog';
@@ -30,7 +31,8 @@ CKEDITOR.editorConfig = function( config ) {
     config.format_tags = 'p;h3;h4;h5;pre';
     config.fillEmptyBlocks = false;
     config.enterMode = CKEDITOR.ENTER_DIV;
-
+    config.resize_enabled = false;
+    config.disableObjectResizing = true;
 
     config.toolbar = [
             { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
