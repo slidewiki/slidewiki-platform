@@ -253,6 +253,39 @@ class SlideContentEditor extends React.Component {
                 '</div>';
                 this.inputBoxButtonTitle = 'Add input box';
                 break;
+            case 'EKDDA':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" id="65156" style="position: relative; width: 1280px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(0.570007, 0.570007); transform-origin: left top 0px;">'+
+                '<div id="42107"></div>'+
+                '<div _id="20482" _idx="undefined" _name="Τίτλος 1" _type="title" class="block content v-up ui-draggable ui-resizable context-menu-disabled" id="26254" style="position: absolute; top: 73.2377px; left: 344.517px; width: 744.816px; height: 107.833px; border-width: 1pt; border-image: initial; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<span id="40205" style="font-size:33.0pt"><span id="46007" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="1426"><span id="86565" style="color:#44546a"><span id="33758">Στυλ κύριου τίτλου</span></span></span></span></span>'+
+                '</div>'+
+                '<div _id="20483" _idx="1" _name="Θέση περιεχομένου 7" _type="body" class="block content v-up ui-draggable ui-resizable context-menu-disabled" id="35446" style="position: absolute; top: 193.667px; left: 254.5px; width: 874.4px; height: 352.992px; border-width: 1pt; border-image: initial; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div class="O0" id="52252" style="margin-top:7.5pt; margin-bottom:1.5pt; margin-left:.31in; text-align:left"><span id="52705" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="63239" style="line-height:94%"><span id="50131" style="unicode-bidi:embed"><span id="13440" style="vertical-align:baseline"><span id="24254"><span id="39451" style="font-size:15.0pt"><span id="1683">■</span></span><span id="68631" style="font-size:15.0pt"><span id="84651"><span id="32068" style="color:#44546a"><span id="27527">Επεξεργασία στυλ υποδείγματος κειμένου</span></span></span></span></span></span></span></span></span></div>'+
+                '<div class="O1" id="97828" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:.75in; text-align:left"><span id="3427" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="37790" style="line-height:94%"><span id="46388" style="unicode-bidi:embed"><span id="28392" style="vertical-align:baseline"><span id="80346"><span id="58669" style="font-size:15.0pt"><span id="43350">–</span></span><span id="19009" style="font-size:15.0pt"><span id="1917"><span id="55809" style="color:#44546a"><span id="97967"><span id="93492" style="font-style:italic">Δεύτερου επιπέδου</span></span></span></span></span></span></span></span></span></span></div>'+
+                '<div class="O2" id="47360" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:1.13in; text-align:left"><span id="43904" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="35348" style="line-height:94%"><span id="25844" style="unicode-bidi:embed"><span id="88898" style="vertical-align:baseline"><span id="34086"><span id="85847" style="font-size:13.0pt"><span id="5433">■</span></span><span id="88667" style="font-size:13.0pt"><span id="22977"><span id="91060" style="color:#44546a"><span id="63567">Τρίτου επιπέδου</span></span></span></span></span></span></span></span></span></div>'+
+                '<div class="O3" id="95692" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:1.5in; text-align:left"><span id="59126" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="19780" style="line-height:94%"><span id="63156" style="unicode-bidi:embed"><span id="94918" style="vertical-align:baseline"><span id="51569"><span id="47155" style="font-size:13.0pt"><span id="17715">–</span></span><span id="5499" style="font-size:13.0pt"><span id="94774"><span id="2878" style="color:#44546a"><span id="14908"><span id="54673" style="font-style:italic">Τέταρτου επιπέδου</span></span></span></span></span></span></span></span></span></span></div>'+
+                '<div class="O4" id="39182" style="margin-top:3.75pt; margin-bottom:1.5pt; margin-left:1.88in; text-align:left"><span id="94468" style="font-family:Lucida Sans Unicode,Lucida Grande,sans-serif;"><span id="74893" style="line-height:94%"><span id="23192" style="unicode-bidi:embed"><span id="73743" style="vertical-align:baseline"><span id="29433"><span id="98602" style="font-size:12.0pt"><span id="15240">■</span></span><span id="67631" style="font-size:12.0pt"><span id="8611"><span id="53659" style="color:#44546a"><span id="28991">Πέμπτου επιπέδου</span></span></span></span></span></span></span></span></span></div>'+
+                '</div>'+
+                '<div _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing-container context-menu-disabled" id="57453" style="position: absolute; top: 478.794px; left: 1226.01px; width: 73.3333px; height: 42.4999px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<svg _id="20484" _idx="4294967295" _name="Θέση αριθμού διαφάνειας 6" _type="sldNum" class="drawing context-menu-disabled" id="23417" style="position: absolute; top: 0px; left: 0px; width: 73.3333px; height: 42.4999px; z-index: 29882; cursor: auto;"><rect fill="none" height="42.49994750656168" id="14813" stroke="none" stroke-dasharray="0" stroke-width="1" width="73.33333333333333" x="0" y="0"></rect></svg></div>'+
+                '<div class="ui-draggable ui-resizable context-menu-disabled" id="42079" style="position: absolute; top: -14.7607px; left: 104.576px; width: 31.2555px; height: 723.158px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="79727"><img alt="" data-widget="image" height="540" id="99176" src="https://fileservice.experimental.slidewiki.org/2/7f0ed680-a366-11e7-a136-9f74315f64e9.png" style="width: 23.25px; height: 715.158px;" width="18"></div>'+
+                '</div>'+
+                '<div id="69723" style="position: absolute; top: 587.058px; left: 168.866px; width: 1172.12px; height: 122.721px; z-index: 29872; cursor: auto;" tabindex="0" class="context-menu-disabled">'+
+                '<div class="h-left" id="11016"><img alt="" data-widget="image" height="97" id="77810" src="https://fileservice.experimental.slidewiki.org/2/0de686a0-a367-11e7-a136-9f74315f64e9.png" style="width: 1164.12px; height: 114.719px;" width="869"></div>'+
+                '</div>'+
+                '<div id="18921" style="position: absolute; top: 635.895px; left: 174.382px; width: 111.703px; height: 70.7775px; z-index: 2147383647; cursor: auto;" tabindex="0" class="context-menu-disabled">'+
+                '<div class="h-left" id="36912"><img alt="" data-widget="image" height="47" id="60032" src="https://fileservice.experimental.slidewiki.org/2/6248d9f0-a367-11e7-a136-9f74315f64e9.png" style="width: 103.703px; height: 62.7775px;" width="68"></div>'+
+                '</div>'+
+                '<div class="ui-draggable ui-resizable context-menu-disabled" id="54829" style="position: absolute; top: 25.9078px; left: 145.666px; width: 185.596px; height: 116.33px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="93035"><img alt="" height="75" id="27106" src="https://fileservice.experimental.slidewiki.org/2/6373d320-a36c-11e7-a136-9f74315f64e9.png" style="width: 177.596px; height: 108.33px;" width="114"></div>'+
+                '</div>'+
+                '<div class="ui-draggable ui-resizable context-menu-disabled" id="10793" style="position: absolute; top: 49.3611px; left: 1085.84px; width: 174.514px; height: 67.8675px; z-index: 2147383647; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="34717"><img alt="" height="57" id="9225" src="https://fileservice.experimental.slidewiki.org/2/659cb450-a371-11e7-a136-9f74315f64e9.png" style="width: 166.514px; height: 59.8675px;" width="141"></div>'+
+                '</div>'+
+                '</div>';
+                break;
 
 
         }
@@ -1483,6 +1516,9 @@ class SlideContentEditor extends React.Component {
             </div>
             <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
                 SlideWiki template
+            </div>
+            <div className="item" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
+                EKDDA template
             </div>
         </div>;
 
