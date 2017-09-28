@@ -45,11 +45,11 @@ export default {
                 uri: url,
                 body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
                 headers: headers,
-                json: false
+                json: true
             })
                 .then((res) => {
                     // console.log('response from saving image:', res);
-                    callback(null, Microservices.file.uri + res);
+                    callback(null, Microservices.file.uri + res.url);
                 })
                 .catch((err) => {
                     console.log('Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
