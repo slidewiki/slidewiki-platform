@@ -13,7 +13,6 @@ import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
-import {hashPassword} from '../../../configs/general';
 import common from '../../../common';
 
 const MODI = 'sociallogin_modi';
@@ -262,7 +261,7 @@ class UserRegistration extends React.Component {
                 username: this.refs.username.value,
                 language: language,
                 email: this.refs.email.value,
-                password: hashPassword(this.refs.password.value),
+                password: common.hashPassword(this.refs.password.value),
                 grecaptcharesponse: this.state.grecaptcharesponse
             };
         } catch (e) {

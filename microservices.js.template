@@ -1,5 +1,3 @@
-const co = require('../common');
-
 export default {
     Microservices: {
         'deck': {

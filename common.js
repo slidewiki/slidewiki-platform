@@ -1,4 +1,11 @@
+import { sha512 } from 'js-sha512';
+import { hashingSalt } from './configs/general';
+
 export default {
+
+    hashPassword: function(password) {
+        return sha512(password + hashingSalt);
+    },
 
     writeCookie(name, value, days) {
         let expires;
