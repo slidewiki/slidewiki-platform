@@ -1,7 +1,7 @@
 import React from 'react';
 import { Microservices } from '../../../configs/microservices';
-import { connectToStores } from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
+import { TextArea } from 'semantic-ui-react';
 import { timeSince } from '../../../common';
 import UserPicture from '../../common/UserPicture';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
@@ -160,7 +160,8 @@ class UserGroupEdit extends React.Component {
               </div>
               <div className="fourteen wide column">
                 <div className="content">
-                    <a className="header" href={'/user/' + this.props.username}>{this.props.username}</a>
+                    <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                    <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.username}</a>
                     <div className="description">Group owner</div>
                 </div>
               </div>
@@ -190,7 +191,8 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + member.username}>{member.username}</a>
+                              <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                              <a className="header" href={'/user/' + member.username} target="_blank">{member.username}</a>
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
