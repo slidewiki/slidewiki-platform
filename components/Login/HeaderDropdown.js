@@ -43,10 +43,11 @@ class HeaderDropdown extends React.Component {
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
                 <div className="menu" role="menu">
-                    <div className="header">
+                    <div className="header" role="separator" tabIndex="-1">
                         {this.props.UserProfileStore.username}
                     </div>
-                    <div className="divider"></div>
+                    <div className="divider"  role="separator" ></div>
+
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
                         <i className="user icon link"  /> My Decks
                     </div>
@@ -62,6 +63,7 @@ class HeaderDropdown extends React.Component {
                     <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
                         <i className="sign out icon"/> Sign Out
                     </div>
+
                 </div>
             </div>
         );
