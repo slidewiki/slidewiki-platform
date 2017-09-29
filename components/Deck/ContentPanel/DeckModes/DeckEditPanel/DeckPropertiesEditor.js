@@ -4,6 +4,7 @@ import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
+import { TextArea } from 'semantic-ui-react';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
@@ -295,7 +296,8 @@ class DeckPropertiesEditor extends React.Component {
                         </div>
                         <div className="ten wide column">
                           <div className="content">
-                            <a className="header" href={'/user/' + user.username}>{user.username}</a>
+                            <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                            <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
                             <div className="description">
                               {optionalElement}{optionalText}
                             </div>
