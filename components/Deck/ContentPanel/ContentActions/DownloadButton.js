@@ -83,19 +83,15 @@ class DownloadButton extends React.Component{
         context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
     handleOnChange(event,data){
-        console.log('onChange');
-        console.log('data');
-        console.log(data.value);
-        console.log(data);
+
         this.selectedFormat = data.value;
 
     }
 
     handleOnClose(event, data){
-        console.log('onClose');
-        console.log(this.selectedFormat);
+
         if(this.selectedFormat !== undefined){
-            console.log(this.selectedFormat);
+
 
             swal({
                 title: this.context.intl.formatMessage(this.messages.swal_title),
@@ -159,7 +155,7 @@ class DownloadButton extends React.Component{
               options={downloadOptions}
               closeOnChange
               defaultValue = ""
-              onChange = {this.handleOnChange.bind(this)}            
+              onChange = {this.handleOnChange.bind(this)}
               onClose = {this.handleOnClose.bind(this)}
               ref = {(dropDown) => {this.dropDown = dropDown;}}
               >
