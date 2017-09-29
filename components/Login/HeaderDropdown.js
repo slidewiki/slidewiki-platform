@@ -48,19 +48,19 @@ class HeaderDropdown extends React.Component {
                     </div>
                     <div className="divider"  role="separator" ></div>
 
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="-1" aria-selected="true">
                         <i className="user icon link"  /> My Decks
                     </div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="0" >
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="-1" >
                         <i className="icon users" /> My Groups
                     </div>
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="-1" >
                         <i className="setting icon" /> My Settings
                     </div>
-                    <div className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="0" >
+                    <div className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="-1" >
                         <i className={alarmClassName} /> My Notifications
                     </div>
-                    <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
+                    <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="-1" >
                         <i className="sign out icon"/> Sign Out
                     </div>
 
