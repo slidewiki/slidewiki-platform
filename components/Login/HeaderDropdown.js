@@ -43,11 +43,12 @@ class HeaderDropdown extends React.Component {
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
                 <div className="menu" role="menu">
+                    {/*
                     <div className="header" role="separator" tabIndex="-1">
                         {this.props.UserProfileStore.username}
                     </div>
                     <div className="divider"  role="separator" ></div>
-
+                   */}
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="-1" aria-selected="true">
                         <i className="user icon link"  /> My Decks
                     </div>
