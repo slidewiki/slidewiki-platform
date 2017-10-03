@@ -51,8 +51,9 @@ class TreeNode extends React.Component {
 
     }
 
-    componentDidUpdate() {
-        if (this.props.item.get('focused')) {
+    componentDidUpdate(prevProps, prevState) {
+        //check if node was focused
+        if (this.props.item.get('focused') && !prevProps.item.get('focused')) {
             this.focusNode();
         }
     }
@@ -151,7 +152,7 @@ class TreeNode extends React.Component {
             'hide-element': !this.props.item.get('selected') && !this.state.mouseover
         });
         let actionSignifier = <span className={actionSigClass}
-                                    onClick={this.handleMenuClick.bind(this, nodeSelector)}><i
+                                    onClick={this.handleMenuClick.bind(this, nodeSelector)} tabIndex="0"><i
             className="ui link ellipsis horizontal icon right floated"></i></span>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
