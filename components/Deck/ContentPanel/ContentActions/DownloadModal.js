@@ -274,7 +274,7 @@ class DownloadModal extends React.Component{
                                           color="red"
                                           type="button"
                                           onClick={this.handleClose}
-                                          content={this.context.intl.formatMessage(this.messages.downloadModal_downloadButton)}
+                                          content={this.context.intl.formatMessage(this.messages.downloadModal_cancelButton)}
                                       />
                                       </Grid.Column>
                                       </Grid.Row>
