@@ -101,6 +101,14 @@ class TreeNode extends React.Component {
         e.stopPropagation();
     }
 
+    handleMenuKeyDown(selector, e) {
+        // Enter is pressed while menu icon is focused
+        if (e.keyCode == 13){
+            this.props.onSwitchOnAction(selector);
+            e.stopPropagation();
+        }
+    }
+
     handleEditFocus(e) {
         //select all content
         e.target.select();
@@ -149,10 +157,11 @@ class TreeNode extends React.Component {
                                           username={self.props.username} permissions={self.props.permissions}/>;
         }
         actionSigClass = classNames({
-            'hide-element': !this.props.item.get('selected') && !this.state.mouseover
+            'hide-element': !this.props.item.get('focused') && !this.state.mouseover
         });
         let actionSignifier = <span className={actionSigClass}
-                                    onClick={this.handleMenuClick.bind(this, nodeSelector)} tabIndex="0"><i
+                                    onClick={this.handleMenuClick.bind(this, nodeSelector)} onKeyDown={this.handleMenuKeyDown.bind(this, nodeSelector)}
+                                    role="menubar" aria-haspopup="true" tabIndex="0"><i
             className="ui link ellipsis horizontal icon right floated"></i></span>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
