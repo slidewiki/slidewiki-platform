@@ -31,7 +31,7 @@ class Tree extends React.Component {
     }
 
     handleRightKey() {
-        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.selector.get('spath'));
+        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.focusedSelector.get('spath'));
         if (node.get('editable') || this.props.username=== '') {
             //disable handler when editing node or when user is not loggedIn
             return true;
@@ -40,24 +40,24 @@ class Tree extends React.Component {
                 if (!node.get('expanded')) {
                     this.props.onToggleNode({
                         id: this.props.rootNode.id,
-                        stype: this.props.selector.get('stype'),
-                        sid: this.props.selector.get('sid'),
-                        spath: this.props.selector.get('spath')
+                        stype: this.props.focusedSelector.get('stype'),
+                        sid: this.props.focusedSelector.get('sid'),
+                        spath: this.props.focusedSelector.get('spath')
                     });
                 } else {
                     this.props.onSwitchOnAction({
                         id: this.props.rootNode.id,
-                        stype: this.props.selector.get('stype'),
-                        sid: this.props.selector.get('sid'),
-                        spath: this.props.selector.get('spath')
+                        stype: this.props.focusedSelector.get('stype'),
+                        sid: this.props.focusedSelector.get('sid'),
+                        spath: this.props.focusedSelector.get('spath')
                     });
                 }
             } else {
                 this.props.onSwitchOnAction({
                     id: this.props.rootNode.id,
-                    stype: this.props.selector.get('stype'),
-                    sid: this.props.selector.get('sid'),
-                    spath: this.props.selector.get('spath')
+                    stype: this.props.focusedSelector.get('stype'),
+                    sid: this.props.focusedSelector.get('sid'),
+                    spath: this.props.focusedSelector.get('spath')
                 });
             }
             return false;
@@ -65,7 +65,7 @@ class Tree extends React.Component {
     }
 
     handleLeftKey() {
-        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.selector.get('spath'));
+        let node = TreeUtil.getImmNodeFromPath(this.props.deckTree, this.props.focusedSelector.get('spath'));
         if (node.get('editable')  || this.props.username=== '') {
             //disable handler when editing node or when user is not loggedIn
             return true;
@@ -74,17 +74,17 @@ class Tree extends React.Component {
                 if (node.get('onAction')) {
                     this.props.onSwitchOnAction({
                         id: this.props.rootNode.id,
-                        stype: this.props.selector.get('stype'),
-                        sid: this.props.selector.get('sid'),
-                        spath: this.props.selector.get('spath')
+                        stype: this.props.focusedSelector.get('stype'),
+                        sid: this.props.focusedSelector.get('sid'),
+                        spath: this.props.focusedSelector.get('spath')
                     });
                 } else {
                     if (node.get('expanded')) {
                         this.props.onToggleNode({
                             id: this.props.rootNode.id,
-                            stype: this.props.selector.get('stype'),
-                            sid: this.props.selector.get('sid'),
-                            spath: this.props.selector.get('spath')
+                            stype: this.props.focusedSelector.get('stype'),
+                            sid: this.props.focusedSelector.get('sid'),
+                            spath: this.props.focusedSelector.get('spath')
                         });
                     }
                 }
@@ -92,9 +92,9 @@ class Tree extends React.Component {
                 if (node.get('onAction')) {
                     this.props.onSwitchOnAction({
                         id: this.props.rootNode.id,
-                        stype: this.props.selector.get('stype'),
-                        sid: this.props.selector.get('sid'),
-                        spath: this.props.selector.get('spath')
+                        stype: this.props.focusedSelector.get('stype'),
+                        sid: this.props.focusedSelector.get('sid'),
+                        spath: this.props.focusedSelector.get('spath')
                     });
                 }
             }

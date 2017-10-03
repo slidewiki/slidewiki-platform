@@ -167,7 +167,7 @@ class TreePanel extends React.Component {
                             'wordWrap': 'break-word'
                         }}> {decktreeError} </div> : ''}
 
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} focusedSelector={this.props.DeckTreeStore.focusedSelector} nextSelector={nextSelector}
                             prevSelector={prevSelector} page={this.props.page}
                             mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onFocusNode={this.handleFocusNode.bind(this)}
                             onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
