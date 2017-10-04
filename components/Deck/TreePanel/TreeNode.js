@@ -156,13 +156,12 @@ class TreeNode extends React.Component {
                                           page={self.props.page} rootNode={self.props.rootNode}
                                           username={self.props.username} permissions={self.props.permissions}/>;
         }
-        actionSigClass = classNames({
-            'hide-element': !this.props.item.get('focused') && !this.state.mouseover
-        });
-        let actionSignifier = <span className={actionSigClass}
-                                    onClick={this.handleMenuClick.bind(this, nodeSelector)} onKeyDown={this.handleMenuKeyDown.bind(this, nodeSelector)}
-                                    role="menubar" aria-haspopup="true" tabIndex="0"><i
-            className="ui link ellipsis horizontal icon right floated"></i></span>;
+        let actionSignifier = <Button as='button' basic icon ui size='mini' floated='right'
+                                      onClick={this.handleMenuClick.bind(this, nodeSelector)}
+                                      style={{display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none' }}
+                                      tabIndex={this.props.item.get('focused')}>
+                <Icon name='ellipsis horizontal'/>
+        </Button>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
@@ -260,7 +259,7 @@ class TreeNode extends React.Component {
                 {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
                                                onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}>  </i>
+                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true">  </i>
                     {nodeDIV}
                     {(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier}
                 </div>
