@@ -30,6 +30,7 @@ import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
+import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 
 import {navigateAction} from 'fluxible-router';
 
@@ -221,6 +222,38 @@ export default {
         handler: require('../components/User/UserProfile/UserProfile'),
         action: (context, payload, done) => {
             context.executeAction(chooseAction, payload, done);
+        }
+    },
+    userprofilereview: {
+        path: '/Sfn87Pfew9Af09aM',
+        method: 'get',
+        page: 'userprofilereview',
+        title: 'SlideWiki -- user review',
+        handler: require('../components/User/UserProfile/UserProfileReview'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | User review'});
+            done();
+        }
+    },
+    userprofilereviewuser: {
+        path: '/Sfn87Pfew9Af09aM/user/:username/',
+        method: 'get',
+        page: 'userprofilereview',
+        title: 'SlideWiki -- user review',
+        handler: require('../components/User/UserProfile/UserProfileReviewUser'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(checkReviewableUser, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(chooseAction, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
         }
     },
     search: {
@@ -426,30 +459,9 @@ export default {
 
     },
 
+
     presentation: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/',
-        method: 'get',
-        page: 'presentation',
-        handler: require('../components/Deck/Presentation/Presentation'),
-        action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
-        }
-    },
-    /*
-    presentationPrint: {
-        path: '/presentationprint/:id/*',
-        method: 'get',
-        page: 'presentationprint',
-        handler: require('../components/Deck/Presentation/PresentationPrint'),
-        action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
-        }
-    },
-    */
-    presentationSlide: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/*/:sid?/',
+        path: '/presentation/:id/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
