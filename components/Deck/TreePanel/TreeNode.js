@@ -156,9 +156,14 @@ class TreeNode extends React.Component {
                                           page={self.props.page} rootNode={self.props.rootNode}
                                           username={self.props.username} permissions={self.props.permissions}/>;
         }
-        let actionSignifier = <Button as='button' basic icon ui size='mini' floated='right'
+        let actionSignifierStyle = {
+            display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none',
+            'background-color': '#FFFFFF',
+            height: '0.5em'
+        };
+        let actionSignifier = <Button as='button' icon ui size='mini' floated='right'
                                       onClick={this.handleMenuClick.bind(this, nodeSelector)}
-                                      style={{display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none' }}
+                                      style={actionSignifierStyle}
                                       tabIndex={this.props.item.get('focused')}>
                 <Icon name='ellipsis horizontal'/>
         </Button>;
