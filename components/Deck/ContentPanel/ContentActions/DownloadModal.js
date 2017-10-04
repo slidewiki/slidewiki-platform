@@ -151,6 +151,7 @@ class DownloadModal extends React.Component{
                   aria-labelledby="downloadModalHeader"
                   aria-describedby="downloadModalDescription"
                   aria-hidden = {!this.state.modalOpen}
+                  role="dialog"
                   tabIndex="0"
               >
                   <FocusTrap
