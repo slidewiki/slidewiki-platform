@@ -143,8 +143,8 @@ class DownloadModal extends React.Component{
                         <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
                               <Icon name='download' size='large'/>
                         </Button>
+                  }
 
-                      }
                   open={this.state.modalOpen}
                   onClose={this.handleClose}
                   id="downloadModal"
@@ -178,8 +178,8 @@ class DownloadModal extends React.Component{
 
                                    </Grid.Column>
 
-                                   <Grid.Column textAlign='left' width={13} role="radiogroup">
-                                    <label  id="downloadModalDescription" >{this.context.intl.formatMessage(this.messages.downloadModal_description)}</label>
+                                   <Grid.Column textAlign='left' width={13} role="radiogroup" >
+                                    <label  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</label>
                                     <Form.Field >
                                           <Radio
                                             label='PDF'
@@ -239,6 +239,7 @@ class DownloadModal extends React.Component{
                                                 checked={this.state.radioValue === 'SCORMv3'}
                                                 onChange={this.handleRadioChange}
                                                 role="radio"
+                                                  aria-checked={this.state.radioValue === 'SCORMv3'}
                                                 tabIndex="-1"
                                             />
                                           </Form.Field>
