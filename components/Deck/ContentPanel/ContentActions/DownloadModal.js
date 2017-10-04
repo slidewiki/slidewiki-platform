@@ -178,7 +178,7 @@ class DownloadModal extends React.Component{
 
                                    </Grid.Column>
 
-                                   <Grid.Column textAlign='left' width={13} role="radiogroup" >
+                                   <Grid.Column textAlign='left' width={13} role="radiogroup" aria-labelledby="downloadModalDescription">
                                     <label  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</label>
                                     <Form.Field >
                                           <Radio
@@ -189,7 +189,9 @@ class DownloadModal extends React.Component{
                                             onChange={this.handleRadioChange}
                                             role="radio"
                                             aria-checked={this.state.radioValue === 'PDF'}
+                                            aria-label='PDF'
                                             tabIndex="0"
+
                                             />
                                         </Form.Field>
                                         <Form.Field>
@@ -201,6 +203,7 @@ class DownloadModal extends React.Component{
                                               onChange={this.handleRadioChange}
                                               role="radio"
                                               aria-checked={this.state.radioValue === 'ePub'}
+                                              aria-label='ePub'
                                               tabIndex="-1"
 
                                           />
@@ -214,6 +217,7 @@ class DownloadModal extends React.Component{
                                                onChange={this.handleRadioChange}
                                                role="radio"
                                                aria-checked={this.state.radioValue === 'SCORMv1.2'}
+                                               aria-label='SCORM 1.2'
                                                tabIndex="-1"
 
                                            />
@@ -227,6 +231,7 @@ class DownloadModal extends React.Component{
                                                 onChange={this.handleRadioChange}
                                                 role="radio"
                                                 aria-checked={this.state.radioValue === 'SCORMv2'}
+                                                aria-label='SCORM 2004 (3rd edition)'
                                                 tabIndex="-1"
 
                                             />
@@ -239,7 +244,8 @@ class DownloadModal extends React.Component{
                                                 checked={this.state.radioValue === 'SCORMv3'}
                                                 onChange={this.handleRadioChange}
                                                 role="radio"
-                                                  aria-checked={this.state.radioValue === 'SCORMv3'}
+                                                aria-checked={this.state.radioValue === 'SCORMv3'}
+                                                aria-label='SCORM 2004 (4th edition)'
                                                 tabIndex="-1"
                                             />
                                           </Form.Field>
@@ -252,6 +258,7 @@ class DownloadModal extends React.Component{
                                                 onChange={this.handleRadioChange}
                                                 role="radio"
                                                 aria-checked={this.state.radioValue === 'SCORMv4'}
+                                                aria-label='SCORM 2004 (5th edition)'
                                                 tabIndex="-1"
                                             />
                                           </Form.Field>
