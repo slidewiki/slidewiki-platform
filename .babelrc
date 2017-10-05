@@ -1,14 +1,30 @@
 {
   "presets": ["es2015", "react"],
-  "plugins": [
-    "add-module-exports",
-    "transform-object-rest-spread",
-    "transform-class-properties",
-    "syntax-decorators",
-    "transform-react-constant-elements",
-    "transform-react-inline-elements",
-    ["react-intl", {
-        "messagesDir": "./build/messages/"
-        }],
-  ]
+  "env": {
+    "production": {
+      "plugins": [
+          "add-module-exports",
+          "transform-object-rest-spread",
+          "transform-class-properties",
+          "syntax-decorators",
+          "transform-react-constant-elements",
+           "transform-react-inline-elements",
+          ["react-intl", {
+              "messagesDir": "./build/messages/"
+              }]
+      ]
+  },
+    "development": {
+        "plugins": [
+          "add-module-exports",
+          "transform-object-rest-spread",
+          "transform-class-properties",
+          "transform-react-constant-elements",
+          "syntax-decorators",
+          ["react-intl", {
+              "messagesDir": "./build/messages/"
+              }],
+        ],
+    }
+  }
 }
