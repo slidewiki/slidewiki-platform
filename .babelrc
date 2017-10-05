@@ -6,7 +6,6 @@
         }],
     "add-module-exports",
     "transform-react-constant-elements",
-    "transform-react-inline-elements",
     "transform-object-rest-spread",
     "transform-class-properties",
     "syntax-decorators"
