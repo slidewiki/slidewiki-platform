@@ -101,14 +101,6 @@ class TreeNode extends React.Component {
         e.stopPropagation();
     }
 
-    handleMenuKeyDown(selector, e) {
-        // Enter is pressed while menu icon is focused
-        if (e.keyCode == 13){
-            this.props.onSwitchOnAction(selector);
-            e.stopPropagation();
-        }
-    }
-
     handleEditFocus(e) {
         //select all content
         e.target.select();
