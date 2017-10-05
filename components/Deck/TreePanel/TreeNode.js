@@ -161,9 +161,9 @@ class TreeNode extends React.Component {
             'background-color': '#FFFFFF',
             height: '0.5em'
         };
-        let actionSignifier = <Button as='button' icon ui size='mini' floated='right'
+        let actionSignifier = <Button as='button' icon ui size='tiny' floated='right'
                                       onClick={this.handleMenuClick.bind(this, nodeSelector)}
-                                      style={actionSignifierStyle}
+                                      style={actionSignifierStyle} aria-label='open deck edit controls'
                                       tabIndex={this.props.item.get('focused')}>
                 <Icon name='ellipsis horizontal'/>
         </Button>;
