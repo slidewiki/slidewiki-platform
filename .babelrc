@@ -8,10 +8,7 @@
           "transform-class-properties",
           "syntax-decorators",
           "transform-react-constant-elements",
-           "transform-react-inline-elements",
-          ["react-intl", {
-              "messagesDir": "./build/messages/"
-              }]
+          "transform-react-inline-elements"
       ]
   },
     "development": {
