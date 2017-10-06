@@ -6,7 +6,6 @@ import removeProvider from '../../../actions/user/userprofile/removeProvider';
 import resetProviderStuff from '../../../actions/user/userprofile/resetProviderStuff';
 import newSocialData from '../../../actions/user/registration/newSocialData';
 import updateProviderAction from '../../../actions/user/userprofile/updateProviderAction';
-import UserProfileStore from '../../../stores/UserProfileStore';
 import common from '../../../common';
 import {Microservices} from '../../../configs/microservices';
 
@@ -20,9 +19,8 @@ class Integrations extends React.Component {
         this.provider = '';
     }
 
-    componentWillReceiveProps(nextProps) {
-        // console.log('Integrations componentWillReceiveProps()', nextProps.UserProfileStore.user.providers, this.props.UserProfileStore.user.providers);
-        if (this.props.UserProfileStore.removeProviderError === false && nextProps.UserProfileStore.removeProviderError) {
+    componentDidUpdate() {
+        if (this.props.removeProviderError) {
             swal({
                 title: 'Error',
                 text: 'The provider hasn\'t been disabled, because something unexpected happened. Please try again later.',
@@ -35,7 +33,7 @@ class Integrations extends React.Component {
                 return true;
             }).catch();
         }
-        else if (this.props.UserProfileStore.addProviderError === false && nextProps.UserProfileStore.addProviderError) {
+        else if (this.props.addProviderError) {
             swal({
                 title: 'Error',
                 text: 'The provider hasn\'t been added, because something unexpected happened. Please try again later.',
@@ -48,7 +46,7 @@ class Integrations extends React.Component {
             }).catch();
             this.context.executeAction(resetProviderStuff, {});
         }
-        else if (this.props.UserProfileStore.addProviderAlreadyUsedError === false && nextProps.UserProfileStore.addProviderAlreadyUsedError) {
+        else if (this.props.addProviderAlreadyUsedError) {
             swal({
                 title: 'Duplication',
                 text: 'The provider you wanted to add is already assigned to another user. Do you have another user account at SlideWiki?',
@@ -63,16 +61,11 @@ class Integrations extends React.Component {
         }
     }
 
-    componentDidUpdate() {
-        // console.log('Integrations componentDidUpdate()', this.providers, this.props.UserProfileStore.user.providers);
-
-    }
-
     handleEnable(e) {
         console.log('handleEnable', e.target.attributes[1].nodeValue);
         e.preventDefault();
 
-        if (this.props.UserProfileStore.providerAction !== '') {
+        if (this.props.providerAction) {
             //do nothing
             return;
         }
@@ -116,7 +109,7 @@ class Integrations extends React.Component {
         console.log('handleDisable', e.target.attributes[1].nodeValue);
         e.preventDefault();
 
-        if (this.props.UserProfileStore.providerAction !== '') {
+        if (this.props.providerAction) {
             //do nothing
             return;
         }
@@ -125,7 +118,7 @@ class Integrations extends React.Component {
 
         this.context.executeAction(updateProviderAction, 'disable_' + this.provider);
 
-        if (this.props.UserProfileStore.user.providers.length === 1 && this.props.UserProfileStore.user.hasPassword === false) {
+        if (this.props.providers.length === 1 && this.props.hasPassword === false) {
             swal({
                 title: 'Error',
                 text: 'You are not allowed to disable all providers.',
@@ -148,6 +141,7 @@ class Integrations extends React.Component {
 
     handleStorageEvent(e) {
         console.log('storage event', e.key, localStorage.getItem(e.key));
+        console.log( localStorage.getItem(MODI),  localStorage.getItem(NAME));
         //this is available
 
         if (e.key !== NAME || localStorage.getItem(MODI) !== 'addProvider')
@@ -210,8 +204,8 @@ class Integrations extends React.Component {
 
     render() {
         let facebook = false, google = false, github = false;
-        if (this.props.UserProfileStore.user.providers)
-            this.props.UserProfileStore.user.providers.forEach((provider) => {
+        if (this.props.providers)
+            this.props.providers.forEach((provider) => {
                 switch (provider) {
                     case 'facebook':
                         facebook = true;
@@ -224,7 +218,7 @@ class Integrations extends React.Component {
                         break;
                 }
             });
-        // console.log('Integrations render()', this.props.UserProfileStore.user.providers);
+        // console.log('Integrations render()', this.props.providers);
 
         let facebook_icon_classes = classNames({
             'big': true,
@@ -352,7 +346,7 @@ class Integrations extends React.Component {
                           </div>
                         </div>
                       </div>
-                      {(this.props.UserProfileStore.providerAction !== '') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                      {(this.props.providerAction) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                   </div>
 
               </div>
@@ -364,11 +358,5 @@ class Integrations extends React.Component {
 Integrations.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
-Integrations = connectToStores(Integrations, [UserProfileStore], (context, props) => {
-    return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
-    };
-});
 
 export default Integrations;
