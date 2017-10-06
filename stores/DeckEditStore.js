@@ -22,6 +22,7 @@ class DeckEditStore extends BaseStore {
             groups: []
         };
         this.showGroupModal = false;
+        this.shouldShowEditInProgressModal = false;
     }
 
     updateProperties(payload) {
@@ -95,6 +96,14 @@ class DeckEditStore extends BaseStore {
         this.emitChange();
         this.showGroupModal = false;
     }
+
+    showEditInProgressModal() {
+        this.shouldShowEditInProgressModal = true;
+    }
+
+    hideEditInProgressModal() {
+        this.shouldShowEditInProgressModal = false;
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -104,7 +113,9 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties',
+    'SHOW_EDIT_IN_PROGRESS_MODAL': 'showEditInProgressModal',
+    'HIDE_EDIT_IN_PROGRESS_MODAL': 'hideEditInProgressModal'
 };
 
 export default DeckEditStore;
