@@ -8,6 +8,7 @@ import DeckEditPanel from './DeckModes/DeckEditPanel/DeckEditPanel';
 import SlideViewPanel from './SlideModes/SlideViewPanel/SlideViewPanel';
 import SlideEditPanel from './SlideModes/SlideEditPanel/SlideEditPanel';
 import NoPermissionsModal from './NoPermissionsModal';
+import EditInProgressModal from './EditInProgressModal';
 
 class ContentPanel extends React.Component {
     render() {
@@ -50,6 +51,7 @@ class ContentPanel extends React.Component {
                     <ContentActionsFooter ContentStore={this.props.ContentStore} />
                 </div>
                 <NoPermissionsModal selector={this.props.ContentStore.selector} />
+                <EditInProgressModal/>
              </div>
         );
     }

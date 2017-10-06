@@ -1,11 +1,12 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckEditStore from '../../../stores/DeckEditStore';
-import {NavLink, navigateAction} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import _ from 'lodash';
 import hideEditInProgressModal from '../../../actions/deckedit/hideEditInProgressModal';
+import ContentUtil from './util/ContentUtil';
 
 
 class EditInProgressModal extends React.Component {
@@ -19,7 +20,11 @@ class EditInProgressModal extends React.Component {
     }
 
     continueEditing() {
+        const nodeURL = ContentUtil.makeNodeURL(this.props.DeckEditStore.editInProgressModalTarget, 'edit');
         this.context.executeAction(hideEditInProgressModal);
+        this.context.executeAction(navigateAction, {
+            url: nodeURL
+        });
     }
 
     render() {
@@ -29,8 +34,8 @@ class EditInProgressModal extends React.Component {
             '                   Are you sure you wish to edit this slide?';
         let buttons =
             <div>
-                <Button as='button' onClick={this.continueEditing.bind(this)}>Go to the latest version</Button>
-                <Button as='button' onClick={this.cancelEditing.bind(this)}><Icon name='close'/> Close</Button>
+                <Button as='button' onClick={this.continueEditing.bind(this)}>Start Editing</Button>
+                <Button as='button' onClick={this.cancelEditing.bind(this)}><Icon name='close'/>Cancel</Button>
             </div>;
         return (
             <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='editInProgressModalHeader'

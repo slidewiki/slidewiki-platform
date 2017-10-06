@@ -22,7 +22,10 @@ class DeckEditStore extends BaseStore {
             groups: []
         };
         this.showGroupModal = false;
+
+        this.otherEditInProgress = true;
         this.shouldShowEditInProgressModal = false;
+        this.editInProgressModalTarget = '';
     }
 
     updateProperties(payload) {
@@ -56,7 +59,10 @@ class DeckEditStore extends BaseStore {
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
-            showGroupModal: this.showGroupModal
+            showGroupModal: this.showGroupModal,
+            otherEditInProgress: this.otherEditInProgress,
+            shouldShowEditInProgressModal: this.shouldShowEditInProgressModal,
+            editInProgressModalTarget: this.editInProgressModalTarget
         };
     }
 
@@ -73,6 +79,9 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
+        this.otherEditInProgress = state.otherEditInProgress;
+        this.shouldShowEditInProgressModal = state.shouldShowEditInProgressModal;
+        this.editInProgressModalTarget = state.editInProgressModalTarget;
     }
 
     updateAuthorizedUsers(users) {
@@ -97,12 +106,15 @@ class DeckEditStore extends BaseStore {
         this.showGroupModal = false;
     }
 
-    showEditInProgressModal() {
+    showEditInProgressModal(payload) {
+        this.editInProgressModalTarget = payload.selector;
         this.shouldShowEditInProgressModal = true;
+        this.emitChange();
     }
 
     hideEditInProgressModal() {
         this.shouldShowEditInProgressModal = false;
+        this.emitChange();
     }
 }
 

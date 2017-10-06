@@ -11,8 +11,9 @@ import AttachSubdeck from '../AttachSubdeck/AttachSubdeckModal';
 import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
+import DeckEditStore from '../../../../stores/DeckEditStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
-
+import showEditInProgressModal from '../../../../actions/deckedit/showEditInProgressModal';
 
 
 class ContentActionsHeader extends React.Component {
@@ -34,6 +35,8 @@ class ContentActionsHeader extends React.Component {
         const nodeURL = ContentUtil.makeNodeURL(selector, 'edit');
         if (this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit) {
             this.context.executeAction(showNoPermissionsModal, {selector: selector, user: this.props.UserProfileStore.userid, permissions: this.props.PermissionsStore.permissions});
+        } else if(this.props.DeckEditStore.otherEditInProgress) {
+            this.context.executeAction(showEditInProgressModal, {selector: selector});
         } else {
             this.context.executeAction(navigateAction, {
                 url: nodeURL
@@ -139,12 +142,13 @@ ContentActionsHeader.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 //it should listen to decktree store in order to handle adding slides/decks
-ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore], (context, props) => {
+ContentActionsHeader = connectToStores(ContentActionsHeader, [DeckTreeStore, UserProfileStore, PermissionsStore, ContentStore, DeckEditStore], (context, props) => {
     return {
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         PermissionsStore: context.getStore(PermissionsStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
+        DeckEditStore: context.getStore(DeckEditStore).getState()
     };
 });
 export default ContentActionsHeader;
