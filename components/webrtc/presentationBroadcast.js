@@ -301,28 +301,33 @@ class presentationBroadcast extends React.Component {
         }
 
         function connectionFailureHandler() {
-            let dialog = {
-                title: 'An error occured',
-                html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
-                type: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Okay',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                preConfirm: () => {
-                    return new Promise((resolve) => {
-                        cleanup();
-                        that.context.executeAction(navigateAction, {'url': '/'});
-                        resolve();
-                    });
-                }
-            };
-            if(swal.isVisible){
-                swal.hideLoading();
-                swal.insertQueueStep(dialog);
-                swal.clickConfirm();
-            } else
-              swal(dialog);
+            // let dialog = {
+            //     title: 'An error occured',
+            //     html: 'We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.',
+            //     type: 'error',
+            //     confirmButtonColor: '#3085d6',
+            //     confirmButtonText: 'Okay',
+            //     allowOutsideClick: false,
+            //     allowEscapeKey: false,
+            //     preConfirm: () => {
+            //         return new Promise((resolve) => {
+            //             cleanup();
+            //             that.context.executeAction(navigateAction, {'url': '/'});
+            //             resolve();
+            //         });
+            //     }
+            // };
+            // if(swal.isVisible){
+            //     swal.hideLoading();//NOTE is currently not working, contacted developer.
+            //     swal.insertQueueStep(dialog);
+            //     swal.clickConfirm();
+            // } else
+            //   swal(dialog);
+            /*eslint not-alert: false*/
+            let res = window.confirm('We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.');
+            cleanup();
+            that.context.executeAction(navigateAction, {'url': '/'});
+            /*eslint not-alert: true*/
         }
 
         function handleICEConnectionStateChange(peerID, event) {
@@ -332,7 +337,8 @@ class presentationBroadcast extends React.Component {
                         console.log('The connection has been successfully established');
                         if(!that.isInitiator){
                             try {
-                              swal.hideLoading();
+                              connectionFailureHandler();
+                              swal.hideLoading();//NOTE is currently not working, contacted developer.
                             } catch (e) {
                               console.log('Error: swal was not defined', e);
                             }
