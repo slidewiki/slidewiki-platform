@@ -3,10 +3,11 @@ import {BaseStore} from 'fluxible/addons';
 class UserNotificationsStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-        this.notifications = undefined;
+        this.notifications = [];
         this.newNotifications = [];
         this.newNotificationsCount = 0;
         this.subscriptions = [];
+        this.loading = true;
         this.activityTypes = [
             {type:'add', selected: true},
             {type:'edit', selected: true},
@@ -24,10 +25,15 @@ class UserNotificationsStore extends BaseStore {
             {type:'left', selected: true}
         ];
     }
+    showLoading(payload){
+        this.loading = true;
+        this.emitChange();
+    }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
         this.newNotifications = payload.newNotifications;
         this.subscriptions = payload.subscriptions;
+        this.loading = false;
 
         this.markNewNotifications();
         this.newNotificationsCount = this.newNotifications.length;
@@ -178,6 +184,7 @@ class UserNotificationsStore extends BaseStore {
             notifications: this.notifications,
             newNotifications: this.newNotifications,
             newNotificationsCount: this.newNotificationsCount,
+            loading: this.loading,
             subscriptions: this.subscriptions,
             activityTypes: this.activityTypes
         };
@@ -189,6 +196,7 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = state.notifications;
         this.newNotifications = state.newNotifications;
         this.newNotificationsCount = state.newNotificationsCount;
+        this.loading = state.loading;
         this.subscriptions = state.subscriptions;
         this.activityTypes = state.activityTypes;
     }
@@ -201,7 +209,8 @@ UserNotificationsStore.handlers = {
     'LOAD_NEW_USER_NOTIFICATIONS_COUNT_SUCCESS': 'loadNewNotificationsCount',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
     'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
-    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter'
+    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter',
+    'SHOW_NOTIFICATIONS_LOADING': 'showLoading'
 };
 
 export default UserNotificationsStore;
