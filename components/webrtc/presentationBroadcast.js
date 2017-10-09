@@ -213,10 +213,10 @@ class presentationBroadcast extends React.Component {
                             candidate: message.data.candidate
                         });
                         that.pcs[message.sender].RTCconnection.addIceCandidate(candidate).catch((e) => {
-                          console.log('Error: was unable to add Ice candidate:', candidate, 'to sender', message.sender);
+                            console.log('Error: was unable to add Ice candidate:', candidate, 'to sender', message.sender);
                         }); //Catch defective candidates, TODO add better exception handling
                     } catch (e) {
-                      console.log('Error: building the candiate failed with', message);
+                        console.log('Error: building the candiate failed with', message);
                     }//TODO add better exception handling
                 }
             }
@@ -323,11 +323,9 @@ class presentationBroadcast extends React.Component {
             //     swal.clickConfirm();
             // } else
             //   swal(dialog);
-            /*eslint not-alert: false*/
-            let res = window.confirm('We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.');
+            let res = window.confirm('We\'re sorry, but we can\'t connect you to the presenter. It seems like there is a problem with your connection or browser. Please update your browser, disable extensions or ask your network operator about it. We\'re using a peer to peer connection technique called WebRTC.');// eslint-disable-line no-alert
             cleanup();
             that.context.executeAction(navigateAction, {'url': '/'});
-            /*eslint not-alert: true*/
         }
 
         function handleICEConnectionStateChange(peerID, event) {
@@ -337,10 +335,10 @@ class presentationBroadcast extends React.Component {
                         console.log('The connection has been successfully established');
                         if(!that.isInitiator){
                             try {
-                              connectionFailureHandler();
-                              swal.hideLoading();//NOTE is currently not working, contacted developer.
+                                connectionFailureHandler();
+                                swal.hideLoading();//NOTE is currently not working, contacted developer.
                             } catch (e) {
-                              console.log('Error: swal was not defined', e);
+                                console.log('Error: swal was not defined', e);
                             }
                         }
                         break;
@@ -541,8 +539,8 @@ class presentationBroadcast extends React.Component {
                 case 'message':
                     if (that.isInitiator) {
                         this.lastMessage = {
-                          data: data,
-                          peerID: peerID
+                            data: data,
+                            peerID: peerID
                         };
                         this.forceUpdate();
                     }
