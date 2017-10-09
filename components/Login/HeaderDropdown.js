@@ -42,7 +42,7 @@ class HeaderDropdown extends React.Component {
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
-                <div className="menu" role="menu">
+                <div className="menu vertical ui" role="menu">
                     <div className="header">
                         {this.props.UserProfileStore.username}
                     </div>
