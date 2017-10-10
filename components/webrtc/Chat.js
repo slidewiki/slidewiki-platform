@@ -44,7 +44,7 @@ class Chat extends React.Component {
               || nextProps.lastMessage.data.sender !== currentMessage.data.sender
               || nextProps.lastMessage.data.data !== currentMessage.data.data) {
                 this.addMessage(nextProps.lastMessage.data, false, nextProps.lastMessage.peerID);
-              }
+            }
         }
     }
 

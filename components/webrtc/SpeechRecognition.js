@@ -22,7 +22,7 @@ class SpeechRecognition extends React.Component {
     }
 
     componentDidMount() {
-      this.speechRecognitionDisabled = this.props.speechRecognitionDisabled;
+        this.speechRecognitionDisabled = this.props.speechRecognitionDisabled;
     }
 
     componentDidUpdate() {
