@@ -6,7 +6,6 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let ReactIntlPlugin = require('react-intl-webpack-plugin');
 
 let webpackConfig = {
-    name: 'main',
     resolve: {
         extensions: ['.js']
     },
@@ -63,7 +62,7 @@ let webpackConfig = {
     },
     plugins: [
         //collect all messages into one json
-        //new ReactIntlPlugin(),
+        new ReactIntlPlugin(),
         // css files from the extract-text-plugin loader
         new ExtractTextPlugin({
             filename: '../css/vendor.bundle.css',
@@ -100,20 +99,7 @@ let webpackConfig = {
         }),
         new Visualizer()
     ],
-    devtool: 'source-map',
-
-    // we do not include the javascript files that include ENV variables
-    // this way we can build the bundle, but also be able to read the ENV during runtime, not build-time
-    // these excluded files are in a separate bundle using `prod.settings.config.js` file
-    externals: [
-        (context, request, callback) => {
-            if (/\/configs\/(microservices|secrets|general|settings)/.test(request)) {
-                return callback(null, 'SlideWikiSettings');
-            }
-            callback();
-        },
-    ],
-
+    devtool: 'source-map'
 };
 
-module.exports = [webpackConfig, require('./prod.settings.config')];
+module.exports = webpackConfig;

@@ -52,4 +52,7 @@ RUN npm run build:nostart
 #   Run!   #
 # -------- #
 
+# default value for SMTP configuration in case it is left blank in the .env file
+ENV SMTP_PORT=25
+
 ENTRYPOINT ["./entrypoint.sh"]

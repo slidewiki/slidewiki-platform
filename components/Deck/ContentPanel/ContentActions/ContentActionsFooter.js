@@ -16,7 +16,7 @@ import incrementDeckViewCounter from '../../../../actions/activityfeed/increment
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
-import DownloadButton from './DownloadButton';
+import DownloadModal from './DownloadModal';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -166,7 +166,7 @@ class ContentActionsFooter extends React.Component {
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
-                            <DownloadButton/>
+                            <DownloadModal/>
                             <ReportModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
