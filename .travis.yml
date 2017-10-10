@@ -14,11 +14,14 @@ before_install:
 - sudo apt-get update
 - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/install_compose.sh ; fi
+before_script:
+- cp microservices.js.template configs/microservices.js && cp general.js.template configs/general.js && SMTP_PORT=993 cat secrets.js.template | envsubst > configs/secrets.js
 script:
 - npm run lint
 - npm run test
 - npm run build:nostart
 after_success:
+- git reset --hard && rm configs/microservices.js
 - openssl aes-256-cbc -K $encrypted_3ef84d34223e_key -iv $encrypted_3ef84d34223e_iv -in deployment_keys.tar.enc -out deployment_keys.tar -d
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/dockerhub.sh ; fi
 - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] ; then ./travis_scripts/deploy.sh ; fi
