@@ -9,8 +9,10 @@ import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import TreeUtil from '../../TreePanel/util/TreeUtil';
 
 class Comment extends React.Component {
-    handleReply() {
+    handleReply(e) {
+        e.preventDefault();
         this.context.executeAction(invertReplyBoxFlag, {comment: this.props.comment});
+        return false;
     }
 
     //return the position of the node in the deck
@@ -44,7 +46,7 @@ class Comment extends React.Component {
         const comment = this.props.comment;
         const replyLink = (
             <div className="actions">
-                <a tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
+                <a href="#" tabIndex="0" className="reply" onClick={this.handleReply.bind(this)}>Reply</a>
             </div>
         );
 

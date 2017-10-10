@@ -9,6 +9,8 @@ export default {
     name: 'email',
     // At least one of the CRUD methods is Required
     create: (req, resource, params, body, config, callback) => {
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
+
         if (!params.subject || !params.message)
             return callback('Error: Missing parameters', null);
 

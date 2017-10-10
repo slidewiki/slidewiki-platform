@@ -9,11 +9,9 @@ class SearchParamsStore extends BaseStore {
         this.searchstring = '';
         this.kind = '';
         this.language = '';
-        // this.group = '';
         this.field = '';
         this.user = '';
         this.tag = '';
-        this.revisions = false;
         this.fetch = false;
         this.sort = '';
     }
@@ -44,12 +42,10 @@ class SearchParamsStore extends BaseStore {
         this.keywords = (params.keywords || '');
         this.kind = (params.kind || '');
         this.language = (params.language || '');
-        // this.group = params.group;
         this.field = (params.field || '');
         this.user = (params.user || '');
         this.tag = (params.tag || '');
-        this.revisions = params.revisions;
-        this.sort = params.sort;
+        this.sort = (params.sort || 'score');
         this.fetch = true;
         this.emitChange();
         this.fetch = false;
@@ -59,11 +55,9 @@ class SearchParamsStore extends BaseStore {
         this.keywords = '';
         this.kind = '';
         this.language = '';
-        // this.group = '';
         this.field = '';
         this.user = '';
         this.tag = '';
-        this.revisions = false;
         this.sort = '';
         this.fetch = true;
         this.emitChange();
@@ -75,11 +69,9 @@ class SearchParamsStore extends BaseStore {
             keywords: this.keywords,
             kind: this.kind,
             language: this.language,
-            // group: this.group,
             field: this.field,
             user: this.user,
             tag: this.tag,
-            revisions: this.revisions,
             sort: this.sort,
             fetch: this.fetch
         };
@@ -92,11 +84,9 @@ class SearchParamsStore extends BaseStore {
         this.keywords = state.keywords;
         this.kind = state.kind;
         this.language = state.language;
-        // this.group = state.group;
         this.field = state.field;
         this.user = state.user;
         this.tag = state.tag;
-        this.revisions = state.revisions;
         this.sort = state.sort;
         this.fetch = state.fetch;
     }

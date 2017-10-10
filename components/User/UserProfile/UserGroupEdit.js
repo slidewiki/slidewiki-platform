@@ -1,8 +1,7 @@
 import React from 'react';
 import { Microservices } from '../../../configs/microservices';
-import { connectToStores } from 'fluxible-addons-react';
 import {NavLink, navigateAction} from 'fluxible-router';
-import UserProfileStore from '../../../stores/UserProfileStore';
+import { TextArea } from 'semantic-ui-react';
 import { timeSince } from '../../../common';
 import UserPicture from '../../common/UserPicture';
 import updateUsergroup from '../../../actions/user/userprofile/updateUsergroup';
@@ -15,9 +14,9 @@ class UserGroupEdit extends React.Component {
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('UserGroupEdit componentWillReceiveProps:', nextProps.UserProfileStore.saveUsergroupError, this.props.UserProfileStore.saveUsergroupError);
-        if (nextProps.UserProfileStore.saveUsergroupError !== '' && this.props.UserProfileStore.saveUsergroupError === '') {
+    componentDidUpdate() {
+        console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError);
+        if (this.props.saveUsergroupError) {
             swal({
                 title: 'Error',
                 text: 'Unknown error while saving.',
@@ -50,7 +49,7 @@ class UserGroupEdit extends React.Component {
                     $('#usergoup_edit_dropdown_usernames_remote').dropdown('clear');
                     $('#usergoup_edit_dropdown_usernames_remote').dropdown('hide');
 
-                    let group = this.getGroup(this.props.UserProfileStore.currentUsergroup.members);
+                    let group = this.getGroup(this.props.currentUsergroup.members);
                     if (group.members === undefined || group.members === null)
                         group.members = [];
 
@@ -58,7 +57,7 @@ class UserGroupEdit extends React.Component {
                     console.log('trying to add', name, 'to', group.members, ' with ', data);
                     if (group.members.findIndex((member) => {
                         return member.userid === parseInt(data.userid);
-                    }) === -1 && data.username !== this.props.UserProfileStore.username) {
+                    }) === -1 && data.username !== this.props.username) {
                         group.members.push({
                             username: data.username,
                             userid: parseInt(data.userid),
@@ -78,15 +77,15 @@ class UserGroupEdit extends React.Component {
 
     getGroup(members = undefined) {
         let group = {
-            _id: this.props.UserProfileStore.currentUsergroup._id,
+            _id: this.props.currentUsergroup._id,
             name: this.refs.GroupName.value,
             description: this.refs.GroupDescription.value,
             members: members,
-            timestamp: this.props.UserProfileStore.currentUsergroup.timestamp || '',
-            creator: this.props.UserProfileStore.currentUsergroup.creator || this.props.UserProfileStore.userid
+            timestamp: this.props.currentUsergroup.timestamp || '',
+            creator: this.props.currentUsergroup.creator || this.props.userid
         };
 
-        if (this.props.UserProfileStore.currentUsergroup._id)
+        if (this.props.currentUsergroup._id)
             group.id = group._id;
 
         //TODO get members from list
@@ -101,7 +100,7 @@ class UserGroupEdit extends React.Component {
     handleSave(e) {
         e.preventDefault();
 
-        let group = this.getGroup(this.props.UserProfileStore.currentUsergroup.members);
+        let group = this.getGroup(this.props.currentUsergroup.members);
 
         console.log('handleSave:', group);
 
@@ -127,9 +126,9 @@ class UserGroupEdit extends React.Component {
     }
 
     handleClickRemoveMember(member) {
-        // console.log('handleClickRemoveMember', member, 'from', this.props.UserProfileStore.currentUsergroup.members);
+        // console.log('handleClickRemoveMember', member, 'from', this.props.currentUsergroup.members);
 
-        let group = this.getGroup(this.props.UserProfileStore.currentUsergroup.members);
+        let group = this.getGroup(this.props.currentUsergroup.members);
 
         group.members = group.members.filter((gmember) => {
             return gmember.userid !== member.userid;
@@ -143,25 +142,26 @@ class UserGroupEdit extends React.Component {
 
         let userlist = [];
         let prefs = {
-            name: this.props.UserProfileStore.currentUsergroup.name,
-            desc: this.props.UserProfileStore.currentUsergroup.description
+            name: this.props.currentUsergroup.name,
+            desc: this.props.currentUsergroup.description
         };
         //change header and data depending on group should be created or edited
         let header = 'Create Group';
-        if (this.props.UserProfileStore.currentUsergroup._id !== undefined) {
+        if (this.props.currentUsergroup._id !== undefined) {
             header = 'Edit Group';
         }
 
         //add creator as default member
         userlist.push(
-          <div className="item" key={this.props.UserProfileStore.userid}>
+          <div className="item" key={this.props.userid}>
             <div className="ui grid">
               <div className="one wide column middle aligned">
-                <UserPicture picture={ this.props.UserProfileStore.user.picture } username={ this.props.UserProfileStore.username } avatar={ true } width= { 24 } />
+                <UserPicture picture={ this.props.picture } username={ this.props.username } avatar={ true } width= { 24 } />
               </div>
               <div className="fourteen wide column">
                 <div className="content">
-                    <a className="header" href={'/user/' + this.props.UserProfileStore.username}>{this.props.UserProfileStore.username}</a>
+                    <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                    <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.username}</a>
                     <div className="description">Group owner</div>
                 </div>
               </div>
@@ -169,9 +169,9 @@ class UserGroupEdit extends React.Component {
           </div>
         );
 
-        // console.log('render UserGroupEdit:', this.props.UserProfileStore.currentUsergroup.members);
-        if (this.props.UserProfileStore.currentUsergroup.members !== undefined && this.props.UserProfileStore.currentUsergroup.members.length > 0) {
-            this.props.UserProfileStore.currentUsergroup.members.forEach((member) => {
+        // console.log('render UserGroupEdit:', this.props.currentUsergroup.members);
+        if (this.props.currentUsergroup.members !== undefined && this.props.currentUsergroup.members.length > 0) {
+            this.props.currentUsergroup.members.forEach((member) => {
                 let fct = () => {
                     this.handleClickRemoveMember(member);
                 };
@@ -191,7 +191,8 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <a className="header" href={'/user/' + member.username}>{member.username}</a>
+                              <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                              <a className="header" href={'/user/' + member.username} target="_blank">{member.username}</a>
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>
                         </div>
@@ -241,7 +242,7 @@ class UserGroupEdit extends React.Component {
                                 <i className="save icon"></i>Save group
                             </button>
                         </div>
-                        {(this.props.UserProfileStore.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                        {(this.props.saveUsergroupIsLoading === true) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
                         <div className="ui hidden divider">
                         </div>
@@ -262,11 +263,5 @@ class UserGroupEdit extends React.Component {
 UserGroupEdit.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-
-UserGroupEdit = connectToStores(UserGroupEdit, [UserProfileStore], (context, props) => {
-    return {
-        UserProfileStore: context.getStore(UserProfileStore).getState()
-    };
-});
 
 export default UserGroupEdit;
