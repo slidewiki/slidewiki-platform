@@ -11,6 +11,7 @@ class DataSourceStore extends BaseStore {
     }
     loadDataSources(payload) {
         this.dataSources = payload.dataSources;
+        this.dataSources.forEach((datasource) => {if (datasource._id) delete datasource._id;});//Remove _id attribute created for migrated decks
         this.selector = payload.selector;
         this.dataSource = undefined;
         this.selectedIndex = -1;
