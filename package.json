@@ -112,7 +112,7 @@
     "react-edit-inline": "^1.0.8",
     "react-google-recaptcha": "^0.6.0",
     "react-hotkeys": "^0.9.0",
-    "react-image-cropper": "^1.0.5",
+    "react-image-cropper": "^1.1.1",
     "react-intl": "^2.2.3",
     "react-intl-webpack-plugin": "0.0.3",
     "react-list": "^0.8.6",

@@ -14,6 +14,7 @@ class ChangePictureModal extends React.Component {
             activeTrap: false
         };
 
+        this.cropperWidth = 200;
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
@@ -41,6 +42,17 @@ class ChangePictureModal extends React.Component {
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
         }
+    }
+
+    handleImgLoad(){
+        console.log('here');
+        console.log(this.refs.cropper.values());
+        this.cropperWidth = this.refs.cropper.values().imgWidth;
+        if(this.refs.cropper.values().imgWidth > this.refs.cropper.values().imgHeight)
+            this.cropperWidth = this.refs.cropper.values().imgHeight;
+        else
+            this.cropperWidth = this.refs.cropper.values().imgWidth;
+        this.forceUpdate();
     }
 
     uploadCroppedPicture(e) {
@@ -90,7 +102,7 @@ class ChangePictureModal extends React.Component {
                   <Modal.Content>
                       <Divider />
                       <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
-                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}}/>
+                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} width={this.cropperWidth} height={this.cropperWidth} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}} onImgLoad={this.handleImgLoad.bind(this)}/>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                         <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
