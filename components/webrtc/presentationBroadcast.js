@@ -83,15 +83,6 @@ class presentationBroadcast extends React.Component {
                 //   facingMode: "user"
                 // }
             });
-            swal({
-                title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                html: '<p>Other people are free to join the room. Rooms are currently limited to '+this.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
-                type: 'info',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Check',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then(() => { this.startSpeechrecognition = true; this.forceUpdate(); $('body>a#atlwdg-trigger').remove();});
         });
 
         that.socket.on('join', (room, socketID) => { //whole room recieves this, except for the peer that tries to join
@@ -246,8 +237,49 @@ class presentationBroadcast extends React.Component {
             navigator.mediaDevices.getUserMedia(options)
                 .then(gotStream)
                 .catch((err) => {
-                    console.log('getUserMedia() error: ' + err.name);
+                    switch (err.name) {
+                        case 'NotAllowedError'://The user declined the use of the media device(s)
+                            if(that.isInitiator)
+                                requestStreamsErrorHandler('No access to microphone', 'Your browser reported that you refused to grant this application access to your microphone. The presention rooms feature is not usable without a microphone. Please grant us access to your microphone (see your URL bar) and click the Okay button. The room will be automatically recreated.', 'warning');
+                            else
+                                console.log('getUserMedia() error: ' + err.name);
+                            break;
+                        default:
+                            console.log('getUserMedia() error: ' + err.name);
+                            if(that.isInitiator)
+                                requestStreamsErrorHandler('Device error', 'Your browser reported a problem accessing your microphone. You can\'t use the presention rooms feature without a microphone. Please try to fix your microphone (settings) and open up a new room. You will be redirected to the homepage.', 'error');
+                            else
+                                requestStreamsErrorHandler('Browser Error', 'Your browser reported a technical problem. You can\'t use the presention rooms feauter with this problem. Please try to fix it by updating your browser or resetting it and rejoin a room. You will be redirected to the homepage.', 'error');
+                    }
                 });
+        }
+
+        function requestStreamsErrorHandler(title1, text1, type1) {
+            let dialog = {
+                title: title1,
+                html: text1,
+                type: type1,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Okay',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        cleanup();
+                        if(type1 === 'error')
+                            that.context.executeAction(navigateAction, {'url': '/'});
+                        else
+                            location.reload();
+                        resolve();
+                    });
+                }
+            };
+
+            that.socket.close();
+            if(swal.isVisible())
+                swal.insertQueueStep(dialog);
+            else
+              swal(dialog);
         }
 
         function gotStream(stream) {
@@ -257,6 +289,15 @@ class presentationBroadcast extends React.Component {
                 //let localVideo = document.querySelector('#localVideo');
                 //localVideo.srcObject = stream;
                 $('#media').remove();
+                swal({//NOTE implemented here because this dialog interrupted with error dialogs of requestStreams()
+                    title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
+                    html: '<p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
+                    type: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Check',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(() => { that.startSpeechrecognition = true; that.forceUpdate(); $('body>a#atlwdg-trigger').remove();});
             }
             that.localStream = stream;
 
