@@ -133,7 +133,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'use':
-                const useIconClass = allIconClass.concat(' attach');
+                const useIconClass = allIconClass.concat(' repeat');
                 const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
@@ -143,6 +143,20 @@ class UserNotificationsItem extends React.Component {
                         </a> {'used ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
                         {' in deck '}<a href={'/deck/' + notification.use_info.target_id}>{title}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'attach':
+                const attachIconClass = allIconClass.concat(' attach');
+                iconNotification = (<i className={attachIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary" >
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'attached ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}
                     </div>

@@ -18,6 +18,7 @@ class UserNotificationsStore extends BaseStore {
             // {type:'rate', selected: true},
             // {type:'translate', selected: true},
             {type:'use', selected: true},
+            {type:'attach', selected: true},
             {type:'fork', selected: true},
             {type:'delete', selected: true},
             {type:'joined', selected: true},
