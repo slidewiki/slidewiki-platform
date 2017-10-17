@@ -36,7 +36,7 @@ export default function deleteTreeNode(context, payload, done) {
                 //Create a 'delete' activity
                 let activity = {
                     activity_type: 'delete',
-                    user_id: String(payload.userid),
+                    user_id: String(userid),
                     content_id: payload.parentId,
                     content_kind: 'deck',
                     content_name: payload.parentName,
