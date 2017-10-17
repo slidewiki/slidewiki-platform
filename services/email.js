@@ -47,7 +47,8 @@ export default {
 
             connection.send({
                 from: from,
-                to: to
+                to: to,
+                textEncoding: 'quoted-printable'
             },
             'From: <' + from + '>\r\n' + 'To: <' + to + '>\r\n' + 'Subject: ' + params.subject + '\r\nDate: ' + (new Date()).toGMTString() + '\r\n\r\n' + params.message,
             (err, info) => {
