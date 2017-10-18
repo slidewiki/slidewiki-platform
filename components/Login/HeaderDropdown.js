@@ -37,20 +37,18 @@ class HeaderDropdown extends React.Component {
         const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
         const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" />) : '';
         return(
-            <div className="ui top right dropdown larger blue button" ref="userDropDown" role="button" aria-haspopup="true" aria-label="User management">
+            <div id="userButtonMenu" className="ui top right dropdown larger blue button" ref="userDropDown" role="button" aria-haspopup="true" aria-controls="userHeaderMenu" aria-label="User management">
                 <div className="text">
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
-                <div className="menu" role="menu">
-                <div className="header" role="separator" tabIndex="-1">
-                <div className="ui menu vertical" style={{width:'160px'}} role="menu">
-                    <div className="header">
+                <div id="userHeaderMenu" className="ui menu vertical" style={{width:'160px'}} role="menu" aria-labelledby="userButtonMenu">
+                    <div className="header" role="separator" tabIndex="-1">
                         {this.props.UserProfileStore.username}
                     </div>
                     <div className="divider"  role="separator" ></div>
 
-                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="-1" aria-selected="true">
+                    <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="-1" >
                         <i className="user icon link"  /> My Decks
                     </div>
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="-1" >
