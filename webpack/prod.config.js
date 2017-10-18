@@ -7,7 +7,10 @@ let ReactIntlPlugin = require('react-intl-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
-        extensions: ['.js']
+        extensions: ['.js'],
+        alias: {
+            react: path.resolve('./node_modules/react'),
+        }
     },
     entry: {
         main: [
