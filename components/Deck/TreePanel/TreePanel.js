@@ -5,6 +5,7 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
+import focusTreeNode from '../../../actions/decktree/focusTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
@@ -35,6 +36,10 @@ class TreePanel extends React.Component {
 
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);
+    }
+
+    handleFocusNode(selector) {
+        this.context.executeAction(focusTreeNode, selector);
     }
 
     handleSwitchOnAction(selector) {
@@ -162,9 +167,9 @@ class TreePanel extends React.Component {
                             'wordWrap': 'break-word'
                         }}> {decktreeError} </div> : ''}
 
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} focusedSelector={this.props.DeckTreeStore.focusedSelector} nextSelector={nextSelector}
                             prevSelector={prevSelector} page={this.props.page}
-                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
+                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onFocusNode={this.handleFocusNode.bind(this)}
                             onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
                             onRename={this.handleRenameNode.bind(this)}
                             onUndoRename={this.handleUndoRenameNode.bind(this)}
