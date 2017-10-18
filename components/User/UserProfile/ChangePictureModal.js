@@ -101,7 +101,7 @@ class ChangePictureModal extends React.Component {
                   </Modal.Header>
                   <Modal.Content>
                       <Divider />
-                      <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
+                      <TextArea className="sr-only" id="ChangePictureModalDescription" value="This windows allows you to crop and then save a picture meant to be used as a user-profile picture. The crop tool is set to maximum size." />
                       <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} width={this.cropperWidth} height={this.cropperWidth} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}} onImgLoad={this.handleImgLoad.bind(this)}/>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
