@@ -22,8 +22,8 @@ export default {
         } else {
             switch (resource) {
                 case 'activities.list':
-                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '/more/0/30' }).then((res) => {
-                        let activities = JSON.parse(res);
+                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '?metaonly=false&start=0&limit=30' }).then((res) => {
+                        let activities = JSON.parse(res).items;
                         callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
                     }).catch((err) => {
                         console.log(err);
@@ -35,8 +35,8 @@ export default {
 
                     if (!params.newActivities) break;
 
-                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '/more/' + params.newActivities.start + '/' + params.newActivities.numNew }).then((res) => {
-                        let activities = JSON.parse(res);
+                    rp.get({uri: Microservices.activities.uri + '/activities/' + content_kind + '/' + content_id + '?metaonly=false&start=' + params.newActivities.start + '&limit=' + params.newActivities.numNew }).then((res) => {
+                        let activities = JSON.parse(res).items;
                         callback(null, {activities: activities, selector: selector, hasMore: (activities.length === 30)});
                     }).catch((err) => {
                         console.log(err);
@@ -77,17 +77,7 @@ export default {
                 break;
         }
     }
-    // update: (req, resource, params, body, config, callback) => {
-    //     req.reqId = req.reqId ? req.reqId : -1;
-    //     log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
-    //     let args = params.params? params.params : params;
-    //     if(resource === 'activities.like'){
-    //         /*********connect to microservices*************/
-    //         //todo
-    //         /*********received data from microservices*************/
-    //         callback(null, {id: args.id});
-    //     }
-    // }
+
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
     // update: (req, resource, params, body, config, callback) => {}
