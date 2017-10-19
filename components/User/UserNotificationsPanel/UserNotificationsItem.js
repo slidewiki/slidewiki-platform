@@ -134,7 +134,7 @@ class UserNotificationsItem extends React.Component {
                 break;
             case 'use':
                 const useIconClass = allIconClass.concat(' repeat');
-                const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
+                const title = (notification.use_info.target_name !== '') ? notification.use_info.target_name : notification.use_info.target_id;
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
