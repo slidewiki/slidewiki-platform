@@ -59,6 +59,13 @@ class SendReportStore extends BaseStore {
     closeReportModal(payload){
         this.openModal = false;
         this.activeTrap = false;
+        
+        this.wrongFields = {
+            reason: false,
+            text: false,
+            name: false
+        };
+        this.error = null;
         this.emitChange();
     }
 
