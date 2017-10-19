@@ -241,14 +241,14 @@ class ReportModal extends React.Component {
                                             <input type="hidden" id="reason" name="reason" ref="reason" />
                                                 <i className="dropdown icon"/>
                                                 <div className="default text">Reason</div>
-                                                <div className="menu">
-                                                    <div className="item" data-value="copyright">Copyright</div>
-                                                    <div className="item" data-value="spam">Spam</div>
+                                                <div className="menu" role="menu">
+                                                    <div className="item" data-value="copyright" role="menuitem">Copyright</div>
+                                                    <div className="item" data-value="spam" role="menuitem">Spam</div>
                                                 </div>
                                         </div>
                                         <br/>
                                         <div className={fieldClass_text}>
-                                            <label>Explanation</label>
+                                            <label hmtlFor="reportComment">Explanation</label>
                                             <textarea ref="text" id="reportComment" name="text" style={{width:'50%', minHeight: '6em', height: '6em'}} placeholder="Please give a short explanation about your report"></textarea>
                                         </div>
                                         {(this.props.UserProfileStore.userid === '') ?  captchaField: ''}
