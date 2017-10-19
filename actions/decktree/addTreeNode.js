@@ -16,8 +16,9 @@ export default function addTreeNode(context, payload, done) {
                 //context.dispatch('ADD_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('ADD_TREE_NODE_SUCCESS', res);
+                let activityType = (payload.attach) ? 'attach' : 'add';
                 let activity = {
-                    activity_type: 'add',
+                    activity_type: activityType,
                     user_id: String(userid),
                     content_owner_id: String(context.getStore(UserProfileStore).userid),
                     content_name: res.node.title,
