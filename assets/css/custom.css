@@ -120,10 +120,19 @@
  }
 
 /* HTML DOM Node related */
-.diff-view .added, .modified, .deleted {
+.diff-view .added, .diff-view .modified, .diff-view .deleted {
   padding: 5px;
   margin: 0px -10px;
   display: inline-block;
+}
+
+.diff-view ul, .diff-view ol {
+  display: flex;
+  flex-direction: column;
+}
+
+.diff-view ul .added, .diff-view ul .modified, .diff-view ul .deleted {
+  display: inline-table !important;
 }
 
 .diff-view p {
