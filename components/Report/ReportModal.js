@@ -205,7 +205,6 @@ class ReportModal extends React.Component {
                     + 'Description of the report: \n\n' + this.refs.text.value + '\n\n\n',
                 swal_messages : this.getSwalMessages()
             };
-            console.log(payload);
             this.context.executeAction(sendReport,payload);
 
 
@@ -230,6 +229,7 @@ class ReportModal extends React.Component {
             modalOpen: false,
             activeTrap: false
         });
+        this.context.executeAction(closeReportModal,{});
 
     }
 
@@ -253,7 +253,7 @@ class ReportModal extends React.Component {
             'ui': true,
             'selection': true,
             'dropdown': true,
-            'required': true,
+            'bottom': true,
             'error': this.props.SendReportStore.wrongFields.reason
         });
 
@@ -313,16 +313,20 @@ class ReportModal extends React.Component {
                         }}
                         >
                         <Modal.Header className="ui center aligned" id="reportModalHeader">
-                            <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modal_title)+' '+this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' +  this.context.intl.formatMessage(this.messages.modal_title_2)}</h1>
+                            <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modal_title)}  {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck'} {this.context.intl.formatMessage(this.messages.modal_title_2)}</h1>
                         </Modal.Header>
                         <Modal.Content>
                             <Container>
-                                <Segment color="blue" textAlign="center" padded>
-                                   <Segment>
-                                       <div id="reportModalDescription" tabIndex="0">{this.context.intl.formatMessage(this.messages.modal_description)}</div>
+                                <Segment color="blue" textAlign="left" padded>
+                                  <div id="reportModalDescription" tabIndex="0">{this.context.intl.formatMessage(this.messages.modal_description)}</div>
+
+                                   <Segment textAlign="center" >
                                     <Form id="reportForm">
+                                        <Segment textAlign="left" >
                                         {(this.props.UserProfileStore.userid === '') ?  nameField: ''}
-                                        <div style={{width:'50%'}} className={fieldClass_reason} data-tooltip={this.context.intl.formatMessage(this.messages.reason_tooltip)} ref="reasonDropdown">
+                                        <label htmlFor="reason">{this.context.intl.formatMessage(this.messages.reason_option_reason)}</label>
+                                        <div style={{width:'50%'}} className={fieldClass_reason} style={{display:'block'}} data-tooltip={this.context.intl.formatMessage(this.messages.reason_tooltip)} ref="reasonDropdown">
+
                                             <input type="hidden" id="reason" name="reason" ref="reason"/>
                                                 <i className="dropdown icon"/>
                                                 <div className="default text">{this.context.intl.formatMessage(this.messages.reason_option_reason)}</div>
@@ -334,9 +338,10 @@ class ReportModal extends React.Component {
                                         <br/>
                                         <div className={fieldClass_text}>
                                             <label htmlFor="reportComment">{this.context.intl.formatMessage(this.messages.explanation)}</label>
-                                            <textarea ref="text" id="reportComment" name="text" style={{width:'50%', minHeight: '6em', height: '6em'}} placeholder={this.context.intl.formatMessage(this.messages.explanation_placeholder)}></textarea>
+                                            <textarea ref="text" id="reportComment" name="text" style={{width:'100%', minHeight: '6em', height: '6em'}} placeholder={this.context.intl.formatMessage(this.messages.explanation_placeholder)}></textarea>
                                         </div>
                                         {(this.props.UserProfileStore.userid === '') ?  captchaField: ''}
+                                        </Segment>
                                         <Button
                                             color="blue"
                                             type="submit"

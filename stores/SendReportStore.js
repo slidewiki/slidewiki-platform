@@ -50,16 +50,16 @@ class SendReportStore extends BaseStore {
         this.emitChange();
     }
 
-    openReportModal(payload){
+    openReportModal(){
         this.openModal = true;
         this.activeTrap = true;
         this.emitChange();
     }
 
-    closeReportModal(payload){
+    closeReportModal(){
         this.openModal = false;
         this.activeTrap = false;
-        
+
         this.wrongFields = {
             reason: false,
             text: false,
@@ -83,8 +83,7 @@ SendReportStore.handlers = {
     'REPORT_SHOW_WRONG_FIELDS': 'showWrongFields',
     'REPORT_MODAL_OPEN': 'openReportModal',
     'REPORT_MODAL_CLOSE': 'closeReportModal'
-    //'CREATION_FAILURE': 'creationFailure',
-    //'CREATION_SUCCESS': 'creationSuccess',
+
 };
 
 
