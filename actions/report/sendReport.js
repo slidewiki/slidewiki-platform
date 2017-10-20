@@ -1,11 +1,10 @@
 import log from '../log/clog';
-//import {navigateAction} from 'fluxible-router';
 
 export default function sendReport(context,payload,done){
     log.info(context);
 
     context.service.create('email', {subject: payload.subject, message: payload.text}, { timeout: 20 * 1000 }, (err, res) => {
-        // console.log('action got:', err, res);
+
         if (err) {
             swal({
                 title: payload.swal_messages.title,
@@ -16,10 +15,8 @@ export default function sendReport(context,payload,done){
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 buttonsStyling: false
-            })
-            .then(() => {
-                //nothing
             });
+
         } else {
             swal({
                 title: payload.swal_messages.title,
@@ -30,14 +27,6 @@ export default function sendReport(context,payload,done){
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 buttonsStyling: false
-            })
-            .then(() => {
-                //go to homepage
-                //context.executeAction(navigateAction, {
-                  //go to home page after
-                  //  url: '/'
-                //});
-
             });
         }
         done();
