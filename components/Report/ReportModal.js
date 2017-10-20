@@ -306,9 +306,11 @@ class ReportModal extends React.Component {
                         id="focus-trap-reportModal"
                         className = "header"
                         active={this.state.activeTrap}
-                        onDeactivate={this.unmountTrap}
-                        clickOutsideDeactivates={true}
-                        initialFocus="#reportModalDescription"
+                        focusTrapOptions={{
+                            onDeactivate:this.unmountTrap,
+                            clickOutsideDeactivates:true,
+                            initialFocus: '#reportModalDescription'
+                        }}
                         >
                         <Modal.Header className="ui center aligned" id="reportModalHeader">
                             <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modal_title)+' '+this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck' +  this.context.intl.formatMessage(this.messages.modal_title_2)}</h1>
@@ -365,7 +367,8 @@ class ReportModal extends React.Component {
 }
 
 ReportModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 ReportModal = connectToStores(ReportModal, [ContentStore, UserProfileStore, SendReportStore], (context, props) => {
