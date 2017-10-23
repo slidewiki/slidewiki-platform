@@ -71,5 +71,8 @@ export default {
         'translation': {
             uri: 'https://translationservice.experimental.slidewiki.org'
         },
+        'questions': {
+            uri: 'https://questionservice.experimental.slidewiki.org'
+        }
     }
 };

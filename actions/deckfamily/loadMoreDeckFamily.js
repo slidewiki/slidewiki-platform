@@ -6,7 +6,7 @@ export default function loadMoreDeckFamily(context, payload, done) {
     log.info(context);
 
     // form appropriate search query params
-    payload.params.queryparams = `keywords=*:*&kind=deck&tag=${encodeURIComponent(payload.params.tag)}&sort=lastUpdate`;
+    payload.params.queryparams = `keywords=*:*&kind=deck&tag=${encodeURIComponent(payload.params.tag)}&sort=lastUpdate&page=${payload.page}`;
 
     // fetch results from search-service
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
@@ -18,7 +18,8 @@ export default function loadMoreDeckFamily(context, payload, done) {
                 tag: decodeURIComponent(payload.params.tag),
                 numFound: res.numFound,
                 decks: res.docs,
-                start: res.start
+                page: res.page,
+                hasMore: res.hasMore
             });
         }
 

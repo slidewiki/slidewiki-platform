@@ -225,7 +225,6 @@ export default {
                 },
                 tags: params.tags,
                 title: params.title,
-                user: params.userid.toString(),
                 license: params.license,
                 theme: params.theme
             };
@@ -233,6 +232,7 @@ export default {
                 method: 'POST',
                 uri: Microservices.deck.uri + '/deck/new',
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
@@ -271,7 +271,6 @@ export default {
                 language: params.language,
                 tags: params.tags? params.tags: [],
                 title: params.title,
-                user: params.userid.toString(),
                 license: params.license,
                 theme: params.theme,
                 new_revision: false,
@@ -283,6 +282,7 @@ export default {
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
@@ -321,6 +321,7 @@ export default {
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
@@ -330,9 +331,7 @@ export default {
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId + '/fork',
                 json: true,
-                body: {
-                    user: params.userid.toString()
-                }
+                headers: {'----jwt----': params.jwt},
             }).then((res) => callback(false, res))
             .catch((err) => callback(err));
         }

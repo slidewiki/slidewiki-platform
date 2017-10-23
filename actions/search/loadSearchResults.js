@@ -20,8 +20,8 @@ export default function loadSearchResults(context, payload, done) {
     context.service.read('searchresults.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
-            context.executeAction(serviceUnavailable, payload, done);
-            //context.dispatch('LOAD_RESULTS_FAILURE', err); // not implemented in store
+            // context.executeAction(serviceUnavailable, payload, done);
+            context.dispatch('LOAD_RESULTS_FAILURE', err);
         } else {
             context.dispatch('LOAD_RESULTS_SUCCESS', res);
         }

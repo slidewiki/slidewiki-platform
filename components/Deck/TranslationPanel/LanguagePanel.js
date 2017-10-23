@@ -42,11 +42,12 @@ class LanguagePanel extends React.Component {
         const deckLanguage = this.props.TranslationStore.currentLang.language;
         const translations = this.props.TranslationStore.translations;
         let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>;
-
-        let options = translations.map(this.renderAvailable, this).filter((option) => {
-            return option;
-        });
-
+        let options = [];
+        if (translations){
+            options = translations.map(this.renderAvailable, this).filter((option) => {
+                return option;
+            });
+        }
         options.push(<TranslationPanel2/>);
 
         return(
