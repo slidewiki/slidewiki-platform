@@ -34,6 +34,8 @@ class presentationBroadcast extends React.Component {
         this.speechRecognitionDisabled = false;
         this.startSpeechrecognition = false;
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
+        this.showReopenModalButton = false;
+        this.myName = '';
     }
 
     componentDidMount() {
@@ -596,6 +598,12 @@ class presentationBroadcast extends React.Component {
                 case 'newUsername':
                     handleNewUsername(data.data, peerID);
                     break;
+                case 'username':
+                    if(!that.isInitiator){
+                        that.myName = data.data;
+                        this.forceUpdate();
+                    }
+                    break;
                 case 'completeTask':
                     showCompleteTaskModal();
                     break;
@@ -753,6 +761,7 @@ class presentationBroadcast extends React.Component {
                 that.pcs[peerID].username = 'Peer ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
             else
                 that.pcs[peerID].username = username;
+            sendRTCMessage('username', that.pcs[peerID].username, peerID);
             that.forceUpdate();
         }
 
@@ -762,25 +771,41 @@ class presentationBroadcast extends React.Component {
         }
 
         function showCompleteTaskModal() {
+            let tmp = that;
+            if(tmp === undefined)
+                tmp = this;
+            tmp.showReopenModalButton = false;
             swal({
                 title: 'Complete the given Task',
                 text: 'The presenter asked you to complete a task. As soon as you have completed the task, click on "Completed" and wait for the presenter to proceed.',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Completed',
+                showCancelButton: true,
+                cancelButtonText: 'Dismiss',
                 allowOutsideClick: false,
-                allowEscapeKey: false
+                allowEscapeKey: false,
             }).then(() => {
-                sendRTCMessage('taskCompleted',undefined, that.presenterID);
+                tmp.sendRTCMessage('taskCompleted',undefined, tmp.presenterID);
+            }).catch((e) => {
+                if(e === 'cancel'){
+                    tmp.showReopenModalButton = true;
+                    tmp.forceUpdate();
+                }
             });
+            tmp.forceUpdate();
         }
+
+        that.showCompleteTaskModal = showCompleteTaskModal;
 
         function checkUser(id) {
             $('input#'+id).prop('checked', true);
         }
 
         function closeModal() {
+            that.showReopenModalButton = false;
             swal.closeModal();
+            that.forceUpdate();
         }
     }
 
@@ -882,6 +907,7 @@ class presentationBroadcast extends React.Component {
                   sendRTCMessage={this.sendRTCMessage}
                   presenterID={this.presenterID}
                   myID={this.myID}
+                  myName={this.myName}
                   pcs={this.pcs}
                   lastMessage={this.lastMessage} />
               </Grid.Column>
@@ -912,6 +938,10 @@ class presentationBroadcast extends React.Component {
                   ) : (
                     <Button content='Resume to presenter progress' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                   )}
+                  {(this.showReopenModalButton) ? (
+                    <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
+                  ) : ''}
+
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>

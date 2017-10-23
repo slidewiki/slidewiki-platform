@@ -17,7 +17,7 @@ class Chat extends React.Component {
     constructor(props) {
         super(props);
 
-        this.textInputLength = 300;
+        this.textInputLength = 2000;
         this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
     }
 
@@ -112,7 +112,7 @@ class Chat extends React.Component {
             {(!this.props.isInitiator) ? (
               <Grid columns={1}>
                 <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.5+'px', 'minHeight': this.props.height*0.5+'px', 'height': this.props.height*0.5+'px'}}>
-                  <h3>Your Questions:</h3>
+                  <h3>Your Questions ({this.props.myName}):</h3>
                   {messages}
                 </Grid.Column>
                 <Grid.Column>
