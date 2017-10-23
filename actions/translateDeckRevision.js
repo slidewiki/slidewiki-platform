@@ -18,6 +18,8 @@ export default function translateDeckRevision(context, payload, done) {
 
     payload.user = user.toString();
     payload.deckId = context.getStore(ContentStore).selector.id;
+    payload.jwt = context.getStore(UserProfileStore).jwt;
+    console.log(payload);
         //enrich with root deck id if deck to be revised is not uppermost deck
     //    let parent = TreeUtil.getParentId(payload.selector);
     //    payload.root_deck = parent;

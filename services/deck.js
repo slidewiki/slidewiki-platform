@@ -238,15 +238,14 @@ export default {
             .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
 
-            
             let toSend = {
-                user: params.user,
                 language: params.language
             };
             rp({
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId + '/translate',
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((data) => {
                 //console.log('DECK:' + JSON.stringify(data.root_deck));
