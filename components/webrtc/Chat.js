@@ -76,7 +76,7 @@ class Chat extends React.Component {
         let currentTime = new Date().getTime();
         this.commentList[currentTime] = {};
         if(!fromMyself)
-            this.commentList[currentTime].peer = 'Peer ' + (this.props.pcs[peerID].username || Object.keys(this.props.pcs).indexOf(data.sender));
+            this.commentList[currentTime].peer = this.props.pcs[peerID].username || Object.keys(this.props.pcs).indexOf(data.sender);
         else
             this.commentList[currentTime].peer = 'Me';
         this.commentList[currentTime].message = data.data;

@@ -33,6 +33,7 @@ class presentationBroadcast extends React.Component {
         this.subtitle = '';//used for speech recognition results
         this.speechRecognitionDisabled = false;
         this.startSpeechrecognition = false;
+        this.peerNumber = -1;//used for peernames, will be incremented on each new peer
     }
 
     componentDidMount() {
@@ -333,6 +334,7 @@ class presentationBroadcast extends React.Component {
         function createPeerConnection(peerID) {
             try {
                 that.pcs[peerID] = {};
+                that.pcs[peerID].username = '';
                 that.pcs[peerID].RTCconnection = new RTCPeerConnection(that.pcConfig);
                 that.pcs[peerID].RTCconnection.onicecandidate = handleIceCandidate.bind(that, peerID);
                 that.pcs[peerID].RTCconnection.ontrack = handleRemoteStreamAdded;
@@ -747,8 +749,16 @@ class presentationBroadcast extends React.Component {
 
 
         function handleNewUsername(username, peerID) {
-            that.pcs[peerID].username = username;
+            if(isEmpty(username) || username === 'undefined')
+                that.pcs[peerID].username = 'Peer ' + nextPeerNumber();//TODO implement separate counter, as this will mess up numbers
+            else
+                that.pcs[peerID].username = username;
             that.forceUpdate();
+        }
+
+        function nextPeerNumber() {
+            that.peerNumber += 1;
+            return that.peerNumber;
         }
 
         function showCompleteTaskModal() {
@@ -774,11 +784,11 @@ class presentationBroadcast extends React.Component {
         }
     }
 
-
-
     sendUsername() {
         if (this.context && this.context.getUser() && this.context.getUser().username)
             this.sendRTCMessage('newUsername', this.context.getUser().username, this.presenterID);
+        else
+            this.sendRTCMessage('newUsername', 'undefined');
     }
 
     audienceCompleteTask (event) {
@@ -800,8 +810,6 @@ class presentationBroadcast extends React.Component {
         });
         this.sendRTCMessage('completeTask');
     }
-
-
 
     resumePlayback(){
         this.paused = false;
@@ -854,7 +862,8 @@ class presentationBroadcast extends React.Component {
 
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
-            return this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbits';
+            let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
+            return tmp ? 'Anonymous Rabbits' : this.pcs[key].username;
         }));
         peernames = Array.from(peernames).reduce((a,b) => a+', '+b, '').substring(1);
 
