@@ -147,7 +147,7 @@ class AttachSubdeckModal extends React.Component{
                 id:slideId
             };
         });
-        this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec});
+        this.context.executeAction(addTreeNodeListAndNavigate, {selector: this.props.selector, nodeSpec:nodeSpec, attach: true});
 
         //find target deck id
         let targetDeckId = this.props.selector.sid;

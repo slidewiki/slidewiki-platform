@@ -39,7 +39,7 @@ export default function saveTreeNode(context, payload, done) {
                 //create new activity
                 let activity = {
                     activity_type: 'edit',
-                    user_id: String(userid),
+                    user_id:String(context.getStore(UserProfileStore).userid),
                     content_id: String(newSid),
                     content_kind: payload.selector.stype
                 };
