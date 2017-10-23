@@ -20,7 +20,6 @@ import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 
 import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
-import LanguagePanel from '../../../TranslationPanel/LanguagePanel.js';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -68,12 +67,12 @@ class DeckViewPanel extends React.Component {
         const deckOwner = this.props.DeckViewStore.ownerData.username;
         const originCreator = this.props.DeckViewStore.originCreatorData.username;
 
-        // let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
-        // let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
-        // // default English
-        // deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
-        // //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
-        // //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
+        let deckLanguageCode = deckData.language === undefined ? 'en' : deckData.language;
+        let deckLanguage = deckLanguageCode === undefined ? '' : ISO6391.getName(deckLanguageCode);
+        // default English
+        deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
+        //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
+        //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
         // // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
         // //const countryFlag = 'gb';
         //let translations = this.props.TranslationStore.translations;
@@ -123,7 +122,9 @@ class DeckViewPanel extends React.Component {
                             <div className="ui hidden divider"></div>
 
                             <div className="meta">
-                                <TranslationPanel/>
+                                <div className="ui label" tabIndex="0">
+                                    <i className="comments icon" aria-label="Language"></i>{deckLanguage}
+                                </div>
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                 </div>
