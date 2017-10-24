@@ -101,10 +101,10 @@ class Deck extends React.Component {
 
                 <div className={leftColClass}>
                     <div className="row">
-                        <div className={treePanelClass}>
+                        {/*<div className={treePanelClass}>
                             <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
                         </div>
-                        {/*
+
                         <div className="ui hidden divider"></div>
                         <div className={ActivityFeedPanelClass}>
                             <div className="row">
