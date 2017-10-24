@@ -1540,16 +1540,27 @@ class SlideContentEditor extends React.Component {
             'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
+        const dropDownItemStyle = {
+            //minWidth: '100%',
+            minHeight: '100px',
+            //borderStyle: 'dashed dashed none dashed',
+            //borderColor: '#e7e7e7',
+        };
         let templateOptions = <div className="menu">
             <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
-                Title and bullets
+                Title and bullets <br/>
+                <br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
             <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
-                Empty document
+                Empty document <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
             <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column
+                1 row 1 column <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
+            {/*
             <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 2 columns
             </div>
@@ -1583,8 +1594,8 @@ class SlideContentEditor extends React.Component {
             <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
                 EKDDA template - English no footer
             </div>
+            */}
         </div>;
-
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
