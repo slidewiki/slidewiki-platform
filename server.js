@@ -101,6 +101,7 @@ fetchrPlugin.registerService(require('./services/logservice'));
 fetchrPlugin.registerService(require('./services/like'));
 fetchrPlugin.registerService(require('./services/email'));
 fetchrPlugin.registerService(require('./services/media'));
+fetchrPlugin.registerService(require('./services/userreview'));
 
 
 // ************************** UI Internationalisation routines ***************************************
