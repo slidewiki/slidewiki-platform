@@ -93,7 +93,7 @@ const app = new Fluxible({
         PermissionsStore,
         ContentLikeStore,
         DeckFamilyStore,
-        UserReviewStore
+        UserReviewStore,
         MediaStore
     ]
 });
