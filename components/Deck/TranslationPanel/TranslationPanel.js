@@ -8,7 +8,6 @@ import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import TranslationPanel2 from './TranslationPanel2.js';
 
 
 class TranslationPanel extends React.Component {
@@ -21,17 +20,17 @@ class TranslationPanel extends React.Component {
     }
 
 
-    handleTranslateToClick(event,data){
-        //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
-        this.context.executeAction(translateDeckRevision, {
-            // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
-            language: data.value+'_'+data.value.toUpperCase()
-        });
-        this.dropDown.setValue('');
-
-
-        //
-    }
+    // handleTranslateToClick(event,data){
+    //     //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
+    //     this.context.executeAction(translateDeckRevision, {
+    //         // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
+    //         language: data.value+'_'+data.value.toUpperCase()
+    //     });
+    //     this.dropDown.setValue('');
+    //
+    //
+    //     //
+    // }
 
     renderAvailable(translation) {
         if (translation.language !== this.props.TranslationStore.currentLang.language){
@@ -76,21 +75,21 @@ class TranslationPanel extends React.Component {
 
         let languageOptions = supported.map(this.renderTranslateTo, this);
 
-        let translate_item = user ?
-
-        <Dropdown text='Translate...'
-            floating
-            labeled
-            button
-            scrolling
-            className='icon primary small'
-            icon='world'
-            options={languageOptions}
-            onChange = {this.handleTranslateToClick.bind(this)}
-            ref = {(dropDown) => {this.dropDown = dropDown;}}
-          />
-
-        : '';
+        // let translate_item = user ?
+        //
+        // <Dropdown text='Translate...'
+        //     floating
+        //     labeled
+        //     button
+        //     scrolling
+        //     className='icon primary small'
+        //     icon='world'
+        //     options={languageOptions}
+        //     onChange = {this.handleTranslateToClick.bind(this)}
+        //     ref = {(dropDown) => {this.dropDown = dropDown;}}
+        //   />
+        //
+        // : '';
 
         let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>;
 
@@ -99,8 +98,6 @@ class TranslationPanel extends React.Component {
             <Dropdown item trigger={currentLang}>
                 <Dropdown.Menu>
                 { translations.map(this.renderAvailable, this) }
-                        {divider}
-                        {translate_item}
                 </Dropdown.Menu>
             </Dropdown>
 
