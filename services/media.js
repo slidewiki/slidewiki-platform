@@ -44,15 +44,14 @@ export default {
             rp.put({
                 uri: url,
                 body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
-                headers: headers,
-                json: true
+                headers: headers
             })
                 .then((res) => {
-                    // console.log('response from saving image:', res);
-                    callback(null, Microservices.file.uri + res.url);
+                    // console.log('media: response from saving image:', res);
+                    callback(null, Microservices.file.uri + JSON.parse(res).url);
                 })
                 .catch((err) => {
-                    console.log('Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
+                    // console.log('media: Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
                     callback(err, null);
                 });
         }
