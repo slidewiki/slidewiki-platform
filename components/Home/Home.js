@@ -224,7 +224,7 @@ class Home extends React.Component {
                                 </div>
                                 <div className="ui segment top attached">
                                     <DeckList scope="featured"/>
-                                    <Button as='button' primary style={{'margin-left':'auto', 'display':'inherit'}} onClick={this.openFeatured.bind(this)}><FormattedMessage id='home.view_all' defaultMessage='View all'/></Button>
+                                    <Button as='button' primary style={{'margin-left':'auto', 'display':'inherit'}} onClick={this.openFeatured.bind(this)}><FormattedMessage id='home.allfeatured' defaultMessage='See all'/></Button>
 
                                 </div>
                             </div>
