@@ -33,7 +33,7 @@
     "dev:windows": "set HOST=127.0.0.1&& set PORT=3000&& node ./webpack/dev-server.js",
     "langs": "babel plugins/intl/translate.js | node",
     "lint": "eslint --ignore-path .gitignore -c .eslintrc \"./**/*.js\"",
-    "test:unit": "mocha test/unit/ --recursive --compilers js:babel-register --reporter spec",
+    "test": "npm run test:components",
     "test:components": "mocha test/setup.js test/components/**/*.js",
     "coverage": "istanbul cover _mocha -- --require babel-register test/setup.js test/components/*.js",
     "coverall": "npm run coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
