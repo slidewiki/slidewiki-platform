@@ -87,16 +87,16 @@ export default {
     },
 
     featuredDecks: {
-        path: '/recommended/:limit?/:offset?',
+        path: '/featured/:limit?/:offset?',
         method: 'get',
         page: 'featuredDecks',
-        title: 'Slidewiki -- top decks',
+        title: 'Slidewiki -- featured decks',
         handler: require('../components/Home/Featured'),
         action: (context, payload, done) => {
             async.series([
                 (callback) => {
                     context.dispatch('UPDATE_PAGE_TITLE', {
-                        pageTitle: shortTitle + ' | Recommended Decks'
+                        pageTitle: shortTitle + ' | Featured Decks'
                     });
                     callback();
                 },

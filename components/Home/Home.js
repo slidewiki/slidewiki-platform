@@ -10,7 +10,7 @@ class Home extends React.Component {
 
     openFeatured(e){
         this.context.executeAction(navigateAction, {
-            url: '/recommended'
+            url: '/featured'
         });
     };
     render() {
@@ -220,7 +220,7 @@ class Home extends React.Component {
                             </div>
                             <div className="ui segments">
                                 <div className="ui segment top attached">
-                                    <h3><FormattedMessage id='home.featured' defaultMessage='Recommended decks'/></h3>
+                                    <h3><FormattedMessage id='home.featured' defaultMessage='Featured decks'/></h3>
                                 </div>
                                 <div className="ui segment top attached">
                                     <DeckList scope="featured"/>
