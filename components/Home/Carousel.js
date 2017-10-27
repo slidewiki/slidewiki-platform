@@ -63,7 +63,7 @@ class Carousel extends React.Component {
                                         <div className="glide__wrapper hide-element">
                                             <ul className="glide__track" style={{minHeight: '300px'}}>
                                                 <li className="glide__slide">
-                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <NavLink href="/discover" className="ui large image" tabIndex="-1">
                                                     <FormattedMessage id="carousel.create_alt" defaultMessage='Create slides with SlideWiki.'>
                                                     {
                                                         (alt) => <img
@@ -75,7 +75,7 @@ class Carousel extends React.Component {
                                                     </NavLink>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <NavLink href="/discover" className="ui large image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.reuse_alt" defaultMessage='Repurpose & Reuse Educational Content through open educational resources.'>
                                                         {
                                                             (alt) => <img
@@ -87,7 +87,7 @@ class Carousel extends React.Component {
                                                     </NavLink>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <NavLink href="/features" className="ui large image" tabIndex="-1">
+                                                    <NavLink href="/discover" className="ui large image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.collaborative_alt" defaultMessage='Collaborative Content Authoring.'>
                                                         {
                                                             (alt) => <img
@@ -99,7 +99,7 @@ class Carousel extends React.Component {
                                                     </NavLink>
                                                 </li>
                                                 <li className="glide__slide" >
-                                                    <NavLink href="/features" className="ui large  image" tabIndex="-1">
+                                                    <NavLink href="/discover" className="ui large  image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.communities_alt" defaultMessage='Supporting Knowledge Communities.'>
                                                         {
                                                             (alt) => <img
@@ -126,7 +126,7 @@ class Carousel extends React.Component {
                                 <div className="left aligned five wide column">
                                     <h2><FormattedMessage id="carousel.menu.title" defaultMessage='Discover SlideWiki'/></h2>
                                     <div className="ui right vertical fluid compact menu">
-                                        <NavLink className="item gslide-header gh1"  data-glide-trigger='.glide' href="/features" data-glide-dir='=1'>
+                                        <NavLink className="item gslide-header gh1"  data-glide-trigger='.glide' href="/discover" data-glide-dir='=1'>
                                             <div className="content">
                                                 <div className="ui small header">
                                                     <FormattedMessage id="carousel.menu.1" defaultMessage='Create Online Slide Decks'/>
@@ -135,7 +135,7 @@ class Carousel extends React.Component {
                                                 </div>
                                             </div>
                                         </NavLink>
-                                        <NavLink className="item gslide-header gh2" data-glide-trigger='.glide' data-glide-dir='=2' href="/features" >
+                                        <NavLink className="item gslide-header gh2" data-glide-trigger='.glide' data-glide-dir='=2' href="/discover" >
                                             <div className="content">
                                                 <div className="ui small header">
                                                     <FormattedMessage id="carousel.menu.2" defaultMessage='Reuseable Educational Content'/>
@@ -143,14 +143,14 @@ class Carousel extends React.Component {
                                                 <div className="description"><FormattedMessage id="carousel.menu.2_desc" defaultMessage='Discover a wide range of open educational slides and courses.'/></div>
                                             </div>
                                         </NavLink>
-                                        <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/features" href="/features" data-glide-dir='=3'>
+                                        <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/discover" href="/discover" data-glide-dir='=3'>
                                             <div className="content">
                                                 <div className="ui small header"><FormattedMessage id="carousel.menu.3" defaultMessage='Collaborative Content Authoring'/>
                                                 </div>
                                                 <div className="description"><FormattedMessage id="carousel.menu.3_desc" defaultMessage='Create slides online together with peers and colleagues through our collaborative editing features.'/></div>
                                             </div>
                                         </NavLink>
-                                        <NavLink className="item gslide-header gh4"  href="/features" data-glide-trigger='.glide' data-glide-dir='=4'>
+                                        <NavLink className="item gslide-header gh4"  href="/discover" data-glide-trigger='.glide' data-glide-dir='=4'>
                                             <div className="content">
                                                 <div className="ui small header"><FormattedMessage id="carousel.menu.4" defaultMessage='Supporting Knowledge Communities'/>
                                                 </div>
