@@ -1,11 +1,18 @@
 import React, {PropTypes} from 'react';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
-import { NavLink } from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
+import {Button} from 'semantic-ui-react';
 
 class Home extends React.Component {
+
+    openFeatured(e){
+        this.context.executeAction(navigateAction, {
+            url: '/recommended'
+        });
+    };
     render() {
         const heightStyle = {
             height: '100px'
@@ -17,6 +24,8 @@ class Home extends React.Component {
         const compMessageStyle = {
             background: '#1E78BB'
         };
+
+
         return (
             <div ref="home">
                 <div className="ui blue inverted segment" style={{borderRadius: '0px'}}>
@@ -211,9 +220,13 @@ class Home extends React.Component {
                             </div>
                             <div className="ui segments">
                                 <div className="ui segment top attached">
-                                    <h3><FormattedMessage id='home.featured' defaultMessage='Featured decks'/></h3>
+                                    <h3><FormattedMessage id='home.featured' defaultMessage='Recommended decks'/></h3>
                                 </div>
-                                <DeckList scope="featured"/>
+                                <div className="ui segment top attached">
+                                    <DeckList scope="featured"/>
+                                    <Button as='button' primary style={{'margin-left':'auto', 'display':'inherit'}} onClick={this.openFeatured.bind(this)}><FormattedMessage id='home.view_all' defaultMessage='View all'/></Button>
+
+                                </div>
                             </div>
                         </div>
 
@@ -229,7 +242,8 @@ class Home extends React.Component {
 
 Home.contextTypes = {
     intl: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.func
+    getUser: React.PropTypes.func.isRequired,
+    executeAction: React.PropTypes.func.isRequired
 };
 
 

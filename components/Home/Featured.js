@@ -3,15 +3,16 @@ import DeckList from './DeckList';
 import {Container, Header} from 'semantic-ui-react';
 import { FormattedMessage, defineMessages} from 'react-intl';
 
-class Recent extends React.Component {
+class Featured extends React.Component {
     render() {
+
         return (
             <Container>
-                <Header as="h2" style={{marginTop: '1em'}}><FormattedMessage id="recent.header" defaultMessage="Recent decks added by users"/></Header>
-                <DeckList scope="recent"/>
+                <Header as="h2" style={{marginTop: '1em'}}><FormattedMessage id="featured.header" defaultMessage="Recommended decks"/></Header>
+                <DeckList scope="featured"/>
             </Container>
         );
     }
 }
 
-export default Recent;
+export default Featured;
