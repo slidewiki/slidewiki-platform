@@ -1554,18 +1554,19 @@ class SlideContentEditor extends React.Component {
             </div>
             <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
                 Empty document <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
             </div>
             <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 1 column <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
             </div>
-            {/*
             <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 2 columns
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
             </div>
             <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
                 2 rows 2 columns
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
             </div>
             <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
                 2 rows 1 column
@@ -1594,7 +1595,6 @@ class SlideContentEditor extends React.Component {
             <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
                 EKDDA template - English no footer
             </div>
-            */}
         </div>;
         const headerStyle = {
             //minWidth: '100%',
