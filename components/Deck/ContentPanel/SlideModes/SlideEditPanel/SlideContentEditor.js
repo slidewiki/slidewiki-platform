@@ -1561,39 +1561,48 @@ class SlideContentEditor extends React.Component {
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
             </div>
             <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 2 columns
+                1 row 2 columns <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
             </div>
             <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 2 columns
+                2 rows 2 columns <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
             </div>
             <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 1 column
+                2 rows 1 column <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
             </div>
             <div className="item" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column image
+                1 row 1 column image <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
             </div>
             <div className="item" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
-                Document with title
+                Document with title <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
             </div>
             <div className="item" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                Open University Theme Title Page
+                Open University Theme Title Page <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
             </div>
             <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                OEG Theme Title Page
+                OEG Theme Title Page <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
             </div>
             <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
-                SlideWiki template
+                SlideWiki template <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
             </div>
             <div className="item" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template
+                EKDDA template <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
             </div>
             <div className="item" data-value="EKDDAeng" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English
+                EKDDA template - English <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
             </div>
             <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English no footer
+                EKDDA template - English no footer <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
             </div>
         </div>;
         const headerStyle = {
