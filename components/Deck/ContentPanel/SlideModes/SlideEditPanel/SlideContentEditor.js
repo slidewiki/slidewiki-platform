@@ -710,13 +710,20 @@ class SlideContentEditor extends React.Component {
                 }, 500);
                 */
             });
-            if(document.domain !== 'localhost')
-            {
-                document.domain = 'slidewiki.org';
-            }
         });
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
         $('#inlineSpeakerNotes [style*="absolute"]').css({'position': 'relative', 'zIndex': '0'});
+
+        if(document.domain !== 'localhost')
+        {
+            // prevent problems with Cross Origin Resource Sharing when import service returns script
+            // set document domain to a suffix of the current domain
+            // see https://stackoverflow.com/questions/3076414/ways-to-circumvent-the-same-origin-policy
+            // TODO: use Cross-Origin Resource Sharing method, e.g., using https://dev.ckeditor.com/ticket/13475
+            document.domain = Microservices.import.uri.substring(Microservices.import.uri.indexOf('.')+1);
+            // image upload expects that fileservice runs on same domain,
+            // otherwise Cross-Origin Resource Sharing method is necessary
+        }
 
         ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) => {
             if(process.env.BROWSER){
