@@ -42,10 +42,14 @@ const compareWrapperIds = (initSrc, finalSrc) => {
 };
 
 const getParentId = (finalSrc, id) => {
-    const finalRoot = toHTML(finalSrc);
-    const parent = $(finalRoot).find(`#${id}`).parent();
+    if(id !== undefined){
+        const finalRoot = toHTML(finalSrc);
+        const parent = $(finalRoot).find(`#${id}`).parent();
 
-    return parent[0].id;
+        return parent[0].id;
+    } else {
+        return null;
+    }
 };
 
 const getClosestDiv = (finalSrc, id) => {
@@ -121,6 +125,7 @@ const handleREMOVE = (el, source, finalsource) => {
     } else {
         if(_id){
             let targetElement = $(root).find(`#${_id}`);
+            console.log(targetElement);
             targetElement.addClass('deleted');
         }
     }

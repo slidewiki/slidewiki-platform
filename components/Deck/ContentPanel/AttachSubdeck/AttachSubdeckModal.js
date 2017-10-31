@@ -3,12 +3,14 @@ import {connectToStores} from 'fluxible-addons-react';
 import { Button, Icon, Modal, Container, Segment, TextArea, Popup } from 'semantic-ui-react';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import AttachSubdeckModalStore from '../../../../stores/AttachSubdeckModalStore';
+import DeckTreeStore from '../../../../stores/DeckTreeStore';
 import FocusTrap from 'focus-trap-react';
 import loadUserDecks  from '../../../../actions/attachSubdeck/loadUserDecks';
 import loadRecentDecks  from '../../../../actions/attachSubdeck/loadRecentDecks';
 import resetModalStore from '../../../../actions/attachSubdeck/resetModalStore';
 import initModal from '../../../../actions/attachSubdeck/initModal';
 import addTreeNodeAndNavigate from '../../../../actions/decktree/addTreeNodeAndNavigate';
+import addActivity from '../../../../actions/activityfeed/addActivity';
 import AttachDeckList from './AttachDeckList';
 import AttachMenu from './AttachMenu';
 import AttachMyDecks from './AttachMyDecks';
@@ -107,11 +109,52 @@ class AttachSubdeckModal extends React.Component{
     handleAttachButton() {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "deck", id: 1245-2}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}, attach: true});
+
+        //find target deck id
+        let targetDeckId = this.props.selector.sid;
+        if (this.props.selector.stype === 'slide') {
+            const pathArray = this.props.selector.spath.split(';');
+            if (pathArray.length > 1) {
+                const parentDeck = pathArray[pathArray.length - 2];
+                targetDeckId = parentDeck.split(':')[0];
+            } else {
+                targetDeckId = this.props.selector.id;
+            }
+        }
+
+        let activity = {
+            activity_type: 'use',
+            user_id: String(this.props.UserProfileStore.userid),
+            content_id: this.state.selectedDeckId,
+            content_kind: 'deck',
+            use_info: {
+                target_id:  targetDeckId,
+                target_name: this.getTitle(this.props.DeckTreeStore.deckTree, 'deck', targetDeckId)
+            }
+        };
+
+        this.context.executeAction(addActivity, {activity: activity});
+
         this.handleClose();
 
     }
 
+    //find node title
+    getTitle(deckTree, type, id) {
+        let title = '';
+        if (deckTree.get('type') === type && deckTree.get('id') === id) {
+            title = deckTree.get('title');
+        } else if (deckTree.get('type') === 'deck') {
+            deckTree.get('children').forEach((item, index) => {
+                if (title === '') {
+                    title = this.getTitle(item, type, id);
+                }
+            });
+        }
+
+        return title;
+    }
 
     render() {
 
@@ -211,10 +254,11 @@ AttachSubdeckModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore],(context,props) => {
+AttachSubdeckModal = connectToStores(AttachSubdeckModal,[UserProfileStore,AttachSubdeckModalStore,DeckTreeStore],(context,props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState()
+        AttachSubdeckModalStore: context.getStore(AttachSubdeckModalStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 

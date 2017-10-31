@@ -7,7 +7,10 @@ let ReactIntlPlugin = require('react-intl-webpack-plugin');
 
 let webpackConfig = {
     resolve: {
-        extensions: ['.js']
+        extensions: ['.js'],
+        alias: {
+            react: path.resolve('./node_modules/react'),
+        }
     },
     entry: {
         main: [
@@ -62,7 +65,7 @@ let webpackConfig = {
     },
     plugins: [
         //collect all messages into one json
-        new ReactIntlPlugin(),
+        //new ReactIntlPlugin(),
         // css files from the extract-text-plugin loader
         new ExtractTextPlugin({
             filename: '../css/vendor.bundle.css',

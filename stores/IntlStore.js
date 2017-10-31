@@ -10,9 +10,13 @@ class IntlStore extends BaseStore {
         this.currentLocale = '';
     }
 
-    handleLoad(payload) {        
-        this.messages = payload.messages;
+    handleLoadLocales(payload) {
         this.locales = payload.locales;
+        this.currentLocale = payload.locales[0];
+        this.emitChange();
+    }
+    handleLoadMessages(payload) {
+        this.messages = payload.messages;
         this.currentLocale = payload.locales[0];
         this.emitChange();
     }
@@ -56,7 +60,10 @@ class IntlStore extends BaseStore {
 
 IntlStore.storeName = 'IntlStore';
 if (!process.env.BROWSER) {
-    IntlStore.handlers = {'LOAD_INTL_SERVER' : 'handleLoad'};
+    IntlStore.handlers = {
+        'LOAD_INTL_SERVER' : 'handleLoadLocales',
+        'LOAD_INTL_MESSAGES' : 'handleLoadMessages'
+    };
 }else{
     IntlStore.handlers = {};
 }

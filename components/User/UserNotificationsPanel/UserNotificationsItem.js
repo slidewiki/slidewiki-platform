@@ -133,7 +133,8 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'use':
-                const useIconClass = allIconClass.concat(' copy');
+                const useIconClass = allIconClass.concat(' repeat');
+                const title = (notification.use_info.target_name !== '') ? notification.use_info.target_name : notification.use_info.target_id;
                 iconNotification = (<i className={useIconClass}></i>);
                 summaryNotification = (
                     <div className="summary">
@@ -141,8 +142,21 @@ class UserNotificationsItem extends React.Component {
                             {notification.author ? notification.author.username : 'unknown'}
                         </a> {'used ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
-                        {/*{' in deck '}<a href={'/slideview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>*/}
-                        {' in deck '}<a href={'/deckview/' + notification.use_info.target_id}>{notification.use_info.target_name}</a>
+                        {' in deck '}<a href={'/deck/' + notification.use_info.target_id}>{title}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'attach':
+                const attachIconClass = allIconClass.concat(' attach');
+                iconNotification = (<i className={attachIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary" >
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'attached ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{cheerioContentName}</a>
                         <br/>
                         {DateDiv}
                     </div>
@@ -193,12 +207,14 @@ class UserNotificationsItem extends React.Component {
             case 'fork':
                 const forkIconClass = allIconClass.concat(' fork');
                 iconNotification = (<i className={forkIconClass}></i>);
+                const forkRef = (notification.fork_info) ? (<span>, creating a <a href={'/deck/' + notification.fork_info.content_id}>new deck</a></span>) : '';
                 summaryNotification = (
                     <div className="summary">
                         <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
                             {notification.author ? notification.author.username : 'unknown'}
                         </a> {'forked ' + notification.content_kind + ' '}
                         <a href={viewPath}>{cheerioContentName}</a>
+                        {forkRef}
                         <br/>
                         {DateDiv}
                     </div>

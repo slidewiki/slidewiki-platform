@@ -69,7 +69,7 @@ export default {
             });
 
             let shareCountPromise = rp.get({
-                uri: Microservices.activities.uri + '/activities/allrevisions/count/share/deck/' + deckId,
+                uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=share&all_revisions=true',
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -79,7 +79,7 @@ export default {
             });
 
             let downloadCountPromise = rp.get({
-                uri: Microservices.activities.uri + '/activities/allrevisions/count/download/deck/' + deckId,
+                uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=download&all_revisions=true',
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -225,7 +225,6 @@ export default {
                 },
                 tags: params.tags,
                 title: params.title,
-                user: params.userid.toString(),
                 license: params.license,
                 theme: params.theme
             };
@@ -233,6 +232,7 @@ export default {
                 method: 'POST',
                 uri: Microservices.deck.uri + '/deck/new',
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
@@ -254,7 +254,6 @@ export default {
                 language: params.language,
                 tags: params.tags? params.tags: [],
                 title: params.title,
-                user: params.userid.toString(),
                 license: params.license,
                 theme: params.theme,
                 new_revision: false,
@@ -266,6 +265,7 @@ export default {
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
@@ -304,6 +304,7 @@ export default {
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId,
                 json: true,
+                headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
             .catch((err) => callback(err));
@@ -313,9 +314,7 @@ export default {
                 method: 'PUT',
                 uri: Microservices.deck.uri + '/deck/' + params.deckId + '/fork',
                 json: true,
-                body: {
-                    user: params.userid.toString()
-                }
+                headers: {'----jwt----': params.jwt},
             }).then((res) => callback(false, res))
             .catch((err) => callback(err));
         }
