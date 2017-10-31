@@ -175,7 +175,6 @@ const handlePROPS = (node, patch, source, finalsource, vnode) => {
 const preprocessSrc = (source, mode) => {
 
     source = source
-                .replace(/&nbsp;/g, '')
                 .replace(/(?:\r\n|\r|\n)/g, '')
                 .replace(/&#8203;/g, '');
 
@@ -186,7 +185,7 @@ const preprocessSrc = (source, mode) => {
 
         vTreeObject.length > 1 ? root = createElement(vTreeObject[0]) : root = createElement(vTreeObject);
 
-        $(root).find('br').remove();
+        // $(root).find('br').remove();
         $(root).find('.drawing-container').remove();
         $(root).find('p:empty').remove();
         $(root).find('span:empty').remove();
