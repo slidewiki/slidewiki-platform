@@ -142,8 +142,6 @@ export default {
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
             
-        console.log(`${Microservices.deck.uri}/deck/${args.id}/groups?user=${args.userId}`);
-
             let deckGroupsPromise = rp.get({
                 method: 'GET',
                 uri: `${Microservices.deck.uri}/deck/${args.id}/groups?user=${args.userId}`, 
