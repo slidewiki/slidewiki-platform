@@ -111,15 +111,16 @@
 .diff-view .added,
 .diff-view .modified,
 .diff-view .deleted {
-  padding: 15px 5px 5px 5px;
+  padding: 5px 5px 5px 5px;
   margin: 0px -10px;
   display: inline-block;
+  position: relative;
 }
 
 .diff-view .added::before,
 .diff-view .modified::before,
 .diff-view .deleted::before {
-  color: rgba(0,0,0,0.7);
+  color: rgba(0,0,0,0.8);
   position: absolute;
   font-size: 20px;
   right: 5px;
@@ -143,34 +144,34 @@
 }
 
 .diff-view .added {
-  border: 5px solid #2196F3;
+  border: 2px solid #2196F3;
   background-color: rgba(0, 188, 212,0.2);
 }
 .diff-view .added::before { content: "+" }
 
 .diff-view .modified {
-  border: 5px solid #FFCC00;
-  background-color: rgba(255,204,0,0.1);
+  border: 2px solid #FFCC00;
+  background-color: rgba(255,204,0,0.2);
 }
 .diff-view .modified::before { content: "+/-" }
 
 .diff-view .deleted {
-  border: 5px solid #ff0030;
-  background-color: rgba(255,0,48,0.1);
+  border: 2px solid #ff0030;
+  background-color: rgba(255,0,48,0.2);
 }
 .diff-view .deleted::before { content: "x" }
 
 .diff-view.inverse .added {
-  border: 5px solid #2ecc71;
+  border: 2px solid #2ecc71;
   background-color: rgba(46,204,113,0.2);
 }
 .diff-view.inverse .modified {
-  border: 5px solid #FF9800;
-  background-color: rgba(255,152,0,0.1);
+  border: 2px solid #FF9800;
+  background-color: rgba(255,152,0,0.2);
 }
 .diff-view.inverse .deleted {
-  border: 5px solid #9C27B0;
-  background-color: rgba(156,39,176,0.1);
+  border: 2px solid #9C27B0;
+  background-color: rgba(156,39,176,0.2);
 }
 
 /* Text related */
@@ -191,7 +192,7 @@
 .diff-view.hide-add .added,
 .diff-view.hide-mod .modified,
 .diff-view.hide-del .deleted  {
-  border: 5px solid transparent;
+  border: 2px solid transparent;
   background-color: transparent;
 }
 .diff-view.hide-add .added::before,
@@ -199,8 +200,6 @@
 .diff-view.hide-del .deleted::before {
   display: none;
 }
-
-
 
 .diff-view.hide-text .ins,
 .diff-view.hide-text .del{

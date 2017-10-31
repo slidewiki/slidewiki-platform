@@ -125,7 +125,6 @@ const handleREMOVE = (el, source, finalsource) => {
     } else {
         if(_id){
             let targetElement = $(root).find(`#${_id}`);
-            console.log(targetElement);
             targetElement.addClass('deleted');
         }
     }
