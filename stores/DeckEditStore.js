@@ -21,6 +21,9 @@ class DeckEditStore extends BaseStore {
             users: [],
             groups: []
         };
+        this.deckGroupOptions = [];
+        this.selectedDeckGroups = [];
+
         this.showGroupModal = false;
     }
 
@@ -32,6 +35,8 @@ class DeckEditStore extends BaseStore {
         this.authorizedUsers = JSON.parse(JSON.stringify(payload.deckProps.editors.users));
         this.authorizedGroups = JSON.parse(JSON.stringify(payload.deckProps.editors.groups));
         this.originalEditors = JSON.parse(JSON.stringify(payload.deckProps.editors));
+
+        this.selectedDeckGroups = payload.deckGroups;
         // console.log('Now we have new origin editors:', this.originalEditors);
 
         this.emitChange();
@@ -42,6 +47,8 @@ class DeckEditStore extends BaseStore {
             users: [],
             groups: []
         };
+
+        this.selectedDeckGroups = [];
 
         this.emitChange();
     }
@@ -55,7 +62,9 @@ class DeckEditStore extends BaseStore {
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
-            showGroupModal: this.showGroupModal
+            showGroupModal: this.showGroupModal, 
+            deckGroupOptions: this.deckGroupOptions,
+            selectedDeckGroups: this.selectedDeckGroups,
         };
     }
 
@@ -72,6 +81,8 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
+        this.deckGroupOptions = state.deckGroupOptions;
+        this.selectedDeckGroups = state.selectedDeckGroups;
     }
 
     updateAuthorizedUsers(users) {
@@ -95,6 +106,26 @@ class DeckEditStore extends BaseStore {
         this.emitChange();
         this.showGroupModal = false;
     }
+
+    loadDeckGroups(payload){
+        this.deckGroupOptions = payload.documents;
+        this.emitChange();
+    }
+
+    loadDeckGroupsError(){
+        // TODO
+    }
+
+    addDeckGroup(newGroup){
+        this.deckGroupOptions.push(newGroup);
+        // TODO: add new groups to selected
+
+        this.emitChange();
+    }
+
+    addDeckGroupError(){
+        // TODO
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -104,7 +135,13 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties', 
+
+    'LOAD_DECK_GROUPS_SUCCESS': 'loadDeckGroups', 
+    'LOAD_DECK_GROUPS_FAILURE': 'loadDeckGroupsError', 
+
+    'ADD_DECK_GROUP_SUCCESS': 'addDeckGroup', 
+    'ADD_DECK_GROUP_FAILURE': 'addDeckGroupError'
 };
 
 export default DeckEditStore;

@@ -19,6 +19,7 @@ import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import LanguageDropdown from '../../../../common/LanguageDropdown';
+import NewDeckGroupModal from './NewDeckGroupModal';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -88,9 +89,12 @@ class DeckPropertiesEditor extends React.Component {
             }
         }
     }
-
+    initDeckGroupsDropdown(){
+        $('#deckGroupsDropdown').dropdown({allowAdditions: false});
+    }
     componentDidUpdate() {
         this.handleDropboxes();
+        this.initDeckGroupsDropdown();
 
         if (this.props.DeckEditStore.showGroupModal) {
             $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
@@ -99,6 +103,7 @@ class DeckPropertiesEditor extends React.Component {
 
     componentDidMount() {
         this.handleDropboxes();
+        this.initDeckGroupsDropdown();
     }
 
     handleDropboxes() {
@@ -367,6 +372,13 @@ class DeckPropertiesEditor extends React.Component {
         return list_authorized;
     }
 
+    showNewDeckGroupModal(event){
+        event.preventDefault();
+        this.setState({
+            showNewDeckGroupModal: true
+        });
+    }
+
     render() {
         //CSS
         let titleFieldClass = classNames({
@@ -459,6 +471,27 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         );
 
+        // form deck group dropdown options
+        let deckGroupOptions = this.props.DeckEditStore.deckGroupOptions.map( (deckGroup) => {
+            return <div className="item" key={deckGroup._id} data-value={deckGroup._id}>{deckGroup.title}</div>;
+        });
+
+
+        // followed the tip using timeout proposed here: https://github.com/Semantic-Org/Semantic-UI/issues/2247
+        // nothing else seems to be working in multi-select
+        console.log(JSON.stringify(this.props.DeckEditStore.selectedDeckGroups));
+
+        let selectedDeckGroups = this.props.DeckEditStore.selectedDeckGroups.map( (deckGroup) => {
+            return deckGroup._id;
+        });
+        console.log(selectedDeckGroups);
+
+        // setTimeout( () => {
+        // $('#deckGroupsDropdown').dropdown('set selected', selectedDeckGroups);
+        // $('#deckGroupsDropdown').dropdown('refresh');
+
+        // }, 1);
+
         //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
         //<div className={licenseFieldClass}>
         return (
@@ -524,6 +557,28 @@ class DeckPropertiesEditor extends React.Component {
                                 </div>
                                 <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
                             </div>
+                            <div className="field">
+                                <label htmlFor="deck_groups">Deck Groups</label>
+                                <div className="two fields">
+                                    <div className="field">
+                                        <div id="deckGroupsDropdown" className="ui fluid multiple search selection dropdown">
+                                            <input name="deckGroups" type="hidden" value={selectedDeckGroups}/>
+                                            <i className="dropdown icon"></i>
+                                            <div className="default text">Choose Deck Groups</div>
+                                            <div className="menu">
+                                                {deckGroupOptions}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="field">
+                                        <button className="ui primary button"
+                                                onClick={this.showNewDeckGroupModal.bind(this)}>Create
+                                        </button>
+                                    </div>
+                                </div>
+                                <NewDeckGroupModal isOpen={this.state.showNewDeckGroupModal} handleClose={() => this.setState({showNewDeckGroupModal: false})} />
+                            </div>
+                            <div className="ui hidden divider"></div>
                           </div>
                         ) : ''}
 

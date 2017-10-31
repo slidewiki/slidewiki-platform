@@ -141,10 +141,21 @@ export default {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
             let editorsPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid + '/editors'}).promise().bind(this);
-            Promise.all([deckPromise, editorsPromise]).then((res) => {
+            
+        console.log(`${Microservices.deck.uri}/deck/${args.id}/groups?user=${args.userId}`);
+
+            let deckGroupsPromise = rp.get({
+                method: 'GET',
+                uri: `${Microservices.deck.uri}/deck/${args.id}/groups?user=${args.userId}`, 
+                json: true
+            });
+
+            Promise.all([deckPromise, editorsPromise, deckGroupsPromise]).then((res) => {
                 let revision,
                     deck = JSON.parse(res[0]),
-                    editors = JSON.parse(res[1]);
+                    editors = JSON.parse(res[1]), 
+                    deckGroups = res[2];
+
                 //if deck's sid does not specify revision, find the active revision from the corresponding field
                 if (args.sid.split('-').length < 2) {
                     revision = deck.revisions.find((rev) => {
@@ -173,7 +184,8 @@ export default {
                 // console.log('Returned editors of deck:', editors.editors);
                 callback(null, {
                     deckProps: deckProps,
-                    editors: contributors
+                    editors: contributors, 
+                    deckGroups: deckGroups
                 });
             }).catch((err) => {
                 callback(err);
