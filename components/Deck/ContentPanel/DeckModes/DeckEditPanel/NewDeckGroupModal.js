@@ -2,7 +2,7 @@ import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
-import addDeckGroup from '../../../../../actions/deckGroups/addDeckGroup';
+import addNewDeckGroup from '../../../../../actions/deckGroups/addNewDeckGroup';
 
 class NewDeckGroupModal extends React.Component {
 
@@ -65,7 +65,7 @@ class NewDeckGroupModal extends React.Component {
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
 
-        this.context.executeAction(addDeckGroup, {
+        this.context.executeAction(addNewDeckGroup, {
             title: this.state.title, 
             description: this.state.description
         });

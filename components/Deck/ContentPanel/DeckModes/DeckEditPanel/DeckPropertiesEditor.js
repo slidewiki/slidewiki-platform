@@ -20,6 +20,9 @@ import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import LanguageDropdown from '../../../../common/LanguageDropdown';
 import NewDeckGroupModal from './NewDeckGroupModal';
+import addSelectedDeckGroup from '../../../../../actions/deckGroups/addSelectedDeckGroup';
+import removeSelectedDeckGroup from '../../../../../actions/deckGroups/removeSelectedDeckGroup';
+import addDeckToDeckGroups from '../../../../../actions/deckGroups/addDeckToDeckGroups';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -44,7 +47,7 @@ class DeckPropertiesEditor extends React.Component {
             //license: props.deckProps.license || '',
             license: 'CC BY-SA',
             users: editors.users,
-            groups: editors.groups
+            groups: editors.groups,
         };
     }
 
@@ -90,7 +93,15 @@ class DeckPropertiesEditor extends React.Component {
         }
     }
     initDeckGroupsDropdown(){
-        $('#deckGroupsDropdown').dropdown({allowAdditions: false});
+        $('#deckGroupsDropdown').dropdown({
+            allowAdditions: false,
+            onAdd: (newValue) => {
+                this.context.executeAction(addSelectedDeckGroup, parseInt(newValue));
+            }, 
+            onRemove: (removedValue) => {
+                this.context.executeAction(removeSelectedDeckGroup, parseInt(removedValue));
+            }
+        });
     }
     componentDidUpdate() {
         this.handleDropboxes();
@@ -177,6 +188,10 @@ class DeckPropertiesEditor extends React.Component {
 
     handleCancel(event) {
         event.preventDefault();
+
+        // needed so as not preserve values when editing deck again
+        this.clearDeckGroupsDropdown();
+
         this.context.executeAction(navigateAction, {
             url: ContentUtil.makeNodeURL(this.props.selector, 'view')
         });
@@ -211,9 +226,11 @@ class DeckPropertiesEditor extends React.Component {
 
         this.setState({validationErrors: validationErrors});
         if (isValid) {
+            let deckId = this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id;
+
             this.context.executeAction(updateDeckEditViewState, 'loading');
             this.context.executeAction(saveAction, {
-                deckId: this.props.selector.sid != null ? this.props.selector.sid : this.props.selector.id,
+                deckId: deckId,
                 title: this.state.title,
                 language: this.state.language,
                 description: this.state.description,
@@ -231,6 +248,12 @@ class DeckPropertiesEditor extends React.Component {
                 tags: TagsStore.tags
             });
             this.context.executeAction(updateTheme, this.state.theme);
+            this.context.executeAction(addDeckToDeckGroups, {
+                deckId : deckId, 
+                deckGroups: this.props.DeckEditStore.selectedDeckGroups
+            });
+            // needed so as not preserve values when editing deck again
+            this.clearDeckGroupsDropdown(); 
         }
     }
 
@@ -379,6 +402,10 @@ class DeckPropertiesEditor extends React.Component {
         });
     }
 
+    clearDeckGroupsDropdown(){
+        $('#deckGroupsDropdown').dropdown('clear');
+    }
+
     render() {
         //CSS
         let titleFieldClass = classNames({
@@ -475,23 +502,7 @@ class DeckPropertiesEditor extends React.Component {
         let deckGroupOptions = this.props.DeckEditStore.deckGroupOptions.map( (deckGroup) => {
             return <div className="item" key={deckGroup._id} data-value={deckGroup._id}>{deckGroup.title}</div>;
         });
-
-
-        // followed the tip using timeout proposed here: https://github.com/Semantic-Org/Semantic-UI/issues/2247
-        // nothing else seems to be working in multi-select
-        console.log(JSON.stringify(this.props.DeckEditStore.selectedDeckGroups));
-
-        let selectedDeckGroups = this.props.DeckEditStore.selectedDeckGroups.map( (deckGroup) => {
-            return deckGroup._id;
-        });
-        console.log(selectedDeckGroups);
-
-        // setTimeout( () => {
-        // $('#deckGroupsDropdown').dropdown('set selected', selectedDeckGroups);
-        // $('#deckGroupsDropdown').dropdown('refresh');
-
-        // }, 1);
-
+        
         //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
         //<div className={licenseFieldClass}>
         return (
@@ -562,7 +573,7 @@ class DeckPropertiesEditor extends React.Component {
                                 <div className="two fields">
                                     <div className="field">
                                         <div id="deckGroupsDropdown" className="ui fluid multiple search selection dropdown">
-                                            <input name="deckGroups" type="hidden" value={selectedDeckGroups}/>
+                                            <input name="deckGroups" type="hidden" value={this.props.DeckEditStore.selectedDeckGroups}/>
                                             <i className="dropdown icon"></i>
                                             <div className="default text">Choose Deck Groups</div>
                                             <div className="menu">
