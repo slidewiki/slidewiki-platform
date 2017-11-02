@@ -31,7 +31,8 @@ class UserProfile extends React.Component {
             })
             .then(() => {
             },() => {//dismiss function
-                if(this.props.IntlStore.currentLocale !== getIntlLanguage()) //user to reload page beacuse of cookie change
+                if(this.props.IntlStore.currentLocale !== getIntlLanguage() ||
+                (this.props.UserProfileStore.category === categories.categories[0] && this.props.UserProfileStore.categoryItem === categories.settings[0]) ) //user to reload page beacuse of cookie change or picture change
                     window.location.reload();
             }).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.userdeleted === true)
