@@ -5,7 +5,6 @@ import DeckPageStore from '../../stores/DeckPageStore';
 import ServiceErrorStore from '../../stores/ServiceErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
-import NavigationPanel from './NavigationPanel/NavigationPanel';
 import TreePanel from './TreePanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
@@ -94,9 +93,9 @@ class Deck extends React.Component {
                 <div className="ui padded stackable grid ">
                 {error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''}
                 <div className="row">
-                    <div className={navigationPanelClass}>
+                    {/*}<div className={navigationPanelClass}>
                       <NavigationPanel />
-                    </div>
+                    </div>*/}
                 </div>
 
                 <div className={leftColClass}>
