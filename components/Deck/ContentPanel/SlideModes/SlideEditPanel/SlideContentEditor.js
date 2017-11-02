@@ -492,12 +492,12 @@ class SlideContentEditor extends React.Component {
             let deckID = currentSelector.id;
             let dataSources = (this.props.DataSourceStore.dataSources !== undefined) ? this.props.DataSourceStore.dataSources : [];
             let tags = this.props.SlideViewStore.tags? this.props.SlideViewStore: [];
-
             //setTimeout(function() {
             this.context.executeAction(saveSlide, {
                 id: currentSelector.sid,
                 deckID: deckID,
                 title: title,
+                theme: this.getTheme(),
                 content: content,
                 speakernotes: speakernotes,
                 dataSources: dataSources,
@@ -1487,6 +1487,25 @@ class SlideContentEditor extends React.Component {
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
         }
     }
+    getTheme() {
+        // Add the CSS dependency for the theme
+        // Get the theme information, and download the stylesheet
+        let styleName = 'default';
+        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
+            styleName = this.props.selector.theme;
+        }
+        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
+            styleName = this.props.DeckTreeStore.theme;
+        }
+        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
+        {
+            //if none of above yield a theme they will be legacy decks:
+            styleName = 'white';
+        }
+
+        return styleName;
+
+    }
     componentWillUnmount() {
         // Remove the warning window.
         window.onbeforeunload = () => {};
@@ -1663,21 +1682,9 @@ class SlideContentEditor extends React.Component {
             <input type='text' id='title' name='title' ref='title' value={this.props.title} placeholder='Slide title (in deck)' autoFocus tabIndex='0' aria-required='true' required size='50' onChange='' />
                     */
 
-        // Add the CSS dependency for the theme
-        // Get the theme information, and download the stylesheet
-        let styleName = 'default';
-        if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
-            styleName = this.props.selector.theme;
-        }
-        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
-            styleName = this.props.DeckTreeStore.theme;
-        }
-        if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
-        {
-            //if none of above yield a theme they will be legacy decks:
-            styleName = 'white';
-        }
+        let styleName = this.getTheme();
         let style = require('../../../../../custom_modules/reveal.js/css/theme/' + styleName + '.css');
+
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
