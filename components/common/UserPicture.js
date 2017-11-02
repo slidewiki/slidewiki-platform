@@ -15,12 +15,6 @@ import classNames from 'classnames';
  */
 
 class UserPicture extends React.Component {
-    componentDidMount() {
-    }
-
-    componentDidUpdate() {
-    }
-
     render() {
         let classes = classNames({
             'ui': true,

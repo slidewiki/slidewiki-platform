@@ -143,7 +143,7 @@ class Carousel extends React.Component {
                                                 <div className="description"><FormattedMessage id="carousel.menu.2_desc" defaultMessage='Discover a wide range of open educational slides and courses.'/></div>
                                             </div>
                                         </NavLink>
-                                        <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/discover" href="/discover" data-glide-dir='=3'>
+                                        <NavLink className="item gslide-header gh3"  data-glide-trigger='.glide' href="/features" href="/discover" data-glide-dir='=3'>
                                             <div className="content">
                                                 <div className="ui small header"><FormattedMessage id="carousel.menu.3" defaultMessage='Collaborative Content Authoring'/>
                                                 </div>
