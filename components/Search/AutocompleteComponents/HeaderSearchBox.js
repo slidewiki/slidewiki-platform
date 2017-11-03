@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {NavLink, navigateAction} from 'fluxible-router';
+import { navigateAction } from 'fluxible-router';
 import suggestKeywords from '../../../actions/search/suggestKeywords';
 
 class HeaderSearchBox extends React.Component {

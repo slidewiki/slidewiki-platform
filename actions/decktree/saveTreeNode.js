@@ -8,8 +8,8 @@ export default function saveTreeNode(context, payload, done) {
     log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
-        //enrich with user id
-        payload.userid = userid;
+        //enrich with jwt
+        payload.jwt = context.getStore(UserProfileStore).jwt;
         context.service.update('decktree.nodeTitle', payload, {timeout: 20 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
@@ -39,7 +39,7 @@ export default function saveTreeNode(context, payload, done) {
                 //create new activity
                 let activity = {
                     activity_type: 'edit',
-                    user_id: String(userid),
+                    user_id:String(context.getStore(UserProfileStore).userid),
                     content_id: String(newSid),
                     content_kind: payload.selector.stype
                 };

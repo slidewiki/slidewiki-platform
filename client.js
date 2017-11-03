@@ -333,6 +333,31 @@ function loadLocaleData(locale) {
                 }
                 break;
 
+                //french
+            case 'fr':
+
+                if (!hasIntl) {
+
+                    require.ensure([
+                        'intl/locale-data/jsonp/fr',
+                        'react-intl/locale-data/fr'
+                    ], (require) => {
+                        require('intl/locale-data/jsonp/fr');
+                        addLocaleData(require('react-intl/locale-data/fr'));
+                        debug('Intl and ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-fr');
+                }
+                else {
+                    require.ensure([
+                        'react-intl/locale-data/fr'
+                    ], (require) => {
+                        addLocaleData(require('react-intl/locale-data/fr'));
+                        debug('ReactIntl locale-data for %s has been downloaded', locale);
+                        resolve();
+                    }, 'locale-fr-no-intl');
+                }
+                break;
 
             default:
                 if (!hasIntl) {
