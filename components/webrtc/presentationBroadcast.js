@@ -800,6 +800,8 @@ class presentationBroadcast extends React.Component {
 
         function checkUser(id) {
             $('input#'+id).prop('checked', true);
+            let tmp = parseInt($('span#taskModalPeerCount').text());
+            $('span#taskModalPeerCount').text(tmp + 1);
         }
 
         function closeModal() {
@@ -817,14 +819,20 @@ class presentationBroadcast extends React.Component {
     }
 
     audienceCompleteTask (event) {
-        let toInsert = Object.keys(this.pcs).map((key) => {
+        let nameArray = Object.keys(this.pcs).map((key) => {
             let username = this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbit';
             return '<div><input type="checkbox" disabled id="' + key + '"> ' + username + '</input><br/></div>';
-        }).reduce((a,b) => a + b, '');
-        toInsert = (toInsert.length > 0) ? toInsert : '<p>There is currently no audience</p>';
+        });
+        let titleHTMLAddition = '';
+        let contentHTML = nameArray.reduce((a,b) => a + b, '');
+        if(contentHTML.length > 0){
+            titleHTMLAddition = ' <span id="taskModalPeerCount">0</span>/' + nameArray.length;
+        } else {
+            contentHTML = '<p>There is currently no audience, please close this modal and reopen it as soon as some audience joined your room.</p>';
+        }
         swal({
-            title: 'Audience Progress',
-            html: toInsert,
+            title: 'Audience Progress' + titleHTMLAddition,
+            html: contentHTML,
             type: 'info',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'End Task',
