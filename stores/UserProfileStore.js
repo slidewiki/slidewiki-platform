@@ -43,6 +43,8 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.userDeckGroups = undefined;
+        this.updateDeckGroupsError = false;
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -91,6 +93,8 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = false;
         this.deleteUsergroupError = '';
         this.usergroupsViewStatus = '';
+        this.userDeckGroups = undefined;
+        this.updateDeckGroupsError = false;
 
         //LoginModal
         this.showLoginModal = false;
@@ -121,7 +125,9 @@ class UserProfileStore extends BaseStore {
             saveUsergroupIsLoading: this.saveUsergroupIsLoading,
             saveProfileIsLoading: this.saveProfileIsLoading,
             deleteUsergroupError: this.deleteUsergroupError,
-            usergroupsViewStatus: this.usergroupsViewStatus
+            usergroupsViewStatus: this.usergroupsViewStatus, 
+            userDeckGroups: this.userDeckGroups,
+            updateDeckGroupsError: this.updateDeckGroupsError
         };
     }
 
@@ -154,6 +160,8 @@ class UserProfileStore extends BaseStore {
         this.saveProfileIsLoading = state.saveProfileIsLoading;
         this.deleteUsergroupError = state.deleteUsergroupError;
         this.usergroupsViewStatus = state.usergroupsViewStatus;
+        this.userDeckGroups = state.userDeckGroups;
+        this.updateDeckGroupsError = state.updateDeckGroupsError;
     }
 
     changeTo(payload) {
@@ -363,6 +371,20 @@ class UserProfileStore extends BaseStore {
         this.usergroupsViewStatus = 'pending';
         this.emitChange();
     }
+
+    updateDeckGroups(payload){
+        console.log(payload);
+        
+        this.userDeckGroups = payload;
+        this.updateDeckGroupsError = false;
+        this.emitChange();
+    }
+
+    updateDeckGroupsFailed(){
+        this.userDeckGroups = {};
+        this.updateDeckGroupsError = true;
+        this.emitChange();
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -400,7 +422,9 @@ UserProfileStore.handlers = {
     'UPDATE_USERGROUPS_STATUS': 'updateUsergroupsStatus',
     'LEAVE_USERGROUP_FAILED': 'deleteUsergroupFailed',
     'LEAVE_USERGROUP_SUCCESS': 'deleteUsergroupSuccess',
-    'SAVE_USERPROFILE_START': 'saveProfileStart'
+    'SAVE_USERPROFILE_START': 'saveProfileStart',
+    'LOAD_USER_DECK_GROUPS_SUCCESS': 'updateDeckGroups', 
+    'LOAD_USER_DECK_GROUPS_FAILURE': 'updateDeckGroupsFailed'
 };
 
 export default UserProfileStore;

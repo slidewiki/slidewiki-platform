@@ -1,7 +1,7 @@
 import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
-
+const async = require('async');
 
 export default {
     name: 'deckgroups',
@@ -14,7 +14,7 @@ export default {
         if(resource === 'deckgroups.user'){
             rp({
                 method: 'GET', 
-                uri: `${Microservices.deck.uri}/groups?user=${args.userId}&page=0&per_page=100`,
+                uri: `${Microservices.deck.uri}/groups?user=${args.userId}&page=0&per_page=100`, // TODO: get page and per_page from args
                 json: true 
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
@@ -54,7 +54,7 @@ export default {
         let args = params.params? params.params : params;
 
         // update deck assignments to deck groups
-        if(resource === 'deckgroups.updateDeck'){
+        if(resource === 'deckgroups.updateDecks'){
             console.log(args);
 
             // get deck groups assigned to current deck
@@ -64,31 +64,41 @@ export default {
                 json: true
             }).then( (existingDeckGroups) => {
                 let existingDeckGroupIds = existingDeckGroups.map( (e) => { return e._id; });
-                let addToGroups = [];
-                let removeFromGroups = existingDeckGroupIds;
+                let addOps = [];
+                let removeOps = existingDeckGroupIds.map( (e) => { return {groupId: e, updateOp: {op: 'remove', deckId: args.deckId}}; } );
 
                 // check if deck group ids given are already related to this deck
                 args.deckGroups.forEach( (deckGroupId) => {
                     if(existingDeckGroupIds.includes(deckGroupId)){
                         // deck is already related to this deck group
-                        removeFromGroups = removeFromGroups.filter( (e) => { return e !== deckGroupId; });
+                        removeOps = removeOps.filter( (e) => { return e.groupId !== deckGroupId; });
                     } else {
-                        addToGroups.push(deckGroupId);
+                        addOps.push({groupId: deckGroupId, updateOp: {op: 'add', deckId: args.deckId}});
                     }
                 });
             
-                // let promises = [];
-                // addToGroups.map( (groupId) => {
-                    
-                // });
-
-                // console.log('add');
-                // console.log(addToGroups);
-                // console.log('remove');
-                // console.log(removeFromGroups);
-                callback(null, {});
-
-            }).catch( (err) => callback);
+                // add/remove deck id to/from the following deck groups
+                async.eachSeries(addOps.concat(removeOps), (item, done) => {
+                    rp({
+                        method: 'PATCH', 
+                        uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,
+                        json: true,
+                        headers: {'----jwt----': args.jwt},
+                        body: [
+                            item.updateOp
+                        ]
+                    }).then( () => done())
+                    .catch(done);
+                }, (err) => {
+                    if(err){
+                        callback(err);
+                    } else {
+                        callback(null, {});
+                    }
+                });
+            }).catch( (err) => {
+                callback(err);
+            });
         }
     }
 };

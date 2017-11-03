@@ -10,7 +10,7 @@ import UserGroups from './UserGroups';
 import UserGroupEdit from './UserGroupEdit';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
-import PrivatePublicUserProfile from './PrivatePublicUserProfile';
+import PrivatePublicUserProfile from './PrivatePublicUserProfile/PrivatePublicUserProfile';
 import Integrations from './Integrations';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
@@ -160,7 +160,7 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} />);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} category={this.props.UserProfileStore.category} deckGroups={this.props.UserProfileStore.userDeckGroups} loadDeckGroupsError={this.props.UserProfileStore.updateDeckGroupsError}/>);
     }
 
     displayIntegrations() {

@@ -125,9 +125,10 @@ class DeckEditStore extends BaseStore {
         this.emitChange();
     }
 
-    loadDeckGroupsError(){
+    loadDeckGroupsFail(){
         this.loadDeckGroupsError = true;
         this.emitChange();
+        this.loadDeckGroupsError = false;
     }
 
     addDeckGroup(newGroup){
@@ -139,6 +140,7 @@ class DeckEditStore extends BaseStore {
     addDeckGroupError(){
         this.addDeckGroupError = true;
         this.emitChange();
+        this.addDeckGroupError = false;
     }
 
     addSelectedDeckGroup(groupId){
@@ -165,11 +167,11 @@ DeckEditStore.handlers = {
 
     // load user groups created by a specific user
     'LOAD_USER_DECK_GROUPS_SUCCESS': 'loadUserDeckGroups', 
-    'LOAD_USER_DECK_GROUPS_FAILURE': 'loadDeckGroupsError', 
+    'LOAD_USER_DECK_GROUPS_FAILURE': 'loadDeckGroupsFail', 
 
     // load deck groups assigned to a deck
     'LOAD_DECK_GROUPS_SUCCESS': 'loadDeckGroups', 
-    'LOAD_DECK_GROUPS_FAILURE': 'loadDeckGroupsError',
+    'LOAD_DECK_GROUPS_FAILURE': 'loadDeckGroupsFail',
 
     'ADD_DECK_GROUP_SUCCESS': 'addDeckGroup', 
     'ADD_DECK_GROUP_FAILURE': 'addDeckGroupError', 

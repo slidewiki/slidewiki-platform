@@ -22,7 +22,7 @@ import LanguageDropdown from '../../../../common/LanguageDropdown';
 import NewDeckGroupModal from './NewDeckGroupModal';
 import addSelectedDeckGroup from '../../../../../actions/deckGroups/addSelectedDeckGroup';
 import removeSelectedDeckGroup from '../../../../../actions/deckGroups/removeSelectedDeckGroup';
-import addDeckToDeckGroups from '../../../../../actions/deckGroups/addDeckToDeckGroups';
+import updateDecksOfDeckGroup from '../../../../../actions/deckGroups/updateDecksOfDeckGroup';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -106,7 +106,7 @@ class DeckPropertiesEditor extends React.Component {
     componentDidUpdate() {
         this.handleDropboxes();
         this.initDeckGroupsDropdown();
-
+        
         if (this.props.DeckEditStore.showGroupModal) {
             $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
         }
@@ -248,7 +248,7 @@ class DeckPropertiesEditor extends React.Component {
                 tags: TagsStore.tags
             });
             this.context.executeAction(updateTheme, this.state.theme);
-            this.context.executeAction(addDeckToDeckGroups, {
+            this.context.executeAction(updateDecksOfDeckGroup, {
                 deckId : deckId, 
                 deckGroups: this.props.DeckEditStore.selectedDeckGroups
             });
