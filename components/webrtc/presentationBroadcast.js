@@ -44,8 +44,8 @@ class presentationBroadcast extends React.Component {
         if(isEmpty(that.iframesrc) || that.iframesrc === 'undefined' || isEmpty(that.room) || that.room === 'undefined'){
             console.log('Navigating away because of missing paramenters in URL');
             swal({
-                title: 'Something went terribly wrong',
-                html: 'It seems like your URL isn\'t correct. Please report this as a bug. You will now be redirected to the homepage.',
+                titleText: 'Something went terribly wrong',
+                text: 'It seems like your URL isn\'t correct. Please report this as a bug. You will now be redirected to the homepage.',
                 type: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
@@ -135,8 +135,8 @@ class presentationBroadcast extends React.Component {
             console.log('Room ' + that.room + ' is full');
             that.socket.close();
             swal({
-                title: 'Room ' + room + ' is full',
-                html: 'Rooms have limited capacities for people. The room you tried to join is already full.',
+                titleText: 'Room ' + room + ' is full',
+                text: 'Rooms have limited capacities for people. The room you tried to join is already full.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
@@ -154,8 +154,8 @@ class presentationBroadcast extends React.Component {
         that.socket.on('room is full', () => {
             console.log('Received room is full');
             swal({
-                title: '<p>The presentation room is full.</p>',
-                html: '<p>The maximium number of listeners is already reached. Please try again later.</p>',
+                titleText: 'The Room is already full',
+                text: 'The maximium number of listeners is already reached. Please try again later.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Check',
@@ -294,7 +294,7 @@ class presentationBroadcast extends React.Component {
                 $('#media').remove();
                 swal({//NOTE implemented here because this dialog interrupted with error dialogs of requestStreams()
                     title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                    html: '<p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
+                    text: 'Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.',
                     type: 'info',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Check',
@@ -428,8 +428,8 @@ class presentationBroadcast extends React.Component {
         function handleRPCClose() {
             if (!that.isInitiator) {
                 swal({
-                    title: '<p>The presenter closed the session</p>',
-                    html: '<p>This presentation has ended. Feel free to look at the deck as long as you want.</p>',
+                    titleText: 'The presenter closed the session',
+                    text: 'This presentation has ended. Feel free to look at the deck as long as you want.',
                     type: 'warning',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Check',
@@ -776,7 +776,7 @@ class presentationBroadcast extends React.Component {
                 tmp = this;
             tmp.showReopenModalButton = false;
             swal({
-                title: 'Complete the given Task',
+                titleText: 'Complete the given Task',
                 text: 'The presenter asked you to complete a task. As soon as you have completed the task, click on "Completed" and wait for the presenter to proceed.',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
@@ -872,7 +872,7 @@ class presentationBroadcast extends React.Component {
                 throw 'Unable to copy';
             else{
                 swal({
-                    title: 'URL copied to clipboard',
+                    titleText: 'URL copied to clipboard',
                     type: 'success',
                     showConfirmButton: false,
                     allowOutsideClick: false,
@@ -882,7 +882,7 @@ class presentationBroadcast extends React.Component {
         } catch (err) {
             console.log('Oops, unable to copy');
             swal({
-                title: 'Can\'t copy URL to clipboard',
+                titleText: 'Can\'t copy URL to clipboard',
                 text: 'Please select the URL in your browser and share it manually.',
                 type: 'error',
                 confirmButtonColor: '#3085d6',
