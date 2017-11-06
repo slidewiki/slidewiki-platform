@@ -92,7 +92,6 @@ const app = new Fluxible({
         ServiceErrorStore,
         PermissionsStore,
         ContentLikeStore,
-        SocialShareStore,
         DeckFamilyStore,
         MediaStore,
         UserReviewStore
