@@ -5,6 +5,7 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
+import focusTreeNode from '../../../actions/decktree/focusTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
@@ -14,6 +15,7 @@ import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavi
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
+import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
 
 class TreePanel extends React.Component {
@@ -35,6 +37,10 @@ class TreePanel extends React.Component {
 
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);
+    }
+
+    handleFocusNode(selector) {
+        this.context.executeAction(focusTreeNode, selector);
     }
 
     handleSwitchOnAction(selector) {
@@ -124,7 +130,6 @@ class TreePanel extends React.Component {
             'disabled': (!this.props.PermissionsStore.permissions.fork),
             'button': true
         });
-
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
@@ -139,6 +144,7 @@ class TreePanel extends React.Component {
                         <i className="counterclockwise rotated sitemap large icon"></i>Deck Explorer
                     </a>
                 </div>
+                      <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
@@ -162,9 +168,9 @@ class TreePanel extends React.Component {
                             'wordWrap': 'break-word'
                         }}> {decktreeError} </div> : ''}
 
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} focusedSelector={this.props.DeckTreeStore.focusedSelector} nextSelector={nextSelector}
                             prevSelector={prevSelector} page={this.props.page}
-                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
+                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onFocusNode={this.handleFocusNode.bind(this)}
                             onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
                             onRename={this.handleRenameNode.bind(this)}
                             onUndoRename={this.handleUndoRenameNode.bind(this)}

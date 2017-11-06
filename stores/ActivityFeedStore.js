@@ -58,16 +58,19 @@ class ActivityFeedStore extends BaseStore {
     //     this.emitChange();
     // }
     addActivity(payload) {
-        this.activities.unshift(payload.activity);//add to the beginning
-        if (isLocalStorageOn()) {
-            localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
-        }
+        const activity = payload.activity;
+        if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id) {
+            this.activities.unshift(activity);//add to the beginning
+            if (isLocalStorageOn()) {
+                localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
+            }
 
-        this.emitChange();
+            this.emitChange();
+        }
     }
     addActivities(payload) {
         payload.activities.forEach((activity) => {
-            if (activity.content_id === this.selector.id) {
+            if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id) {
                 this.activities.unshift(activity);//add to the beginning
             }
         });
