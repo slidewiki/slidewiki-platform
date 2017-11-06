@@ -195,7 +195,7 @@ class Home extends React.Component {
                                         </div>
                                         <div className="item">
                                             <div className="content">
-                                                <NavLink className="header" href="/features"><FormattedMessage id='home.learn' defaultMessage='Learn about SlideWiki'/></NavLink>
+                                                <NavLink className="header" href="/discover"><FormattedMessage id='home.learn' defaultMessage='Learn about SlideWiki'/></NavLink>
                                                 <div className="description">
                                                     <p><FormattedMessage id='home.learn_desc' defaultMessage="Find out more about SlideWiki's features and how it can be used to create, share and adapt slides, decks and open educational resources."/></p>
                                                 </div>

@@ -150,15 +150,15 @@ export default {
             done();
         }
     },
-    features: {
-        path: '/features',
+    discover: {
+        path: '/discover',
         method: 'get',
-        page: 'features',
-        title: 'SlideWiki -- Features',
+        page: 'discover',
+        title: 'SlideWiki -- Discover More',
         handler: require('../components/Home/Features'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Features'
+                pageTitle: shortTitle + ' | Discover More'
             });
             done();
         }
