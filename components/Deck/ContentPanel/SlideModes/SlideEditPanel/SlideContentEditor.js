@@ -1217,9 +1217,9 @@ class SlideContentEditor extends React.Component {
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $('.pptx2html [style*="absolute"]').each(function () {
-            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: 0px; position: absolute; z-index: 90000000;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
-            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 60px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
             //let menuID = $(this).attr('id');
@@ -1566,51 +1566,71 @@ class SlideContentEditor extends React.Component {
             'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
+        const dropDownItemStyle = {
+            //minWidth: '100%',
+            minHeight: '100px',
+            //borderStyle: 'dashed dashed none dashed',
+            //borderColor: '#e7e7e7',
+        };
         let templateOptions = <div className="menu">
             <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
-                Title and bullets
+                Title and bullets <br/>
+                <br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
             <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
-                Empty document
+                Empty document <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
             </div>
             <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column
+                1 row 1 column <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
             </div>
             <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 2 columns
+                1 row 2 columns <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
             </div>
             <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 2 columns
+                2 rows 2 columns <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
             </div>
             <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 1 column
+                2 rows 1 column <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
             </div>
             <div className="item" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column image
+                1 row 1 column image <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
             </div>
             <div className="item" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
-                Document with title
+                Document with title <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
             </div>
             <div className="item" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                Open University Theme Title Page
+                Open University Theme Title Page <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
             </div>
             <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                OEG Theme Title Page
+                OEG Theme Title Page <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
             </div>
             <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
-                SlideWiki template
+                SlideWiki template <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
             </div>
             <div className="item" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template
+                EKDDA template <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
             </div>
             <div className="item" data-value="EKDDAeng" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English
+                EKDDA template - English <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
             </div>
             <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English no footer
+                EKDDA template - English no footer <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
             </div>
         </div>;
-
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
