@@ -36,9 +36,30 @@ export default {
                 .then((res) => {
                     // console.log('response from saving image:', res);
                     callback(null, res);
+                    //callback(null, JSON.parse(res));
                 })
                 .catch((err) => {
                     console.log('Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
+                    callback(err, null);
+                });
+        }
+        else if (resource === 'media.uploadProfilePicture') {
+            let url = Microservices.file.uri + '/profilepicture/' + params.username;
+            let headers = {
+                '----jwt----': params.jwt,
+                'content-type': params.type
+            };
+            rp.put({
+                uri: url,
+                body: new Buffer(params.bytes.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64'),
+                headers: headers
+            })
+                .then((res) => {
+                    // console.log('media: response from saving image:', res);
+                    callback(null, Microservices.file.uri + JSON.parse(res).url);
+                })
+                .catch((err) => {
+                    // console.log('media: Error while saving image', (err.response) ? {body: err.response.body, headers: err.response.request.headers} : err);
                     callback(err, null);
                 });
         }
