@@ -16,20 +16,17 @@ export default {
         }
 
         if(resource === 'questions.list') {
-            // rp.get({
-            //     uri: 'https://questionservice.experimental.slidewiki.org/questions',
-            //     //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
-            // }).then((res) => {
+            rp.get({
+                uri: 'https://questionservice.experimental.slidewiki.org/questions',
+                //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid + '/' + 'questions',
+            }).then((res) => {
             /* This is what we get from microservice */
             /*
-            [{'related_object':'slide','related_object_id':'10678','question':'string','user_id':'17','difficulty':1,'choices':[{'choice':'string','is_correct':true,'explanation':'string'}],'id':10},
-             {'related_object':'slide','related_object_id':'1141','question':'question 2','user_id':'17','difficulty':2,'choices':[{'choice':'string','is_correct':true,'explanation':'string'},
-             {'choice':'string','is_correct':true,'explanation':'string'}],'id':11}]
-            */
             let q = [{'related_object':'slide','related_object_id':'10678','question':'string','user_id':'17','difficulty':1,'choices':[{'choice':'string','is_correct':true}],'explanation':'string explanation','id':10},
                 {'related_object':'slide','related_object_id':'1141','question':'question 2','user_id':'17','difficulty':2,'choices':[{'choice':'string1','is_correct':true},{'choice':'string2','is_correct':true},{'choice':'string3','is_correct':false}],'explanation':'string1 string2 explanation','id':11}];
-            // let questions = JSON.parse(res)
-            let questions = q
+            */
+            let questions = JSON.parse(res)
+            // let questions = q
                 .map((item, index) => {
                     return {
                         id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
