@@ -25,7 +25,7 @@ export default {
             let q = [{'related_object':'slide','related_object_id':'10678','question':'string','user_id':'17','difficulty':1,'choices':[{'choice':'string','is_correct':true}],'explanation':'string explanation','id':10},
                 {'related_object':'slide','related_object_id':'1141','question':'question 2','user_id':'17','difficulty':2,'choices':[{'choice':'string1','is_correct':true},{'choice':'string2','is_correct':true},{'choice':'string3','is_correct':false}],'explanation':'string1 string2 explanation','id':11}];
             */
-            let questions = JSON.parse(res)
+                let questions = JSON.parse(res)
             // let questions = q
                 .map((item, index) => {
                     return {
@@ -37,14 +37,13 @@ export default {
                         explanation: item.explanation,
                         userId: item.user_id,
                     };
-                }
-            );
-            callback(null, {questions: questions, totalLength: 2, selector: selector});
-            // }).catch((err) => {
-            //     console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
-            //     console.log(err);
-            //     callback(err, {});
-            // });
+                });
+                callback(null, {questions: questions, totalLength: 2, selector: selector});
+            }).catch((err) => {
+                console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
+                console.log(err);
+                callback(err, {});
+            });
         }
 
         /* Hard coded sample work follows */
