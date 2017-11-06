@@ -820,13 +820,20 @@ class presentationBroadcast extends React.Component {
 
     audienceCompleteTask (event) {
         let nameArray = Object.keys(this.pcs).map((key) => {
-            let username = this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbit';
-            return '<div><input type="checkbox" disabled id="' + key + '"> ' + username + '</input><br/></div>';
-        });
+            return {'username': this.pcs[key].username ? this.pcs[key].username : 'Anonymous Rabbit', 'key': key};
+        }).sort((a,b) => a.username > b.username);
+        let contentArray = nameArray.map((tmp) => '<div><input type="checkbox" disabled id="' + tmp.key + '"> ' + tmp.username + '</input><br/></div>');
         let titleHTMLAddition = '';
-        let contentHTML = nameArray.reduce((a,b) => a + b, '');
-        if(contentHTML.length > 0){
-            titleHTMLAddition = ' <span id="taskModalPeerCount">0</span>/' + nameArray.length;
+        let contentHTML = '';
+        let indexes = [0,Math.ceil(contentArray.length/3),Math.ceil(contentArray.length/3)*2,contentArray.length];
+        if(contentArray.length > 0){
+            titleHTMLAddition = ' <span id="taskModalPeerCount">0</span>/' + contentArray.length;
+            contentHTML = '<div class="ui accordion"><div class="title"><i class="dropdown icon"></i>Detailed list of peers</div><div class="content"><div class="transition hidden">'+
+            '<div class="ui stackable three column grid">'+
+                '<div class="column">'+contentArray.slice(indexes[0],indexes[1]).reduce((a,b) => a + b, '')+'</div>'+
+                '<div class="column">'+contentArray.slice(indexes[1],indexes[2]).reduce((a,b) => a + b, '')+'</div>'+
+                '<div class="column">'+contentArray.slice(indexes[2],indexes[3]).reduce((a,b) => a + b, '')+'</div>'+
+            '</div></div></div></div>';
         } else {
             contentHTML = '<p>There is currently no audience, please close this modal and reopen it as soon as some audience joined your room.</p>';
         }
@@ -837,7 +844,10 @@ class presentationBroadcast extends React.Component {
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'End Task',
             allowOutsideClick: false,
-            allowEscapeKey: false
+            allowEscapeKey: false,
+            onOpen: function () {
+                $('.ui.accordion').accordion();
+            }
         }).then(() => {
             this.sendRTCMessage('closeAndProceed');
         });
