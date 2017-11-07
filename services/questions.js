@@ -111,26 +111,33 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
 
+        const choices = [
+            {'choice': args.question.answer1, 'is_correct': args.question.correct1},
+            {'choice': args.question.answer2, 'is_correct': args.question.correct2},
+            {'choice': args.question.answer3, 'is_correct': args.question.correct3},
+            {'choice': args.question.answer4, 'is_correct': args.question.correct4},
+        ];
+
         if (resource === 'questions.add') {
             rp.post({
-                uri: Microservices.questions.uri + '/question',
+                uri: Microservices.questions.uri + '/' + args.question.relatedObject + '/question',
                 body:JSON.stringify({
-                    user_id: args.userId,
-                    related_object_id: args.sid,
-                    related_object: args.stype,
-                    difficulty: args.difficulty,
-                    choices: args.choices,
-                    question: args.question})
+                    user_id: args.question.userId.toString(),
+                    related_object_id: args.question.relatedObjectId,
+                    //related_object: args.question.relatedObject,
+                    difficulty: parseInt(args.question.difficulty),
+                    choices: choices,
+                    question: args.question.title,
+                    explanation: args.question.explanation})
             }).then((res) => {
                 console.log('Question create method should be successful. Check via swagger for following oid, otype, and qid:', args.sid, args.stype, args.questionId);
                 callback(null, {});
             }).catch((err) => {
                 console.log('Question create method errored. Check via swagger for following oid and qid:', args.sid, args.questionId);
-                console.log(err);
+                //console.log(err);
                 callback(err, {});
             });
         }
-
     },
 
     update: (req, resource, params, body, config, callback) => {
@@ -138,40 +145,48 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
 
+        const choices = [
+            {'choice': args.question.answer1, 'is_correct': args.question.correct1},
+            {'choice': args.question.answer2, 'is_correct': args.question.correct2},
+            {'choice': args.question.answer3, 'is_correct': args.question.correct3},
+            {'choice': args.question.answer4, 'is_correct': args.question.correct4},
+        ];
+
         if (resource === 'questions.update') {
             rp.put({
-                uri: Microservices.questions.uri + '/question/' + args.questionId,
+                uri: Microservices.questions.uri + '/question/' + args.question.qid,
                 body:JSON.stringify({
-                    user_id: args.userId,
-                    related_object_id: args.sid,
-                    related_object: args.stype,
-                    difficulty: args.difficulty,
-                    choices: args.choices,
-                    question: args.question})
+                    user_id: args.question.userId.toString(),
+                    related_object_id: args.question.relatedObjectId,
+                    related_object: args.question.relatedObject,
+                    difficulty: parseInt(args.question.difficulty),
+                    choices: choices,
+                    question: args.question.title,
+                    explanation: args.question.explanation
+                })
             }).then((res) => {
-                console.log('Question update should be successful. Check via swagger for questionId:', args.questionId);
+                console.log('Question update should be successful. Check via swagger for questionId:', args.question.qid);
                 callback(null, {});
             }).catch((err) => {
                 console.log(err);
                 callback(err, {});
             });
         }
-
     },
 
     delete: (req, resource, params, config, callback) => {
+        //console.log('From question service, delete op:', params);
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
         let args = params.params? params.params : params;
-
         if (resource === 'questions.delete') {
             rp.delete({
-                uri: Microservices.questions.uri + '/question/' + args.questionId
+                uri: Microservices.questions.uri + '/question/' + args.question.qid
             }).then((res) => {
-                console.log('Question delete should be successful. Check via swagger for questionId:', args.questionId);
+                console.log('Question delete should be successful. Check via swagger for questionId:', args.question.qid);
                 callback(null, {});
             }).catch((err) => {
-                console.log(err);
+                //console.log(err);
                 callback(err, {});
             });
         }
