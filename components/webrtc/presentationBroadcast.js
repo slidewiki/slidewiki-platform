@@ -21,7 +21,6 @@ class presentationBroadcast extends React.Component {
         this.pcConfig = {'iceServers': Microservices.webrtc.iceServers};
         this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
-        this.lastMessage = {};
         this.maxPeers = 100;
 
         //******** SlideWiki specific variables ********
@@ -578,11 +577,7 @@ class presentationBroadcast extends React.Component {
                     break;
                 case 'message':
                     if (that.isInitiator) {
-                        this.lastMessage = {
-                            data: data,
-                            peerID: peerID
-                        };
-                        this.forceUpdate();
+                        this.refs.chat.addMessage(data, false, peerID);
                     }
                     break;
                 case 'log':
@@ -920,14 +915,13 @@ class presentationBroadcast extends React.Component {
                 height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
               </Grid.Column>
               <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
-                <Chat isInitiator={this.isInitiator}
+                <Chat ref="chat" isInitiator={this.isInitiator}
                   height={height}
                   sendRTCMessage={this.sendRTCMessage}
                   presenterID={this.presenterID}
                   myID={this.myID}
                   myName={this.myName}
-                  pcs={this.pcs}
-                  lastMessage={this.lastMessage} />
+                  pcs={this.pcs}/>
               </Grid.Column>
             </Grid.Row>
 

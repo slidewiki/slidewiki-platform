@@ -11,50 +11,26 @@ class Chat extends React.Component {
     presenterID - var
     myID - var
     pcs - var
-    lastMessage - var
 */
 
     constructor(props) {
         super(props);
 
+        this.state = {
+            commentList: {},//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
+            charCount: 0,
+            TextAreaContent: ''
+        };
         this.textInputLength = 2000;
-        this.commentList = {};//{timestamp: {peer: username, message: text},timestamp: {peer: username, message: text}}
     }
 
-    componentDidMount() {
-
-    }
-
-    componentDidUpdate() {
-
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.lastMessage.data) {
-            let currentMessage = this.props.lastMessage;
-            if (currentMessage === {} || currentMessage === undefined)
-                currentMessage = {
-                    peerID: 0,
-                    data: {
-                        sender: 0,
-                        data: null
-                    }
-                };
-            if (nextProps.lastMessage.peerID !== currentMessage.peerID
-              || nextProps.lastMessage.data.sender !== currentMessage.data.sender
-              || nextProps.lastMessage.data.data !== currentMessage.data.data) {
-                this.addMessage(nextProps.lastMessage.data, false, nextProps.lastMessage.peerID);
-            }
-        }
-    }
-
-    updateCharCount(){
-        $('#textCharCount').text($('#messageToSend').val().length + '/' + this.textInputLength);
+    updateCharCount(e, {name, value}){
+        this.setState({charCount: value.length, [name]: value});
     }
 
     sendMessage(event) {
         event.preventDefault();
-        if($('#messageToSend:first').val().length < 15){
+        if(this.state.TextAreaContent.length < 15){
             swal({
                 title: 'Message too short',
                 html: 'The message you tried to send is too short. Please write more than 15 characters.',
@@ -64,28 +40,34 @@ class Chat extends React.Component {
                 allowOutsideClick: false
             });
         } else {
-            this.props.sendRTCMessage('message', $('#messageToSend:first').val(), this.props.presenterID);
-            this.addMessage({sender: this.props.myID, data: $('#messageToSend:first').val()}, true);
-            $('#messageToSend:first').val('');
-            this.updateCharCount();
+            this.props.sendRTCMessage('message', this.state.TextAreaContent, this.props.presenterID);
+            this.addMessage({sender: this.props.myID, data: this.state.TextAreaContent}, true);
+            this.setState({charCount: 0, TextAreaContent: ''});
         }
         return false;
     }
 
     addMessage(data, fromMyself = false, peerID = null) {
         let currentTime = new Date().getTime();
-        this.commentList[currentTime] = {};
+        let newPost = {};
+        newPost[currentTime] = {};
         if(!fromMyself)
-            this.commentList[currentTime].peer = this.props.pcs[peerID].username || Object.keys(this.props.pcs).indexOf(data.sender);
+            newPost[currentTime].peer = this.props.pcs[peerID].username || Object.keys(this.props.pcs).indexOf(data.sender);
         else
-            this.commentList[currentTime].peer = 'Me';
-        this.commentList[currentTime].message = data.data;
-        this.forceUpdate();
+            newPost[currentTime].peer = 'Me';
+        newPost[currentTime].message = data.data;
+        this.setState((prevState) => {
+            return {commentList: Object.assign({}, prevState.commentList, newPost)};
+        });
+    }
+
+    clearMessageList() {
+        this.setState({commentList: {}});
     }
 
     render() {
         let messages = [];
-        for(let i in this.commentList) {
+        for(let i in this.state.commentList) {
             messages.push(
               <Popup key={i}
                 trigger={
@@ -93,9 +75,9 @@ class Chat extends React.Component {
                     <Comment.Group>
                       <Comment>
                         <Comment.Content>
-                          <Comment.Author>{this.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                          <Comment.Author>{this.state.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
                           <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
-                            {this.commentList[i].message}
+                            {this.state.commentList[i].message}
                           </Comment.Text>
                         </Comment.Content>
                       </Comment>
@@ -109,9 +91,19 @@ class Chat extends React.Component {
 
         return (
           <div>
-            {(!this.props.isInitiator) ? (
+            {(this.props.isInitiator) ? (
               <Grid columns={1}>
-                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.5+'px', 'minHeight': this.props.height*0.5+'px', 'height': this.props.height*0.5+'px'}}>
+                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
+                  <div id="messageList"><h3>Questions from Audience:</h3>{messages}</div>
+                </Grid.Column>
+                <Grid.Column>
+                  <Divider clearing />
+                  <Button fluid={true} content='Clear Chat' labelPosition='right' icon='erase' primary onClick={this.clearMessageList.bind(this)}/>
+                </Grid.Column>
+              </Grid>
+            ) : (
+              <Grid columns={1}>
+                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
                   <h3>Your Questions ({this.props.myName}):</h3>
                   {messages}
                 </Grid.Column>
@@ -119,17 +111,15 @@ class Chat extends React.Component {
                   <Divider clearing />
                   <Form reply>
                     <div>
-                      <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} onChange={this.updateCharCount.bind(this)}/>
+                      <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} name="TextAreaContent" value={this.state.TextAreaContent} onChange={this.updateCharCount.bind(this)}/>
                       <Form.Field>
                         <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
-                        <Label pointing='left' id='textCharCount'>0/{this.textInputLength}</Label>
+                        <Label pointing='left'>{this.state.charCount}/{this.textInputLength}</Label>
                       </Form.Field>
                     </div>
                   </Form>
                 </Grid.Column>
               </Grid>
-            ) : (
-              <div id="messageList"><h3>Questions from Audience:</h3>{messages}</div>
             )}
           </div>
         );
