@@ -1764,11 +1764,12 @@ class SlideContentEditor extends React.Component {
                     <i className="browser icon black"> </i>
                     <a style={buttonColorBlack}>Use template</a>
                 </button>
-                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/> */}
+                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/>
                 <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
                  <i className="outline tasks icon black"></i>
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
+                */}
                 <UploadMediaModal ref="uploadMediaModal"/>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
@@ -1808,7 +1809,7 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, PresentationStore, MediaStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
@@ -1816,7 +1817,6 @@ SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserPr
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
         DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        PresentationStore: context.getStore(PresentationStore).getState(),
         MediaStore: context.getStore(MediaStore).getState()
     };
 });
