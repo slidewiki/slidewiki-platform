@@ -68,12 +68,15 @@ class Chat extends React.Component {
     openMessageInModal(peer, message) {
         swal({
             titleText: 'Message from ' + peer,
-            text: message,
+            html: '<div style="word-wrap:break-word; white-space:pre-wrap; text-align:left;padding:5%;">' + escapeHTML(message) + '</div>',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Close',
             allowOutsideClick: false,
             allowEscapeKey: false
         });
+        function  escapeHTML(text) {
+            return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
     }
 
     render() {
@@ -89,7 +92,7 @@ class Chat extends React.Component {
                       <Comment>
                         <Comment.Content>
                           <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
+                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
                             {message}
                           </Comment.Text>
                           {(this.props.isInitiator) ? (
