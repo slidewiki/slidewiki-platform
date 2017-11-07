@@ -32,8 +32,8 @@ class Chat extends React.Component {
         event.preventDefault();
         if(this.state.TextAreaContent.length < 15){
             swal({
-                title: 'Message too short',
-                html: 'The message you tried to send is too short. Please write more than 15 characters.',
+                titleText: 'Message too short',
+                text: 'The message you tried to send is too short. Please write more than 15 characters.',
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
@@ -65,9 +65,22 @@ class Chat extends React.Component {
         this.setState({commentList: {}});
     }
 
+    openMessageInModal(peer, message) {
+        swal({
+            titleText: 'Message from ' + peer,
+            text: message,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Close',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
+    }
+
     render() {
         let messages = [];
         for(let i in this.state.commentList) {
+            let author = this.state.commentList[i].peer.toString();
+            let message = this.state.commentList[i].message;
             messages.push(
               <Popup key={i}
                 trigger={
@@ -75,10 +88,15 @@ class Chat extends React.Component {
                     <Comment.Group>
                       <Comment>
                         <Comment.Content>
-                          <Comment.Author>{this.state.commentList[i].peer.toString()}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                          <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
                           <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'initial'}}>
-                            {this.state.commentList[i].message}
+                            {message}
                           </Comment.Text>
+                          {(this.props.isInitiator) ? (
+                            <Comment.Actions>
+                                <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
+                            </Comment.Actions>
+                          ) : ('')}
                         </Comment.Content>
                       </Comment>
                     </Comment.Group>
@@ -93,8 +111,9 @@ class Chat extends React.Component {
           <div>
             {(this.props.isInitiator) ? (
               <Grid columns={1}>
-                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
-                  <div id="messageList"><h3>Questions from Audience:</h3>{messages}</div>
+                <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
+                  <h3>Questions from Audience:</h3>
+                  {messages}
                 </Grid.Column>
                 <Grid.Column>
                   <Divider clearing />
@@ -103,7 +122,7 @@ class Chat extends React.Component {
               </Grid>
             ) : (
               <Grid columns={1}>
-                <Grid.Column id="messageList" style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
+                <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
                   <h3>Your Questions ({this.props.myName}):</h3>
                   {messages}
                 </Grid.Column>
