@@ -1,7 +1,8 @@
 node_modules
 bower_components
 build
-custom_modules
+custom_modules/custom-semantic-ui
+custom_modules/reveal.js
 *.log
 *.lock
 logs/*.log
