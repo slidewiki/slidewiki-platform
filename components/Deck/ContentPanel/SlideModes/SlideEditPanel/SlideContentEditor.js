@@ -1306,7 +1306,7 @@ class SlideContentEditor extends React.Component {
                 //TODO code which inserts the file into the slide
                 // MediaStore.file contains everything about the file - also the byte64 string and url
             }
-            else if (extProps.MediaStore.status === 'error') {
+            else if (nextProps.MediaStore.status === 'error') {
                 this.refs.uploadMediaModal.handleClose();
                 swal({
                     title: 'Error',
