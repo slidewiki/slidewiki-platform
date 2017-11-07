@@ -116,6 +116,7 @@
     "react-intl": "^2.2.3",
     "react-intl-webpack-plugin": "0.0.3",
     "react-list": "^0.8.6",
+    "react-qr-svg": "^2.1.0",
     "react-resize-aware": "^1.0.11",
     "react-responsive": "^1.2.6",
     "react-share": "^1.16.0",

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { handleRoute, navigateAction} from 'fluxible-router';
 import { provideContext } from 'fluxible-addons-react';
 import { isEmpty } from '../../common';
@@ -6,6 +7,7 @@ import { Grid, Button, Popup } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
 import Chat from './Chat.js';
+import { QRCode } from 'react-qr-svg';
 
 class presentationBroadcast extends React.Component {
 
@@ -898,6 +900,20 @@ class presentationBroadcast extends React.Component {
         document.body.removeChild(toCopy);
     }
 
+    showQRCode() {
+        swal({
+            titleText: 'Share this Room',
+            html: '<div id="qr-code"></div>',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Close',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            onOpen: () => {
+                ReactDOM.render(<QRCode bgColor="#FFFFFF" fgColor="#000000" level="L" value={window.location.href} style={{ width: 256 }}/>, document.getElementById('qr-code'));
+            }
+        });
+    }
+
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
             let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
@@ -923,6 +939,7 @@ class presentationBroadcast extends React.Component {
                   myName={this.myName}
                   pcs={this.pcs}/>
               </Grid.Column>
+              <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '40%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
             </Grid.Row>
 
             <Grid.Row>
@@ -953,7 +970,6 @@ class presentationBroadcast extends React.Component {
                   {(this.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
                   ) : ''}
-
                 </Button.Group>
               </Grid.Column>
             </Grid.Row>
