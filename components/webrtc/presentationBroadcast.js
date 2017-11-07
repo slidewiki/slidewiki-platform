@@ -939,7 +939,9 @@ class presentationBroadcast extends React.Component {
                   myName={this.myName}
                   pcs={this.pcs}/>
               </Grid.Column>
-              <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '40%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
+              {(this.isInitiator) ? (
+                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '40%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
+              ) : ('')};
             </Grid.Row>
 
             <Grid.Row>
