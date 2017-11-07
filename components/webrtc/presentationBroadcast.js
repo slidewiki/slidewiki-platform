@@ -924,7 +924,7 @@ class presentationBroadcast extends React.Component {
         let height = typeof window !== 'undefined' ? window.innerHeight : 961;
 
         return (
-          <Grid celled='internally'>
+          <Grid celled='internally' stackable columns={2}>
             <Grid.Row>
               <Grid.Column width={13}>
                 <iframe id="slidewikiPresentation" src={this.iframesrc}
