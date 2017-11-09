@@ -13,13 +13,19 @@ class presentationBroadcast extends React.Component {
 
     constructor(props) {
         super(props);
-        this.texts = {roleText: '', peerCountText: ''};
+        this.state = {
+            subtitle: '',//used for speech recognition results
+            roleText: '',
+            peerCountText: '',
+            paused: false,//user has manually paused slide transitions
+            showReopenModalButton: false,
+            myName: '',
+        };
         this.isInitiator = false;
         this.localStream = undefined;
         this.myID = undefined;
         this.presenterID = undefined;
         this.pcs = {}; // {<socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}, <socketID>: {RTCConnection: RPC, dataChannel: dataChannel, username: username}}
-        this.turnReady = undefined;
         this.pcConfig = {'iceServers': Microservices.webrtc.iceServers};
         this.room = this.props.currentRoute.query.room + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.socket = undefined;
@@ -29,14 +35,13 @@ class presentationBroadcast extends React.Component {
         this.eventForwarding = true;
         this.iframesrc = this.props.currentRoute.query.presentation + '';//NOTE Error handling implemented in first lines of componentDidMount
         this.lastRemoteSlide = this.iframesrc + '';
-        this.paused = false; //user has manually paused slide transitions
         this.currentSlide = this.iframesrc + '';
-        this.subtitle = '';//used for speech recognition results
-        this.speechRecognitionDisabled = false;
-        this.startSpeechrecognition = false;
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
-        this.showReopenModalButton = false;
-        this.myName = '';
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(prevState.paused !== this.state.paused && this.state.paused === false)
+            this.changeSlide(this.lastRemoteSlide);
     }
 
     componentDidMount() {
@@ -74,9 +79,10 @@ class presentationBroadcast extends React.Component {
         that.socket.on('created', (room, socketID) => { //only initiator recieves this
             console.log('Created room ' + that.room);
             that.isInitiator = true;
-            that.texts.roleText = 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ';
-            that.texts.peerCountText = 'People currently listening: ';
-            that.forceUpdate();
+            that.setState({
+                roleText: 'You are the presenter. Other people will hear your voice and reflect your presentation progress. ',
+                peerCountText: 'People currently listening: '
+            });
             setmyID();
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             requestStreams({
@@ -106,8 +112,7 @@ class presentationBroadcast extends React.Component {
         that.socket.on('joined', (room) => { //only recieved by peer that tries to join - a peer has joined the room
             console.log('joined: ' + that.room);
             setmyID();
-            that.texts.roleText = 'You are now listening to the presenter and your presentation will reflect his actions.';
-            that.forceUpdate();
+            that.setState({roleText: 'You are now listening to the presenter and your presentation will reflect his actions.'});
             $('#slidewikiPresentation').on('load', activateIframeListeners);
             gotStream('');//NOTE Skip requesting streams for the listeners, as they do not need them
 
@@ -301,7 +306,7 @@ class presentationBroadcast extends React.Component {
                     confirmButtonText: 'Check',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                }).then(() => { that.startSpeechrecognition = true; that.forceUpdate(); $('body>a#atlwdg-trigger').remove();});
+                }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); $('body>a#atlwdg-trigger').remove();});
             }
             that.localStream = stream;
 
@@ -437,9 +442,11 @@ class presentationBroadcast extends React.Component {
                     allowOutsideClick: false,
                     allowEscapeKey: false
                 });
-                that.texts.roleText = 'This presentation has ended. Feel free to look at the deck as long as you want.';
-                that.texts.peerCountText = '';
-                that.forceUpdate();
+
+                that.setState({
+                    roleText: 'This presentation has ended. Feel free to look at the deck as long as you want.',
+                    peerCountText: ''
+                });
                 handleRemoteHangup(that.presenterID);
             }
         }
@@ -455,13 +462,20 @@ class presentationBroadcast extends React.Component {
             channel.onopen = function() {
                 console.log('Data Channel opened');
                 if (that.isInitiator)
-                    sendRTCMessage('gotoslide', document.getElementById('slidewikiPresentation').contentWindow.location.href, peerID);// using href instead of currentSlide because it could be bad initialized
-                else {
+                    sendStatusObject(peerID);
+                else
                     that.sendUsername();
-                }
             };
 
             channel.onmessage = handleMessage.bind(that, channel, peerID);
+        }
+
+        function sendStatusObject(context, peerID) {
+            let tosend = {
+                slide: document.getElementById('slidewikiPresentation').contentWindow.location.href, // using href because currentSlide might be badly initialized
+                subtitle: that.refs.speechRecognition.getSubtitle()
+            };
+            sendRTCMessage('statusObject', tosend, peerID);
         }
 
         function handleIceCandidate(peerID, event) {
@@ -589,16 +603,14 @@ class presentationBroadcast extends React.Component {
                     handleRemoteHangup(data.data);
                     break;
                 case 'subtitle':
-                    this.subtitle = data.data;
-                    this.forceUpdate();
+                    this.setState({subtitle: data.data});
                     break;
                 case 'newUsername':
                     handleNewUsername(data.data, peerID);
                     break;
                 case 'username':
                     if(!that.isInitiator){
-                        that.myName = data.data;
-                        this.forceUpdate();
+                        that.setState({myName: data.data});
                     }
                     break;
                 case 'completeTask':
@@ -609,6 +621,12 @@ class presentationBroadcast extends React.Component {
                     break;
                 case 'closeAndProceed':
                     closeModal();
+                    break;
+                case 'statusObject':
+                    if(!that.isInitiator){
+                        this.setState({subtitle: data.data.subtitle});
+                        changeSlide(data.data.slide);
+                    }
                     break;
                 default:
 
@@ -727,8 +745,7 @@ class presentationBroadcast extends React.Component {
             } else {
                 iframe.on('slidechanged', () => {
                     if (document.getElementById('slidewikiPresentation').contentWindow.location.href !== that.lastRemoteSlide) {
-                        that.paused = true;
-                        that.forceUpdate();
+                        that.setState({paused: true});
                     }
                 });
                 let textArea = $('#messageToSend');
@@ -743,11 +760,17 @@ class presentationBroadcast extends React.Component {
 
         function changeSlide(slideID) { // called by peers
             that.lastRemoteSlide = slideID;
-            if (!that.paused) {
-                console.log('Changing to slide: ', slideID);
-                that.iframesrc = slideID;
-                document.getElementById('slidewikiPresentation').contentWindow.location.assign(slideID);
-                that.forceUpdate();
+            if (!that.state.paused) {
+                let doc = document.getElementById('slidewikiPresentation');
+                if(doc.contentDocument.readyState === 'complete'){
+                    console.log('Changing to slide: ', slideID);
+                    that.iframesrc = slideID;
+                    doc.contentWindow.location.assign(slideID);
+                } else { //if readyState === 'loading' || readyState === 'interactive'
+                    setTimeout(() => {
+                        changeSlide(slideID);
+                    }, 20);
+                }
             }
         }
         that.changeSlide = changeSlide;
@@ -771,7 +794,7 @@ class presentationBroadcast extends React.Component {
             let tmp = that;
             if(tmp === undefined)
                 tmp = this;
-            tmp.showReopenModalButton = false;
+            tmp.setState({showReopenModalButton: false});
             swal({
                 titleText: 'Complete the given Task',
                 text: 'The presenter asked you to complete a task. As soon as you have completed the task, click on "Completed" and wait for the presenter to proceed.',
@@ -786,8 +809,7 @@ class presentationBroadcast extends React.Component {
                 tmp.sendRTCMessage('taskCompleted',undefined, tmp.presenterID);
             }).catch((e) => {
                 if(e === 'cancel'){
-                    tmp.showReopenModalButton = true;
-                    tmp.forceUpdate();
+                    tmp.setState({showReopenModalButton: true});
                 }
             });
             tmp.forceUpdate();
@@ -802,9 +824,8 @@ class presentationBroadcast extends React.Component {
         }
 
         function closeModal() {
-            that.showReopenModalButton = false;
+            that.setState({showReopenModalButton: false});
             swal.closeModal();
-            that.forceUpdate();
         }
     }
 
@@ -852,8 +873,8 @@ class presentationBroadcast extends React.Component {
     }
 
     resumePlayback(){
-        this.paused = false;
-        this.changeSlide(this.lastRemoteSlide);
+        this.setState({paused: false});
+        //NOTE SlideChange is triggerd by componentDidUpdate
     }
 
     copyURLToClipboard() {
@@ -914,6 +935,51 @@ class presentationBroadcast extends React.Component {
         });
     }
 
+    showInviteModal() {
+        swal({
+            titleText: 'Invite other people',
+            html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
+            type: 'info',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Copy to Clipboard',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: function() {
+                return new Promise((resolve, reject) => {
+                    let toCopy = document.createElement('input');
+                    toCopy.style.position = 'fixed';
+                    toCopy.style.top = 0;
+                    toCopy.style.left = 0;
+                    toCopy.style.width = '2em';
+                    toCopy.style.height = '2em';
+                    toCopy.style.padding = 0;
+                    toCopy.style.border = 'none';
+                    toCopy.style.outline = 'none';
+                    toCopy.style.boxShadow = 'none';
+                    toCopy.style.background = 'transparent';
+                    toCopy.value = window.location.href;
+                    document.getElementById('clipboardtarget')
+                        .appendChild(toCopy);
+                    toCopy.value = window.location.href;
+                    toCopy.select();
+
+                    try {
+                        let successful = document.execCommand('copy');
+                        if (!successful)
+                            throw 'Unable to copy';
+                        resolve('Copied to clipboard');
+                    } catch (err) {
+                        console.log('Oops, unable to copy');
+                        reject('Oops, unable to copy');
+                    }
+                });
+            }
+        })
+        .then(() => {}, () => {});
+    }
+
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
             let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
@@ -936,7 +1002,7 @@ class presentationBroadcast extends React.Component {
                   sendRTCMessage={this.sendRTCMessage}
                   presenterID={this.presenterID}
                   myID={this.myID}
-                  myName={this.myName}
+                  myName={this.state.myName}
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
@@ -947,17 +1013,17 @@ class presentationBroadcast extends React.Component {
             <Grid.Row>
               <Grid.Column width={13}>
                 <h4>
-                  {this.isInitiator ? (<p>{this.texts.roleText}{this.texts.peerCountText}<Popup
+                  {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
                       trigger={<span>{Object.keys(this.pcs).length}</span>}
                       content={peernames}
-                    /></p>) : <p>{this.texts.roleText}</p>}
+                    /></p>) : <p>{this.state.roleText}</p>}
                 </h4>
                 <div id="media" style={{'display': 'none'}}></div>
-                <SpeechRecognition isInitiator={this.isInitiator}
-                    speechRecognitionDisabled={this.speechRecognitionDisabled}
-                    start={this.startSpeechrecognition}
+                <SpeechRecognition ref="speechRecognition"
+                    isInitiator={this.isInitiator}
                     sendRTCMessage={this.sendRTCMessage}
-                    subtitle={this.subtitle} />
+                    showInviteModal={this.showInviteModal}
+                    subtitle={this.state.subtitle} />
               </Grid.Column>
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
@@ -967,9 +1033,9 @@ class presentationBroadcast extends React.Component {
                   {(this.isInitiator) ? (
                     <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
                   ) : (
-                    <Button content='Resume to presenter progress' style={(this.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                    <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
                   )}
-                  {(this.showReopenModalButton) ? (
+                  {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
                   ) : ''}
                 </Button.Group>

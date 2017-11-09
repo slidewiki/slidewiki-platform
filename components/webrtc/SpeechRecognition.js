@@ -7,37 +7,39 @@ class SpeechRecognition extends React.Component {
 /*
   Props:
     isInitiator - var
-    speechRecognitionDisabled - var
-    start - var start of speech recognition
     sendRTCMessage - func
+    showInviteModal - func
     subtitle - var
-
 */
 
     constructor(props) {
         super(props);
 
+        this.state={
+            speechRecognitionDisabled: false,
+            subtitle: ''
+        };
+
         this.recognition = undefined;
-        this.speechRecognitionDisabled = false;
     }
 
-    componentDidMount() {
-        this.speechRecognitionDisabled = this.props.speechRecognitionDisabled;
+    getSubtitle() {
+        return this.state.subtitle;
     }
 
     componentDidUpdate() {
-        // console.log('componentDidUpdate', this.props.subtitle, this.props.start);
-        this.handleSubtitle(this.props.subtitle);
+        $('#input_subtitle').animate({
+            scrollLeft: $('#input_subtitle')[0].scrollLeft+1000
+        }, 1000);
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log('componentWillReceiveProps ', this.props.start, nextProps.start);
-        if (this.props.start === false && nextProps.start === true) {
-            this.activateSpeechRecognition();
-        }
+        if(this.state.subtitle !== nextProps.subtitle  && nextProps.subtitle !== '')
+            this.setState({subtitle: nextProps.subtitle});
     }
 
     activateSpeechRecognition() {
+        console.log('Activating Speech Recognition...');
         let that = this;
         let final_transcript = '';
 
@@ -71,13 +73,13 @@ class SpeechRecognition extends React.Component {
                     console.warn('error:', e);
 
                     swal({
-                        title: 'Speech recognition disabled',
-                        html: 'There was an error with the speech recognition API. This should be an edge case. You could restart it.',
+                        titleText: 'Speech recognition disabled',
+                        text: 'There was an error with the speech recognition API. This should be an edge case. You may restart it.',
                         type: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Enable it',
+                        confirmButtonText: 'Enable again',
                         cancelButtonText: 'Keep it disabled',
                         allowOutsideClick: false,
                         allowEscapeKey: false,
@@ -104,34 +106,32 @@ class SpeechRecognition extends React.Component {
                 let m = (final_transcript || interim_transcript);
                 let tosend = m.substr((m.length-300) > 0 ? m.length-300 : 0, 300);
                 that.props.sendRTCMessage('subtitle', tosend);
-                that.handleSubtitle(tosend);
+                that.setState({subtitle: tosend});
             };
 
             that.recognition.onerror = function (e) {
                 if(e.type === 'error' && e.error !== 'no-speech'){
                     console.log('SpeechRecognition error: ', e);
-                    that.speechRecognitionDisabled = true;
-                    that.recognition.stop();
+                    that.disableSpeechRecognition(that);
                     swal({
-                        title: 'Speech recognition disabled',
-                        html: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any subtitles anymore.',
+                        titleText: 'Speech recognition disabled',
+                        text: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any subtitles anymore.',
                         type: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Okay',
                         allowOutsideClick: false,
                         allowEscapeKey: false
                     });
-                    that.forceUpdate();
                 } else
                     that.recognition.stop();
             };
 
             that.recognition.onend = function (e) {
-                if(!that.speechRecognitionDisabled){
+                if(!that.state.speechRecognitionDisabled){
                     console.warn('Recognition ended itself - stupid thing! Restarting ....', e);
                     that.recognition.start();
                 } else {
-                    that.props.sendRTCMessage('subtitle', 'Subtitle has been disabled by presenter');
+                    //TODO in StatusObjekt packen
                 }
             };
 
@@ -141,7 +141,7 @@ class SpeechRecognition extends React.Component {
             });
 
             swal({
-                title: 'Speech recognition enabled',
+                titleText: 'Speech recognition enabled',
                 html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p><p>Please select the language in which you will talk or disable the feature.</p>',
                 type: 'info',
                 input: 'select',
@@ -162,96 +162,51 @@ class SpeechRecognition extends React.Component {
                 }
             }).then(() => {}, (dismiss) => {
                 if (dismiss === 'cancel') {
-                    that.speechRecognitionDisabled = true;
-                    that.recognition.stop();
+                    that.disableSpeechRecognition(that);
                     console.log('Recognition disabled');
                 }
             }).then(() => {
-                that.showInviteSwal();
+                that.props.showInviteModal();
             });
 
         } else {
             swal({
-                title: 'Speech recognition disabled',
-                html: '<p>Your browser isn\'t able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that supports speech recognition.</p>',
+                titleText: 'Speech recognition disabled',
+                text: 'Your browser isn\'t able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that supports speech recognition.',
                 type: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
                 allowOutsideClick: false,
                 allowEscapeKey: false
             }).then(() => {
-                that.showInviteSwal();
+                that.props.showInviteModal();
             });
         }
     }
 
-    showInviteSwal() {
+    showStopSpeechRecognitionModal() {
         swal({
-            title: 'Invite other people',
-            html: '<p>Copy the following link and send it to other people in order to invite them to this room: <br/><br/><strong> ' + window.location.href + '</strong><div id="clipboardtarget"/></p>',
-            type: 'info',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Copy to Clipboard',
-            showCancelButton: true,
-            cancelButtonColor: '#d33',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            preConfirm: function() {
-                return new Promise((resolve, reject) => {
-                    let toCopy = document.createElement('input');
-                    toCopy.style.position = 'fixed';
-                    toCopy.style.top = 0;
-                    toCopy.style.left = 0;
-                    toCopy.style.width = '2em';
-                    toCopy.style.height = '2em';
-                    toCopy.style.padding = 0;
-                    toCopy.style.border = 'none';
-                    toCopy.style.outline = 'none';
-                    toCopy.style.boxShadow = 'none';
-                    toCopy.style.background = 'transparent';
-                    toCopy.value = window.location.href;
-                    document.getElementById('clipboardtarget')
-                        .appendChild(toCopy);
-                    toCopy.value = window.location.href;
-                    toCopy.select();
-
-                    try {
-                        let successful = document.execCommand('copy');
-                        if (!successful)
-                            throw 'Unable to copy';
-                        resolve('Copied to clipboard');
-                    } catch (err) {
-                        console.log('Oops, unable to copy');
-                        reject('Oops, unable to copy');
-                    }
-                });
-            }
-        })
-        .then(() => { this.forceUpdate(); }, () => {});
-    }
-
-    handleSubtitle(subtitle) {
-        $('#input_subtitle').val(subtitle);
-        $('#input_subtitle').animate({
-            scrollLeft: $('#input_subtitle')[0].scrollLeft+1000
-        }, 1000);
-    }
-
-    stopSpeechRecognition() {
-        swal({
-            title: 'Disable Speech Recognition',
-            html: 'You will deactivate speech recognition for this presentation. You will not be able to turn it back on.',
+            titleText: 'Disable Speech Recognition',
+            text: 'You will deactivate speech recognition for this presentation. You will not be able to turn it back on.',
             type: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Disable',
             showCancelButton: true,
             cancelButtonColor: '#d33',
-            allowOutsideClick: false
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then(() => {
-            this.speechRecognitionDisabled = true;
-            this.recognition.stop();
-            this.forceUpdate();
+            this.disableSpeechRecognition(this);
         }, () => {});
+    }
+
+    disableSpeechRecognition(context) {
+        context.setState({speechRecognitionDisabled: true});
+        context.recognition.stop();
+        context.setState((prevState) => {
+            return {subtitle: prevState.subtitle + '...Speechrecognition has been disabled'};
+        });
+        context.props.sendRTCMessage('subtitle', this.state.subtitle);
     }
 
     render() {
@@ -260,8 +215,8 @@ class SpeechRecognition extends React.Component {
             <Label pointing='below'> {this.props.isInitiator ? 'Your Transcoded Voice' : 'Transcoded Speaker Voice'}</Label>
             <Input labelPosition='left' type='text' fluid>
               <Label>Subtitle:</Label>
-              <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...'/>
-              {this.props.isInitiator ? (<Button color='red' icon='stop' disabled={this.speechRecognitionDisabled ? true : false} onClick={this.stopSpeechRecognition.bind(this)}/>) : ('')}
+              <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' value={this.state.subtitle}/>
+              {this.props.isInitiator ? (<Button color='red' icon='stop' disabled={this.state.speechRecognitionDisabled ? true : false} onClick={this.showStopSpeechRecognitionModal.bind(this)}/>) : ('')}
             </Input>
           </div>
         );
