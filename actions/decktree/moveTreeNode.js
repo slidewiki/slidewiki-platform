@@ -1,4 +1,5 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
 
 export default function moveTreeNode(context, payload, done) {
@@ -42,6 +43,15 @@ export default function moveTreeNode(context, payload, done) {
                 context.dispatch('MOVE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('MOVE_TREE_NODE_SUCCESS', payload);
+
+                let activity = {
+                    activity_type: 'move',
+                    user_id: String(userid),
+                    content_name: res.title,
+                    content_id: String(res.id),
+                    content_kind: res.type
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);
         });
