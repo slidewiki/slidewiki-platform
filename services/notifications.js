@@ -84,42 +84,42 @@ export default {
         }
     },
     update: (req, resource, params, body, config, callback) => {
-      req.reqId = req.reqId ? req.reqId : -1;
-      log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-      let args = params.params? params.params : params;
-      let uid = args.uid;
-      if (uid === undefined) {
-          uid = 0;
-      }
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
+        let args = params.params? params.params : params;
+        let uid = args.uid;
+        if (uid === undefined) {
+            uid = 0;
+        }
 
-      if (resource === 'notifications.read'){
-         let id = args.id;
-         rp.put({
-             uri: Microservices.notification.uri + '/notification/mark/' + id,
-             body: JSON.stringify({
-                 read: true
-             }),
-             resolveWithFullResponse: true
-         }).then((res) => {
-             callback(null, {id: id});
-         }).catch((err) => {
-             console.log(err);
-             callback(null, {});
-         });
-      } else if (resource === 'notifications.readall'){
-         rp.put({
-             uri: Microservices.notification.uri + '/notification/markall/' + id,
-             body: JSON.stringify({
-                 read: true
-             }),
-             resolveWithFullResponse: true
-         }).then((res) => {
-             callback(null, {args: args});
-         }).catch((err) => {
-             console.log(err);
-             callback(null, {});
-         });
-      }
+        if (resource === 'notifications.read'){
+            let id = args.id;
+            rp.put({
+                uri: Microservices.notification.uri + '/notification/mark/' + id,
+                body: JSON.stringify({
+                    read: true
+                }),
+                resolveWithFullResponse: true
+            }).then((res) => {
+                callback(null, {id: id});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {});
+            });
+        } else if (resource === 'notifications.readall'){
+            rp.put({
+                uri: Microservices.notification.uri + '/notification/markall/' + id,
+                body: JSON.stringify({
+                    read: true
+                }),
+                resolveWithFullResponse: true
+            }).then((res) => {
+                callback(null, {args: args});
+            }).catch((err) => {
+                console.log(err);
+                callback(null, {});
+            });
+        }
     }
 
     // other methods
