@@ -3,7 +3,7 @@ const log = require('../../log/clog');
 
 export default function markAsReadUserNotifications(context, payload, done) {
     log.info(context);
-    context.service.read('notifications.readall', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.update('notifications.readall', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
