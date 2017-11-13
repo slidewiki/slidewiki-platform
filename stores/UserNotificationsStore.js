@@ -10,6 +10,7 @@ class UserNotificationsStore extends BaseStore {
         this.activityTypes = [
             {type:'add', selected: true},
             {type:'edit', selected: true},
+            {type:'move', selected: true},
             {type:'comment', selected: true},
             {type:'reply', selected: true},
             {type:'download', selected: true},
