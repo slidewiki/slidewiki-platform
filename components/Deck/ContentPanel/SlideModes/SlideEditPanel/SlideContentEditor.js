@@ -1217,9 +1217,9 @@ class SlideContentEditor extends React.Component {
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $('.pptx2html [style*="absolute"]').each(function () {
-            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: 0px; position: absolute; z-index: 90000000;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
-            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 60px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
             //let menuID = $(this).attr('id');
