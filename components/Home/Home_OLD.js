@@ -86,7 +86,7 @@ class Home extends React.Component {
                     <div>
                     <h2 className="ui header"><FormattedMessage id='home.recent' defaultMessage='Recent decks'/></h2>
                         <DeckList scope="recent"/>
-                            <a className="ui right floated button" href='/recent'><FormattedMessage id='home.view_all' defaultMessage='View all'/></a>
+                            <a className="ui right floated button" href='/recentDecks'><FormattedMessage id='home.view_all' defaultMessage='View all'/></a>
                     </div>
                 </div>
             </div>
