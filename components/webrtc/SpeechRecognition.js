@@ -179,6 +179,7 @@ class SpeechRecognition extends React.Component {
                 allowOutsideClick: false,
                 allowEscapeKey: false
             }).then(() => {
+                that.disableSpeechRecognition(that);
                 that.props.showInviteModal();
             });
         }
