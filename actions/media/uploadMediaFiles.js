@@ -9,9 +9,13 @@ export default function uploadMediaFiles(context, payload, done) {
     payload.jwt = context.getStore(UserProfileStore).jwt;
 
     console.log(payload);
+    console.log('ontvangen');
+
     context.dispatch('START_UPLOADING_MEDIA_FILE', {type: payload.type, name: payload.title});
+    console.log('jaja start upload dispatch');
 
     context.service.create('media.create', payload, { timeout: 20 * 1000 }, { timeout: 20 * 1000 }, (err, res) => {
+        console.log('jaja context.service.create');
         if (err) {
             // Every file send to the file-service gets checked if its distinct, if so 409 is returned
             // All images of all users are regarded thus the 409 response is really common
@@ -26,7 +30,7 @@ export default function uploadMediaFiles(context, payload, done) {
 
                 delete payload.jwt;
                 delete payload.userid;
-                
+
                 console.log('Got 409 from file service', payload);
                 context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
             }
@@ -38,6 +42,8 @@ export default function uploadMediaFiles(context, payload, done) {
             payload.url = Microservices.file.uri + '/picture/' + res.filename;
             payload.thumbnailUrl = Microservices.file.uri + '/picture/' + res.thumbnailName;
             context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
+            console.log('success');
+
         }
         done();
     });

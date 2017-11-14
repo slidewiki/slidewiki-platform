@@ -16,13 +16,16 @@ export default {
 
             //NOTE available but currently not used params: copyrightHolderURL and copyrightAdditions
             let holder = '';
-            if(context.getUser() && context.getUser().username) holder = context.getUser().username + ', id=' + params.userID; else holder = params.userID;
+            console.log('jaja');
+            //if(context.getUser() && context.getUser().username) holder = context.getUser().username + ', id=' + params.userID; else holder = params.userID;
+            holder = params.userID;
+            console.log('jaja 2');
             let url = Microservices.file.uri + '/v2/picture?' +
                 'license=' + encodeURIComponent(params.license) +
                 '&copyrightHolder=' + encodeURIComponent(holder) + //NOTE prefer to use a real world name or the username at SlideWiki + it's ID
                 '&title=' + encodeURIComponent(params.title) +
                 '&altText='+encodeURIComponent(params.text);
-            // console.log('use url', url);
+             console.log('use url', url);
             let headers = {
                 '----jwt----': params.jwt,
                 'content-type': params.type

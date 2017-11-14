@@ -86,6 +86,7 @@ class UploadMediaModal extends React.Component {
         let payload = {
             type: this.state.files[0].type,
             license: this.state.licenseValue,
+            copyrightHolder: 'testtest',
             title: this.state.title || this.state.files[0].name,
             text: this.state.alt,
             filesize: this.state.files[0].size,
@@ -101,6 +102,7 @@ class UploadMediaModal extends React.Component {
 
             if (evt.target.readyState === FileReader.DONE) {
                 payload.bytes = reader.result;
+                console.log('jaja execture');
                 that.context.executeAction(uploadMediaFiles, payload);
 
                 that.setState({
