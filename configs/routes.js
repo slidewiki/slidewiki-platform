@@ -541,6 +541,12 @@ export default {
             context.executeAction(loadDeckFamily, payload, done);
         }
     },
+    webrtc: {
+        path: '/presentationbroadcast',//Example: ...broadcast?room=foo&presentation=/Presentation/386-1/
+        method: 'get',
+        page: 'presentationBroadcast',
+        handler: require('../components/webrtc/presentationBroadcast')
+    },
     /* This should be the last route in routes.js */
     notfound: {
         path: '*',
