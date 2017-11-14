@@ -124,7 +124,7 @@ class TranslationModal extends React.Component {
             <Modal.Content>
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
                     {available_desc}
-                    <p>You are about to translate the deck, please, choose the target language from the list below:</p>
+                    <p id='translationModalDesc'>You are about to translate the deck. Please choose the target language from the list below:</p>
                     <Dropdown
                         placeholder='Choose a target language...'
                         scrolling
@@ -136,6 +136,7 @@ class TranslationModal extends React.Component {
                         ref = {(dropDown) => {this.dropDown = dropDown;}}
                         value = {this.state.language}
                       />
+                      <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate. <br/> Attempting to translate large decks might result in an error.</b></p>
                     <Divider/>
                     <p>
                         <Button as='button' primary onClick={this.handleTranslateToClick.bind(this)}><Icon name='translate'/> Translate</Button>
