@@ -16,6 +16,7 @@ import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNa
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
 import TranslationModal from './TranslationModal';
+import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
 
 class TreePanel extends React.Component {
@@ -155,6 +156,7 @@ class TreePanel extends React.Component {
                         <i className="counterclockwise rotated sitemap large icon"></i>Deck Explorer
                     </a>
                 </div>
+                      <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}

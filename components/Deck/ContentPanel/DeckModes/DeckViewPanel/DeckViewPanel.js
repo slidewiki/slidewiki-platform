@@ -58,7 +58,52 @@ class DeckViewPanel extends React.Component {
         const downloadCount = deckData.downloadCount;
 
         //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
-        const deckTheme = currentRevision.theme;
+        let deckTheme = currentRevision.theme;
+        switch (deckTheme) {
+            case 'default':
+                deckTheme = 'White - Default';
+                break;
+            case 'beige':
+                deckTheme = 'Cream';
+                break;
+            case 'black':
+                deckTheme = 'Black';
+                break;
+            case 'league':
+                deckTheme = 'Black';
+                break;
+            case 'sky':
+                deckTheme = 'sky';
+                break;
+            case 'solarized':
+                deckTheme = 'Beige';
+                break;
+            case 'moon':
+                deckTheme = 'Dark Slate Blue';
+                break;
+            case 'night':
+                deckTheme = 'High Contrast 1';
+                break;
+            case 'blood':
+                deckTheme = 'High Contrast 2';
+                break;
+            case 'serif':
+                deckTheme = 'Serif';
+                break;
+            case 'simple':
+                deckTheme = 'Simple';
+                break;
+            case 'openuniversity':
+                deckTheme = 'Open University';
+                break;
+            case 'odimadrid':
+                deckTheme = 'ODI Madrid';
+                break;
+            case 'oeg':
+                deckTheme = 'OEG';
+                break;
+            default:                
+        }
         const deckLicense = deckData.license;
         const deckTitle = currentRevision.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');

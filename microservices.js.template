@@ -38,7 +38,16 @@ export default {
         },
         'translation': {
             uri: '${SERVICE_URL_TRANSLATION}'
+        },
+        'webrtc' : {
+            uri : '${SERVICE_URL_SIGNALING}',
+            iceServers: [//Firefox complained that more than two STUN servers makes discovery slow
+                {'urls': 'stun:stun.l.google.com:19302'},
+                {'urls': 'stun:stun.schlund.de'},
+            ]
+        },
+        'questions': {
+            uri: '${SERVICE_URL_QUESTION}'
         }
-
     }
 };
