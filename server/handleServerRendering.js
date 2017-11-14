@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
+import PresentorComponent from '../components/PresentorHTMLLayout';
 
 import serialize from 'serialize-javascript';
 import debugLib from 'debug';
@@ -39,7 +40,11 @@ let renderApp = function(req, res, context){
 
 
     //todo: for future, we can choose to not include specific scripts in some predefined layouts
-    const htmlElement = React.createElement(HTMLComponent, {
+    let layout = HTMLComponent;
+    if(req.url && req.url.indexOf('\/Presentation\/') !== -1){
+        layout = PresentorComponent;
+    }
+    const htmlElement = React.createElement(layout, {
         //clientFile: env === 'production' ? 'main.min.js' : 'main.js',
         clientFile: 'main.js',
         addAssets: (env === 'production'),
