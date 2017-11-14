@@ -140,7 +140,7 @@ class TreePanel extends React.Component {
         return (
             <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                       <NavigationPanel />
-                <div className="ui segment top attached active tab" style={SegmentStyles}>
+                <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
 
