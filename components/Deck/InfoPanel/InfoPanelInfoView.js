@@ -75,7 +75,7 @@ class InfoPanelInfoView extends React.Component {
             title = rootNode.title;
         }
         return (
-            <div className="ui container" >
+            <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
                         Updated version available</NavLink>
