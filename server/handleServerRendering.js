@@ -41,7 +41,7 @@ let renderApp = function(req, res, context){
 
     //todo: for future, we can choose to not include specific scripts in some predefined layouts
     let layout = HTMLComponent;
-    if(req.url && req.url.indexOf('\/Presentation\/') !== -1){
+    if(req.url && req.url.slice(0,20).includes('/Presentation/')){//NOTE only test first few chars as presentaton rooms URL has "/Presentation/..." also in it
         layout = PresentorComponent;
     }
     const htmlElement = React.createElement(layout, {
