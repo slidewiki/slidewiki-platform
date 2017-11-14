@@ -29,11 +29,7 @@ export default {
 
             }).catch((err) => {
                 returnErr = true;
-<<<<<<< HEAD
-                callback(null, {content: null, theme: null, selector: null});
-=======
                 callback(null, {content: slideServiceRes, theme: undefined, selector: selector});
->>>>>>> master
             });
         }//If presentation.content
         else if(resource === 'presentation.live'){
