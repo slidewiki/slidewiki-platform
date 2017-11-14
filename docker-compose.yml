@@ -18,6 +18,7 @@ slidewikiplatform:
     - SERVICE_URL_TAG=https://tagservice.experimental.slidewiki.org
     - SERVICE_URL_SEARCH=https://searchservice.experimental.slidewiki.org
     - SERVICE_URL_PDF=https://pdfservice.experimental.slidewiki.org
+    - SERVICE_URL_TRANSLATION=https://translationservice.experimental.slidewiki.org
     - SERVICE_URL_SIGNALING=https://signalingservice.experimental.slidewiki.org
     - SERVICE_URL_QUESTION=https://questionservice.experimental.slidewiki.org
     - SERVICE_VAR_IMPORT_HOST=importservice.experimental.slidewiki.org

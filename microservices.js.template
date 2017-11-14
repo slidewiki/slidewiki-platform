@@ -36,6 +36,9 @@ export default {
         'tag': {
             uri : '${SERVICE_URL_TAG}'
         },
+        'translation': {
+            uri: '${SERVICE_URL_TRANSLATION}'
+        },
         'webrtc' : {
             uri : '${SERVICE_URL_SIGNALING}',
             iceServers: [//Firefox complained that more than two STUN servers makes discovery slow

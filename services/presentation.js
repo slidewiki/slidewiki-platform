@@ -21,6 +21,7 @@ export default {
             //let theme = get_sample_theme();
             let isSubdeck = selector.id !== selector.subdeck;
             let id = isSubdeck ? selector.subdeck : selector.id;
+            console.log( Microservices.deck.uri + '/deck/' + String(id) + '/slides');
 
             rp.get({uri: Microservices.deck.uri + '/deck/' + String(id) + '/slides'}).then((res) => {
                 slideServiceRes = JSON.parse(res);
