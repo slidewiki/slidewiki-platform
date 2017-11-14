@@ -115,7 +115,7 @@ class SpeechRecognition extends React.Component {
                     that.disableSpeechRecognition(that);
                     swal({
                         titleText: 'Speech recognition disabled',
-                        text: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any subtitles anymore.',
+                        text: 'An error occured and we had to disable speech recognition. We are sorry about it, but speech recognition is a highly experimental feature. Your listeners will not recieve any transcript anymore.',
                         type: 'error',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Okay',
@@ -142,7 +142,7 @@ class SpeechRecognition extends React.Component {
 
             swal({
                 titleText: 'Speech recognition enabled',
-                html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be transcoded and displayed at all peers as a subtitle.</p><p>Please select the language in which you will talk or disable the feature.</p>',
+                html: '<p>Speech recognition is an experimental feature. If enabled, your voice will be automatically transcribed and displayed at all peers as a transcript.</p><p>Please select the language in which you will talk or disable the feature.</p>',
                 type: 'info',
                 input: 'select',
                 inputValue: that.recognition.lang,
@@ -172,7 +172,7 @@ class SpeechRecognition extends React.Component {
         } else {
             swal({
                 titleText: 'Speech recognition disabled',
-                text: 'Your browser isn\'t able to transcode speech to text. Thus, your peers will not recieve a subtitle. Google Chrome is currently the only browser that supports speech recognition.',
+                text: 'Your browser isn\'t able to transcribe speech to text. Thus, your peers will not recieve a transcript. Google Chrome is currently the only browser that supports speech recognition.',
                 type: 'error',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
@@ -212,9 +212,9 @@ class SpeechRecognition extends React.Component {
     render() {
         return (
           <div>
-            <Label pointing='below'> {this.props.isInitiator ? 'Your Transcoded Voice' : 'Transcoded Speaker Voice'}</Label>
+            <Label pointing='below'>Automatically generated transcript</Label>
             <Input labelPosition='left' type='text' fluid>
-              <Label>Subtitle:</Label>
+              <Label>Transcript:</Label>
               <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' value={this.state.subtitle}/>
               {this.props.isInitiator ? (<Button color='red' icon='stop' disabled={this.state.speechRecognitionDisabled ? true : false} onClick={this.showStopSpeechRecognitionModal.bind(this)}/>) : ('')}
             </Input>
