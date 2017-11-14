@@ -64,7 +64,7 @@ export default {
     recentDecks: {
         path: '/recent/:limit?/:offset?',
         method: 'get',
-        page: 'featuredDecks',
+        page: 'recentDecks',
         title: 'Slidewiki -- recent decks',
         handler: require('../components/Home/Recent'),
         action: (context, payload, done) => {
@@ -77,6 +77,31 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
+
+    featuredDecks: {
+        path: '/featured/:limit?/:offset?',
+        method: 'get',
+        page: 'featuredDecks',
+        title: 'Slidewiki -- featured decks',
+        handler: require('../components/Home/Featured'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Featured Decks'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
                 }
             ],
             (err, result) => {
@@ -125,15 +150,15 @@ export default {
             done();
         }
     },
-    features: {
-        path: '/features',
+    discover: {
+        path: '/discover',
         method: 'get',
-        page: 'features',
-        title: 'SlideWiki -- Features',
+        page: 'discover',
+        title: 'SlideWiki -- Discover More',
         handler: require('../components/Home/Features'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Features'
+                pageTitle: shortTitle + ' | Discover More'
             });
             done();
         }
@@ -515,6 +540,12 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadDeckFamily, payload, done);
         }
+    },
+    webrtc: {
+        path: '/presentationbroadcast',//Example: ...broadcast?room=foo&presentation=/Presentation/386-1/
+        method: 'get',
+        page: 'presentationBroadcast',
+        handler: require('../components/webrtc/presentationBroadcast')
     },
     /* This should be the last route in routes.js */
     notfound: {
