@@ -203,7 +203,8 @@ class SpeechRecognition extends React.Component {
 
     disableSpeechRecognition(context) {
         context.setState({speechRecognitionDisabled: true});
-        context.recognition.stop();
+        if(context.recognition)
+            context.recognition.stop();
         context.setState((prevState) => {
             return {subtitle: prevState.subtitle + '...Speechrecognition has been disabled'};
         });
