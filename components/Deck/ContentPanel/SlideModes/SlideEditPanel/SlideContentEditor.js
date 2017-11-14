@@ -1305,6 +1305,25 @@ class SlideContentEditor extends React.Component {
                 this.refs.uploadMediaModal.handleClose();
                 //TODO code which inserts the file into the slide
                 // MediaStore.file contains everything about the file - also the byte64 string and url
+                if($('.pptx2html').length)
+                {
+                    console.log('pptx2html');
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 200px; left: 200px; width: 310px; height: 210; z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    this.uniqueIDAllElements();
+                    this.resize();
+                    this.resizeDrag();
+                    this.forceUpdate();
+                }
+                else
+                {
+                    console.log('nonpptx2html' + $('#inlineContent').html());
+                    $('#inlineContent').append('<img id="10000" src="' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
+                    //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
+                    this.uniqueIDAllElements();
+                    this.resize();
+                    this.forceUpdate();
+                }
+
             }
             else if (nextProps.MediaStore.status === 'error') {
                 this.refs.uploadMediaModal.handleClose();
