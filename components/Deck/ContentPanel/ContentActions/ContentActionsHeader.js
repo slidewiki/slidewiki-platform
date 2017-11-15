@@ -91,15 +91,14 @@ class ContentActionsHeader extends React.Component {
                            data-tooltip="Duplicate"
                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="grey large copy icon"></i>
+                          </button> 
                 <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
                             type="button"
                             aria-label="Delete"
                             data-tooltip="Delete"
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="red large trash icon"></i>
-                          </button>
-                          </button>
-                        
+                          </button>   
                     </div>
                     <div className="ui icon basic large buttons">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
@@ -111,7 +110,6 @@ class ContentActionsHeader extends React.Component {
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-
                         </button>
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} />
                           <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
