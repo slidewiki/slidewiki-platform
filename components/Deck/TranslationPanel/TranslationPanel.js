@@ -34,7 +34,10 @@ class TranslationPanel extends React.Component {
 
     renderAvailable(translation) {
         if (translation.language !== this.props.TranslationStore.currentLang.language){
-            let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+            let languageName = '';
+            if(translation.language){
+                languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+            }
             if (languageName){
                 return (
                     <Dropdown.Item
@@ -94,9 +97,11 @@ class TranslationPanel extends React.Component {
         //
         // : '';
 
+
         let currentLang = deckLanguage ?
             <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>
-            : <span>Undefined</span>;
+            : <span>English</span>;
+
 
 
         return(

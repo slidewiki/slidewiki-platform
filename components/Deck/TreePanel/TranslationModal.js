@@ -47,6 +47,7 @@ class TranslationModal extends React.Component {
         }
     }
 
+
     handleOptionChange(event, data) {
         this.setState({language: data.value, error: false});
     }
@@ -79,6 +80,7 @@ class TranslationModal extends React.Component {
             existing_codes = this.props.TranslationStore.translations.map((el) => { //getting all translations codes
                 return el.language.split('_')[0];
             });
+
             available_array = translations.map((translation) => {
                 let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
                 if (languageName){
@@ -104,8 +106,10 @@ class TranslationModal extends React.Component {
             return !existing_codes.includes(el.code);
         });
 
+
         if (supported){
             languageOptions = supported.map(this.renderTranslateTo, this);
+
         }
 
 
