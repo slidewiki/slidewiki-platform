@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -14,6 +15,7 @@ import {Microservices} from '../../../../../configs/microservices';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
+import UploadMediaModal from '../../../../common/UploadMediaModal';
 
 let ReactDOM = require('react-dom');
 
@@ -690,6 +692,9 @@ class SlideContentEditor extends React.Component {
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
+                this.refs.uploadMediaModal.handleOpen();
+                evt.preventDefault();
+                /*
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
@@ -703,6 +708,7 @@ class SlideContentEditor extends React.Component {
                         }, 500);
                     });
                 }, 500);
+                */
             });
         });
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
@@ -1293,6 +1299,62 @@ class SlideContentEditor extends React.Component {
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
     }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.MediaStore.status === 'uploading') {
+            if (nextProps.MediaStore.status === 'success') {
+                this.refs.uploadMediaModal.handleClose();
+                //TODO code which inserts the file into the slide
+                // MediaStore.file contains everything about the file - also the byte64 string and url
+                if($('.pptx2html').length)
+                {
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    this.uniqueIDAllElements();
+                    this.refreshCKeditor();
+                    this.resize();
+                    this.resizeDrag();
+                    this.forceUpdate();
+
+                    nextProps.MediaStore.status = '';
+                    nextProps.MediaStore.filetype = '';
+                    nextProps.MediaStore.filename = '';
+                    nextProps.MediaStore.file = {};
+                }
+                else
+                {
+                    $('#inlineContent').append('<img id="10000" src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'">');
+                    //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
+                    this.uniqueIDAllElements();
+                    this.refreshCKeditor();
+                    this.resize();
+                    this.forceUpdate();
+
+                    nextProps.MediaStore.status = '';
+                    nextProps.MediaStore.filetype = '';
+                    nextProps.MediaStore.filename = '';
+                    nextProps.MediaStore.file = {};
+
+                }
+
+            }
+            else if (nextProps.MediaStore.status === 'error') {
+                this.refs.uploadMediaModal.handleClose();
+                swal({
+                    title: 'Error',
+                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                });
+            }
+        }
+
+    }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
         //if ($('.pptx2html [style*="absolute"]').not('.drawing-container').css('borderStyle') !== 'dashed') {
@@ -1732,7 +1794,13 @@ class SlideContentEditor extends React.Component {
                     <i className="browser icon black"> </i>
                     <a style={buttonColorBlack}>Use template</a>
                 </button>
-                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/> */}
+                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/>
+                <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
+                 <i className="outline tasks icon black"></i>
+                 <a style={buttonColorBlack}>{this.CKeditorMode}</a>
+                </button>
+                */}
+                <UploadMediaModal ref="uploadMediaModal"/>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
@@ -1771,14 +1839,15 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
     };
 });
 export default SlideContentEditor;
