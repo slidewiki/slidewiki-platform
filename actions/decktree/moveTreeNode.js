@@ -1,10 +1,12 @@
 import UserProfileStore from '../../stores/UserProfileStore';
+import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
 
 export default function moveTreeNode(context, payload, done) {
     log.info(context);
     let userid = context.getStore(UserProfileStore).userid;
     if (userid != null && userid !== '') {
+        let jwt = context.getStore(UserProfileStore).jwt;
         let {selector, sourceNode, targetNode, targetIndex} = payload;
         let sourceSelector = {
             'id': selector.id,
@@ -30,7 +32,7 @@ export default function moveTreeNode(context, payload, done) {
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
         context.service.update('decktree.move', {
-            userid,
+            jwt,
             selector,
             sourceSelector,
             targetSelector,
@@ -41,6 +43,15 @@ export default function moveTreeNode(context, payload, done) {
                 context.dispatch('MOVE_TREE_NODE_FAILURE', err);
             } else {
                 context.dispatch('MOVE_TREE_NODE_SUCCESS', payload);
+
+                let activity = {
+                    activity_type: 'move',
+                    user_id: String(userid),
+                    content_name: res.title,
+                    content_id: String(res.id),
+                    content_kind: res.type
+                };
+                context.executeAction(addActivity, {activity: activity});
             }
             done(null, res);
         });

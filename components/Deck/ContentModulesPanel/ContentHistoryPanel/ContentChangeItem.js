@@ -6,6 +6,8 @@ import {formatDate} from '../../ActivityFeedPanel/util/ActivityFeedUtil'; //TODO
 
 import {NavLink} from 'fluxible-router';
 
+import Iso from 'iso-639-1';
+
 class ContentChangeItem extends React.Component {
 
     handleRevertClick() {
@@ -33,6 +35,12 @@ class ContentChangeItem extends React.Component {
         window.open('/slideview/' + this.props.change.value.ref.id + '-' + this.props.change.value.ref.revision, '_blank');
     }
 
+    handleDiffViewClick() {
+        const { sid, stype } = this.props.selector;
+        const did = this.props.change.value.ref.revision;
+        window.open(`/diffview/${stype}/${sid}/${did}`);
+    }
+
     render() {
         const change = this.props.change;
 
@@ -53,6 +61,10 @@ class ContentChangeItem extends React.Component {
             case 'fork':
                 iconName = 'fork';
                 description = <span>created a fork of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink></span>;
+                break;
+            case 'translate':
+                iconName = 'translate';
+                description = <span>created a translation of deck <NavLink href={'/deck/' + change.value.origin.id + '-' + change.value.origin.revision}>{change.value.origin.title}</NavLink> into { Iso.getName(change.translatedTo.substring(0, 2)) } </span>;
                 break;
             case 'revise':
                 iconName = 'save';
@@ -93,6 +105,9 @@ class ContentChangeItem extends React.Component {
         if (this.props.selector.stype === 'slide' && ['add', 'attach', 'copy', 'edit', 'rename', 'revert'].includes(change.action) ) {
             // buttons are shown only for slide history and only for changes that result in new slide revisions
 
+            const canEdit = this.props.permissions.edit && !this.props.permissions.readOnly;
+            const isCurrent = this.props.selector.sid === `${this.props.change.value.ref.id}-${this.props.change.value.ref.revision}`;
+
             const currentRev = parseInt(this.props.selector.sid.split('-')[1]);
             const shouldView = currentRev !== change.value.ref.revision;
 
@@ -100,8 +115,8 @@ class ContentChangeItem extends React.Component {
                 && change.oldValue && currentRev !== change.oldValue.ref.revision;
 
             buttons = <Button.Group basic size='tiny' floated='right'>
-                        <Button aria-label='Compare to current slide version' icon='exchange' disabled/>
-                        <Button aria-label='Restore slide' icon='history' disabled={!canRestore}
+                            <Button aria-label='Compare to current slide version' icon='exchange' disabled={isCurrent} onClick={this.handleDiffViewClick.bind(this)}/>
+                            <Button aria-label='Restore slide' icon='history' disabled={!canEdit || !canRestore}
                                 onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
                         <Button aria-label='View slide' icon tabIndex='0' disabled={!shouldView} onClick={this.handleViewSlideClick.bind(this)}>
                             <Icon.Group>

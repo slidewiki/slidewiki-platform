@@ -1,11 +1,18 @@
 import React, {PropTypes} from 'react';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
-import {NavLink} from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
+import {Button} from 'semantic-ui-react';
 
 class Home extends React.Component {
+
+    openFeatured(e){
+        this.context.executeAction(navigateAction, {
+            url: '/featured'
+        });
+    };
     render() {
         const heightStyle = {
             height: '100px'
@@ -17,6 +24,8 @@ class Home extends React.Component {
         const compMessageStyle = {
             background: '#1E78BB'
         };
+
+
         return (
             <div ref="home">
                 <div className="ui blue inverted segment" style={{borderRadius: '0px'}}>
@@ -156,7 +165,7 @@ class Home extends React.Component {
                                                                             id='home.3.strong4'
                                                                             defaultMessage='Download'/></strong>
                                                     }}
-                                                    defaultMessage="{strong} decks in PDF, ePub or SCROM format."/>
+                                                    defaultMessage="{strong} decks in PDF, ePub or SCORM format."/>
                                                 </div>
                                             </div>
                                         </div>
@@ -186,7 +195,7 @@ class Home extends React.Component {
                                         </div>
                                         <div className="item">
                                             <div className="content">
-                                                <a className="header" href="/features"><FormattedMessage id='home.learn' defaultMessage='Learn about SlideWiki'/></a>
+                                                <NavLink className="header" href="/discover"><FormattedMessage id='home.learn' defaultMessage='Learn about SlideWiki'/></NavLink>
                                                 <div className="description">
                                                     <p><FormattedMessage id='home.learn_desc' defaultMessage="Find out more about SlideWiki's features and how it can be used to create, share and adapt slides, decks and open educational resources."/></p>
                                                 </div>
@@ -213,7 +222,11 @@ class Home extends React.Component {
                                 <div className="ui segment top attached">
                                     <h3><FormattedMessage id='home.featured' defaultMessage='Featured decks'/></h3>
                                 </div>
-                                <DeckList scope="featured"/>
+                                <div className="ui segment top attached">
+                                    <DeckList scope="featured"/>
+                                    <Button as='button' primary style={{'marginLeft':'auto', 'display':'inherit'}} onClick={this.openFeatured.bind(this)}><FormattedMessage id='home.allfeatured' defaultMessage='See all'/></Button>
+
+                                </div>
                             </div>
                         </div>
 
@@ -229,7 +242,8 @@ class Home extends React.Component {
 
 Home.contextTypes = {
     intl: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.func
+    getUser: React.PropTypes.func.isRequired,
+    executeAction: React.PropTypes.func.isRequired
 };
 
 

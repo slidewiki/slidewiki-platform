@@ -3,7 +3,7 @@ import { NavLink, navigateAction } from 'fluxible-router';
 import UserPicture from '../common/UserPicture';
 import { connectToStores } from 'fluxible-addons-react';
 import userSignOut from '../../actions/user/userSignOut';
-import loadUserNotifications from '../../actions/user/notifications/loadUserNotifications';
+import loadNewUserNotificationsCount from '../../actions/user/notifications/loadNewUserNotificationsCount';
 import UserProfileStore from '../../stores/UserProfileStore';
 import UserNotificationsStore from '../../stores/UserNotificationsStore';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
@@ -14,7 +14,7 @@ class HeaderDropdown extends React.Component {
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
 
-        this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
+        this.context.executeAction(loadNewUserNotificationsCount, { uid: this.props.UserProfileStore.userid });
     }
 
     componentDidUpdate() {
@@ -34,15 +34,15 @@ class HeaderDropdown extends React.Component {
 
     render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
-        const alarmClassName = (this.props.UserNotificationsStore.newNotifications.length > 0) ? 'alarm red icon' : 'alarm outline icon';
-        const alarmIcon = (this.props.UserNotificationsStore.newNotifications.length > 0) ? (<i className="ui small outline alarm icon" />) : '';
+        const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
+        const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" />) : '';
         return(
-            <div className="ui top right pointing dropdown" ref="userDropDown" role="button" aria-haspopup="true" aria-label="User management">
+            <div className="ui top right dropdown larger blue button" ref="userDropDown" role="button" aria-haspopup="true" aria-label="User management">
                 <div className="text">
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
-                <div className="menu" role="menu">
+                <div className="ui menu vertical" style={{width:'160px'}} role="menu">
                     <div className="header">
                         {this.props.UserProfileStore.username}
                     </div>

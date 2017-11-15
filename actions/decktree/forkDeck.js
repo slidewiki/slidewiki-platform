@@ -14,7 +14,7 @@ export default function forkDeck(context, payload, done) {
         });
     } else {
         let selector = payload.selector;
-        context.service.update('deck.fork', {deckId: selector.id, userid: userid}, null, {timeout: 30 * 1000}, (err, res) => {
+        context.service.update('deck.fork', {deckId: selector.id, jwt: context.getStore(UserProfileStore).jwt}, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
@@ -23,6 +23,7 @@ export default function forkDeck(context, payload, done) {
                 }
             } else {
                 context.dispatch('FORK_DECK_SUCCESS', res);
+                console.log('res', res);
                 let newURL, newId = res.root_deck;
                 // by default after forking a deck, navigate to the same position that was shown before
                 // unless the navigateToRoot parameter is set
@@ -53,14 +54,28 @@ export default function forkDeck(context, payload, done) {
                     url: newURL
                 });
 
-                //create new activity
-                let activity = {
+                userid = String(context.getStore(UserProfileStore).userid);
+                //create a fork activity for the origin deck
+                let activity1 = {
                     activity_type: 'fork',
-                    user_id: String(userid),
+                    user_id: userid,
                     content_id: selector.id,
+                    content_kind: 'deck',
+                    fork_info: {
+                        content_id: newId
+                    }
+                };
+                context.executeAction(addActivity, {activity: activity1});
+
+                //create an add activity for the new deck
+                let activity2 = {
+                    activity_type: 'add',
+                    user_id: userid,
+                    content_id: newId,
+                    content_owner_id: userid,
                     content_kind: 'deck'
                 };
-                context.executeAction(addActivity, {activity: activity});
+                context.executeAction(addActivity, {activity: activity2});
             }
             done();
         }

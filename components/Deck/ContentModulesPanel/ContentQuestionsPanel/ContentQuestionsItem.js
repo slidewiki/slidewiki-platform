@@ -16,8 +16,11 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList items={question} selector={this.props.selector} />
+            <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
         );
+
+        //HEAD of 1602:
+        //<ContentQuestionAnswersList items={question} selector={this.props.selector} />
 
         // const editIcon = (
         //     <a className="like" onClick={this.handleEditClick.bind(this)}>

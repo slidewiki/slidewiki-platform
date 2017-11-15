@@ -7,8 +7,7 @@ import addActivity from '../activityfeed/addActivity';
 export default function addDeckSaveDeck(context, payload, done) {
     log.info(context);
     //enrich data
-    if (payload.userid === undefined || payload.userid === null || payload.userid === '')
-        payload.userid = context.getStore(UserProfileStore).userid;
+    payload.jwt = context.getStore(UserProfileStore).jwt;
 
     //no pptx uploaded
     if (payload.deckId === null) {

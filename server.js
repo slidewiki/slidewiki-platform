@@ -84,6 +84,7 @@ fetchrPlugin.registerService(require('./services/activities'));
 fetchrPlugin.registerService(require('./services/decktree'));
 fetchrPlugin.registerService(require('./services/translation'));
 fetchrPlugin.registerService(require('./services/history'));
+fetchrPlugin.registerService(require('./services/diffview'));
 fetchrPlugin.registerService(require('./services/usage'));
 fetchrPlugin.registerService(require('./services/questions'));
 fetchrPlugin.registerService(require('./services/discussion'));
@@ -98,7 +99,10 @@ fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
 fetchrPlugin.registerService(require('./services/logservice'));
 fetchrPlugin.registerService(require('./services/like'));
+fetchrPlugin.registerService(require('./services/media'));
 fetchrPlugin.registerService(require('./services/email'));
+fetchrPlugin.registerService(require('./services/media'));
+fetchrPlugin.registerService(require('./services/userreview'));
 
 
 // ************************** UI Internationalisation routines ***************************************

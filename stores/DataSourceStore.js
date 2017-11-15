@@ -7,7 +7,6 @@ class DataSourceStore extends BaseStore {
         this.showAllDataSources = false;
         this.dataSource = undefined;
         this.selectedIndex = -1;
-        this.contentOwner = 0;
         this.selector = {};
     }
     loadDataSources(payload) {
@@ -15,7 +14,16 @@ class DataSourceStore extends BaseStore {
         this.selector = payload.selector;
         this.dataSource = undefined;
         this.selectedIndex = -1;
-        this.contentOwner = payload.owner;
+        this.emitChange();
+    }
+    updateDatasourcesFromSlideData(payload) {
+        let lastRevision = payload.slide.revisions[payload.slide.revisions.length - 1];
+        this.dataSources = lastRevision.dataSources ? lastRevision.dataSources : [];
+        this.selector = payload.selector;
+        this.dataSource = undefined;
+        this.selectedIndex = -1;
+        this.contentOwner = lastRevision.user;
+
         this.emitChange();
     }
     loadDataSource(payload) {
@@ -48,7 +56,6 @@ class DataSourceStore extends BaseStore {
             showAllDataSources: this.showAllDataSources,
             dataSource: this.dataSource,
             selectedIndex: this.selectedIndex,
-            contentOwner: this.contentOwner,
             selector: this.selector,
         };
     }
@@ -60,7 +67,6 @@ class DataSourceStore extends BaseStore {
         this.showAllDataSources = state.showAllDataSources;
         this.dataSource = state.dataSource;
         this.selectedIndex = state.selectedIndex;
-        this.contentOwner = state.contentOwner;
         this.selector = state.selector;
     }
 }
@@ -68,6 +74,7 @@ class DataSourceStore extends BaseStore {
 DataSourceStore.storeName = 'DataSourceStore';
 DataSourceStore.handlers = {
     'LOAD_DATASOURCES_SUCCESS': 'loadDataSources',
+    'LOAD_SLIDE_CONTENT_SUCCESS': 'updateDatasourcesFromSlideData',
     'LOAD_DATASOURCE': 'loadDataSource',
     'NEW_DATASOURCE': 'newDataSource',
     'SHOW_ALL_DATASOURCES': 'handleShowAllDataSources',

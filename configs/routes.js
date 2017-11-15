@@ -11,7 +11,6 @@ import loadDeckView from '../actions/loadDeckView';
 import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
-import loadUserNotifications from '../actions/user/notifications/loadUserNotifications';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
 import loadTranslations from '../actions/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
@@ -30,8 +29,11 @@ import loadFeatured from '../actions/loadFeatured';
 import loadRecent from '../actions/loadRecent';
 import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
+import loadDiffview from '../actions/loadDiffview';
+import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 
 import {navigateAction} from 'fluxible-router';
+import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -63,7 +65,7 @@ export default {
     recentDecks: {
         path: '/recent/:limit?/:offset?',
         method: 'get',
-        page: 'featuredDecks',
+        page: 'recentDecks',
         title: 'Slidewiki -- recent decks',
         handler: require('../components/Home/Recent'),
         action: (context, payload, done) => {
@@ -76,6 +78,31 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadRecent, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
+
+    featuredDecks: {
+        path: '/featured/:limit?/:offset?',
+        method: 'get',
+        page: 'featuredDecks',
+        title: 'Slidewiki -- featured decks',
+        handler: require('../components/Home/Featured'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.dispatch('UPDATE_PAGE_TITLE', {
+                        pageTitle: shortTitle + ' | Featured Decks'
+                    });
+                    callback();
+                },
+                (callback) => {
+                    context.executeAction(loadFeatured, {params: {limit: 100, offset: 0}}, callback); //for now limit 100, can change this later to infinite scroll
                 }
             ],
             (err, result) => {
@@ -98,6 +125,19 @@ export default {
             done();
         }
     },
+    contactus: {
+        path: '/contactus',
+        method: 'get',
+        page: 'contactus',
+        title: 'SlideWiki -- Contact Us',
+        handler: require('../components/Home/ContactUs'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Contact Us'
+            });
+            done();
+        }
+    },
     license: {
         path: '/license',
         method: 'get',
@@ -111,15 +151,15 @@ export default {
             done();
         }
     },
-    features: {
-        path: '/features',
+    discover: {
+        path: '/discover',
         method: 'get',
-        page: 'features',
-        title: 'SlideWiki -- Features',
+        page: 'discover',
+        title: 'SlideWiki -- Discover More',
         handler: require('../components/Home/Features'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
-                pageTitle: shortTitle + ' | Features'
+                pageTitle: shortTitle + ' | Discover More'
             });
             done();
         }
@@ -133,6 +173,19 @@ export default {
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Imprint'
+            });
+            done();
+        }
+    },
+    terms: {
+        path: '/terms',
+        method: 'get',
+        page: 'imprint',
+        title: 'SlideWiki -- Terms',
+        handler: require('../components/Home/Terms'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Terms'
             });
             done();
         }
@@ -210,6 +263,38 @@ export default {
             context.executeAction(chooseAction, payload, done);
         }
     },
+    userprofilereview: {
+        path: '/Sfn87Pfew9Af09aM',
+        method: 'get',
+        page: 'userprofilereview',
+        title: 'SlideWiki -- user review',
+        handler: require('../components/User/UserProfile/UserProfileReview'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {pageTitle: shortTitle + ' | User review'});
+            done();
+        }
+    },
+    userprofilereviewuser: {
+        path: '/Sfn87Pfew9Af09aM/user/:username/',
+        method: 'get',
+        page: 'userprofilereview',
+        title: 'SlideWiki -- user review',
+        handler: require('../components/User/UserProfile/UserProfileReviewUser'),
+        action: (context, payload, done) => {
+            async.series([
+                (callback) => {
+                    context.executeAction(checkReviewableUser, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(chooseAction, payload, callback);
+                }
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
+        }
+    },
     search: {
         path: '/search/:queryparams?',
         method: 'get',
@@ -240,7 +325,11 @@ export default {
                 },
                 (callback) => {
                     context.executeAction(loadPresentation, payload, callback);
-                }
+                },
+                (callback) => {
+                    context.executeAction(loadTranslations, payload, callback);
+                },
+
             ],
             (err, result) => {
                 if(err) console.log(err);
@@ -253,6 +342,15 @@ export default {
         method: 'get',
         action: (context, payload, done) => {
             context.executeAction(loadLegacy, payload, done);
+        }
+    },
+    diffview: {
+        path: '/diffview/:stype/:sid/:did',
+        method: 'get',
+        page: 'diffview',
+        handler: require('../components/Deck/Diffview/Diffview'),
+        action: (context, payload, done) => {
+            context.executeAction(loadDiffview, payload, done);
         }
     },
     contributors: {
@@ -415,30 +513,9 @@ export default {
 
     },
 
+
     presentation: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/',
-        method: 'get',
-        page: 'presentation',
-        handler: require('../components/Deck/Presentation/Presentation'),
-        action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
-        }
-    },
-    /*
-    presentationPrint: {
-        path: '/presentationprint/:id/*',
-        method: 'get',
-        page: 'presentationprint',
-        handler: require('../components/Deck/Presentation/PresentationPrint'),
-        action: (context, payload, done) => {
-            context.executeAction(loadPresentation, payload, done);
-        }
-    },
-    */
-    presentationSlide: {
-        // In reveal.js we have id/#/sid, but the routes.js doesn't accept the hash/pound sign (#)
-        path: '/presentation/:id/*/:sid?/',
+        path: '/presentation/:id/:subdeck/:sid?',
         method: 'get',
         page: 'presentation',
         handler: require('../components/Deck/Presentation/Presentation'),
@@ -492,6 +569,12 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadDeckFamily, payload, done);
         }
+    },
+    webrtc: {
+        path: '/presentationbroadcast',//Example: ...broadcast?room=foo&presentation=/Presentation/386-1/
+        method: 'get',
+        page: 'presentationBroadcast',
+        handler: require('../components/webrtc/presentationBroadcast')
     },
     /* This should be the last route in routes.js */
     notfound: {

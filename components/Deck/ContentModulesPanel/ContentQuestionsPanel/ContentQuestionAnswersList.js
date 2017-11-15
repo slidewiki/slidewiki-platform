@@ -56,26 +56,28 @@ class ContentQuestionAnswersList extends React.Component {
         let correctAnswers = this.props.items.answers.filter((item) => item.correct).map((node, index) => {
             return (
               <div key={index}>
-                <a className="header">
-                  {node.answer}
-                </a>
-                <div className="description">
-                  <p>
-                    <label><strong>Explanation:</strong></label> {node.explanation}
-                  </p>
-                </div>
+                  <a className="header">
+                      {node.answer}
+                  </a>
               </div>
             );
         });
 
+        let explanation = (
+            <div className="description">
+                <p>
+                    <label><strong>Explanation:</strong></label> {this.props.explanation}
+                </p>
+            </div>
+        );
         let answers = (
-          <div className="ui two column stackable grid">
+            <div className="ui two column stackable grid">
                 <div className="column">
-                  <div className="ui grouped fields">
-                    <fieldset>
-                      {list}
-                    </fieldset>
-                  </div>
+                    <div className="ui grouped fields">
+                        <fieldset>
+                            {list}
+                        </fieldset>
+                    </div>
                 </div>
                 <div className="column">
                   <button className="ui compact button primary" onClick={this.handleButtonClick}>
@@ -87,9 +89,8 @@ class ContentQuestionAnswersList extends React.Component {
                     <div className="content">
                       {this.state.showCorrect ? correctAnswers : null}
                     </div>
-                  </div>
                 </div>
-              </div>
+            </div>
         );
 
         return (

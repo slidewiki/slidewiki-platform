@@ -5,6 +5,7 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import Tree from './Tree';
 import toggleTreeNode from '../../../actions/decktree/toggleTreeNode';
+import focusTreeNode from '../../../actions/decktree/focusTreeNode';
 import switchOnActionTreeNode from '../../../actions/decktree/switchOnActionTreeNode';
 import renameTreeNode from '../../../actions/decktree/renameTreeNode';
 import undoRenameTreeNode from '../../../actions/decktree/undoRenameTreeNode';
@@ -14,6 +15,8 @@ import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavi
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
+import TranslationModal from './TranslationModal';
+import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
 
 class TreePanel extends React.Component {
@@ -21,7 +24,8 @@ class TreePanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isForkModalOpen: false
+            isForkModalOpen: false,
+            isTranslationModalOpen: false
         };
     }
 
@@ -35,6 +39,10 @@ class TreePanel extends React.Component {
 
     handleToggleNode(selector) {
         this.context.executeAction(toggleTreeNode, selector);
+    }
+
+    handleFocusNode(selector) {
+        this.context.executeAction(focusTreeNode, selector);
     }
 
     handleSwitchOnAction(selector) {
@@ -82,15 +90,16 @@ class TreePanel extends React.Component {
     }
 
     handleTranslation() {
-        swal({
-            title: 'Translation',
-            text: 'This feature is still under construction...',
-            type: 'info',
-            confirmButtonText: 'Confirmed',
-            confirmButtonClass: 'positive ui button',
-            buttonsStyling: false
-        });
-        this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+        // swal({
+        //     title: 'Translation',
+        //     text: 'This feature is still under construction...',
+        //     type: 'info',
+        //     confirmButtonText: 'Confirmed',
+        //     confirmButtonClass: 'positive ui button',
+        //     buttonsStyling: false
+        // });
+        // this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+        this.setState({isTranslationModalOpen: true});
     }
 
     handleMoveNode(sourceNode, targetNode, targetIndex) {
@@ -125,6 +134,14 @@ class TreePanel extends React.Component {
             'button': true
         });
 
+        let classes_translatebtn = classNames({
+            'ui': true,
+            'basic': true,
+            'attached': true,
+            'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'button': true
+        });
+
         let deckTree = this.props.DeckTreeStore.deckTree;
         let selector = this.props.DeckTreeStore.selector;
         let prevSelector = this.props.DeckTreeStore.prevSelector;
@@ -134,11 +151,7 @@ class TreePanel extends React.Component {
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
             <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
-                <div className="ui top attached tabular menu" >
-                    <a className="active item" >
-                        <i className="counterclockwise rotated sitemap large icon"></i>Deck Explorer
-                    </a>
-                </div>
+                <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
@@ -148,8 +161,8 @@ class TreePanel extends React.Component {
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
                             <i className="large blue fork icon"></i>
                         </div>
-                        <div className="ui basic attached disabled button" role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck"
-                            onClick={this.handleTranslation.bind(this)} tabIndex="-1">
+                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
+                            onClick={this.handleTranslation.bind(this)} tabIndex="1">
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>
@@ -162,9 +175,9 @@ class TreePanel extends React.Component {
                             'wordWrap': 'break-word'
                         }}> {decktreeError} </div> : ''}
 
-                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} nextSelector={nextSelector}
+                        <Tree deckTree={deckTree} rootNode={rootNode} selector={selector} focusedSelector={this.props.DeckTreeStore.focusedSelector} nextSelector={nextSelector}
                             prevSelector={prevSelector} page={this.props.page}
-                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)}
+                            mode={this.props.mode} onToggleNode={this.handleToggleNode.bind(this)} onFocusNode={this.handleFocusNode.bind(this)}
                             onSwitchOnAction={this.handleSwitchOnAction.bind(this)}
                             onRename={this.handleRenameNode.bind(this)}
                             onUndoRename={this.handleUndoRenameNode.bind(this)}
@@ -176,6 +189,7 @@ class TreePanel extends React.Component {
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
+                <TranslationModal selector={selector.toJS()} isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
             </div>
         );
     }

@@ -9,10 +9,17 @@ import lodash from 'lodash';
 import {Microservices} from '../../../../../configs/microservices';
 import {NavLink} from 'fluxible-router';
 
+import { Dropdown, Menu, Flag } from 'semantic-ui-react';
+
+import {navigateAction} from 'fluxible-router';
+
 import ContentLikeStore from '../../../../../stores/ContentLikeStore';
 import UserProfileStore from '../../../../../stores/UserProfileStore';
+import TranslationStore from '../../../../../stores/TranslationStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
+
+import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
 
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
@@ -51,7 +58,52 @@ class DeckViewPanel extends React.Component {
         const downloadCount = deckData.downloadCount;
 
         //const deckTheme = lodash.get(deckData, 'theme', 'Simple');
-        const deckTheme = currentRevision.theme;
+        let deckTheme = currentRevision.theme;
+        switch (deckTheme) {
+            case 'default':
+                deckTheme = 'White - Default';
+                break;
+            case 'beige':
+                deckTheme = 'Cream';
+                break;
+            case 'black':
+                deckTheme = 'Black';
+                break;
+            case 'league':
+                deckTheme = 'Black';
+                break;
+            case 'sky':
+                deckTheme = 'sky';
+                break;
+            case 'solarized':
+                deckTheme = 'Beige';
+                break;
+            case 'moon':
+                deckTheme = 'Dark Slate Blue';
+                break;
+            case 'night':
+                deckTheme = 'High Contrast 1';
+                break;
+            case 'blood':
+                deckTheme = 'High Contrast 2';
+                break;
+            case 'serif':
+                deckTheme = 'Serif';
+                break;
+            case 'simple':
+                deckTheme = 'Simple';
+                break;
+            case 'openuniversity':
+                deckTheme = 'Open University';
+                break;
+            case 'odimadrid':
+                deckTheme = 'ODI Madrid';
+                break;
+            case 'oeg':
+                deckTheme = 'OEG';
+                break;
+            default:                
+        }
         const deckLicense = deckData.license;
         const deckTitle = currentRevision.title;
         const deckDate = CustomDate.format(deckData.timestamp, 'Do MMMM YYYY');
@@ -66,8 +118,9 @@ class DeckViewPanel extends React.Component {
         deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
         //const deckLanguageCode = lodash.get(deckData, 'language', undefined);
         //const deckLanguage = deckLanguageCode === undefined ? 'English' : ISO6391.getName(deckLanguageCode.substr(0, 2));
-        // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
-        //const countryFlag = 'gb';
+        // // TODO when flag code is available, remove the hard coded flag and update the respective JSX.
+        // //const countryFlag = 'gb';
+        //let translations = this.props.TranslationStore.translations;
         const totalSlides = lodash.get(this.props.DeckViewStore.slidesData, 'children.length', undefined);
         const maxSlideThumbnails = 3;
 
@@ -78,14 +131,18 @@ class DeckViewPanel extends React.Component {
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
 
+        const user = this.props.UserProfileStore.userid;
+
         let originInfo = deckData.origin != null ? <div className="meta" tabIndex="0"><strong>Origin:&nbsp;</strong>
                 <NavLink href={'/deck/' + deckData.origin.id + '-' + deckData.origin.revision}>{deckData.origin.title}</NavLink> by <a href={'/user/' + originCreator}>{originCreator}</a>
         </div> : '';
 
         return (
-        <div ref="deckViewPanel" className="ui container bottom attached" style={heightStyle}>
+        <div ref="deckViewPanel" id='deckViewPanel' className="ui container bottom attached" style={heightStyle}>
+
                 <main role="main">
             <div className="ui segment" style={heightStyle}>
+            {(this.props.TranslationStore.inProgress) ? <div className="ui active dimmer"><div className="ui text loader">Translating</div></div> : ''}
                 <div className="ui two column grid container">
                 {(deckTitle === undefined) ? <div className="ui active dimmer">
                         <div className="ui text loader">Loading</div></div> : ''}
@@ -108,11 +165,14 @@ class DeckViewPanel extends React.Component {
                     <div className="right aligned column">
 
                             <div className="ui hidden divider"></div>
-                            <div className="ui large labels">
-                                <div className="ui label" tabIndex="0">
-                                <i className="ui comments outline icon" aria-label="Deck language"></i>
-                                    {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
-                                <div className="ui  label" tabIndex="0">
+
+                            <div className="meta">
+                                {/*<div className="ui label" tabIndex="0">
+                                    <i className="comments icon" aria-label="Language"></i>{deckLanguage}
+                                </div>
+                                */}
+                                <TranslationPanel/>
+                                <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                 </div>
                                 <div className="ui  label" tabIndex="0">
@@ -167,12 +227,17 @@ class DeckViewPanel extends React.Component {
     }
 }
 
-DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore], (context, props) => {
+DeckViewPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
+
+DeckViewPanel = connectToStores(DeckViewPanel, [DeckViewStore, ContentLikeStore, UserProfileStore, ContentStore, TranslationStore], (context, props) => {
     return {
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         ContentLikeStore: context.getStore(ContentLikeStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentStore: context.getStore(ContentStore).getState()
+        ContentStore: context.getStore(ContentStore).getState(),
+        TranslationStore: context.getStore(TranslationStore).getState(),
     };
 });
 export default DeckViewPanel;
