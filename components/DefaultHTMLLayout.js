@@ -1,6 +1,7 @@
 import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
 import ga from '../plugins/googleAnalytics/ga';
+import { Microservices } from '../configs/microservices';
 
 let hook = require('css-modules-require-hook');
 
@@ -80,7 +81,7 @@ class DefaultHTMLLayout extends React.Component {
                   <script src="/ckeditor/ckeditor.js" defer></script>
                   : ''
                 }
-                <script src="https://signalingservice.experimental.slidewiki.org/socket.io/socket.io.js"></script>
+                <script src={ Microservices.webrtc.uri + '/socket.io/socket.io.js' }></script>
                 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
                 <script src="/headjs/dist/1.0.0/head.min.js"></script>
                 {/* Adding for dependency loading with reveal.js*/}
