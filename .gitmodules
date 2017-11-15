@@ -3,4 +3,4 @@
 	url = https://github.com/slidewiki/custom-semantic-ui.git
 [submodule "custom_modules/reveal.js"]
 	path = custom_modules/reveal.js
-	url = https://github.com/slidewiki/reveal.js
+	url = https://github.com/slidewiki/reveal.js.git
