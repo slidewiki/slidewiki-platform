@@ -1307,21 +1307,32 @@ class SlideContentEditor extends React.Component {
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)
                 {
-                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 200px; left: 200px; width: 310px; height: 210; z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'"></div>');
                     this.uniqueIDAllElements();
                     this.refreshCKeditor();
                     this.resize();
                     this.resizeDrag();
                     this.forceUpdate();
+
+                    nextProps.MediaStore.status = '';
+                    nextProps.MediaStore.filetype = '';
+                    nextProps.MediaStore.filename = '';
+                    nextProps.MediaStore.file = {};
                 }
                 else
                 {
-                    $('#inlineContent').append('<img id="10000" src="' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
+                    $('#inlineContent').append('<img id="10000" src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'">');
                     //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
                     this.uniqueIDAllElements();
                     this.refreshCKeditor();
                     this.resize();
                     this.forceUpdate();
+
+                    nextProps.MediaStore.status = '';
+                    nextProps.MediaStore.filetype = '';
+                    nextProps.MediaStore.filename = '';
+                    nextProps.MediaStore.file = {};
+
                 }
 
             }

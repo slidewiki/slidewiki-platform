@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
+import { connectToStores, provideContext } from 'fluxible-addons-react';
 
 class UploadMediaModal extends React.Component {
 
@@ -16,6 +17,7 @@ class UploadMediaModal extends React.Component {
             files: [],
             license: false,
             licenseValue: 'CC0',
+            mediaAttribution: '',
             alt: '',
             title: '',
             isLoading: false
@@ -49,6 +51,7 @@ class UploadMediaModal extends React.Component {
             files: [],
             license: false,
             licenseValue: 'CC0',
+            mediaAttribution: '',
             alt: '',
             title: '',
             isLoading: false
@@ -83,6 +86,7 @@ class UploadMediaModal extends React.Component {
     submitPressed(e) {
         e.preventDefault();
         let that = this;
+        if(this.state.copyrightHolder === undefined){this.state.copyrightHolder = this.context.getUser().username;}
         let payload = {
             type: this.state.files[0].type,
             license: this.state.licenseValue,
@@ -132,6 +136,7 @@ class UploadMediaModal extends React.Component {
     }
 
     render() {
+        this.context.getUser().username;
         let dropzone = '';
         if(this.state.files.length < 1){
             dropzone = <div className="dropzone">
@@ -160,7 +165,7 @@ class UploadMediaModal extends React.Component {
         let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = 'License information';
-            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><TextArea ref="mediaAttribution" required/></div> : '';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><Input  ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required/></div> : '';
             content = <div>
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
@@ -178,10 +183,6 @@ class UploadMediaModal extends React.Component {
                   <Dropdown selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" required/>
                 </div>
                 {licenseBoxes}
-                <div className="required field">
-                  <label>Copyright Holder:</label>
-                  <Popup trigger={<input ref="copyrightHolder" id="UploadMediaModal_input_copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required/>} content='Who is the creator or copyrights owner of this picture?' position='top center'/>
-                </div>
                 <div className="required field">
                   <div className="ui checkbox">
                     <input type="checkbox" required/>
@@ -244,7 +245,8 @@ class UploadMediaModal extends React.Component {
 }
 
 UploadMediaModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    getUser: React.PropTypes.func
 };
 
 export default UploadMediaModal;
