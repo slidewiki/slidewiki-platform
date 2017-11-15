@@ -177,7 +177,7 @@ export default {
             done();
         }
     },
-        terms: {
+    terms: {
         path: '/terms',
         method: 'get',
         page: 'imprint',
