@@ -56,40 +56,43 @@ class ContentQuestionAnswersList extends React.Component {
         let correctAnswers = this.props.items.answers.filter((item) => item.correct).map((node, index) => {
             return (
               <div key={index}>
-                <a className="header">
-                  {node.answer}
-                </a>
-                <div className="description">
-                  <p>
-                    <label><strong>Explanation:</strong></label> {node.explanation}
-                  </p>
-                </div>
+                  <a className="header">
+                      {node.answer}
+                  </a>
               </div>
             );
         });
 
+        let explanation = (
+            <div className="description">
+                <p>
+                    <label><strong>Explanation:</strong></label> {this.props.explanation}
+                </p>
+            </div>
+        );
         let answers = (
-          <div className="ui two column stackable grid">
+            <div className="ui two column stackable grid">
                 <div className="column">
-                  <div className="ui grouped fields">
-                    <fieldset>
-                      {list}
-                    </fieldset>
-                  </div>
-                </div>
-                <div className="column">
-                  <button className="ui compact button primary" onClick={this.handleButtonClick}>
-                    <i className=" help circle icon" />
-                    Show answer
-                  </button>
-                  {/*showEditButton()*/}
-                  <div className="ui item">
-                    <div className="content">
-                      {this.state.showCorrect ? correctAnswers : null}
+                    <div className="ui grouped fields">
+                        <fieldset>
+                            {list}
+                        </fieldset>
                     </div>
-                  </div>
                 </div>
-              </div>
+                <div className="column">
+                    <button className="ui compact button primary" onClick={this.handleButtonClick}>
+                        <i className=" help circle icon" />
+                        Show answer
+                    </button>
+                    {/*showEditButton()*/}
+                    <div className="ui item">
+                        <div className="content">
+                            {this.state.showCorrect ? correctAnswers : null}
+                            {this.state.showCorrect ? explanation : null}
+                        </div>
+                    </div>
+                </div>
+            </div>
         );
 
         return (
@@ -101,6 +104,13 @@ class ContentQuestionAnswersList extends React.Component {
                             {answers}
                         </div>
                     </div> }
+            {/*<ContentQuestionAnswersList items={question} selector={this.props.selector} />
+            //in master, merge conflict with branch 1451. branch 1451 has newer version?
+           <div ref="contentquestionanswersList">
+                <div className="ui relaxed list">
+                    {answers}
+                </div>*/}
+
             </div>
         );
     }

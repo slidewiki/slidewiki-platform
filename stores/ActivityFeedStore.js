@@ -8,6 +8,7 @@ class ActivityFeedStore extends BaseStore {
         this.activities = [];
         this.selector = {};
         this.hasMore = true;
+        this.presentations = [];
     }
     updateActivities(payload) {
         this.activities = payload.activities;
@@ -57,16 +58,19 @@ class ActivityFeedStore extends BaseStore {
     //     this.emitChange();
     // }
     addActivity(payload) {
-        this.activities.unshift(payload.activity);//add to the beginning
-        if (isLocalStorageOn()) {
-            localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
-        }
+        const activity = payload.activity;
+        if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id) {
+            this.activities.unshift(activity);//add to the beginning
+            if (isLocalStorageOn()) {
+                localStorage.setItem('activitiesCount', this.activities.length);// save this to compare it later with rehydrated data
+            }
 
-        this.emitChange();
+            this.emitChange();
+        }
     }
     addActivities(payload) {
         payload.activities.forEach((activity) => {
-            if (activity.content_id === this.selector.id) {
+            if (this.selector.stype === activity.content_kind && this.selector.sid === activity.content_id) {
                 this.activities.unshift(activity);//add to the beginning
             }
         });
@@ -113,6 +117,11 @@ class ActivityFeedStore extends BaseStore {
             }
         }
     }
+    updatePresentations(payload) {
+        // console.log('ActivityFeedStore: updatePresentations', payload);
+        this.presentations = payload;
+        this.emitChange();
+    }
     getState() {
         return {
             activities: this.activities,
@@ -120,6 +129,7 @@ class ActivityFeedStore extends BaseStore {
             selector: this.selector,
             hasMore: this.hasMore,
             wasFetch: this.wasFetch,
+            presentations: this.presentations
         };
     }
     dehydrate() {
@@ -130,6 +140,7 @@ class ActivityFeedStore extends BaseStore {
         this.activityType = state.activityType;
         this.selector = state.selector;
         this.hasMore = state.hasMore;
+        this.presentations = state.presentations;
     }
 }
 
@@ -144,7 +155,8 @@ ActivityFeedStore.handlers = {
     'ADD_ACTIVITY_SUCCESS': 'addActivity',
     'ADD_ACTIVITIES_SUCCESS': 'addActivities',
     'LIKE_ACTIVITY_SUCCESS': 'addLikeActivity',
-    'DISLIKE_ACTIVITY_SUCCESS': 'removeLikeActivity'
+    'DISLIKE_ACTIVITY_SUCCESS': 'removeLikeActivity',
+    'LOAD_PRESENTATIONS_SUCCESS': 'updatePresentations'
 };
 
 export default ActivityFeedStore;

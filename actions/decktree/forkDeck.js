@@ -14,7 +14,7 @@ export default function forkDeck(context, payload, done) {
         });
     } else {
         let selector = payload.selector;
-        context.service.update('deck.fork', {deckId: selector.id, userid: userid}, null, {timeout: 30 * 1000}, (err, res) => {
+        context.service.update('deck.fork', {deckId: selector.id, jwt: context.getStore(UserProfileStore).jwt}, null, {timeout: 30 * 1000}, (err, res) => {
             if (err) {
                 log.error(context, {filepath: __filename});
                 context.executeAction(serviceUnavailable, payload, done);
@@ -54,10 +54,11 @@ export default function forkDeck(context, payload, done) {
                     url: newURL
                 });
 
+                userid = String(context.getStore(UserProfileStore).userid);
                 //create a fork activity for the origin deck
                 let activity1 = {
                     activity_type: 'fork',
-                    user_id: String(userid),
+                    user_id: userid,
                     content_id: selector.id,
                     content_kind: 'deck',
                     fork_info: {
@@ -69,9 +70,9 @@ export default function forkDeck(context, payload, done) {
                 //create an add activity for the new deck
                 let activity2 = {
                     activity_type: 'add',
-                    user_id: String(userid),
+                    user_id: userid,
                     content_id: newId,
-                    content_owner_id: String(userid),
+                    content_owner_id: userid,
                     content_kind: 'deck'
                 };
                 context.executeAction(addActivity, {activity: activity2});

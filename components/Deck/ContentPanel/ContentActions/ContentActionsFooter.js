@@ -16,7 +16,7 @@ import incrementDeckViewCounter from '../../../../actions/activityfeed/increment
 import dislikeActivity from '../../../../actions/activityfeed/dislikeActivity.js';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentLikeStore from '../../../../stores/ContentLikeStore';
-import DownloadButton from './DownloadButton';
+import DownloadModal from './DownloadModal';
 
 class ContentActionsFooter extends React.Component {
     constructor(props) {
@@ -38,9 +38,16 @@ class ContentActionsFooter extends React.Component {
     }
     getPresentationHref(){
         let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
+        if(!this.props.ContentStore.selector.subdeck){
+
+            presLocation += this.props.ContentStore.selector.id + '/';
+        }
+        else{
+            presLocation += this.props.ContentStore.selector.subdeck + '/';
+        }
         if(this.props.ContentStore.selector.stype === 'slide'){
             // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += '#/slide-' + this.props.ContentStore.selector.sid;
+            presLocation += this.props.ContentStore.selector.sid;// + '/';
         }
         return presLocation;
     }
@@ -48,6 +55,20 @@ class ContentActionsFooter extends React.Component {
         if(process.env.BROWSER){
             e.preventDefault();
             window.open(this.getPresentationHref());
+        }
+    }
+    handlePresentationRoomClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            swal({
+                title: 'Please enter a room name',
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonText: 'Next',
+                allowOutsideClick: false
+            }).then((roomName) => {
+                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
+            }).catch();
         }
     }
     /*
@@ -154,12 +175,15 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
+                            <button onClick={this.handlePresentationRoomClick.bind(this)} className="ui button" type="button" aria-label="Presentation Room Mode" data-tooltip="(Experimental!) Create a room and invite other via a link to your presentation">
+                                <i className="record large icon"></i>
+                            </button>
                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
-                            <DownloadButton/>
+                            <DownloadModal/>
                             <ReportModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
                             <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>

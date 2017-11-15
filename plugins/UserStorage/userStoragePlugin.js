@@ -89,8 +89,7 @@ module.exports = function userStoragePlugin(options) {
                             let servercookie = cookieParser.serialize(user_cookieName, preparedUser, {
                                 expires: createExpire(),
                                 maxAge: secondsCookieShouldBeValid,
-                                sameSite: true,
-                                domain: host
+                                sameSite: true
                             });
                             res.setHeader('Set-Cookie', servercookie);
                             // console.log('userStoragePlugin actionContext setUser() on server', servercookie);
@@ -99,8 +98,7 @@ module.exports = function userStoragePlugin(options) {
                             cookie.set(user_cookieName, preparedUser,{
                                 expires: createExpire(),
                                 maxAge: secondsCookieShouldBeValid,
-                                domain: location.hostname,
-                                samesite: true
+                                sameSite: true
                             });
                             // console.log('userStoragePlugin actionContext setUser() on client');
                         }
@@ -119,14 +117,11 @@ module.exports = function userStoragePlugin(options) {
                             res.setHeader('Set-Cookie', cookieParser.serialize(user_cookieName, user, {
                                 expires: new Date(0),
                                 maxAge: 1,
-                                sameSite: true,
-                                domain: host
+                                sameSite: true
                             }));
                         }
                         else {
-                            cookie.remove(user_cookieName, {
-                                domain: location.hostname
-                            });
+                            cookie.remove(user_cookieName);
                         }
                     };
                 },

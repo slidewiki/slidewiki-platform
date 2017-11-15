@@ -1,10 +1,9 @@
 import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import DataSourceStore from '../../../../stores/DataSourceStore';
-import UserProfileStore from '../../../../stores/UserProfileStore';
+import PermissionsStore from '../../../../stores/PermissionsStore';
 import DataSourceList from './DataSourceList';
 import EditDataSource from './EditDataSource';
-import ShadowScrollbars from './Scrollbars/ShadowScrollbars';
 import newDataSource from '../../../../actions/datasource/newDataSource';
 import showMoreDataSources from '../../../../actions/datasource/showMoreDataSources';
 
@@ -25,11 +24,9 @@ class DataSourcePanel extends React.Component {
         const displayDataSources = (arrayOfDataSourcesIsLarge && !showAllDataSources) ? dataSources.slice(0, 9) : dataSources;
         const dataSource = this.props.DataSourceStore.dataSource;
         const selector = this.props.DataSourceStore.selector;
-        const userId = this.props.UserProfileStore.userid;
-        const contentOwnerId = this.props.DataSourceStore.contentOwner;
-        const editable = (String(userId) === String(contentOwnerId)) && (selector.stype === 'slide');
 
-        let newDataSourceButton = (editable) ?
+        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit) && (selector.stype === 'slide');
+        let newDataSourceButton = (editPermission) ?
             <button tabIndex="0" onClick={this.handleNewDataSource.bind(this)} className="ui blue labeled icon button">
                 <i className="icon plus"></i> Add source
             </button>
@@ -43,7 +40,7 @@ class DataSourcePanel extends React.Component {
             <div>There are currently no sources for this {this.props.DataSourceStore.selector.stype}.</div>
             :
             <div>
-                <DataSourceList items={displayDataSources} editable ={editable} selector={selector}/>
+                <DataSourceList items={displayDataSources} editable ={editPermission} selector={selector}/>
                 {showMoreLink}
             </div>
             ;
@@ -67,10 +64,10 @@ DataSourcePanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore, UserProfileStore], (context, props) => {
+DataSourcePanel = connectToStores(DataSourcePanel, [DataSourceStore, PermissionsStore], (context, props) => {
     return {
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 

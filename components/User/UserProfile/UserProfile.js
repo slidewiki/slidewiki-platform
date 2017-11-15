@@ -31,7 +31,8 @@ class UserProfile extends React.Component {
             })
             .then(() => {
             },() => {//dismiss function
-                if(this.props.IntlStore.currentLocale !== getIntlLanguage()) //user to reload page beacuse of cookie change
+                if(this.props.IntlStore.currentLocale !== getIntlLanguage() ||
+                (this.props.UserProfileStore.category === categories.categories[0] && this.props.UserProfileStore.categoryItem === categories.settings[0]) ) //user to reload page beacuse of cookie change or picture change
                     window.location.reload();
             }).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.userdeleted === true)
@@ -165,7 +166,7 @@ class UserProfile extends React.Component {
 
     displayIntegrations() {
         return (
-            <Integrations />
+            <Integrations removeProviderError={this.props.UserProfileStore.removeProviderError} addProviderError={this.props.UserProfileStore.addProviderError} addProviderAlreadyUsedError={this.props.UserProfileStore.addProviderAlreadyUsedError} providerAction={this.props.UserProfileStore.providerAction} providers={this.props.UserProfileStore.user.providers} hasPassword={this.props.UserProfileStore.user.hasPassword}/>
         );
     }
 
@@ -174,7 +175,7 @@ class UserProfile extends React.Component {
     }
 
     displayGroupedit() {
-        return (<UserGroupEdit />);
+        return (<UserGroupEdit saveUsergroupError={this.props.UserProfileStore.saveUsergroupError} username={this.props.UserProfileStore.username} currentUsergroup={this.props.UserProfileStore.currentUsergroup} userid={this.props.UserProfileStore.userid} saveUsergroupIsLoading={this.props.UserProfileStore.saveUsergroupIsLoading} picture={this.props.UserProfileStore.user.picture} />);
     }
 
     notImplemented() {

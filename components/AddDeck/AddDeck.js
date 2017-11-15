@@ -130,7 +130,6 @@ class AddDeck extends React.Component {
                 theme: theme,
                 license: license,
                 tags: tags,
-                userid: this.props.UserProfileStore.userid,
                 deckId: this.props.ImportStore.deckId,
                 selector: {id: this.props.ImportStore.deckId}
             });
@@ -168,10 +167,10 @@ class AddDeck extends React.Component {
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
         let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? 'Uploading file' :
-          (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
-          (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
-          (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
-          'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
+        (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
+        (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
+        (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
+        'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
 
         if (this.props.ImportStore.uploadProgress === 100) {
@@ -195,13 +194,13 @@ class AddDeck extends React.Component {
                     confirmButtonClass: 'positive ui button',
                     buttonsStyling: false
                 })
-                .then((dismiss) => {
-                    this.handleImportRedirect();
-                    return true;
-                })
-                .catch(() => {
-                    return true;
-                });
+                    .then((dismiss) => {
+                        this.handleImportRedirect();
+                        return true;
+                    })
+                    .catch(() => {
+                        return true;
+                    });
             } else {
                 swal({
                     title: 'Error',
@@ -211,12 +210,12 @@ class AddDeck extends React.Component {
                     confirmButtonClass: 'negative ui button',
                     buttonsStyling: false
                 })
-                .then(() => {
-                    return true;
-                })
-                .catch(() => {
-                    return true;
-                });
+                    .then(() => {
+                        return true;
+                    })
+                    .catch(() => {
+                        return true;
+                    });
             }
         }
     }
@@ -322,7 +321,7 @@ class AddDeck extends React.Component {
         if (filename.length > 40)
             filename = filename.substr(0, 40) + ' ...';
 
-    /*    let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
+        /*    let themeOptions = <select className="ui search dropdown" aria-labelledby="theme" id="themes" ref="select_themes">
             <option value="default">Default - Reveal.js White</option>
             <option value="beige">Reveal.js Beige</option>
             <option value="black">Reveal.js Black</option>
@@ -337,21 +336,21 @@ class AddDeck extends React.Component {
         </select>;
         */
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
-            <option value="openuniversity">Open University Theme</option>
-            <option value="odimadrid">ODI Madrid</option>
-            <option value="oeg">OEG</option>
-        </select>;
+                <option value="default">White - Default</option>
+                <option value="beige">Cream</option>
+                <option value="black">Black</option>
+                <option value="league">Dark Grey</option>
+                <option value="sky">Pale Blue</option>
+                <option value="solarized">Beige</option>
+                <option value="moon">Dark Slate Blue</option>
+                <option value="night">High Contrast 1</option>
+                <option value="blood">High Contrast 2</option>
+                <option value="serif">Serif</option>
+                <option value="simple">Simple</option>
+                <option value="openuniversity">Open University</option>
+                <option value="odimadrid">ODI Madrid</option>
+                <option value="oeg">OEG</option>
+            </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
         //   <option value="CC BY" >Creative Commons Attribution</option>
@@ -374,82 +373,82 @@ class AddDeck extends React.Component {
         }
 
         return (
-          <div className="ui vertically padded grid container">
-              <div className="sixteen wide column">
-                <h3>Add a deck to SlideWiki</h3>
-              </div>
-              <div className="sixteen wide column">
-                  <form className="ui form upload">
-                      <div className="two fields">
-                        <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
-                            <label htmlFor="title">
-                                Title
-                            </label>
-                            <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+            <div className="ui vertically padded grid container">
+                <div className="sixteen wide column">
+                    <h3>Add a deck to SlideWiki</h3>
+                </div>
+                <div className="sixteen wide column">
+                    <form className="ui form upload">
+                        <div className="two fields">
+                            <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
+                                <label htmlFor="title">
+                                    Title
+                                </label>
+                                <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
+                            </div>
+                            <div className={fieldClass_language}>
+                                <label htmlFor="language">Language</label>
+                                <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
+                            </div>
                         </div>
-                        <div className={fieldClass_language}>
-                            <label htmlFor="language">Language</label>
-                            <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
+
+                        <div className="field">
+                            <label htmlFor="deck-description">Description</label>
+                            <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
                         </div>
-                      </div>
+                        <div className="two fields">
+                            <div className="field" ref="div_themes" >
+                                <label htmlFor="themes">Choose deck theme</label>
+                                {themeOptions}
+                            </div>
 
-                      <div className="field">
-                          <label htmlFor="deck-description">Description</label>
-                          <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
-                      </div>
-                      <div className="two fields">
-                          <div className="field" ref="div_themes" >
-                              <label htmlFor="themes">Choose deck theme</label>
-                                  {themeOptions}
-                          </div>
-
-                      </div>
+                        </div>
 
                         <div className="ui message" id="uploadDesc">
-                          <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.</p>
-                          </div>
-                     <div className="ui grid">
-                         <div className="two column row">
-                          <div className="column">
-                              <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
-                                  Select file
-                              </div>
-                              <Import />
-                          </div>
-                          <div className="column" ref="div_filename">
-                              {filename ? '"Selected for upload: '+filename+'"' : ''}
-                          </div>
-                      </div>
-                  </div>
-                  <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
-                      <div className="bar"></div>
-                      <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"></div>
-                  </div>
-                      <div className={fieldClass_conditions} >
-                          <div className="ui checkbox" ref="div_conditions" >
-                              <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
-                              <label htmlFor="terms">
-                                  I agree to the SlideWiki <NavLink className="item" routeName="imprint">terms and conditions</NavLink> and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.
-                              </label>
-                          </div>
-                      </div>
-                      <div className={fieldClass_imageslicense} >
-                          <div className="ui checkbox" ref="div_imageslicense" >
-                              <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
-                              <label htmlFor="termsimages">
-                                  I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.
-                              </label>
-                          </div>
-                      </div>
-
-                      <div className="ui buttons">
-                      <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
-                          Create deck
+                            <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.</p>
                         </div>
-                      </div>
+                        <div className="ui grid">
+                            <div className="two column row">
+                                <div className="column">
+                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
+                                        Select file
+                                    </div>
+                                    <Import />
+                                </div>
+                                <div className="column" ref="div_filename">
+                                    {filename ? '"Selected for upload: '+filename+'"' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="ui indicating progress" ref="div_progress" id="progressbar_addDeck_upload" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
+                            <div className="bar"></div>
+                            <div className="label" ref="div_progress_text" id="progresslabel_addDeck_upload" aria-live="polite"></div>
+                        </div>
+                        <div className={fieldClass_conditions} >
+                            <div className="ui checkbox" ref="div_conditions" >
+                                <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
+                                <label htmlFor="terms">
+                                    I agree to the SlideWiki <NavLink className="item" routeName="imprint">terms and conditions</NavLink> and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.
+                                </label>
+                            </div>
+                        </div>
+                        <div className={fieldClass_imageslicense} >
+                            <div className="ui checkbox" ref="div_imageslicense" >
+                                <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
+                                <label htmlFor="termsimages">
+                                    I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.
+                                </label>
+                            </div>
+                        </div>
 
-                  </form>
-              </div>
+                        <div className="ui buttons">
+                            <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                                Create deck
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         );
     }

@@ -76,18 +76,17 @@ class SearchPanel extends React.Component {
 
         let queryparams = `keywords=${encodeURIComponent(keywords)}`;
 
-        if(this.state.field)
+        if(this.state.field && this.state.field.trim()){
             queryparams += `&field=${this.state.field}`;
+        }
 
-        if(this.state.kind){
+        if(this.state.kind && this.state.kind.trim()){
             queryparams += `&kind=${this.state.kind}`;
         }
 
-        if(this.state.language)
+        if(this.state.language && this.state.language.trim()){
             queryparams += `&language=${this.state.language}`;
-
-        if(this.state.license)
-            queryparams += `&license=${this.state.license}`;
+        }
 
         let users = this.refs.user.getSelected();
         if(users){
@@ -193,6 +192,7 @@ class SearchPanel extends React.Component {
                                     <label htmlFor="language">Language</label>
                                     <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                       <option value=' '>Select Language</option>
+                                      <option value='nl_NL'>Dutch</option>
                                       <option value='en_GB'>English</option>
                                       <option value='de_DE'>German</option>
                                       <option value='el_GR'>Greek</option>

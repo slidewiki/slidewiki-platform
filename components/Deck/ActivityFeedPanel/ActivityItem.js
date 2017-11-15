@@ -57,7 +57,7 @@ class ActivityItem extends React.Component {
         const viewPath = ((node.content_kind === 'slide') ? '/deck/' + this.props.selector.id + '/slide/' : '/deck/') + node.content_id;
         const nodeRef = (node.content_kind === this.props.selector.stype && node.content_id.split('-')[0] === this.props.selector.sid.split('-')[0]) ? (<span>{'this ' + node.content_kind}</span>) : (<span>{node.content_kind + ' '}<a href={this.getPath(node)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a></span>);
 
-        if (node.user_id === '0') {
+        if (node.user_id === '0'|| node.user_id === 'undefined') {
             node.user_id = undefined;
         }
         switch (node.activity_type) {
@@ -65,7 +65,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large translate icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'translated '} {nodeRef} {' to '}
                         {/*<a href={'/slideview/' + node.translation_info.content_id}>{node.translation_info.language}</a>*/}
@@ -80,7 +80,7 @@ class ActivityItem extends React.Component {
                 const onPlatform = (node.share_info.platform === 'E-mail') ? 'by E-mail' : (' on ' + node.share_info.platform);
                 SummaryNode = (
                     <div className="description">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'shared '} {nodeRef} {onPlatform}
                         <br/>
@@ -92,7 +92,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large write icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'created '} {nodeRef}
                         <br/>
@@ -104,9 +104,21 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large edit icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'edited '} {nodeRef}
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'move':
+                IconNode = (<i className="ui large move icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> {'moved '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -116,7 +128,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large comment outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'commented on '} {nodeRef}
                         <br/>
@@ -130,7 +142,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui big comments outline icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a>
                         <span> replied to a comment </span>{'on ' } {nodeRef}
@@ -142,14 +154,26 @@ class ActivityItem extends React.Component {
                 );
                 break;
             case 'use':
-                IconNode = (<i className="ui large attach icon"></i>);
+                IconNode = (<i className="ui large repeat icon"></i>);
                 const title = (node.use_info.target_name !== '') ? node.use_info.target_name : node.use_info.target_id;
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'used '} {nodeRef}
                         {' in deck '}<a href={'/deck/' + node.use_info.target_id}>{title}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
+            case 'attach':
+                IconNode = (<i className="ui large attach icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> {'attached '} {nodeRef}
                         <br/>
                         {DateDiv}
                     </div>
@@ -159,7 +183,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large empty star icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'rated '} {nodeRef}
                         <br/>
@@ -171,7 +195,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large thumbs outline up icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'liked '} {nodeRef}
                         <br/>
@@ -183,7 +207,7 @@ class ActivityItem extends React.Component {
                 IconNode = (<i className="ui large download icon"></i>);
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'downloaded '} {nodeRef}
                         <br/>
@@ -196,7 +220,7 @@ class ActivityItem extends React.Component {
                 const forkRef = (node.fork_info) ? (<span>, creating a <a href={'/deck/' + node.fork_info.content_id}>new deck</a></span>) : '';
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> {'forked '}{nodeRef}{forkRef}
                         <br/>
@@ -210,7 +234,7 @@ class ActivityItem extends React.Component {
 
                 SummaryNode = (
                     <div className="summary">
-                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''}>
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
                             {node.author ? node.author.username : 'unknown'}
                         </a> <span>{'deleted ' + node.delete_info.content_kind + ' "' + cheerioDeletedName + '" '}</span>
                         <br/>
@@ -229,14 +253,6 @@ class ActivityItem extends React.Component {
                     </div>
                 );
         }
-        // TODO: Unused (no likes for activities), therefore MetaNode should be removed probably, otherwise it should go below the SummaryNode
-        const MetaNode = (
-            <div className="meta">
-                <a className="like" onClick={this.handleLike.bind(this)}>
-                    <i className="like icon"></i> {node.likesNo} Likes
-                </a>
-            </div>
-        );
 
         return (
             <div className="ui feed">

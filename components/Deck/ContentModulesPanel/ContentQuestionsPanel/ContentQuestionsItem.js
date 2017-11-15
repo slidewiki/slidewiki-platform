@@ -16,7 +16,10 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList items={question} selector={this.props.selector} />
+            {/*<ContentQuestionAnswersList items={question} selector={this.props.selector} />
+            //in branch 1451 - merge conflict. Below newer version?
+            */}
+            <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
         );
 
         // const editIcon = (
