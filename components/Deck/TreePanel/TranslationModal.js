@@ -54,7 +54,7 @@ class TranslationModal extends React.Component {
 
     renderTranslateTo(supported) {
         return (
-            {value:supported.code , text: supported.name}
+            {value:supported.code , key: supported.code, text: supported.name}
         );
     }
 
@@ -88,7 +88,7 @@ class TranslationModal extends React.Component {
                         let link = '/deck/';
                         link+= translation.deck_id;
                         return (
-                            <a href={link}>{languageName}, </a>
+                            <a href={link} key={languageName}>{languageName}, </a>
                         );
                     }
                 }else{
