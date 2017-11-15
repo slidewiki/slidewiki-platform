@@ -60,10 +60,10 @@ class UserNotificationsStore extends BaseStore {
     deleteUserNotification(payload) {
         let index = this.notifications.findIndex((notification) => {return (notification.id === payload.id);});
         if (index !== -1) {
-            if (notifications[index].new) {
+            if (this.notifications[index].new) {
                 this.newNotificationsCount--;
             }
-            notifications.splice(index, 1);
+            this.notifications.splice(index, 1);
         }
 
         this.emitChange();

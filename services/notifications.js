@@ -50,7 +50,7 @@ export default {
 
         if (resource === 'notifications.item'){
             /*********connect to microservices*************/
-            const id = args.notificationId;
+            const id = args.id;
             let options = {
                 method: 'DELETE',
                 uri: Microservices.notification.uri + '/notification/delete',
@@ -108,7 +108,7 @@ export default {
             });
         } else if (resource === 'notifications.readall'){
             rp.put({
-                uri: Microservices.notification.uri + '/notification/markall/' + id,
+                uri: Microservices.notification.uri + '/notification/markall/' + uid,
                 body: JSON.stringify({
                     read: true
                 }),
