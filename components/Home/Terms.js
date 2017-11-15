@@ -45,7 +45,7 @@ class terms extends React.Component {
                 </p>
                 <ul class="ui list">
                     <li>
-                        'This service may contain <b>translations</b> powered by Google. 
+                        'This service may contain <b>translations</b> powered by Micros. 
                         Google disclaims all warranties related to the translations, expressed or implied, including any warranties of accuracy, reliability, and any implied warranties of merchantability, fitness for a particular purpose and noninfringement.'; ?>
                     </li>
                     <li> '<b>You License Freely Your Contributions</b> &#8211; you generally must license your contributions and edits to our sites or Projects under a free and open license (unless your contribution is in the public domain).'); ?>
@@ -54,8 +54,9 @@ class terms extends React.Component {
                     </li>
                 </ul>
 
-                <p>Text is adopted from <a href="http://wikimediafoundation.org/wiki/Terms_of_Use">Wikipedia terms of use</a> and is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a> License.'); ?>
-                </p>       
+                <p>Our terms are adopted from <a href="http://wikimediafoundation.org/wiki/Terms_of_Use">Wikipedia terms of use</a> which is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a> License.'); ?>
+                </p>
+                <p>For full terms and conditions please read our <NavLink routeName="imprint" href="/imprint">Imprint</NavLink> page.</p>
             </div>
 
         );
