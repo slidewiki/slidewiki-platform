@@ -25,7 +25,7 @@ export default {
                 '&copyrightHolder=' + encodeURIComponent(holder) + //NOTE prefer to use a real world name or the username at SlideWiki + it's ID
                 '&title=' + encodeURIComponent(params.title) +
                 '&altText='+encodeURIComponent(params.text);
-             console.log('use url', url);
+            console.log('use url', url);
             let headers = {
                 '----jwt----': params.jwt,
                 'content-type': params.type
