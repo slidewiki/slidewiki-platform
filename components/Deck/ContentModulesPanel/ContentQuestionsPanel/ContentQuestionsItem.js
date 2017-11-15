@@ -90,7 +90,7 @@ class ContentQuestionsItem extends React.Component {
             <div
               className={activeIfFirst + ' content'}
               data-reactid={653}>
-              {answers}
+              {/*answers*/}
             </div>
             </div>
         );

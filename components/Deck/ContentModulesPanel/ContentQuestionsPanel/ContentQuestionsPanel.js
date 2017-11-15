@@ -10,6 +10,7 @@ import loadContentQuestions from '../../../../actions/loadContentQuestions';
 import ContentQuestionsList from './ContentQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
 // import ContentQuestionForm from './ContentQuestionForm';
+import PermissionsStore from '../../../../stores/PermissionsStore';
 
 class ContentQuestionsPanel extends React.Component {
 
@@ -74,12 +75,13 @@ class ContentQuestionsPanel extends React.Component {
         let buttonBar = '';
         switch(selector.stype) {
             case 'slide':
-                buttonBar = (
+                buttonBar = '';
+                /* (
                     <button className='ui button blue'>
                         <i className='plus icon'></i>
                         Add question
                     </button>
-                );
+                );*/
                 break;
             case 'deck':
                 buttonBar = (
@@ -95,21 +97,37 @@ class ContentQuestionsPanel extends React.Component {
                 break;
         }
 
+        let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
+        console.log(editPermission);
+        let addQuestionButton = (editPermission) ?
+            <div className="column right aligned" data-reactid={655}>
+                <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
+                    <i className="small plus icon" data-reactid={640} />
+                    Add question
+                </button>
+            </div>
+            : '';
+        console.log(addQuestionButton);
+
+        /*
         let addQuestionButton = (
             <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
                     <i className="small plus icon" data-reactid={640} />
-                    {/* react-text: 641 */}Add question{/* /react-text */}
+                    Add question
                 </button>
             </div>
         );
 
         const getUserButton = () => {
+        console.log(creatorId);
             if(userId && creatorId === userId) {
+            if (editPermission){
                 return addQuestionButton;
             }
             return null;
         };
+        */
 
         let questionsHeader = (
             <div className="ui segment attached" data-reactid={636}>
@@ -122,7 +140,7 @@ class ContentQuestionsPanel extends React.Component {
                                         <div className="ui label red">Prototype interface - not functional</div>
                                     </h3>
                                 </div>
-                                {getUserButton()}
+                                {addQuestionButton}
                             </div>
                         </div>
                         {content}
@@ -207,12 +225,13 @@ class ContentQuestionsPanel extends React.Component {
 ContentQuestionsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {
+ContentQuestionsPanel = connectToStores(ContentQuestionsPanel, [ContentQuestionsStore, DeckViewStore, UserProfileStore, PermissionsStore], (context, props) => {
     return {
         ContentQuestionsStore: context.getStore(ContentQuestionsStore).getState(),
         DeckViewStore: context.getStore(DeckViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ContentModulesStore: context.getStore(ContentModulesStore).getState(),
+        PermissionsStore: context.getStore(PermissionsStore).getState()
     };
 });
 export default ContentQuestionsPanel;

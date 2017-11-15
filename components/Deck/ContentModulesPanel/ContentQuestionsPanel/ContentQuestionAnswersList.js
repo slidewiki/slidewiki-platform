@@ -89,19 +89,16 @@ class ContentQuestionAnswersList extends React.Component {
                     <div className="content">
                       {this.state.showCorrect ? correctAnswers : null}
                     </div>
-                </div>
+                  </div>
+              </div>
             </div>
         );
 
         return (
-            <div>
-                { this.state.isEditButtonClicked ?
-                    <ContentQuestionEdit question={this.props.items} selector={this.props.selector} userId={userId} /> :
-                    <div ref="contentquestionanswersList">
-                        <div className="ui relaxed list">
-                            {answers}
-                        </div>
-                    </div> }
+            <div ref="contentquestionanswersList">
+                <div className="ui relaxed list">
+                    {answers}
+                </div>
             </div>
         );
     }
