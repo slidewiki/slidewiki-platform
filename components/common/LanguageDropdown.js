@@ -42,6 +42,9 @@ class LanguageDropdown extends React.Component {
         });
 
         let languageOptions = <div className="menu">
+            <div className="item" data-value="nl_NL" >
+                Dutch
+            </div>
             <div className="item" data-value="en_GB" >
                 English
             </div>
