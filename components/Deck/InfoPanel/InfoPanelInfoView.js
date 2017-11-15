@@ -55,9 +55,7 @@ class InfoPanelInfoView extends React.Component {
             list = nodes.map((node, index) => {
                 if(index === (nodes.length - 1)){
                     return (
-                        <div key={index} className="section">
-                            {cheerio.load(pathNames[index]).text()}
-                        </div>
+                        cheerio.load(pathNames[index]).text()
                     );
                 }else{
                     /*
@@ -73,9 +71,9 @@ class InfoPanelInfoView extends React.Component {
             });
             title = list; //use title of slide
             titlediv =
-            <div className="ui segment">
-                <h3 className="ui header">
-                   <i className="grey file text icon" aria-label="Slide title"></i>
+            <div className="ui segment top attached compact">
+                <h3 className="ui small header">
+                   <i className="grey small file text icon" aria-label="Slide title"></i>
                    {title}
                 </h3>
             </div>;
