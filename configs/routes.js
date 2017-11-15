@@ -33,6 +33,7 @@ import loadDiffview from '../actions/loadDiffview';
 import checkReviewableUser from '../actions/userReview/checkReviewableUser';
 
 import {navigateAction} from 'fluxible-router';
+import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 export default {
     //-----------------------------------HomePage routes------------------------------
@@ -176,6 +177,19 @@ export default {
             done();
         }
     },
+    terms: {
+        path: '/terms',
+        method: 'get',
+        page: 'imprint',
+        title: 'SlideWiki -- Terms',
+        handler: require('../components/Home/Terms'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Terms'
+            });
+            done();
+        }
+    },
     welcome: {
         path: '/welcome',
         method: 'get',
@@ -305,7 +319,22 @@ export default {
         page: 'deck',
         handler: require('../components/Deck/Deck'),
         action: (context, payload, done) => {
-            context.executeAction(loadDeck, payload, done);
+            async.series([
+                (callback) => {
+                    context.executeAction(loadDeck, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadPresentation, payload, callback);
+                },
+                (callback) => {
+                    context.executeAction(loadTranslations, payload, callback);
+                },
+
+            ],
+            (err, result) => {
+                if(err) console.log(err);
+                done();
+            });
         }
     },
     legacydeck: {
@@ -540,6 +569,12 @@ export default {
         action: (context, payload, done) => {
             context.executeAction(loadDeckFamily, payload, done);
         }
+    },
+    webrtc: {
+        path: '/presentationbroadcast',//Example: ...broadcast?room=foo&presentation=/Presentation/386-1/
+        method: 'get',
+        page: 'presentationBroadcast',
+        handler: require('../components/webrtc/presentationBroadcast')
     },
     /* This should be the last route in routes.js */
     notfound: {
