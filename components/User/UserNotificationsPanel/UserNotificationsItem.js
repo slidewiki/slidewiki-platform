@@ -107,6 +107,20 @@ class UserNotificationsItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'move':
+                const moveIconClass = allIconClass.concat(' move');
+                iconNotification = (<i className={moveIconClass}></i>);
+                summaryNotification = (
+                    <div className="summary">
+                        <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
+                            {notification.author ? notification.author.username : 'unknown'}
+                        </a> {'moved ' + notification.content_kind + ' '}
+                        <a href={viewPath}>{cheerioContentName}</a>
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
             case 'comment':
                 const commentIconClass = allIconClass.concat(' comment outline');
                 iconNotification = (<i className={commentIconClass}></i>);

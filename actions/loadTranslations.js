@@ -7,13 +7,7 @@ const log = require('./log/clog');
 
 export default function loadTranslations(context, payload, done) {
     log.info(context);
-    if(!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        context.executeAction(deckContentTypeError, payload, done);
-        return;
-    }
-
-    if (!(AllowedPattern.SLIDE_ID.test(payload.params.sid) || payload.params.sid === undefined)) {
-        context.executeAction(slideIdTypeError, payload, done);
+    if(!(['deck'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
         return;
     }
 
@@ -25,10 +19,6 @@ export default function loadTranslations(context, payload, done) {
         } else {
             context.dispatch('LOAD_TRANSLATIONS_SUCCESS', res);
         }
-        let pageTitle = shortTitle + ' | Translations | ' + payload.params.stype + ' | ' + payload.params.sid;
-        context.dispatch('UPDATE_PAGE_TITLE', {
-            pageTitle: pageTitle
-        });
         done();
     });
 }
