@@ -105,7 +105,7 @@ class ContentQuestionAnswersList extends React.Component {
                         </div>
                     </div> }
             {/*<ContentQuestionAnswersList items={question} selector={this.props.selector} />
-            //in master, merge conflict with branch 1451. branch 1451 has newer version?
+            //in master, merge conflict with branch 1451 above. branch 1451 has newer version?
            <div ref="contentquestionanswersList">
                 <div className="ui relaxed list">
                     {answers}
