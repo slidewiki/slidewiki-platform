@@ -151,12 +151,7 @@ class TreePanel extends React.Component {
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
         return (
             <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
-            <div className="ui top attached tabular menu" >
-                    <a className="active item" >
-                        <i className="counterclockwise rotated sitemap large icon"></i>Deck Explorer
-                    </a>
-            </div>
-                      <NavigationPanel />
+                <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
