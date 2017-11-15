@@ -2,7 +2,6 @@ import {shortTitle} from '../../configs/general';
 import slideIdTypeError from '../error/slideIdTypeError';
 import serviceUnavailable from '../error/serviceUnavailable';
 import { AllowedPattern } from '../error/util/allowedPattern';
-import showSlideEditPanel from '../deckpagelayout/showSlideEditPanel.js';
 const log = require('../log/clog');
 
 export default function loadSlideView(context, payload, done) {
@@ -22,9 +21,7 @@ export default function loadSlideView(context, payload, done) {
             context.executeAction(serviceUnavailable, payload, done);
             return;
         } else {
-            context.executeAction(hideSlideEditPanel,{}, () => {
-                context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
-            });
+            context.dispatch('LOAD_SLIDE_CONTENT_SUCCESS', res);
         }
         let pageTitle = shortTitle + ' | Slide View | ' + payload.params.sid;
         context.dispatch('UPDATE_PAGE_TITLE', {
