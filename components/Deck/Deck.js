@@ -101,7 +101,7 @@ class Deck extends React.Component {
             dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
         let leftPanel;
-        if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype == 'slide' && this.props.DeckPageStore.selector.spath !== '')
+        if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '')
         {
             //if we view a slide in edit mode - show slide edit panel
             leftPanel =      <div className={leftColClassSlideEdit}>
