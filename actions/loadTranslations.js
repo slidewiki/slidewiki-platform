@@ -7,9 +7,7 @@ const log = require('./log/clog');
 
 export default function loadTranslations(context, payload, done) {
     log.info(context);
-    if(!(['deck'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)) {
-        return;
-    }
+    
 
     context.service.read('translation.list', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
