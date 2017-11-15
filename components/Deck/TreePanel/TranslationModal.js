@@ -59,12 +59,13 @@ class TranslationModal extends React.Component {
     }
 
     render() {
-
+        let current = '';
+        
         const deckLanguage = this.props.TranslationStore.currentLang.language;
         if (deckLanguage){
             current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
         }else{
-            current = 'Undefined';
+            current = '';
         }
         let translations = [];
         let existing_codes = [];
@@ -72,7 +73,7 @@ class TranslationModal extends React.Component {
         let languages_array = [];
         let available_desc = '';
         let available_array = [];
-        let current = '';
+
         let languageOptions = [];
 
         if (this.props.TranslationStore.translations){
