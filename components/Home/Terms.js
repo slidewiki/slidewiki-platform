@@ -42,7 +42,7 @@ class terms extends React.Component {
                 <ul className="ui list">
                     <li>This service may contain <b>translations</b> powered by Microsoft translate. We disclaims all warranties related to the translations, expressed or implied, including any warranties of accuracy, reliability, and any implied warranties of merchantability, fitness for a particular purpose and noninfringement.
                     </li>
-                    <li> <b>You License Freely Your Contributions</b> &#8211; you generally must license your contributions and edits to our sites or Projects under a free and open <NavLink routeName="license" href="/license">license</NavLink> (unless your contribution is in the public domain).
+                    <li> <b>You License Freely Your Contributions</b> &#8211; you generally must license your contributions and edits to our sites or Projects under a free and open license (unless your contribution is in the public domain).
                     </li>
                     <li><b>No Professional Advice</b> &#8211; the content of presentations and other projects is for informational purposes only and does not constitute professional advice.
                     </li>
@@ -82,7 +82,7 @@ class terms extends React.Component {
                     <li>Using the services in a manner that is inconsistent with applicable law.</li>
                 </ul>
                 <h3 className="ui header">Engaging in Disruptive and Illegal Misuse of Facilities</h3>  
-              <ul className="ui list">
+                <ul className="ui list">
                     <li>Posting or distributing content that contains any viruses, malware, worms, Trojan horses, malicious code, or other device that could harm our technical infrastructure or system or that of our users;</li>
                     <li>Engaging in automated uses of the site that are abusive or disruptive of the services and have not been approved by the Wikimedia community;</li>
                     <li>Disrupting the services by placing an undue burden on a Project website or the networks or servers connected with a Project website;</li>
@@ -97,10 +97,10 @@ class terms extends React.Component {
                     </ul>
                 </ul>
 
-               <h3 className="ui header">Compatibility with Wikipedia terms of use</h3>  
+                <h3 className="ui header">Compatibility with Wikipedia terms of use</h3>  
                 <p>Our terms are adopted from <a href="http://wikimediafoundation.org/wiki/Terms_of_Use">Wikipedia terms of use</a> which is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a> License.
                 </p>
-                <p>For full terms and conditions please read our <NavLink routeName="imprint" href="/imprint">Imprint</NavLink> page.</p>
+                <p>For full terms and conditions please read our Imprint page.</p>
             </div>
 
         );
