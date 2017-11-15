@@ -2,6 +2,7 @@ import {shortTitle} from '../../configs/general';
 import slideIdTypeError from '../error/slideIdTypeError';
 import { AllowedPattern } from '../error/util/allowedPattern';
 import expandContentPanel from '../deckpagelayout/expandContentPanel';
+import showSlideEditPanel from '../deckpagelayout/showSlideEditPanel.js';
 import serviceUnavailable from '../error/serviceUnavailable';
 const log = require('../log/clog');
 
@@ -20,7 +21,9 @@ export default function loadSlideEdit(context, payload, done) {
             //expand edit view collapsing TreeNode. Then dispatch LOAD_SLIDE_EDIT_SUCCESS
             //revert for SWIK-1347 - Slide Edit view to display decktree (and right-hand panel)
             //context.executeAction(expandContentPanel,{}, () => {
-            context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
+            context.executeAction(showSlideEditPanel,{}, () => {
+                context.dispatch('LOAD_SLIDE_EDIT_SUCCESS', res);
+            });
             //});
 
             //TODO: do not allow editing title when on the edit slide mode

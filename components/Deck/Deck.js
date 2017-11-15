@@ -6,6 +6,7 @@ import ServiceErrorStore from '../../stores/ServiceErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import TreePanel from './TreePanel/TreePanel';
+import SlideEditPanel from './SlideEditPanel/TreePanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
@@ -46,6 +47,17 @@ class Deck extends React.Component {
             'hide-element': !status.ActivityFeedPanel.visible
         });
         */
+        let leftColClassSlideEdit = classNames({
+            'three':  status.SlideEditPanel.columnSize===3 || status.SlideEditPanel.columnSize===3,
+            'four':  status.SlideEditPanel.columnSize===4 || status.SlideEditPanel.columnSize===4,
+            'twelve':  status.SlideEditPanel.columnSize===12 || status.SlideEditPanel.columnSize===12,
+            'sixteen':  status.SlideEditPanel.columnSize===16 || status.SlideEditPanel.columnSize===16,
+            'wide column': status.SlideEditPanel.visible || status.SlideEditPanel.visible,
+            'hide-element': !status.SlideEditPanel.visible && !status.SlideEditPanel.visible
+        });
+        let SlideEditPanelClass = classNames({
+            'hide-element': !status.SlideEditPanel.visible
+        });
         let centerColClass = classNames({
             'four':  status.ContentPanel.columnSize===4 || status.ContentModulesPanel.columnSize===4,
             'ten':  status.ContentPanel.columnSize===10 || status.ContentModulesPanel.columnSize===10,
@@ -97,6 +109,16 @@ class Deck extends React.Component {
                       <NavigationPanel />
                     </div>*/}
                 </div>
+
+                <div className={leftColClassSlideEdit}>
+                    <div className="row">
+                        <div className={SlideEditPanelClass}>
+                            <SlideEditPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                        </div>
+                        <div className="ui hidden divider"></div>
+                    </div>
+                </div>
+
 
                 <div className={leftColClass}>
                     <div className="row">
