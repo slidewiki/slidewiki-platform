@@ -48,7 +48,10 @@ class TranslationModal extends React.Component {
     }
 
     renderAvailable(translation) {
-        let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+        let languageName = '';
+        if(translation.language){
+            languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+        }
         if (languageName){
             if (translation.language !== this.props.TranslationStore.currentLang.language){
                 return (
@@ -90,7 +93,10 @@ class TranslationModal extends React.Component {
         let available_desc = '';
         let available_array = [];
         available_array = translations.map((translation) => {
-            let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+            let languageName = '';
+            if(translation.language){
+                languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+            }
             if (languageName){
                 if (translation.language !== this.props.TranslationStore.currentLang.language){
                     let link = '/deck/';
@@ -104,7 +110,10 @@ class TranslationModal extends React.Component {
             }
         });
         if (available_array.length){
-            let current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+            let current = '';
+            if(deckLanguage){
+                current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+            }
             available_desc = <p>This deck is already available in {available_array} and <b>{current}</b>.</p>;
         }
 
@@ -112,7 +121,10 @@ class TranslationModal extends React.Component {
             return !existing_codes.includes(el.code);
         });
 
-        let currentLang = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+        let currentLang = '';
+        if(deckLanguage){
+            currentLang = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+        }
 
         let languageOptions = supported.map(this.renderTranslateTo, this);
 
