@@ -40,6 +40,7 @@ class DeckPageStore extends BaseStore {
         //hide all others than Navigation and Content
         for(let c in this.componentsStatus){
             if(c=== 'NavigationPanel') {
+                //this.componentsStatus[c].visible=0;
                 this.componentsStatus[c].visible=1;
                 this.componentsStatus[c].columnSize=16;
             }else if(c=== 'SlideEditPanel'){
@@ -49,6 +50,7 @@ class DeckPageStore extends BaseStore {
                 this.componentsStatus[c].visible=1;
                 this.componentsStatus[c].columnSize=10;
             }else if(c=== 'ActivityFeedPanel'){
+                this.componentsStatus[c].visible=0;
                 this.componentsStatus[c].visible=1;
                 this.componentsStatus[c].columnSize=3;
             }else{

@@ -6,7 +6,7 @@ import ServiceErrorStore from '../../stores/ServiceErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import TreePanel from './TreePanel/TreePanel';
-import SlideEditPanel from './SlideEditPanel/TreePanel';
+import SlideEditPanel from './SlideEditPanel/SlideEditPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
