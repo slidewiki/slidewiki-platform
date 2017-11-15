@@ -47,22 +47,6 @@ class TranslationModal extends React.Component {
         }
     }
 
-    renderAvailable(translation) {
-        let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
-        if (languageName){
-            if (translation.language !== this.props.TranslationStore.currentLang.language){
-                return (
-                    <a href='' key={translation.language} onClick={ this.handleLanguageClick.bind(this, translation.deck_id) }>{languageName}</a>
-                );
-            }else{
-                return (
-                    <b>{languageName}</b>
-                );
-            }
-        }else{
-            return null;
-        }
-    }
 
     handleOptionChange(event, data) {
         this.setState({language: data.value, error: false});
@@ -70,51 +54,65 @@ class TranslationModal extends React.Component {
 
     renderTranslateTo(supported) {
         return (
-            {value:supported.code , text: supported.name}
+            {value:supported.code , key: supported.code, text: supported.name}
         );
     }
 
     render() {
-
+        let current = '';
+        
         const deckLanguage = this.props.TranslationStore.currentLang.language;
+        if (deckLanguage){
+            current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
+        }else{
+            current = '';
+        }
         let translations = [];
         let existing_codes = [];
         let languages_string = '';
         let languages_array = [];
+        let available_desc = '';
+        let available_array = [];
+
+        let languageOptions = [];
+
         if (this.props.TranslationStore.translations){
             translations = this.props.TranslationStore.translations;
             existing_codes = this.props.TranslationStore.translations.map((el) => { //getting all translations codes
                 return el.language.split('_')[0];
             });
-        }
-        let available_desc = '';
-        let available_array = [];
-        available_array = translations.map((translation) => {
-            let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
-            if (languageName){
-                if (translation.language !== this.props.TranslationStore.currentLang.language){
-                    let link = '/deck/';
-                    link+= translation.deck_id;
-                    return (
-                        <a href={link}>{languageName}, </a>
-                    );
+
+            available_array = translations.map((translation) => {
+                let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+                if (languageName){
+                    if (translation.language !== this.props.TranslationStore.currentLang.language){
+                        let link = '/deck/';
+                        link+= translation.deck_id;
+                        return (
+                            <a href={link} key={languageName}>{languageName}, </a>
+                        );
+                    }
+                }else{
+                    return null;
                 }
-            }else{
-                return null;
+            });
+            if (deckLanguage){
+                available_desc = <p>This deck is already available in {available_array} and <b>{current}</b>.</p>;
             }
-        });
-        if (available_array.length){
-            let current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
-            available_desc = <p>This deck is already available in {available_array} and <b>{current}</b>.</p>;
         }
+
+
 
         const supported = this.props.TranslationStore.supportedLangs.filter((el) => { //removing existing translations from supported
             return !existing_codes.includes(el.code);
         });
 
-        let currentLang = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
 
-        let languageOptions = supported.map(this.renderTranslateTo, this);
+        if (supported){
+            languageOptions = supported.map(this.renderTranslateTo, this);
+
+        }
+
 
         return (
         <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
