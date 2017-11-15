@@ -86,7 +86,7 @@ class UploadMediaModal extends React.Component {
         let payload = {
             type: this.state.files[0].type,
             license: this.state.licenseValue,
-            copyrightHolder: 'testtest',
+            copyrightHolder: this.state.copyrightHolder,
             title: this.state.title || this.state.files[0].name,
             text: this.state.alt,
             filesize: this.state.files[0].size,
@@ -102,7 +102,6 @@ class UploadMediaModal extends React.Component {
 
             if (evt.target.readyState === FileReader.DONE) {
                 payload.bytes = reader.result;
-                console.log('jaja execture');
                 that.context.executeAction(uploadMediaFiles, payload);
 
                 that.setState({
@@ -161,24 +160,28 @@ class UploadMediaModal extends React.Component {
         let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = 'License information';
-            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><TextArea fluid ref="mediaAttribution" required/></div> : '';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><TextArea ref="mediaAttribution" required/></div> : '';
             content = <div>
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
               <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                 <div className="required field">
                   <label>Title:</label>
-                  <Input fluid defaultValue={this.state.files[0].name} ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} required/>
+                  <Input defaultValue={this.state.files[0].name} ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} required/>
                 </div>
                 <div className="required field">
                   <label>Description/Alt Text:</label>
-                  <Popup trigger={<input fluid ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} required/>} content='What does the picture mean?' position='top center'/>
+                  <Popup trigger={<input ref="mediaAltText" id="UploadMediaModal_input_mediaAltText" name="alt" onChange={this.handleChange.bind(this)} required/>} content='What does the picture mean?' position='top center'/>
                 </div>
                 <div className="required field">
                   <label>Choose a license:</label>
-                  <Dropdown fluid fluid selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" required/>
+                  <Dropdown selection options={[{text: 'CC0 Public Domain', value: 'CC0'},{text: 'CC-BY Creative Commons Attribution 4.0', value: 'CC BY 4.0'},{text: 'CC-BY-SA Creative Common Attribution Share-Alike 4.0', value: 'CC BY SA 4.0'}]} defaultValue='CC0' onChange={this.changeLicense.bind(this)} ref="mediaLicense" required/>
                 </div>
                 {licenseBoxes}
+                <div className="required field">
+                  <label>Copyright Holder:</label>
+                  <Popup trigger={<input ref="copyrightHolder" id="UploadMediaModal_input_copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required/>} content='Who is the creator or copyrights owner of this picture?' position='top center'/>
+                </div>
                 <div className="required field">
                   <div className="ui checkbox">
                     <input type="checkbox" required/>
