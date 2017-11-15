@@ -37,6 +37,7 @@ class PresentationRoomsHTMLLayout extends React.Component {
                 {/*TODO Following custom libs have been included due to the header bar (that is included but will be removed internally) --> Don't load the headerbar at all and remove the following two libs*/}
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
+                <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
                 {/* All external vendors bundle*/
