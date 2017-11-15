@@ -58,7 +58,10 @@ class TranslationPanel extends React.Component {
     }
 
     render() {
-        const deckLanguage = this.props.TranslationStore.currentLang.language;
+        let deckLanguage = '';
+        this.props.TranslationStore.currentLang ? deckLanguage = this.props.TranslationStore.currentLang.language : deckLanguage = 'Undefined';
+        //console.log(this.props.TranslationStore);
+
         let translations = [];
         let existing_codes = [];
         if (this.props.TranslationStore.translations){
@@ -91,16 +94,24 @@ class TranslationPanel extends React.Component {
         //
         // : '';
 
-        let currentLang = <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>;
+        let currentLang = deckLanguage ?
+            <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>
+            : <span>Undefined</span>;
+
 
         return(
 
-            <Dropdown item trigger={currentLang}>
-                <Dropdown.Menu>
-                { translations.map(this.renderAvailable, this) }
-                </Dropdown.Menu>
-            </Dropdown>
-
+            <span>
+                {translations.length ? (
+                    <Dropdown item trigger={currentLang}>
+                        <Dropdown.Menu>
+                        { translations.map(this.renderAvailable, this) }
+                        </Dropdown.Menu>
+                    </Dropdown>
+                ) : (
+                    <span>{currentLang}</span>
+                )}
+            </span>
         );
     }
 
