@@ -4,7 +4,7 @@ import ISO6391 from 'iso-639-1';
 import {NavLink, navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
 
-import { Dropdown, Menu, Flag, Button, Modal, Popup } from 'semantic-ui-react';
+import { Dropdown, Menu, Flag, Button, Modal, Popup , Header} from 'semantic-ui-react';
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
@@ -99,16 +99,17 @@ class TranslationPanel extends React.Component {
 
 
         let currentLang = deckLanguage ?
-            <span><i className='icon comments'/>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>
+            <span>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>
             : <span>English</span>;
 
 
 
         return(
-
             <span>
+            <b>Language: </b>
+
                 {translations.length ? (
-                    <Dropdown item trigger={currentLang}>
+                    <Dropdown inline item trigger={currentLang}>
                         <Dropdown.Menu>
                         { translations.map(this.renderAvailable, this) }
                         </Dropdown.Menu>

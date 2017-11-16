@@ -8,6 +8,7 @@ import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/Contribu
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
+import TranslationPanel from '../TranslationPanel/TranslationPanel';
 
 
 class InfoPanelInfoView extends React.Component {
@@ -94,6 +95,9 @@ class InfoPanelInfoView extends React.Component {
                     {titlediv}
                 <div className="ui attached segment">
                     <ContributorsPanel />
+                </div>
+                <div className="ui attached segment">
+                    <TranslationPanel />
                 </div>
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
