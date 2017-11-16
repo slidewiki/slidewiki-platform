@@ -11,6 +11,8 @@ import {Microservices} from '../../../configs/microservices';
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
+const MODI_LTI = 'ltilogin_modi';
+const NAME_LTI = 'ltilogin_data';
 
 class Integrations extends React.Component {
     constructor(props){

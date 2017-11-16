@@ -6,6 +6,8 @@ import userSignIn from '../../actions/user/userSignIn';
 import userSignOut from '../../actions/user/userSignOut';
 import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
+import userLTISignIn from '../../actions/user/userLTISignIn';
+import newLTIData from '../../actions/user/registration/newLTIData';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
 import {hashPassword} from '../../configs/general';
@@ -23,6 +25,9 @@ const modalStyle = {
 };
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
+
+const MODI_LTI = 'ltilogin_modi';
+const NAME_LTI = 'ltilogin_data';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -220,12 +225,48 @@ class LoginModal extends React.Component {
         win.focus();
     }
 
+
+    ltiLogin(provider, e) {
+        e.preventDefault();
+        console.log('Hit on LTI login icon', provider);
+        //this.provider = provider;
+
+        $('.ui.login.modal').modal('toggle');
+
+        //prepare localStorage
+        localStorage.setItem(MODI_LTI, 'login');
+        localStorage.setItem(NAME, '');
+
+        //observe storage
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+        //create new window
+        let url = Microservices.user.uri + '/connect/' + provider;
+
+        let width = screen.width*0.75, height = screen.height*0.75;
+        if (width < 600)
+            width = screen.width;
+        if (height < 500)
+            height = screen.height;
+        let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+        let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
+        win.focus();
+    }
+
+
     handleStorageEvent(e) {
         console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
 
-        if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
-            return;
+        //if (e.key !== NAME || localStorage.getItem(MODI) !== 'login')
+        //    return;
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'login'
+        || e.key !== NAME_LTI || localStorage.getItem(MODI_LTI) !== 'login'
+      )
+                return;
+
 
         let data = {};
         try {
@@ -237,6 +278,7 @@ class LoginModal extends React.Component {
         finally {
             //delete data
             localStorage.setItem(NAME, '');
+            localStorage.setItem(NAME_LTI, '');
         }
 
         //add language before send to service

@@ -33,6 +33,7 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.errorMessage = '';
         this.socialLoginError = false;
+        this.ltiLoginError = false;
         this.removeProviderError = false;
         this.addProviderError = false;
         this.addProviderAlreadyUsedError = false;
@@ -81,6 +82,7 @@ class UserProfileStore extends BaseStore {
         this.userpicture = undefined;
         this.userDecks = [];
         this.socialLoginError = false;
+        this.ltiLoginError = false;
         this.removeProviderError = false;
         this.addProviderError = false;
         this.addProviderAlreadyUsedError = false;
@@ -112,6 +114,7 @@ class UserProfileStore extends BaseStore {
             showLoginModal: this.showLoginModal,
             lastUser: this.lastUser,
             socialLoginError: this.socialLoginError,
+            ltiLoginError: this.ltiLoginError,
             removeProviderError: this.removeProviderError,
             addProviderError: this.addProviderError,
             providerAction: this.providerAction,
@@ -144,6 +147,7 @@ class UserProfileStore extends BaseStore {
         this.showLoginModal = state.showLoginModal;
         this.lastUser = state.lastUser;
         this.socialLoginError = state.socialLoginError;
+        this.ltiLoginError = state.ltiLoginError;
         this.removeProviderError = state.removeProviderError;
         this.addProviderError = state.addProviderError;
         this.providerAction = state.providerAction;
@@ -248,11 +252,24 @@ class UserProfileStore extends BaseStore {
         this.socialLoginError = false;
     }
 
+    handleLTISignInError(err) {
+        this.ltiLoginError = true;
+        this.emitChange();
+        this.ltiLoginError = false;
+    }
+
     socialRegister(res) {
         this.userpicture = res.picture;
 
         this.handleSignInSuccess(res);
     }
+
+    ltiRegister(res) {
+        this.userpicture = res.picture;
+
+        this.handleSignInSuccess(res);
+    }
+
 
     removeProviderSuccess(provider) {
         console.log('UserProfileStore removeProviderSuccess()', provider, this.user.providers);
@@ -381,9 +398,12 @@ UserProfileStore.handlers = {
     'SIGNIN_SUCCESS': 'handleSignInSuccess',
     'SIGNIN_FAILURE': 'handleSignInError',
     'SOCIAL_SIGNIN_FAILURE': 'handleSocialSignInError',
+    'LTI_SIGNIN_FAILURE': 'handleLTISignInError',
     'USER_SIGNOUT': 'handleSignOut',
     //social
     'SOCIAL_SIGNIN_SUCCESS': 'socialRegister',
+    //LTI
+    'LTI_SIGNIN_SUCCESS': 'ltiRegister',
     'REMOVE_PROVIDER_SUCCESS': 'removeProviderSuccess',
     'REMOVE_PROVIDER_FAILURE': 'removeProviderFailure',
     'ADD_PROVIDER_SUCCESS': 'addProviderSucess',

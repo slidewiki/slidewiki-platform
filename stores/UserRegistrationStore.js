@@ -12,6 +12,11 @@ class UserRegistrationStore extends BaseStore {
         this.socialCredentialsTaken = false;
         this.socialCredentialsTakenByDeactivatedAccount = false;
         this.socialuserdata = {};
+
+        this.ltiError = false;
+        this.ltiCredentialsTaken = false;
+        this.ltiCredentialsTakenByDeactivatedAccount = false;
+        this.ltiuserdata = {};
     }
 
     handleCreateUserSuccess(res) {
@@ -35,6 +40,16 @@ class UserRegistrationStore extends BaseStore {
         this.socialCredentialsTakenByDeactivatedAccount = false;
         this.emitChange();
     }
+
+    handleLTICreateUserSuccess(res) {
+        // console.log('UserRegistrationStore handleLTICreateUserSuccess:', res);
+        this.ltiError = false;
+        this.ltiCredentialsTaken = false;
+        this.ltiCredentialsTakenByDeactivatedAccount = false;
+        this.emitChange();
+    }
+
+
 
     handleResetUserRegistrationStatus() {
         this.registrationStatus = 'guest';
@@ -62,6 +77,19 @@ class UserRegistrationStore extends BaseStore {
         }
         else
             this.socialError = true;
+        this.emitChange();
+    }
+
+    handleLTIUserRegistrationError(err) {
+        // console.log('UserRegistrationStore handleLTIUserRegistrationError()', err, '___', err.message, '___', err.statusCode, '___', err.toString());
+        if (err.statusCode.toString() === '409') {
+            this.ltiCredentialsTaken = true;
+        }
+        else if (err.statusCode.toString() === '423') {
+            this.ltiCredentialsTakenByDeactivatedAccount = true;
+        }
+        else
+            this.ltiError = true;
         this.emitChange();
     }
 
@@ -120,6 +148,16 @@ class UserRegistrationStore extends BaseStore {
         this.emitChange();
     }
 
+    newLTIData(data) {
+          console.log('UserRegistrationStore newLTIData', data);
+
+          this.ltiuserdata = data || {};
+          this.ltiError = false;
+          this.ltiCredentialsTaken = false;
+          this.ltiCredentialsTakenByDeactivatedAccount = false;
+          this.emitChange();
+      }
+
     getState() {
         return {
             registrationStatus: this.registrationStatus,
@@ -129,7 +167,11 @@ class UserRegistrationStore extends BaseStore {
             socialError: this.socialError,
             socialCredentialsTaken: this.socialCredentialsTaken,
             socialuserdata: this.socialuserdata,
-            socialCredentialsTakenByDeactivatedAccount: this.socialCredentialsTakenByDeactivatedAccount
+            socialCredentialsTakenByDeactivatedAccount: this.socialCredentialsTakenByDeactivatedAccount,
+            ltiError: this.ltiError,
+            ltiCredentialsTaken: this.ltiCredentialsTaken,
+            ltiuserdata: this.ltiuserdata,
+            ltiCredentialsTakenByDeactivatedAccount: this.ltiCredentialsTakenByDeactivatedAccount
         };
     }
 
@@ -146,6 +188,11 @@ class UserRegistrationStore extends BaseStore {
         this.socialCredentialsTaken = state.socialCredentialsTaken;
         this.socialuserdata = state.socialuserdata;
         this.socialCredentialsTakenByDeactivatedAccount = state.socialCredentialsTakenByDeactivatedAccount;
+
+        this.ltiError = state.ltiError;
+        this.ltiCredentialsTaken = state.ltiCredentialsTaken;
+        this.ltiuserdata = state.ltiuserdata;
+        this.ltiCredentialsTakenByDeactivatedAccount = state.ltiCredentialsTakenByDeactivatedAccount;
     }
 }
 
@@ -156,10 +203,13 @@ UserRegistrationStore.handlers = {
     'CHECK_EMAIL_SUCCESS': 'handleEmailChecked',
     'CHECK_USERNAME_SUCCESS': 'handleUsernameChecked',
     'SOCIAL_CREATE_USER_SUCCESS': 'handleSocialCreateUserSuccess',
+    'LTI_CREATE_USER_SUCCESS': 'handleLTICreateUserSuccess',
     //error handling
     'CREATE_USER_FAILURE': 'handleUserRegistrationError',
     'SOCIAL_CREATE_USER_FAILURE': 'handleSocialUserRegistrationError',
+    'LTI_CREATE_USER_FAILURE': 'handleLTIUserRegistrationError',
 
+    'NEW_LTI_DATA': 'newLTIData',
     'NEW_SOCIAL_DATA': 'newSocialData'
 };
 

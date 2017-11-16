@@ -1,3 +1,4 @@
+'use strict';
 let webpack = require('webpack');
 let path = require('path');
 let StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;

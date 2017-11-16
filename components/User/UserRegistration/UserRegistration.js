@@ -10,14 +10,18 @@ import resetUserRegistrationStatus from '../../../actions/user/registration/rese
 import checkEmail from '../../../actions/user/registration/checkEmail';
 import checkUsername from '../../../actions/user/registration/checkUsername';
 import newSocialData from '../../../actions/user/registration/newSocialData';
+import newLTIData from '../../../actions/user/registration/newLTIData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
+import UserRegistrationLTI from './UserRegistrationLTI';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
 import common from '../../../common';
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
+const MODI_LTI = 'ltilogin_modi';
+const NAME_LTI = 'ltilogin_data';
 
 class UserRegistration extends React.Component {
     constructor(props) {
@@ -195,6 +199,72 @@ class UserRegistration extends React.Component {
             if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
                 this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
         }
+
+
+
+
+        // console.log('UserRegistration componentWillReceiveProps()', this.props.UserRegistrationStore.ltiuserdata, nextProps.UserRegistrationStore.ltiuserdata);
+        if (localStorage.getItem(MODI_LTI) === 'login_failed' && nextProps.UserRegistrationStore.ltiuserdata.email === undefined && nextProps.UserRegistrationStore.ltiuserdata.username === undefined) {
+            this.setUserdata({}, false);
+            return;
+        }
+        if (nextProps.UserRegistrationStore.ltiCredentialsTaken && !this.props.UserRegistrationStore.ltiCredentialsTaken) {
+            $(ReactDOM.findDOMNode(this.refs.modal_lti.refs.wrappedElement.refs.LTIRegistration_Modal)).modal('hide');
+            window.scrollTo(0,0);
+
+            swal({
+                title: 'Information',
+                text: 'Signing up with this provider failed because you are already registered at SlideWiki with this provider. Either sign in or sign up with another provider if you wish to create a new account.',
+                type: 'question',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                confirmButtonClass: 'positive ui button',
+                cancelButtonText: 'Register',
+                cancelButtonClass: 'ui red button',
+                buttonsStyling: false
+            })
+                .then((dismiss) => {
+                    if (dismiss === 'cancel')
+                        return true;
+
+                    this.context.executeAction(navigateAction, {
+                        url: '/'
+                    });
+
+                    $('.ui.login.modal').modal('show');
+
+                    return true;
+                })
+                .catch(() => {
+                    return true;
+                });
+        }
+        else if (nextProps.UserRegistrationStore.ltiCredentialsTakenByDeactivatedAccount && !this.props.UserRegistrationStore.ltiCredentialsTakenByDeactivatedAccount) {
+            $(ReactDOM.findDOMNode(this.refs.modal_lti.refs.wrappedElement.refs.LTIRegistration_Modal)).modal('hide');
+            window.scrollTo(0,0);
+
+            swal({
+                title: 'Information',
+                text: 'These provider credentials are already used by a deactivated user. To reactivate a specific user please contact us directly.',
+                type: 'error',
+                showCloseButton: true,
+                showCancelButton: false,
+                confirmButtonText: 'OK',
+                confirmButtonClass: 'ui button',
+                buttonsStyling: false
+            })
+                .then((dismiss) => {
+                    return true;
+                })
+                .catch(() => {
+                    return true;
+                });
+        }
+        else if (nextProps.UserRegistrationStore.ltiuserdata && localStorage.getItem(MODI_LTI) === 'login_failed_register_now') {
+            if ((nextProps.UserRegistrationStore.ltiuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.ltiuserdata.email && !(this.refs.email.value)))
+                this.setUserdata(nextProps.UserRegistrationStore.ltiuserdata);
+        }
     }
 
     componentDidUpdate() {
@@ -253,6 +323,7 @@ class UserRegistration extends React.Component {
         // let username = $('#firstname').val().charAt(0).toLowerCase() + $('#lastname').val().toLowerCase();
 
         localStorage.setItem(MODI, '');
+        localStorage.setItem(MODI_LTI, '');
 
         let data = {};
         try {
@@ -323,6 +394,39 @@ class UserRegistration extends React.Component {
         let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
         win.focus();
     }
+
+
+
+        ltiRegister(provider, e) {
+            e.preventDefault();
+            // console.log('Hit on social register icon', provider);
+
+            //delete old data
+            this.context.executeAction(newLTIData, {});
+
+            //prepare localStorage
+            localStorage.setItem(MODI_LTI, 'register');
+            localStorage.setItem(NAME_LTI, '');
+
+            this.provider = provider;
+
+            //observe storage
+            $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+            //create new tab
+            let url = Microservices.user.uri + '/connect/' + provider;
+
+            let width = screen.width*0.75, height = screen.height*0.75;
+            if (width < 600)
+                width = screen.width;
+            if (height < 500)
+                height = screen.height;
+            let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+            let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
+            win.focus();
+        }
+
 
     handleStorageEvent(e) {
         // console.log('storage event', e.key, localStorage.getItem(e.key));

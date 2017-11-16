@@ -506,6 +506,21 @@ export default {
             done();
         }
     },
+
+    ltiLogin: {
+        path: '/ltiLogin',
+        method: 'get',
+        page: 'ltiLogin',
+        title: 'SlideWiki -- Login',
+        handler: require('../components/Login/LTI'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Login'
+            });
+            done();
+        }
+    },
+
     deckfamily: {
         path: '/deckfamily/:tag',
         method: 'get',
