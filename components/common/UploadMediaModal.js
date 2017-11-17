@@ -17,7 +17,7 @@ class UploadMediaModal extends React.Component {
             files: [],
             license: false,
             licenseValue: 'CC0',
-            mediaAttribution: '',
+            copyrightHolder: '',
             alt: '',
             title: '',
             isLoading: false
@@ -51,7 +51,7 @@ class UploadMediaModal extends React.Component {
             files: [],
             license: false,
             licenseValue: 'CC0',
-            mediaAttribution: '',
+            copyrightHolder: '',
             alt: '',
             title: '',
             isLoading: false
@@ -86,7 +86,8 @@ class UploadMediaModal extends React.Component {
     submitPressed(e) {
         e.preventDefault();
         let that = this;
-        if(this.state.copyrightHolder === undefined){this.state.copyrightHolder = this.context.getUser().username;}
+        if(this.state.copyrightHolder === undefined || this.state.copyrightHolder === ''){this.state.copyrightHolder = this.props.userFullName;}
+        console.log('copyrighthodler: ' + this.state.copyrightHolder);
         let payload = {
             type: this.state.files[0].type,
             license: this.state.licenseValue,
@@ -165,7 +166,7 @@ class UploadMediaModal extends React.Component {
         let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = 'License information';
-            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><Input  ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required/></div> : '';
+            licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label>Image created by/ attributed to:</label><Input ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
               <Divider/>
