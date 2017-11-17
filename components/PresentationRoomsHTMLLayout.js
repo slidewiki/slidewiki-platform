@@ -38,6 +38,8 @@ class PresentationRoomsHTMLLayout extends React.Component {
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
+                <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
+                <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js" defer></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
                 {/* All external vendors bundle*/
