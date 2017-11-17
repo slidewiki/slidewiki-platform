@@ -17,7 +17,7 @@
   },
   "bugs": "https://github.com/slidewiki/slidewiki-platform/issues",
   "engines": {
-    "node": "7.3.0"
+    "node": ">=6.11.0"
   },
   "main": "start.js",
   "scripts": {
