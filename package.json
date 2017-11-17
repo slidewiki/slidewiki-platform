@@ -40,7 +40,6 @@
     "validate": "npm ls",
     "pull": "git pull --recurse-submodules",
     "precommit": "npm run lint",
-    "prepush": "npm run lint",
     "prelangs": "webpack --config ./webpack/langs.config.js && set NODE_ENV=development && set BABEL_ENV=development",
     "windows": "webpack --config ./webpack/prod.config.js && set NODE_ENV=production && npm start"
   },
