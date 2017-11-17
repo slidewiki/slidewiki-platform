@@ -159,7 +159,7 @@
     "eslint-plugin-react": "^6.10.0",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^1.1.5",
-    "husky": "^0.13.2",
+    "husky": "^0.14.3",
     "istanbul": "0.4.5",
     "jsdom": "^9.12.0",
     "json-loader": "^0.5.4",
