@@ -97,7 +97,6 @@
     "npm": "^5.5.1",
     "pre-commit": "^1.2.2",
     "react": "^15.4.2",
-    "react-async-script": "^0.7.0",
     "react-cookie": "1.0.4",
     "react-cookie-banner": "^0.0.18",
     "react-custom-scrollbars": "^4.0.2",
