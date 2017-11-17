@@ -1,18 +1,20 @@
 {
   "parser": "babel-eslint",
-  "extend": "eslint:recommended",
-  "plugins": [
-    "react"
-  ],
-  "ecmaFeatures": {
-        "blockBindings": true,
-        "arrowFunctions": true,
-        "defaultParams": true,
-        "forOf": true
+  "extends": "eslint:recommended",
+  "plugins": ["react"],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "blockBindings": true,
+      "arrowFunctions": true,
+      "defaultParams": true,
+      "forOf": true
+      }
     },
   "env": {
     "node": true,
-    "es6": true
+    "es6": true,
+    "mocha": true
   },
   "rules": {
     "no-console": 0,
@@ -23,9 +25,9 @@
     "quotes": [2, "single"],
     "linebreak-style": [2, "unix"],
     "prefer-arrow-callback": 2,
-    "dot-notation": [2, {"allowKeywords": true}],  //some libraries use keywords like catch or delete
+    "dot-notation": [2, {"allowKeywords": true}],
     "no-use-before-define": 0,
-    "no-unused-vars": 0, // see https://github.com/babel/babel-eslint/issues/21
+    "no-unused-vars": 0,
     "semi": [2, "always"],
     "strict": 0,
     "yoda": [2, "never"],"no-alert": 2,
