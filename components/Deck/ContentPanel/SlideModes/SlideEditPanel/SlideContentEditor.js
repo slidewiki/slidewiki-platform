@@ -34,8 +34,7 @@ class SlideContentEditor extends React.Component {
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
-        this.refs.template;
-        this.showTemplates = false;
+        //this.refs.template;
         this.menuFocus;
         this.previousCaretRange;
         this.CKeditorMode = 'advanced toolbar';
@@ -69,7 +68,7 @@ class SlideContentEditor extends React.Component {
 
     }
 
-    handleTemplatechange(){
+    handleTemplatechange(template){
         /*
         if (this.showTemplates === false){
             this.refs.template.showOptions();
@@ -77,7 +76,7 @@ class SlideContentEditor extends React.Component {
         }
         else{*/
         //let template = this.refs.template.getSelected();
-        let template = this.refs.template.value;
+        //let template = this.refs.template.value;
         if (template !== '')
         {
             //overwrite content with templates from
@@ -103,6 +102,7 @@ class SlideContentEditor extends React.Component {
     }
 
     applyTemplate(template){
+        //move to SlideEditPanel!!
         switch (template) {
             case '1':
                 //TODO replace with this.refs.inlineContent.innerHTML + cases below
@@ -605,7 +605,6 @@ class SlideContentEditor extends React.Component {
             //require('../../../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
           //  require('../../../../../node_modules/ckeditor/ckeditor.js');
         //}
-        $(this.refs.TemplateDropdown).dropdown();
 
         //TODO replace with context.getUser();
         const userId = this.props.UserProfileStore.userid;
@@ -1291,7 +1290,6 @@ class SlideContentEditor extends React.Component {
     }
 
     componentDidUpdate() {
-        $(this.refs.TemplateDropdown).dropdown();
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
             this.inputBoxButtonTitle = 'Add input box';
@@ -1300,6 +1298,14 @@ class SlideContentEditor extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps) {
+        //console.log('new props');
+        //console.log(nextProps);
+        if (nextProps.SlideEditStore.template !== '')
+        {
+            //console.log('test');
+            this.handleTemplatechange(nextProps.SlideEditStore.template);
+            nextProps.SlideEditStore.template = '';
+        }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
                 this.refs.uploadMediaModal.handleClose();
@@ -1609,71 +1615,6 @@ class SlideContentEditor extends React.Component {
             'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
-        const dropDownItemStyle = {
-            //minWidth: '100%',
-            minHeight: '100px',
-            //borderStyle: 'dashed dashed none dashed',
-            //borderColor: '#e7e7e7',
-        };
-        let templateOptions = <div className="menu">
-            <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
-                Title and bullets <br/>
-                <br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
-            </div>
-            <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
-                Empty document <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
-            </div>
-            <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
-            </div>
-            <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 2 columns <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
-            </div>
-            <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 2 columns <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
-            </div>
-            <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 1 column <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
-            </div>
-            <div className="item" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column image <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
-            </div>
-            <div className="item" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
-                Document with title <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
-            </div>
-            <div className="item" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                Open University Theme Title Page <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
-            </div>
-            <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                OEG Theme Title Page <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
-            </div>
-            <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
-                SlideWiki template <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
-            </div>
-            <div className="item" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
-            </div>
-            <div className="item" data-value="EKDDAeng" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
-            </div>
-            <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English no footer <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
-            </div>
-        </div>;
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
@@ -1772,12 +1713,6 @@ class SlideContentEditor extends React.Component {
                     <i className="plus square outline icon black large"></i>
                     <a style={buttonColorBlack}>{this.inputBoxButtonTitle}</a>
                 </button>
-                <div className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
-                    <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
-                    <i className="dropdown icon large"/>
-                    <div className="default text">Use template</div>
-                    {templateOptions}
-                </div>
                 <button tabIndex="0" ref="helpbutton" className="ui orange button " onClick={this.keymapInfoButton.bind(this)} onChange={this.keymapInfoButton.bind(this)}>
                     <i className="help circle icon black large"></i>
                     <a style={buttonColorBlack}>keys</a>
