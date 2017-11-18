@@ -10,6 +10,7 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
+        this.addInputBox = false;
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -43,6 +44,10 @@ class SlideEditStore extends BaseStore {
         this.template = payload.template;
         this.emitChange();
     }
+    handleAddInputBox(){
+        this.addInputBox = true;
+        this.emitChange();
+    }
     getState() {
         return {
             id: this.id,
@@ -50,7 +55,8 @@ class SlideEditStore extends BaseStore {
             content: this.content,
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
-            template: this.template
+            template: this.template,
+            addInputBox: this.addInputBox
         };
     }
     dehydrate() {
@@ -63,6 +69,7 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
         this.template = state.template;
+        this.addInputBox = state.addInputBox;
     }
 }
 
@@ -71,7 +78,8 @@ SlideEditStore.handlers = {
     'LOAD_SLIDE_EDIT_SUCCESS': 'updateContent',
     'SAVE_SLIDE_EDIT_SUCCESS': 'saveSlide',
     'ADD_SLIDE_EDIT_SUCCESS': 'addSlide',
-    'CHANGE_TEMPLATE': 'changeTemplate'
+    'CHANGE_TEMPLATE': 'changeTemplate',
+    'ADD_INPUT_BOX': 'handleAddInputBox'
 };
 
 export default SlideEditStore;

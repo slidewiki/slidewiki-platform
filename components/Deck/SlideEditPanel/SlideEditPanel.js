@@ -3,6 +3,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import changeTemplate from '../../../actions/slide/changeTemplate';
+import addInputBox from '../../../actions/slide/addInputBox';
 
 class SlideEditPanel extends React.Component {
 
@@ -21,6 +22,9 @@ class SlideEditPanel extends React.Component {
         this.context.executeAction(changeTemplate, {
             template: this.refs.template.value
         });
+    }
+    handleAddInputBox(){
+        this.context.executeAction(addInputBox, {});
     }
     componentDidMount() {
         $(this.refs.TemplateDropdown).dropdown();
@@ -120,7 +124,7 @@ class SlideEditPanel extends React.Component {
                   <div className="ui center aligned grid">
                       <div className="ui vertical labeled icon grey inverted massive  menu">
 
-                          <a className="item">
+                          <a className="item" role="button" tabIndex="1" onClick={this.handleAddInputBox.bind(this)}>
                               <i className="font icon"></i>Text
                           </a>
 
@@ -136,7 +140,7 @@ class SlideEditPanel extends React.Component {
                           <a className="item">
                               <i className="plus square outline icon"></i>Embed
                           </a>
-                          <a className="item" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)}>
+                          <a className="item" role="button" tabIndex="1" onClick={this.handleTemplateClick.bind(this)}>
                               <i className="grid layout icon"></i>Template
                           </a>
                           {templateDropDown}
