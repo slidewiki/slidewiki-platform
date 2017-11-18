@@ -27,16 +27,10 @@ class PresentationRoomsHTMLLayout extends React.Component {
             </head>
             <body>
                 <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
-                {/* Following are added only to support IE browser */}
-                <script src="/es5-shim/es5-shim.min.js"></script>
-                <script src="/es5-shim/es5-sham.min.js"></script>
-                <script src="/json3/lib/json3.min.js"></script>
-                <script src="/es6-shim/es6-shim.min.js"></script>
-                <script src="/es6-shim/es6-sham.min.js"></script>
-                {/* Above are added only to support IE browser */}
-                {/*TODO Following custom libs have been included due to the header bar (that is included but will be removed internally) --> Don't load the headerbar at all and remove the following two libs*/}
+                {/*TODO The following libs were included due to the header bar (that is included but is removed internally) --> don't load the headerbar at all and remove these two libs*/}
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
+                {/*Following libs need to be included*/}
                 <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js" defer></script>
