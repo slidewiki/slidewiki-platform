@@ -120,10 +120,6 @@ class SlideEditPanel extends React.Component {
                   <div className="ui center aligned grid">
                       <div className="ui vertical labeled icon grey inverted massive  menu">
 
-                          <a className="item" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)}>
-                              <i className="grid layout icon"></i>Template
-                          </a>
-                          {templateDropDown}
                           <a className="item">
                               <i className="font icon"></i>Text
                           </a>
@@ -140,6 +136,10 @@ class SlideEditPanel extends React.Component {
                           <a className="item">
                               <i className="plus square outline icon"></i>Embed
                           </a>
+                          <a className="item" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)}>
+                              <i className="grid layout icon"></i>Template
+                          </a>
+                          {templateDropDown}
                           <div className="ui divider"></div>
                           <a className="item">
                               <i className="code icon"></i>HTML editor
