@@ -201,6 +201,13 @@ class UploadMediaModal extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
+        /*trigger={
+                <Button className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
+                  <i className="outline upload icon black"></i>
+                  <a style={buttonColorBlack}>Add Image</a>
+                </Button>
+               }
+        */
 
         return (
           <Modal trigger={

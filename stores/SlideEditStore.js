@@ -10,7 +10,8 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
-        this.addInputBox = false;
+        this.addInputBox = 'false';
+        this.uploadMediaClick = 'false';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -43,9 +44,19 @@ class SlideEditStore extends BaseStore {
     changeTemplate(payload){
         this.template = payload.template;
         this.emitChange();
+        this.template = '';
+        this.emitChange();
     }
     handleAddInputBox(){
-        this.addInputBox = true;
+        this.addInputBox = 'true';
+        this.emitChange();
+        this.addInputBox = 'false';
+        this.emitChange();
+    }
+    handleUploadMedia(){
+        this.uploadMediaClick = 'true';
+        this.emitChange();
+        this.uploadMediaClick = 'false';
         this.emitChange();
     }
     getState() {
@@ -56,7 +67,8 @@ class SlideEditStore extends BaseStore {
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
             template: this.template,
-            addInputBox: this.addInputBox
+            addInputBox: this.addInputBox,
+            uploadMediaClick: this.uploadMediaClick
         };
     }
     dehydrate() {
@@ -70,6 +82,7 @@ class SlideEditStore extends BaseStore {
         this.scaleratio = state.scaleratio;
         this.template = state.template;
         this.addInputBox = state.addInputBox;
+        this.uploadMediaClick = state.uploadMediaClick;
     }
 }
 
@@ -79,7 +92,8 @@ SlideEditStore.handlers = {
     'SAVE_SLIDE_EDIT_SUCCESS': 'saveSlide',
     'ADD_SLIDE_EDIT_SUCCESS': 'addSlide',
     'CHANGE_TEMPLATE': 'changeTemplate',
-    'ADD_INPUT_BOX': 'handleAddInputBox'
+    'ADD_INPUT_BOX': 'handleAddInputBox',
+    'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
 };
 
 export default SlideEditStore;

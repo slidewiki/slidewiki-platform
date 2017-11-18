@@ -574,7 +574,7 @@ class SlideContentEditor extends React.Component {
     }
     getAbsoluteDiv(zindex){
         //return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid" style="text-align: center;"><span class="text-block h-mid" style="color: #000; font-size: 44pt; font-family: Calibri; font-weight: initial; font-style: normal; ">New content</span></div></div>';
-        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+';"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
+        return '<div style="position: absolute; top: 50px; left: 100px; width: 400px; height: 200px; z-index: '+zindex+'; box-shadow : 0 0 15px 5px rgba(0, 150, 253, 1);"><div class="h-mid"><span class="text-block"><p>New content</p></span></div></div>';
     }
     componentDidMount() {
         //todo: do testing and if it works remove these libs from default layout
@@ -1267,18 +1267,26 @@ class SlideContentEditor extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         //console.log('new props');
-        //console.log(nextProps);
-        if (nextProps.SlideEditStore.template !== '')
+        console.log(nextProps.SlideEditStore.addInputBox);
+        console.log(nextProps.SlideEditStore.uploadMediaClick);
+        console.log(nextProps.SlideEditStore.template);
+        if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
-            //console.log('test');
-            this.handleTemplatechange(nextProps.SlideEditStore.template);
-            nextProps.SlideEditStore.template = '';
-        }
-        if (nextProps.SlideEditStore.addInputBox === true)
-        {
-            //console.log('test');
             this.addAbsoluteDiv();
-            nextProps.SlideEditStore.addInputBox = false;
+            //nextProps.SlideEditStore.addInputBox = 'false';
+            //this.props.SlideEditStore.addInputBox = 'false';
+        }
+        if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
+        {
+            this.refs.uploadMediaModal.handleOpen();
+            //nextProps.SlideEditStore.uploadMediaClick = 'false';
+            //this.props.SlideEditStore.uploadMediaClick = 'false';
+        }
+        if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
+        {
+            this.handleTemplatechange(nextProps.SlideEditStore.template);
+            //this.props.SlideEditStore.template = '';
+            //nextProps.SlideEditStore.template = '';
         }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
@@ -1287,7 +1295,7 @@ class SlideContentEditor extends React.Component {
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)
                 {
-                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                     this.uniqueIDAllElements();
                     this.refreshCKeditor();
                     this.resize();
@@ -1522,7 +1530,7 @@ class SlideContentEditor extends React.Component {
             //$('.pptx2html').animate({
             //    transform: 'scale(2)'
             //});
-            console.log('scale with ratio: ' + this.scaleratio);
+            //console.log('scale with ratio: ' + this.scaleratio);
 
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
             this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';

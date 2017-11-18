@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import addInputBox from '../../../actions/slide/addInputBox';
+import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 
 class SlideEditPanel extends React.Component {
 
@@ -25,6 +26,9 @@ class SlideEditPanel extends React.Component {
     }
     handleAddInputBox(){
         this.context.executeAction(addInputBox, {});
+    }
+    handleUploadMediaClick(){
+        this.context.executeAction(uploadMediaClick, {});
     }
     componentDidMount() {
         $(this.refs.TemplateDropdown).dropdown();
@@ -127,8 +131,7 @@ class SlideEditPanel extends React.Component {
                           <a className="item" role="button" tabIndex="1" onClick={this.handleAddInputBox.bind(this)}>
                               <i className="font icon"></i>Text
                           </a>
-
-                          <a className="item">
+                          <a className="item" role="button" tabIndex="1" onClick={this.handleUploadMediaClick.bind(this)}>
                               <i className="photo icon"></i>Image
                           </a>
                           <a className="item">
