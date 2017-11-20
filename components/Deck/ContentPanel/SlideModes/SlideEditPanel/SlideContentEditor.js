@@ -656,7 +656,15 @@ class SlideContentEditor extends React.Component {
         }); //leave all buttons
         //this.currentcontent = this.props.content;
 
+        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+            return false;
+        });
+
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+            //document.body.scrollTop = document.documentElement.scrollTop = 0;
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             this.resize();
             this.uniqueIDAllElements();
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
