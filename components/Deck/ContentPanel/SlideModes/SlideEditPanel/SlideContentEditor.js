@@ -1286,14 +1286,30 @@ class SlideContentEditor extends React.Component {
         {
             this.refs.uploadMediaModal.handleOpen();
         }
-        if (nextProps.SlideEditStore.uploadVideoClick !== '' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
+        if (nextProps.SlideEditStore.uploadVideoClick === 'true' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
         {
-            //console.log('video upload');
-            //$('.cke_button__youtube_icon').click();
-            $('.cke_button__youtube_icon').focus();
-            //CKEDITOR.instances.inlineContent.callFunction(91,$('.cke_button__youtube_icon'));
-            //CKEDITOR.instances.inlineContent.callFunction(92,$('.cke_button__youtube_icon'));
-            //CKEDITOR.instances.inlineContent.execCommand('youtube');
+            $('.pptx2html').append('<div id="10000" style="width: 300px; height: 200px; position: absolute; top: 100px; left: 100px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+            //this.refreshCKeditor();
+            //this.resize();
+            //this.forceUpdate();
+            //https://www.youtube.com/watch?v=08C-u8U6rXM
+
+            $('#10000').focus();
+            this.placeCaretAtStart(10000);
+            this.resizeDrag();
+            this.uniqueIDAllElements();
+            CKEDITOR.instances.inlineContent.execCommand('youtube');
+
+            $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in video dialog button
+                console.log('====ckeditor save button ok==== - refresh drag and menus');
+                //this.addBorders();
+                setTimeout(() => {
+                    this.resizeDrag();
+                    this.emitChange();
+                    //this.forceUpdate();
+                }, 500);
+            });
+
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {
@@ -1306,7 +1322,7 @@ class SlideContentEditor extends React.Component {
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)
                 {
-                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                     this.uniqueIDAllElements();
                     this.refreshCKeditor();
                     this.resize();
