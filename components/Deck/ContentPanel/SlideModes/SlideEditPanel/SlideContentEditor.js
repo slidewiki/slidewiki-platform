@@ -1267,26 +1267,29 @@ class SlideContentEditor extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         //console.log('new props');
-        console.log(nextProps.SlideEditStore.addInputBox);
-        console.log(nextProps.SlideEditStore.uploadMediaClick);
-        console.log(nextProps.SlideEditStore.template);
+        //console.log(nextProps.SlideEditStore.addInputBox);
+        //console.log(nextProps.SlideEditStore.uploadMediaClick);
+        //console.log(nextProps.SlideEditStore.template);
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
             this.addAbsoluteDiv();
-            //nextProps.SlideEditStore.addInputBox = 'false';
-            //this.props.SlideEditStore.addInputBox = 'false';
         }
         if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
         {
             this.refs.uploadMediaModal.handleOpen();
-            //nextProps.SlideEditStore.uploadMediaClick = 'false';
-            //this.props.SlideEditStore.uploadMediaClick = 'false';
+        }
+        if (nextProps.SlideEditStore.uploadVideoClick !== '' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
+        {
+            //console.log('video upload');
+            //$('.cke_button__youtube_icon').click();
+            $('.cke_button__youtube_icon').focus();
+            //CKEDITOR.instances.inlineContent.callFunction(91,$('.cke_button__youtube_icon'));
+            //CKEDITOR.instances.inlineContent.callFunction(92,$('.cke_button__youtube_icon'));
+            //CKEDITOR.instances.inlineContent.execCommand('youtube');
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {
             this.handleTemplatechange(nextProps.SlideEditStore.template);
-            //this.props.SlideEditStore.template = '';
-            //nextProps.SlideEditStore.template = '';
         }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
