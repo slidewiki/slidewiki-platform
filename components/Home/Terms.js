@@ -10,8 +10,7 @@ class terms extends React.Component {
                 <p>Disclaimer: This summary is not a part of the Terms of Use and is not a legal document. It is simply a handy reference for understanding the full terms. Think of it as the user-friendly interface to the legal language of our Terms of Use.</p>
                 <h2 className="ui header">Part of our mission is to:</h2>
                 <ul className="ui list">
-                    <li> <b>Empower and engage</b> people around the world to collect and develop educational content and either publish it under a free license or dedicate it to the public domain.
-                    </li>
+                    <li> <b>Empower and engage</b> people around the world to collect and develop educational content and either publish it under a free license or dedicate it to the public domain.</li>
                     <li><b>Disseminate</b>  this content effectively and globally, free of charge</li>
     
                 </ul>
