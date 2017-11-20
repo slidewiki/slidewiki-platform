@@ -1294,13 +1294,13 @@ class SlideContentEditor extends React.Component {
             //this.forceUpdate();
             //https://www.youtube.com/watch?v=08C-u8U6rXM
 
-            $('#10000').focus();
-            this.placeCaretAtStart(10000);
-            this.resizeDrag();
-            this.uniqueIDAllElements();
+            //$('#10000').focus();
+            //this.placeCaretAtStart(10000);
+            //this.resizeDrag();
+            //this.uniqueIDAllElements();
             CKEDITOR.instances.inlineContent.execCommand('youtube');
 
-            $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in video dialog button
+            /*$('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in video dialog button
                 console.log('====ckeditor save button ok==== - refresh drag and menus');
                 //this.addBorders();
                 setTimeout(() => {
@@ -1308,7 +1308,7 @@ class SlideContentEditor extends React.Component {
                     this.emitChange();
                     //this.forceUpdate();
                 }, 500);
-            });
+            });*/
 
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
