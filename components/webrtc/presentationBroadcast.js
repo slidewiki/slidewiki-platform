@@ -37,6 +37,8 @@ class presentationBroadcast extends React.Component {
         this.lastRemoteSlide = this.iframesrc + '';
         this.currentSlide = this.iframesrc + '';
         this.peerNumber = -1;//used for peernames, will be incremented on each new peer
+        this.mediaRecorder = undefined;
+        this.blobs = '';
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -309,6 +311,17 @@ class presentationBroadcast extends React.Component {
                 }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
             }
             that.localStream = stream;
+            console.log('Initializing recorder');
+            that.mediaRecorder = new MediaStreamRecorder(stream);
+            console.log('Setting Mimetype');
+            that.mediaRecorder.mimeType = 'audio/ogg';
+            console.log('starting recorder');
+            that.mediaRecorder.start(1000);
+            console.log('started recording');
+            that.mediaRecorder.ondataavailable = (blob) => {
+                console.log('Recorded blob');
+                that.blobs += blob;
+            };
 
             function sendASAP() {
                 if (that.presenterID) //wait for presenterID before sending the message
@@ -334,7 +347,10 @@ class presentationBroadcast extends React.Component {
         }
 
         window.onbeforeunload = function() {
+            that.mediaRecorder.stop();
+            that.mediaRecorder.save(that.blobs, 'file.ogg');
             hangup();
+            return 'Are you sure to do this?';
         };
 
         //******** WebRTC specific methods ********
