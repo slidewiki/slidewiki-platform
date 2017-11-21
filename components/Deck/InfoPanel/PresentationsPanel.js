@@ -65,6 +65,7 @@ class PresentationsPanel extends React.Component {
                         </div>
                         <div className="column">Create a presentation room to broadcast your slideshow and invite participants</div>
                     </div>
+                    <div className="ui divider"></div>
                     <div ref="presentationList">
                         {(this.props.ActivityFeedStore.presentations.length < 1)
                             ?
