@@ -39,7 +39,7 @@ class terms extends React.Component {
                 <h2 className="ui header">With the understanding that</h2>
 
                 <ul className="ui list">
-                    <li>This service may contain <b>translations</b> powered by thir party sercies. Selecting to use the translate service will result in data being sent to third-party services. We disclaims all warranties related to the translations, expressed or implied, including any warranties of accuracy, reliability, and any implied warranties of merchantability, fitness for a particular purpose and noninfringement.
+                    <li>This service may contain <b>translations</b> powered by thir party services. Selecting to use the translate service will result in data being sent to third-party services. We disclaims all warranties related to the translations, expressed or implied, including any warranties of accuracy, reliability, and any implied warranties of merchantability, fitness for a particular purpose and noninfringement.
                     </li>
                     <li> <b>You license freely your contributions</b> &#8211; you generally must license your contributions and edits to our sites or projects under a free and open license (unless your contribution is in the public domain).
                     </li>
