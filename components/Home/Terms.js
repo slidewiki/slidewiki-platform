@@ -83,7 +83,7 @@ class terms extends React.Component {
                 <h3 className="ui header">Engaging in Disruptive and Illegal Misuse of Facilities</h3>
                 <ul className="ui list">
                     <li>Posting or distributing content that contains any viruses, malware, worms, Trojan horses, malicious code, or other device that could harm our technical infrastructure or system or that of our users;</li>
-                    <li>Engaging in automated uses of the site that are abusive or disruptive of the services and have not been approved by the Wikimedia community;</li>
+                    <li>Engaging in automated uses of the site that are abusive or disruptive of the services and have not been approved by the SlideWiki project community;</li>
                     <li>Disrupting the services by placing an undue burden on a Project website or the networks or servers connected with a Project website;</li>
                     <li>Disrupting the services by inundating any of the Project websites with communications or other traffic that suggests no serious intent to use the Project website for its stated purpose;</li>
                     <li>Knowingly accessing, tampering with, or using any of our non-public areas in our computer systems without authorization; and</li>
