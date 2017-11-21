@@ -12,6 +12,7 @@ import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
+import translateSlideRevision from '../../../../actions/translateSlideRevision';
 
 
 
@@ -39,6 +40,10 @@ class ContentActionsHeader extends React.Component {
                 url: nodeURL
             });
         }
+    }
+
+    handleSlideTranslation(language, selector){
+        this.context.executeAction(translateSlideRevision, {language: language, selector: selector});
     }
     render() {
         const contentDetails = this.props.ContentStore;
@@ -131,6 +136,10 @@ class ContentActionsHeader extends React.Component {
                               </a>
                           </button>
                           */}
+
+                          <button className="item ui small basic right attached button" onClick={this.handleSlideTranslation.bind(this, 'de_DE', selector)}>
+                              Translate to the best language ever
+                          </button>
                       </div>
                   </div>
                   }
