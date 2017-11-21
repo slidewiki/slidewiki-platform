@@ -175,9 +175,7 @@ class ContentActionsFooter extends React.Component {
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
-                            <button onClick={this.handlePresentationRoomClick.bind(this)} className="ui button" type="button" aria-label="Presentation Room Mode" data-tooltip="(Experimental!) Create a room and invite other via a link to your presentation">
-                                <i className="record large icon"></i>
-                            </button>
+                            
                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
                             <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
                                 <i className="print large icon"></i>

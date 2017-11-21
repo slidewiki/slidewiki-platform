@@ -38,8 +38,14 @@ class PresentationsPanel extends React.Component {
 
         return (
             <div ref="presentationPanel">
-                <h5 className="ui small header" tabIndex="0">Presentations Feed
+                <h5 className="ui small header" tabIndex="0">Presentations Feed (beta)
+                    <i className="yellow warning sign icon"></i>
                 </h5>
+                <div className="ui basic semgment">
+                    <button onClick={this.handlePresentationRoomClick.bind(this)} className="ui button" type="button" aria-label="Presentation Room Mode" data-tooltip="(Beta!) Create a room and invite other via a link to your presentation">
+                        <i className="record large icon"></i>
+                    </button>
+                </div>
                 <div className="ui basic segment" style={panelDIVStyles}>
                   <div ref="presentationList">
                       {(this.props.ActivityFeedStore.presentations.length < 1)
