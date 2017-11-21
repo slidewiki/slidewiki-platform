@@ -656,7 +656,15 @@ class SlideContentEditor extends React.Component {
         }); //leave all buttons
         //this.currentcontent = this.props.content;
 
+        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+            return false;
+        });
+
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+            //document.body.scrollTop = document.documentElement.scrollTop = 0;
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             this.resize();
             this.uniqueIDAllElements();
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
@@ -1307,7 +1315,7 @@ class SlideContentEditor extends React.Component {
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)
                 {
-                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                     this.uniqueIDAllElements();
                     this.refreshCKeditor();
                     this.resize();
@@ -1800,7 +1808,7 @@ class SlideContentEditor extends React.Component {
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
                 */}
-                <UploadMediaModal ref="uploadMediaModal"/>
+                <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>

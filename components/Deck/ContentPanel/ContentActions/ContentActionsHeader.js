@@ -83,7 +83,24 @@ class ContentActionsHeader extends React.Component {
                     </div>
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
-                    <div className="right menu">
+                 <div className="left menu">
+                    <div className="ui icon basic large buttons">
+                    <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
+                           type="button"
+                           aria-label="Duplicate"
+                           data-tooltip="Duplicate"
+                           tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                              <i className="grey large copy icon"></i>
+                          </button>
+                <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
+                            type="button"
+                            aria-label="Delete"
+                            data-tooltip="Delete"
+                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                              <i className="red large trash icon"></i>
+                          </button>
+                    </div>
+                    <div className="ui icon basic large buttons">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
                           type="button"
                           aria-label="Add Slide"
@@ -93,7 +110,6 @@ class ContentActionsHeader extends React.Component {
                               <i className="grey file large text icon"></i>
                               <i className="inverted corner plus icon"></i>
                             </i>
-
                         </button>
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} />
                           <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
@@ -107,21 +123,7 @@ class ContentActionsHeader extends React.Component {
                               </i>
                           </button>
                           <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
-                          <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
-                           type="button"
-                           aria-label="Duplicate"
-                           data-tooltip="Duplicate"
-                           tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                              <i className="grey large copy icon"></i>
 
-                          </button>
-                          <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
-                            type="button"
-                            aria-label="Delete"
-                            data-tooltip="Delete"
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                              <i className="red large trash icon"></i>
-                          </button>
                           {/*
                           <button className="item ui small basic right attached disabled button">
                               <a className="" title="Settings">
@@ -130,6 +132,7 @@ class ContentActionsHeader extends React.Component {
                           </button>
                           */}
                       </div>
+                  </div>
                   }
               </div>
         );
