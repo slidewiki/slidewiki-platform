@@ -57,20 +57,7 @@ class ContentActionsFooter extends React.Component {
             window.open(this.getPresentationHref());
         }
     }
-    handlePresentationRoomClick(e){
-        if(process.env.BROWSER){
-            e.preventDefault();
-            swal({
-                title: 'Please enter a room name',
-                input: 'text',
-                showCancelButton: true,
-                confirmButtonText: 'Next',
-                allowOutsideClick: false
-            }).then((roomName) => {
-                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
-            }).catch();
-        }
-    }
+ 
     /*
     getPrintHref(){
         return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
