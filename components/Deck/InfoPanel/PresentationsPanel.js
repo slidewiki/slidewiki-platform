@@ -2,10 +2,26 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
+import ContentStore from '../../../stores/ContentStore';
 import {isLocalStorageOn} from '../../../common.js';
 import ReactList from 'react-list';
 
 class PresentationsPanel extends React.Component {
+    getPresentationHref(){
+        let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
+        if(!this.props.ContentStore.selector.subdeck){
+
+            presLocation += this.props.ContentStore.selector.id + '/';
+        }
+        else{
+            presLocation += this.props.ContentStore.selector.subdeck + '/';
+        }
+        if(this.props.ContentStore.selector.stype === 'slide'){
+            // presLocation += this.props.ContentStore.selector.sid + '/';
+            presLocation += this.props.ContentStore.selector.sid;// + '/';
+        }
+        return presLocation;
+    }
     handlePresentationRoomClick(e){
         if(process.env.BROWSER){
             e.preventDefault();
@@ -19,7 +35,9 @@ class PresentationsPanel extends React.Component {
                 window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
             }).catch();
         }
-    } componentWillMount() {
+    }
+
+    componentWillMount() {
 
     }
 
@@ -87,9 +105,10 @@ class PresentationsPanel extends React.Component {
 PresentationsPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-PresentationsPanel = connectToStores(PresentationsPanel, [ActivityFeedStore], (context, props) => {
+PresentationsPanel = connectToStores(PresentationsPanel, [ActivityFeedStore, ContentStore], (context, props) => {
     return {
-        ActivityFeedStore: context.getStore(ActivityFeedStore).getState()
+        ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
+        ContentStore: context.getStore(ContentStore).getState()
     };
 });
 export default PresentationsPanel;
