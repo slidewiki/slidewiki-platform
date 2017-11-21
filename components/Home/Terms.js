@@ -97,7 +97,7 @@ class terms extends React.Component {
                 </ul>
 
                 <h3 className="ui header">Compatibility with Wikipedia terms of use</h3>
-                <p>Our terms are adopted from <a href="http://wikimediafoundation.org/wiki/Terms_of_Use">Wikipedia terms of use</a> which is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a> License.
+                <p>Our terms are adopted from <a href="http://wikimediafoundation.org/wiki/Terms_of_Use" target="_blank">Wikipedia terms of use</a> which is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/" target="_blank">Creative Commons Attribution/Share-Alike</a> License.
                 </p>
                 <p>For full terms and conditions please read our Imprint page.</p>
             </div>
