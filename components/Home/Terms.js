@@ -12,7 +12,6 @@ class terms extends React.Component {
                 <ul className="ui list">
                     <li> <b>Empower and Engage</b> people around the world to collect and develop educational content and either publish it under a free license or dedicate it to the public domain.
                     </li>
-                    <li><b>Disseminate</b>  this content effectively and globally, free of charge</li>
                     <li> <b>Disseminate</b> this content effectively and globally, free of charge.</li>
                 </ul>
                 <h2 className="ui header">You are free to:</h2>
@@ -70,18 +69,18 @@ class terms extends React.Component {
                     <li>Attempting to impersonate another user or individual, misrepresenting your affiliation with any individual or entity, or using the username of another user with the intent to deceive; and</li>
                     <li>Engaging in fraud.</li>
                 </ul>
-                <h3 className="ui header">Committing Infringement</h3>               
+                <h3 className="ui header">Committing Infringement</h3>
 
                 <ul className="ui list">
                     <li>Infringing copyrights, trademarks, patents, or other proprietary rights under applicable law.</li>
                 </ul>
-                <h3 className="ui header">Misusing Our Services for Other Illegal Purposes</h3>  
+                <h3 className="ui header">Misusing Our Services for Other Illegal Purposes</h3>
                 <ul className="ui list">
                     <li>Posting child pornography or any other content that violates applicable law concerning child pornography;</li>
                     <li>Posting or trafficking in obscene material that is unlawful under applicable law; and</li>
                     <li>Using the services in a manner that is inconsistent with applicable law.</li>
                 </ul>
-                <h3 className="ui header">Engaging in Disruptive and Illegal Misuse of Facilities</h3>  
+                <h3 className="ui header">Engaging in Disruptive and Illegal Misuse of Facilities</h3>
                 <ul className="ui list">
                     <li>Posting or distributing content that contains any viruses, malware, worms, Trojan horses, malicious code, or other device that could harm our technical infrastructure or system or that of our users;</li>
                     <li>Engaging in automated uses of the site that are abusive or disruptive of the services and have not been approved by the Wikimedia community;</li>
@@ -97,7 +96,7 @@ class terms extends React.Component {
                     </ul>
                 </ul>
 
-                <h3 className="ui header">Compatibility with Wikipedia terms of use</h3>  
+                <h3 className="ui header">Compatibility with Wikipedia terms of use</h3>
                 <p>Our terms are adopted from <a href="http://wikimediafoundation.org/wiki/Terms_of_Use">Wikipedia terms of use</a> which is available under the <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution/Share-Alike</a> License.
                 </p>
                 <p>For full terms and conditions please read our Imprint page.</p>
