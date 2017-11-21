@@ -77,7 +77,7 @@ class PresentationsPanel extends React.Component {
                     </h5>
                     <div className="two column grid">
                         <div className="column">
-                            <button onClick={this.handlePresentationRoomClick.bind(this)} className="ui button" type="button" aria-label="Presentation Room Mode, Beta" data-tooltip="Start Presentation Room (beta_)">
+                            <button style={{marginLeft: '4em'}} onClick={this.handlePresentationRoomClick.bind(this)} className="ui button" type="button" aria-label="Presentation Room Mode, Beta" data-tooltip="Start Presentation Room (beta_)">
                                 <i className="record large icon"></i>
                             </button>
                         </div>
