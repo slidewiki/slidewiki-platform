@@ -65,10 +65,10 @@ class DeckPropertiesEditor extends React.Component {
                     allowOutsideClick: true,
                     buttonsStyling: false
                 })
-                .then(() => {
-                    return true;
-                })
-                .catch();
+                    .then(() => {
+                        return true;
+                    })
+                    .catch();
             }
             else if (newProps.DeckEditStore.viewstate === 'success') {
                 swal({
@@ -81,10 +81,10 @@ class DeckPropertiesEditor extends React.Component {
                     allowOutsideClick: true,
                     buttonsStyling: false
                 })
-                .then(() => {
-                    return true;
-                })
-                .catch();
+                    .then(() => {
+                        return true;
+                    })
+                    .catch();
             }
         }
     }
@@ -105,7 +105,7 @@ class DeckPropertiesEditor extends React.Component {
         $(ReactDOM.findDOMNode(this.refs.AddGroups))
             .dropdown({
                 action: (someText, dataValue, source) => {
-                    // console.log('group dropdown select', dataValue);
+                // console.log('group dropdown select', dataValue);
 
                     $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddGroups)).dropdown('hide');
@@ -140,7 +140,7 @@ class DeckPropertiesEditor extends React.Component {
                 saveRemoteData: false,
                 action: (name, value, source) => {
                     let data = JSON.parse(decodeURIComponent(value));
-                    // console.log('user dropdown select', name, value, data);
+                // console.log('user dropdown select', name, value, data);
 
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
@@ -149,7 +149,7 @@ class DeckPropertiesEditor extends React.Component {
                     if (users === undefined || users === null)
                         users = [];
 
-                    // console.log('trying to add', name, 'to', users);
+                // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
                         return member.id === parseInt(data.userid);
                     }) === -1 && parseInt(data.userid) !== this.props.userid) {
@@ -278,39 +278,39 @@ class DeckPropertiesEditor extends React.Component {
                     this.handleClickRemoveUser(user, event);
                 };
                 let optionalElement = (user.organization || user.country) ?  (
-                  <div>
-                    {user.organization || 'Unknown organization'} ({user.country || 'unknown country'})
-                    <br/>
-                  </div>
+                    <div>
+                        {user.organization || 'Unknown organization'} ({user.country || 'unknown country'})
+                        <br/>
+                    </div>
                 ) : '';
                 let optionalText = (user.joined) ? ('Access granted '+timeSince((new Date(user.joined)))+' ago') : '';
                 const key = 'user_' + counter + user.username + user.id;
                 // console.log('new authorized user:', user);
                 // console.log('New key for authorized user:', key, user);
                 list_authorized.push(
-                  (
-                    <div className="item" key={key} >
-                      <div className="ui grid">
-                        <div className="one wide column">
-                          <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
-                        </div>
-                        <div className="ten wide column">
-                          <div className="content">
-                            <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
-                            <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
-                            <div className="description">
-                              {optionalElement}{optionalText}
+                    (
+                        <div className="item" key={key} >
+                            <div className="ui grid">
+                                <div className="one wide column">
+                                    <UserPicture picture={ user.picture } username={ user.username } avatar={ true } width= { 24 } />
+                                </div>
+                                <div className="ten wide column">
+                                    <div className="content">
+                                        <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                                        <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
+                                        <div className="description">
+                                            {optionalElement}{optionalText}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="four wide column middle aligned">
+                                    <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
+                                        Remove
+                                    </button>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                        <div className="four wide column middle aligned">
-                            <button className="ui tiny compact borderless black basic button" key={user.id} onClick={fct}>
-                              Remove
-                            </button>
-                        </div>
-                      </div>
-                    </div>
-                  )
+                    )
                 );
                 counter++;
             });
@@ -330,31 +330,31 @@ class DeckPropertiesEditor extends React.Component {
                 };
                 let optionalText = (group.joined) ? ('Access granted '+timeSince((new Date(group.joined)))+' ago') : '';
                 temp_list.push(
-                  (
-                    <div className="item" key={'group_' + group.id + group.name} >
-                      <div className="ui grid">
-                        <div className="one wide column">
-                          <i className="large group middle aligned icon"></i>
-                        </div>
-                        <div className="ten wide column">
-                          <div className="content">
-                            <a className="header">{group.name}</a>
-                            <div className="description">
-                              {optionalText}
+                    (
+                        <div className="item" key={'group_' + group.id + group.name} >
+                            <div className="ui grid">
+                                <div className="one wide column">
+                                    <i className="large group middle aligned icon"></i>
+                                </div>
+                                <div className="ten wide column">
+                                    <div className="content">
+                                        <a className="header">{group.name}</a>
+                                        <div className="description">
+                                            {optionalText}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="four wide column middle aligned">
+                                    <button className="ui tiny compact borderless black basic button" onClick={fct}>
+                                        Remove
+                                    </button>
+                                    <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
+                                        Show details
+                                    </button>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                        <div className="four wide column middle aligned">
-                          <button className="ui tiny compact borderless black basic button" onClick={fct}>
-                            Remove
-                          </button>
-                          <button className="ui tiny compact borderless black basic button" key={group.id} onClick={fct2} >
-                            Show details
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )
+                    )
                 );
             });
         }
@@ -392,26 +392,26 @@ class DeckPropertiesEditor extends React.Component {
 
         //content elements
         let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
-                                   value={this.state.theme}
-                                   onChange={this.handleChange.bind(this, 'theme')}>
-            <option value="default">Default - Reveal.js White</option>
-            <option value="beige">Reveal.js Beige</option>
-            <option value="black">Reveal.js Black</option>
-            <option value="blood">Reveal.js Blood</option>
-            <option value="league">Reveal.js League</option>
-            <option value="moon">Reveal.js Moon</option>
-            <option value="night">Reveal.js Night</option>
-            <option value="serif">Reveal.js Serif</option>
-            <option value="simple">Reveal.js Simple</option>
-            <option value="sky">Reveal.js Sky</option>
-            <option value="solarized">Reveal.js Solarized</option>
-            <option value="openuniversity">Open University Theme</option>
-            <option value="odimadrid">ODI Madrid</option>
-            <option value="oeg">OEG</option>
-        </select>;
+                               value={this.state.theme}
+                               onChange={this.handleChange.bind(this, 'theme')}>
+                <option value="default">White - Default</option>
+                <option value="beige">Cream</option>
+                <option value="black">Black</option>
+                <option value="league">Dark Grey</option>
+                <option value="sky">Pale Blue</option>
+                <option value="solarized">Beige</option>
+                <option value="moon">Dark Slate Blue</option>
+                <option value="night">High Contrast 1</option>
+                <option value="blood">High Contrast 2</option>
+                <option value="serif">Serif</option>
+                <option value="simple">Simple</option>
+                <option value="openuniversity">Open University</option>
+                <option value="odimadrid">ODI Madrid</option>
+                <option value="oeg">OEG</option>
+            </select>;
         let licenseOptions = <a className="ui label">
-          <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
-        </a>;
+                <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
+            </a>;
         /*
         <i className="creative commons large icon"></i>
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
@@ -438,22 +438,22 @@ class DeckPropertiesEditor extends React.Component {
             });
         }
         let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
-                                     ref="AddGroups">
-                                     <input type="hidden" name="groups" />
-            <i className="dropdown icon"></i>
-            <div className="default text">Select Groups</div>
-            <div className="menu">
-              {groupsArray}
-            </div>
-        </div>;
+                                ref="AddGroups">
+                <input type="hidden" name="groups" />
+                <i className="dropdown icon"></i>
+                <div className="default text">Select Groups</div>
+                <div className="menu">
+                    {groupsArray}
+                </div>
+            </div>;
 
         let buttons = (
             <div>
                 <button className='ui primary button'
-                        onClick={this.handleSave.bind(this, false)}>Save
+                    onClick={this.handleSave.bind(this, false)}>Save
                 </button>
                 <button className="ui secondary button"
-                        onClick={this.handleCancel.bind(this)}>
+                    onClick={this.handleCancel.bind(this)}>
                     Cancel
                 </button>
             </div>
@@ -462,79 +462,79 @@ class DeckPropertiesEditor extends React.Component {
         //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
         //<div className={licenseFieldClass}>
         return (
-        <div className="ui container">
-            <div className="ui grid">
-                <div className="sixteen wide column">
-                    <form className="ui form">
-                        <div className="two fields">
-                            <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
-                                <label htmlFor="title_input">
-                                    Title
-                                </label>
-                                <input type="text" name="deck-title" value={this.state.title}
-                                       onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
-                                       aria-required="true" id="title_input"/>
-
-                            </div>
-                            <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
-                                <label htmlFor="language" id="language_label">
-                                    Language
-                                </label>
-                                <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
-                            </div>
-                        </div>
-                        <div className="field">
-                            <label htmlFor="description_input" id="deck-description">Description</label>
-                            <textarea rows="4" aria-labelledby="deck-description" id="description_input"
-                                      value={this.state.description}
-                                      onChange={this.handleChange.bind(this, 'description')}/>
-                        </div>
-                        <div className="two fields">
-                            <div className="field">
-                                <label htmlFor="theme" id="theme">Choose deck theme</label>
-                                {themeOptions}
-                            </div>
-                            <div className="field">
-                                <label htmlFor="license" id="license_label">License</label>
-                                {licenseOptions}
-                            </div>
-                        </div>
-
-                        {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
-                          <div>
+            <div className="ui container">
+                <div className="ui grid">
+                    <div className="sixteen wide column">
+                        <form className="ui form">
                             <div className="two fields">
-                                <div className={groupsFieldClass}>
-                                    <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
-                                    {groupsOptions}
+                                <div className={titleFieldClass} data-tooltip={this.state.validationErrors.title}>
+                                    <label htmlFor="title_input">
+                                        Title
+                                    </label>
+                                    <input type="text" name="deck-title" value={this.state.title}
+                                        onChange={this.handleChange.bind(this, 'title')} placeholder="Title"
+                                        aria-required="true" id="title_input"/>
+
                                 </div>
-                                <div className={groupsFieldClass}>
-                                    <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
-                                    <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
-                                    </select>
+                                <div className={langFieldClass} data-tooltip={this.state.validationErrors.language}>
+                                    <label htmlFor="language" id="language_label">
+                                        Language
+                                    </label>
+                                    <LanguageDropdown type="spoken" required={true} value={this.state.language} arialabel="language" onChange={this.handleChange.bind(this, 'language')} />
                                 </div>
                             </div>
                             <div className="field">
-                                <div className="ui tiny header">
-                                    Authorized:
-                                </div>
-                                <div className="ui very relaxed  list">
-                                    {this.getListOfAuthorized()}
-                                </div>
-                                <div className="ui hidden divider">
-                                </div>
-                                <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
+                                <label htmlFor="description_input" id="deck-description">Description</label>
+                                <textarea rows="4" aria-labelledby="deck-description" id="description_input"
+                                    value={this.state.description}
+                                    onChange={this.handleChange.bind(this, 'description')}/>
                             </div>
-                          </div>
-                        ) : ''}
+                            <div className="two fields">
+                                <div className="field">
+                                    <label htmlFor="theme" id="theme">Choose deck theme</label>
+                                    {themeOptions}
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="license" id="license_label">License</label>
+                                    {licenseOptions}
+                                </div>
+                            </div>
 
-                        {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                            {(this.props.PermissionsStore.permissions.admin && (this.props.DeckEditStore.deckProps.sid === this.props.DeckEditStore.deckProps.localRootDeck)) ? (
+                                <div>
+                                    <div className="two fields">
+                                        <div className={groupsFieldClass}>
+                                            <label htmlFor="deck_edit_dropdown_groups">Add groups for edit rights</label>
+                                            {groupsOptions}
+                                        </div>
+                                        <div className={groupsFieldClass}>
+                                            <label htmlFor="deck_edit_dropdown_usernames_remote">Add users for edit rights</label>
+                                            <select className="ui search dropdown" aria-labelledby="AddUser" name="AddUser" ref="AddUser" id="deck_edit_dropdown_usernames_remote">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="field">
+                                        <div className="ui tiny header">
+                                            Authorized:
+                                        </div>
+                                        <div className="ui very relaxed  list">
+                                            {this.getListOfAuthorized()}
+                                        </div>
+                                        <div className="ui hidden divider">
+                                        </div>
+                                        <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
+                                    </div>
+                                </div>
+                            ) : ''}
 
-                        {buttons}
-                    </form>
+                            {(this.props.DeckEditStore.viewstate === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+
+                            {buttons}
+                        </form>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
         );
 
     }

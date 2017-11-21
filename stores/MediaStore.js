@@ -48,6 +48,7 @@ class MediaStore extends BaseStore {
     }
 
     startUploading(data) {
+        console.log('start upload store notify');
         this.status = 'uploading';
         this.filetype = data.type;
         this.filename = data.name;
@@ -61,7 +62,7 @@ class MediaStore extends BaseStore {
     }
 
     successUpload(data) {
-        // console.log('MediaStore: successUpload()', data);
+        console.log('MediaStore: successUpload()', data);
         this.status = 'success';
         this.file = data;
         this.emitChange();

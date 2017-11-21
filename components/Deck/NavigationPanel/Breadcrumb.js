@@ -43,7 +43,7 @@ class Breadcrumb extends React.Component {
         */
         return (
             <div className="ui top attached compact segment">
-                <h2 className="ui small breadcrumb">
+                <h2 className="ui large breadcrumb">
                 <i className="small yellow open folder icon"></i>
                     <NavLink href={'/deck/' + self.props.selector.get('id')}> {this.props.rootDeckName} </NavLink>
                     <i className="right chevron icon divider"></i>
