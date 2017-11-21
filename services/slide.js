@@ -107,22 +107,6 @@ export default {
                       language: Joi.string(),
                       license: Joi.string().valid('CC0', 'CC BY', 'CC BY-SA')
                     }).requiredKeys('user', 'content', 'root_deck', 'license'),*/
-        }else if (resource === 'slide.translate'){
-
-            let toSend = {
-                language: params.language
-            };
-            rp({
-                method: 'PUT',
-                uri: Microservices.deck.uri + '/slide/' + params.selector.sid + '/translate',
-                json: true,
-                headers: {'----jwt----': params.jwt},
-                body: toSend
-            }).then((data) => {
-                //console.log('DECK:' + JSON.stringify(data.root_deck));
-                callback(false, data);
-            })
-            .catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {

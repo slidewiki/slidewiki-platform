@@ -8,8 +8,7 @@ export default {
     read: (req, resource, params, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
-        let args = params.params ? params.params : params;
-        let selector = {'sid': args.sid, 'stype': args.stype, 'spath': args.spath};
+        let args = params.params? params.params : params;
         if(resource === 'translation.list'){
 
             let deck_id = parseInt(args.sid.split('-')[0]);
@@ -18,7 +17,7 @@ export default {
             rp({
                 method: 'GET',
                 json: true,
-                uri: Microservices.deck.uri + '/' + selector.stype + '/' + deck_id + '/translations',
+                uri: Microservices.deck.uri + '/deck/' + deck_id + '/translations',
             }).then((res) => {
                 callback(null, res);
             }).catch((err) => {

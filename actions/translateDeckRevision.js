@@ -11,6 +11,7 @@ const common = require('../common.js');
 export default function translateDeckRevision(context, payload, done) {
     context.dispatch('START_TRANSLATION', 'success');
     log.info(context);
+    console.log('action translateDeckRevision: got payload', payload);
     //enrich with user id
     let user = context.getStore(UserProfileStore).userid;
     //if (!user) user = '3'; //NEED TO REMOVE THE LINE
@@ -18,6 +19,7 @@ export default function translateDeckRevision(context, payload, done) {
     payload.user = user.toString();
     payload.deckId = context.getStore(ContentStore).selector.id;
     payload.jwt = context.getStore(UserProfileStore).jwt;
+    console.log(payload);
         //enrich with root deck id if deck to be revised is not uppermost deck
     //    let parent = TreeUtil.getParentId(payload.selector);
     //    payload.root_deck = parent;
