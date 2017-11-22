@@ -31,6 +31,18 @@ class Deck extends React.Component {
             'wide column': status.NavigationPanel.visible,
             'hide-element': !status.NavigationPanel.visible
         });
+        let leftColClass = classNames({
+            'three':  status.TreePanel.columnSize===3 || status.ActivityFeedPanel.columnSize===3,
+            'four':  status.TreePanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
+            'twelve':  status.TreePanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
+            'sixteen':  status.TreePanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
+            'wide column': status.TreePanel.visible || status.ActivityFeedPanel.visible,
+            'hide-element': !status.TreePanel.visible && !status.ActivityFeedPanel.visible
+        });
+        let treePanelClass = classNames({
+            'hide-element': !status.TreePanel.visible
+        });
+        /*
         let leftColClassSlideEdit = classNames({
             'three':  status.SlideEditPanel.columnSize===3 || status.ActivityFeedPanel.columnSize===3,
             'four':  status.SlideEditPanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
@@ -42,6 +54,7 @@ class Deck extends React.Component {
         let SlideEditPanelClass = classNames({
             'hide-element': !status.SlideEditPanel.visible
         });
+        */
         /*
         let ActivityFeedPanelClass = classNames({
             'hide-element': !status.ActivityFeedPanel.visible
@@ -89,6 +102,39 @@ class Deck extends React.Component {
         }else{
             dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
+        /*
+        let leftPanel;
+        if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '')
+        {
+            //if we view a slide in edit mode - show slide edit panel
+            leftPanel =      <div className={leftColClassSlideEdit}>
+                                <div className="row">
+                                    <div className={SlideEditPanelClass}>
+                                        <SlideEditPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                                    </div>
+                                    <div className="ui hidden divider"></div>
+                                </div>
+                            </div>;
+        }
+        else {
+            //if we view something else - show decktree
+            leftPanel =     <div className={leftColClass}>
+                                <div className="row">
+                                    <div className={treePanelClass}>
+                                        <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                                    </div>
+
+                                    {/*<div className="ui hidden divider"></div>
+                                    <div className={ActivityFeedPanelClass}>
+                                        <div className="row">
+                                            <ActivityFeedPanel />
+                                        </div>
+                                    </div>*//*}
+                                    <div className="ui hidden divider"></div>
+                                </div>
+                            </div>;
+        }
+        */
         return (
             <div className="ui fluid container" ref="deck">
                 <div className="ui padded stackable grid ">
@@ -97,6 +143,7 @@ class Deck extends React.Component {
                       <NavigationPanel />
                     </div>*/}
                 </div>
+
 
                 <div className={leftColClass}>
                     <div className="row">
@@ -113,7 +160,7 @@ class Deck extends React.Component {
                         <div className="ui hidden divider"></div>
                     </div>
                 </div>
-
+                {/*leftPanel*/}
 
                 {dividerDIV}
 
