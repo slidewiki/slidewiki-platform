@@ -6,7 +6,7 @@ import ServiceErrorStore from '../../stores/ServiceErrorStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import TreePanel from './TreePanel/TreePanel';
-import SlideEditPanel from './SlideEditPanel/SlideEditPanel';
+//import SlideEditPanel from './SlideEditPanel/SlideEditPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
@@ -42,6 +42,7 @@ class Deck extends React.Component {
         let treePanelClass = classNames({
             'hide-element': !status.TreePanel.visible
         });
+        /*
         let leftColClassSlideEdit = classNames({
             'three':  status.SlideEditPanel.columnSize===3 || status.ActivityFeedPanel.columnSize===3,
             'four':  status.SlideEditPanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
@@ -53,6 +54,7 @@ class Deck extends React.Component {
         let SlideEditPanelClass = classNames({
             'hide-element': !status.SlideEditPanel.visible
         });
+        */
         /*
         let ActivityFeedPanelClass = classNames({
             'hide-element': !status.ActivityFeedPanel.visible
@@ -100,6 +102,7 @@ class Deck extends React.Component {
         }else{
             dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
+        /*
         let leftPanel;
         if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '')
         {
@@ -126,11 +129,12 @@ class Deck extends React.Component {
                                         <div className="row">
                                             <ActivityFeedPanel />
                                         </div>
-                                    </div>*/}
+                                    </div>*//*}
                                     <div className="ui hidden divider"></div>
                                 </div>
                             </div>;
         }
+        */
         return (
             <div className="ui fluid container" ref="deck">
                 <div className="ui padded stackable grid ">
@@ -140,7 +144,23 @@ class Deck extends React.Component {
                     </div>*/}
                 </div>
 
-                {leftPanel}
+
+                <div className={leftColClass}>
+                    <div className="row">
+                        <div className={treePanelClass}>
+                            <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                        </div>
+
+                        {/*<div className="ui hidden divider"></div>
+                        <div className={ActivityFeedPanelClass}>
+                            <div className="row">
+                                <ActivityFeedPanel />
+                            </div>
+                        </div>*/}
+                        <div className="ui hidden divider"></div>
+                    </div>
+                </div>
+                {/*leftPanel*/}
 
                 {dividerDIV}
 
