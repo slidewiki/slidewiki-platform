@@ -73,8 +73,8 @@ class ContentActionsHeader extends React.Component {
         } ;
 
         return (
-            <div className="ui top attached tabular menu" role="tablist">
-                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+            <div className="ui menu" role="menu">
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} >
                     <i></i>View
                 </NavLink>
                 {this.props.UserProfileStore.username === '' ? '' :
