@@ -4,21 +4,19 @@ import striptags from 'striptags';
 import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from './error/serviceUnavailable';
-import addActivity from './activityfeed/addActivity';
+import loadTranslations from './loadTranslations';
 const log = require('./log/clog');
 const common = require('../common.js');
 
 export default function translateSlideRevision(context, payload, done) {
     context.dispatch('START_TRANSLATION', 'success');
     log.info(context);
-    console.log('action translateSlideRevision: got payload', payload);
     //enrich with user id
     let user = context.getStore(UserProfileStore).userid;
     //if (!user) user = '3'; //NEED TO REMOVE THE LINE
 
     payload.user = user.toString();
     payload.jwt = context.getStore(UserProfileStore).jwt;
-    console.log(payload);
         //enrich with root deck id if deck to be revised is not uppermost deck
     //    let parent = TreeUtil.getParentId(payload.selector);
     //    payload.root_deck = parent;
@@ -41,13 +39,10 @@ export default function translateSlideRevision(context, payload, done) {
             // context.executeAction(addActivity, {activity: activity});
 
             context.dispatch('END_TRANSLATION', 'success');
-            console.log('res:' + res);
 
-            // context.executeAction(navigateAction, {
-            //     url: '/deck/' + res.root_deck //ADD HERE NEW DECK ID
-            // });
-
-            done();
+            context.executeAction(loadTranslations, {
+                params: payload.selector
+            }, done);
 
         }
     });

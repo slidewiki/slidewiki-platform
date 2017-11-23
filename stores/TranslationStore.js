@@ -7,6 +7,7 @@ class TranslationStore extends BaseStore {
         this.currentLang = {};
         this.supportedLangs = [];
         this.inProgress = false;
+        this.slideToPreview = null;
     }
     startTranslation(payload){
         this.inProgress = true;
@@ -25,12 +26,18 @@ class TranslationStore extends BaseStore {
         this.supportedLangs = payload.supportedLangs;
         this.emitChange();
     }
+    loadSlidePreview(payload) {
+        this.slideToPreview = payload.slide;
+        this.emitChange();
+    }
+
     getState() {
         return {
             translations: this.translations,
             currentLang: this.currentLang,
             supportedLangs: this.supportedLangs,
-            inProgress: this.inProgress
+            inProgress: this.inProgress,
+            slideToPreview: this.slideToPreview,
         };
     }
     getSupportedLangs(){
@@ -38,12 +45,18 @@ class TranslationStore extends BaseStore {
             supportedLangs: this.supportedLangs
         };
     }
+    getSlideToPreview(){
+        return {
+            slideToPreview: this.slideToPreview
+        };
+    }
     dehydrate() {
         return {
             translations: this.translations,
             currentLang: this.currentLang,
             supportedLangs: this.supportedLangs,
-            inProgress: this.inProgress
+            inProgress: this.inProgress,
+            slideToPreview: this.slideToPreview,
         };
     }
     rehydrate(state) {
@@ -51,6 +64,7 @@ class TranslationStore extends BaseStore {
         this.currentLang = state.currentLang;
         this.supportedLangs = state.supportedLangs;
         this.inProgress = state.inProgress;
+        this.slideToPreview = state.slideToPreview;
     }
 
 }
@@ -60,7 +74,8 @@ TranslationStore.handlers = {
     'LOAD_TRANSLATIONS_SUCCESS': 'updateTranslations',
     'LOAD_SUPPORTED_LANGS_SUCCESS': 'loadSupportedLangs',
     'START_TRANSLATION' : 'startTranslation',
-    'END_TRANSLATION' : 'endTranslation'
+    'END_TRANSLATION' : 'endTranslation',
+    'LOAD_SLIDE_PREVIEW_SUCCESS': 'loadSlidePreview'
 };
 
 export default TranslationStore;

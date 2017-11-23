@@ -8,15 +8,29 @@ import { Dropdown, Menu, Flag, Button, Modal, Popup , Header} from 'semantic-ui-
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import loadSlidePreview from '../../../actions/slide/loadSlidePreview';
+import SlidePreviewModal from './SlidePreviewModal';
 
 
 class TranslationPanel extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            previewModal: false,            
+        };
+    }
 
     handleLanguageClick(id){
 
         this.context.executeAction(navigateAction, {
             url: '/deck/'+ id
         });
+    }
+
+    showSlidePreview(id){
+        this.context.executeAction(loadSlidePreview, {params: {'sid' : id}});
+        this.setState({previewModal: true});
     }
 
 
@@ -39,15 +53,28 @@ class TranslationPanel extends React.Component {
                 languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
             }
             if (languageName){
-                return (
-                    <Dropdown.Item
-                    key = {translation.language}
-                    onClick={ this.handleLanguageClick.bind(this, translation.deck_id) }
-                    //href={''}
-                    >
-                    {languageName}
-                    </Dropdown.Item>
-                );
+                if (translation.deck_id){
+                    return (
+                        <Dropdown.Item
+                        key = {translation.language}
+                        onClick={ this.handleLanguageClick.bind(this, translation.deck_id) }
+                        //href={''}
+                        >
+                        {languageName}
+                        </Dropdown.Item>
+                    );
+                }else if (translation.slide_id){
+                    return (
+                        <Dropdown.Item
+                        key = {translation.language}
+                        onClick={ this.showSlidePreview.bind(this, translation.slide_id) }
+                        //href={''}
+                        >
+                        {languageName}
+                        </Dropdown.Item>
+                    );
+                }
+
             }
         }
     }
@@ -81,23 +108,6 @@ class TranslationPanel extends React.Component {
 
         let languageOptions = supported.map(this.renderTranslateTo, this);
 
-        // let translate_item = user ?
-        //
-        // <Dropdown text='Translate...'
-        //     floating
-        //     labeled
-        //     button
-        //     scrolling
-        //     className='icon primary small'
-        //     icon='world'
-        //     options={languageOptions}
-        //     onChange = {this.handleTranslateToClick.bind(this)}
-        //     ref = {(dropDown) => {this.dropDown = dropDown;}}
-        //   />
-        //
-        // : '';
-
-
         let currentLang = deckLanguage ?
             <span>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>
             : <span>English</span>;
@@ -105,7 +115,12 @@ class TranslationPanel extends React.Component {
 
 
         return(
+
+
             <span>
+
+            <SlidePreviewModal slide={this.props.TranslationStore.slideToPreview} isOpen={this.state.previewModal} handleClose={() => this.setState({previewModal: false})} />
+
             <b>Language: </b>
 
                 {translations.length ? (

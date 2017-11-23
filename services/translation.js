@@ -11,14 +11,13 @@ export default {
         let args = params.params ? params.params : params;
         let selector = {'sid': args.sid, 'stype': args.stype, 'spath': args.spath};
         if(resource === 'translation.list'){
-
-            let deck_id = parseInt(args.sid.split('-')[0]);
+            let item_id = parseInt(args.sid.split('-')[0]);
             let translations = [];
             let currentLang = {};
             rp({
                 method: 'GET',
                 json: true,
-                uri: Microservices.deck.uri + '/' + selector.stype + '/' + deck_id + '/translations',
+                uri: Microservices.deck.uri + '/' + selector.stype + '/' + item_id + '/translations',
             }).then((res) => {
                 callback(null, res);
             }).catch((err) => {
