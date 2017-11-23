@@ -33,7 +33,7 @@ class UploadMediaModal extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if(prevState.files !== this.state.files && !isEmpty(this.state.files)){
-            console.log('refocussing');
+            //TODO Bad approach to set focus, but setting it without timeout does not work
             setTimeout(() => {
                 this.refs.UploadMediaModalSaveButton.focus();
             }, 100);
