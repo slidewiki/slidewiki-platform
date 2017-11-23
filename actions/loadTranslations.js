@@ -6,7 +6,6 @@ import serviceUnavailable from './error/serviceUnavailable';
 const log = require('./log/clog');
 
 export default function loadTranslations(context, payload, done) {
-    console.log('loadTranslations payload: ' + JSON.stringify(payload));
     log.info(context);
 
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){

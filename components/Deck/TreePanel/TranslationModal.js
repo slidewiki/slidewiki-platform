@@ -5,6 +5,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import ISO6391 from 'iso-639-1';
 import {navigateAction} from 'fluxible-router';
 import translateDeckRevision from '../../../actions/translateDeckRevision.js';
+import translateSlideRevision from '../../../actions/translateSlideRevision.js';
 
 import {  Dropdown, Button, Modal, Icon, Header, Divider} from 'semantic-ui-react';
 
@@ -33,14 +34,22 @@ class TranslationModal extends React.Component {
     }
 
 
-    handleTranslateToClick(){
+    handleTranslateToClick(type, selector = null){
         //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
         let code = this.state.language;
         if (code){
-            this.context.executeAction(translateDeckRevision, {
-                // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
-                language: code+'_'+code.toUpperCase()
-            });
+            if (type === 'deck'){
+                this.context.executeAction(translateDeckRevision, {
+                    // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
+                    language: code+'_'+code.toUpperCase()
+                });
+            }else{
+                this.context.executeAction(translateSlideRevision, {
+                    // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
+                    language: code+'_'+code.toUpperCase(),
+                    selector: selector
+                });
+            }
             this.handleClose();
         }else{
             this.setState({error: true});
@@ -60,7 +69,9 @@ class TranslationModal extends React.Component {
 
     render() {
         let current = '';
-        
+        let selector = this.props.selector;
+        let type = selector.stype;
+
         const deckLanguage = this.props.TranslationStore.currentLang.language;
         if (deckLanguage){
             current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
@@ -115,34 +126,67 @@ class TranslationModal extends React.Component {
 
 
         return (
+
         <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
                aria-describedby='translationModalDesc' open={this.props.isOpen}
                onClose={this.props.handleClose}>
-            <Header icon='translate' content='Translate the deck' id='translationModalHeader'/>
-            <Modal.Content>
-                <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
-                    {available_desc}
-                    <p id='translationModalDesc'>You are about to translate the deck. Please choose the target language from the list below:</p>
-                    <Dropdown
-                        placeholder='Choose a target language...'
-                        scrolling
-                        selection
-                        search
-                        className={this.state.error ? 'error' : ''}
-                        options={languageOptions}
-                        onChange={this.handleOptionChange.bind(this)}
-                        ref = {(dropDown) => {this.dropDown = dropDown;}}
-                        value = {this.state.language}
-                      />
-                      <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate. <br/> Attempting to translate large decks might result in an error.</b></p>
-                    <Divider/>
-                    <p>
-                        <Button as='button' primary onClick={this.handleTranslateToClick.bind(this)}><Icon name='translate'/> Translate</Button>
-                        <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
-                    </p>
+               {this.props.selector.stype === 'deck' ? (
+                   <span>
+                        <Header icon='translate' content='Translate the deck' id='translationModalHeader'/>
+                        <Modal.Content>
+                            <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
+                                {available_desc}
+                                <p id='translationModalDesc'>You are about to translate the deck. Please choose the target language from the list below:</p>
+                                <Dropdown
+                                    placeholder='Choose a target language...'
+                                    scrolling
+                                    selection
+                                    search
+                                    className={this.state.error ? 'error' : ''}
+                                    options={languageOptions}
+                                    onChange={this.handleOptionChange.bind(this)}
+                                    ref = {(dropDown) => {this.dropDown = dropDown;}}
+                                    value = {this.state.language}
+                                  />
+                                  <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate. <br/> Attempting to translate large decks might result in an error.</b></p>
+                                <Divider/>
+                                <p>
+                                    <Button as='button' primary onClick={this.handleTranslateToClick.bind(this, 'deck')}><Icon name='translate'/> Translate</Button>
+                                    <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
+                                </p>
 
-                </FocusTrap>
-            </Modal.Content>
+                            </FocusTrap>
+                        </Modal.Content>
+                    </span>
+            ) : (
+                <span>
+                    <Header icon='translate' content='Translate the slide' id='translationModalHeader'/>
+                    <Modal.Content>
+                        <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
+                            {available_desc}
+                            <p id='translationModalDesc'>You are about to translate the slide. Please choose the target language from the list below:</p>
+                            <Dropdown
+                                placeholder='Choose a target language...'
+                                scrolling
+                                selection
+                                search
+                                className={this.state.error ? 'error' : ''}
+                                options={languageOptions}
+                                onChange={this.handleOptionChange.bind(this)}
+                                ref = {(dropDown) => {this.dropDown = dropDown;}}
+                                value = {this.state.language}
+                              />
+                              <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate.</b></p>
+                            <Divider/>
+                            <p>
+                                <Button as='button' primary onClick={this.handleTranslateToClick.bind(this, 'slide', this.props.selector)}><Icon name='translate'/> Translate</Button>
+                                <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
+                            </p>
+
+                        </FocusTrap>
+                    </Modal.Content>
+                </span>
+            ) }
         </Modal>
         );
     }

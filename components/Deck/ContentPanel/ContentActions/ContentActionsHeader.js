@@ -14,9 +14,18 @@ import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 import translateSlideRevision from '../../../../actions/translateSlideRevision';
 
+import TranslationModal from '../../TreePanel/TranslationModal';
+
 
 
 class ContentActionsHeader extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isTranslationModalOpen: false
+        };
+    }
 
     componentDidUpdate(){
 
@@ -42,8 +51,21 @@ class ContentActionsHeader extends React.Component {
         }
     }
 
-    handleSlideTranslation(language, selector){
-        this.context.executeAction(translateSlideRevision, {language: language, selector: selector});
+    // handleSlideTranslation(language, selector){
+    //     this.context.executeAction(translateSlideRevision, {language: language, selector: selector});
+    // }
+
+    handleTranslation() {
+        // swal({
+        //     title: 'Translation',
+        //     text: 'This feature is still under construction...',
+        //     type: 'info',
+        //     confirmButtonText: 'Confirmed',
+        //     confirmButtonClass: 'positive ui button',
+        //     buttonsStyling: false
+        // });
+        // this.context.executeAction(forkDeck, {deckId: this.props.DeckTreeStore.selector.get('id')});
+        this.setState({isTranslationModalOpen: true});
     }
     render() {
         const contentDetails = this.props.ContentStore;
@@ -76,6 +98,14 @@ class ContentActionsHeader extends React.Component {
             attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
+
+        let classes_translatebtn = classNames({
+            'ui': true,
+            'basic': true,
+            'attached': true,
+            'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'button': true
+        });
 
         return (
             <div className="ui top attached tabular menu" role="tablist">
@@ -135,11 +165,19 @@ class ContentActionsHeader extends React.Component {
                                   <i className="black large setting icon"></i>
                               </a>
                           </button>
-                          */}
 
                           <button className="item ui small basic right attached button" onClick={this.handleSlideTranslation.bind(this, 'de_DE', selector)}>
                               Translate to the best language ever
                           </button>
+                          */}
+                          {selector.stype === 'slide' ? (
+                              <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate slide"
+                                  onClick={this.handleTranslation.bind(this)} tabIndex="1">
+                                  <i className="translate blue large icon"></i>
+                              </div>
+                          ) : ''}
+                          <TranslationModal selector={selector} isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
+
                       </div>
                   </div>
                   }
