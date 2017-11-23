@@ -4,6 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import {Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
 import uploadMediaFiles from '../../actions/media/uploadMediaFiles';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
+import {isEmpty} from '../../common';
 
 class UploadMediaModal extends React.Component {
 
@@ -28,6 +29,15 @@ class UploadMediaModal extends React.Component {
         this.unmountTrap = this.unmountTrap.bind(this);
         this.showLicense = this.showLicense.bind(this);
         this.submitPressed = this.submitPressed.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.files !== this.state.files && !isEmpty(this.state.files)){
+            console.log('refocussing');
+            setTimeout(() => {
+                this.refs.UploadMediaModalSaveButton.focus();
+            }, 100);
+        }
     }
 
     handleChange(e) {
@@ -141,7 +151,7 @@ class UploadMediaModal extends React.Component {
         let dropzone = '';
         if(this.state.files.length < 1){
             dropzone = <div className="dropzone">
-              <Dropzone onDrop={this.onDrop.bind(this)} accept="image/*" multiple={false} className="ui grey inverted center aligned padded raised segment">
+              <Dropzone ref="initialDropzone" onDrop={this.onDrop.bind(this)} accept="image/*" multiple={false} className="ui grey inverted center aligned padded raised segment">
                 <Icon name="cloud upload" size="massive"/>
                 <p>Try drop a file here, or click to select a file to upload.</p>
               </Dropzone>
@@ -149,7 +159,7 @@ class UploadMediaModal extends React.Component {
         } else { //TODO Implement a switch-case statement for other media files. Currently only works for images.
             dropzone = <div><div className="dropzone">
               <Dropzone onDrop={this.onDrop.bind(this)} accept="image/*" multiple={false} className="ui secondary clearing segment">
-                <Image src={this.state.files[0].preview} size="large" centered={true}/>
+                <Image id="imageToProceed" src={this.state.files[0].preview} size="large" centered={true}/>
               </Dropzone>
             </div>
             <br/><p>Not the right image? Click on the image to upload another one.</p></div>;
@@ -173,7 +183,7 @@ class UploadMediaModal extends React.Component {
               <form className="ui form" onSubmit={this.submitPressed.bind(this)}>
                 <div className="required field">
                   <label htmlFor="mediaTitle">Title:</label>
-                  <Input defaultValue={this.state.files[0].name} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label="Title of the image" aria-required="true"required/>
+                  <Input defaultValue={this.state.files[0].name} id="mediaTitle" ref="mediaTitle" name="title" onChange={this.handleChange.bind(this)} aria-label="Title of the image" aria-required="true"required autoFocus/>
                 </div>
                 <div className="required field">
                   <label htmlFor="mediaAltText">Description/Alt Text:</label>
@@ -236,7 +246,7 @@ class UploadMediaModal extends React.Component {
                     <Divider />
                     <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                       <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                      <Button id="UploadMediaModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={saveHandler} icon={submitButtonIcon} labelPosition='left' content={submitButtonText}/>
+                      <Button id="UploadMediaModalSaveButton" ref="UploadMediaModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={saveHandler} icon={submitButtonIcon} labelPosition='left' content={submitButtonText} disabled={isEmpty(this.state.files)}/>
                     </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>
