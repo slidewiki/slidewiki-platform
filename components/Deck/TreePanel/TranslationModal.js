@@ -11,13 +11,16 @@ import {  Dropdown, Button, Modal, Icon, Header, Divider} from 'semantic-ui-reac
 
 import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
+import DeckTreeStore from '../../../stores/DeckTreeStore';
+import loadSlidePreview from '../../../actions/slide/loadSlidePreview';
+import SlidePreviewModal from '../TranslationPanel/SlidePreviewModal';
 
 
 class TranslationModal extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {language: null, error:false};
+        this.state = {language: null, error:false, previewModal:false};
     }
 
     handleLanguageClick(id){
@@ -34,11 +37,11 @@ class TranslationModal extends React.Component {
     }
 
 
-    handleTranslateToClick(type, selector = null){
+    handleTranslateToClick(mode, selector = null){
         //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
         let code = this.state.language;
         if (code){
-            if (type === 'deck'){
+            if (mode === 'deck'){
                 this.context.executeAction(translateDeckRevision, {
                     // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
                     language: code+'_'+code.toUpperCase()
@@ -67,17 +70,23 @@ class TranslationModal extends React.Component {
         );
     }
 
+    showSlidePreview(id){
+        this.context.executeAction(loadSlidePreview, {params: {'sid' : id}});
+        this.setState({previewModal: true});
+    }
+
     render() {
         let current = '';
         let selector = this.props.selector;
-        let type = selector.stype;
-
-        const deckLanguage = this.props.TranslationStore.currentLang.language;
-        if (deckLanguage){
-            current = ISO6391.getName(deckLanguage.toLowerCase().substr(0,2));
-        }else{
-            current = '';
+        let mode = this.props.mode;
+        if (mode !== 'deck'){ //this is content item modal
+            if (this.props.selector.stype === 'deck'){ //a deck is selected
+                mode = 'subdeck';
+            }else{
+                mode = 'slide'; //a slide is selected
+            }
         }
+
         let translations = [];
         let existing_codes = [];
         let languages_string = '';
@@ -86,29 +95,89 @@ class TranslationModal extends React.Component {
         let available_array = [];
 
         let languageOptions = [];
+        let currentLanguage = 'en_GB';
 
-        if (this.props.TranslationStore.translations){
-            translations = this.props.TranslationStore.translations;
-            existing_codes = this.props.TranslationStore.translations.map((el) => { //getting all translations codes
+        switch (mode) {
+            case 'deck': //root deck, subdecks
+                currentLanguage = this.props.DeckTreeStore.currentLang.language;
+                if (currentLanguage){
+                    current = ISO6391.getName(currentLanguage.toLowerCase().substr(0,2));
+                }else{
+                    current = '';
+                }
+                translations = this.props.DeckTreeStore.translations; //for the root deck
+                break;
+            case 'slide': //slide, subdeck
+                currentLanguage = this.props.TranslationStore.currentLang.language;
+                if (currentLanguage){
+                    current = ISO6391.getName(currentLanguage.toLowerCase().substr(0,2));
+                }else{
+                    current = '';
+                }
+                translations = this.props.TranslationStore.translations;
+                break;
+            case 'subdeck': //slide, subdeck
+                currentLanguage = this.props.TranslationStore.currentLang.language;
+                if (currentLanguage){
+                    current = ISO6391.getName(currentLanguage.toLowerCase().substr(0,2));
+                }else{
+                    current = '';
+                }
+                translations = this.props.TranslationStore.translations;
+                break;
+            default:
+                currentLanguage = this.props.DeckTreeStore.currentLang.language;
+                if (currentLanguage){
+                    current = ISO6391.getName(currentLanguage.toLowerCase().substr(0,2));
+                }else{
+                    current = '';
+                }
+                translations = this.props.DeckTreeStore.translations; //for the root deck
+                break;
+        }
+
+        if (translations){
+            existing_codes = translations.map((el) => { //getting all translations codes
                 return el.language.split('_')[0];
             });
 
             available_array = translations.map((translation) => {
                 let languageName = ISO6391.getName(translation.language.toLowerCase().substr(0,2));
+                let link = '/deck/';
                 if (languageName){
-                    if (translation.language !== this.props.TranslationStore.currentLang.language){
-                        let link = '/deck/';
-                        link+= translation.deck_id;
-                        return (
-                            <a href={link} key={languageName}>{languageName}, </a>
-                        );
+                    if (translation.language !== currentLanguage){
+                        switch (mode){
+                            case 'deck':
+                                link+= translation.deck_id;
+                                return (
+                                    <a href={link} key={languageName}>{languageName}, </a>
+                                );
+                                break;
+                            case 'slide':
+                                return (
+                                    <a as='a' onClick={ this.showSlidePreview.bind(this, translation.slide_id) } key ={languageName}>{languageName}, </a>
+                                );
+                                break;
+                            case 'subdeck':
+                                link+= translation.deck_id;
+                                return (
+                                    <a href={link} key={languageName}>{languageName}, </a>
+                                );
+                                break;
+                            default: //subdeck
+                                link+= translation.deck_id;
+                                return (
+                                    <a href={link} key={languageName}>{languageName}, </a>
+                                );
+                                break;
+                        }
                     }
                 }else{
                     return null;
                 }
             });
-            if (deckLanguage){
-                available_desc = <p>This deck is already available in {available_array} and <b>{current}</b>.</p>;
+            if (currentLanguage){
+                available_desc = <p>This {mode} is already available in {available_array} and <b>{current}</b>.</p>;
             }
         }
 
@@ -130,63 +199,31 @@ class TranslationModal extends React.Component {
         <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
                aria-describedby='translationModalDesc' open={this.props.isOpen}
                onClose={this.props.handleClose}>
-               {this.props.selector.stype === 'deck' ? (
-                   <span>
-                        <Header icon='translate' content='Translate the deck' id='translationModalHeader'/>
-                        <Modal.Content>
-                            <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
-                                {available_desc}
-                                <p id='translationModalDesc'>You are about to translate the deck. Please choose the target language from the list below:</p>
-                                <Dropdown
-                                    placeholder='Choose a target language...'
-                                    scrolling
-                                    selection
-                                    search
-                                    className={this.state.error ? 'error' : ''}
-                                    options={languageOptions}
-                                    onChange={this.handleOptionChange.bind(this)}
-                                    ref = {(dropDown) => {this.dropDown = dropDown;}}
-                                    value = {this.state.language}
-                                  />
-                                  <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate. <br/> Attempting to translate large decks might result in an error.</b></p>
-                                <Divider/>
-                                <p>
-                                    <Button as='button' primary onClick={this.handleTranslateToClick.bind(this, 'deck')}><Icon name='translate'/> Translate</Button>
-                                    <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
-                                </p>
-
-                            </FocusTrap>
-                        </Modal.Content>
-                    </span>
-            ) : (
-                <span>
-                    <Header icon='translate' content='Translate the slide' id='translationModalHeader'/>
-                    <Modal.Content>
-                        <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
-                            {available_desc}
-                            <p id='translationModalDesc'>You are about to translate the slide. Please choose the target language from the list below:</p>
-                            <Dropdown
-                                placeholder='Choose a target language...'
-                                scrolling
-                                selection
-                                search
-                                className={this.state.error ? 'error' : ''}
-                                options={languageOptions}
-                                onChange={this.handleOptionChange.bind(this)}
-                                ref = {(dropDown) => {this.dropDown = dropDown;}}
-                                value = {this.state.language}
-                              />
-                              <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate.</b></p>
-                            <Divider/>
-                            <p>
-                                <Button as='button' primary onClick={this.handleTranslateToClick.bind(this, 'slide', this.props.selector)}><Icon name='translate'/> Translate</Button>
-                                <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
-                            </p>
-
-                        </FocusTrap>
-                    </Modal.Content>
-                </span>
-            ) }
+               <SlidePreviewModal slide={this.props.TranslationStore.slideToPreview} isOpen={this.state.previewModal} handleClose={() => this.setState({previewModal: false})} />
+            <Header icon='translate' content={'Translate the ' +mode} id='translationModalHeader'/>
+            <Modal.Content>
+                <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
+                    {available_desc}
+                    <p id='translationModalDesc'>You are about to translate the {mode}. Please choose the target language from the list below:</p>
+                    <Dropdown
+                        placeholder='Choose a target language...'
+                        scrolling
+                        selection
+                        search
+                        className={this.state.error ? 'error' : ''}
+                        options={languageOptions}
+                        onChange={this.handleOptionChange.bind(this)}
+                        ref = {(dropDown) => {this.dropDown = dropDown;}}
+                        value = {this.state.language}
+                      />
+                      <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate.</b></p>
+                    <Divider/>
+                    <p>
+                        <Button as='button' primary onClick={this.handleTranslateToClick.bind(this, mode, this.props.selector)}><Icon name='translate'/> Translate</Button>
+                        <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
+                    </p>
+                </FocusTrap>
+            </Modal.Content>
         </Modal>
         );
     }
@@ -195,10 +232,11 @@ class TranslationModal extends React.Component {
 TranslationModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-TranslationModal = connectToStores(TranslationModal, [TranslationStore, UserProfileStore], (context, props) => {
+TranslationModal = connectToStores(TranslationModal, [TranslationStore, UserProfileStore, DeckTreeStore], (context, props) => {
     return {
         TranslationStore: context.getStore(TranslationStore).getState(),
-        UserProfileStore: context.getStore(UserProfileStore).getState()
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
     };
 });
 

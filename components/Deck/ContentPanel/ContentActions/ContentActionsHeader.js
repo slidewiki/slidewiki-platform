@@ -170,13 +170,13 @@ class ContentActionsHeader extends React.Component {
                               Translate to the best language ever
                           </button>
                           */}
-                          {selector.stype === 'slide' ? (
-                              <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate slide"
+
+                              <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip={'Translate ' + selector.stype}
                                   onClick={this.handleTranslation.bind(this)} tabIndex="1">
                                   <i className="translate blue large icon"></i>
                               </div>
-                          ) : ''}
-                          <TranslationModal selector={selector} isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
+
+                          <TranslationModal selector={selector} mode='item' isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
 
                       </div>
                   </div>

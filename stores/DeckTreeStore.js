@@ -18,6 +18,8 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = null;
         this.latestRevisionId = null;
         this.theme = null;
+        this.translations = [];
+        this.currentLang = {};
     }
     updateDeckTree(payload) {
         this.isSelectorValid = true;
@@ -572,7 +574,9 @@ class DeckTreeStore extends BaseStore {
             isSelectorValid: this.isSelectorValid,
             revisionId: this.revisionId,
             latestRevisionId: this.latestRevisionId,
-            theme: this.theme
+            theme: this.theme,
+            translations: this.translations,
+            currentLang: this.currentLang
         };
     }
     dehydrate() {
@@ -590,6 +594,8 @@ class DeckTreeStore extends BaseStore {
         this.revisionId = state.revisionId;
         this.latestRevisionId = state.latestRevisionId;
         this.theme = state.theme;
+        this.translations = state.translations;
+        this.currentLang = state.currentLang;
     }
     handleDeckTreeError(err){
         this.error = err;
@@ -638,6 +644,12 @@ class DeckTreeStore extends BaseStore {
         }
         this.emitChange();
     }
+
+    updateTranslations(payload) {
+        this.translations = payload.translations;
+        this.currentLang = payload.currentLang;
+        this.emitChange();
+    }
 }
 
 DeckTreeStore.storeName = 'DeckTreeStore';
@@ -655,8 +667,8 @@ DeckTreeStore.handlers = {
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError',
-    'FOCUS_TREE_NODE': 'focusTreeNode'
-
+    'FOCUS_TREE_NODE': 'focusTreeNode',
+    'LOAD_TRANSLATIONS_ROOT_SUCCESS': 'updateTranslations',
 };
 
 export default DeckTreeStore;

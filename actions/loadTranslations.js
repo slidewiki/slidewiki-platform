@@ -7,7 +7,7 @@ const log = require('./log/clog');
 
 export default function loadTranslations(context, payload, done) {
     log.info(context);
-
+    console.log('PAYLOAD:' + JSON.stringify(payload));
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;
@@ -22,13 +22,11 @@ export default function loadTranslations(context, payload, done) {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
-            context.dispatch('LOAD_TRANSLATIONS_FAILURE', err);
+            context.dispatch('LOAD_TRANSLATIONS_ROOT_FAILURE', err);
         } else {
-            context.dispatch('LOAD_TRANSLATIONS_SUCCESS', res);
+            context.dispatch('LOAD_TRANSLATIONS_ROOT_SUCCESS', res.root);
+            context.dispatch('LOAD_TRANSLATIONS_SUCCESS', res.item);
         }
         done();
     });
-
-
-
 }
