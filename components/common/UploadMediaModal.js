@@ -153,7 +153,7 @@ class UploadMediaModal extends React.Component {
             dropzone = <div className="dropzone">
               <Dropzone ref="initialDropzone" onDrop={this.onDrop.bind(this)} accept="image/*" multiple={false} className="ui grey inverted center aligned padded raised segment">
                 <Icon name="cloud upload" size="massive"/>
-                <p>Try drop a file here, or click to select a file to upload.</p>
+                <p>Drop a file directly from your filebrowser here to upload it.</p><p>Alternatively, click <button id="upload" className="ui button" aria-label='select file to upload'><i className="outline upload icon large black"></i><label htmlFor="upload">choose file</label></button> or anywhere around this text to select a file to upload.</p>
               </Dropzone>
             </div>;
         } else { //TODO Implement a switch-case statement for other media files. Currently only works for images.
@@ -176,6 +176,7 @@ class UploadMediaModal extends React.Component {
         let submitButtonIcon = 'arrow right';
         if(this.state.license){
             heading = 'License information';
+            //licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" aria-required="true" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} required defaultValue={this.props.userFullName}/></div> : '';
             licenseBoxes = (this.state.licenseValue !== 'CC0') ? <div className="required field"><label htmlFor="copyrightHolder">Image created by/ attributed to:</label><Input id="copyrightHolder" ref="copyrightHolder" name="copyrightHolder" onChange={this.handleChange.bind(this)} aria-label="Copyrightholder" aria-required="true" required defaultValue={this.props.userFullName}/></div> : '';
             content = <div>
               <Image src={this.state.files[0].preview} size="large" centered={true}/>
@@ -215,7 +216,7 @@ class UploadMediaModal extends React.Component {
         return (
           <Modal trigger={
                   <Button className="ui orange button" tabIndex='0' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} onClick={this.handleOpen} value="">
-                    <i className="outline upload icon black"></i>
+                    <i className="outline upload icon large black"></i>
                     <a style={buttonColorBlack}>Add Image</a>
                   </Button>
                  }
@@ -234,7 +235,8 @@ class UploadMediaModal extends React.Component {
                   focusTrapOptions={{
                       onDeactivate: this.unmountTrap,
                       clickOutsideDeactivates: false,
-                      initialFocus: '#UploadMediaModalSaveButton',
+                      //initialFocus: '#UploadMediaModalSaveButton',
+                      initialFocus: '#upload',
                   }}>
                   <Modal.Header className="ui left aligned" as="h1" id="UploadMediaModalHeader">
                       {heading}
