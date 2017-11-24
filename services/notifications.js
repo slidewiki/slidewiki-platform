@@ -108,7 +108,7 @@ export default {
             });
         } else if (resource === 'notifications.readall'){
             rp.put({
-                uri: Microservices.notification.uri + '/notification/markall/' + uid,
+                uri: Microservices.notification.uri + '/notifications/markall/' + uid,
                 body: JSON.stringify({
                     read: true
                 }),

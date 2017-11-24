@@ -118,6 +118,7 @@ class UserNotificationsPanel extends React.Component {
         });
 
         const notifications = this.props.UserNotificationsStore.notifications;
+        const notificationsCount = this.props.UserNotificationsStore.notifications ? this.props.UserNotificationsStore.notifications.length : 0;
         const newNotificationsCount = this.props.UserNotificationsStore.newNotificationsCount;
         const selector = this.props.UserNotificationsStore.selector;
 
@@ -139,7 +140,9 @@ class UserNotificationsPanel extends React.Component {
                     <i tabIndex="0" className="ui large checkmark box icon"></i>
                 </a>
             );
-            iconDeleteAll = (//disabled icon
+        };
+        if(notificationsCount > 0) {//if there are notifications -> enable it
+            iconDeleteAll = (
                 <a className="item" onClick={this.handleDelete.bind(this)} title={iconDeleteAllTitle}>
                     <i tabIndex="0" className="ui large remove circle outline icon"></i>
                 </a>
