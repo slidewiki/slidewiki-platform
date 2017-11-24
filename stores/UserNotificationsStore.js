@@ -73,6 +73,8 @@ class UserNotificationsStore extends BaseStore {
     deleteAllUserNotifications() {
         this.notifications = [];
         this.newNotificationsCount = 0;
+
+        this.emitChange();
     }
     updateNotificationsVisibility(payload) {
         let clickedSubscription = (payload.changedId === 0) ? this.activityTypes.find((at) => {return (at.type === payload.changedType);}) : this.subscriptions.find((s) => {return (s.type === payload.changedType && s.id === payload.changedId);});
