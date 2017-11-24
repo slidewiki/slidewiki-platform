@@ -199,17 +199,12 @@ UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
     'LOAD_NEW_USER_NOTIFICATIONS_COUNT_SUCCESS': 'loadNewNotificationsCount',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
-<<<<<<< HEAD
     'SELECT_ALL_ACTIVITY_TYPES': 'selectAllActivityTypes',
     'DELETE_USER_NOTIFICATION_SUCCESS': 'deleteUserNotification',
     'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'deleteAllUserNotifications',
     'READ_ALL_USER_NOTIFICATIONS_SUCCESS': 'readAllUserNotificationsSuccess',
     'READ_USER_NOTIFICATION_SUCCESS': 'readUserNotificationSuccess'
-=======
-    'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
-    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter',
     'SHOW_NOTIFICATIONS_LOADING': 'showLoading'
->>>>>>> master
 };
 
 export default UserNotificationsStore;
