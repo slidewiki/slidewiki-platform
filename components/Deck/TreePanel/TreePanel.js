@@ -138,7 +138,8 @@ class TreePanel extends React.Component {
             'ui': true,
             'basic': true,
             'attached': true,
-            'disabled': (!this.props.PermissionsStore.permissions.fork),
+            //'disabled': (!this.props.PermissionsStore.permissions.fork),
+            'disabled': true,
             'button': true
         });
 
@@ -149,14 +150,14 @@ class TreePanel extends React.Component {
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let rootNodeTitle = <strong>{rootNode.title} </strong>;
         let decktreeError = this.props.DeckTreeStore.error ? this.props.DeckTreeStore.error.msg : 0;
+        /*                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
+                                    onClick={this.handleTranslation.bind(this)} tabIndex="1">
+                                    <i className="translate blue large icon"></i>
+                                </div>
+        */
         return (
             <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
-                <div className="ui top attached tabular menu" >
-                    <a className="active item" >
-                        <i className="counterclockwise rotated sitemap large icon"></i>Deck Explorer
-                    </a>
-                </div>
-                      <NavigationPanel />
+                <NavigationPanel />
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
@@ -166,14 +167,11 @@ class TreePanel extends React.Component {
                         <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
                             <i className="large blue fork icon"></i>
                         </div>
-                        <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip="Translate deck"
-                            onClick={this.handleTranslation.bind(this)} tabIndex="1">
+                        <div className={classes_translatebtn} role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck" tabIndex="-1">
                             <i className="translate blue large icon"></i>
                         </div>
                     </div>
                     }
-
-
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{
                             'wordBreak': 'break-all',

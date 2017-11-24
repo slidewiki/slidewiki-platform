@@ -8,7 +8,7 @@ class Footer extends React.Component {
             <div className="ui blue inverted vertical footer segment" ref="footer" style={{marginTop: '10px', paddignTop: '10px'}} role="contentinfo" >
                 <div className="ui fluid container">
                     <div className="ui  inverted divided equal height stackable  grid">
-                           <div className="one wide column"></div>
+                        <div className="one wide column"></div>
                         <div className="four wide column">
                             <h4 className="ui inverted header">About</h4>
                             <div className="ui inverted  link list">
@@ -20,6 +20,7 @@ class Footer extends React.Component {
                         <div className="five wide column">
                             <h4 className="ui inverted header">Terms & Conditions</h4>
                             <div className="ui inverted link list">
+                                <NavLink className="item" routeName="terms" href="/terms">Terms</NavLink>
                                 <NavLink className="item" routeName="license" href="/license">License</NavLink>
                                 <NavLink className="item" routeName="imprint" href="/imprint">Imprint</NavLink>
                                 <NavLink className="item" routeName="dataprotection" href="/dataprotection">Data Protection Conditions</NavLink>
@@ -32,7 +33,7 @@ class Footer extends React.Component {
                                 <div className="item">Build GIT_COMMIT&#64;GIT_BRANCH</div>
                             </div>
                         </div>
-                           <div className="one wide column"></div>
+                        <div className="one wide column"></div>
                     </div>
 
                 </div>

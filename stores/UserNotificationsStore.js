@@ -6,6 +6,7 @@ class UserNotificationsStore extends BaseStore {
         this.notifications = undefined;
         this.newNotificationsCount = 0;
         this.subscriptions = [];
+        this.loading = true;
         this.activityTypes = [
             {type:'add', selected: true},
             {type:'edit', selected: true},
@@ -25,9 +26,14 @@ class UserNotificationsStore extends BaseStore {
             {type:'left', selected: true}
         ];
     }
+    showLoading(payload){
+        this.loading = true;
+        this.emitChange();
+    }
     loadNotifications(payload) {
         this.notifications = payload.notifications;
         this.subscriptions = payload.subscriptions;
+        this.loading = false;
 
         this.newNotificationsCount = this.countNewNotifications();
         this.addVisibleParameterToNotifications();
@@ -171,6 +177,7 @@ class UserNotificationsStore extends BaseStore {
         return {
             notifications: this.notifications,
             newNotificationsCount: this.newNotificationsCount,
+            loading: this.loading,
             subscriptions: this.subscriptions,
             activityTypes: this.activityTypes
         };
@@ -181,6 +188,7 @@ class UserNotificationsStore extends BaseStore {
     rehydrate(state) {
         this.notifications = state.notifications;
         this.newNotificationsCount = state.newNotificationsCount;
+        this.loading = state.loading;
         this.subscriptions = state.subscriptions;
         this.activityTypes = state.activityTypes;
     }
@@ -191,11 +199,17 @@ UserNotificationsStore.handlers = {
     'LOAD_USER_NOTIFICATIONS_SUCCESS': 'loadNotifications',
     'LOAD_NEW_USER_NOTIFICATIONS_COUNT_SUCCESS': 'loadNewNotificationsCount',
     'UPDATE_NOTIFICATIONS_VISIBILITY': 'updateNotificationsVisibility',
+<<<<<<< HEAD
     'SELECT_ALL_ACTIVITY_TYPES': 'selectAllActivityTypes',
     'DELETE_USER_NOTIFICATION_SUCCESS': 'deleteUserNotification',
     'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'deleteAllUserNotifications',
     'READ_ALL_USER_NOTIFICATIONS_SUCCESS': 'readAllUserNotificationsSuccess',
     'READ_USER_NOTIFICATION_SUCCESS': 'readUserNotificationSuccess'
+=======
+    'DELETE_USER_NOTIFICATION_SUCCESS': 'clearNotificationNewParameter',
+    'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'clearAllNotificationsNewParameter',
+    'SHOW_NOTIFICATIONS_LOADING': 'showLoading'
+>>>>>>> master
 };
 
 export default UserNotificationsStore;

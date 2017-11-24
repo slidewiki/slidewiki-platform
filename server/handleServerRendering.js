@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/server';
 import app from '../app';
 import HTMLComponent from '../components/DefaultHTMLLayout';
 import PresentorComponent from '../components/PresentorHTMLLayout';
+import PresentationRoomsComponent from '../components/PresentationRoomsHTMLLayout';
 
 import serialize from 'serialize-javascript';
 import debugLib from 'debug';
@@ -43,6 +44,9 @@ let renderApp = function(req, res, context){
     let layout = HTMLComponent;
     if(req.url && req.url.slice(0,20).includes('/Presentation/')){//NOTE only test first few chars as presentaton rooms URL has "/Presentation/..." also in it
         layout = PresentorComponent;
+    }
+    if(req.url && req.url.includes('/presentationbroadcast')){
+        layout = PresentationRoomsComponent;
     }
     const htmlElement = React.createElement(layout, {
         //clientFile: env === 'production' ? 'main.min.js' : 'main.js',

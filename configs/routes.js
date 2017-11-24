@@ -177,6 +177,19 @@ export default {
             done();
         }
     },
+    terms: {
+        path: '/terms',
+        method: 'get',
+        page: 'imprint',
+        title: 'SlideWiki -- Terms',
+        handler: require('../components/Home/Terms'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Terms'
+            });
+            done();
+        }
+    },
     welcome: {
         path: '/welcome',
         method: 'get',

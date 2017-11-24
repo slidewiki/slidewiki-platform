@@ -11,10 +11,6 @@ import loadUserNotifications from '../../../actions/user/notifications/loadUserN
 import selectAllActivityTypes from '../../../actions/user/notifications/selectAllActivityTypes';
 
 class UserNotificationsPanel extends React.Component {
-    constructor() {
-        super();
-        this.displayEmptyText = 'Loading notifications...';
-    }
 
     componentWillMount() {
         if ((String(this.props.UserProfileStore.userid) === '')) {//the user is not loggedin
@@ -23,12 +19,6 @@ class UserNotificationsPanel extends React.Component {
             });
         } else {
             this.context.executeAction(loadUserNotifications, { uid: this.props.UserProfileStore.userid });
-        }
-    }
-
-    componentWillUpdate() {
-        if (this.props.UserNotificationsStore.notifications !== undefined) {
-            this.displayEmptyText = 'There are currently no notifications.';
         }
     }
 
@@ -76,35 +66,7 @@ class UserNotificationsPanel extends React.Component {
         if (String(this.props.UserProfileStore.userid) === '') {//user is not loggedin
             return null;
         }
-        //Create subscription lists
-        // const subscriptions = this.props.UserNotificationsStore.subscriptions;
-        // const userSubscriptionList = subscriptions.map((s, index) => {
-        //     if (s.type === 'user')
-        //         return (
-        //             <div className="ui item toggle checkbox" key={index} >
-        //                 <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-        //                 <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-        //             </div>
-        //         );
-        // });
-        // const slideSubscriptionList = subscriptions.map((s, index) => {
-        //     if (s.type === 'slide')
-        //         return (
-        //             <div className="ui item toggle checkbox" key={index} >
-        //                 <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-        //                 <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-        //             </div>
-        //         );
-        // });
-        // const deckSubscriptionList = subscriptions.map((s, index) => {
-        //     if (s.type === 'deck')
-        //         return (
-        //             <div className="ui item toggle checkbox" key={index} >
-        //                 <input name="toggleCheckbox" type="checkbox" defaultChecked={s.selected} onChange={this.handleChangeToggle.bind(this, s.type, s.id)} />
-        //                 <label><a className="user" href={'/' + s.type + '/' + s.id}>{s.name}</a></label>
-        //             </div>
-        //         );
-        // });
+
         const activityTypeList = this.props.UserNotificationsStore.activityTypes.map((at, index) => {
 
             const labelName = (at.type === 'react') ? 'Like' : at.type;
@@ -169,45 +131,22 @@ class UserNotificationsPanel extends React.Component {
                 </div>
             </div>
         );
-        // const filters = (
-        //     <div className="five wide column">
-        //         <div className="ui basic segment">
-        //             <h4 className="ui header">Show notifications for:</h4>
-        //             <label>Users:</label>
-        //             <div className="subscriptions">
-        //                 <div ref="subscriptionslist">
-        //                     <div className="ui relaxed list">
-        //                         {userSubscriptionList}
-        //                     </div>
-        //                  </div>
-        //             </div>
-        //             <label>Slides:</label>
-        //             <div className="subscriptions">
-        //                 <div ref="subscriptionslist">
-        //                     <div className="ui relaxed list">
-        //                         {slideSubscriptionList}
-        //                     </div>
-        //                  </div>
-        //             </div>
-        //             <label>Decks:</label>
-        //             <div className="subscriptions">
-        //                 <div ref="subscriptionslist">
-        //                     <div className="ui relaxed list">
-        //                         {deckSubscriptionList}
-        //                     </div>
-        //                  </div>
-        //             </div>
-        //             <h4 className="ui header">Show activity types:</h4>
-        //             <div className="activityTypes">
-        //                 <div ref="activityTypeList">
-        //                     <div className="ui relaxed list">
-        //                         {activityTypeList}
-        //                     </div>
-        //                  </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // );
+
+        let loadingDiv = <div className="ui basic segment">
+            <div className="ui active text loader">Loading</div>
+        </div>;
+        let emptyDiv = <div className="ui grid centered">
+            <h3>There are currently no notifications.</h3>
+        </div>;
+
+        let notificationsDiv='';
+        if(this.props.UserNotificationsStore.loading){
+            notificationsDiv = loadingDiv;
+        } else if (notifications.length === 0) {
+            notificationsDiv = emptyDiv;
+        } else {
+            notificationsDiv = <UserNotificationsList username={this.props.UserProfileStore.username} items={notifications} selector={selector} />;
+        }
         return (
             <div ref="userNotificationsPanel">
                 <div className="ui hidden divider" />
@@ -222,12 +161,7 @@ class UserNotificationsPanel extends React.Component {
                     </div>
                     <div className="column ten wide">
                         <div className="ui basic segment">
-                            {(!notifications || notifications.length === 0)
-                                ?
-                                <div>{this.displayEmptyText}</div>
-                                :
-                                <UserNotificationsList username={this.props.UserProfileStore.username} items={notifications} selector={selector} />
-                            }
+                            {notificationsDiv}
                         </div>
                     </div>
                 </div>

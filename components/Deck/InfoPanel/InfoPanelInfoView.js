@@ -48,15 +48,14 @@ class InfoPanelInfoView extends React.Component {
         let nodes = [];
         let list, output = '';
         let title = '';
+        let titlediv;
         let pathNames = this.getNameofNodes(deckTree, selector);
         if(selector.get('spath')){
             nodes = selector.get('spath').split(';');
             list = nodes.map((node, index) => {
                 if(index === (nodes.length - 1)){
                     return (
-                        <div key={index} className="section">
-                            {cheerio.load(pathNames[index]).text()}
-                        </div>
+                        cheerio.load(pathNames[index]).text()
                     );
                 }else{
                     /*
@@ -70,22 +69,29 @@ class InfoPanelInfoView extends React.Component {
                 }
 
             });
-            title = list; //use title of deck
+            title = list; //use title of slide
+            titlediv =
+            <div className="ui segment top attached compact">
+                <h3 className="ui small header">
+                   <i className="grey small file text icon" aria-label="Slide title"></i>
+                   {title}
+                </h3>
+            </div>;
+
         }
         else {
-            title = rootNode.title;
+            //title = rootNode.title;
+            //title = ''; //use title of deck
+            titlediv = '';
+
         }
         return (
-            <div className="ui container" >
+            <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
                         Updated version available</NavLink>
                     </div>}
-                <div className="ui attached segment">
-                    <h4 className="header ui medium" aria-describedby="InfoTitle" tabIndex="0">
-                            {title}</h4>
-                    <div className="sr-only" id="InfoTitle">Title:</div>
-                </div>
+                    {titlediv}
                 <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
