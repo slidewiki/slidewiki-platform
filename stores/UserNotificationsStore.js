@@ -203,7 +203,7 @@ UserNotificationsStore.handlers = {
     'DELETE_USER_NOTIFICATION_SUCCESS': 'deleteUserNotification',
     'DELETE_ALL_USER_NOTIFICATIONS_SUCCESS': 'deleteAllUserNotifications',
     'READ_ALL_USER_NOTIFICATIONS_SUCCESS': 'readAllUserNotificationsSuccess',
-    'READ_USER_NOTIFICATION_SUCCESS': 'readUserNotificationSuccess'
+    'READ_USER_NOTIFICATION_SUCCESS': 'readUserNotificationSuccess',
     'SHOW_NOTIFICATIONS_LOADING': 'showLoading'
 };
 
