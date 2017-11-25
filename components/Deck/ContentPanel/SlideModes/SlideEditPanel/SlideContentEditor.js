@@ -750,14 +750,14 @@ class SlideContentEditor extends React.Component {
                 //console.log('image width' + $(this).find('img:first').width());
                 //console.log('image width attr' + $(this).find('img:first').attr('width'));
                 //console.log('box width' + $(this).width());
-                if($(this).width() < $(this).find('img:first').width()+8)
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than image width/height
-                    $(this).width($(this).find('img:first').width() + 8);
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust image width');
                 }
-                if($(this).height() < $(this).find('img:first').height()+8)
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than image width/height
-                    $(this).height($(this).find('img:first').height() + 8);
+                    $(this).height($(this).find('img:first').height());
                 //    console.log('adjust image height');
                 }
             }
@@ -845,8 +845,8 @@ class SlideContentEditor extends React.Component {
                             ui.size.height = newHeight;
                             if($(this).find('img:first').length)
                             {
-                                $(this).find('img:first').width(newWidth - 8);
-                                $(this).find('img:first').height(newHeight - 8);
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight);
                             }
                         },
                         stop: function(event, ui) {
