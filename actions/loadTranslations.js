@@ -7,7 +7,6 @@ const log = require('./log/clog');
 
 export default function loadTranslations(context, payload, done) {
     log.info(context);
-    console.log('PAYLOAD:' + JSON.stringify(payload));
     if (!(['deck', 'slide', 'question'].indexOf(payload.params.stype) > -1 || payload.params.stype === undefined)){
         context.executeAction(deckContentTypeError, payload, done);
         return;

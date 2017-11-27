@@ -16,7 +16,7 @@ import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNa
 import loadTranslations from '../../../actions/loadTranslations';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
-import TranslationModal from './TranslationModal';
+import TranslationModal from '../Translation/TranslationModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
 

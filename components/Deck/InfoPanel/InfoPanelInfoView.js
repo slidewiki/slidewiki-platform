@@ -8,7 +8,7 @@ import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/Contribu
 import cheerio from 'cheerio';
 import PresentationPanel from './PresentationsPanel';
 import ActivityFeedStore from '../../../stores/ActivityFeedStore';
-import TranslationPanel from '../TranslationPanel/TranslationPanel';
+import TranslationPanel from '../Translation/TranslationPanel';
 
 
 class InfoPanelInfoView extends React.Component {

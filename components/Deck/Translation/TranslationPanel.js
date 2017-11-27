@@ -17,7 +17,8 @@ class TranslationPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            previewModal: false,            
+            previewModal: false,
+            previewLanguage: null
         };
     }
 
@@ -28,9 +29,9 @@ class TranslationPanel extends React.Component {
         });
     }
 
-    showSlidePreview(id){
+    showSlidePreview(id, language){
         this.context.executeAction(loadSlidePreview, {params: {'sid' : id}});
-        this.setState({previewModal: true});
+        this.setState({previewModal: true, previewLanguage: language});
     }
 
 
@@ -67,7 +68,7 @@ class TranslationPanel extends React.Component {
                     return (
                         <Dropdown.Item
                         key = {translation.language}
-                        onClick={ this.showSlidePreview.bind(this, translation.slide_id) }
+                        onClick={ this.showSlidePreview.bind(this, translation.slide_id, languageName) }
                         //href={''}
                         >
                         {languageName}
@@ -119,7 +120,7 @@ class TranslationPanel extends React.Component {
 
             <span>
 
-            <SlidePreviewModal slide={this.props.TranslationStore.slideToPreview} isOpen={this.state.previewModal} handleClose={() => this.setState({previewModal: false})} />
+            <SlidePreviewModal languageName={this.state.previewLanguage} slide={this.props.TranslationStore.slideToPreview} isOpen={this.state.previewModal} handleClose={() => this.setState({previewModal: false})} />
 
             <b>Language: </b>
 

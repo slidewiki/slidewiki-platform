@@ -16,7 +16,8 @@ export default function translateDeckRevision(context, payload, done) {
     //if (!user) user = '3'; //NEED TO REMOVE THE LINE
 
     payload.user = user.toString();
-    payload.deckId = context.getStore(ContentStore).selector.id;
+    payload.deckId = context.getStore(ContentStore).selector.sid;
+    
     payload.jwt = context.getStore(UserProfileStore).jwt;
         //enrich with root deck id if deck to be revised is not uppermost deck
     //    let parent = TreeUtil.getParentId(payload.selector);

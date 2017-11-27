@@ -452,7 +452,7 @@ export default {
         path: '/translations/:stype/:sid',
         method: 'get',
         page: 'translations',
-        handler: require('../components/Deck/TranslationPanel/TranslationPanel'),
+        handler: require('../components/Deck/Translation/TranslationPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadTranslations, payload, done);
         }

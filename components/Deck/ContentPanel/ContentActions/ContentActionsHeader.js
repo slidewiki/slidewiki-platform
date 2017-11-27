@@ -14,7 +14,7 @@ import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 import translateSlideRevision from '../../../../actions/translateSlideRevision';
 
-import TranslationModal from '../../TreePanel/TranslationModal';
+import TranslationModal from '../../Translation/TranslationModal';
 
 
 
@@ -170,12 +170,14 @@ class ContentActionsHeader extends React.Component {
                               Translate to the best language ever
                           </button>
                           */}
-
+                          {selector.spath ? (
                               <div className={classes_translatebtn} role="button" aria-label="See in other language" data-tooltip={'Translate ' + selector.stype}
                                   onClick={this.handleTranslation.bind(this)} tabIndex="1">
                                   <i className="translate blue large icon"></i>
                               </div>
+                          ) : ('')
 
+                        }
                           <TranslationModal selector={selector} mode='item' isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
 
                       </div>

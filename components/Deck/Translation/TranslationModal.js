@@ -13,14 +13,14 @@ import TranslationStore from '../../../stores/TranslationStore';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import DeckTreeStore from '../../../stores/DeckTreeStore';
 import loadSlidePreview from '../../../actions/slide/loadSlidePreview';
-import SlidePreviewModal from '../TranslationPanel/SlidePreviewModal';
+import SlidePreviewModal from './SlidePreviewModal';
 
 
 class TranslationModal extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {language: null, error:false, previewModal:false};
+        this.state = {language: null, error:false, previewModal:false, previewLanguage: null};
     }
 
     handleLanguageClick(id){
@@ -32,7 +32,7 @@ class TranslationModal extends React.Component {
     }
 
     handleClose(){
-        this.setState({language: null, error: false});
+        this.setState({language: null, error: false, previewLanguage: null});
         this.props.handleClose();
     }
 
@@ -41,19 +41,32 @@ class TranslationModal extends React.Component {
         //$(document).find('#deckViewPanel').prepend('<div className="ui active dimmer"><div className="ui text loader">Loading</div></div>');
         let code = this.state.language;
         if (code){
-            if (mode === 'deck'){
-                this.context.executeAction(translateDeckRevision, {
-                    // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
-                    language: code+'_'+code.toUpperCase()
-                });
-            }else{
-                this.context.executeAction(translateSlideRevision, {
-                    // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
-                    language: code+'_'+code.toUpperCase(),
-                    selector: selector
-                });
+            switch (mode){
+                case 'deck':
+                    this.context.executeAction(translateDeckRevision, {
+                        // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
+                        language: code+'_'+code.toUpperCase()
+                    });
+                    this.props.handleClose();
+                    break;
+                case 'slide':
+                    this.context.executeAction(translateSlideRevision, {
+                        // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
+                        language: code+'_'+code.toUpperCase(),
+                        selector: selector
+                    });
+                    this.setState({previewModal: true});
+                    break;
+                case 'subdeck':
+                    this.context.executeAction(translateDeckRevision, {
+                        // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
+                        language: code+'_'+code.toUpperCase(),
+                        selector: selector
+                    });
+                    this.props.handleClose();
+                    break;                
             }
-            this.handleClose();
+
         }else{
             this.setState({error: true});
         }
@@ -70,9 +83,9 @@ class TranslationModal extends React.Component {
         );
     }
 
-    showSlidePreview(id){
+    showSlidePreview(id, language){
         this.context.executeAction(loadSlidePreview, {params: {'sid' : id}});
-        this.setState({previewModal: true});
+        this.setState({previewModal: true, previewLanguage: language});
     }
 
     render() {
@@ -155,7 +168,7 @@ class TranslationModal extends React.Component {
                                 break;
                             case 'slide':
                                 return (
-                                    <a as='a' onClick={ this.showSlidePreview.bind(this, translation.slide_id) } key ={languageName}>{languageName}, </a>
+                                    <a as='a' onClick={ this.showSlidePreview.bind(this, translation.slide_id, languageName) } key ={languageName}>{languageName}, </a>
                                 );
                                 break;
                             case 'subdeck':
@@ -199,7 +212,7 @@ class TranslationModal extends React.Component {
         <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
                aria-describedby='translationModalDesc' open={this.props.isOpen}
                onClose={this.props.handleClose}>
-               <SlidePreviewModal slide={this.props.TranslationStore.slideToPreview} isOpen={this.state.previewModal} handleClose={() => this.setState({previewModal: false})} />
+               <SlidePreviewModal languageName={this.state.previewLanguage} slide={this.props.TranslationStore.slideToPreview} isOpen={this.state.previewModal} handleClose={() => this.setState({previewModal: false})} />
             <Header icon='translate' content={'Translate the ' +mode} id='translationModalHeader'/>
             <Modal.Content>
                 <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>

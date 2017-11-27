@@ -5,9 +5,11 @@ import {connectToStores} from 'fluxible-addons-react';
 import ISO6391 from 'iso-639-1';
 import {navigateAction} from 'fluxible-router';
 
+import SlideContentView from '../ContentPanel/SlideModes/SlideViewPanel/SlideContentView';
+
 
 //import {  Dropdown, Button, Modal, Icon, Header, Divider} from 'semantic-ui-react';
-import {Modal, Header} from 'semantic-ui-react';
+import {Modal, Header, Icon, Button} from 'semantic-ui-react';
 // import TranslationStore from '../../../stores/TranslationStore';
 // import UserProfileStore from '../../../stores/UserProfileStore';
 
@@ -56,21 +58,28 @@ class SlidePreviewModal extends React.Component {
     //     return (
     //         {value:supported.code , key: supported.code, text: supported.name}
     //     );
+
+    //<div dangerouslySetInnerHTML={{ __html: content }}></div>
+
     // }
 
     render() {
         let slide = this.props.slide;
         let modal = '';
         let content = '';
+        let languageName = this.props.languageName;
         if (slide) {
             content = slide.revisions[0].content;
             modal = <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
                aria-describedby='translationModalDesc' open={this.props.isOpen}
                onClose={this.props.handleClose}>
-            <Header icon='translate' content='Slide Preview' id='slidePreviewHeader'/>
-            <Modal.Content>
-                    <div dangerouslySetInnerHTML={{ __html: content }}></div>
+            <Header icon='translate' content={'Slide Preview: ' + languageName}  id='slidePreviewHeader'/>
+            <Modal.Content id ='translation_preview'>
+                    <SlideContentView content={content} container_id = 'translation_preview'/>
             </Modal.Content>
+            <Modal.Actions>
+                <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
+            </Modal.Actions>
             </Modal>;
         };
 

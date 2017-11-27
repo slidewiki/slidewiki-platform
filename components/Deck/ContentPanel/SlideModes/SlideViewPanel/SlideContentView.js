@@ -14,7 +14,7 @@ class SlideContentView extends React.Component {
         if (nextProps.theme === this.props.theme){
 
         }
-        console.log('componentWillReceiveProps ' + this.props.loadingIndicator + nextProps.loadingIndicator);
+        //console.log('componentWillReceiveProps ' + this.props.loadingIndicator + nextProps.loadingIndicator);
         if (nextProps.loadingIndicator !== this.props.loadingIndicator)
         {
             if (nextProps.loadingIndicator === 'true')
@@ -43,11 +43,11 @@ class SlideContentView extends React.Component {
             }
             */
             //initial resize
-            this.resize();
+            this.resize(this.props.container_id);
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
                 {
                 //console.log('resize');
-                this.resize();
+                this.resize(this.props.container_id);
             });
             this.loading = '';
         }
@@ -57,16 +57,17 @@ class SlideContentView extends React.Component {
         // update mathjax rendering
         // add to the mathjax rendering queue the command to type-set the inlineContent
         MathJax.Hub.Queue(['Typeset',MathJax.Hub,'inlineContent']);
-        this.resize();
+        this.resize(this.props.container_id);
 
         //this.loading = '';
         //console.log('componentDidUpdate');
     }
 
-    resize()
+    resize(container_id = 'container')
     {
-        let containerwidth = document.getElementById('container').offsetWidth;
-        let containerheight = document.getElementById('container').offsetHeight;
+
+        let containerwidth = document.getElementById(container_id).offsetWidth;
+        let containerheight = document.getElementById(container_id).offsetHeight;
         //console.log('Component has been resized! Width =' + containerwidth + 'height' + containerheight);
 
         //reset scaling of pptx2html element to get original size

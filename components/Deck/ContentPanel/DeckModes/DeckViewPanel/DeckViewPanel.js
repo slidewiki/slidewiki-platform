@@ -19,8 +19,6 @@ import TranslationStore from '../../../../../stores/TranslationStore';
 import ContentStore from '../../../../../stores/ContentStore';
 import loadLikes from '../../../../../actions/activityfeed/loadLikes';
 
-import TranslationPanel from '../../../TranslationPanel/TranslationPanel.js';
-
 class DeckViewPanel extends React.Component {
     getTextFromHtml(html) {
         let text = cheerio.load(html).text();

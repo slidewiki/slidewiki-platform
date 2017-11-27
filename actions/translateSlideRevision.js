@@ -39,6 +39,7 @@ export default function translateSlideRevision(context, payload, done) {
             // context.executeAction(addActivity, {activity: activity});
 
             context.dispatch('END_TRANSLATION', 'success');
+            context.dispatch('LOAD_SLIDE_PREVIEW_SUCCESS', res);
 
             context.executeAction(loadTranslations, {
                 params: payload.selector
