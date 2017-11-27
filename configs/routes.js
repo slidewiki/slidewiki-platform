@@ -31,7 +31,7 @@ import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
 import checkReviewableUser from '../actions/userReview/checkReviewableUser';
-
+import handleLTISignup from '../actions/user/registration/ltiSignUp';
 import {navigateAction} from 'fluxible-router';
 
 export default {
@@ -512,14 +512,39 @@ export default {
         method: 'get',
         page: 'ltiLogin',
         title: 'SlideWiki -- Login',
-        handler: require('../components/Login/LTI'),
+        handler: require('../components/Login/LTI'),//require('../actions/user/registration/ltiSignUp'),
         action: (context, payload, done) => {
             context.dispatch('UPDATE_PAGE_TITLE', {
                 pageTitle: shortTitle + ' | Login'
             });
             done();
         }
+        //action: (context, payload, done) => {
+        //    context.executeAction(ltiSignUp, payload, done);
+        //}
     },
+
+
+    ltiLogin2: {
+        path: '/ltiLogin2',
+        method: 'get',
+        page: 'ltiLogin2',
+        title: 'SlideWiki -- Login',
+        handler: require('../components/Login/LTI'),
+        /*
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Login'
+            });
+            done();
+        }*/
+        action: (context, payload, done) => {
+            context.executeAction(ltiSignUp, payload, done);
+        }
+    },
+
+
+
 
     deckfamily: {
         path: '/deckfamily/:tag',

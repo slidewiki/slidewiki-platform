@@ -18,7 +18,7 @@ class LTI extends React.Component {
             localStorage.setItem(NAME, decodeURIComponent(data));
 
             //close the tab
-            //window.close();
+            window.close();
         }
     }
 
