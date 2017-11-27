@@ -207,7 +207,7 @@ class DeckViewPanel extends React.Component {
                                         <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
                                            tabIndex="-1">
                                             <Thumbnail key={index}
-                                                       url={thumbnailURL + '/slideThumbnail/' + slide.id + '.jpeg'}
+                                                       url={thumbnailURL + '/thumbnail/slide/' + slide.id + '/' + slide.theme}
                                                        slideId={slide.id} alt={''} abIndex={-1}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}

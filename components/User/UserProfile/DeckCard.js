@@ -12,11 +12,15 @@ class DeckCard extends React.Component {
     render() {
         // console.log('DeckCard: cardContent', this.props);
 
-        let thumbnailURL = Microservices.file.uri + '/slideThumbnail/';
-        if (this.props.cardContent.firstSlide)
-            thumbnailURL += this.props.cardContent.firstSlide + '.jpeg';
-        else
+        let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/`;
+        if (this.props.cardContent.firstSlide) {
+            thumbnailURL += this.props.cardContent.firstSlide;
+            if (this.props.cardContent.theme) {
+                thumbnailURL += '/' + this.props.cardContent.theme;
+            }
+        } else {
             thumbnailURL = this.props.cardContent.picture;
+        }
 
         let description = (this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
         return (
