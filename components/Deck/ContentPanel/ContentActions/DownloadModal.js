@@ -140,7 +140,7 @@ class DownloadModal extends React.Component{
 
               <Modal
                   trigger={
-                        <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
+                        <Button icon aria-hidden="false" className="ui secondary button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
                               <Icon name='download' size='large'/>
                         </Button>
                   }
