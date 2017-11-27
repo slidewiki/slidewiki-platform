@@ -155,7 +155,7 @@ class AttachSubdeckModalStore extends BaseStore{
             this.deckSlides =[];
         }else{
             this.deckSlides = payload.slides.map((slide) => {
-                return(slide.id);
+                return(slide.id + '/' + slide.theme);
             });
             this.deckSlidesTitles = payload.slides.map((slide) => {
                 return(slide.title);

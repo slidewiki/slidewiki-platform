@@ -202,7 +202,7 @@ class AttachSlides extends React.Component{
                                     role="gridcell"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
                                     tabIndex="0">
-                                    <Image src={Microservices.file.uri + '/slideThumbnail/' +this.state.deckSlides[slidesShowed]+'.jpeg'}
+                                    <Image src={Microservices.file.uri + '/thumbnail/slide/' +this.state.deckSlides[slidesShowed]}
                                         alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
                                   </Grid.Column>;
                 columnsContent[columnCount] = singleColumn;
