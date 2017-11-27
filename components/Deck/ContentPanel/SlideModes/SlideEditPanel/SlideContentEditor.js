@@ -1758,9 +1758,17 @@ class SlideContentEditor extends React.Component {
         let styleName = 'default';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
-        }
-        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
-            styleName = this.props.DeckTreeStore.theme;
+        } else {
+            // we need to figure out the theme based on the parent deck
+            // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
+            let treeNode = this.props.DeckTreeStore.flatTree
+                .find((node) => node.get('id') === this.props.SlideEditStore.slideId && node.get('type') === 'slide');
+
+            if (treeNode) {
+                styleName = treeNode.get('theme');
+            } else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined') {
+                styleName = this.props.DeckTreeStore.theme;
+            }
         }
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {

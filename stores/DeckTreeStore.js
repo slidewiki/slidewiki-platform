@@ -69,7 +69,16 @@ class DeckTreeStore extends BaseStore {
     //path: array of binary id:position
     makePathForTree(deckTree, path) {
         let nodePath = this.makeSelectorPathString(path);
-        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: false, editable: false, onAction: 0};
+        let newTree = {
+            id: deckTree.id,
+            title: deckTree.title,
+            type: deckTree.type,
+            path: nodePath,
+            theme: deckTree.theme,
+            selected: false,
+            editable: false,
+            onAction: 0
+        };
         if (deckTree.type === 'deck') {
             newTree.children = [];
             newTree.expanded = true;
@@ -97,7 +106,14 @@ class DeckTreeStore extends BaseStore {
     //it is a trade off: updating the tree needs this to be synchronized
     flattenTree(deckTree) {
         let list = [];
-        list.push({id: deckTree.get('id'), title: deckTree.get('title'), type: deckTree.get('type'), path: deckTree.get('path')});
+        list.push({
+            id: deckTree.get('id'),
+            title: deckTree.get('title'),
+            type: deckTree.get('type'),
+            path: deckTree.get('path'),
+            theme: deckTree.get('theme'),
+        });
+
         if (deckTree.get('type') === 'deck') {
             deckTree.get('children').forEach((item, index) => {
                 list = list.concat(this.flattenTree(item));
