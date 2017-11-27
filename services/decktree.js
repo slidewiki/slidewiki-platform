@@ -22,10 +22,13 @@ export default {
     },
     create: (req, resource, params, body, config, callback) => {
         req.reqId = req.reqId ? req.reqId : -1;
+
+        log.info('decktree create params:', params);
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
         let selector= {'id': String(args.selector.id), 'spath': args.selector.spath, 'sid': String(args.selector.sid), 'stype': args.selector.stype};
-        
+        // log.info('decktree create req', req);
+        console.log('decktree create args', args);
         if(resource === 'decktree.node'){
             /*********connect to microservices*************/
             rp.post({
@@ -33,6 +36,7 @@ export default {
                 headers: {'----jwt----': args.jwt},
                 body:JSON.stringify({
                     selector: selector,
+                    theme: args.theme,
                     nodeSpec:args.nodeSpec
                 })
             }).then((res) => {

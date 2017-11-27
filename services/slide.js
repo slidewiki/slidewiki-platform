@@ -2,6 +2,8 @@ import {Microservices} from '../configs/microservices';
 import rp from 'request-promise';
 const log = require('../configs/log').log;
 
+
+
 export default {
     name: 'slide',
     // At least one of the CRUD methods is Required
@@ -39,6 +41,9 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         //TODO get real content name
         let args = params.params? params.params : params;
+        log.info('slide service: args', args);
+        console.log('slide service: args', args);
+        req.log('slide service: args', args);
         //let selector= args.selector;
         //let selector= {'id': String(args.id), 'spath': args.spath, 'sid': String(args.sid), 'stype': args.stype};
         //let slideSpec = {'id': String(args.slideSpec.sid), 'type': args.slideSpec.type};
@@ -67,6 +72,7 @@ export default {
                         id: content_id,
                         revision: content_id
                     },
+                    theme: args.selector.theme,
                     position: content_id,
                     language: 'EN',
                     license: 'CC BY-SA',
@@ -122,7 +128,7 @@ export default {
             const content_id = '112233445566778899000000';
             /*********connect to microservices*************/
             let url = Microservices.deck.uri + '/slide/' + args.id;
-
+            log.info('slide.content args.theme', args.theme);
             rp.put({
                 uri: url,
                 headers: {'----jwt----': args.jwt},
@@ -141,6 +147,7 @@ export default {
                         id: content_id,
                         revision: content_id
                     },
+                    theme: args.theme,
                     position: content_id,
                     language: 'EN',
                     dataSources: args.dataSources,

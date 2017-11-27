@@ -20,10 +20,11 @@ class ContentActionsHeader extends React.Component {
     componentDidUpdate(){
 
     }
-    handleAddNode(selector, nodeSpec) {
-        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
+    handleAddNode(selector, nodeSpec, theme='default') {
+        //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2", theme: "sky"}
         //nodeSec: Object {type: "slide", id: "0"}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec});
+        console.log('handleAddNode selector', selector);
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: selector, nodeSpec: nodeSpec, theme: theme});
     }
 
     handleDeleteNode(selector) {
@@ -61,7 +62,6 @@ class ContentActionsHeader extends React.Component {
         });
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
-
         let buttonStyle = {
             classNames : classNames({
                 'item small attached left':true,
@@ -84,7 +84,7 @@ class ContentActionsHeader extends React.Component {
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
+                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}, this.props.DeckTreeStore.theme) }
                           type="button"
                           aria-label="Add Slide"
                           data-tooltip="Add Slide"
