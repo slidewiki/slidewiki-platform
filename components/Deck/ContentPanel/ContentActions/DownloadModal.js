@@ -94,6 +94,9 @@ class DownloadModal extends React.Component{
             case 'ePub':
                 return Microservices.pdf.uri + '/exportEPub/' + splittedId[0];
                 break;
+            case 'HTML':
+                return Microservices.pdf.uri +'/exportOfflineHTML/'+ splittedId[0];
+                break;
             case 'SCORMv1.2':
             case 'SCORMv2':
             case 'SCORMv3':
@@ -128,6 +131,7 @@ class DownloadModal extends React.Component{
         if(process.env.BROWSER){
             event.preventDefault();
             window.open(this.getExportHref(this.state.radioValue));
+            this.handleClose();
         }
 
         this.createDownloadActivity();
@@ -181,7 +185,7 @@ class DownloadModal extends React.Component{
 
                                    <Grid.Column textAlign='left' width={13} role="radiogroup" aria-labelledby="downloadModalDescription">
                                     <div  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</div>
-                                    <Form.Field >
+                                     <Form.Field >
                                           <Radio
                                             label='PDF'
                                             name='downloadRadioGroup'
@@ -194,6 +198,20 @@ class DownloadModal extends React.Component{
                                             tabIndex="0"
 
                                             />
+                                      </Form.Field>
+                                      <Form.Field>
+                                        <Radio
+                                          label='HTML'
+                                          name='downloadRadioGroup'
+                                          value='HTML'
+                                          checked={this.state.radioValue === 'HTML'}
+                                          onChange={this.handleRadioChange}
+                                          role="radio"
+                                          aria-checked={this.state.radioValue === 'HTML'}
+                                          aria-label='HTML'
+                                          tabIndex="0"
+
+                                          />
                                         </Form.Field>
                                         <Form.Field>
                                           <Radio
