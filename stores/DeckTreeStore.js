@@ -104,19 +104,25 @@ class DeckTreeStore extends BaseStore {
     }
     //flat tree is used to avoid complex recursive functions on tree
     //it is a trade off: updating the tree needs this to be synchronized
-    flattenTree(deckTree) {
+    //this also propagates themes from decks to slide children
+    flattenTree(deckTree, theme) {
+        if (!theme) theme = deckTree.get('theme');
+
         let list = [];
         list.push({
             id: deckTree.get('id'),
             title: deckTree.get('title'),
             type: deckTree.get('type'),
             path: deckTree.get('path'),
-            theme: deckTree.get('theme'),
+            theme: theme,
         });
 
         if (deckTree.get('type') === 'deck') {
             deckTree.get('children').forEach((item, index) => {
-                list = list.concat(this.flattenTree(item));
+                let theme = item.get('theme');
+                if (item.get('type') === 'slide') theme = deckTree.get('theme');
+
+                list = list.concat(this.flattenTree(item, theme));
             });
         }
         return list;
@@ -310,6 +316,7 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.nodeSpec.title));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.nodeSpec.path));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('theme', (val) => payload.nodeSpec.theme));
         //update flat tree for slide control
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
         this.emitChange();
