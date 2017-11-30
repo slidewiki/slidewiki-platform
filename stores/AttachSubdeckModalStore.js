@@ -13,7 +13,6 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
         this.deckSlides =[];
-        this.deckSlidesTitles=[];
     }
 
     getState(){
@@ -27,8 +26,6 @@ class AttachSubdeckModalStore extends BaseStore{
             activeItem: this.activeItem,
             selectedSlides:this.selectedSlides,
             deckSlides: this.deckSlides,
-            deckSlidesTitles:  this.deckSlidesTitles
-
         };
     }
     dehydrate() {
@@ -44,8 +41,6 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = state.activeItem;
         this.selectedSlides = state.selectedSlides;
         this.deckSlides = state.deckSlides;
-        this.deckSlidesTitles = state.deckSlidesTitles;
-
     }
 
     updateUserDecks(payload){
@@ -74,6 +69,7 @@ class AttachSubdeckModalStore extends BaseStore{
                     //creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                     creationDate: deck.timestamp,
                     deckID: deck._id,
+                    theme: deck.theme,
                     firstSlide: deck.firstSlide,
                     language:deck.language,
                     countRevisions:deck.countRevisions,
@@ -105,6 +101,7 @@ class AttachSubdeckModalStore extends BaseStore{
                     updated:deck.lastUpdate,
                     creationDate: deck.timestamp,
                     deckID: deck.db_id,
+                    theme: deck.theme,
                     firstSlide: deck.firstSlide,
                     language:deck.language,
                     countRevisions:deck.revisionsCount,
@@ -128,7 +125,6 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
         this.deckSlides =[];
-        this.deckSlidesTitles=[];
 
         this.emitChange();
     }
@@ -139,8 +135,6 @@ class AttachSubdeckModalStore extends BaseStore{
         this.activeItem = 'MyDecks';
         this.selectedSlides = [];
         this.deckSlides =[];
-        this.deckSlidesTitles=[];
-
 
         this.emitChange();
     }
@@ -154,14 +148,11 @@ class AttachSubdeckModalStore extends BaseStore{
         if((payload.slides===[])||(typeof payload.slides === 'undefined')){
             this.deckSlides =[];
         }else{
-            this.deckSlides = payload.slides.map((slide) => {
-                return(slide.id + '/' + slide.theme);
-            });
-            this.deckSlidesTitles = payload.slides.map((slide) => {
-                return(slide.title);
-            });
-
-
+            this.deckSlides = payload.slides.map((slide) => ({
+                id: slide.id,
+                title: slide.title,
+                theme: slide.theme,
+            }));
         }
 
         this.emitChange();

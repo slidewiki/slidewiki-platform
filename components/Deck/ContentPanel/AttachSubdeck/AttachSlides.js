@@ -28,7 +28,6 @@ class AttachSlides extends React.Component{
             selectedDeckId: this.props.AttachSubdeckModalStore.selectedDeckId,
             deckSlides: this.props.AttachSubdeckModalStore.deckSlides,
             selectedSlides:this.props.AttachSubdeckModalStore.selectedSlides,
-            deckSlidesTitles:this.props.AttachSubdeckModalStore.deckSlidesTitles,
             selectedSlidesLabel: this.props.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length,
             firstTime:true
 
@@ -46,7 +45,6 @@ class AttachSlides extends React.Component{
             deckSlides: nextProps.AttachSubdeckModalStore.deckSlides,
             selectedSlides:nextProps.AttachSubdeckModalStore.selectedSlides,
             selectedDeckTitle:nextProps.AttachSubdeckModalStore.selectedDeckTitle,
-            deckSlidesTitles:nextProps.AttachSubdeckModalStore.deckSlidesTitles,
             selectedSlidesLabel: nextProps.AttachSubdeckModalStore.selectedSlides.length +' of ' + this.props.AttachSubdeckModalStore.deckSlides.length
 
         });
@@ -92,9 +90,8 @@ class AttachSlides extends React.Component{
     }
     handleAllSlides(){
 
-        let selectedIds = this.state.deckSlides.map((slideId,index) => {
-            return slideId+'-'+index;
-
+        let selectedIds = this.state.deckSlides.map((slide,index) => {
+            return slide.id+'-'+index;
         });
         this.setState({
             selectedSlides:selectedIds,
@@ -192,7 +189,12 @@ class AttachSlides extends React.Component{
 
         for(let i=0;i<numRows;i++){
             while((columnCount<this.numColumns) && (slidesShowed < this.state.deckSlides.length)){
-                slideId =this.state.deckSlides[slidesShowed]+'-'+slidesShowed; //we include the position. the same slideid can be more than one time
+                slideId =this.state.deckSlides[slidesShowed].id+'-'+slidesShowed; //we include the position. the same slideid can be more than one time
+
+                let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${this.state.deckSlides[slidesShowed].id}`;
+                if (this.state.deckSlides[slidesShowed].theme) {
+                    thumbnailURL += '/' + this.state.deckSlides[slidesShowed].theme;
+                }
                 singleColumn =  <Grid.Column key={slidesShowed}
                                     id={'slide'+slidesShowed}
                                     onClick={this.handleOnclick.bind(this,slideId)}
@@ -202,8 +204,8 @@ class AttachSlides extends React.Component{
                                     role="gridcell"
                                     aria-selected ={this.state.selectedSlides.includes(slideId)}
                                     tabIndex="0">
-                                    <Image src={Microservices.file.uri + '/thumbnail/slide/' +this.state.deckSlides[slidesShowed]}
-                                        alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
+                                    <Image src={thumbnailURL}
+                                        alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlides[slidesShowed].title} bordered size='medium' />
                                   </Grid.Column>;
                 columnsContent[columnCount] = singleColumn;
                 columnCount ++;

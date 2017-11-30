@@ -213,6 +213,7 @@ export default {
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
                             firstSlide: deck.firstSlide,
+                            theme: deck.theme,
                             language:deck.language,
                             countRevisions:deck.countRevisions
 

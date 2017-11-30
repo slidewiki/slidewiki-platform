@@ -126,7 +126,6 @@ class DeckViewPanel extends React.Component {
 
         const totalLikes = this.props.ContentLikeStore.usersWhoLikedDeck.length;
 
-        const thumbnailURL = Microservices.file.uri;
         const deckURL = '/deck/' + this.props.selector.id;
         const creatorProfileURL = '/user/' + deckCreator;
         const ownerProfileURL = '/user/' + deckOwner;
@@ -200,6 +199,10 @@ class DeckViewPanel extends React.Component {
                 <div key={this.props.slideIndex} className="ui three column grid container">
                     {/* Read https://slidewiki.atlassian.net/wiki/display/SWIK/How+To+Use+Slide+Thumbnail to know the details */}
                     {slidesArr.map((slide, index) => {
+                        let thumbnailURL = `${Microservices.file.uri}/thumbnail/slide/${slide.id}`;
+                        if (slide.theme) {
+                            thumbnailURL += '/' + slide.theme;
+                        }
                         if (index < maxSlideThumbnails) {
                             return (<div key={index} className="column">
                                 <div className="ui fluid card">
@@ -207,7 +210,7 @@ class DeckViewPanel extends React.Component {
                                         <a href={deckURL + '/slide/' + slide.id} className="ui medium image"
                                            tabIndex="-1">
                                             <Thumbnail key={index}
-                                                       url={thumbnailURL + '/thumbnail/slide/' + slide.id + '/' + slide.theme}
+                                                       url={thumbnailURL}
                                                        slideId={slide.id} alt={''} abIndex={-1}/>
                                         </a>
                                         <a href={deckURL + '/slide/' + slide.id}
