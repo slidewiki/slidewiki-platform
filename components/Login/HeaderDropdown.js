@@ -73,7 +73,8 @@ class HeaderDropdown extends React.Component {
                 <div className="text">
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 </div>
-                <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
+
+                {/*<i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}*/}
                 <ul id="userHeaderMenu" className="ui menu vertical" style={{width:'160px'}} role="menu" aria-labelledby="userButtonMenu" tabIndex="0">
                     {/*
                     <li className="header" role="separator" tabIndex="-1">
@@ -81,19 +82,19 @@ class HeaderDropdown extends React.Component {
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
                      */}
-                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
+                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="-1" >
                         <i className="user icon link"  /> My Decks
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="0" >
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="-1" >
                         <i className="icon users" /> My Groups
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="-1" >
                         <i className="setting icon" /> My Settings
                     </li>
-                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="0" >
+                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="-1" >
                         <i className={alarmClassName} /> My Notifications
                     </li>
-                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
+                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="-1" >
                         <i className="sign out icon"/> Sign Out
                     </li>
 
