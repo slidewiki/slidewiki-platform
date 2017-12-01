@@ -75,11 +75,12 @@ class HeaderDropdown extends React.Component {
                 </div>
                 <i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}
                 <ul id="userHeaderMenu" className="ui menu vertical" style={{width:'160px'}} role="menu" aria-labelledby="userButtonMenu" tabIndex="0">
+                    {/*
                     <li className="header" role="separator" tabIndex="-1">
                         {this.props.UserProfileStore.username}
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
-
+                     */}
                     <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
                         <i className="user icon link"  /> My Decks
                     </li>
