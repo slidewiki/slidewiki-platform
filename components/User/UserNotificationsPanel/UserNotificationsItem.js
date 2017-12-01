@@ -280,13 +280,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             default:
-                const warningIconClass = allIconClass.concat(' warning');
-                iconNotification = (<i className={warningIconClass}></i>);
-                summaryNotification = (
-                    <div className="summary">
-                        Unknown type of activity - {notification.activity_type}
-                    </div>
-                );
+                
         }
 
         let notificationIsNew = (notification.newNotificationId !== undefined && notification.newNotificationId !== '');
