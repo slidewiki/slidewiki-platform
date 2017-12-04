@@ -9,15 +9,18 @@ const log = require('../log/clog');
 
 export default function loadDeckTree(context, payload, done) {
     log.info(context);
+
+    console.log('Payload for loadDeckTree:', payload);
+
     if (!(AllowedPattern.DECK_ID.test(payload.params.id))) {
         context.executeAction(deckIdTypeError, payload, done);
         return;
     }
 
-    if (!(payload.params.spath && (AllowedPattern.DECK_CONTENT_PATH.test(payload.params.spath)) || payload.params.spath === undefined || payload.params.spath === '')) {
+    /*if (!(payload.params.spath && (AllowedPattern.DECK_CONTENT_PATH.test(payload.params.spath)) || payload.params.spath === undefined || payload.params.spath === '')) {
         context.executeAction(deckContentPathError, payload, done);
         return;
-    }
+    }*/
     let pageTitle = shortTitle + ' | Deck Tree | ' + payload.params.id;
 
     let currentSelector = context.getStore(DeckTreeStore).getSelector();

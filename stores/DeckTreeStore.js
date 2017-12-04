@@ -20,6 +20,7 @@ class DeckTreeStore extends BaseStore {
         this.theme = null;
     }
     updateDeckTree(payload) {
+        console.log('Updating deck tree with', payload);
         this.isSelectorValid = true;
         this.selector = Immutable.fromJS(payload.selector);
         //add path to tree nodes
