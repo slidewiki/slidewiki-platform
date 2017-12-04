@@ -3,7 +3,7 @@ import serviceUnavailable from '../error/serviceUnavailable';
 import UserProfileStore from '../../stores/UserProfileStore';
 
 // loads deck groups created by the current user
-export default function loadUserDeckGroups(context, payload, done) {
+export default function loadUserCollections(context, payload, done) {
     log.info(context);
 
     // enrich payload with user id
@@ -11,10 +11,11 @@ export default function loadUserDeckGroups(context, payload, done) {
 
     context.service.read('deckgroups.user', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
+            console.log(err);
             log.error(context, {filepath: __filename});
-            context.dispatch('LOAD_USER_DECK_GROUPS_FAILURE', err);
+            context.dispatch('LOAD_USER_COLLECTIONS_FAILURE', err);
         } else {
-            context.dispatch('LOAD_USER_DECK_GROUPS_SUCCESS', res);
+            context.dispatch('LOAD_USER_COLLECTIONS_SUCCESS', res);
         }
 
         done();

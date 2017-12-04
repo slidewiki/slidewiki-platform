@@ -7,6 +7,7 @@ export default {
     name: 'deckgroups',
 
     read: (req, resource, params, config, callback) => {
+        console.log('edw');
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
@@ -34,16 +35,23 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         let args = params.params? params.params : params;
 
+        let payload = {
+            title: args.title, 
+            description: args.description,
+            decks: []
+        };
+
+        // add userGroup if given 
+        if(args.userGroup !== ''){
+            payload.userGroup = args.userGroup;
+        }
+
         rp({
             method: 'POST',
             uri: `${Microservices.deck.uri}/groups`,
             json: true,
             headers: {'----jwt----': args.jwt},
-            body: {
-                title: args.title, 
-                description: args.description, 
-                decks: []
-            }
+            body: payload
         }).then((deckGroup) => callback(null, deckGroup))
         .catch((err) => callback(err));
     },
@@ -68,7 +76,7 @@ export default {
                 let removeOps = existingDeckGroupIds.map( (e) => { return {groupId: e, updateOp: {op: 'remove', deckId: args.deckId}}; } );
 
                 // check if deck group ids given are already related to this deck
-                args.deckGroups.forEach( (deckGroupId) => {
+                args.collections.forEach( (deckGroupId) => {
                     if(existingDeckGroupIds.includes(deckGroupId)){
                         // deck is already related to this deck group
                         removeOps = removeOps.filter( (e) => { return e.groupId !== deckGroupId; });

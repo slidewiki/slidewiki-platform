@@ -3,8 +3,8 @@ import slideIdTypeError from './error/slideIdTypeError';
 import { AllowedPattern } from './error/util/allowedPattern';
 import UserProfileStore from '../stores/UserProfileStore';
 import serviceUnavailable from './error/serviceUnavailable';
-import loadUserDeckGroups from './deckGroups/loadUserDeckGroups';
-import loadDeckGroups from './deckGroups/loadDeckGroups';
+import loadUserCollections from './collections/loadUserCollections';
+import loadCollections from './collections/loadCollections';
 const log = require('./log/clog');
 
 export default function loadDeckEdit(context, payload, done) {
@@ -17,10 +17,10 @@ export default function loadDeckEdit(context, payload, done) {
     }
 
     // load deck groups of the current user
-    context.executeAction(loadUserDeckGroups);
+    context.executeAction(loadUserCollections);
 
     // load deck groups assigned to the current deck
-    context.executeAction(loadDeckGroups, payload, done);
+    context.executeAction(loadCollections, payload, done);
 
     payload.params.jwt = context.getStore(UserProfileStore).jwt;
     

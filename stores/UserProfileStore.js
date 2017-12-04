@@ -372,9 +372,7 @@ class UserProfileStore extends BaseStore {
         this.emitChange();
     }
 
-    updateDeckGroups(payload){
-        console.log(payload);
-        
+    updateDeckGroups(payload){       
         this.userDeckGroups = payload;
         this.updateDeckGroupsError = false;
         this.emitChange();

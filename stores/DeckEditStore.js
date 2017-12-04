@@ -21,14 +21,14 @@ class DeckEditStore extends BaseStore {
             users: [],
             groups: []
         };
-        this.deckGroupOptions = [];
-        this.selectedDeckGroups = [];
+        this.collectionOptions = [];
+        this.selectedCollections = [];
 
         this.showGroupModal = false;
 
         // variables for error handling 
-        this.loadDeckGroupsError = false;
-        this.addDeckGroupError = false;
+        this.loadCollectionsError = false;
+        this.addCollectionError = false;
     }
 
     updateProperties(payload) {
@@ -50,7 +50,7 @@ class DeckEditStore extends BaseStore {
             groups: []
         };
 
-        this.selectedDeckGroups = [];
+        this.selectedCollections = [];
 
         this.emitChange();
     }
@@ -65,10 +65,10 @@ class DeckEditStore extends BaseStore {
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
             showGroupModal: this.showGroupModal, 
-            deckGroupOptions: this.deckGroupOptions,
-            selectedDeckGroups: this.selectedDeckGroups,
-            loadDeckGroupsError: this.loadDeckGroupsError, 
-            addDeckGroupError: this.addDeckGroupError,
+            collectionOptions: this.collectionOptions,
+            selectedCollections: this.selectedCollections,
+            loadCollectionsError: this.loadCollectionsError, 
+            addCollectionError: this.addCollectionError,
         };
     }
 
@@ -85,10 +85,10 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
-        this.deckGroupOptions = state.deckGroupOptions;
-        this.selectedDeckGroups = state.selectedDeckGroups;
-        this.loadDeckGroupsError = state.loadDeckGroupsError; 
-        this.addDeckGroupError = state.addDeckGroupError;
+        this.collectionOptions = state.collectionOptions;
+        this.selectedCollections = state.selectedCollections;
+        this.loadCollectionsError = state.loadCollectionsError; 
+        this.addCollectionError = state.addCollectionError;
     }
 
     updateAuthorizedUsers(users) {
@@ -113,43 +113,43 @@ class DeckEditStore extends BaseStore {
         this.showGroupModal = false;
     }
 
-    loadUserDeckGroups(payload){
-        this.deckGroupOptions = payload.documents;
+    loadUserCollections(payload){
+        this.collectionOptions = payload.documents;
         this.emitChange();
     }
 
-    loadDeckGroups(payload){
-        this.selectedDeckGroups = payload.map( (group) => {
-            return group._id;
+    loadCollections(payload){
+        this.selectedCollections = payload.map( (collection) => {
+            return collection._id;
         });
         this.emitChange();
     }
 
-    loadDeckGroupsFail(){
-        this.loadDeckGroupsError = true;
+    loadCollectionsFail(){
+        this.loadCollectionsError = true;
         this.emitChange();
-        this.loadDeckGroupsError = false;
+        this.loadCollectionsError = false;
     }
 
-    addDeckGroup(newGroup){
-        this.deckGroupOptions.push(newGroup);
-        this.selectedDeckGroups.push(newGroup._id);
-        this.emitChange();
-    }
-
-    addDeckGroupError(){
-        this.addDeckGroupError = true;
-        this.emitChange();
-        this.addDeckGroupError = false;
-    }
-
-    addSelectedDeckGroup(groupId){
-        this.selectedDeckGroups.push(groupId);
+    addCollection(newCollection){
+        this.collectionOptions.push(newCollection);
+        this.selectedCollections.push(newCollection._id);
         this.emitChange();
     }
 
-    removeSelectedDeckGroup(groupId){
-        this.selectedDeckGroups = this.selectedDeckGroups.filter( (e) => {
+    addCollectionFailure(){
+        this.addCollectionError = true;
+        this.emitChange();
+        this.addCollectionError = false;
+    }
+
+    addSelectedCollection(groupId){
+        this.selectedCollections.push(groupId);
+        this.emitChange();
+    }
+
+    removeSelectedCollection(groupId){
+        this.selectedCollections = this.selectedCollections.filter( (e) => {
             return e !== groupId;
         });
         this.emitChange();
@@ -166,19 +166,19 @@ DeckEditStore.handlers = {
     'LOAD_DECK_PROPS_FAILURE': 'resetProperties', 
 
     // load user groups created by a specific user
-    'LOAD_USER_DECK_GROUPS_SUCCESS': 'loadUserDeckGroups', 
-    'LOAD_USER_DECK_GROUPS_FAILURE': 'loadDeckGroupsFail', 
+    'LOAD_USER_COLLECTIONS_SUCCESS': 'loadUserCollections', 
+    'LOAD_USER_COLLECTIONS_FAILURE': 'loadCollectionsFail', 
 
     // load deck groups assigned to a deck
-    'LOAD_DECK_GROUPS_SUCCESS': 'loadDeckGroups', 
-    'LOAD_DECK_GROUPS_FAILURE': 'loadDeckGroupsFail',
+    'LOAD_COLLECTIONS_SUCCESS': 'loadCollections', 
+    'LOAD_COLLECTIONS_FAILURE': 'loadCollectionsFail',
 
-    'ADD_DECK_GROUP_SUCCESS': 'addDeckGroup', 
-    'ADD_DECK_GROUP_FAILURE': 'addDeckGroupError', 
+    'ADD_COLLECTION_SUCCESS': 'addCollection', 
+    'ADD_COLLECTION_FAILURE': 'addCollectionFailure', 
 
     // add/remove selected deck groups
-    'ADD_SELECTED_DECK_GROUP': 'addSelectedDeckGroup',
-    'REMOVE_SELECTED_DECK_GROUP': 'removeSelectedDeckGroup'
+    'ADD_SELECTED_COLLECTION': 'addSelectedCollection',
+    'REMOVE_SELECTED_COLLECTION': 'removeSelectedCollection'
 };
 
 export default DeckEditStore;

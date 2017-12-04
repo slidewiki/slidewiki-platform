@@ -1,32 +1,30 @@
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
-import {Button, Icon, Modal, Header, Form} from 'semantic-ui-react';
+import {Button, Icon, Modal, Header, Form, Dropdown} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
-import addNewDeckGroup from '../../../../../actions/deckGroups/addNewDeckGroup';
+import addNewCollection from '../../../../../actions/collections/addNewCollection';
 
-class NewDeckGroupModal extends React.Component {
+class NewCollectionModal extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             title: this.props.title || '', 
-            description: this.props.description || '', 
+            description: this.props.description || '',
+            userGroup: this.props.userGroup || '', 
             validationError: false
         };
     }
-    // navigateToFork() {
-    //     let lastUpdatedFork = _.maxBy(this.props.forks, (fork) => new Date(fork.lastUpdate));
-    //     this.context.executeAction(navigateAction, {
-    //         url: '/deck/' + lastUpdatedFork.id
-    //     });
-    //     this.props.handleClose();
-    // }
     handleChange(fieldName, event) {
         let stateChange = {};
         stateChange[fieldName] = event.target.value;
         this.setState(stateChange);
     }
-
+    handleUserGroupChange(event, data){
+        this.setState({
+            userGroup: data.value
+        });
+    }
     handleClose(){
         this.clearInputFields();
         this.props.handleClose();
@@ -36,6 +34,7 @@ class NewDeckGroupModal extends React.Component {
         this.setState({
             title: '', 
             description: '', 
+            userGroup: '',
             validationError: false
         });
     }
@@ -65,28 +64,38 @@ class NewDeckGroupModal extends React.Component {
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
 
-        this.context.executeAction(addNewDeckGroup, {
+        this.context.executeAction(addNewCollection, {
             title: this.state.title, 
-            description: this.state.description
+            description: this.state.description,
+            userGroup: this.state.userGroup
         });
 
         this.handleClose();
     }
     render() {
+        let userGroupOptions = this.props.userGroups.map( (userGroup) => ({
+                text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
+                value: userGroup._id
+        }));
+
         return (
             <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='forkModalHeader'
                    aria-describedby='forkModalDesc' open={this.props.isOpen}
                    onClose={this.props.handleClose}>
-                <Header content='Create a new Deck Group' id='forkModalHeader'/>
+                <Header content='Create a new Deck Collection' id='forkModalHeader'/>
                 <Modal.Content>
                 <Form>
                     <Form.Field required error={this.state.validationError}>
                         <label>Title</label>
-                        <input placeholder='Deck Group Title' value={this.state.title} onChange={this.handleChange.bind(this, 'title')} />
+                        <input placeholder='Deck Collection Title' value={this.state.title} onChange={this.handleChange.bind(this, 'title')} />
                     </Form.Field>
                     <Form.Field>
                         <label>Description</label>
-                        <input placeholder='Deck Group Description' value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                        <input placeholder='Deck Collection Description' value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                    </Form.Field>
+                    <Form.Field>
+                        <label htmlFor="user_group_of_new_deck_group">User Group</label>
+                        <Dropdown placeholder="Select User Group" fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} />
                     </Form.Field>
                 </Form>
                 </Modal.Content>
@@ -103,8 +112,8 @@ class NewDeckGroupModal extends React.Component {
     }
 }
 
-NewDeckGroupModal.contextTypes = {
+NewCollectionModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-export default NewDeckGroupModal;
+export default NewCollectionModal;

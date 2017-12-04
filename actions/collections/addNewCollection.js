@@ -2,16 +2,19 @@ const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import UserProfileStore from '../../stores/UserProfileStore';
 
-export default function updateDecksOfDeckGroup(context, payload, done) {
+export default function addNewCollection(context, payload, done) {
     log.info(context);
 
     // enrich payload with jwt
     payload.jwt = context.getStore(UserProfileStore).jwt;
 
-    context.service.update('deckgroups.updateDecks', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.create('deckgroups.create', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
-            context.dispatch('UPDATE_DECKS_OF_DECK_GROUP_ERROR', err);
+            console.log(err);
+            context.dispatch('ADD_COLLECTION_FAILURE', err);
+        } else {
+            context.dispatch('ADD_COLLECTION_SUCCESS', res);
         }
 
         done();

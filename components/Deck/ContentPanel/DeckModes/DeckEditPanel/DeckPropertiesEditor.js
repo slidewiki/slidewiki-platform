@@ -19,10 +19,10 @@ import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import LanguageDropdown from '../../../../common/LanguageDropdown';
-import NewDeckGroupModal from './NewDeckGroupModal';
-import addSelectedDeckGroup from '../../../../../actions/deckGroups/addSelectedDeckGroup';
-import removeSelectedDeckGroup from '../../../../../actions/deckGroups/removeSelectedDeckGroup';
-import updateDecksOfDeckGroup from '../../../../../actions/deckGroups/updateDecksOfDeckGroup';
+import NewCollectionModal from './NewCollectionModal';
+import addSelectedCollection from '../../../../../actions/collections/addSelectedCollection';
+import removeSelectedCollection from '../../../../../actions/collections/removeSelectedCollection';
+import updateCollectionDecks from '../../../../../actions/collections/updateCollectionDecks';
 
 class DeckPropertiesEditor extends React.Component {
     constructor(props) {
@@ -92,20 +92,20 @@ class DeckPropertiesEditor extends React.Component {
             }
         }
     }
-    initDeckGroupsDropdown(){
-        $('#deckGroupsDropdown').dropdown({
+    initCollectionsDropdown(){
+        $('#collectionsDropdown').dropdown({
             allowAdditions: false,
             onAdd: (newValue) => {
-                this.context.executeAction(addSelectedDeckGroup, parseInt(newValue));
+                this.context.executeAction(addSelectedCollection, parseInt(newValue));
             }, 
             onRemove: (removedValue) => {
-                this.context.executeAction(removeSelectedDeckGroup, parseInt(removedValue));
+                this.context.executeAction(removeSelectedCollection, parseInt(removedValue));
             }
         });
     }
     componentDidUpdate() {
         this.handleDropboxes();
-        this.initDeckGroupsDropdown();
+        this.initCollectionsDropdown();
         
         if (this.props.DeckEditStore.showGroupModal) {
             $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
@@ -114,7 +114,7 @@ class DeckPropertiesEditor extends React.Component {
 
     componentDidMount() {
         this.handleDropboxes();
-        this.initDeckGroupsDropdown();
+        this.initCollectionsDropdown();
     }
 
     handleDropboxes() {
@@ -190,7 +190,7 @@ class DeckPropertiesEditor extends React.Component {
         event.preventDefault();
 
         // needed so as not preserve values when editing deck again
-        this.clearDeckGroupsDropdown();
+        this.clearCollectionsDropdown();
 
         this.context.executeAction(navigateAction, {
             url: ContentUtil.makeNodeURL(this.props.selector, 'view')
@@ -248,12 +248,12 @@ class DeckPropertiesEditor extends React.Component {
                 tags: TagsStore.tags
             });
             this.context.executeAction(updateTheme, this.state.theme);
-            this.context.executeAction(updateDecksOfDeckGroup, {
+            this.context.executeAction(updateCollectionDecks, {
                 deckId : deckId, 
-                deckGroups: this.props.DeckEditStore.selectedDeckGroups
+                collections: this.props.DeckEditStore.selectedCollections
             });
             // needed so as not preserve values when editing deck again
-            this.clearDeckGroupsDropdown(); 
+            this.clearCollectionsDropdown(); 
         }
     }
 
@@ -395,15 +395,15 @@ class DeckPropertiesEditor extends React.Component {
         return list_authorized;
     }
 
-    showNewDeckGroupModal(event){
+    showNewCollectionModal(event){
         event.preventDefault();
         this.setState({
-            showNewDeckGroupModal: true
+            showNewCollectionModal: true
         });
     }
 
-    clearDeckGroupsDropdown(){
-        $('#deckGroupsDropdown').dropdown('clear');
+    clearCollectionsDropdown(){
+        $('#collectionsDropdown').dropdown('clear');
     }
 
     render() {
@@ -498,9 +498,9 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         );
 
-        // form deck group dropdown options
-        let deckGroupOptions = this.props.DeckEditStore.deckGroupOptions.map( (deckGroup) => {
-            return <div className="item" key={deckGroup._id} data-value={deckGroup._id}>{deckGroup.title}</div>;
+        // form collections dropdown options
+        let collectionOptions = this.props.DeckEditStore.collectionOptions.map( (collection) => {
+            return <div className="item" key={collection._id} data-value={collection._id}>{collection.title}</div>;
         });
         
         //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
@@ -569,25 +569,25 @@ class DeckPropertiesEditor extends React.Component {
                                 <GroupDetailsModal ref="groupdetailsmodal_" group={this.props.DeckEditStore.detailedGroup} />
                             </div>
                             <div className="field">
-                                <label htmlFor="deck_groups">Deck Groups</label>
+                                <label htmlFor="deck_groups">Deck Collections</label>
                                 <div className="two fields">
                                     <div className="field">
-                                        <div id="deckGroupsDropdown" className="ui fluid multiple search selection dropdown">
-                                            <input name="deckGroups" type="hidden" value={this.props.DeckEditStore.selectedDeckGroups}/>
+                                        <div id="collectionsDropdown" className="ui fluid multiple search selection dropdown">
+                                            <input name="collections" type="hidden" value={this.props.DeckEditStore.selectedCollections}/>
                                             <i className="dropdown icon"></i>
-                                            <div className="default text">Choose Deck Groups</div>
+                                            <div className="default text">Choose Deck Collection</div>
                                             <div className="menu">
-                                                {deckGroupOptions}
+                                                {collectionOptions}
                                             </div>
                                         </div>
                                     </div>
                                     <div className="field">
                                         <button className="ui primary button"
-                                                onClick={this.showNewDeckGroupModal.bind(this)}>Create
+                                                onClick={this.showNewCollectionModal.bind(this)}>Create
                                         </button>
                                     </div>
                                 </div>
-                                <NewDeckGroupModal isOpen={this.state.showNewDeckGroupModal} handleClose={() => this.setState({showNewDeckGroupModal: false})} />
+                                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} />
                             </div>
                             <div className="ui hidden divider"></div>
                           </div>
