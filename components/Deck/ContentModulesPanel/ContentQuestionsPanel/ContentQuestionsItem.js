@@ -16,7 +16,7 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList items={question.answers} />
+            <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
         );
 
         // const editIcon = (
