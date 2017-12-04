@@ -11,7 +11,19 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
 
-        if(resource === 'deckgroups.user'){
+        // suggest deck collections that this user can add decks to
+        if(resource === 'deckgroups.suggest'){
+
+            // filter only usergroups that the user is the creator and get their ids
+            let ownedUserGroups = params.usergroups.filter((usergroup) => {
+                return (usergroup.creator.userid === args.userId);
+            }).map( (usergroup) => {
+                return usergroup._id;
+            });
+
+            console.log(ownedUserGroups);
+
+            // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
             rp({
                 method: 'GET', 
                 uri: `${Microservices.deck.uri}/groups?user=${args.userId}&page=0&per_page=100`, // TODO: get page and per_page from args
@@ -61,9 +73,7 @@ export default {
         let args = params.params? params.params : params;
 
         // update deck assignments to deck groups
-        if(resource === 'deckgroups.updateDecks'){
-            console.log(args);
-
+        if(resource === 'deckgroups.decks'){
             // get deck groups assigned to current deck
             rp({
                 method: 'GET', 
@@ -86,6 +96,16 @@ export default {
             
                 // add/remove deck id to/from the following deck groups
                 async.eachSeries(addOps.concat(removeOps), (item, done) => {
+                    console.log({
+                        method: 'PATCH', 
+                        uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,
+                        json: true,
+                        headers: {'----jwt----': args.jwt},
+                        body: [
+                            item.updateOp
+                        ]
+                    });
+
                     rp({
                         method: 'PATCH', 
                         uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,
