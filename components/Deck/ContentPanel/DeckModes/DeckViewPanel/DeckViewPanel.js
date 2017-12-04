@@ -167,11 +167,11 @@ class DeckViewPanel extends React.Component {
                             <div className="ui hidden divider"></div>
 
                             <div className="meta">
-                                {/*<div className="ui label" tabIndex="0">
+                                <div className="ui label" tabIndex="0">
                                     <i className="comments icon" aria-label="Language"></i>{deckLanguage}
                                 </div>
-                                */}
-                                <TranslationPanel/>
+                                
+                               {/* <TranslationPanel/>*/}
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
                                 </div>

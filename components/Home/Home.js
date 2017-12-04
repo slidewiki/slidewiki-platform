@@ -127,7 +127,7 @@ class Home extends React.Component {
                                                     values={{
                                                         strong: <strong><FormattedMessage
                                                                             id='home.3.strong1'
-                                                                            defaultMessage='Presentation mode'/></strong>
+                                                                            defaultMessage='Slideshow mode'/></strong>
                                                     }}
                                                     defaultMessage="Use the {strong} to view a deck as a slideshow. Includes a timer and speaker notes' view."/>
                                                 </div>
@@ -153,7 +153,7 @@ class Home extends React.Component {
                                                                             id='home.3.strong3'
                                                                             defaultMessage='Comments'/></strong>
                                                     }}
-                                                    defaultMessage="Add {strong} to decks and slides  to interact with other learners."/>
+                                                    defaultMessage="Add {strong} to decks and slides to interact with other learners."/>
                                                 </div>
                                             </div>
                                             <div className="item">
