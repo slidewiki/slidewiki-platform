@@ -61,6 +61,7 @@
     "cookie-parser": "^1.4.3",
     "css-modules-require-hook": "^4.0.6",
     "csurf": "^1.9.0",
+    "crypt": "^0.0.2",
     "debug": "^3.1.0",
     "diff": "3.4.0",
     "es5-shim": "^4.5.9",
