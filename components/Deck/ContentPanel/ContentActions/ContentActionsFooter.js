@@ -57,20 +57,7 @@ class ContentActionsFooter extends React.Component {
             window.open(this.getPresentationHref());
         }
     }
-    handlePresentationRoomClick(e){
-        if(process.env.BROWSER){
-            e.preventDefault();
-            swal({
-                title: 'Please enter a room name',
-                input: 'text',
-                showCancelButton: true,
-                confirmButtonText: 'Next',
-                allowOutsideClick: false
-            }).then((roomName) => {
-                window.open('/presentationbroadcast?room=' + roomName + '&presentation=' + this.getPresentationHref().replace('#', '%23'));
-            }).catch();
-        }
-    }
+
     /*
     getPrintHref(){
         return '/PresentationPrint/' + this.props.ContentStore.selector.id + '/?print-pdf';
@@ -171,22 +158,20 @@ class ContentActionsFooter extends React.Component {
                         <div className="ui icon buttons large right floated">
 
                             <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
-                                <button className="ui button" type="button" aria-label="Presentation Mode" data-tooltip="Presentation Mode">
+                                <button className="ui button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
                             </NavLink>
-                            <button onClick={this.handlePresentationRoomClick.bind(this)} className="ui button" type="button" aria-label="Presentation Room Mode" data-tooltip="(Experimental!) Create a room and invite other via a link to your presentation">
-                                <i className="record large icon"></i>
-                            </button>
+
                            <NavLink onClick={this.handlePrintClick.bind(this)} href={this.getExportHref('PDF')} target="_blank">
-                            <button className="ui button" type="button" aria-label="Print" data-tooltip="Print" >
+                            <button className="ui button" type="button" aria-label="Download PDF version for printing" data-tooltip="Download PDF version for printing" >
                                 <i className="print large icon"></i>
                             </button>
                             </NavLink>
                             <DownloadModal/>
                             <ReportModal/>
                             <SocialShare userid={this.props.UserProfileStore.userid} selector={this.props.ContentStore.selector} />
-                            <button className={likeButton} type="button" aria-label="Like" data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
+                            <button className={likeButton} type="button" aria-label={tooltipLikeButton} data-tooltip={tooltipLikeButton} onClick={this.handleLikeClick.bind(this)}>
                                 <i className={classNameLikeButton}></i>
                             </button>
                             {/* {this.state.expanded ? <button className="ui button" onClick={this.handleCollapseClick.bind(this)} title="Reset Layout"><i className="large icon compress"></i></button> : <button className="ui button" onClick={this.handleExpandClick.bind(this)} title="Expand Content"><i className="large icon expand"></i></button>} */}

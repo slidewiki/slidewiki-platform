@@ -30,7 +30,7 @@ class SlideContentEditor extends React.Component {
         //if(this.props.content.indexOf('pptx2html') !== -1)
         if (this.props.content.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            this.inputBoxButtonTitle = 'Add input box';
+            this.inputBoxButtonTitle = 'Add text box';
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
@@ -117,7 +117,7 @@ class SlideContentEditor extends React.Component {
                     '</ul>'+
                     '<div class="h-left">&nbsp;</div>'+
                     '</div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '2':
                 //CKEDITOR.instances.inlineContent.setData('');
@@ -136,7 +136,7 @@ class SlideContentEditor extends React.Component {
                     '<p>Row 1 - Column 1</p></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>' +
                     '</div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '12':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -149,7 +149,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">'+
                     '<p>Row 1 - Column&nbsp;2</p>'+
                     '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '22':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -165,7 +165,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">'+
                     '<p>Row 2 - Column&nbsp;2</p>'+
                     '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '21':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -179,7 +179,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">Row 1 - Column 1</div>'+
                     '</div></div>';
 
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '11img':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -191,8 +191,8 @@ class SlideContentEditor extends React.Component {
                     '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">'+
                     '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
-                    '<p>&nbsp;</p></div></div></div>', 'Add input box';
-                this.inputBoxButtonTitle = 'Add input box';
+                    '<p>&nbsp;</p></div></div></div>', 'Add text box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             // case 'title':
             //     this.refs.inlineContent.innerHTML =
@@ -203,7 +203,7 @@ class SlideContentEditor extends React.Component {
             //       ' </div>' +
             //       '</div>';
             //
-            //     this.inputBoxButtonTitle = 'Add input box';
+            //     this.inputBoxButtonTitle = 'Add text box';
             //     this.emitChange();
             //     break;
             case 'outitleslide':
@@ -214,7 +214,7 @@ class SlideContentEditor extends React.Component {
                 '<h3>Title</h3>' +
                 '<h4>[Subtitle]</h4>' +
                 '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'oegtitleslide':
                 this.refs.inlineContent.innerHTML =
@@ -224,7 +224,7 @@ class SlideContentEditor extends React.Component {
                 '<h3>Title</h3>' +
                 '<h4>[Subtitle]</h4>' +
                 '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'slidewikislide':
                 this.refs.inlineContent.innerHTML =
@@ -253,7 +253,7 @@ class SlideContentEditor extends React.Component {
                     '<h4 class="h-left" id="45263" style="text-align: center;"><span id="34455" style="color:#ffffff;"><span class="text-block" id="27908"><span id="54919" style="background-color:#1e78bb;">Footer</span></span></span></h4>' +
                     '</div>' +
                     '</div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'EKDDA':
                 this.refs.inlineContent.innerHTML =
@@ -284,7 +284,7 @@ class SlideContentEditor extends React.Component {
                 '<div class="h-left" id="34717"><img alt="" id="9225" src="https://fileservice.stable.slidewiki.org/2346/24fbd5f0-a481-11e7-a346-5db6696affe9.png" style="width: 166.514px; height: 59.8675px;" width="191" height="78"></div>'+
                 '</div>'+
                 '</div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'EKDDAeng':
                 this.refs.inlineContent.innerHTML =
@@ -562,7 +562,7 @@ class SlideContentEditor extends React.Component {
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             swal({
                 title: 'Switch to canvas style layout',
-                text: 'This will add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
+                text: 'This will Add text boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -583,7 +583,7 @@ class SlideContentEditor extends React.Component {
                 //update content
                 //TODO replace with this.refs.inlineContent.innerHTML
                 //CKEDITOR.instances.inlineContent.setData(newContent);
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 this.emitChange(); //confirm non-save on-leave
                 this.forceUpdate();
                 this.resizeDrag();
@@ -656,7 +656,15 @@ class SlideContentEditor extends React.Component {
         }); //leave all buttons
         //this.currentcontent = this.props.content;
 
+        //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+        //    return false;
+        //});
+
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+            //document.body.scrollTop = document.documentElement.scrollTop = 0;
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             this.resize();
             this.uniqueIDAllElements();
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
@@ -742,14 +750,14 @@ class SlideContentEditor extends React.Component {
                 //console.log('image width' + $(this).find('img:first').width());
                 //console.log('image width attr' + $(this).find('img:first').attr('width'));
                 //console.log('box width' + $(this).width());
-                if($(this).width() < $(this).find('img:first').width()+8)
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than image width/height
-                    $(this).width($(this).find('img:first').width() + 8);
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust image width');
                 }
-                if($(this).height() < $(this).find('img:first').height()+8)
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than image width/height
-                    $(this).height($(this).find('img:first').height() + 8);
+                    $(this).height($(this).find('img:first').height());
                 //    console.log('adjust image height');
                 }
             }
@@ -837,8 +845,8 @@ class SlideContentEditor extends React.Component {
                             ui.size.height = newHeight;
                             if($(this).find('img:first').length)
                             {
-                                $(this).find('img:first').width(newWidth - 8);
-                                $(this).find('img:first').height(newHeight - 8);
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight);
                             }
                         },
                         stop: function(event, ui) {
@@ -1294,7 +1302,7 @@ class SlideContentEditor extends React.Component {
         $(this.refs.TemplateDropdown).dropdown();
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            this.inputBoxButtonTitle = 'Add input box';
+            this.inputBoxButtonTitle = 'Add text box';
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
@@ -1307,7 +1315,7 @@ class SlideContentEditor extends React.Component {
                 // MediaStore.file contains everything about the file - also the byte64 string and url
                 if($('.pptx2html').length)
                 {
-                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
                     this.uniqueIDAllElements();
                     this.refreshCKeditor();
                     this.resize();
@@ -1772,6 +1780,7 @@ class SlideContentEditor extends React.Component {
                     <i className="plus square outline icon black large"></i>
                     <a style={buttonColorBlack}>{this.inputBoxButtonTitle}</a>
                 </button>
+                <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
                 <div className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
                     <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
                     <i className="dropdown icon large"/>
@@ -1800,7 +1809,6 @@ class SlideContentEditor extends React.Component {
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
                 */}
-                <UploadMediaModal ref="uploadMediaModal"/>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
