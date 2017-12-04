@@ -1,10 +1,6 @@
-'use strict';
+require('babel-register')();
+// setup file
+var enzyme = require('enzyme');
+var Adapter = require('enzyme-adapter-react-15');
 
-let jsdom = require('jsdom');
-
-const DEFAULT_HTML = '<!DOCTYPE html><html><body></body></html>';
-global.document = jsdom.jsdom(DEFAULT_HTML);
-
-global.window = document.defaultView;
-
-global.navigator = window.navigator;
+enzyme.configure({ adapter: new Adapter() });
