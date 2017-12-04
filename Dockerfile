@@ -1,4 +1,4 @@
-FROM slidewiki/runtime:latest
+FROM slidewiki/runtime:nodejs-8-slim
 MAINTAINER Ali Khalili "hyperir@gmail.com"
 
 WORKDIR /nodeApp
