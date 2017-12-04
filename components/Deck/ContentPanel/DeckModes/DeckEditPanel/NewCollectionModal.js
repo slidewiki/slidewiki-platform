@@ -74,8 +74,8 @@ class NewCollectionModal extends React.Component {
     }
     render() {
         let userGroupOptions = this.props.userGroups.map( (userGroup) => ({
-                text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
-                value: userGroup._id
+            text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
+            value: userGroup._id
         }));
 
         return (
