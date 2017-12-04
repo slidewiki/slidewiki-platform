@@ -15,6 +15,7 @@ import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavi
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
+import loadDeckTree from '../../../actions/decktree/loadDeckTree';
 
 
 class TreePanel extends React.Component {
@@ -24,6 +25,24 @@ class TreePanel extends React.Component {
         this.state = {
             isForkModalOpen: false
         };
+    }
+
+    componentDidMount() {
+        //This works - but is asynchronous, meaning the DeckTreePanel updates
+        //can override people selecting slides.
+        this.pollingTreeUpdate = setInterval(() => {
+            let payload = {
+                params: context.getStore(DeckTreeStore).getSelector(),
+                navigate: {
+                    runFetchTree: true
+                }
+            };
+            this.context.executeAction(loadDeckTree, payload);
+        }, 3000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.pollingTreeUpdate);
     }
 
     handleFocus() {
