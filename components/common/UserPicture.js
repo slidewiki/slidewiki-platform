@@ -14,8 +14,10 @@ import classNames from 'classnames';
  *   avatar:
  */
 
-class UserPicture extends Component {
+//change by Ted for testing framework
+//class UserPicture extends Component {
 
+class UserPicture extends React.Component {
     render() {
         let classes = classNames({
             'ui': true,
