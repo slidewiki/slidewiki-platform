@@ -1,11 +1,18 @@
 import React, {PropTypes} from 'react';
 import DeckList from './DeckList';
 import Carousel from './Carousel';
-import { NavLink } from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import { FormattedMessage, defineMessages} from 'react-intl';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
+import {Button} from 'semantic-ui-react';
 
 class Home extends React.Component {
+
+    openFeatured(e){
+        this.context.executeAction(navigateAction, {
+            url: '/featured'
+        });
+    };
     render() {
         const heightStyle = {
             height: '100px'
@@ -17,6 +24,8 @@ class Home extends React.Component {
         const compMessageStyle = {
             background: '#1E78BB'
         };
+
+
         return (
             <div ref="home">
                 <div className="ui blue inverted segment" style={{borderRadius: '0px'}}>
@@ -118,7 +127,7 @@ class Home extends React.Component {
                                                     values={{
                                                         strong: <strong><FormattedMessage
                                                                             id='home.3.strong1'
-                                                                            defaultMessage='Presentation mode'/></strong>
+                                                                            defaultMessage='Slideshow mode'/></strong>
                                                     }}
                                                     defaultMessage="Use the {strong} to view a deck as a slideshow. Includes a timer and speaker notes' view."/>
                                                 </div>
@@ -144,7 +153,7 @@ class Home extends React.Component {
                                                                             id='home.3.strong3'
                                                                             defaultMessage='Comments'/></strong>
                                                     }}
-                                                    defaultMessage="Add {strong} to decks and slides  to interact with other learners."/>
+                                                    defaultMessage="Add {strong} to decks and slides to interact with other learners."/>
                                                 </div>
                                             </div>
                                             <div className="item">
@@ -213,7 +222,11 @@ class Home extends React.Component {
                                 <div className="ui segment top attached">
                                     <h3><FormattedMessage id='home.featured' defaultMessage='Featured decks'/></h3>
                                 </div>
-                                <DeckList scope="featured"/>
+                                <div className="ui segment top attached">
+                                    <DeckList scope="featured"/>
+                                    <Button as='button' primary style={{'marginLeft':'auto', 'display':'inherit'}} onClick={this.openFeatured.bind(this)}><FormattedMessage id='home.allfeatured' defaultMessage='See all'/></Button>
+
+                                </div>
                             </div>
                         </div>
 
@@ -229,7 +242,8 @@ class Home extends React.Component {
 
 Home.contextTypes = {
     intl: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.func
+    getUser: React.PropTypes.func.isRequired,
+    executeAction: React.PropTypes.func.isRequired
 };
 
 

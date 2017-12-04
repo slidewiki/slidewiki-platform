@@ -12,3 +12,4 @@ configs/version.js
 slidewiki
 migrate
 .idea/
+package-lock.json
