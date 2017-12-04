@@ -6,7 +6,8 @@ import DeckTreeStore from '../../../stores/DeckTreeStore';
 import ActivityFeedPanel from '../ActivityFeedPanel/ActivityFeedPanel';
 import ContributorsPanel from '../ContentModulesPanel/ContributorsPanel/ContributorsPanel';
 import cheerio from 'cheerio';
-import ContentModulesStore from '../../../stores/ContentModulesStore';
+import PresentationPanel from './PresentationsPanel';
+import ActivityFeedStore from '../../../stores/ActivityFeedStore';
 
 
 class InfoPanelInfoView extends React.Component {
@@ -41,21 +42,20 @@ class InfoPanelInfoView extends React.Component {
         //    'grey file text': (this.props.DeckTreeStore.get('type') === 'slide'),
         //    'yellow folder link': (this.props.DeckTreeStore.get('type') === //'deck'),
         //});
-        
+
         let rootNode = {'title': deckTree.get('title'), 'id': deckTree.get('id')};
         let self = this;
         let nodes = [];
         let list, output = '';
         let title = '';
+        let titlediv;
         let pathNames = this.getNameofNodes(deckTree, selector);
         if(selector.get('spath')){
             nodes = selector.get('spath').split(';');
             list = nodes.map((node, index) => {
                 if(index === (nodes.length - 1)){
                     return (
-                        <div key={index} className="section">
-                            {cheerio.load(pathNames[index]).text()}
-                        </div>
+                        cheerio.load(pathNames[index]).text()
                     );
                 }else{
                     /*
@@ -69,28 +69,41 @@ class InfoPanelInfoView extends React.Component {
                 }
 
             });
-            title = list; //use title of deck
+            title = list; //use title of slide
+            titlediv =
+            <div className="ui segment top attached compact">
+                <h3 className="ui small header">
+                   <i className="grey small file text icon" aria-label="Slide title"></i>
+                   {title}
+                </h3>
+            </div>;
+
         }
         else {
-            title = rootNode.title;
+            //title = rootNode.title;
+            //title = ''; //use title of deck
+            titlediv = '';
+
         }
         return (
-            <div className="ui container" >
+            <div className="ui container" ref="infoPanel" role="complementary">
                 {this.props.DeckTreeStore.revisionId !== this.props.DeckTreeStore.latestRevisionId &&
                     <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
                         Updated version available</NavLink>
                     </div>}
-                <div className="ui attached segment">
-                    <h4 className="header ui medium" aria-describedby="InfoTitle" tabIndex="0">
-                            {title}</h4>
-                    <div className="sr-only" id="InfoTitle">Title:</div>
-                </div>
+                    {titlediv}
                 <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
                 <div className="ui attached segment">
                     <ActivityFeedPanel />
                 </div>
+                {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
+                  <div className="ui attached segment">
+                      <PresentationPanel />
+                  </div>
+                ) : ''}
+
                 <div className="ui attached segment">
                     <div className={['ui', 'image']}>
                         <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" tabIndex="-1" alt="">
@@ -109,10 +122,10 @@ class InfoPanelInfoView extends React.Component {
 InfoPanelInfoView.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-InfoPanelInfoView= connectToStores(InfoPanelInfoView, [DeckTreeStore,ContentModulesStore], (context, props) => {
+InfoPanelInfoView= connectToStores(InfoPanelInfoView, [ActivityFeedStore, DeckTreeStore], (context, props) => {
     return {
-        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
-        ContentModulesStore: context.getStore(ContentModulesStore).getState()
+        ActivityFeedStore: context.getStore(ActivityFeedStore).getState(),
+        DeckTreeStore: context.getStore(DeckTreeStore).getState()
     };
 });
 export default InfoPanelInfoView;

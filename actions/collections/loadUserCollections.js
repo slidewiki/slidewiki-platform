@@ -11,7 +11,6 @@ export default function loadUserCollections(context, payload, done) {
 
     context.service.read('deckgroups.user', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
-            console.log(err);
             log.error(context, {filepath: __filename});
             context.dispatch('LOAD_USER_COLLECTIONS_FAILURE', err);
         } else {

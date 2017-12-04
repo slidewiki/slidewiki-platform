@@ -43,6 +43,7 @@ import ServiceErrorStore from './stores/ServiceErrorStore';
 import PermissionsStore from './stores/PermissionsStore';
 import ContentLikeStore from './stores/ContentLikeStore';
 import DeckFamilyStore from './stores/DeckFamilyStore';
+import MediaStore from './stores/MediaStore';
 import UserReviewStore from './stores/UserReviewStore';
 
 // create new fluxible instance & register all stores
@@ -90,7 +91,8 @@ const app = new Fluxible({
         PermissionsStore,
         ContentLikeStore,
         DeckFamilyStore,
-        UserReviewStore
+        UserReviewStore,
+        MediaStore
     ]
 });
 

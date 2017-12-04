@@ -14,6 +14,7 @@ export default function loadCollections(context, payload, done) {
             log.error(context, {filepath: __filename});
             context.dispatch('LOAD_COLLECTIONS_FAILURE', err);
         } else {
+            console.log(res);
             context.dispatch('LOAD_COLLECTIONS_SUCCESS', res);
         }
 

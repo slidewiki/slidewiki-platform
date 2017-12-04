@@ -7,7 +7,6 @@ export default {
     name: 'deckgroups',
 
     read: (req, resource, params, config, callback) => {
-        console.log('edw');
         req.reqId = req.reqId ? req.reqId : -1;
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
