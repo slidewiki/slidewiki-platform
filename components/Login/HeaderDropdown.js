@@ -15,13 +15,14 @@ class HeaderDropdown extends React.Component {
         this.state ={
             userMenuButtonExpanded : false
         };
+        this.onEnterAndClick = this.onEnterAndClick.bind(this);
         this.handleOnShowMenu = this.handleOnShowMenu.bind(this);
         this.handleOnHideMenu = this.handleOnHideMenu.bind(this);
 
     }
     componentDidMount(){
         //$(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false}); //string refs are legacy
-        $('#userButtonMenu').dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false, onShow: this.handleOnShowMenu, onHide:this.handleOnHideMenu});
+        $('#userButtonMenu').dropdown({action: this.onEnterAndClick, selectOnKeydown: false, onShow: this.handleOnShowMenu, onHide:this.handleOnHideMenu});
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
 
@@ -30,7 +31,7 @@ class HeaderDropdown extends React.Component {
 
     componentDidUpdate() {
         //$(this.refs.userDropDown).dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false});
-        $('#userButtonMenu').dropdown({action: this.onEnterAndClick.bind(this), selectOnKeydown: false, onShow: this.handleOnShowMenu, onHide:this.handleOnHideMenu});
+        $('#userButtonMenu').dropdown({action: this.onEnterAndClick, selectOnKeydown: false, onShow: this.handleOnShowMenu, onHide:this.handleOnHideMenu});
 
         if(this.props.UserProfileStore.userpicture === undefined)
             this.context.executeAction(fetchUser, { params: {username: this.props.UserProfileStore.username}, onlyPicture: true});
@@ -47,29 +48,30 @@ class HeaderDropdown extends React.Component {
         return false;
     }
     handleOnShowMenu(){
-        console.log('onShow menu');
-
-        this.setState({
-            userMenuButtonExpanded : true
-        });
-        $('#myDecksMenuItem').focus();
-
+        if(process.env.BROWSER){ //ensure the component is mounted
+            this.setState({
+                userMenuButtonExpanded : true
+            });
+            $('#myDecksMenuItem').focus();
+        }
     }
     handleOnHideMenu(){
-        console.log('onHide menu');
-
         this.setState({
             userMenuButtonExpanded : false
         });
 
     }
- //ref="userDropDown"  removed the String ref
+
+
+     //ref="userDropDown"  removed the String ref
     render() {
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
         const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
         const alarmIcon = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? (<i className="ui small outline alarm icon" />) : '';
         return(
-              <div id="userButtonMenu" className="ui top right dropdown larger blue button" ref={(drop) => {this.userDropDown=drop;}}  aria-haspopup="true" aria-controls="userHeaderMenu" aria-label="User management" aria-expanded={this.state.userMenuButtonExpanded}>
+            <div>
+
+              <div id="userButtonMenu" role="button" className="ui top right dropdown larger blue button" ref={(drop) => {this.userDropDown=drop;}}  aria-haspopup="true" aria-controls="userHeaderMenu" aria-label="User management" aria-expanded={this.state.userMenuButtonExpanded}>
                 {/*<div className="text">*/}
                     <UserPicture picture={ pic } username={ this.props.UserProfileStore.username } avatar={ true } width= { 30 } />
                 {/*</div>*/}
@@ -82,23 +84,25 @@ class HeaderDropdown extends React.Component {
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
                      */}
-                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
-                        <i className="user icon link"  /> My Decks
+                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"   >
+                        <i className="user icon link"  aria-hidden={true} /> My Decks
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="0" >
-                        <i className="icon users" /> My Groups
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" >
+                        <i className="icon users" aria-hidden={true} /> My Groups
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
-                        <i className="setting icon" /> My Settings
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings"  >
+                        <i className="setting icon" aria-hidden={true} /> My Settings
                     </li>
-                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="0" >
-                        <i className={alarmClassName} /> My Notifications
+                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" >
+                        <i className={alarmClassName} aria-hidden={true}  /> My Notifications
                     </li>
-                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
-                        <i className="sign out icon"/> Sign Out
+                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out"  >
+                        <i className="sign out icon" aria-hidden={true} /> Sign Out
                     </li>
 
                 </ul>
+              </div>
+                {alarmIcon} {/*Placed here to avoid sr problems*/}
             </div>
 
         );
