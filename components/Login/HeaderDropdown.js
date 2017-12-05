@@ -77,26 +77,27 @@ class HeaderDropdown extends React.Component {
                 {/*</div>*/}
 
                 {/*<i className="ui big left floated aligned dropdown icon"></i>{alarmIcon}*/}
-                <ul id="userHeaderMenu" className="ui menu vertical" style={{width:'160px'}} role="menu" aria-labelledby="userButtonMenu" tabIndex="0">
+                <div id="userHeaderMenuDesc" className='sr-only'> Menu options: My Decks, shortcut d; My Groups, shortcut g; My Settings, shortcut s;My Notifications, shortcut n; Sign out, shotcut o </div>
+                <ul id="userHeaderMenu" className="ui menu vertical" style={{width:'160px'}} role="menu" aria-labelledby="userButtonMenu" aria-describedby="userHeaderMenuDesc" tabIndex="0">
                     {/*
                     <li className="header" role="separator" tabIndex="-1">
                         {this.props.UserProfileStore.username}
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
                      */}
-                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"  tabIndex="-1" aria-describedby='myDecksMenuDesc' accessKey='d' >
-                        <i className="user icon link"  aria-hidden={true} /> My Decks <div id="myDecksMenuDesc" className='sr-only'> My Decks shortcut d</div>
+                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"  tabIndex="-1"  accessKey='d' >
+                        <i className="user icon link"  aria-hidden={true} /> My Decks
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups"  tabIndex="-1" >
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups"  tabIndex="-1" accessKey='g'>
                         <i className="icon users" aria-hidden={true} /> My Groups
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings"   tabIndex="-1">
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings"   tabIndex="-1" accessKey='s'>
                         <i className="setting icon" aria-hidden={true} /> My Settings
                     </li>
-                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications"  tabIndex="-1">
+                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications"  tabIndex="-1" accessKey='n'>
                         <i className={alarmClassName} aria-hidden={true}  /> My Notifications
                     </li>
-                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out"  tabIndex="-1" >
+                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out"  tabIndex="-1"accessKey='o' >
                         <i className="sign out icon" aria-hidden={true} /> Sign Out
                     </li>
 
