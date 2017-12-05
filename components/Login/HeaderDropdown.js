@@ -84,19 +84,19 @@ class HeaderDropdown extends React.Component {
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
                      */}
-                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"   >
+                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"  tabIndex="-1"  >
                         <i className="user icon link"  aria-hidden={true} /> My Decks
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" >
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups"  tabIndex="-1" >
                         <i className="icon users" aria-hidden={true} /> My Groups
                     </li>
-                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings"  >
+                    <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings"   tabIndex="-1">
                         <i className="setting icon" aria-hidden={true} /> My Settings
                     </li>
-                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" >
+                    <li className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications"  tabIndex="-1">
                         <i className={alarmClassName} aria-hidden={true}  /> My Notifications
                     </li>
-                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out"  >
+                    <li className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out"  tabIndex="-1" >
                         <i className="sign out icon" aria-hidden={true} /> Sign Out
                     </li>
 
