@@ -590,7 +590,7 @@ class DeckPropertiesEditor extends React.Component {
                                         </button>
                                     </div>
                                 </div>
-                                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} />
+                                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />
                             </div>
                             <div className="ui hidden divider"></div>                        
 

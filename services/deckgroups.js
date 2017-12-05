@@ -11,29 +11,37 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
 
+        let usergroups = params.usergroups.map( (usergroup) => {
+            return usergroup._id;
+        }).join('&usergroup=');
+
         // suggest deck collections that this user can add decks to
         if(resource === 'deckgroups.suggest'){
 
-            // filter only usergroups that the user is the creator and get their ids
-            let ownedUserGroups = params.usergroups.filter((usergroup) => {
-                return (usergroup.creator.userid === args.userId);
-            }).map( (usergroup) => {
-                return usergroup._id;
-            });
-
-            console.log(ownedUserGroups);
-
+            // form request call
+            let uri = `${Microservices.deck.uri}/groups?user=${args.userId}`;
+            if(usergroups !== ''){
+                uri += `&usergroup=${usergroups}`;
+            }
+            uri += '&page=0&per_page=100';
+            
             // get deck collections that the user is either admin or a creator of a user group that is associated to this collection
             rp({
                 method: 'GET', 
-                uri: `${Microservices.deck.uri}/groups?user=${args.userId}&page=0&per_page=100`, // TODO: get page and per_page from args
+                uri: uri,
                 json: true 
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
         } else if (resource === 'deckgroups.deck'){
+
+            let uri = `${Microservices.deck.uri}/deck/${args.sid}/groups?user=${args.userId}`;
+            if(usergroups !== ''){
+                uri += `&usergroup=${usergroups}`;
+            }
+
             rp({
                 method: 'GET', 
-                uri: `${Microservices.deck.uri}/deck/${args.sid}/groups?user=${args.userId}`,
+                uri: uri,
                 json: true 
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
@@ -72,12 +80,23 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
 
+        let usergroups = params.usergroups.map( (usergroup) => {
+            return usergroup._id;
+        }).join('&usergroup=');
+
         // update deck assignments to deck groups
         if(resource === 'deckgroups.decks'){
+
+            let uri = `${Microservices.deck.uri}/deck/${args.deckId}/groups?user=${params.userId}`;
+
+            if(usergroups !== ''){
+                uri += `&usergroup=${usergroups}`;
+            }
+            
             // get deck groups assigned to current deck
             rp({
                 method: 'GET', 
-                uri: `${Microservices.deck.uri}/deck/${args.deckId}/groups`, 
+                uri: uri, 
                 json: true
             }).then( (existingDeckGroups) => {
                 let existingDeckGroupIds = existingDeckGroups.map( (e) => { return e._id; });
@@ -96,16 +115,6 @@ export default {
             
                 // add/remove deck id to/from the following deck groups
                 async.eachSeries(addOps.concat(removeOps), (item, done) => {
-                    console.log({
-                        method: 'PATCH', 
-                        uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,
-                        json: true,
-                        headers: {'----jwt----': args.jwt},
-                        body: [
-                            item.updateOp
-                        ]
-                    });
-
                     rp({
                         method: 'PATCH', 
                         uri: `${Microservices.deck.uri}/group/${item.groupId}/decks`,

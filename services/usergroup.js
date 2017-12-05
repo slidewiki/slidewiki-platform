@@ -8,7 +8,7 @@ export default {
         // console.log('service usergroup with parameters',resource,  params, config);
 
         // user groups owned by the specified user
-        if(resource === 'usergroup.member'){
+        if(resource === 'usergroup.member'){            
             rp({
                 method: 'GET',
                 uri: Microservices.user.uri + '/user/' + params.userId + '/profile',

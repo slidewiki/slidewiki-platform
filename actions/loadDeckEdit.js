@@ -17,7 +17,7 @@ export default function loadDeckEdit(context, payload, done) {
     }
 
     // load deck groups of the current user
-    context.executeAction(loadUserCollections);
+    context.executeAction(loadUserCollections, payload, done);
 
     // load deck groups assigned to the current deck
     context.executeAction(loadCollections, payload, done);
