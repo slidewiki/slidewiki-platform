@@ -16,6 +16,7 @@ import addActivity from '../../actions/activityfeed/addActivity';
 import Import from '../Import/Import';
 import Error from '../Error/Error';
 import LanguageDropdown from '../common/LanguageDropdown';
+import {FormattedMessage, defineMessages} from 'react-intl';
 let ReactDOM = require('react-dom');
 let classNames = require('classnames');
 
@@ -162,15 +163,44 @@ class AddDeck extends React.Component {
         });
     }
     updateProgressBar() {
-        //console.log('updateProgressBar() called!', this.props.ImportStore.uploadProgress);
+        const progress_messages = defineMessages({
+            uploading:{
+                id: 'AddDeck.progress.uploading',
+                defaultMessage: 'Uploading file',
+            },
+            converting:{
+                id: 'AddDeck.progress.converting',
+                defaultMessage: 'Converting file',
+            },
+            importing:{
+                id: 'AddDeck.progress.importing',
+                defaultMessage: 'Importing slide ',
+            },
+            of:{
+                id: 'AddDeck.progress.of',
+                defaultMessage: ' of ',
+            },
+            uploaded:{
+                id: 'AddDeck.progress.uploaded',
+                defaultMessage: 'Slides uploaded!',
+            },
+            imported:{
+                id: 'AddDeck.progress.imported',
+                defaultMessage: 'Imported ',
+            },
+            slides:{
+                id: 'AddDeck.progress.slides',
+                defaultMessage: ' slides',
+            }
+        });
         $('#progressbar_addDeck_upload').progress('set percent', this.props.ImportStore.uploadProgress);
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
-        let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? 'Uploading file' :
-        (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
-        (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
-        (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
-        'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
+        let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? this.context.intl.formatMessage(progress_messages.uploading) :
+        (this.props.ImportStore.uploadProgress === 65) ? this.context.intl.formatMessage(progress_messages.converting) :
+        (this.props.ImportStore.uploadProgress !== 100) ? this.context.intl.formatMessage(progress_messages.importing) + noOfSlides + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides :
+        (noOfSlides === totalNoOfSlides) ? this.context.intl.formatMessage(progress_messages.uploaded) :
+        this.context.intl.formatMessage(progress_messages.imported) + noOfSlides  + this.context.intl.formatMessage(progress_messages.of) + totalNoOfSlides + this.context.intl.formatMessage(progress_messages.slides);//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
 
         if (this.props.ImportStore.uploadProgress === 100) {
@@ -186,11 +216,25 @@ class AddDeck extends React.Component {
                 };
                 context.executeAction(addActivity, {activity: activity});
 
+                const success_messages = defineMessages({
+                    success_title_text:{
+                        id: 'AddDeck.swal.success_title_text',
+                        defaultMessage: 'Deck created!',
+                    },
+                    success_text:{
+                        id: 'AddDeck.swal.success_text',
+                        defaultMessage: 'The selected file has been imported and a new deck nas been created.',
+                    },
+                    success_confirm_text:{
+                        id: 'AddDeck.swal.success_confirm_text',
+                        defaultMessage: 'View deck',
+                    }
+                });
                 swal({
-                    title: 'Deck created!',
-                    text: 'The selected file has been imported and a new deck nas been created.',
+                    title: this.context.intl.formatMessage(success_messages.success_title_text),
+                    text: this.context.intl.formatMessage(success_messages.success_text),
                     type: 'success',
-                    confirmButtonText: 'View deck',
+                    confirmButtonText: this.context.intl.formatMessage(success_messages.success_confirm_text),
                     confirmButtonClass: 'positive ui button',
                     buttonsStyling: false
                 })
@@ -202,11 +246,25 @@ class AddDeck extends React.Component {
                         return true;
                     });
             } else {
+                const error_messages = defineMessages({
+                    error_title_text:{
+                        id: 'AddDeck.swal.error_title_text',
+                        defaultMessage: 'Error',
+                    },
+                    error_text:{
+                        id: 'AddDeck.swal.error_text',
+                        defaultMessage: 'There was a problem with importing this file. Please, try again.',
+                    },
+                    error_confirm_text:{
+                        id: 'AddDeck.swal.error_confirm_text',
+                        defaultMessage: 'Close',
+                    }
+                });
                 swal({
-                    title: 'Error',
-                    text: 'There was a problem with importing this file. Please, try again.',
+                    title: this.context.intl.formatMessage(error_messages.error_title_text),
+                    text: this.context.intl.formatMessage(error_messages.error_text),
                     type: 'error',
-                    confirmButtonText: 'Close',
+                    confirmButtonText: this.context.intl.formatMessage(error_messages.error_confirm_text),
                     confirmButtonClass: 'negative ui button',
                     buttonsStyling: false
                 })
@@ -222,12 +280,23 @@ class AddDeck extends React.Component {
     initializeProgressBar() {
         $('#progressbar_addDeck_upload').progress('set active');
         $('#progressbar_addDeck_upload').progress('reset');
+
+        const progress_messages = defineMessages({
+            uploaded:{
+                id: 'AddDeck.progress.uploaded',
+                defaultMessage: 'Slides uploaded!',
+            },
+            failed:{
+                id: 'AddDeck.progress.failed',
+                defaultMessage: 'Upload failed!',
+            }
+        });
         $('#progressbar_addDeck_upload').progress({
             text: {
                 // active  : 'Uploading: {percent}%',
                 // active  : 'Importing: {percent}%',
-                success : 'Slides uploaded!',
-                error   : 'Upload failed!'
+                success : this.context.intl.formatMessage(progress_messages.uploaded),
+                error   : this.context.intl.formatMessage(progress_messages.failed)
             }
         });
     }
@@ -358,10 +427,24 @@ class AddDeck extends React.Component {
         // </select>;
 
 
-        let hint_title = this.props.AddDeckStore.wrongFields.title ? 'Please enter a title.' : undefined;
-        let hint_language = this.props.AddDeckStore.wrongFields.language ? 'Please select a language.' : undefined;
+        const form_messages = defineMessages({
+            hint_title:{
+                id: 'AddDeck.form.hint_title',
+                defaultMessage: 'Please enter a title.',
+            },
+            hint_language:{
+                id: 'AddDeck.form.hint_language',
+                defaultMessage: 'Please select a language.',
+            },
+            selected_message:{
+                id: 'AddDeck.form.selected_message',
+                defaultMessage: '(Selected for upload: {filename})',
+            }
+        });
+        let hint_title = this.props.AddDeckStore.wrongFields.title ? this.context.intl.formatMessage(form_messages.hint_title) : undefined;
+        let hint_language = this.props.AddDeckStore.wrongFields.language ? this.context.intl.formatMessage(form_messages.hint_language) : undefined;
         // let hint_license = this.props.AddDeckStore.wrongFields.license ? 'Please select a license.' : undefined;
-        let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
+        //let hint_tags = 'Please separate tags with ", " - one comma and one whitespace.';
 
         //check number of slides in order to update progressbar
         if (this.props.ImportStore.deckId !== null &&
@@ -375,48 +458,72 @@ class AddDeck extends React.Component {
         return (
             <div className="ui vertically padded grid container">
                 <div className="sixteen wide column">
-                    <h3>Add a deck to SlideWiki</h3>
+                    <h3>
+                        <FormattedMessage
+                            id='AddDeck.form.heading'
+                            defaultMessage='Add a deck to SlideWiki' />
+                    </h3>
                 </div>
                 <div className="sixteen wide column">
                     <form className="ui form upload">
                         <div className="two fields">
                             <div className={fieldClass_title} data-tooltip={hint_title} ref="div_title" >
                                 <label htmlFor="title">
-                                    Title
+                                    <FormattedMessage
+                                        id='AddDeck.form.label_title'
+                                        defaultMessage='Title' />
                                 </label>
                                 <input type="text" placeholder="Title" id="title" aria-required="true" ref="input_title" />
                             </div>
                             <div className={fieldClass_language}>
-                                <label htmlFor="language">Language</label>
+                                <label htmlFor="language">
+                                    <FormattedMessage
+                                        id='AddDeck.form.label_language'
+                                        defaultMessage='Language' />
+                                </label>
                                 <LanguageDropdown type="spoken" required={true} tooltip={hint_language} ref="div_languages" error={this.props.AddDeckStore.wrongFields.language} />
                             </div>
                         </div>
 
                         <div className="field">
-                            <label htmlFor="deck-description">Description</label>
+                            <label htmlFor="deck-description">
+                                <FormattedMessage
+                                  id='AddDeck.form.label_description'
+                                  defaultMessage='Description' />
+                            </label>
                             <textarea rows="4" aria-labelledby="deck-description" id="deck-description" ref="textarea_description" ></textarea>
                         </div>
                         <div className="two fields">
                             <div className="field" ref="div_themes" >
-                                <label htmlFor="themes">Choose deck theme</label>
+                                <label htmlFor="themes">
+                                    <FormattedMessage
+                                        id='AddDeck.form.label_themes'
+                                        defaultMessage='Choose deck theme' />
+                                </label>
                                 {themeOptions}
                             </div>
 
                         </div>
 
                         <div className="ui message" id="uploadDesc">
-                            <p>You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.</p>
+                            <p>
+                                <FormattedMessage
+                                    id='AddDeck.form.format_message'
+                                    defaultMessage='You can upload existing slides to your new deck. Currently only PowerPoint pptx and OpenOffice odp files are supported.' />
+                            </p>
                         </div>
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
                                     <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
-                                        Select file
+                                        <FormattedMessage
+                                            id='AddDeck.form.button_select'
+                                            defaultMessage='Select file' />
                                     </div>
                                     <Import />
                                 </div>
                                 <div className="column" ref="div_filename">
-                                    {filename ? '"Selected for upload: '+filename+'"' : ''}
+                                    {filename ? this.context.intl.formatMessage(form_messages.selected_message, {filename: filename}) : ''}
                                 </div>
                             </div>
                         </div>
@@ -428,7 +535,17 @@ class AddDeck extends React.Component {
                             <div className="ui checkbox" ref="div_conditions" >
                                 <input type="checkbox" tabIndex="0" id="terms" aria-required="true" ref="checkbox_conditions" />
                                 <label htmlFor="terms">
-                                    I agree to the SlideWiki <NavLink className="item" routeName="imprint">terms and conditions</NavLink> and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.
+                                    <FormattedMessage
+                                        id='AddDeck.form.label_terms1'
+                                        defaultMessage='I agree to the SlideWiki ' />
+                                    <NavLink className="item" routeName="imprint">
+                                        <FormattedMessage
+                                            id='AddDeck.form.label_terms2'
+                                            defaultMessage='terms and conditions' />
+                                    </NavLink>
+                                    <FormattedMessage
+                                        id='AddDeck.form.label_terms3'
+                                        defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
                                 </label>
                             </div>
                         </div>
@@ -436,14 +553,18 @@ class AddDeck extends React.Component {
                             <div className="ui checkbox" ref="div_imageslicense" >
                                 <input type="checkbox" tabIndex="0" id="termsimages" aria-required="true" ref="checkbox_imageslicense" />
                                 <label htmlFor="termsimages">
-                                    I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.
+                                    <FormattedMessage
+                                        id='AddDeck.form.label_termsimages'
+                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.' />
                                 </label>
                             </div>
                         </div>
 
                         <div className="ui buttons">
                             <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
-                                Create deck
+                              <FormattedMessage
+                                  id='AddDeck.form.button_create'
+                                  defaultMessage='Create deck' />
                             </div>
                         </div>
 
@@ -456,7 +577,8 @@ class AddDeck extends React.Component {
 
 
 AddDeck.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 AddDeck = connectToStores(AddDeck, [AddDeckStore, UserProfileStore, ImportStore], (context, props) => {
     return {
