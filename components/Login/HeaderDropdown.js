@@ -84,8 +84,8 @@ class HeaderDropdown extends React.Component {
                     </li>
                     <li className="divider"  role="separator" tabIndex="-1" ></li>
                      */}
-                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"  tabIndex="-1"  >
-                        <i className="user icon link"  aria-hidden={true} /> My Decks
+                    <li id="myDecksMenuItem" className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks"  tabIndex="-1" aria-describedby='myDecksMenuDesc' accessKey='d' >
+                        <i className="user icon link"  aria-hidden={true} /> My Decks <div id="myDecksMenuDesc" className='sr-only'> My Decks shortcut d</div>
                     </li>
                     <li className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups"  tabIndex="-1" >
                         <i className="icon users" aria-hidden={true} /> My Groups
