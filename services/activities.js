@@ -52,11 +52,15 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
 
+        let headers = {};
+        if (args.jwt) headers['----jwt----'] = args.jwt;
+
         switch (resource) {
             case 'activities.new':
                 rp.post({
                     uri: Microservices.activities.uri + '/activity/new',
-                    body: JSON.stringify(args.activity)
+                    body: JSON.stringify(args.activity),
+                    headers,
                 }).then((res) => {
                     callback(null, {activity: JSON.parse(res)});
                 }).catch((err) => {
@@ -67,7 +71,8 @@ export default {
             case 'activities.newarray':
                 rp.post({
                     uri: Microservices.activities.uri + '/activities/new',
-                    body: JSON.stringify(args.activities)
+                    body: JSON.stringify(args.activities),
+                    headers,
                 }).then((res) => {
                     callback(null, {activities: JSON.parse(res)});
                 }).catch((err) => {
