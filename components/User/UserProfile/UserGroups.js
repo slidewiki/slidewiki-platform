@@ -38,16 +38,16 @@ class UserGroups extends React.Component {
 
     handleClickOnEditGroup(e) {
         e.preventDefault();
-        console.log('handleClickOnEditGroup:', e.target.attributes.name.nodeValue);
+        // console.log('handleClickOnEditGroup:', e.target.attributes.name.value);
 
-        const action = e.target.attributes.name.nodeValue;  //eg. changeGroup_2
+        const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
 
         let group = this.props.groups.find((group) => {
             return group._id.toString() === groupid;
         });
 
-        console.log('handleClickOnEditGroup: use group', group);
+        // console.log('handleClickOnEditGroup: use group', group);
 
         this.context.executeAction(updateUsergroup, {group: group, offline: false});
 
@@ -58,9 +58,9 @@ class UserGroups extends React.Component {
 
     handleClickOnRemoveGroup(e) {
         e.preventDefault();
-        console.log('handleClickOnRemoveGroup:', e.target.attributes.name.nodeValue);
+        console.log('handleClickOnRemoveGroup:', e.target.attributes.name.value);
 
-        const action = e.target.attributes.name.nodeValue;  //eg. changeGroup_2
+        const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
 
         this.context.executeAction(deleteUsergroup, {groupid: groupid});
@@ -68,9 +68,9 @@ class UserGroups extends React.Component {
 
     handleClickOnLeaveGroup(e) {
         e.preventDefault();
-        console.log('handleClickOnLeaveGroup:', e.target.attributes.name.nodeValue);
+        console.log('handleClickOnLeaveGroup:', e.target.attributes.name.value);
 
-        const action = e.target.attributes.name.nodeValue;  //eg. changeGroup_2
+        const action = e.target.attributes.name.value;  //eg. changeGroup_2
         const groupid = action.split('_')[1];
 
         this.context.executeAction(leaveUsergroup, {groupid: groupid});

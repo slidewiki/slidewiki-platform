@@ -4,6 +4,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
+import MediaStore from '../../../../../stores/MediaStore';
 import addSlide from '../../../../../actions/slide/addSlide';
 import saveSlide from '../../../../../actions/slide/saveSlide';
 import loadSlideAll from '../../../../../actions/slide/loadSlideAll';
@@ -14,6 +15,7 @@ import {Microservices} from '../../../../../configs/microservices';
 import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
+import UploadMediaModal from '../../../../common/UploadMediaModal';
 
 let ReactDOM = require('react-dom');
 
@@ -28,7 +30,7 @@ class SlideContentEditor extends React.Component {
         //if(this.props.content.indexOf('pptx2html') !== -1)
         if (this.props.content.includes('pptx2html'))
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            this.inputBoxButtonTitle = 'Add input box';
+            this.inputBoxButtonTitle = 'Add text box';
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
@@ -115,7 +117,7 @@ class SlideContentEditor extends React.Component {
                     '</ul>'+
                     '<div class="h-left">&nbsp;</div>'+
                     '</div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '2':
                 //CKEDITOR.instances.inlineContent.setData('');
@@ -134,7 +136,7 @@ class SlideContentEditor extends React.Component {
                     '<p>Row 1 - Column 1</p></div>'+
                     '<div _id="3" _idx="1" _name="Content Placeholder 2" _type="body" class="block content v-up h-mid" style="left: 0px; top: 675.14px; width: 941.77px; height: 43.44px; position: absolute; z-index: 2138483647; ">Footer</div>' +
                     '</div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '12':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -147,7 +149,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">'+
                     '<p>Row 1 - Column&nbsp;2</p>'+
                     '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '22':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -163,7 +165,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">'+
                     '<p>Row 2 - Column&nbsp;2</p>'+
                     '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '21':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -177,7 +179,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">Row 1 - Column 1</div>'+
                     '</div></div>';
 
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case '11img':
                 this.refs.inlineContent.innerHTML = '<div class="pptx2html" style="width: 960px; height: 720px; position: relative;  transform-origin: left top 0px;">'+
@@ -189,8 +191,8 @@ class SlideContentEditor extends React.Component {
                     '<div style="left: 1.25px; top: 304px; width: 938.96px; height: 360.72px; position: absolute; z-index: 2138483647; ">'+
                     '<div class="h-mid">'+
                     '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
-                    '<p>&nbsp;</p></div></div></div>', 'Add input box';
-                this.inputBoxButtonTitle = 'Add input box';
+                    '<p>&nbsp;</p></div></div></div>', 'Add text box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             // case 'title':
             //     this.refs.inlineContent.innerHTML =
@@ -201,7 +203,7 @@ class SlideContentEditor extends React.Component {
             //       ' </div>' +
             //       '</div>';
             //
-            //     this.inputBoxButtonTitle = 'Add input box';
+            //     this.inputBoxButtonTitle = 'Add text box';
             //     this.emitChange();
             //     break;
             case 'outitleslide':
@@ -212,7 +214,7 @@ class SlideContentEditor extends React.Component {
                 '<h3>Title</h3>' +
                 '<h4>[Subtitle]</h4>' +
                 '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'oegtitleslide':
                 this.refs.inlineContent.innerHTML =
@@ -222,7 +224,7 @@ class SlideContentEditor extends React.Component {
                 '<h3>Title</h3>' +
                 '<h4>[Subtitle]</h4>' +
                 '</div></div></div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'slidewikislide':
                 this.refs.inlineContent.innerHTML =
@@ -251,7 +253,7 @@ class SlideContentEditor extends React.Component {
                     '<h4 class="h-left" id="45263" style="text-align: center;"><span id="34455" style="color:#ffffff;"><span class="text-block" id="27908"><span id="54919" style="background-color:#1e78bb;">Footer</span></span></span></h4>' +
                     '</div>' +
                     '</div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'EKDDA':
                 this.refs.inlineContent.innerHTML =
@@ -282,7 +284,7 @@ class SlideContentEditor extends React.Component {
                 '<div class="h-left" id="34717"><img alt="" id="9225" src="https://fileservice.stable.slidewiki.org/2346/24fbd5f0-a481-11e7-a346-5db6696affe9.png" style="width: 166.514px; height: 59.8675px;" width="191" height="78"></div>'+
                 '</div>'+
                 '</div>';
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 break;
             case 'EKDDAeng':
                 this.refs.inlineContent.innerHTML =
@@ -560,7 +562,7 @@ class SlideContentEditor extends React.Component {
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             swal({
                 title: 'Switch to canvas style layout',
-                text: 'This will add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
+                text: 'This will Add text boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
@@ -581,7 +583,7 @@ class SlideContentEditor extends React.Component {
                 //update content
                 //TODO replace with this.refs.inlineContent.innerHTML
                 //CKEDITOR.instances.inlineContent.setData(newContent);
-                this.inputBoxButtonTitle = 'Add input box';
+                this.inputBoxButtonTitle = 'Add text box';
                 this.emitChange(); //confirm non-save on-leave
                 this.forceUpdate();
                 this.resizeDrag();
@@ -654,7 +656,15 @@ class SlideContentEditor extends React.Component {
         }); //leave all buttons
         //this.currentcontent = this.props.content;
 
+        //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+        //    return false;
+        //});
+
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
+            //document.body.scrollTop = document.documentElement.scrollTop = 0;
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             this.resize();
             this.uniqueIDAllElements();
             if (this.refs.inlineContent.innerHTML.includes('pptx2html'))
@@ -690,6 +700,9 @@ class SlideContentEditor extends React.Component {
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
+                this.refs.uploadMediaModal.handleOpen();
+                evt.preventDefault();
+                /*
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
@@ -703,6 +716,7 @@ class SlideContentEditor extends React.Component {
                         }, 500);
                     });
                 }, 500);
+                */
             });
         });
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
@@ -736,14 +750,14 @@ class SlideContentEditor extends React.Component {
                 //console.log('image width' + $(this).find('img:first').width());
                 //console.log('image width attr' + $(this).find('img:first').attr('width'));
                 //console.log('box width' + $(this).width());
-                if($(this).width() < $(this).find('img:first').width()+8)
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than image width/height
-                    $(this).width($(this).find('img:first').width() + 8);
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust image width');
                 }
-                if($(this).height() < $(this).find('img:first').height()+8)
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than image width/height
-                    $(this).height($(this).find('img:first').height() + 8);
+                    $(this).height($(this).find('img:first').height());
                 //    console.log('adjust image height');
                 }
             }
@@ -831,8 +845,8 @@ class SlideContentEditor extends React.Component {
                             ui.size.height = newHeight;
                             if($(this).find('img:first').length)
                             {
-                                $(this).find('img:first').width(newWidth - 8);
-                                $(this).find('img:first').height(newHeight - 8);
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight);
                             }
                         },
                         stop: function(event, ui) {
@@ -1217,9 +1231,9 @@ class SlideContentEditor extends React.Component {
         //https://github.com/swisnl/jQuery-contextMenu
         //http://swisnl.github.io/jQuery-contextMenu/
         $('.pptx2html [style*="absolute"]').each(function () {
-            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: 0px; position: absolute; z-index: 90000000;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1"  style="top: -32px; left: -30px; right:-30px; bottom:-30px; position: absolute; z-index: -1; opacity: 0.1;" class="'+  $(this).attr('id')+'dragdiv dragdiv ui button orange outline"><i tabIndex="-1" class="move icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')+'dragdiv').hide();
-            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 60px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
+            this.innerHTML = '<div tabIndex="-1" style="top: -32px; left: 0px; position: absolute; z-index: 90000000;"  class="context-menu-one ui button blue outline '+  $(this).attr('id')+'" id="'+  $(this).attr('id')+'"><i tabIndex="-1" class="tasks icon"></i></div>' + this.innerHTML;
             $('.'+$(this).attr('id')).hide();
             //this.innerHTML = '<div><button tabIndex="0" class="'+  $(this).attr('id')+'dragdiv ui button orange outline '+  $(this).attr('id')+'"  style="left: 50px; position: absolute; z-index: 90000000;"><i class="move icon small"></i></button></div>' + this.innerHTML;
             //let menuID = $(this).attr('id');
@@ -1288,10 +1302,66 @@ class SlideContentEditor extends React.Component {
         $(this.refs.TemplateDropdown).dropdown();
         if(typeof(CKEDITOR.instances.inlineContent) !== 'undefined' && CKEDITOR.instances.inlineContent.getData().indexOf('pptx2html') !== -1)
         { // if pptx2html element with absolute content is in slide content (underlying HTML)
-            this.inputBoxButtonTitle = 'Add input box';
+            this.inputBoxButtonTitle = 'Add text box';
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             this.inputBoxButtonTitle = 'Switch to canvas with input boxes';
         }
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.MediaStore.status === 'uploading') {
+            if (nextProps.MediaStore.status === 'success') {
+                this.refs.uploadMediaModal.handleClose();
+                //TODO code which inserts the file into the slide
+                // MediaStore.file contains everything about the file - also the byte64 string and url
+                if($('.pptx2html').length)
+                {
+                    $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';""><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
+                    this.uniqueIDAllElements();
+                    this.refreshCKeditor();
+                    this.resize();
+                    this.resizeDrag();
+                    this.forceUpdate();
+
+                    nextProps.MediaStore.status = '';
+                    nextProps.MediaStore.filetype = '';
+                    nextProps.MediaStore.filename = '';
+                    nextProps.MediaStore.file = {};
+                }
+                else
+                {
+                    $('#inlineContent').append('<img id="10000" src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'">');
+                    //this.refs.inlineContent.append('<img src=""' + nextProps.MediaStore.file.url + '" width="300" height="300" alt="'+nextProps.MediaStore.file.text+'">');
+                    this.uniqueIDAllElements();
+                    this.refreshCKeditor();
+                    this.resize();
+                    this.forceUpdate();
+
+                    nextProps.MediaStore.status = '';
+                    nextProps.MediaStore.filetype = '';
+                    nextProps.MediaStore.filename = '';
+                    nextProps.MediaStore.file = {};
+
+                }
+
+            }
+            else if (nextProps.MediaStore.status === 'error') {
+                this.refs.uploadMediaModal.handleClose();
+                swal({
+                    title: 'Error',
+                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
+                    type: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonClass: 'negative ui button',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    buttonsStyling: false
+                })
+                .then(() => {
+                    return true;
+                });
+            }
+        }
+
     }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
@@ -1547,51 +1617,71 @@ class SlideContentEditor extends React.Component {
             'duplicate': (event) => this.duplicateNode(slideEditorContext, event),
             //'escape': (event) => {this.removeEditMode(); $('#' + this.menuFocus).focus(); $('#' + this.menuFocus).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});}
         };
+        const dropDownItemStyle = {
+            //minWidth: '100%',
+            minHeight: '100px',
+            //borderStyle: 'dashed dashed none dashed',
+            //borderColor: '#e7e7e7',
+        };
         let templateOptions = <div className="menu">
             <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
-                Title and bullets
+                Title and bullets <br/>
+                <br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
             <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
-                Empty document
+                Empty document <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
             </div>
             <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column
+                1 row 1 column <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
             </div>
             <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 2 columns
+                1 row 2 columns <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
             </div>
             <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 2 columns
+                2 rows 2 columns <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
             </div>
             <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
-                2 rows 1 column
+                2 rows 1 column <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
             </div>
             <div className="item" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
-                1 row 1 column image
+                1 row 1 column image <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
             </div>
             <div className="item" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
-                Document with title
+                Document with title <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
             </div>
             <div className="item" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                Open University Theme Title Page
+                Open University Theme Title Page <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
             </div>
             <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
-                OEG Theme Title Page
+                OEG Theme Title Page <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
             </div>
             <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
-                SlideWiki template
+                SlideWiki template <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
             </div>
             <div className="item" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template
+                EKDDA template <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
             </div>
             <div className="item" data-value="EKDDAeng" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English
+                EKDDA template - English <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
             </div>
             <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
-                EKDDA template - English no footer
+                EKDDA template - English no footer <br/><br/>
+                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
             </div>
         </div>;
-
         const headerStyle = {
             //minWidth: '100%',
             height: '0px',
@@ -1690,6 +1780,7 @@ class SlideContentEditor extends React.Component {
                     <i className="plus square outline icon black large"></i>
                     <a style={buttonColorBlack}>{this.inputBoxButtonTitle}</a>
                 </button>
+                <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
                 <div className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
                     <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
                     <i className="dropdown icon large"/>
@@ -1712,7 +1803,12 @@ class SlideContentEditor extends React.Component {
                     <i className="browser icon black"> </i>
                     <a style={buttonColorBlack}>Use template</a>
                 </button>
-                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/> */}
+                <TemplateDropdown name="template" ref="template" id="template" onClick={this.handleTemplatechange.bind(this)}/>
+                <button tabIndex="0" ref="CKeditorModeButton" className="ui orange button " onClick={this.handleCKeditorModeButton.bind(this)} onChange={this.handleCKeditorModeButton.bind(this)}>
+                 <i className="outline tasks icon black"></i>
+                 <a style={buttonColorBlack}>{this.CKeditorMode}</a>
+                </button>
+                */}
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
@@ -1751,14 +1847,15 @@ SlideContentEditor.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore], (context, props) => {
+SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
 
     return {
         SlideEditStore: context.getStore(SlideEditStore).getState(),
         SlideViewStore: context.getStore(SlideViewStore).getState(),
         UserProfileStore: context.getStore(UserProfileStore).getState(),
         DataSourceStore: context.getStore(DataSourceStore).getState(),
-        DeckTreeStore: context.getStore(DeckTreeStore).getState()
+        DeckTreeStore: context.getStore(DeckTreeStore).getState(),
+        MediaStore: context.getStore(MediaStore).getState()
     };
 });
 export default SlideContentEditor;
