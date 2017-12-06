@@ -14,6 +14,8 @@ import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
 let MediaQuery = require ('react-responsive');
 import {FormattedMessage, defineMessages} from 'react-intl';
+import SelectInstanceModal from '../User/SelectInstanceModal.js';
+import openSSOModal from '../../actions/user/openSSOModal';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -220,6 +222,14 @@ class LoginModal extends React.Component {
         win.focus();
     }
 
+    doSSO(e) {
+        e.preventDefault();
+
+        $('.ui.login.modal').modal('toggle');
+
+        this.context.executeAction(openSSOModal);
+    }
+
     handleStorageEvent(e) {
         console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
@@ -374,6 +384,7 @@ class LoginModal extends React.Component {
                       <br/>
                       <div className="container">
                         {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
+                        <i className="big circular user link icon" onClick={this.doSSO.bind(this)} title='Sign in with an account of another SlideWiki instance' ></i>
                         <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
                         <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
                       </div>
@@ -406,6 +417,7 @@ class LoginModal extends React.Component {
                 </button>
               </div>
             </div>
+            <SelectInstanceModal />
           </div>
         );
     }
