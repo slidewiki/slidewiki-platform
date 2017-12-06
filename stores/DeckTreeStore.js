@@ -356,20 +356,24 @@ class DeckTreeStore extends BaseStore {
         } catch (e) {
             //there might be the case when the node for old selector does not exist anymore
         }
-        selectedNodeIndex = this.makeImmSelectorFromPath(newSelector.get('spath'));
-        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
-        this.selector = newSelector;
+        try {
+            selectedNodeIndex = this.makeImmSelectorFromPath(newSelector.get('spath'));
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
+            this.selector = newSelector;
 
-        //unfocus old focused node
-        this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => false));
-        this.focusedSelector = newSelector;
-        //if the root deck was selected, focus it's first node
-        if (!this.focusedSelector.get('spath')) {
-            this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
+            //unfocus old focused node
+            this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => false));
+            this.focusedSelector = newSelector;
+            //if the root deck was selected, focus it's first node
+            if (!this.focusedSelector.get('spath')) {
+                this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
+            }
+            //update the focused node in the tree
+            this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
+            this.updatePrevNextSelectors();
+        } catch (e) {
+            //todo: handle unexpected events here
         }
-        //update the focused node in the tree
-        this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
-        this.updatePrevNextSelectors();
     }
     deleteTreeNode(selector, silent) {
         let selectorIm = Immutable.fromJS(selector);
