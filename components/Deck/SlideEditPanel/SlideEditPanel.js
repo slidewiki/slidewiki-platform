@@ -21,7 +21,7 @@ class SlideEditPanel extends React.Component {
                     <div className="four wide column">
                     <button className="ui small basic right floated icon button"><i className="edit icon"></i></button>
                 </div>
-
+                */}
                 <div className="ui grey inverted segment bottom attached active tab">
                   <div className="ui center aligned grid">
                       <div className="ui vertical labeled icon grey inverted massive  menu">
@@ -58,7 +58,6 @@ class SlideEditPanel extends React.Component {
                       </div>
                   </div>
               </div>
-              */}
             </div>
         );
     }
