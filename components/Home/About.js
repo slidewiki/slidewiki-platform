@@ -30,9 +30,9 @@ class About extends React.Component {
                             <FormattedMessage id="about.euwebsite" defaultMessage="SlideWiki EU project website"/>
                         </a>
                     }}
-                    defaultMessage={"SlideWiki is an open-source platform, and all its content can be reused under CC-BY license. SlideWiki development, large-scale trials" +
-                    "and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. " +
-                    "For more details, see {link_1}"}/>
+                    defaultMessage={'SlideWiki is an open-source platform, and all its content can be reused under CC-BY license. SlideWiki development, large-scale trials' +
+                    'and underlying research is funded from Framework Programme for Research and Innovation Horizon 2020 under grant agreement no 688095. ' +
+                    'For more details, see {link_1}'}/>
                 </p>
                 <h3>
                   <FormattedMessage id="about.functionality" defaultMessage="The final-release functionality of the SlideWiki platform will include, but not limited to:"/>
