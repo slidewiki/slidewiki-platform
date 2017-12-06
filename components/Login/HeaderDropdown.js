@@ -7,6 +7,7 @@ import loadNewUserNotificationsCount from '../../actions/user/notifications/load
 import UserProfileStore from '../../stores/UserProfileStore';
 import UserNotificationsStore from '../../stores/UserNotificationsStore';
 import fetchUser from '../../actions/user/userprofile/fetchUser';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class HeaderDropdown extends React.Component {
     componentDidMount(){
@@ -48,19 +49,19 @@ class HeaderDropdown extends React.Component {
                     </div>
                     <div className="divider"></div>
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username} role="menuitem" aria-label="My Decks" tabIndex="0" >
-                        <i className="user icon link"  /> My Decks
+                        <i className="user icon link"  /> <FormattedMessage id='header.mydecks' defaultMessage='My Decks'/>
                     </div>
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/groups/overview'} role="menuitem" aria-label="My Groups" tabIndex="0" >
-                        <i className="icon users" /> My Groups
+                        <i className="icon users" /> <FormattedMessage id='header.mygroups' defaultMessage='My Groups'/>
                     </div>
                     <div className="item" data-value={'/user/' + this.props.UserProfileStore.username + '/settings/profile' } role="menuitem" aria-label="My Settings" tabIndex="0" >
-                        <i className="setting icon" /> My Settings
+                        <i className="setting icon" /> <FormattedMessage id='header.mysettings' defaultMessage='My Settings'/>
                     </div>
                     <div className="item" data-value={'/notifications'} role="menuitem" aria-label="My Notifications" tabIndex="0" >
-                        <i className={alarmClassName} /> My Notifications
+                        <i className={alarmClassName} /><FormattedMessage id='header.mynotifications' defaultMessage='My Notifications'/>
                     </div>
                     <div className="item" data-value={'logout'} role="menuitem" aria-label="Sign Out" tabIndex="0" >
-                        <i className="sign out icon"/> Sign Out
+                        <i className="sign out icon"/> <FormattedMessage id='header.signout' defaultMessage='Sign Out'/>
                     </div>
                 </div>
             </div>
