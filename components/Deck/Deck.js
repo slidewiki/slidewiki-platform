@@ -153,7 +153,7 @@ class Deck extends React.Component {
                     </div>*/}
                 </div>
 
-
+                {/*}
                 <div className={leftColClass}>
                     <div className="row">
                         <div className={treePanelClass}>
@@ -165,11 +165,14 @@ class Deck extends React.Component {
                             <div className="row">
                                 <ActivityFeedPanel />
                             </div>
-                        </div>*/}
+                        </div>*//*}
                         <div className="ui hidden divider"></div>
                     </div>
                 </div>
-                {/*leftPanel*/}
+                {*/}
+
+                {leftPanel}
+
 
 
                 {dividerDIV}
