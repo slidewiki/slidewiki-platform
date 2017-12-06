@@ -1719,7 +1719,7 @@ class SlideContentEditor extends React.Component {
                  <i className="save icon large"></i>
                  Save
                 </button>
-                {/*<UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>*/}
+                <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
                 <button tabIndex="0" ref="helpbutton" className="ui orange button " onClick={this.keymapInfoButton.bind(this)} onChange={this.keymapInfoButton.bind(this)}>
                     <i className="help circle icon black large"></i>
                     <a style={buttonColorBlack}>keys</a>
