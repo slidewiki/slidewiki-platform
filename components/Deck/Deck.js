@@ -144,7 +144,6 @@ class Deck extends React.Component {
                     </div>*/}
                 </div>
 
-
                 <div className={leftColClass}>
                     <div className="row">
                         <div className={treePanelClass}>
