@@ -12,8 +12,8 @@ export default function updateCollectionDecks(context, payload, done) {
     // first get user groups that the user is member of 
     context.service.read('usergroup.member', payload, {timeout: 20 * 1000}, (err, usergroups) => {
         if(err){
-            console.log(err);
             log.error(context, {filepath: __filename});
+            done();
         } else {
 
             payload.usergroups = usergroups;

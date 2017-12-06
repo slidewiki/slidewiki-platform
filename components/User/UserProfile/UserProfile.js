@@ -161,7 +161,7 @@ class UserProfile extends React.Component {
     }
 
     displayUserProfile() {
-        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} category={this.props.UserProfileStore.category} deckGroups={this.props.UserProfileStore.userDeckGroups} loadDeckGroupsError={this.props.UserProfileStore.updateDeckGroupsError}/>);
+        return (<PrivatePublicUserProfile user={this.props.UserProfileStore.user} decks={this.props.UserProfileStore.userDecks} loggedinuser={this.props.UserProfileStore.username} category={this.props.UserProfileStore.category} deckCollections={this.props.UserProfileStore.userDeckCollections} loadDeckCollectionsError={this.props.UserProfileStore.updateDeckCollectionsError}/>);
     }
 
     displayIntegrations() {

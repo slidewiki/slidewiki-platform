@@ -11,12 +11,12 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'read', Method: req.method});
         let args = params.params? params.params : params;
 
-        let usergroups = params.usergroups.map( (usergroup) => {
+        let usergroups = (params.usergroups || []).map( (usergroup) => {
             return usergroup._id;
         }).join('&usergroup=');
 
         // suggest deck collections that this user can add decks to
-        if(resource === 'deckgroups.suggest'){
+        if(resource === 'deckgroups.forUser'){
 
             // form request call
             let uri = `${Microservices.deck.uri}/groups?user=${args.userId}`;
@@ -32,7 +32,7 @@ export default {
                 json: true 
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
-        } else if (resource === 'deckgroups.deck'){
+        } else if (resource === 'deckgroups.forDeck'){
 
             let uri = `${Microservices.deck.uri}/deck/${args.sid}/groups?user=${args.userId}`;
             if(usergroups !== ''){

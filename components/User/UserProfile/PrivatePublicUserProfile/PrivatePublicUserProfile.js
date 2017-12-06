@@ -1,7 +1,7 @@
 import React from 'react';
 import PublicUserData from '../PublicUserData';
 import UserDecks from './UserDecks';
-import UserDeckGroups from './UserDeckGroups';
+import UserDeckCollections from './UserDeckCollections';
 import UserMenu from './UserMenu';
 
 class PrivatePublicUserProfile extends React.Component {
@@ -13,14 +13,14 @@ class PrivatePublicUserProfile extends React.Component {
         return <UserDecks decks={this.props.decks} user={this.props.user} loggedinuser={this.props.loggedinuser} />;
     }
 
-    showUserDeckGroups(){
-        return <UserDeckGroups user={this.props.user} loggedinuser={this.props.loggedinuser} deckGroups={this.props.deckGroups} loadDeckGroupsError={this.props.loadDeckGroupsError} />;
+    showUserCollections(){
+        return <UserDeckCollections user={this.props.user} loggedinuser={this.props.loggedinuser} collections={this.props.deckCollections} error={this.props.loadDeckCollectionsError} />;
     }
 
     chooseView(){
         switch(this.props.category){
-            case 'deckgroups':
-                return this.showUserDeckGroups();
+            case 'collections':
+                return this.showUserCollections();
             default: 
                 return this.showUserDecks();        
         }
