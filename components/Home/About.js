@@ -26,7 +26,7 @@ class About extends React.Component {
                 <p>
                   <FormattedMessage id="about.p4"
                     values={{
-                        link_1: <a href="http://slidewiki.eu">
+                        link_1: <a href="http://slidewiki.eu" target="_blank">
                             <FormattedMessage id="about.euwebsite" defaultMessage="SlideWiki EU project website"/>
                         </a>
                     }}
