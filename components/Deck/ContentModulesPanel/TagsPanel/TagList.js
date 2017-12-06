@@ -21,7 +21,7 @@ class TagList extends React.Component {
                             : ''
                     }
                 </a>)) }
-             </div>
+            </div>
         );
     }
 }

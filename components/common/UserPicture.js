@@ -48,7 +48,7 @@ class UserPicture extends React.Component {
         } else
             picture = <img src={ this.props.picture } className={ classes } alt=' ' role='presentation'/>;
         return (
-        <div > { this.props.link ? <a href={ '/user/' + this.props.username }>picture</a> : picture}</div>
+            <div > { this.props.link ? <a href={ '/user/' + this.props.username }>picture</a> : picture}</div>
         );
     }
 }

@@ -11,19 +11,19 @@ class ContributorItem extends React.Component {
         };
         return (
             <a className="item" href="#" onClick={func}>
-                    <div className="ui image">
-                        <UserPicture picture={ this.props.data.picture }
-                            username={ this.props.data.username } link={ false }
-                            private={ false } size={ 'mini' } width= { 24 } bordered={ false } alt={'""'}/>
+                <div className="ui image">
+                    <UserPicture picture={ this.props.data.picture }
+                        username={ this.props.data.username } link={ false }
+                        private={ false } size={ 'mini' } width= { 24 } bordered={ false } alt={'""'}/>
+                </div>
+                <div className="content">
+                    <div className="description">
+                        {this.props.data.username}
                     </div>
-                    <div className="content">
-                        <div className="description">
-                            {this.props.data.username}
-                        </div>
 
-                        <div className="extra">{this.props.data.organization}</div>
-                    </div>
-                </a>
+                    <div className="extra">{this.props.data.organization}</div>
+                </div>
+            </a>
 
         );
     }

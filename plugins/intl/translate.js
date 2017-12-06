@@ -81,18 +81,18 @@ class Translator {
 }
 
 const defaultMessages = globSync(MESSAGES_PATTERN)
-.map((filename) => fs.readFileSync(filename, 'utf8'))
-.map((file) => JSON.parse(file))
-.reduce((collection, descriptors) => {
-    descriptors.forEach(({id, defaultMessage}) => {
-        if (collection.hasOwnProperty(id)) {
-            throw new Error(`Duplicate message id: ${id}`);
-        }
-        collection[id] = defaultMessage;
-    });
+    .map((filename) => fs.readFileSync(filename, 'utf8'))
+    .map((file) => JSON.parse(file))
+    .reduce((collection, descriptors) => {
+        descriptors.forEach(({id, defaultMessage}) => {
+            if (collection.hasOwnProperty(id)) {
+                throw new Error(`Duplicate message id: ${id}`);
+            }
+            collection[id] = defaultMessage;
+        });
 
-    return collection;
-}, {});
+        return collection;
+    }, {});
 
 
 

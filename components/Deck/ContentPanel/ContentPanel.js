@@ -50,7 +50,7 @@ class ContentPanel extends React.Component {
                     <ContentActionsFooter ContentStore={this.props.ContentStore} />
                 </div>
                 <NoPermissionsModal selector={this.props.ContentStore.selector} />
-             </div>
+            </div>
         );
     }
 }

@@ -21,5 +21,5 @@ export default function addSlide(context, payload, done) {
         done();
     }
 
-  );
+    );
 }

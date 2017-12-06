@@ -136,9 +136,9 @@ class ContentModulesPanel extends React.Component {
       
         // hide tags tab in slides 
         let tagsTab = (this.props.ContentModulesStore.selector.stype === 'deck') 
-        ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>
+            ? <a tabIndex="0" className={tagsTabClass} style={compStyle} onClick={this.handleTabClick.bind(this, 'tags')}>
             Tags<span className="ui tiny circular label">{this.props.ContentModulesStore.moduleCount.tags}</span>
-        </a> : '';
+            </a> : '';
 
         pointingMenu = (
             <div className="ui top attached pointing menu">

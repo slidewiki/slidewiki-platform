@@ -45,7 +45,7 @@ class SlideContentView extends React.Component {
             //initial resize
             this.resize();
             ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
-                {
+            {
                 //console.log('resize');
                 this.resize();
             });
@@ -167,24 +167,24 @@ class SlideContentView extends React.Component {
         //console.log(style.slides);
 
         return (
-        <ResizeAware ref='container' id='container'>
-            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-            <div ref="slideContentView" className="ui" style={compStyle}>
-                <div className={['reveal', style.reveal].join(' ')}>
-                    <div className={['slides', style.slides].join(' ')}>
-                        <section className="present" style={sectionElementStyle}>
-                            <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent'
-                                 dangerouslySetInnerHTML={{__html: this.props.content}}></div>
-                        </section>
+            <ResizeAware ref='container' id='container'>
+                {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                <div ref="slideContentView" className="ui" style={compStyle}>
+                    <div className={['reveal', style.reveal].join(' ')}>
+                        <div className={['slides', style.slides].join(' ')}>
+                            <section className="present" style={sectionElementStyle}>
+                                <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent'
+                                    dangerouslySetInnerHTML={{__html: this.props.content}}></div>
+                            </section>
+                        </div>
+                        <br />
                     </div>
-                    <br />
                 </div>
-            </div>
-            <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
-                <div dangerouslySetInnerHTML={{__html: this.props.speakernotes}}/>
-            </div>
-        </ResizeAware>
+                <div ref="slideContentViewSpeakerNotes" className="ui" style={compSpeakerStyle}>
+                    {this.props.speakernotes ? <b>Speaker notes:</b> : ''}
+                    <div dangerouslySetInnerHTML={{__html: this.props.speakernotes}}/>
+                </div>
+            </ResizeAware>
         );
     }
 }

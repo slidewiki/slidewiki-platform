@@ -49,7 +49,7 @@ function loadIntlPolyfill(locale) {
 
     });
 
-};
+}
 
 // Returns a promise which is resolved as the required locale-data chunks
 // has been downloaded with webpack's require.ensure. For each language,
@@ -387,7 +387,7 @@ function loadLocaleData(locale) {
 
     });
 
-};
+}
 
 //removing hash, for redirects
 function removeHash () {
@@ -424,29 +424,29 @@ function renderApp(locale) {
         const messages = require('./intl/'+locale+'.json');
         ReactDOM.render(
             <IntlProvider locale={ locale } messages={messages}>
-            <Root context={ context.getComponentContext() } />
+                <Root context={ context.getComponentContext() } />
             </IntlProvider>
             , mountNode, () => {
                 debug('Root component has been mounted');
             });
 
-            // debugClient('React Rendering');
-            // ReactDOM.render(
-            //     createElementWithContext(context),
-            //     mountNode,
-            //     () => debugClient('React Rendered')
-            // );
+        // debugClient('React Rendering');
+        // ReactDOM.render(
+        //     createElementWithContext(context),
+        //     mountNode,
+        //     () => debugClient('React Rendered')
+        // );
     });
 }
 
 
 
-    // Load the Intl polyfill and required locale data
+// Load the Intl polyfill and required locale data
 const locale = document.documentElement.getAttribute('lang');
 
 loadIntlPolyfill(locale)
-.then(loadLocaleData.bind(null, locale))
-.then(renderApp.bind(null, locale))
-.catch( (err) => {
-    console.error(err);
-});
+    .then(loadLocaleData.bind(null, locale))
+    .then(renderApp.bind(null, locale))
+    .catch( (err) => {
+        console.error(err);
+    });

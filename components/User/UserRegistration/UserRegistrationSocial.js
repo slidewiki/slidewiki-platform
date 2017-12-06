@@ -201,42 +201,42 @@ class UserRegistrationSocial extends React.Component {
             usernameToolTipp += '\n Here are some suggestions: ' + this.props.UserRegistrationStore.suggestedUsernames;
         }
         return (
-          <div>
-            <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal" >
-              <div className="header">
-                  <h1 style={headerStyle}>Validate user information</h1>
-              </div>
-              <div className="content">
-                  <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
-                      <div className="ui inline field">
-                          <label style={signUpLabelStyle}>First name * </label>
-                          <div className="ui icon input"><input type="text" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
-                      </div>
-                      <div className="ui inline field">
-                          <label style={signUpLabelStyle}>Last name * </label>
-                          <div className="ui icon input"><input type="text" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
-                      </div>
-                      <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                          <label style={signUpLabelStyle}>Username * </label>
-                          <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
-                      </div>
-                      <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                          <label style={signUpLabelStyle}>Email * </label>
-                          <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
-                      </div>
-                      <div className="ui error message"></div>
-                      <button type="submit" className="ui blue labeled submit icon button" >
-                          <i className="icon add user"/> Sign Up
-                      </button>
-                  </form>
-                  <div className="ui dividing header" ></div>
-                  <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
-              </div>
-              <div className="actions">
-                  <div className="ui cancel button">Cancel</div>
-              </div>
+            <div>
+                <div className="ui socialregistration modal" id='signinModal' style={modalStyle} ref="SocialRegistration_Modal" >
+                    <div className="header">
+                        <h1 style={headerStyle}>Validate user information</h1>
+                    </div>
+                    <div className="content">
+                        <form className="ui registrationmodalform form" ref="UserSocialRegistration_form" >
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>First name * </label>
+                                <div className="ui icon input"><input type="text" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
+                            </div>
+                            <div className="ui inline field">
+                                <label style={signUpLabelStyle}>Last name * </label>
+                                <div className="ui icon input"><input type="text" name="lastname" ref="lastname" placeholder="Last name" aria-required="true"/></div>
+                            </div>
+                            <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
+                                <label style={signUpLabelStyle}>Username * </label>
+                                <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                            </div>
+                            <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
+                                <label style={signUpLabelStyle}>Email * </label>
+                                <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                            </div>
+                            <div className="ui error message"></div>
+                            <button type="submit" className="ui blue labeled submit icon button" >
+                                <i className="icon add user"/> Sign Up
+                            </button>
+                        </form>
+                        <div className="ui dividing header" ></div>
+                        <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
+                    </div>
+                    <div className="actions">
+                        <div className="ui cancel button">Cancel</div>
+                    </div>
+                </div>
             </div>
-          </div>
         );
     }
 }

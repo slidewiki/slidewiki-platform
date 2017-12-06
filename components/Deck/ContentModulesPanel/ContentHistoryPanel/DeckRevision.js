@@ -60,14 +60,14 @@ class DeckRevision extends React.Component {
             <List.Item>
                 <List.Content tabIndex='0'>
                     <List.Header><Icon color='grey' name='save' size='large' className='outline'
-                                       aria-label='Saved at'/>
-                        <span>{formatDate(revision.lastUpdate)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} by <a
+                        aria-label='Saved at'/>
+                    <span>{formatDate(revision.lastUpdate)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}{/*moment(revision.lastUpdate).calendar(null, {sameElse: 'lll'})*/} by <a
                         className="user"
                         href={'/user/' + revision.username}> {revision.username}</a>
-                            </span>
-                        <Button basic floated='right' size='tiny' aria-label='expand details'
-                                icon='ellipsis horizontal'
-                                onClick={this.handleExpandClick.bind(this)}/>
+                    </span>
+                    <Button basic floated='right' size='tiny' aria-label='expand details'
+                        icon='ellipsis horizontal'
+                        onClick={this.handleExpandClick.bind(this)}/>
                     </List.Header>
                     {revision.expanded &&
                         <Segment style={segmentStyle}>
@@ -76,9 +76,9 @@ class DeckRevision extends React.Component {
                                     <Button.Group basic size='tiny' floated='right'>
                                         <Button aria-label='Compare to current deck' icon='exchange' disabled/>
                                         <Button aria-label='Restore deck' icon='history' disabled={!canEdit}
-                                                onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
+                                            onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
                                         <Button aria-label='View deck in new tab' icon
-                                                onClick={this.handleViewRevisionClick.bind(this)} tabIndex='0'>
+                                            onClick={this.handleViewRevisionClick.bind(this)} tabIndex='0'>
                                             <Icon.Group>
                                                 <Icon name='unhide'/>
                                                 <Icon name='external' corner/>
@@ -88,7 +88,7 @@ class DeckRevision extends React.Component {
                                 }
                             </Header>
                             <DeckRevisionChanges selector={this.props.selector} permissions={this.props.permissions}
-                                                 changes={this.props.changes}/>
+                                changes={this.props.changes}/>
                         </Segment>
                     }
                 </List.Content>

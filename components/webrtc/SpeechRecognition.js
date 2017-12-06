@@ -213,14 +213,14 @@ class SpeechRecognition extends React.Component {
 
     render() {
         return (
-          <div>
-            <Label pointing='below'>Automatically generated transcript</Label>
-            <Input labelPosition='left' type='text' fluid>
-              <Label>Transcript:</Label>
-              <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' value={this.state.subtitle}/>
-              {this.props.isInitiator ? (<Button color='red' icon='stop' disabled={this.state.speechRecognitionDisabled ? true : false} onClick={this.showStopSpeechRecognitionModal.bind(this)}/>) : ('')}
-            </Input>
-          </div>
+            <div>
+                <Label pointing='below'>Automatically generated transcript</Label>
+                <Input labelPosition='left' type='text' fluid>
+                    <Label>Transcript:</Label>
+                    <input id="input_subtitle" disabled style={{opacity: 1}} placeholder='...' value={this.state.subtitle}/>
+                    {this.props.isInitiator ? (<Button color='red' icon='stop' disabled={this.state.speechRecognitionDisabled ? true : false} onClick={this.showStopSpeechRecognitionModal.bind(this)}/>) : ('')}
+                </Input>
+            </div>
         );
     }
 }

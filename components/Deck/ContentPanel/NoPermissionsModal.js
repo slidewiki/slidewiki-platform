@@ -66,8 +66,8 @@ class NoPermissionsModal extends React.Component {
         }
         return (
             <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='permissionsModalHeader'
-                   aria-describedby='permissionsModalDesc' open={isNoPermissionsModalShown}
-                   onClose={this.handleClose.bind(this)}>
+                aria-describedby='permissionsModalDesc' open={isNoPermissionsModalShown}
+                onClose={this.handleClose.bind(this)}>
                 <Header icon='warning sign' content={headerText} id='permissionsModalHeader'/>
                 <Modal.Content>
                     <p id='permissionsModalDesc'>{modalDescription}</p>

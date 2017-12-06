@@ -131,7 +131,7 @@ class ReportModal extends React.Component {
         return this.refs.reason.value;
     }
     getSwalMessages(){
-      //Get the messages which will show in the swal showed  when the report is sent
+        //Get the messages which will show in the swal showed  when the report is sent
         return {
             title: this.context.intl.formatMessage(this.messages.swal_title),
             text: this.context.intl.formatMessage(this.messages.send_swal_text),
@@ -287,60 +287,60 @@ class ReportModal extends React.Component {
 
         return(
 
-                <Modal
-                    trigger={
-                          <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
-                                <Icon name="warning circle" size='large' />
-                          </Button>
+            <Modal
+                trigger={
+                    <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Report" data-tooltip="Report" onClick={this.handleOpen} >
+                        <Icon name="warning circle" size='large' />
+                    </Button>
 
-                        }
-                    open={this.state.modalOpen}
-                    onOpen={this.handleOpen}
-                    onClose={this.handleClose}
-                    id="reportModal"
-                    aria-labelledby="reportModalHeader"
-                    aria-describedby="reportModalDescription"
-                    tabIndex="0"
+                }
+                open={this.state.modalOpen}
+                onOpen={this.handleOpen}
+                onClose={this.handleClose}
+                id="reportModal"
+                aria-labelledby="reportModalHeader"
+                aria-describedby="reportModalDescription"
+                tabIndex="0"
+            >
+                <FocusTrap
+                    id="focus-trap-reportModal"
+                    className = "header"
+                    active={this.state.activeTrap}
+                    focusTrapOptions={{
+                        onDeactivate:this.unmountTrap,
+                        clickOutsideDeactivates:true,
+                        initialFocus: '#reportModalDescription'
+                    }}
                 >
-                    <FocusTrap
-                        id="focus-trap-reportModal"
-                        className = "header"
-                        active={this.state.activeTrap}
-                        focusTrapOptions={{
-                            onDeactivate:this.unmountTrap,
-                            clickOutsideDeactivates:true,
-                            initialFocus: '#reportModalDescription'
-                        }}
-                        >
-                        <Modal.Header className="ui center aligned" id="reportModalHeader">
-                            <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modal_title)}  {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck'} {this.context.intl.formatMessage(this.messages.modal_title_2)}</h1>
-                        </Modal.Header>
-                        <Modal.Content>
-                            <Container>
-                                <Segment color="blue" textAlign="left" padded>
-                                  <div id="reportModalDescription" tabIndex="0">{this.context.intl.formatMessage(this.messages.modal_description)}</div>
+                    <Modal.Header className="ui center aligned" id="reportModalHeader">
+                        <h1 style={headerStyle}>{this.context.intl.formatMessage(this.messages.modal_title)}  {this.props.ContentStore.selector.stype === 'slide' ? 'slide' : 'deck'} {this.context.intl.formatMessage(this.messages.modal_title_2)}</h1>
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Container>
+                            <Segment color="blue" textAlign="left" padded>
+                                <div id="reportModalDescription" tabIndex="0">{this.context.intl.formatMessage(this.messages.modal_description)}</div>
 
-                                   <Segment textAlign="center" >
+                                <Segment textAlign="center" >
                                     <Form id="reportForm">
                                         <Segment textAlign="left" >
-                                        {(this.props.UserProfileStore.userid === '') ?  nameField: ''}
-                                        <label htmlFor="reason">{this.context.intl.formatMessage(this.messages.reason_option_reason)}</label>
-                                        <div style={{width:'50%'}} className={fieldClass_reason} style={{display:'block'}} data-tooltip={this.context.intl.formatMessage(this.messages.reason_tooltip)} ref="reasonDropdown">
+                                            {(this.props.UserProfileStore.userid === '') ?  nameField: ''}
+                                            <label htmlFor="reason">{this.context.intl.formatMessage(this.messages.reason_option_reason)}</label>
+                                            <div style={{width:'50%'}} className={fieldClass_reason} style={{display:'block'}} data-tooltip={this.context.intl.formatMessage(this.messages.reason_tooltip)} ref="reasonDropdown">
 
-                                            <input type="hidden" id="reason" name="reason" ref="reason"/>
+                                                <input type="hidden" id="reason" name="reason" ref="reason"/>
                                                 <i className="dropdown icon"/>
                                                 <div className="default text">{this.context.intl.formatMessage(this.messages.reason_option_reason)}</div>
                                                 <div className="menu" role="menu">
                                                     <div className="item" data-value="copyright" role="menuitem">{this.context.intl.formatMessage(this.messages.reason_option_copy)}</div>
                                                     <div className="item" data-value="spam" role="menuitem">{this.context.intl.formatMessage(this.messages.reason_option_spam)}</div>
                                                 </div>
-                                        </div>
-                                        <br/>
-                                        <div className={fieldClass_text}>
-                                            <label htmlFor="reportComment">{this.context.intl.formatMessage(this.messages.explanation)}</label>
-                                            <textarea ref="text" id="reportComment" name="text" style={{width:'100%', minHeight: '6em', height: '6em'}} placeholder={this.context.intl.formatMessage(this.messages.explanation_placeholder)}></textarea>
-                                        </div>
-                                        {(this.props.UserProfileStore.userid === '') ?  captchaField: ''}
+                                            </div>
+                                            <br/>
+                                            <div className={fieldClass_text}>
+                                                <label htmlFor="reportComment">{this.context.intl.formatMessage(this.messages.explanation)}</label>
+                                                <textarea ref="text" id="reportComment" name="text" style={{width:'100%', minHeight: '6em', height: '6em'}} placeholder={this.context.intl.formatMessage(this.messages.explanation_placeholder)}></textarea>
+                                            </div>
+                                            {(this.props.UserProfileStore.userid === '') ?  captchaField: ''}
                                         </Segment>
                                         <Button
                                             color="blue"
@@ -358,14 +358,14 @@ class ReportModal extends React.Component {
                                         />
                                         <div className="ui error message"/>
                                     </Form>
-                                    </Segment>
                                 </Segment>
-                            </Container>
+                            </Segment>
+                        </Container>
 
-                        </Modal.Content>
+                    </Modal.Content>
 
-                    </FocusTrap>
-                </Modal>
+                </FocusTrap>
+            </Modal>
 
         );
     }

@@ -35,7 +35,7 @@ class Presentation extends React.Component{
 
     componentDidMount(){
         if(process.env.BROWSER){
-             //loading reveal style
+            //loading reveal style
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});
@@ -87,7 +87,7 @@ class Presentation extends React.Component{
 
             Reveal.addEventListener( 'slidechanged', ( event ) => {
                 //console.log('slidechanged: ' + $('.present > .pptx2html').html());
-                    //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
+                //console.log('resize non-pptx2html slide content - presentwidth: ' + presentwidth + ' and height: ' + presentheight);
                 this.resize();
             } );
 
@@ -95,7 +95,7 @@ class Presentation extends React.Component{
         }
         //listen to resize event and resize.
         ReactDOM.findDOMNode(this.refs.container).addEventListener('resize', (evt) =>
-            {
+        {
             //console.log('resize');
             this.resize();
         });

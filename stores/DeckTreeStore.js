@@ -546,7 +546,7 @@ class DeckTreeStore extends BaseStore {
         } else{ //only one slide or deck was selected.
             this.addTreeNode(payload);
         }
-      //  this.updateTreeNode(payload);
+        //  this.updateTreeNode(payload);
 
     }
     updateNodeRelPosition(path, newPosition) {

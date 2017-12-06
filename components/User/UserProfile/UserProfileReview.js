@@ -24,12 +24,12 @@ class UserProfileReview extends React.Component {
                 title: title,
                 showCancelButton: true
             })
-            .then((secret) => {
-                this.context.executeAction(getNextReviewableUser, {
-                    secret: secret,
-                    jwt: this.props.UserProfileStore.jwt
-                });
-            }).catch(swal.noop);
+                .then((secret) => {
+                    this.context.executeAction(getNextReviewableUser, {
+                        secret: secret,
+                        jwt: this.props.UserProfileStore.jwt
+                    });
+                }).catch(swal.noop);
         } else if (this.props.UserReviewStore.dimmer.noreviewables === undefined){
             this.context.executeAction(getNextReviewableUser, {
                 secret: this.props.UserReviewStore.secret,

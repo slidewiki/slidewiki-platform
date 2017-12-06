@@ -141,12 +141,12 @@ class TreeNode extends React.Component {
         let actionBtnsClass;
         if (this.props.item.get('type') === 'deck') {
             childNodesDIV = <TreeNodeList parentNode={self.props.item} onToggleNode={self.props.onToggleNode}
-                                          onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
-                                          onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
-                                          onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
-                                          onMoveNode={self.props.onMoveNode} mode={self.props.mode}
-                                          page={self.props.page} rootNode={self.props.rootNode}
-                                          username={self.props.username} permissions={self.props.permissions}/>;
+                onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
+                onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
+                onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
+                onMoveNode={self.props.onMoveNode} mode={self.props.mode}
+                page={self.props.page} rootNode={self.props.rootNode}
+                username={self.props.username} permissions={self.props.permissions}/>;
         }
         /*
         let actionSignifierStyle = {
@@ -232,7 +232,7 @@ class TreeNode extends React.Component {
         let nodeDIV = '';
         if (this.props.item.get('editable')) {
             nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
-                             onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
+                onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
             //actionSignifier = '';
         } else {
             nodeDIV = <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
@@ -255,7 +255,7 @@ class TreeNode extends React.Component {
         return connectDragSource(
             <div className="item" style={compStyle}>
                 {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
-                                               onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
+                    onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true">  </i>
                     {nodeDIV}
@@ -264,7 +264,7 @@ class TreeNode extends React.Component {
                 {/*actionBtns*/}
                 {childNodesDIV}
                 <TreeNodeTarget parentNode={self.props.parentNode} onMoveNode={self.props.onMoveNode}
-                                nodeIndex={nodeIndex + 1} isAfterNode={true}/>
+                    nodeIndex={nodeIndex + 1} isAfterNode={true}/>
             </div>
         );
     }

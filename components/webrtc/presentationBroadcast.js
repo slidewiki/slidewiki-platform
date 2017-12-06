@@ -288,7 +288,7 @@ class presentationBroadcast extends React.Component {
             if(swal.isVisible())
                 swal.insertQueueStep(dialog);
             else
-              swal(dialog);
+                swal(dialog);
         }
 
         function gotStream(stream) {
@@ -391,7 +391,7 @@ class presentationBroadcast extends React.Component {
                 swal.insertQueueStep(dialog);
                 swal.clickConfirm();
             } else
-              swal(dialog);
+                swal(dialog);
         }
 
         function handleICEConnectionStateChange(peerID, event) {
@@ -977,7 +977,7 @@ class presentationBroadcast extends React.Component {
                 });
             }
         })
-        .then(() => {}, () => {});
+            .then(() => {}, () => {});
     }
 
     render() {
@@ -990,58 +990,58 @@ class presentationBroadcast extends React.Component {
         let height = typeof window !== 'undefined' ? window.innerHeight : 961;
 
         return (
-          <Grid celled='internally' stackable columns={2}>
-            <Grid.Row>
-              <Grid.Column width={13}>
-                <iframe id="slidewikiPresentation" src={this.iframesrc}
-                height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
-              </Grid.Column>
-              <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
-                <Chat ref="chat" isInitiator={this.isInitiator}
-                  height={height}
-                  sendRTCMessage={this.sendRTCMessage}
-                  presenterID={this.presenterID}
-                  myID={this.myID}
-                  myName={this.state.myName}
-                  pcs={this.pcs}/>
-              </Grid.Column>
-              {(this.isInitiator) ? (
-                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
-              ) : ('')};
-            </Grid.Row>
+            <Grid celled='internally' stackable columns={2}>
+                <Grid.Row>
+                    <Grid.Column width={13}>
+                        <iframe id="slidewikiPresentation" src={this.iframesrc}
+                            height={height*0.78 + 'px'} width="100%" frameBorder="0" style={{border: 0}}></iframe>
+                    </Grid.Column>
+                    <Grid.Column width={3} style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': height*0.78 + 'px'}}>
+                        <Chat ref="chat" isInitiator={this.isInitiator}
+                            height={height}
+                            sendRTCMessage={this.sendRTCMessage}
+                            presenterID={this.presenterID}
+                            myID={this.myID}
+                            myName={this.state.myName}
+                            pcs={this.pcs}/>
+                    </Grid.Column>
+                    {(this.isInitiator) ? (
+                        <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
+                    ) : ('')};
+                </Grid.Row>
 
-            <Grid.Row>
-              <Grid.Column width={13}>
-                <h4>
-                  {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
-                      trigger={<span>{Object.keys(this.pcs).length}</span>}
-                      content={peernames}
-                    /></p>) : <p>{this.state.roleText}</p>}
-                </h4>
-                <div id="media" style={{'display': 'none'}}></div>
-                <SpeechRecognition ref="speechRecognition"
-                    isInitiator={this.isInitiator}
-                    sendRTCMessage={this.sendRTCMessage}
-                    showInviteModal={this.showInviteModal}
-                    subtitle={this.state.subtitle} />
-              </Grid.Column>
-              <Grid.Column width={3}>
-                <Button.Group vertical fluid>
-                  {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
-                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
-                  {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
-                  {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
-                  ) : (
-                    <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
-                  )}
-                  {(this.state.showReopenModalButton) ? (
-                    <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
-                  ) : ''}
-                </Button.Group>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+                <Grid.Row>
+                    <Grid.Column width={13}>
+                        <h4>
+                            {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
+                                trigger={<span>{Object.keys(this.pcs).length}</span>}
+                                content={peernames}
+                            /></p>) : <p>{this.state.roleText}</p>}
+                        </h4>
+                        <div id="media" style={{'display': 'none'}}></div>
+                        <SpeechRecognition ref="speechRecognition"
+                            isInitiator={this.isInitiator}
+                            sendRTCMessage={this.sendRTCMessage}
+                            showInviteModal={this.showInviteModal}
+                            subtitle={this.state.subtitle} />
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                        <Button.Group vertical fluid>
+                            {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
+                            <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
+                            {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
+                            {(this.isInitiator) ? (
+                                <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
+                            ) : (
+                                <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
+                            )}
+                            {(this.state.showReopenModalButton) ? (
+                                <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
+                            ) : ''}
+                        </Button.Group>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         );
     }
 }

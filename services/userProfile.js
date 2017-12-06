@@ -19,8 +19,8 @@ export default {
             uri: Microservices.user.uri + '/user/' + params.params.id,
             headers: { '----jwt----': params.params.jwt }
         })
-        .then((body) => callback(null, params))
-        .catch((err) => callback(err));
+            .then((body) => callback(null, params))
+            .catch((err) => callback(err));
     },
 
     update: (req, resource, params, body, config, callback) => {
@@ -38,8 +38,8 @@ export default {
                 json: true,
                 body: tosend
             })
-            .then((body) => callback(null, {}))
-            .catch((err) => callback(err));
+                .then((body) => callback(null, {}))
+                .catch((err) => callback(err));
         } else if (resource === 'userProfile.update') {
             let tosend = {
                 email: params.email,
@@ -59,8 +59,8 @@ export default {
                 json: true,
                 body: tosend
             })
-            .then((body) => callback(null, params))
-            .catch((err) => callback(err));
+                .then((body) => callback(null, params))
+                .catch((err) => callback(err));
         } else if (resource === 'userProfile.removeProvider') {
             rp({
                 method: 'DELETE',
@@ -68,8 +68,8 @@ export default {
                 headers: { '----jwt----': params.jwt },
                 json: true
             })
-            .then((body) => callback(null, body))
-            .catch((err) => callback(err));
+                .then((body) => callback(null, body))
+                .catch((err) => callback(err));
         } else if (resource === 'userProfile.addProvider') {
             rp({
                 method: 'PUT',
@@ -85,8 +85,8 @@ export default {
                     language: params.language.replace('-', '_')
                 }
             })
-              .then((body) => callback(null, body))
-              .catch((err) => callback(err));
+                .then((body) => callback(null, body))
+                .catch((err) => callback(err));
         } else if (resource === 'userProfile.saveUsergroup') {
             //prepare data
             if (params.members === null || params.members === undefined)
@@ -117,8 +117,8 @@ export default {
                 body: tosend,
                 timeout: body.timeout
             })
-            .then((body) => callback(null, body))
-            .catch((err) => callback(err));
+                .then((body) => callback(null, body))
+                .catch((err) => callback(err));
         } else if (resource === 'userProfile.deleteUsergroup') {
             rp({
                 method: 'DELETE',
@@ -127,8 +127,8 @@ export default {
                 json: true,
                 timeout: body.timeout
             })
-            .then((body) => callback(null, body))
-            .catch((err) => callback(err));
+                .then((body) => callback(null, body))
+                .catch((err) => callback(err));
         } else if (resource === 'userProfile.leaveUsergroup') {
             rp({
                 method: 'PUT',
@@ -137,8 +137,8 @@ export default {
                 json: true,
                 timeout: body.timeout
             })
-            .then((body) => callback(null, body))
-            .catch((err) => callback(err));
+                .then((body) => callback(null, body))
+                .catch((err) => callback(err));
         } else {
             callback('failure');
         }
@@ -156,39 +156,39 @@ export default {
                     headers: { '----jwt----': params.params.jwt },
                     resolveWithFullResponse: true,
                 })
-                .then((response) => {
+                    .then((response) => {
                     //console.log(body);
-                    let body = JSON.parse(response.body);
-                    let converted = {
-                        id: body._id,
-                        uname: body.username,
-                        email: body.email,
-                        lname: !isEmpty(body.surname) ? body.surname : '',
-                        fname: !isEmpty(body.forename) ? body.forename : '',
-                        language: !isEmpty(body.language) ? body.language : '',
-                        country: !isEmpty(body.country) ? body.country : '',
-                        picture: !isEmpty(body.picture) ? body.picture : '',
-                        organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : '',
-                        hasPassword: body.hasPassword || false,
-                        providers: body.providers || [],
-                        groups: !isEmpty(body.groups) ? body.groups : []
-                    };
-                    callback(null, converted, {
-                        headers: {
-                            'Set-Cookie': cookieParser.serialize(user_cookieName, JSON.stringify({
-                                username: body.username,
-                                userid: body._id,
-                                jwt: response.headers['----jwt----'],
-                            }), {
-                                maxAge: secondsCookieShouldBeValid,
-                                sameSite: true,
-                                path: '/',
-                            }),
-                        }
-                    });
-                })
-                .catch((err) => callback(err));
+                        let body = JSON.parse(response.body);
+                        let converted = {
+                            id: body._id,
+                            uname: body.username,
+                            email: body.email,
+                            lname: !isEmpty(body.surname) ? body.surname : '',
+                            fname: !isEmpty(body.forename) ? body.forename : '',
+                            language: !isEmpty(body.language) ? body.language : '',
+                            country: !isEmpty(body.country) ? body.country : '',
+                            picture: !isEmpty(body.picture) ? body.picture : '',
+                            organization: !isEmpty(body.organization) ? body.organization : '',
+                            description: !isEmpty(body.description) ? body.description : '',
+                            hasPassword: body.hasPassword || false,
+                            providers: body.providers || [],
+                            groups: !isEmpty(body.groups) ? body.groups : []
+                        };
+                        callback(null, converted, {
+                            headers: {
+                                'Set-Cookie': cookieParser.serialize(user_cookieName, JSON.stringify({
+                                    username: body.username,
+                                    userid: body._id,
+                                    jwt: response.headers['----jwt----'],
+                                }), {
+                                    maxAge: secondsCookieShouldBeValid,
+                                    sameSite: true,
+                                    path: '/',
+                                }),
+                            }
+                        });
+                    })
+                    .catch((err) => callback(err));
             } else {
                 // console.log('trying to get public user with username: ', params);
                 rp({
@@ -196,22 +196,22 @@ export default {
                     uri: Microservices.user.uri + '/user/' + params.params.username,
                     json: true
                 })
-                .then((body) => {
-                    let converted = {
-                        id: body._id,
-                        uname: body.username,
-                        email: !isEmpty(body.email) ? body.email : '',
-                        lname: !isEmpty(body.surname) ? body.surname : '',
-                        fname: !isEmpty(body.forename) ? body.forename : '',
-                        language: !isEmpty(body.language) ? body.language : '',
-                        country: !isEmpty(body.country) ? body.country : '',
-                        picture: !isEmpty(body.picture) ? body.picture : '',
-                        organization: !isEmpty(body.organization) ? body.organization : '',
-                        description: !isEmpty(body.description) ? body.description : ''
-                    };
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
+                    .then((body) => {
+                        let converted = {
+                            id: body._id,
+                            uname: body.username,
+                            email: !isEmpty(body.email) ? body.email : '',
+                            lname: !isEmpty(body.surname) ? body.surname : '',
+                            fname: !isEmpty(body.forename) ? body.forename : '',
+                            language: !isEmpty(body.language) ? body.language : '',
+                            country: !isEmpty(body.country) ? body.country : '',
+                            picture: !isEmpty(body.picture) ? body.picture : '',
+                            organization: !isEmpty(body.organization) ? body.organization : '',
+                            description: !isEmpty(body.description) ? body.description : ''
+                        };
+                        callback(null, converted);
+                    })
+                    .catch((err) => callback(err));
             }
         } else {
             //TODO get id of a user
@@ -221,24 +221,24 @@ export default {
                     uri: Microservices.deck.uri + '/alldecks/' + params.params.id,
                     json: true
                 })
-                .then((body) => {
-                    let converted = body.map((deck) => {
-                        return {
-                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
-                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id,
-                            firstSlide: deck.firstSlide,
-                            language:deck.language,
-                            countRevisions:deck.countRevisions
+                    .then((body) => {
+                        let converted = body.map((deck) => {
+                            return {
+                                title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                                picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                                description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                                updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+                                creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+                                deckID: deck._id,
+                                firstSlide: deck.firstSlide,
+                                language:deck.language,
+                                countRevisions:deck.countRevisions
 
-                        };
-                    }).sort((a,b) => a.creationDate < b.creationDate);
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
+                            };
+                        }).sort((a,b) => a.creationDate < b.creationDate);
+                        callback(null, converted);
+                    })
+                    .catch((err) => callback(err));
             } else if(params.params.loggedInUser !== params.params.username) {
                 //get id of username
                 rp({
@@ -246,24 +246,24 @@ export default {
                     uri: Microservices.deck.uri + '/alldecks/' + params.params.id2,
                     json: true
                 })
-                .then((body) => {
-                    let converted = body.map((deck) => {
-                        console.log(deck);
-                        return {
-                            title: !isEmpty(deck.title) ? deck.title : 'No Title',
-                            picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
-                            updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
-                            creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
-                            deckID: deck._id,
-                            firstSlide: deck.firstSlide,
-                            language:deck.language,
-                            countRevisions:deck.countRevisions
-                        };
-                    });
-                    callback(null, converted);
-                })
-                .catch((err) => callback(err));
+                    .then((body) => {
+                        let converted = body.map((deck) => {
+                            console.log(deck);
+                            return {
+                                title: !isEmpty(deck.title) ? deck.title : 'No Title',
+                                picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
+                                description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                                updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
+                                creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
+                                deckID: deck._id,
+                                firstSlide: deck.firstSlide,
+                                language:deck.language,
+                                countRevisions:deck.countRevisions
+                            };
+                        });
+                        callback(null, converted);
+                    })
+                    .catch((err) => callback(err));
             }
         }
     }

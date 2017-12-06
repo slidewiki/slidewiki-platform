@@ -36,11 +36,11 @@ class DeactivateAccount extends React.Component {
                             <i className="checkmark icon"></i> Cancel
                         </div>
                         <div className="ui red right labeled icon button" onClick={ this.handleAccountDeactivate.bind(this) }>
-                        <i className="sign out icon"></i> Deactivate account
+                            <i className="sign out icon"></i> Deactivate account
                         </div>
                     </div>
                 </div>
-          </div>
+            </div>
         );
     }
 }

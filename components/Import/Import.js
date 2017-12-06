@@ -59,7 +59,7 @@ class Import extends React.Component {
                         break; // noop
                     default:
                         console.error('An error occurred reading this file.', evt.target.error);
-                };
+                }
             }
 
             let that = this;
@@ -106,27 +106,27 @@ class Import extends React.Component {
         });
         let acceptedFormats = '.key, .odp, .pps, .ppsx, .ppt, .pptm, .pptx,  ';
         outputDIV =   <div className="ui small modal" ref="import">
-                          <div className="header">
-                              <h2>Upload your presentation</h2>
-                          </div>
-                          <div className="content">
-                              <p>Select your presentation file and upload it to SlideWiki.</p>
-                              <p>Only PowerPoint (.pptx) and OpenOffice (.odp) are supported (Max size: {MAX_FILESIZE_MB}MB).</p>
-                              <div className="ui input file focus animated">
-                                    <input ref="selectbutton" accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
-                              </div>
-                          </div>
-                          <div className="actions">
-                              <button tabIndex="0" ref="submitbutton" className={uploadBtn_classes} >
-                                  <div className="visible content"><i className="thumbs up icon"></i>Select <i className="thumbs up icon"></i></div>
-                                  <div className="hidden content" ><i className="upload icon"></i>Done <i className="upload icon"></i></div>
-                              </button>
-                              <div className="ui cancel button red" tabIndex="0">Cancel</div>
-                          </div>
-                      </div>;
+            <div className="header">
+                <h2>Upload your presentation</h2>
+            </div>
+            <div className="content">
+                <p>Select your presentation file and upload it to SlideWiki.</p>
+                <p>Only PowerPoint (.pptx) and OpenOffice (.odp) are supported (Max size: {MAX_FILESIZE_MB}MB).</p>
+                <div className="ui input file focus animated">
+                    <input ref="selectbutton" accept={ acceptedFormats + 'application/vnd.openxmlformats-officedocument.presentationml.presentation'} type="file" tabIndex="0" onChange={this.handleFileSelect.bind(this)} id="import_file_chooser" ></input>
+                </div>
+            </div>
+            <div className="actions">
+                <button tabIndex="0" ref="submitbutton" className={uploadBtn_classes} >
+                    <div className="visible content"><i className="thumbs up icon"></i>Select <i className="thumbs up icon"></i></div>
+                    <div className="hidden content" ><i className="upload icon"></i>Done <i className="upload icon"></i></div>
+                </button>
+                <div className="ui cancel button red" tabIndex="0">Cancel</div>
+            </div>
+        </div>;
 
-                      //from https://github.com/risis-eu/risis-datasets/blob/2a790c3b20b6c83c775d144cd69393032cdfaf82/components/object/ObjectIEditor.js
-                      //editor = <FileUploader spec={this.props.spec} config={this.props.config} onDataEdit={this.handleDataEdit.bind(this)} onEnterPress={this.handleEnterPress.bind(this)} allowActionByKey="1"/>;
+        //from https://github.com/risis-eu/risis-datasets/blob/2a790c3b20b6c83c775d144cd69393032cdfaf82/components/object/ObjectIEditor.js
+        //editor = <FileUploader spec={this.props.spec} config={this.props.config} onDataEdit={this.handleDataEdit.bind(this)} onEnterPress={this.handleEnterPress.bind(this)} allowActionByKey="1"/>;
 
 
         return outputDIV;

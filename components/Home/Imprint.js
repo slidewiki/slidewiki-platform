@@ -22,10 +22,10 @@ class Imprint extends React.Component {
                             E-Mail: info(at)zv.fraunhofer.de
                             </p>
                             <p>
-                            <b>Responsible editor:</b>&nbsp;<a href="mailtion:soeren.auer@iais.fraunhofer.de">Sören Auer</a>
+                                <b>Responsible editor:</b>&nbsp;<a href="mailtion:soeren.auer@iais.fraunhofer.de">Sören Auer</a>
                             </p>
                             <p>
-                            <b>VAT Identification Number</b> in accordance with 	&sect;27 a VAT Tax Act: <b>DE 129515865</b>
+                                <b>VAT Identification Number</b> in accordance with 	&sect;27 a VAT Tax Act: <b>DE 129515865</b>
                             </p>
                             <h3>Court of jurisdiction</h3>
                             <p>
@@ -34,7 +34,7 @@ class Imprint extends React.Component {
                             Registration no. VR 4461<br/>
                             </p>
                             <p>
-                            <h3>Executive Board</h3>
+                                <h3>Executive Board</h3>
                             Prof. Dr.-Ing. Reimund Neugebauer, President, Corporate Policy and Research Management<br/>
                             Prof. Dr. Georg Rosenfeld, Technology Marketing and Business Models<br/>
                             Prof. Dr. Alexander Kurz, Human Resources, Legal Affairs and IP Management<br/>

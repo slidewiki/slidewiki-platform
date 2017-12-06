@@ -36,7 +36,7 @@ class Presentation extends React.Component{
 
     componentDidMount(){
         if(process.env.BROWSER){
-             //loading reveal style
+            //loading reveal style
             //Hide the header and footer
             $('.ui.footer.sticky.segment').css({'display': 'none'});
             $('.ui.inverted.blue.menu, .ui.inverted.menu .blue.active.item').css({'display': 'none'});

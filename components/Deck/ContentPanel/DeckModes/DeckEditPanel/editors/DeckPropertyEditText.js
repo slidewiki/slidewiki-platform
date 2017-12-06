@@ -13,8 +13,8 @@ class DeckPropertyItemText extends React.Component {
     render() {
         return (
             <div className="item">
-                 <span className="header">{this.props.fieldname}</span>
-                 <span className="description">
+                <span className="header">{this.props.fieldname}</span>
+                <span className="description">
                     <InlineEdit
                         text={this.props.fieldcontent}
                         paramName="value"

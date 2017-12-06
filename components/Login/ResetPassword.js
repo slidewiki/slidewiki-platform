@@ -67,9 +67,9 @@ class ResetPassword extends React.Component {
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-            .then(() => {
-                return this.goHome();
-            });
+                .then(() => {
+                    return this.goHome();
+                });
         } else if (this.props.ResetPasswordStore.componentStatus === 'error') {
             swal({
                 title: 'Error',
@@ -81,9 +81,9 @@ class ResetPassword extends React.Component {
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-            .then(() => {
-                return this.closeErrorDimmer();
-            });
+                .then(() => {
+                    return this.closeErrorDimmer();
+                });
         } else if (this.props.ResetPasswordStore.componentStatus === 'apikey') {
             swal({
                 title: 'Error',
@@ -95,10 +95,10 @@ class ResetPassword extends React.Component {
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-            .then(() => {
-                location.reload();
-                return true;
-            });
+                .then(() => {
+                    location.reload();
+                    return true;
+                });
         } else if (this.props.ResetPasswordStore.componentStatus === 'email') {
             swal({
                 title: 'Information',
@@ -110,9 +110,9 @@ class ResetPassword extends React.Component {
                 allowOutsideClick: true,
                 buttonsStyling: false
             })
-            .then(() => {
-                return true;
-            });
+                .then(() => {
+                    return true;
+                });
         }
     }
 

@@ -85,65 +85,65 @@ class Chat extends React.Component {
             let author = this.state.commentList[i].peer.toString();
             let message = this.state.commentList[i].message;
             messages.push(
-              <Popup key={i}
-                trigger={
-                  <Message floating>
-                    <Comment.Group>
-                      <Comment>
-                        <Comment.Content>
-                          <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
-                          <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
-                            {message}
-                          </Comment.Text>
-                          {(this.props.isInitiator) ? (
-                            <Comment.Actions>
-                                <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
-                            </Comment.Actions>
-                          ) : ('')}
-                        </Comment.Content>
-                      </Comment>
-                    </Comment.Group>
-                  </Message>
-                }
-                content={this.props.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
-                position='bottom right'
-              />);
+                <Popup key={i}
+                    trigger={
+                        <Message floating>
+                            <Comment.Group>
+                                <Comment>
+                                    <Comment.Content>
+                                        <Comment.Author>{author}, {new Date(parseInt(i)).toLocaleTimeString('en-GB', { hour12: false, hour: 'numeric', minute: 'numeric'})}</Comment.Author>
+                                        <Comment.Text style={{wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>
+                                            {message}
+                                        </Comment.Text>
+                                        {(this.props.isInitiator) ? (
+                                            <Comment.Actions>
+                                                <Comment.Action onClick={this.openMessageInModal.bind(this, author, message)}>Enlarge</Comment.Action>
+                                            </Comment.Actions>
+                                        ) : ('')}
+                                    </Comment.Content>
+                                </Comment>
+                            </Comment.Group>
+                        </Message>
+                    }
+                    content={this.props.isInitiator ? 'Answer this questions by speaking to your audience' : 'The presenter has recieved your message and may answer via voice'}
+                    position='bottom right'
+                />);
         }
 
         return (
-          <div>
-            {(this.props.isInitiator) ? (
-              <Grid columns={1}>
-                <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
-                  <h3>Questions from Audience:</h3>
-                  {messages}
-                </Grid.Column>
-                <Grid.Column>
-                  <Divider clearing />
-                  <Button fluid={true} content='Clear Chat' labelPosition='right' icon='erase' primary onClick={this.clearMessageList.bind(this)}/>
-                </Grid.Column>
-              </Grid>
-            ) : (
-              <Grid columns={1}>
-                <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
-                  <h3>Your Questions ({this.props.myName}):</h3>
-                  {messages}
-                </Grid.Column>
-                <Grid.Column>
-                  <Divider clearing />
-                  <Form reply>
-                    <div>
-                      <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} name="TextAreaContent" value={this.state.TextAreaContent} onChange={this.updateCharCount.bind(this)}/>
-                      <Form.Field>
-                        <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
-                        <Label pointing='left'>{this.state.charCount}/{this.textInputLength}</Label>
-                      </Form.Field>
-                    </div>
-                  </Form>
-                </Grid.Column>
-              </Grid>
-            )}
-          </div>
+            <div>
+                {(this.props.isInitiator) ? (
+                    <Grid columns={1}>
+                        <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.67+'px', 'minHeight': this.props.height*0.67+'px', 'height': this.props.height*0.67+'px'}}>
+                            <h3>Questions from Audience:</h3>
+                            {messages}
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Divider clearing />
+                            <Button fluid={true} content='Clear Chat' labelPosition='right' icon='erase' primary onClick={this.clearMessageList.bind(this)}/>
+                        </Grid.Column>
+                    </Grid>
+                ) : (
+                    <Grid columns={1}>
+                        <Grid.Column style={{'overflowY': 'auto', 'whiteSpace': 'nowrap', 'maxHeight': this.props.height*0.58+'px', 'minHeight': this.props.height*0.58+'px', 'height': this.props.height*0.58+'px'}}>
+                            <h3>Your Questions ({this.props.myName}):</h3>
+                            {messages}
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Divider clearing />
+                            <Form reply>
+                                <div>
+                                    <Form.TextArea id="messageToSend" placeholder='Ask a question...' maxLength={this.textInputLength} name="TextAreaContent" value={this.state.TextAreaContent} onChange={this.updateCharCount.bind(this)}/>
+                                    <Form.Field>
+                                        <Button content='Send Question' labelPosition='right' icon='send' primary onClick={this.sendMessage.bind(this)}/>
+                                        <Label pointing='left'>{this.state.charCount}/{this.textInputLength}</Label>
+                                    </Form.Field>
+                                </div>
+                            </Form>
+                        </Grid.Column>
+                    </Grid>
+                )}
+            </div>
         );
     }
 }

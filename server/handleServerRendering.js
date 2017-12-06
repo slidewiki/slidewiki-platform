@@ -31,9 +31,9 @@ let renderApp = function(req, res, context){
 
     // Render the Root to string
     const content = ReactDOM.renderToString(
-      <IntlProvider locale={ req.locale } messages = {messages}>
-        <Root context={ context.getComponentContext() } />
-      </IntlProvider>
+        <IntlProvider locale={ req.locale } messages = {messages}>
+            <Root context={ context.getComponentContext() } />
+        </IntlProvider>
     );
 
     debug('Rendering Application component into html');

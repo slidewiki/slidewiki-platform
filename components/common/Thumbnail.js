@@ -5,10 +5,10 @@ class Thumbnail extends React.Component {
     render() {
         const altText = this.props.slideId === undefined ? '' : this.props.slideId;
         return (
-          <span>
-              <img src={this.props.url}
-                  alt={altText} />
-          </span>
+            <span>
+                <img src={this.props.url}
+                    alt={altText} />
+            </span>
         );
     }
 }

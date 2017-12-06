@@ -43,24 +43,24 @@ class AddComment extends React.Component {
 
     render() {
         return (
-          <form className="ui form comment">
-              <div className="ui seven wide required field">
-                  <label htmlFor="title">Comment title</label>
-                  <input type="text" ref="title" id="title" name="title" placeholder="Title" aria-required="true" autoFocus required />
-              </div>
-              <div className="ui field">
-                  <label htmlFor="text">Comment text</label>
-                  <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" ></textarea>
-              </div>
+            <form className="ui form comment">
+                <div className="ui seven wide required field">
+                    <label htmlFor="title">Comment title</label>
+                    <input type="text" ref="title" id="title" name="title" placeholder="Title" aria-required="true" autoFocus required />
+                </div>
+                <div className="ui field">
+                    <label htmlFor="text">Comment text</label>
+                    <textarea ref="text" id="text" name="text" style={{minHeight: '6em', height: '6em'}} placeholder="Text" ></textarea>
+                </div>
 
-              <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
-                  <i className="icon check"></i> Submit
-              </button>
-              <button tabIndex="0" type="button" className="ui secondary labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
-                  <i className="icon close"></i> Cancel
-              </button>
-              <div className="ui error message"/>
-          </form>
+                <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
+                    <i className="icon check"></i> Submit
+                </button>
+                <button tabIndex="0" type="button" className="ui secondary labeled close icon button" onClick={this.handleInvertCommentBox.bind(this)}>
+                    <i className="icon close"></i> Cancel
+                </button>
+                <div className="ui error message"/>
+            </form>
         );
     }
 }

@@ -34,23 +34,23 @@ class DeckHistoryPanel extends React.Component {
         let isRoot = selector.stype === 'deck' && selector.id === selector.sid;
         let deckRevisions = this.props.DeckHistoryStore.revisions.map((revision) => {
             return (
-            <DeckRevision key={revision.id} revision={revision}
-                          changes={this.props.DeckHistoryStore.changes[revision.id]} selector={selector}
-                          userid={this.props.UserProfileStore.userid}
-                          permissions={this.props.PermissionsStore.permissions}/>
+                <DeckRevision key={revision.id} revision={revision}
+                    changes={this.props.DeckHistoryStore.changes[revision.id]} selector={selector}
+                    userid={this.props.UserProfileStore.userid}
+                    permissions={this.props.PermissionsStore.permissions}/>
             );
         });
         return (
-        <div ref="deckHistoryPanel" className="ui">
-            {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
-            <div><Button positive aria-label='Create a new version of this deck' size='small' floated='right'
-                         icon='plus'
-                         content='Create a new version' onClick={this.handleCreateRevisionClick.bind(this)}/>
-                <Divider hidden clearing/></div> : ''}
-            <List relaxed verticalAlign='middle'>
-                {deckRevisions}
-            </List>
-        </div>
+            <div ref="deckHistoryPanel" className="ui">
+                {isRoot && this.props.PermissionsStore.permissions.edit && !this.props.PermissionsStore.permissions.readOnly ?
+                    <div><Button positive aria-label='Create a new version of this deck' size='small' floated='right'
+                        icon='plus'
+                        content='Create a new version' onClick={this.handleCreateRevisionClick.bind(this)}/>
+                    <Divider hidden clearing/></div> : ''}
+                <List relaxed verticalAlign='middle'>
+                    {deckRevisions}
+                </List>
+            </div>
         );
     }
 }

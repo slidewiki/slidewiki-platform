@@ -73,27 +73,27 @@ class UserNotificationsBadge extends React.Component {
 
         if (this.props.UserProfileStore.username !== '') {
             return (
-              <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
-                  <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
-                      <NavLink className="item right" routeName="notifications" navParams={{uid:this.props.UserProfileStore.userid}} activeClass="active">
+                <div onMouseOver={this.removePopupIfNeeded.bind(this)}>
+                    <div ref="notificationsBadge" onClick={this.hidePopup.bind(this)}>
+                        <NavLink className="item right" routeName="notifications" navParams={{uid:this.props.UserProfileStore.userid}} activeClass="active">
                             <i className="large icons">
-                            <i className="newspaper icon"></i>
-                            {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
-                          </i>
-                      </NavLink>
-                  </div>
-                  <div id="popup" className="ui special flowing popup">
-                      <h5>Notifications</h5>
-                      <div ref="userNotificationsList">
-                          <div className="ui relaxed divided list">
-                              {list}
-                          </div>
-                          <div >
-                              {noNewNotificationsMessage}
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                                <i className="newspaper icon"></i>
+                                {this.props.UserNotificationsStore.newNotifications.length ? <span className="ui mini floating red label ">{this.props.UserNotificationsStore.newNotifications.length}</span> : ''}
+                            </i>
+                        </NavLink>
+                    </div>
+                    <div id="popup" className="ui special flowing popup">
+                        <h5>Notifications</h5>
+                        <div ref="userNotificationsList">
+                            <div className="ui relaxed divided list">
+                                {list}
+                            </div>
+                            <div >
+                                {noNewNotificationsMessage}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             );
         } else {
             return null;

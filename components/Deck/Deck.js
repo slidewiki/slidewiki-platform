@@ -138,53 +138,53 @@ class Deck extends React.Component {
         return (
             <div className="ui fluid container" ref="deck">
                 <div className="ui padded stackable grid ">
-                <div className="row">
-                    {/*}<div className={navigationPanelClass}>
+                    <div className="row">
+                        {/*}<div className={navigationPanelClass}>
                       <NavigationPanel />
                     </div>*/}
-                </div>
+                    </div>
 
 
-                <div className={leftColClass}>
-                    <div className="row">
-                        <div className={treePanelClass}>
-                            <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
-                        </div>
+                    <div className={leftColClass}>
+                        <div className="row">
+                            <div className={treePanelClass}>
+                                <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                            </div>
 
-                        {/*<div className="ui hidden divider"></div>
+                            {/*<div className="ui hidden divider"></div>
                         <div className={ActivityFeedPanelClass}>
                             <div className="row">
                                 <ActivityFeedPanel />
                             </div>
                         </div>*/}
-                        <div className="ui hidden divider"></div>
-                    </div>
-                </div>
-                {/*leftPanel*/}
-
-                {dividerDIV}
-
-                <div className={centerColClass}>
-                    <div className="row">
-                        <div className={contentPanelClass}>
-                            <ContentPanel />
-                        </div>
-                        <div className={contentModulesPanelClass}>
                             <div className="ui hidden divider"></div>
-                            <div className="row">
-                                {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
+                        </div>
+                    </div>
+                    {/*leftPanel*/}
+
+                    {dividerDIV}
+
+                    <div className={centerColClass}>
+                        <div className="row">
+                            <div className={contentPanelClass}>
+                                <ContentPanel />
+                            </div>
+                            <div className={contentModulesPanelClass}>
+                                <div className="ui hidden divider"></div>
+                                <div className="row">
+                                    {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className={rightColClass}>
-                    <div className={treePanelClass}>
-                        <InfoPanel />
+                    <div className={rightColClass}>
+                        <div className={treePanelClass}>
+                            <InfoPanel />
+                        </div>
+
+                        <div className="ui hidden divider"></div>
                     </div>
-
-                    <div className="ui hidden divider"></div>
-                </div>
 
 
 

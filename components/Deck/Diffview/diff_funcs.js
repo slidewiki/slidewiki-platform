@@ -13,7 +13,7 @@ import * as jsdiff from 'diff';
 const CKEditor_vars = ['span', 'var', 'em', 'strong', 'u'];
 
 const toHTML = (string) => (
-  createElement(convertHTML(string))
+    createElement(convertHTML(string))
 );
 
 const deepSearch = (obj, key) => {
@@ -83,8 +83,8 @@ const handleTEXT = (oldText, newText, source) => {
     const markedText = temp.innerHTML;
 
     $(root).find(`*:contains(${oldStr})`)
-            .filter(function() { return $(this).text() === oldStr; })
-            .html(markedText);
+        .filter(function() { return $(this).text() === oldStr; })
+        .html(markedText);
 
     source = root.outerHTML;
 
@@ -106,7 +106,7 @@ const handleINSERT = (el, source, finalsource) => {
 
         let parent = getParentId(finalsource, _id);
         $(root).prop('id') === parent ?
-          $(root).append(elem) : $(root).find(`#${parent}`).append(elem);
+            $(root).append(elem) : $(root).find(`#${parent}`).append(elem);
     }
 
     source = root.outerHTML;
@@ -175,8 +175,8 @@ const handlePROPS = (node, patch, source, finalsource, vnode) => {
 const preprocessSrc = (source, mode) => {
 
     source = source
-                .replace(/(?:\r\n|\r|\n)/g, '')
-                .replace(/&#8203;/g, '');
+        .replace(/(?:\r\n|\r|\n)/g, '')
+        .replace(/&#8203;/g, '');
 
     if (mode) {
         //canvas slide

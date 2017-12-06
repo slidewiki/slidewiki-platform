@@ -62,11 +62,11 @@ class UserNotificationsPanel extends React.Component {
         );
         if(newNotifications.length > 0) {//if there are new notifications -> enable it
             iconMarkAsRead = (
-              <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
-                  <i tabIndex="0" className="ui large checkmark box icon"></i>
-              </a>
+                <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
+                    <i tabIndex="0" className="ui large checkmark box icon"></i>
+                </a>
             );
-        };
+        }
         // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
         const filters = (
             <div className="five wide column">
@@ -78,7 +78,7 @@ class UserNotificationsPanel extends React.Component {
                             <div className="ui relaxed list" role="list" >
                                 {activityTypeList}
                             </div>
-                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,12 +104,12 @@ class UserNotificationsPanel extends React.Component {
                 <div className="ui hidden divider"></div>
                 <div className="ui container stackable two columm grid">
                     <div className="six wide column">
-                      <div className="ui huge header">
+                        <div className="ui huge header">
                           Notifications <div className="ui mini label" >{iconMarkAsRead} {newNotifications.length}</div>
-                      </div>
-                      <div className="ui basic segment">
-                          {filters}
-                      </div>
+                        </div>
+                        <div className="ui basic segment">
+                            {filters}
+                        </div>
                     </div>
                     <div className="column ten wide">
                         <div className="ui basic segment">

@@ -9,8 +9,8 @@ class DeckPropertyItemList extends React.Component {
         });
         return (
             <div className="item">
-                  <span className="header">{this.props.fieldname}</span>
-                  <span className="description">{list}</span>
+                <span className="header">{this.props.fieldname}</span>
+                <span className="description">{list}</span>
             </div>
         );
     }

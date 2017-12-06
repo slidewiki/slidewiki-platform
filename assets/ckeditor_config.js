@@ -3,12 +3,12 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-	// Define changes to default configuration here.
-	// For complete reference see:
-	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+// Define changes to default configuration here.
+// For complete reference see:
+// http://docs.ckeditor.com/#!/api/CKEDITOR.config
 
-    //add        '/',
-    // to add a line in the toolbar
+//add        '/',
+// to add a line in the toolbar
 
 CKEDITOR.plugins.addExternal('youtube', '/ckeditor-plugins/youtube/');
 CKEDITOR.plugins.addExternal('lineheight', '/ckeditor-plugins/lineheight/');
@@ -35,23 +35,23 @@ CKEDITOR.editorConfig = function( config ) {
     config.disableObjectResizing = true;
 
     config.toolbar = [
-            { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
+        { name: 'basicstyles', items: ['CopyFormatting', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+        { name: 'links', items: [ 'Link', 'Unlink' ] },
         '/',
-            { name: 'styles', items: [ 'Font'] },
-            { name: 'styles', items: [ 'FontSize' ] },
-            { name: 'styles', items: [ 'lineheight' ] },
-            { name: 'styles', items: [ 'Styles' ] },
-            { name: 'styles', items: [ 'Format'] },
+        { name: 'styles', items: [ 'Font'] },
+        { name: 'styles', items: [ 'FontSize' ] },
+        { name: 'styles', items: [ 'lineheight' ] },
+        { name: 'styles', items: [ 'Styles' ] },
+        { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
-            { name: 'source', items: [ 'Mathjax'] },
-			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+        { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+        { name: 'source', items: [ 'Mathjax'] },
+        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',
-            { name: 'document', items: [ 'Sourcedialog'] },
-            { name: 'document', items: [ 'CodeSnippet'] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+        { name: 'document', items: [ 'Sourcedialog'] },
+        { name: 'document', items: [ 'CodeSnippet'] },
+        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
         '/',
     ];
     //{ name: 'document', items: ['Templates' ] },
@@ -157,13 +157,13 @@ CKEDITOR.editorConfig = function( config ) {
 		'toolbar,' +
 		'undo,' +
 'wysiwygarea';
-	// Remove some buttons provided by the standard plugins, which are
-	// not needed in the Standard(s) toolbar.
+    // Remove some buttons provided by the standard plugins, which are
+    // not needed in the Standard(s) toolbar.
 
     //klaas adapt: extra right-click menu options
     //config.extraPlugins = 'dialogadvtab';
 
-	//config.removeButtons = 'Underline,Subscript,Superscript';
+    //config.removeButtons = 'Underline,Subscript,Superscript';
 
 
 
@@ -239,8 +239,8 @@ CKEDITOR.editorConfig = function( config ) {
     // Show toolbar on startup (optional).
     //config.startupFocus = true
 
-	// Simplify the dialog windows.
-	//config.removeDialogTabs = 'image:advanced;link:advanced';
+    // Simplify the dialog windows.
+    //config.removeDialogTabs = 'image:advanced;link:advanced';
 
 };
 CKEDITOR.disableAutoInline = true;
@@ -263,23 +263,23 @@ CKEDITOR.disableAutoInline = true;
   });
   fileStream.on('finish', (res) => {
   */
-    //let response;
-    //response.writeHead(200, {'Content-Type': 'application/json'});
-    //let json = JSON.stringify({
-      //'uploaded': 1,
-      //'fileName': 'logo_full.png',
-      //'url': 'http://platform.manfredfris.ch/assets/images/logo_full.png'
-    //});
-    //response.end(json);
-    //console.log(json);
-    //reply (json);
-    // JSON ONLY FOR DRAGGING and dropping  - http://stackoverflow.com/questions/33197058/ckeditor-can-not-parse-json-response
-    //reply ({
-      //'uploaded': '1',
-      //'fileName': 'logo_full.png',
-      //'url': 'http://platform.manfredfris.ch/assets/images/logo_full.png'
-      //});
-      /*
+//let response;
+//response.writeHead(200, {'Content-Type': 'application/json'});
+//let json = JSON.stringify({
+//'uploaded': 1,
+//'fileName': 'logo_full.png',
+//'url': 'http://platform.manfredfris.ch/assets/images/logo_full.png'
+//});
+//response.end(json);
+//console.log(json);
+//reply (json);
+// JSON ONLY FOR DRAGGING and dropping  - http://stackoverflow.com/questions/33197058/ckeditor-can-not-parse-json-response
+//reply ({
+//'uploaded': '1',
+//'fileName': 'logo_full.png',
+//'url': 'http://platform.manfredfris.ch/assets/images/logo_full.png'
+//});
+/*
       let content = "<script type=\"text/javascript\">\n";
       //content += "window.parent.CKEDITOR.tools.callFunction(1, 'http://platform.manfredfris.ch/assets/images/logo_full.png', '' );\n";
       //content += "window.opener.CKEDITOR.tools.callFunction(1, 'http://platform.manfredfris.ch/assets/images/logo_full.png', '' );\n";

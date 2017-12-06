@@ -200,7 +200,7 @@ export default {
 
                             returnItem.revisionsCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
                             returnItem.firstSlide = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
-                                                        deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
+                                deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
 
                             // fill deck subitems (forks of the deck)
                             if(forks[returnItem.db_id].length > 0){

@@ -457,9 +457,9 @@ class SlideContentEditor extends React.Component {
             this.loading = 'loading';
             //remove editing borders input boxes:
             $('.pptx2html [style*="absolute"]')
-            .css({'borderStyle': '', 'borderColor': ''});
+                .css({'borderStyle': '', 'borderColor': ''});
             $('.pptx2html')
-            .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
+                .css({'borderStyle': '', 'borderColor': '', 'box-shadow': ''});
             //reset scaling of pptx2html element to get original size
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             //this.removeEditMode();
@@ -602,8 +602,8 @@ class SlideContentEditor extends React.Component {
     componentDidMount() {
         //todo: do testing and if it works remove these libs from default layout
         //if(process.env.BROWSER){
-            //require('../../../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
-          //  require('../../../../../node_modules/ckeditor/ckeditor.js');
+        //require('../../../../../node_modules/jquery-ui-dist/jquery-ui.min.js');
+        //  require('../../../../../node_modules/ckeditor/ckeditor.js');
         //}
         $(this.refs.TemplateDropdown).dropdown();
 
@@ -786,7 +786,7 @@ class SlideContentEditor extends React.Component {
                 if (!(
                     $('.ui-resizable-resizing')[0]
                     || $('.ui-draggable-dragging')[0])
-                   ){
+                ){
                     //if there is nothing being dragged/resized currently
                     $('.'+$(this).attr('id')).show();
                     $('.'+$(this).attr('id')+'dragdiv').show();
@@ -855,7 +855,7 @@ class SlideContentEditor extends React.Component {
                             slideEditorContext.emitChange();
                         }
                     });
-                };
+                }
             }
             else {
                 $(this).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
@@ -1258,9 +1258,9 @@ class SlideContentEditor extends React.Component {
                             $('.'+$(this).attr('id')).show();
                             switch (key) {
                                 //case 'edit':
-                                    //slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
-                                    //slideEditorContext.setEditMode(false, slideEditorContext, slideEditorContext.menuFocus, slideEditorContext.previousCaretRange);
-                                    //break;
+                                //slideEditorContext.setEditMode(key, slideEditorContext, slideEditorContext.menuFocus);
+                                //slideEditorContext.setEditMode(false, slideEditorContext, slideEditorContext.menuFocus, slideEditorContext.previousCaretRange);
+                                //break;
                                 case 'front':
                                     slideEditorContext.bringToFront(slideEditorContext, false, $(this).attr('id'));
                                     break;
@@ -1356,9 +1356,9 @@ class SlideContentEditor extends React.Component {
                     allowOutsideClick: false,
                     buttonsStyling: false
                 })
-                .then(() => {
-                    return true;
-                });
+                    .then(() => {
+                        return true;
+                    });
             }
         }
 
@@ -1771,9 +1771,9 @@ class SlideContentEditor extends React.Component {
         //<div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' onInput={this.emitChange} dangerouslySetInnerHTML={{__html:this.props.title}}></div>
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
-            {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
-                 <i className="save icon large"></i>
+                    <i className="save icon large"></i>
                  Save
                 </button>
                 <button tabIndex="0" ref="submitbutton" className="ui orange button " onClick={this.addAbsoluteDiv.bind(this)} onChange={this.addAbsoluteDiv.bind(this)}>
@@ -1827,7 +1827,7 @@ class SlideContentEditor extends React.Component {
     }
 
     // To detect changes in the editable content.
-/*
+    /*
     shouldComponentUpdate(nextProps) {
         console.log(ReactDOM.findDOMNode(this));
         console.log('shouldComponentUpdate');

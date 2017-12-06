@@ -5,9 +5,9 @@ class ActivityFeedUtil {
     static breakLines(text) {
         return text.split('\n').map((line, key) => {
             return (
-            <span key={key}>
+                <span key={key}>
                     {line}
-                <br />
+                    <br />
                 </span>
             );
         });

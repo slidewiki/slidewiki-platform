@@ -41,11 +41,11 @@ class TranslationPanel extends React.Component {
             if (languageName){
                 return (
                     <Dropdown.Item
-                    key = {translation.language}
-                    onClick={ this.handleLanguageClick.bind(this, translation.deck_id) }
+                        key = {translation.language}
+                        onClick={ this.handleLanguageClick.bind(this, translation.deck_id) }
                     //href={''}
                     >
-                    {languageName}
+                        {languageName}
                     </Dropdown.Item>
                 );
             }
@@ -110,7 +110,7 @@ class TranslationPanel extends React.Component {
                 {translations.length ? (
                     <Dropdown item trigger={currentLang}>
                         <Dropdown.Menu>
-                        { translations.map(this.renderAvailable, this) }
+                            { translations.map(this.renderAvailable, this) }
                         </Dropdown.Menu>
                     </Dropdown>
                 ) : (

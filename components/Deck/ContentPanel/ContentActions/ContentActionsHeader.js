@@ -85,56 +85,56 @@ class ContentActionsHeader extends React.Component {
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
-                          type="button"
-                          aria-label="Add Slide"
-                          data-tooltip="Add Slide"
-                          tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            type="button"
+                            aria-label="Add Slide"
+                            data-tooltip="Add Slide"
+                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                             <i className="icons">
-                              <i className="grey file large text icon"></i>
-                              <i className="inverted corner plus icon"></i>
+                                <i className="grey file large text icon"></i>
+                                <i className="inverted corner plus icon"></i>
                             </i>
 
                         </button>
                         <AttachSlides buttonStyle={buttonStyle} selector={selector} />
-                          <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
-                           type="button"
-                           aria-label="Add Deck"
-                           data-tooltip="Add Deck"
-                           tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                              <i className="medium icons">
+                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
+                            type="button"
+                            aria-label="Add Deck"
+                            data-tooltip="Add Deck"
+                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            <i className="medium icons">
                                 <i className="yellow large folder icon"></i>
                                 <i className="inverted corner plus icon"></i>
-                              </i>
-                          </button>
-                          <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
-                          <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
-                           type="button"
-                           aria-label="Duplicate"
-                           data-tooltip="Duplicate"
-                           tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                              <i className="grey large copy icon"></i>
+                            </i>
+                        </button>
+                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
+                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
+                            type="button"
+                            aria-label="Duplicate"
+                            data-tooltip="Duplicate"
+                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                            <i className="grey large copy icon"></i>
 
-                          </button>
-                          <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
+                        </button>
+                        <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
                             type="button"
                             aria-label="Delete"
                             data-tooltip="Delete"
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                              <i className="red large trash icon"></i>
-                          </button>
-                          {/*
+                            <i className="red large trash icon"></i>
+                        </button>
+                        {/*
                           <button className="item ui small basic right attached disabled button">
                               <a className="" title="Settings">
                                   <i className="black large setting icon"></i>
                               </a>
                           </button>
                           */}
-                      </div>
-                  }
-              </div>
+                    </div>
+                }
+            </div>
         );
     }
-  }
+}
 ContentActionsHeader.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };

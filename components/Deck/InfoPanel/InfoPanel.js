@@ -15,7 +15,7 @@ class InfoPanel extends React.Component {
 
 
         return (
-                       <InfoPanelInfoView />
+            <InfoPanelInfoView />
         );
     }
 }

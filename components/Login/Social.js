@@ -26,7 +26,7 @@ class Social extends React.Component {
         let result = null,
             index = 0;
         result = location.search
-        .substr(1)
+            .substr(1)
             .split('&')
             .map((item) => {
                 index = item.indexOf('=');

@@ -138,169 +138,169 @@ class DownloadModal extends React.Component{
     render() {
         return(
 
-              <Modal
-                  trigger={
-                        <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
-                              <Icon name='download' size='large'/>
-                        </Button>
-                  }
+            <Modal
+                trigger={
+                    <Button icon aria-hidden="false" className="ui button" type="button" aria-label="Download" data-tooltip="Download" onClick={this.handleOpen} >
+                        <Icon name='download' size='large'/>
+                    </Button>
+                }
 
-                  open={this.state.modalOpen}
-                  onClose={this.handleClose}
-                  id="downloadModal"
-                  aria-labelledby="downloadModalHeader"
-                  aria-describedby="downloadModalDescription"
-                  aria-hidden = {!this.state.modalOpen}
-                  role="dialog"
-                  tabIndex="0"
-              >
-                  <FocusTrap
-                      id="focus-trap-downloadModal"
-                      className = "header"
-                      active={this.state.activeTrap}
-                      focusTrapOptions={{
-                          onDeactivate: this.unmountTrap,
-                          clickOutsideDeactivates: true ,
-                          initialFocus: '#downloadModalDescription'
-                      }}
-                  >
-                      <Modal.Header className="ui center aligned" id="downloadModalHeader">
-                          <h1 style={{'textAlign': 'center'}}> {this.context.intl.formatMessage(this.messages.downloadModal_header)}</h1>
-                      </Modal.Header>
-                      <Modal.Content>
-                          <Container>
-                              <Segment color="blue" textAlign="center" padded>
+                open={this.state.modalOpen}
+                onClose={this.handleClose}
+                id="downloadModal"
+                aria-labelledby="downloadModalHeader"
+                aria-describedby="downloadModalDescription"
+                aria-hidden = {!this.state.modalOpen}
+                role="dialog"
+                tabIndex="0"
+            >
+                <FocusTrap
+                    id="focus-trap-downloadModal"
+                    className = "header"
+                    active={this.state.activeTrap}
+                    focusTrapOptions={{
+                        onDeactivate: this.unmountTrap,
+                        clickOutsideDeactivates: true ,
+                        initialFocus: '#downloadModalDescription'
+                    }}
+                >
+                    <Modal.Header className="ui center aligned" id="downloadModalHeader">
+                        <h1 style={{'textAlign': 'center'}}> {this.context.intl.formatMessage(this.messages.downloadModal_header)}</h1>
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Container>
+                            <Segment color="blue" textAlign="center" padded>
                                 <Segment>
-                                  <Form id="downloadForm" >
-                                   <Grid >
-                                   <Grid.Row>
+                                    <Form id="downloadForm" >
+                                        <Grid >
+                                            <Grid.Row>
 
-                                   <Grid.Column width={3}>
+                                                <Grid.Column width={3}>
 
-                                   </Grid.Column>
+                                                </Grid.Column>
 
-                                   <Grid.Column textAlign='left' width={13} role="radiogroup" aria-labelledby="downloadModalDescription">
-                                    <div  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</div>
-                                    <Form.Field >
-                                          <Radio
-                                            label='PDF'
-                                            name='downloadRadioGroup'
-                                            value='PDF'
-                                            checked={this.state.radioValue === 'PDF'}
-                                            onChange={this.handleRadioChange}
-                                            role="radio"
-                                            aria-checked={this.state.radioValue === 'PDF'}
-                                            aria-label='PDF'
-                                            tabIndex="0"
+                                                <Grid.Column textAlign='left' width={13} role="radiogroup" aria-labelledby="downloadModalDescription">
+                                                    <div  id="downloadModalDescription" tabIndex='0'>{this.context.intl.formatMessage(this.messages.downloadModal_description)}</div>
+                                                    <Form.Field >
+                                                        <Radio
+                                                            label='PDF'
+                                                            name='downloadRadioGroup'
+                                                            value='PDF'
+                                                            checked={this.state.radioValue === 'PDF'}
+                                                            onChange={this.handleRadioChange}
+                                                            role="radio"
+                                                            aria-checked={this.state.radioValue === 'PDF'}
+                                                            aria-label='PDF'
+                                                            tabIndex="0"
 
-                                            />
-                                        </Form.Field>
-                                        <Form.Field>
-                                          <Radio
-                                              label='ePub'
-                                              name='downloadRadioGroup'
-                                              value='ePub'
-                                              checked={this.state.radioValue === 'ePub'}
-                                              onChange={this.handleRadioChange}
-                                              role="radio"
-                                              aria-checked={this.state.radioValue === 'ePub'}
-                                              aria-label='ePub'
-                                              tabIndex="-1"
+                                                        />
+                                                    </Form.Field>
+                                                    <Form.Field>
+                                                        <Radio
+                                                            label='ePub'
+                                                            name='downloadRadioGroup'
+                                                            value='ePub'
+                                                            checked={this.state.radioValue === 'ePub'}
+                                                            onChange={this.handleRadioChange}
+                                                            role="radio"
+                                                            aria-checked={this.state.radioValue === 'ePub'}
+                                                            aria-label='ePub'
+                                                            tabIndex="-1"
 
-                                          />
-                                         </Form.Field>
-                                         <Form.Field>
-                                           <Radio
-                                               label='SCORM 1.2'
-                                               name='downloadRadioGroup'
-                                               value='SCORMv1.2'
-                                               checked={this.state.radioValue === 'SCORMv1.2'}
-                                               onChange={this.handleRadioChange}
-                                               role="radio"
-                                               aria-checked={this.state.radioValue === 'SCORMv1.2'}
-                                               aria-label='SCORM 1.2'
-                                               tabIndex="-1"
+                                                        />
+                                                    </Form.Field>
+                                                    <Form.Field>
+                                                        <Radio
+                                                            label='SCORM 1.2'
+                                                            name='downloadRadioGroup'
+                                                            value='SCORMv1.2'
+                                                            checked={this.state.radioValue === 'SCORMv1.2'}
+                                                            onChange={this.handleRadioChange}
+                                                            role="radio"
+                                                            aria-checked={this.state.radioValue === 'SCORMv1.2'}
+                                                            aria-label='SCORM 1.2'
+                                                            tabIndex="-1"
 
-                                           />
-                                          </Form.Field>
-                                          <Form.Field>
-                                            <Radio
-                                                label='SCORM 2004 (3rd edition)'
-                                                name='downloadRadioGroup'
-                                                value='SCORMv2'
-                                                checked={this.state.radioValue === 'SCORMv2'}
-                                                onChange={this.handleRadioChange}
-                                                role="radio"
-                                                aria-checked={this.state.radioValue === 'SCORMv2'}
-                                                aria-label='SCORM 2004 (3rd edition)'
-                                                tabIndex="-1"
+                                                        />
+                                                    </Form.Field>
+                                                    <Form.Field>
+                                                        <Radio
+                                                            label='SCORM 2004 (3rd edition)'
+                                                            name='downloadRadioGroup'
+                                                            value='SCORMv2'
+                                                            checked={this.state.radioValue === 'SCORMv2'}
+                                                            onChange={this.handleRadioChange}
+                                                            role="radio"
+                                                            aria-checked={this.state.radioValue === 'SCORMv2'}
+                                                            aria-label='SCORM 2004 (3rd edition)'
+                                                            tabIndex="-1"
 
-                                            />
-                                          </Form.Field>
-                                          <Form.Field>
-                                            <Radio
-                                                label='SCORM 2004 (4th edition)'
-                                                name='downloadRadioGroup'
-                                                value='SCORMv3'
-                                                checked={this.state.radioValue === 'SCORMv3'}
-                                                onChange={this.handleRadioChange}
-                                                role="radio"
-                                                aria-checked={this.state.radioValue === 'SCORMv3'}
-                                                aria-label='SCORM 2004 (4th edition)'
-                                                tabIndex="-1"
-                                            />
-                                          </Form.Field>
-                                          <Form.Field>
-                                            <Radio
-                                                label='SCORM 2004 (5th edition)'
-                                                name='downloadRadioGroup'
-                                                value='SCORMv4'
-                                                checked={this.state.radioValue === 'SCORMv4'}
-                                                onChange={this.handleRadioChange}
-                                                role="radio"
-                                                aria-checked={this.state.radioValue === 'SCORMv4'}
-                                                aria-label='SCORM 2004 (5th edition)'
-                                                tabIndex="-1"
-                                            />
-                                          </Form.Field>
+                                                        />
+                                                    </Form.Field>
+                                                    <Form.Field>
+                                                        <Radio
+                                                            label='SCORM 2004 (4th edition)'
+                                                            name='downloadRadioGroup'
+                                                            value='SCORMv3'
+                                                            checked={this.state.radioValue === 'SCORMv3'}
+                                                            onChange={this.handleRadioChange}
+                                                            role="radio"
+                                                            aria-checked={this.state.radioValue === 'SCORMv3'}
+                                                            aria-label='SCORM 2004 (4th edition)'
+                                                            tabIndex="-1"
+                                                        />
+                                                    </Form.Field>
+                                                    <Form.Field>
+                                                        <Radio
+                                                            label='SCORM 2004 (5th edition)'
+                                                            name='downloadRadioGroup'
+                                                            value='SCORMv4'
+                                                            checked={this.state.radioValue === 'SCORMv4'}
+                                                            onChange={this.handleRadioChange}
+                                                            role="radio"
+                                                            aria-checked={this.state.radioValue === 'SCORMv4'}
+                                                            aria-label='SCORM 2004 (5th edition)'
+                                                            tabIndex="-1"
+                                                        />
+                                                    </Form.Field>
 
-                                      </Grid.Column>
-                                      <Grid.Column>
-                                      </Grid.Column>
-                                      </Grid.Row>
-                                      <Grid.Row>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                            <Grid.Row>
 
-                                      <Grid.Column width={16} textAlign='center'>
-                                      <Button
-                                          color="blue"
-                                          type="submit"
-                                          content={this.context.intl.formatMessage(this.messages.downloadModal_downloadButton)}
-                                          icon='download'
-                                          onClick={this.handleDownload}
-                                      />
-                                      <Button
-                                          icon="remove"
-                                          color="red"
-                                          type="button"
-                                          onClick={this.handleClose}
-                                          content={this.context.intl.formatMessage(this.messages.downloadModal_cancelButton)}
-                                      />
-                                      </Grid.Column>
-                                      </Grid.Row>
+                                                <Grid.Column width={16} textAlign='center'>
+                                                    <Button
+                                                        color="blue"
+                                                        type="submit"
+                                                        content={this.context.intl.formatMessage(this.messages.downloadModal_downloadButton)}
+                                                        icon='download'
+                                                        onClick={this.handleDownload}
+                                                    />
+                                                    <Button
+                                                        icon="remove"
+                                                        color="red"
+                                                        type="button"
+                                                        onClick={this.handleClose}
+                                                        content={this.context.intl.formatMessage(this.messages.downloadModal_cancelButton)}
+                                                    />
+                                                </Grid.Column>
+                                            </Grid.Row>
 
-                                      </Grid>
+                                        </Grid>
 
-                                  </Form>
+                                    </Form>
 
 
                                 </Segment>
-                              </Segment>
-                          </Container>
+                            </Segment>
+                        </Container>
 
-                      </Modal.Content>
+                    </Modal.Content>
 
-                  </FocusTrap>
-              </Modal>
+                </FocusTrap>
+            </Modal>
 
         );
 

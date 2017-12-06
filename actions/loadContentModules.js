@@ -24,7 +24,7 @@ export default function loadContentModules(context, payload, done) {
         return;
     }
 
-        //load all required actions in parallel
+    //load all required actions in parallel
     let actions = [
         // (callback) => {
         //     context.executeAction(loadContentDiscussion, payload, callback);

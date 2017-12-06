@@ -4,7 +4,7 @@ class About extends React.Component {
     render() {
         return (
             <div className="ui text container" ref="about">
-            <div className="ui hidden divider"></div>
+                <div className="ui hidden divider"></div>
                 <h2 className="ui header">About SlideWiki</h2>
                 <p>SlideWiki aims to exploit the wisdom, creativity and productivity of the crowd for the creation of qualitative, rich,
                     engaging educational content. With SlideWiki users can create and collaborate on slides, diagrams, assessments and arrange this

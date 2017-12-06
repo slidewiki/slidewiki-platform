@@ -149,7 +149,7 @@ class ContactUs extends React.Component {
         });
     }
     componentDidMount(){
-      //Load user info, if user is conected.
+        //Load user info, if user is conected.
         if(this.props.UserProfileStore.username.length > 0)
             this.context.executeAction(fetchUser,{ params: {username: this.props.UserProfileStore.username, id:this.props.UserProfileStore.userid}});
     }
@@ -175,7 +175,7 @@ class ContactUs extends React.Component {
     allow all users to edit, we need to remove the if condition in each change method*/
     onFirstNameChange(event,data){
         if(this.props.UserProfileStore.username.length === 0){
-          //Not logged user, he can edit
+            //Not logged user, he can edit
             this.setState({
                 firstName: data.value
             });
@@ -183,7 +183,7 @@ class ContactUs extends React.Component {
     }
     onLastNameChange(event,data){
         if(this.props.UserProfileStore.username.length === 0){
-          //Not logged user, he can edit
+            //Not logged user, he can edit
             this.setState({
                 lastName: data.value
             });
@@ -191,7 +191,7 @@ class ContactUs extends React.Component {
     }
     onEmailChange(event,data){
         if(this.props.UserProfileStore.username.length === 0){
-          //Not logged user, he can edit
+            //Not logged user, he can edit
             this.setState({
                 email: data.value
             });
@@ -339,7 +339,7 @@ class ContactUs extends React.Component {
     }
 
     getSwalMessages(){
-      //Get the messages which will show in the swal showed  when the form is sent
+        //Get the messages which will show in the swal showed  when the form is sent
         return {
             title: this.context.intl.formatMessage(this.messages.swal_title),
             text: this.context.intl.formatMessage(this.messages.send_swal_text),
@@ -354,7 +354,7 @@ class ContactUs extends React.Component {
         //if we use a input list: type of report in this.typeContact2.inputRef.value
         event.preventDefault();
         if(this.checkForm()){
-          //all data is ok. Send info
+            //all data is ok. Send info
             let payload = {
                 subject : this.summaryContact.inputRef.value,
                 text : 'First Name: '+this.state.firstName +'\n'+
@@ -372,7 +372,7 @@ class ContactUs extends React.Component {
     }
 
     render() {
-      /* only needed if we use dropdown
+        /* only needed if we use dropdown
         const typeOptions = [
           {value:'Suggestion' , text:this.context.intl.formatMessage(this.messages.typeOption_suggestion)},
           {value:'Support' , text:this.context.intl.formatMessage(this.messages.typeOption_support)},
@@ -400,11 +400,11 @@ class ContactUs extends React.Component {
                 <Header as="h2">{this.context.intl.formatMessage(this.messages.swal_title)}</Header>
                 <p>{this.context.intl.formatMessage(this.messages.form_explanation)}</p>
 
-                  <Divider hidden />
-                  <Segment attached="bottom" textAlign="left" >
+                <Divider hidden />
+                <Segment attached="bottom" textAlign="left" >
                     <Header as='h3'>{this.context.intl.formatMessage(this.messages.form_subheader)}</Header>
                     <Form onSubmit={this.onSubmitHandler.bind(this)}>
-                    {/* code needed if we decide use the componet Dropdown for the type
+                        {/* code needed if we decide use the componet Dropdown for the type
                       <Form.Field>
                       <label htmlFor="typeContact">
                        {this.context.intl.formatMessage(this.messages.form_type_label)}
@@ -416,73 +416,73 @@ class ContactUs extends React.Component {
                       </Form.Field>
 
                     */}
-                      <Form.Field key='1'>
-                        <label htmlFor='typeContact2'> {this.context.intl.formatMessage(this.messages.form_type_label)}*</label>
-                        <Input list='typeOptions' id='typeContact2' name="typeContact2"
-                          ref={(input) => {this.typeContact2 = input;}}
-                          placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)}
-                          onChange ={this.onTypeChange.bind(this)}
-                        />
-                        <datalist id='typeOptions' role='listbox'>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUGGESTION}/>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_support)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUPPORT}/>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_account)} role='option' aria-selected={this.state.type === REPORT_TYPE.ACCOUNT}/>
-                          <option  value={this.context.intl.formatMessage(this.messages.typeOption_other)} role='option' aria-selected={this.state.type === REPORT_TYPE.OTHER}/>
-                        </datalist>
-                      </Form.Field>
+                        <Form.Field key='1'>
+                            <label htmlFor='typeContact2'> {this.context.intl.formatMessage(this.messages.form_type_label)}*</label>
+                            <Input list='typeOptions' id='typeContact2' name="typeContact2"
+                                ref={(input) => {this.typeContact2 = input;}}
+                                placeholder={this.context.intl.formatMessage(this.messages.form_type_placeholder)}
+                                onChange ={this.onTypeChange.bind(this)}
+                            />
+                            <datalist id='typeOptions' role='listbox'>
+                                <option  value={this.context.intl.formatMessage(this.messages.typeOption_suggestion)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUGGESTION}/>
+                                <option  value={this.context.intl.formatMessage(this.messages.typeOption_support)} role='option' aria-selected={this.state.type === REPORT_TYPE.SUPPORT}/>
+                                <option  value={this.context.intl.formatMessage(this.messages.typeOption_account)} role='option' aria-selected={this.state.type === REPORT_TYPE.ACCOUNT}/>
+                                <option  value={this.context.intl.formatMessage(this.messages.typeOption_other)} role='option' aria-selected={this.state.type === REPORT_TYPE.OTHER}/>
+                            </datalist>
+                        </Form.Field>
 
-                      <Form.Field key='2'>
-                       <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
-                       <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
-                         placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
-                         value={this.state.firstName}
-                         onChange ={this.onFirstNameChange.bind(this)}
-                       />
-                      </Form.Field>
+                        <Form.Field key='2'>
+                            <label htmlFor='firstNameContact'>{this.context.intl.formatMessage(this.messages.form_firstName_label)}</label>
+                            <Input type='text' id='firstNameContact' name="firstNameContact" ref={(input) => {this.firstNameContact = input;}}
+                                placeholder= {this.context.intl.formatMessage(this.messages.form_firstName_placeholder)}
+                                value={this.state.firstName}
+                                onChange ={this.onFirstNameChange.bind(this)}
+                            />
+                        </Form.Field>
 
-                      <Form.Field key='3'>
-                         <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
-                         <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
-                         placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
-                         value={this.state.lastName}
-                         onChange ={this.onLastNameChange.bind(this)}/>
-                      </Form.Field>
+                        <Form.Field key='3'>
+                            <label htmlFor='lastNameContact'>{this.context.intl.formatMessage(this.messages.form_lastName_label)}</label>
+                            <Input type='text' id='lastNameContact' name="lastNameContact" ref={(input) => {this.lastNameContact = input;}}
+                                placeholder={this.context.intl.formatMessage(this.messages.form_lastName_placeholder)}
+                                value={this.state.lastName}
+                                onChange ={this.onLastNameChange.bind(this)}/>
+                        </Form.Field>
 
-                      <Form.Field key='4'>
-                         <label htmlFor='emailContact'>{this.context.intl.formatMessage(this.messages.form_email_label)}*</label>
-                         <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
-                         placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
-                         aria-required="true" value={this.state.email}
-                         onChange ={this.onEmailChange.bind(this)}/>
-                      </Form.Field>
+                        <Form.Field key='4'>
+                            <label htmlFor='emailContact'>{this.context.intl.formatMessage(this.messages.form_email_label)}*</label>
+                            <Input type='email' id='emailContact' name="emailContact" ref={(input) => {this.emailContact = input;}}
+                                placeholder={this.context.intl.formatMessage(this.messages.form_email_placeholder)}
+                                aria-required="true" value={this.state.email}
+                                onChange ={this.onEmailChange.bind(this)}/>
+                        </Form.Field>
 
-                      <Form.Field key='5'>
-                        <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>
-                        <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
-                        placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
-                        aria-required="true"  />
-                      </Form.Field>
+                        <Form.Field key='5'>
+                            <label htmlFor='summaryContact'>{this.context.intl.formatMessage(this.messages.form_summary_label)}*</label>
+                            <Input type='text' id='summaryContact' name="summaryContact" ref={(input) => {this.summaryContact = input;}}
+                                placeholder={this.context.intl.formatMessage(this.messages.form_summary_placeholder)}
+                                aria-required="true"  />
+                        </Form.Field>
 
-                      <Form.Field key='6'>
-                        <label  htmlFor="descriptionContact"> {this.context.intl.formatMessage(this.messages.form_description_label)} </label>
-                         <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
-                          autoHeight
-                          placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
-                      </Form.Field>
+                        <Form.Field key='6'>
+                            <label  htmlFor="descriptionContact"> {this.context.intl.formatMessage(this.messages.form_description_label)} </label>
+                            <TextArea id='descriptionContact' name="descriptionContact" ref={(input) => {this.descriptionContact = input;}}
+                                autoHeight
+                                placeholder= {this.context.intl.formatMessage(this.messages.form_description_placeholder)} />
+                        </Form.Field>
 
-                      <Form.Field key='7'>
-                        <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
-                        <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
-                         style={recaptchaStyle} sitekey={publicRecaptchaKey}
-                         onChange={this.onRecaptchaChange.bind(this)}
-                         aria-required="true" tabIndex="0"/>
-                      </Form.Field>
+                        <Form.Field key='7'>
+                            <input type="hidden" id="recaptchaContact" name="recaptchaContact"></input>
+                            <ReCAPTCHA id="recaptchaGoogleContact" ref= {(recap) => {this.recaptcha = recap;}}
+                                style={recaptchaStyle} sitekey={publicRecaptchaKey}
+                                onChange={this.onRecaptchaChange.bind(this)}
+                                aria-required="true" tabIndex="0"/>
+                        </Form.Field>
 
-                      <Form.Button color='blue' key='8'>
-                        {this.context.intl.formatMessage(this.messages.form_button)}
-                      </Form.Button>
-                   </Form>
-                   </Segment>
+                        <Form.Button color='blue' key='8'>
+                            {this.context.intl.formatMessage(this.messages.form_button)}
+                        </Form.Button>
+                    </Form>
+                </Segment>
 
             </Container>
 

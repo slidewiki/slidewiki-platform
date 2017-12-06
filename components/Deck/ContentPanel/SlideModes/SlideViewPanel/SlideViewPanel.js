@@ -8,11 +8,11 @@ class SlideViewPanel extends React.Component {
     render() {
         return (
             <div className="ui bottom attached segment">
-            {(this.props.SlideViewStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {(this.props.SlideViewStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                 <SlideContentView content={this.props.SlideViewStore.content}
-                                  speakernotes={this.props.SlideViewStore.speakernotes}
-                                  loadingIndicator={this.props.SlideViewStore.loadingIndicator}
-                                  theme={this.props.selector && this.props.selector.theme ? this.props.selector.theme : this.props.DeckTreeStore.theme} />
+                    speakernotes={this.props.SlideViewStore.speakernotes}
+                    loadingIndicator={this.props.SlideViewStore.loadingIndicator}
+                    theme={this.props.selector && this.props.selector.theme ? this.props.selector.theme : this.props.DeckTreeStore.theme} />
             </div>
         );
     }

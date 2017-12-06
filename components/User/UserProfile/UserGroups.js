@@ -26,12 +26,12 @@ class UserGroups extends React.Component {
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-            .then(() => {
-                this.context.executeAction(updateUsergroup, {group: {}, offline: true});
+                .then(() => {
+                    this.context.executeAction(updateUsergroup, {group: {}, offline: true});
 
-                return true;
-            })
-            .catch();
+                    return true;
+                })
+                .catch();
             return;
         }
     }
@@ -95,23 +95,23 @@ class UserGroups extends React.Component {
                         <div className="column">
                             <div className="ui header"><h3>{group.name}</h3></div>
                             <div
-                                 className="meta">{group.members.length+1} member{((group.members.length+1) !== 1) ? 's': ''}</div>
+                                className="meta">{group.members.length+1} member{((group.members.length+1) !== 1) ? 's': ''}</div>
                         </div>
 
                         <div className="right aligned column">
                             {((this.props.userid === group.creator) || (this.props.userid === group.creator.userid)) ? (
-                              <div>
-                                  <button className="ui large basic icon button" data-tooltip="Group deletion" aria-label="Group deletion" name={'deleteGroup_' + group._id} onClick={this.handleClickOnRemoveGroup.bind(this)} >
-                                      <i className="remove icon" name={'deleteGroup_' + group._id} ></i>
-                                  </button>
-                                  <button className="ui large basic icon button" data-tooltip="Group settings" aria-label="Group settings" name={'changeGroup_' + group._id} onClick={this.handleClickOnEditGroup.bind(this)} >
-                                      <i className="setting icon" name={'changeGroup_' + group._id} ></i>
-                                  </button>
-                              </div>
+                                <div>
+                                    <button className="ui large basic icon button" data-tooltip="Group deletion" aria-label="Group deletion" name={'deleteGroup_' + group._id} onClick={this.handleClickOnRemoveGroup.bind(this)} >
+                                        <i className="remove icon" name={'deleteGroup_' + group._id} ></i>
+                                    </button>
+                                    <button className="ui large basic icon button" data-tooltip="Group settings" aria-label="Group settings" name={'changeGroup_' + group._id} onClick={this.handleClickOnEditGroup.bind(this)} >
+                                        <i className="setting icon" name={'changeGroup_' + group._id} ></i>
+                                    </button>
+                                </div>
                             ) : (
-                              <button className="ui large basic icon button" data-tooltip="Leave group" aria-label="Leave group" name={'leaveGroup_' + group._id} onClick={this.handleClickOnLeaveGroup.bind(this)} >
-                                  <i className="remove icon" name={'leaveGroup_' + group._id} ></i>
-                              </button>
+                                <button className="ui large basic icon button" data-tooltip="Leave group" aria-label="Leave group" name={'leaveGroup_' + group._id} onClick={this.handleClickOnLeaveGroup.bind(this)} >
+                                    <i className="remove icon" name={'leaveGroup_' + group._id} ></i>
+                                </button>
                             )}
 
                         </div>
@@ -123,9 +123,9 @@ class UserGroups extends React.Component {
         if (this.props.groups === undefined || this.props.groups === null || this.props.groups.length < 1) {
             items = [(
                 <div key="dummy" className="ui vertical segment" >
-                  <div className="ui two column stackable grid container">
-                    <h4>Not a member of a group.</h4>
-                  </div>
+                    <div className="ui two column stackable grid container">
+                        <h4>Not a member of a group.</h4>
+                    </div>
                 </div>
             )];
         }
@@ -133,18 +133,18 @@ class UserGroups extends React.Component {
         return (
             <div className="ui segments">
                 <div className="ui secondary clearing segment" >
-                  <h3 className="ui left floated header" >Groups</h3>
-                  <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewGroup.bind(this)}>
-                      <i className="icon users"/>
-                      <p>Create new group</p>
-                  </button>
-              </div>
+                    <h3 className="ui left floated header" >Groups</h3>
+                    <button className="ui right floated labeled icon button" role="button" tabIndex="0" onClick={this.handleCLickNewGroup.bind(this)}>
+                        <i className="icon users"/>
+                        <p>Create new group</p>
+                    </button>
+                </div>
 
-              {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {(this.props.status === 'pending') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
 
-              <div className="ui vertical segment">
-                  {items}
-              </div>
+                <div className="ui vertical segment">
+                    {items}
+                </div>
             </div>
         );
     }

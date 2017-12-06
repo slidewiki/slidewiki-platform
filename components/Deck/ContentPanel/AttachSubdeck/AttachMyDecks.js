@@ -38,17 +38,17 @@ class AttachMyDecks extends React.Component{
         let myDecksContent;
         if(this.state.userDecks.length === 0){
             myDecksContent = <Segment id="panelMyDecksContent">
-                                <Dimmer active inverted>
-                                  <Loader inverted>Loading</Loader>
-                                </Dimmer>
-                                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                              </Segment>;
+                <Dimmer active inverted>
+                    <Loader inverted>Loading</Loader>
+                </Dimmer>
+                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+            </Segment>;
         }else{
             myDecksContent = <Segment id="panelMyDecksContent">
-                                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} role='alert' aria-live='polite' basic color="blue"/>
-                                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} actionButtonId={this.props.actionButtonId} maxHeight='400px'/>
-                              </Segment>;
+                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} role='alert' aria-live='polite' basic color="blue"/>
+                <AttachDeckList user={userInfo} decks={this.state.userDecks} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} actionButtonId={this.props.actionButtonId} maxHeight='400px'/>
+            </Segment>;
         }
 
         return myDecksContent;

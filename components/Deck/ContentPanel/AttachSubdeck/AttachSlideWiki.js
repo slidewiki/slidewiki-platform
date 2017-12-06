@@ -43,11 +43,11 @@ class AttachSlideWiki extends React.Component{
         };
         if(this.state.recentDecks.length === 0){
             slideWikiContent = <Segment id="panelMyDecksContent">
-                              <Dimmer active inverted>
-                                  <Loader inverted>Loading</Loader>
-                              </Dimmer>
-                              <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                          </Segment>;
+                <Dimmer active inverted>
+                    <Loader inverted>Loading</Loader>
+                </Dimmer>
+                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+            </Segment>;
         }else{
             let slides_to_show;
             let fromDecksTitle;
@@ -59,11 +59,11 @@ class AttachSlideWiki extends React.Component{
                 fromDecksTitle=slides_to_show.length>0 ? 'Found decks' : 'No results found';
             }
             slideWikiContent =  <Segment id="panelMyDecksContent">
-                                <Header as="h3">{fromDecksTitle}</Header>
-                                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
-                                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} role='alert' aria-live='polite' basic color="blue"/>
-                                <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} actionButtonId={this.props.actionButtonId} maxHeight='320px'/>
-                              </Segment>;
+                <Header as="h3">{fromDecksTitle}</Header>
+                <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right">Selected Deck</Label>
+                <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} role='alert' aria-live='polite' basic color="blue"/>
+                <AttachDeckList user={userInfo} decks={slides_to_show} selectedDeckId={this.state.selectedDeckId} destinationDeckId={this.props.destinationDeckId} actionButtonId={this.props.actionButtonId} maxHeight='320px'/>
+            </Segment>;
 
         }
 

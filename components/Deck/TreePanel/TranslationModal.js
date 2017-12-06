@@ -115,35 +115,35 @@ class TranslationModal extends React.Component {
 
 
         return (
-        <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
-               aria-describedby='translationModalDesc' open={this.props.isOpen}
-               onClose={this.props.handleClose}>
-            <Header icon='translate' content='Translate the deck' id='translationModalHeader'/>
-            <Modal.Content>
-                <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
-                    {available_desc}
-                    <p id='translationModalDesc'>You are about to translate the deck. Please choose the target language from the list below:</p>
-                    <Dropdown
-                        placeholder='Choose a target language...'
-                        scrolling
-                        selection
-                        search
-                        className={this.state.error ? 'error' : ''}
-                        options={languageOptions}
-                        onChange={this.handleOptionChange.bind(this)}
-                        ref = {(dropDown) => {this.dropDown = dropDown;}}
-                        value = {this.state.language}
-                      />
-                      <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate. <br/> Attempting to translate large decks might result in an error.</b></p>
-                    <Divider/>
-                    <p>
-                        <Button as='button' primary onClick={this.handleTranslateToClick.bind(this)}><Icon name='translate'/> Translate</Button>
-                        <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
-                    </p>
+            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='translationModalHeader'
+                aria-describedby='translationModalDesc' open={this.props.isOpen}
+                onClose={this.props.handleClose}>
+                <Header icon='translate' content='Translate the deck' id='translationModalHeader'/>
+                <Modal.Content>
+                    <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
+                        {available_desc}
+                        <p id='translationModalDesc'>You are about to translate the deck. Please choose the target language from the list below:</p>
+                        <Dropdown
+                            placeholder='Choose a target language...'
+                            scrolling
+                            selection
+                            search
+                            className={this.state.error ? 'error' : ''}
+                            options={languageOptions}
+                            onChange={this.handleOptionChange.bind(this)}
+                            ref = {(dropDown) => {this.dropDown = dropDown;}}
+                            value = {this.state.language}
+                        />
+                        <p><b>!Please note that this is an experimental service! <br/> We use Microsoft Bing translation service, which may not be accurate. <br/> Attempting to translate large decks might result in an error.</b></p>
+                        <Divider/>
+                        <p>
+                            <Button as='button' primary onClick={this.handleTranslateToClick.bind(this)}><Icon name='translate'/> Translate</Button>
+                            <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/> Close</Button>
+                        </p>
 
-                </FocusTrap>
-            </Modal.Content>
-        </Modal>
+                    </FocusTrap>
+                </Modal.Content>
+            </Modal>
         );
     }
 }

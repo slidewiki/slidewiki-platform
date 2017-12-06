@@ -171,35 +171,35 @@ class SearchPanel extends React.Component {
                                 <div className="field">
                                     <label htmlFor="field">Search field</label>
                                     <select name='field' id='field' onChange={this.onChange.bind(this)} value={this.state.field} multiple='' className='ui fluid search dropdown' ref='field'>
-                                      <option value=' '>Select Search field</option>
-                                      <option value='title'>Title</option>
-                                      <option value='description'>Description</option>
-                                      <option value='content'>Content</option>
-                                      <option value='speakernotes'>Speakernotes</option>
+                                        <option value=' '>Select Search field</option>
+                                        <option value='title'>Title</option>
+                                        <option value='description'>Description</option>
+                                        <option value='content'>Content</option>
+                                        <option value='speakernotes'>Speakernotes</option>
                                     </select>
                                 </div>
 
                                 <div className="field">
                                     <label htmlFor="kind">Entity</label>
                                     <select name='kind' id='kind' onChange={this.onChange.bind(this)} value={this.state.kind} multiple='' className='ui fluid search dropdown' ref='kind'>
-                                      <option value=' '>Select Entity</option>
-                                      <option value='slide'>Slide</option>
-                                      <option value='deck'>Deck</option>
+                                        <option value=' '>Select Entity</option>
+                                        <option value='slide'>Slide</option>
+                                        <option value='deck'>Deck</option>
                                     </select>
                                 </div>
 
                                 <div className="field">
                                     <label htmlFor="language">Language</label>
                                     <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
-                                      <option value=' '>Select Language</option>
-                                      <option value='nl_NL'>Dutch</option>
-                                      <option value='en_GB'>English</option>
-                                      <option value='de_DE'>German</option>
-                                      <option value='el_GR'>Greek</option>
-                                      <option value='it_IT'>Italian</option>
-                                      <option value='pt_PT'>Portuguese</option>
-                                      <option value='sr_RS'>Serbian</option>
-                                      <option value='es_ES'>Spanish</option>
+                                        <option value=' '>Select Language</option>
+                                        <option value='nl_NL'>Dutch</option>
+                                        <option value='en_GB'>English</option>
+                                        <option value='de_DE'>German</option>
+                                        <option value='el_GR'>Greek</option>
+                                        <option value='it_IT'>Italian</option>
+                                        <option value='pt_PT'>Portuguese</option>
+                                        <option value='sr_RS'>Serbian</option>
+                                        <option value='es_ES'>Spanish</option>
                                     </select>
                                 </div>
                             </div>

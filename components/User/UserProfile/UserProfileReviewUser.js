@@ -45,12 +45,12 @@ class UserProfileReviewUser extends React.Component {
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
             })
-            .then(() => {
-                this.context.executeAction(getNextReviewableUser, {
-                    secret: this.props.UserReviewStore.secret,
-                    jwt: this.props.UserProfileStore.jwt
-                });
-            },).catch(swal.noop);
+                .then(() => {
+                    this.context.executeAction(getNextReviewableUser, {
+                        secret: this.props.UserReviewStore.secret,
+                        jwt: this.props.UserProfileStore.jwt
+                    });
+                },).catch(swal.noop);
         } else if (this.props.UserReviewStore.dimmer.suspend) {
             swal({
                 type: 'success',
@@ -60,12 +60,12 @@ class UserProfileReviewUser extends React.Component {
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
             })
-            .then(() => {
-                this.context.executeAction(getNextReviewableUser, {
-                    secret: this.props.UserReviewStore.secret,
-                    jwt: this.props.UserProfileStore.jwt
-                });
-            },).catch(swal.noop);
+                .then(() => {
+                    this.context.executeAction(getNextReviewableUser, {
+                        secret: this.props.UserReviewStore.secret,
+                        jwt: this.props.UserProfileStore.jwt
+                    });
+                },).catch(swal.noop);
         } else if (this.props.UserReviewStore.dimmer.keepreviewing) {
             swal({
                 type: 'success',
@@ -75,12 +75,12 @@ class UserProfileReviewUser extends React.Component {
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
             })
-            .then(() => {
-                this.context.executeAction(getNextReviewableUser, {
-                    secret: this.props.UserReviewStore.secret,
-                    jwt: this.props.UserProfileStore.jwt
-                });
-            },).catch(swal.noop);
+                .then(() => {
+                    this.context.executeAction(getNextReviewableUser, {
+                        secret: this.props.UserReviewStore.secret,
+                        jwt: this.props.UserProfileStore.jwt
+                    });
+                },).catch(swal.noop);
         } else if (this.props.UserReviewStore.dimmer.noreviewables) {
             swal({
                 type: 'success',

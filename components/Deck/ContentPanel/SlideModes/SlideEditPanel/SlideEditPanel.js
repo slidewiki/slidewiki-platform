@@ -49,16 +49,16 @@ class SlideEditPanel extends React.Component {
         // Only load WYSIWYG-Editor when the content has been loaded via loadSlideEdit.js
         if (this.props.SlideEditStore.content !== '' && !this.destroy){
             this.editorcontent = <SlideContentEditor title={this.props.SlideEditStore.title}
-                                content={this.props.SlideEditStore.content}
-                                id={this.props.SlideEditStore.id}
-                                speakernotes={this.props.SlideEditStore.speakernotes}
-                                selector={this.props.selector} />;
+                content={this.props.SlideEditStore.content}
+                id={this.props.SlideEditStore.id}
+                speakernotes={this.props.SlideEditStore.speakernotes}
+                selector={this.props.selector} />;
         }
 
         return (
             <div ref="slideEditPanel" className="ui bottom attached segment">
-            {(this.props.SlideEditStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-            {this.editorcontent}
+                {(this.props.SlideEditStore.content === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                {this.editorcontent}
             </div>
         );
     }

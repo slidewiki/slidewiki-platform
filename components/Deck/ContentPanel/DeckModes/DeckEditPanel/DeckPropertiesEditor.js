@@ -140,7 +140,7 @@ class DeckPropertiesEditor extends React.Component {
                 saveRemoteData: false,
                 action: (name, value, source) => {
                     let data = JSON.parse(decodeURIComponent(value));
-                // console.log('user dropdown select', name, value, data);
+                    // console.log('user dropdown select', name, value, data);
 
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('clear');
                     $(ReactDOM.findDOMNode(this.refs.AddUser)).dropdown('hide');
@@ -149,7 +149,7 @@ class DeckPropertiesEditor extends React.Component {
                     if (users === undefined || users === null)
                         users = [];
 
-                // console.log('trying to add', name, 'to', users);
+                    // console.log('trying to add', name, 'to', users);
                     if (users.findIndex((member) => {
                         return member.id === parseInt(data.userid);
                     }) === -1 && parseInt(data.userid) !== this.props.userid) {
@@ -392,26 +392,26 @@ class DeckPropertiesEditor extends React.Component {
 
         //content elements
         let themeOptions = <select className="ui search dropdown" id="theme" aria-labelledby="theme"
-                               value={this.state.theme}
-                               onChange={this.handleChange.bind(this, 'theme')}>
-                <option value="default">White - Default</option>
-                <option value="beige">Cream</option>
-                <option value="black">Black</option>
-                <option value="league">Dark Grey</option>
-                <option value="sky">Pale Blue</option>
-                <option value="solarized">Beige</option>
-                <option value="moon">Dark Slate Blue</option>
-                <option value="night">High Contrast 1</option>
-                <option value="blood">High Contrast 2</option>
-                <option value="serif">Serif</option>
-                <option value="simple">Simple</option>
-                <option value="openuniversity">Open University</option>
-                <option value="odimadrid">ODI Madrid</option>
-                <option value="oeg">OEG</option>
-            </select>;
+            value={this.state.theme}
+            onChange={this.handleChange.bind(this, 'theme')}>
+            <option value="default">White - Default</option>
+            <option value="beige">Cream</option>
+            <option value="black">Black</option>
+            <option value="league">Dark Grey</option>
+            <option value="sky">Pale Blue</option>
+            <option value="solarized">Beige</option>
+            <option value="moon">Dark Slate Blue</option>
+            <option value="night">High Contrast 1</option>
+            <option value="blood">High Contrast 2</option>
+            <option value="serif">Serif</option>
+            <option value="simple">Simple</option>
+            <option value="openuniversity">Open University</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>
+        </select>;
         let licenseOptions = <a className="ui label">
-                <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
-            </a>;
+            <i className="copyright large icon"></i>All decks are published under a <b>Creative Commons Attribution-ShareAlike</b> License
+        </a>;
         /*
         <i className="creative commons large icon"></i>
         let licenseOptions = <select className="ui search dropdown" id="license" aria-labelledby="license"
@@ -438,14 +438,14 @@ class DeckPropertiesEditor extends React.Component {
             });
         }
         let groupsOptions = <div className="ui selection dropdown" id="deck_edit_dropdown_groups" aria-labelledby="groups"
-                                ref="AddGroups">
-                <input type="hidden" name="groups" />
-                <i className="dropdown icon"></i>
-                <div className="default text">Select Groups</div>
-                <div className="menu">
-                    {groupsArray}
-                </div>
-            </div>;
+            ref="AddGroups">
+            <input type="hidden" name="groups" />
+            <i className="dropdown icon"></i>
+            <div className="default text">Select Groups</div>
+            <div className="menu">
+                {groupsArray}
+            </div>
+        </div>;
 
         let buttons = (
             <div>

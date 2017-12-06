@@ -141,7 +141,7 @@ module.exports = function userStoragePlugin(options) {
                                 else {
                                     result = cookie.getJSON(user_cookieName);
                                 }
-                              // console.log('userStoragePlugin actionContext getUser: got user from cookies');
+                                // console.log('userStoragePlugin actionContext getUser: got user from cookies');
                             }
                         } catch (e) {
 

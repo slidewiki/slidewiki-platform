@@ -46,7 +46,7 @@ class TagsPanel extends React.Component {
         let expandLink = '';
         if(arrayOfTagsIsLarge){
             expandLink = (!showAllTags) ? <div><br/><a href="#" onClick={this.handleShowMore.bind(this)} >Show more ...</a></div>
-            : <div><br/><a href="#" onClick={this.handleShowLess.bind(this)} >Show less ...</a></div>;
+                : <div><br/><a href="#" onClick={this.handleShowLess.bind(this)} >Show less ...</a></div>;
         }
         let tagViewPanel = (tags.length === 0)
             ? <div>There are currently no tags.</div>

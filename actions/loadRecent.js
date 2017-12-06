@@ -4,7 +4,7 @@ const log = require('./log/clog');
 export default function loadRecent(context, payload, done) {
     log.info(context);
     context.service.read('deck.recent', payload, {timeout: 20 * 1000}, (err, res) => {
-      //  console.log('Executing loadPresentation action');
+        //  console.log('Executing loadPresentation action');
         if (err) {
             if (err.statusCode === 404) {
                 let data = {recent: []};

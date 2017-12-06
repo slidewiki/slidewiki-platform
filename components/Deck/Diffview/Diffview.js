@@ -153,8 +153,8 @@ class DiffView extends Component {
                             <div className='mergedVers'>
                                 <div className='diff-header'>
                                     Diff View Changes Between Revisions [ {base.id} ] and [ {diff.id} ]
-                              </div>
-                              <div className='inlineContent' dangerouslySetInnerHTML={{__html: diffcontent}}></div>
+                                </div>
+                                <div className='inlineContent' dangerouslySetInnerHTML={{__html: diffcontent}}></div>
                             </div>
                         </div>
                     </div>
@@ -180,20 +180,20 @@ DiffView = connectToStores(DiffView, [DiffViewStore], (context, props) => {
 export default DiffView;
 
 const ErrorVersion = () => (
-  <div className="ui error message text container left">
-      <div className="header row">Error: Incompatible Revisions</div>
-      <p>Unfortunately, the chosen revisions of the slide are incompatible for automatical generation of the difference changes, due to one of the following reasons:</p>
-      <ul className="list">
-          <li>The two revisions compared don't share the same template</li>
-          <li>HTML code of the slide was manually modified</li>
-      </ul>
-      <p>A possible option is to go back and manually view the versions for changes</p>
-  </div>
+    <div className="ui error message text container left">
+        <div className="header row">Error: Incompatible Revisions</div>
+        <p>Unfortunately, the chosen revisions of the slide are incompatible for automatical generation of the difference changes, due to one of the following reasons:</p>
+        <ul className="list">
+            <li>The two revisions compared don't share the same template</li>
+            <li>HTML code of the slide was manually modified</li>
+        </ul>
+        <p>A possible option is to go back and manually view the versions for changes</p>
+    </div>
 );
 
 const ErrorContent = () => (
-  <div className="ui error message text container left">
-      <div className="header row">Error: Revisions Content</div>
-      <p>An error occurred while fetching the content. Please visit the <b>History panel</b> of the slide and try once more.</p>
-  </div>
+    <div className="ui error message text container left">
+        <div className="header row">Error: Revisions Content</div>
+        <p>An error occurred while fetching the content. Please visit the <b>History panel</b> of the slide and try once more.</p>
+    </div>
 );

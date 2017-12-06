@@ -28,8 +28,8 @@ class LocaleSwitcher extends React.Component {
         let className = (locale === this.state.currentLocale) ? 'active' : '';
         return (
             <Dropdown.Item key={locale} onClick={this.handleLocaleClick.bind(this, locale)} href={`?locale=${locale}`} className={className}>
-              {(this.props.mode === 'icon') ? <Flag name={flag}/> : ''}
-              {Iso.getName(locale)}
+                {(this.props.mode === 'icon') ? <Flag name={flag}/> : ''}
+                {Iso.getName(locale)}
             </Dropdown.Item>
         );
     }
@@ -42,14 +42,14 @@ class LocaleSwitcher extends React.Component {
                 current_header = <Flag name={currentFlag}/>;
                 return (
                     <Dropdown trigger={current_header}>
-                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
+                        <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
                     </Dropdown>
                 );
                 break;
             default:
                 return (
                     <Dropdown item trigger={current_header}>
-                      <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
+                        <Dropdown.Menu>{ locales.map(this.renderLocaleLink, this) }</Dropdown.Menu>
                     </Dropdown>
                 );
         }

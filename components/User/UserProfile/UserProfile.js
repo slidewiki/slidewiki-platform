@@ -29,12 +29,12 @@ class UserProfile extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             })
-            .then(() => {
-            },() => {//dismiss function
-                if(this.props.IntlStore.currentLocale !== getIntlLanguage() ||
+                .then(() => {
+                },() => {//dismiss function
+                    if(this.props.IntlStore.currentLocale !== getIntlLanguage() ||
                 (this.props.UserProfileStore.category === categories.categories[0] && this.props.UserProfileStore.categoryItem === categories.settings[0]) ) //user to reload page beacuse of cookie change or picture change
-                    window.location.reload();
-            }).catch(swal.noop);
+                        window.location.reload();
+                }).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.userdeleted === true)
             swal({
                 type: 'success',
@@ -46,7 +46,7 @@ class UserProfile extends React.Component {
                 allowEscapeKey: false,
                 showConfirmButton: false
             })
-            .then(() => {}).catch(swal.noop);
+                .then(() => {}).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.failure === true)
             swal({
                 title: 'Error',
@@ -58,7 +58,7 @@ class UserProfile extends React.Component {
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             })
-            .then(() => {}).catch(swal.noop);
+                .then(() => {}).catch(swal.noop);
     }
 
     chooseView() {
@@ -76,7 +76,7 @@ class UserProfile extends React.Component {
                         break;
                     default:
                         return this.notImplemented();
-                }});
+                    }});
             case categories.categories[1]:
                 return this.addScaffold(() => {switch(this.props.UserProfileStore.categoryItem){
                     case categories.groups[0]:
@@ -87,10 +87,10 @@ class UserProfile extends React.Component {
                         break;
                     default:
                         return this.notImplemented();
-                }});
+                    }});
             default:
                 return this.displayUserProfile();
-        };
+        }
     }
 
     addScaffold(toInsert){
@@ -109,55 +109,55 @@ class UserProfile extends React.Component {
 
     displayUserSettings() {
         return (
-          <div>
-              <div className="ui segments">
+            <div>
+                <div className="ui segments">
 
-                  <div className="ui secondary segment">
-                      <h3>Exchange picture</h3>
-                  </div>
-                  <div className="ui segment">
-                      <ChangePicture user={ this.props.UserProfileStore.user }/>
-                  </div>
+                    <div className="ui secondary segment">
+                        <h3>Exchange picture</h3>
+                    </div>
+                    <div className="ui segment">
+                        <ChangePicture user={ this.props.UserProfileStore.user }/>
+                    </div>
 
-              </div>
-              <div className="ui segments">
+                </div>
+                <div className="ui segments">
 
-                  <div className="ui secondary segment">
-                      <h3>Alter my personal data</h3>
-                  </div>
-                  <div className="ui segment">
-                      <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
-                  </div>
+                    <div className="ui secondary segment">
+                        <h3>Alter my personal data</h3>
+                    </div>
+                    <div className="ui segment">
+                        <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
+                    </div>
 
-              </div>
-          </div>);
+                </div>
+            </div>);
     }
 
     displayAccounts() {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
-                <div className="ui segments">
-                  <div className="ui secondary segment">
-                    <h3>Change password</h3>
-                  </div>
-
-                  <div className="ui segment">
-                    <ChangePassword failures={ this.props.UserProfileStore.failures } dimmer={this.props.UserProfileStore.dimmer}/>
-                  </div>
-                </div>
-            ) : '';
-        return (
-          <div>
-            {changePassword}
             <div className="ui segments">
-              <div className="ui red inverted segment">
-                <h3>Deactivate Account</h3>
-              </div>
+                <div className="ui secondary segment">
+                    <h3>Change password</h3>
+                </div>
 
-              <div className="ui segment">
-                <DeactivateAccount />
-              </div>
+                <div className="ui segment">
+                    <ChangePassword failures={ this.props.UserProfileStore.failures } dimmer={this.props.UserProfileStore.dimmer}/>
+                </div>
             </div>
-        </div>);
+        ) : '';
+        return (
+            <div>
+                {changePassword}
+                <div className="ui segments">
+                    <div className="ui red inverted segment">
+                        <h3>Deactivate Account</h3>
+                    </div>
+
+                    <div className="ui segment">
+                        <DeactivateAccount />
+                    </div>
+                </div>
+            </div>);
     }
 
     displayUserProfile() {

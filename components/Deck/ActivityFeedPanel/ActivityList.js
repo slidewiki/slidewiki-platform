@@ -39,15 +39,15 @@ class ActivityList extends React.Component {
         return (
             <div ref="activityList">
                 {(this.props.ActivityFeedStore.activities.length === 0)
-                ?
-                <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
-                :
-                <ReactList ref="infiniteList" className="ui list"
-                    itemRenderer={this.renderItem.bind(this)}
-                    length={this.props.ActivityFeedStore.activities.length}
-                    type={'simple'}>
-                </ReactList>
-              }
+                    ?
+                    <div>There are currently no activities for this {this.props.ActivityFeedStore.selector.stype}.</div>
+                    :
+                    <ReactList ref="infiniteList" className="ui list"
+                        itemRenderer={this.renderItem.bind(this)}
+                        length={this.props.ActivityFeedStore.activities.length}
+                        type={'simple'}>
+                    </ReactList>
+                }
             </div>
         );
     }

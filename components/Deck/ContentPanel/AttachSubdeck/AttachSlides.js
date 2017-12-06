@@ -70,7 +70,7 @@ class AttachSlides extends React.Component{
     }
 
     handleOnclick(selectedSlide){
-      /*This method:
+        /*This method:
        - adds the selectedSlide into the selectedSlides list if it was not selectedSlide
        - removes the selectedSlide from the selectedSlides list if it was
       */
@@ -81,7 +81,7 @@ class AttachSlides extends React.Component{
         } else { //It was selected...remove from it
             slides[index]='';
             slides = slides.filter(this.checkNoEmpty);
-        };
+        }
 
         this.setState({
             selectedSlides: slides
@@ -157,10 +157,10 @@ class AttachSlides extends React.Component{
            event.keyCode === KEY_CODE.LEFT ||
            event.keyCode === KEY_CODE.UP ||
            event.keyCode === KEY_CODE.DOWN ){
-           //the user wants to navigate through the grid
+            //the user wants to navigate through the grid
             let numRows = Math.ceil(this.state.deckSlides.length/this.numColumns);
             let nextPos = this.getNextPos(pos,this.state.deckSlides.length,this.numColumns,numRows,event.keyCode);  //get next cell
-             //get the id of the cell
+            //get the id of the cell
             $('#slide'+nextPos).focus(); //move to the cell
         } else if(event.keyCode === KEY_CODE.TAB){ //exit grid and go to button
             event.preventDefault();
@@ -194,25 +194,25 @@ class AttachSlides extends React.Component{
             while((columnCount<this.numColumns) && (slidesShowed < this.state.deckSlides.length)){
                 slideId =this.state.deckSlides[slidesShowed]+'-'+slidesShowed; //we include the position. the same slideid can be more than one time
                 singleColumn =  <Grid.Column key={slidesShowed}
-                                    id={'slide'+slidesShowed}
-                                    onClick={this.handleOnclick.bind(this,slideId)}
-                                    onKeyPress={this.handleKeyPress.bind(this,slideId)}
-                                    onKeyDown={this.handleKeyDown.bind(this,slidesShowed)}
-                                    style={this.state.selectedSlides.includes(slideId)?activeItemStyle:{}}
-                                    role="gridcell"
-                                    aria-selected ={this.state.selectedSlides.includes(slideId)}
-                                    tabIndex="0">
-                                    <Image src={Microservices.file.uri + '/slideThumbnail/' +this.state.deckSlides[slidesShowed]+'.jpeg'}
-                                        alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
-                                  </Grid.Column>;
+                    id={'slide'+slidesShowed}
+                    onClick={this.handleOnclick.bind(this,slideId)}
+                    onKeyPress={this.handleKeyPress.bind(this,slideId)}
+                    onKeyDown={this.handleKeyDown.bind(this,slidesShowed)}
+                    style={this.state.selectedSlides.includes(slideId)?activeItemStyle:{}}
+                    role="gridcell"
+                    aria-selected ={this.state.selectedSlides.includes(slideId)}
+                    tabIndex="0">
+                    <Image src={Microservices.file.uri + '/slideThumbnail/' +this.state.deckSlides[slidesShowed]+'.jpeg'}
+                        alt={'Slide '+ (slidesShowed+1)+'. '+this.state.deckSlidesTitles[slidesShowed]} bordered size='medium' />
+                </Grid.Column>;
                 columnsContent[columnCount] = singleColumn;
                 columnCount ++;
                 slidesShowed ++;
             }
 
             singleRow = <Grid.Row  key={i.toString()}>
-                          {columnsContent}
-                        </Grid.Row>;
+                {columnsContent}
+            </Grid.Row>;
             rowsContent[i]=singleRow;
             columnCount = 0;
             columnsContent=[];
@@ -235,55 +235,55 @@ class AttachSlides extends React.Component{
 
         if(this.state.deckSlides.length === 0){ //No slides loaded
             slidesContent = <Segment id="panelSlidesContent">
-                                <Dimmer active inverted>
-                                  <Loader inverted>Loading</Loader>
-                                </Dimmer>
-                                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
-                              </Segment>;
+                <Dimmer active inverted>
+                    <Loader inverted>Loading</Loader>
+                </Dimmer>
+                <Image src="http://semantic-ui.com/images/wireframe/paragraph.png" />
+            </Segment>;
         }else{
 
             let headerContent =  <Grid  aria-describedby="attachSlidesDescription2">
-                                    <Grid.Row columns={1}>
-                                      <Grid.Column>
-                                        <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right" content='Selected Deck'/>
-                                        <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue" tabIndex="0"/>
-                                        <TextArea className="sr-only" id="attachSlidesDescription2" value="Select slides to attach" tabIndex ='-1'/>
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                    <Grid.Row columns={2}>
-                                      <Grid.Column textAlign="left">
-                                      <Label htmlFor="slidesContentId"  color='blue'  pointing="right"  content="Selected slides:"/>
-                                      <Label  id="slidesContentId" content={this.state.selectedSlidesLabel} basic color="blue"/>
+                <Grid.Row columns={1}>
+                    <Grid.Column>
+                        <Label htmlFor="selectedDeckTitleId" as="label"  color="blue" pointing="right" content='Selected Deck'/>
+                        <Label  id="selectedDeckTitleId" content={this.state.selectedDeckTitle} basic color="blue" tabIndex="0"/>
+                        <TextArea className="sr-only" id="attachSlidesDescription2" value="Select slides to attach" tabIndex ='-1'/>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={2}>
+                    <Grid.Column textAlign="left">
+                        <Label htmlFor="slidesContentId"  color='blue'  pointing="right"  content="Selected slides:"/>
+                        <Label  id="slidesContentId" content={this.state.selectedSlidesLabel} basic color="blue"/>
 
-                                      </Grid.Column>
-                                      <Grid.Column textAlign="right" >
-                                        <Button type="button"
-                                           id="attachAllSlidesButtonId"
-                                           color="blue"
-                                           aria-label="Select All"
-                                           data-tooltip="Select All"
-                                           onClick={this.handleAllSlides} >Select All</Button>
-                                        <Button type="button"
-                                            color="blue"
-                                            aria-label="Clear Selection"
-                                            data-tooltip="Clear Selection"
-                                            onClick={this.handleNone}>Clear Selection</Button>
+                    </Grid.Column>
+                    <Grid.Column textAlign="right" >
+                        <Button type="button"
+                            id="attachAllSlidesButtonId"
+                            color="blue"
+                            aria-label="Select All"
+                            data-tooltip="Select All"
+                            onClick={this.handleAllSlides} >Select All</Button>
+                        <Button type="button"
+                            color="blue"
+                            aria-label="Clear Selection"
+                            data-tooltip="Clear Selection"
+                            onClick={this.handleNone}>Clear Selection</Button>
 
-                                      </Grid.Column>
-                                    </Grid.Row>
-                                  </Grid>;
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>;
             let rowsContent=this.loadSlidesGrid();
             slidesContent = <Segment id="panelSlidesContent">
-                               {headerContent}
-                               <Grid columns={this.numColumns}
-                                 style={{maxHeight:'400px',minHeight:'320px',overflowY:'auto'}}
-                                 role="grid"
-                                 aria-expanded="true"
-                                  aria-describedby="gridInstructions">
-                                 <TextArea className="sr-only" id="gridInstructions" value="Use arrow keys to navigate through the grid and then enter to select a slide. You can select more than one slide." tabIndex ='-1'/>
-                                {rowsContent}
-                               </Grid>
-                            </Segment>;
+                {headerContent}
+                <Grid columns={this.numColumns}
+                    style={{maxHeight:'400px',minHeight:'320px',overflowY:'auto'}}
+                    role="grid"
+                    aria-expanded="true"
+                    aria-describedby="gridInstructions">
+                    <TextArea className="sr-only" id="gridInstructions" value="Use arrow keys to navigate through the grid and then enter to select a slide. You can select more than one slide." tabIndex ='-1'/>
+                    {rowsContent}
+                </Grid>
+            </Segment>;
         }
 
         return slidesContent;

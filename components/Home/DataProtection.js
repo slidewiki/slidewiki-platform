@@ -13,14 +13,14 @@ class DataProtection extends React.Component {
                             <h3>1. Recording and processing of data in connection with access over the Internet</h3>
                             <p>When you visit our Web site, our Web server makes a temporary record of each access and stores it in a log file. The following data are recorded, and stored until an automatic deletion date:</p>
                             <ol>
-                              <li>IP address of the requesting processor</li>
-                              <li>Date and time of access</li>
-                              <li>Name and URL of the downloaded file</li>
-                              <li>Volume of data transmitted</li>
-                              <li>Indication whether download was successful</li>
-                              <li>Data identifying the browser software and operating system</li>
-                              <li>Web site from which our site was accessed</li>
-                              <li>Name of your Internet service provider</li>
+                                <li>IP address of the requesting processor</li>
+                                <li>Date and time of access</li>
+                                <li>Name and URL of the downloaded file</li>
+                                <li>Volume of data transmitted</li>
+                                <li>Indication whether download was successful</li>
+                                <li>Data identifying the browser software and operating system</li>
+                                <li>Web site from which our site was accessed</li>
+                                <li>Name of your Internet service provider</li>
                             </ol>
                             <p>The purpose of recording these data is to allow use of the Web site (connection setup), for system security, for technical administration of the network infrastructure and in order to optimize our Internet service. The IP address is only evaluated in the event of fraudulent access to the network infrastructure of the Fraunhofer-Gesellschaft.</p>
                             <p>Apart from the special cases cited above, we do not process personal data without first obtaining your explicit consent to do so. Pseudonymous user profiles can be created as stated under web analysis (see below).</p>

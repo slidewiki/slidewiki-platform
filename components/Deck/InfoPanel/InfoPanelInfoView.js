@@ -73,8 +73,8 @@ class InfoPanelInfoView extends React.Component {
             titlediv =
             <div className="ui segment top attached compact">
                 <h3 className="ui small header">
-                   <i className="grey small file text icon" aria-label="Slide title"></i>
-                   {title}
+                    <i className="grey small file text icon" aria-label="Slide title"></i>
+                    {title}
                 </h3>
             </div>;
 
@@ -91,7 +91,7 @@ class InfoPanelInfoView extends React.Component {
                     <div className="ui vertical segment"><NavLink className="" href={'/deck/' + selector.get('id').split('-')[0]}><i className='warning sign icon'></i>
                         Updated version available</NavLink>
                     </div>}
-                    {titlediv}
+                {titlediv}
                 <div className="ui attached segment">
                     <ContributorsPanel />
                 </div>
@@ -99,9 +99,9 @@ class InfoPanelInfoView extends React.Component {
                     <ActivityFeedPanel />
                 </div>
                 {this.props.ActivityFeedStore.selector.stype === 'deck' ? (
-                  <div className="ui attached segment">
-                      <PresentationPanel />
-                  </div>
+                    <div className="ui attached segment">
+                        <PresentationPanel />
+                    </div>
                 ) : ''}
 
                 <div className="ui attached segment">

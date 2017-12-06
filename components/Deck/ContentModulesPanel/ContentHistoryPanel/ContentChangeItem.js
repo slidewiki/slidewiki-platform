@@ -115,15 +115,15 @@ class ContentChangeItem extends React.Component {
                 && change.oldValue && currentRev !== change.oldValue.ref.revision;
 
             buttons = <Button.Group basic size='tiny' floated='right'>
-                            <Button aria-label='Compare to current slide version' icon='exchange' disabled={isCurrent} onClick={this.handleDiffViewClick.bind(this)}/>
-                            <Button aria-label='Restore slide' icon='history' disabled={!canEdit || !canRestore}
-                                onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
-                        <Button aria-label='View slide' icon tabIndex='0' disabled={!shouldView} onClick={this.handleViewSlideClick.bind(this)}>
-                            <Icon.Group>
-                                <Icon name='unhide'/>
-                                <Icon name='external' corner/>
-                            </Icon.Group>
-                        </Button>
+                <Button aria-label='Compare to current slide version' icon='exchange' disabled={isCurrent} onClick={this.handleDiffViewClick.bind(this)}/>
+                <Button aria-label='Restore slide' icon='history' disabled={!canEdit || !canRestore}
+                    onClick={this.handleRevertClick.bind(this)} tabIndex='0'/>
+                <Button aria-label='View slide' icon tabIndex='0' disabled={!shouldView} onClick={this.handleViewSlideClick.bind(this)}>
+                    <Icon.Group>
+                        <Icon name='unhide'/>
+                        <Icon name='external' corner/>
+                    </Icon.Group>
+                </Button>
             </Button.Group>;
         }
 
@@ -134,14 +134,14 @@ class ContentChangeItem extends React.Component {
                 <List.Content style={{width:'100%'}} tabIndex='0'>
                     <List.Header>
                         <NavLink className="user"
-                                          href={'/user/' + change.username}> {change.username}</NavLink> {description} {buttons}
+                            href={'/user/' + change.username}> {change.username}</NavLink> {description} {buttons}
                     </List.Header>
                     {/*<List.Description>{moment(change.timestamp).calendar(null, {sameElse: 'lll'})}</List.Description>*/}
                     <List.Description>{formatDate(change.timestamp)}, on { datechange.toLocaleDateString('en-GB')} at {datechange.toLocaleTimeString('en-GB')}</List.Description>
                 </List.Content>
             </List.Item>
         );
-    };
+    }
 }
 
 ContentChangeItem.contextTypes = {

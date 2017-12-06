@@ -158,16 +158,16 @@ class Tree extends React.Component {
         let self = this;
         return (
             <HotKeys keyMap={this.getKeyMap()} handlers={this.getKeyMapHandlers()} className="sw-tree"
-                     style={compStyle}>
+                style={compStyle}>
                 <div ref="tree">
                     <TreeNodeList parentNode={self.props.deckTree} onToggleNode={self.props.onToggleNode}
-                                  onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
-                                  onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
-                                  onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
-                                  onMoveNode={self.props.onMoveNode} mode={self.props.mode}
-                                  page={self.props.page} rootNode={self.props.rootNode}
-                                  username={self.props.username}
-                                  permissions={self.props.permissions}/>
+                        onSwitchOnAction={self.props.onSwitchOnAction} onRename={self.props.onRename}
+                        onUndoRename={self.props.onUndoRename} onSave={self.props.onSave}
+                        onAddNode={self.props.onAddNode} onDeleteNode={self.props.onDeleteNode}
+                        onMoveNode={self.props.onMoveNode} mode={self.props.mode}
+                        page={self.props.page} rootNode={self.props.rootNode}
+                        username={self.props.username}
+                        permissions={self.props.permissions}/>
                 </div>
             </HotKeys>
         );

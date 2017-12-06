@@ -14,7 +14,7 @@ export default function loadImportFile(context, payload, done) {
         }
         //let pageTitle = shortTitle + ' | Import presentation | ' + payload.params.stype + ' | ' + payload.params.sid;
         //context.dispatch('UPDATE_PAGE_TITLE', {
-            //pageTitle: pageTitle
+        //pageTitle: pageTitle
         //});
         done();
     });

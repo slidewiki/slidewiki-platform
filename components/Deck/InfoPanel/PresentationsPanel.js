@@ -93,7 +93,7 @@ class PresentationsPanel extends React.Component {
                                 itemRenderer={this.renderItem.bind(this)}
                                 length={this.props.ActivityFeedStore.presentations.length}
                                 type={'simple'}>
-                        </ReactList>
+                            </ReactList>
                         }
                     </div>
                 </div>

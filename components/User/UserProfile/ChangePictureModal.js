@@ -68,41 +68,41 @@ class ChangePictureModal extends React.Component {
 
     render() {
         return (
-          <Modal trigger={
-                  <Button tabIndex='-1' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} style={{'display': 'none'}}/>
-                 }
-              open={this.state.modalOpen}
-              onClose={this.handleClose}
-              size="small"
-              role="dialog"
-              id="ChangePictureModal"
-              aria-labelledby="ChangePictureModalHeader"
-              aria-describedby="ChangePictureModalDescription"
-              tabIndex="0">
-              <FocusTrap
-                  id='focus-trap-ChangePictureModal'
-                  className = "header"
-                  active={this.state.activeTrap}
-                  focusTrapOptions={{
-                      onDeactivate: this.unmountTrap,
-                      clickOutsideDeactivates: false,
-                      initialFocus: '#ChangePictureModalSaveButton',
-                  }}>
-                  <Modal.Header className="ui left aligned" as="h1" id="ChangePictureModalHeader">
+            <Modal trigger={
+                <Button tabIndex='-1' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} style={{'display': 'none'}}/>
+            }
+            open={this.state.modalOpen}
+            onClose={this.handleClose}
+            size="small"
+            role="dialog"
+            id="ChangePictureModal"
+            aria-labelledby="ChangePictureModalHeader"
+            aria-describedby="ChangePictureModalDescription"
+            tabIndex="0">
+                <FocusTrap
+                    id='focus-trap-ChangePictureModal'
+                    className = "header"
+                    active={this.state.activeTrap}
+                    focusTrapOptions={{
+                        onDeactivate: this.unmountTrap,
+                        clickOutsideDeactivates: false,
+                        initialFocus: '#ChangePictureModalSaveButton',
+                    }}>
+                    <Modal.Header className="ui left aligned" as="h1" id="ChangePictureModalHeader">
                       Crop your image
-                  </Modal.Header>
-                  <Modal.Content>
-                      <Divider />
-                      <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
-                      <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}}/>
-                      <Divider />
-                      <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
-                        <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                        <Button id="ChangePictureModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Save" onClick={this.uploadCroppedPicture} icon="save" labelPosition='left' content="Save"/>
-                      </Modal.Actions>
-                  </Modal.Content>
-              </FocusTrap>
-          </Modal>
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Divider />
+                        <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
+                        <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}}/>
+                        <Divider />
+                        <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
+                            <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
+                            <Button id="ChangePictureModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Save" onClick={this.uploadCroppedPicture} icon="save" labelPosition='left' content="Save"/>
+                        </Modal.Actions>
+                    </Modal.Content>
+                </FocusTrap>
+            </Modal>
         );
     }
 }

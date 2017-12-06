@@ -39,12 +39,12 @@ class AttachMenu extends React.Component{
 
     render(){
         return(
-          <Menu attached='top' tabular role="tablist">
-               <Menu.Item as="button" name="From My Decks" id="tabMyDecksId" active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
-                            role="tab" tabIndex="0" />
-               <Menu.Item as="button" name="From SlideWiki" id="tabFromSlideWikiId" active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
-                            onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
-         </Menu>
+            <Menu attached='top' tabular role="tablist">
+                <Menu.Item as="button" name="From My Decks" id="tabMyDecksId" active={this.state.activeItem === 'MyDecks'} aria-selected={this.state.activeItem === 'MyDecks'} onClick={this.handleMyDecksClick}
+                    role="tab" tabIndex="0" />
+                <Menu.Item as="button" name="From SlideWiki" id="tabFromSlideWikiId" active={this.state.activeItem === 'SlideWiki'} aria-selected={this.state.activeItem === 'SlideWiki'}
+                    onClick={this.handleSlideWikiClick} role="tab" tabIndex="0" />
+            </Menu>
         );
     }
 }

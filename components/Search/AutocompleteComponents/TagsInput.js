@@ -49,10 +49,10 @@ class TagsInput extends React.Component {
         });
         return (
             <div className={classes} id='tags_input_div'>
-              <input type="hidden" name="tags_input" ref='tags_input' id='tags_input'></input>
-              <div className="menu" ref="dropdown_menu"></div>
-              <div className="default text" id='tags_input_field'>{this.props.placeholder}</div>
-          </div>
+                <input type="hidden" name="tags_input" ref='tags_input' id='tags_input'></input>
+                <div className="menu" ref="dropdown_menu"></div>
+                <div className="default text" id='tags_input_field'>{this.props.placeholder}</div>
+            </div>
         );
     }
 }

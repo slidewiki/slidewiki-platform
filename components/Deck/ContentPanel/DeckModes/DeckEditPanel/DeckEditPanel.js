@@ -24,12 +24,12 @@ class DeckEditPanel extends React.Component {
         this.handleAuth(this.props.selector);
 
         return (
-        <div ref="deckEditPanel" className="ui bottom attached segment">
-            <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps}
-              selector={this.props.selector}
-              userid={this.props.UserProfileStore.userid}
-              groups={this.props.UserProfileStore.user.groups}/>
-        </div>
+            <div ref="deckEditPanel" className="ui bottom attached segment">
+                <DeckPropertiesEditor deckProps={this.props.DeckEditStore.deckProps}
+                    selector={this.props.selector}
+                    userid={this.props.UserProfileStore.userid}
+                    groups={this.props.UserProfileStore.user.groups}/>
+            </div>
         );
     }
 }

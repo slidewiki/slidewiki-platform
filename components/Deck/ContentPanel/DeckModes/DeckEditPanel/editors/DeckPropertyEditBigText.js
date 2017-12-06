@@ -7,8 +7,8 @@ class DeckPropertyItemBigText extends React.Component {
     render() {
         return (
             <div className="item">
-                 <span className="header">{this.props.fieldname}</span>
-                 <span className="description">
+                <span className="header">{this.props.fieldname}</span>
+                <span className="description">
                     <textarea onChange={this.handleChange}>
                         {this.props.fieldcontent}
                     </textarea>

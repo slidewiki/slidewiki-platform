@@ -22,7 +22,7 @@ export default function loadContentDiscussion(context, payload, done) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             return;
-          // context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
+            // context.dispatch('LOAD_CONTENT_DISCUSSION_FAILURE', err);
         } else {
             context.dispatch('LOAD_CONTENT_DISCUSSION_SUCCESS', res);
             context.dispatch('UPDATE_MODULE_TYPE_SUCCESS', {moduleType: 'discussion'});

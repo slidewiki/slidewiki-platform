@@ -133,10 +133,10 @@ export default {
                 headers: { '----jwt----': args.jwt },
                 json: true
             })
-            .then((body) => {
-                callback(null, body);
-            })
-            .catch((err) => callback(err));
+                .then((body) => {
+                    callback(null, body);
+                })
+                .catch((err) => callback(err));
         } else if (resource === 'deck.properties') { //this is only used for deck edit - thus we call all the api routes with one service call
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             let deckPromise = rp.get({uri: Microservices.deck.uri + '/deck/' + args.sid}).promise().bind(this);
@@ -215,8 +215,8 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'create', Method: req.method});
         if (resource === 'deck.create') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
-//            if (params.tags.length === 1 && params.tags[0].length === 0)
-//                params.tags = undefined;
+            //            if (params.tags.length === 1 && params.tags[0].length === 0)
+            //                params.tags = undefined;
             let toSend = {
                 description: params.description ? params.description : 'empty',
                 language: params.language,
@@ -235,7 +235,7 @@ export default {
                 headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
         } else if (resource === 'deck.translate'){
 
             let toSend = {
@@ -251,7 +251,7 @@ export default {
                 //console.log('DECK:' + JSON.stringify(data.root_deck));
                 callback(false, data);
             })
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {
@@ -284,7 +284,7 @@ export default {
                 headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
             //update a deck by creating a new revision and setting it as active
         } else if (resource === 'deck.updateWithRevision') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
@@ -323,7 +323,7 @@ export default {
                 headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
         } else if (resource === 'deck.fork') {
             //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
             rp({
@@ -332,7 +332,7 @@ export default {
                 json: true,
                 headers: {'----jwt----': params.jwt},
             }).then((res) => callback(false, res))
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
         }
         else if (resource === 'deck.updateEditors') {
             rp({
@@ -347,7 +347,7 @@ export default {
                 },
                 headers: { '----jwt----': params.jwt }
             }).then((deck) => callback(false, deck))
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
         } else if (resource === 'deck.updateTags'){
 
             // send tags to tag-service

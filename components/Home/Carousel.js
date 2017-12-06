@@ -64,49 +64,49 @@ class Carousel extends React.Component {
                                             <ul className="glide__track" style={{minHeight: '300px'}}>
                                                 <li className="glide__slide">
                                                     <NavLink href="/discover" className="ui large image" tabIndex="-1">
-                                                    <FormattedMessage id="carousel.create_alt" defaultMessage='Create slides with SlideWiki.'>
-                                                    {
-                                                        (alt) => <img
+                                                        <FormattedMessage id="carousel.create_alt" defaultMessage='Create slides with SlideWiki.'>
+                                                            {
+                                                                (alt) => <img
                                                                     src="/assets/images/carousel/SW-logo-squ.png"
                                                                     alt={alt}
-                                                                 />
-                                                    }
-                                                    </FormattedMessage>
+                                                                />
+                                                            }
+                                                        </FormattedMessage>
                                                     </NavLink>
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <NavLink href="/discover" className="ui large image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.reuse_alt" defaultMessage='Repurpose & Reuse Educational Content through open educational resources.'>
-                                                        {
-                                                            (alt) => <img
-                                                                        src="/assets/images/carousel/OER-Logo.png"
-                                                                        alt={alt}
-                                                                     />
-                                                        }
+                                                            {
+                                                                (alt) => <img
+                                                                    src="/assets/images/carousel/OER-Logo.png"
+                                                                    alt={alt}
+                                                                />
+                                                            }
                                                         </FormattedMessage>
                                                     </NavLink>
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <NavLink href="/discover" className="ui large image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.collaborative_alt" defaultMessage='Collaborative Content Authoring.'>
-                                                        {
-                                                            (alt) => <img
-                                                                        src="/assets/images/carousel/hands-1926704_640.png"
-                                                                        alt={alt}
-                                                                     />
-                                                        }
+                                                            {
+                                                                (alt) => <img
+                                                                    src="/assets/images/carousel/hands-1926704_640.png"
+                                                                    alt={alt}
+                                                                />
+                                                            }
                                                         </FormattedMessage>
                                                     </NavLink>
                                                 </li>
                                                 <li className="glide__slide" >
                                                     <NavLink href="/discover" className="ui large  image" tabIndex="-1">
                                                         <FormattedMessage id="carousel.communities_alt" defaultMessage='Supporting Knowledge Communities.'>
-                                                        {
-                                                            (alt) => <img
-                                                                        src="/assets/images/carousel/globe-squ-transparent.png"
-                                                                        alt={alt}
-                                                                     />
-                                                        }
+                                                            {
+                                                                (alt) => <img
+                                                                    src="/assets/images/carousel/globe-squ-transparent.png"
+                                                                    alt={alt}
+                                                                />
+                                                            }
                                                         </FormattedMessage>
                                                     </NavLink>
                                                 </li>

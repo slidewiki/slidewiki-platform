@@ -27,10 +27,10 @@ class UserGroupEdit extends React.Component {
                 allowOutsideClick: true,
                 buttonsStyling: false
             })
-            .then(() => {
-                return true;
-            })
-            .catch();
+                .then(() => {
+                    return true;
+                })
+                .catch();
             return;
         }
         this.refs.GroupName.value = this.props.currentUsergroup.name;
@@ -117,10 +117,10 @@ class UserGroupEdit extends React.Component {
                 allowOutsideClick: true,
                 buttonsStyling: false
             })
-            .then(() => {
-                return true;
-            })
-            .catch();
+                .then(() => {
+                    return true;
+                })
+                .catch();
             return;
         }
 
@@ -151,20 +151,20 @@ class UserGroupEdit extends React.Component {
 
         //add creator as default member
         userlist.push(
-          <div className="item" key={this.props.userid}>
-            <div className="ui grid">
-              <div className="one wide column middle aligned">
-                <UserPicture picture={ this.props.picture } username={ this.props.username } avatar={ true } width= { 24 } />
-              </div>
-              <div className="fourteen wide column">
-                <div className="content">
-                    <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
-                    <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.username}</a>
-                    <div className="description">Group owner</div>
+            <div className="item" key={this.props.userid}>
+                <div className="ui grid">
+                    <div className="one wide column middle aligned">
+                        <UserPicture picture={ this.props.picture } username={ this.props.username } avatar={ true } width= { 24 } />
+                    </div>
+                    <div className="fourteen wide column">
+                        <div className="content">
+                            <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                            <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.username}</a>
+                            <div className="description">Group owner</div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         );
 
         // console.log('render UserGroupEdit:', this.props.currentUsergroup.members);
@@ -174,32 +174,32 @@ class UserGroupEdit extends React.Component {
                     this.handleClickRemoveMember(member);
                 };
                 let optionalElement = (member.organization || member.country) ?  (
-                  <div>
-                    {member.organization || 'Unknown organization'} ({member.country || 'unknown country'})
-                    <br/>
-                  </div>
+                    <div>
+                        {member.organization || 'Unknown organization'} ({member.country || 'unknown country'})
+                        <br/>
+                    </div>
                 ) : '';
                 let optionalText = (member.joined) ? ('Joined '+timeSince((new Date(member.joined)))+' ago') : '';
                 userlist.push(
-                  (
-                    <div className="item" key={member.userid}>
-                      <div className="ui grid">
-                        <div className="one wide column middle aligned">
-                          <UserPicture picture={ member.picture } username={ member.username } avatar={ true } width= { 24 } />
+                    (
+                        <div className="item" key={member.userid}>
+                            <div className="ui grid">
+                                <div className="one wide column middle aligned">
+                                    <UserPicture picture={ member.picture } username={ member.username } avatar={ true } width= { 24 } />
+                                </div>
+                                <div className="fourteen wide column">
+                                    <div className="content">
+                                        <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                                        <a className="header" href={'/user/' + member.username} target="_blank">{member.username}</a>
+                                        <div className="description">{optionalElement}{optionalText}</div>
+                                    </div>
+                                </div>
+                                <div className="one wide column middle aligned">
+                                    <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
+                                </div>
+                            </div>
                         </div>
-                        <div className="fourteen wide column">
-                          <div className="content">
-                              <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
-                              <a className="header" href={'/user/' + member.username} target="_blank">{member.username}</a>
-                              <div className="description">{optionalElement}{optionalText}</div>
-                          </div>
-                        </div>
-                        <div className="one wide column middle aligned">
-                          <i className="remove middle aligned icon" key={member.userid} onClick={fct}></i>
-                        </div>
-                      </div>
-                    </div>
-                  )
+                    )
                 );
             });
         }

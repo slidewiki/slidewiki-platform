@@ -22,7 +22,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
         confirmButtonText: 'Yes, delete it!'
 
     }).then((accepted) => {
-       //load all required actions in parallel
+        //load all required actions in parallel
         async.parallel([
             (callback) => {
                 context.executeAction(deleteTreeNode, payload, callback);
@@ -31,8 +31,8 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
             // final callback
         (err, results) => {
             if (!err) {
-              //the logic for retrieving the parent node is handles in the stores
-              //therefore, we need to get access to the selector from the store
+                //the logic for retrieving the parent node is handles in the stores
+                //therefore, we need to get access to the selector from the store
                 let currentState = context.getStore(DeckTreeStore).getState();
                 let selector = {
                     id: currentState.selector.get('id'),
@@ -45,7 +45,7 @@ export default function deleteTreeNodeAndNavigate(context, payload, done) {
                 });
             } else {
                 log.error(context, {filepath: __filename});
-              //context.executeAction(serviceUnavailable, payload, done);
+                //context.executeAction(serviceUnavailable, payload, done);
             }
             done();
         });

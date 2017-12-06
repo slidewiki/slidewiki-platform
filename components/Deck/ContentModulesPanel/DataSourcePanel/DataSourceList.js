@@ -17,7 +17,7 @@ class DataSourceList extends React.Component {
                 <div className="ui relaxed divided list">
                     {list}
                 </div>
-             </div>
+            </div>
         );
     }
 }

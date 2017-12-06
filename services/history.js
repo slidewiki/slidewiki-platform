@@ -74,7 +74,7 @@ export default {
                 },
                 headers: { '----jwt----': params.jwt }
             }).then((deck) => callback(false, deck))
-            .catch((err) => callback(err));
+                .catch((err) => callback(err));
         }
     },
     update: (req, resource, params, body, config, callback) => {

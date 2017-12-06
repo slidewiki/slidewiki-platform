@@ -22,7 +22,7 @@ import AttachSlides from './AttachSlides';
 
 
 class AttachSubdeckModal extends React.Component{
-  /*Props expected:
+    /*Props expected:
     buttonStyle = {
       classNames : string ->additional clases for the trigger button
       iconSize:  enum {large|small} -> final size for displaying the icon of the button. Medium is not accepted by react-semantic-ui component
@@ -74,7 +74,7 @@ class AttachSubdeckModal extends React.Component{
 
     handleOpen(){
 
-      //fETCH USER DECKS
+        //fETCH USER DECKS
         let payload = {params:{
             id2:this.props.UserProfileStore.userid,
             id:this.props.UserProfileStore.userid,
@@ -235,11 +235,11 @@ class AttachSubdeckModal extends React.Component{
             }
 
             actionButton = <Button id="nextAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Next Select slides"
-                              data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
-                               <Icon name="arrow right"/>
+                data-tooltip="Attach" disabled={this.state.selectedDeckId===-1} onClick={this.handleNextButton}>
+                <Icon name="arrow right"/>
                                 Next
-                               <Icon name="arrow right"/>
-                            </Button>;
+                <Icon name="arrow right"/>
+            </Button>;
             actionButton2='';
         } else{ //deck selected, diplay its slides, previous and attach button
             attachMenu ='';
@@ -248,25 +248,25 @@ class AttachSubdeckModal extends React.Component{
 
             segmentPanelContent = <AttachSlides numColumns="3" />;
             actionButton = <Button id="attachAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Attach"
-                            data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
-                             <Icon name="attach"/>
+                data-tooltip="Attach" disabled={this.state.selectedSlides.length===0} onClick={this.handleAttachButton}>
+                <Icon name="attach"/>
                               Attach
-                             <Icon name="attach"/>
-                          </Button>;
+                <Icon name="attach"/>
+            </Button>;
             actionButton2 =<Button id="previousAttachModal" color="green" icon tabIndex="0" type="button" aria-label="Previos"
-                            data-tooltip="Previous" onClick={this.handlePreviousButton}>
-                             <Icon name="arrow left"/>
+                data-tooltip="Previous" onClick={this.handlePreviousButton}>
+                <Icon name="arrow left"/>
                               Previous
-                             <Icon name="arrow left"/>
-                          </Button>;
+                <Icon name="arrow left"/>
+            </Button>;
 
         }
 
         let attachSlideBtn = <Popup trigger={<Button as="button" className={this.props.buttonStyle.classNames}
-                                                     type="button" aria-label="Attach Slides"
-                                                     aria-hidden={this.state.modalOpen}
-                                                     basic icon onClick={this.handleOpen}
-                                                     tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
+            type="button" aria-label="Attach Slides"
+            aria-hidden={this.state.modalOpen}
+            basic icon onClick={this.handleOpen}
+            tabIndex={this.props.buttonStyle.noTabIndex ? -1 : 0}>
             <Icon.Group size={this.props.buttonStyle.iconSize}>
                 <Icon className="grey" name="file text outline"/>
                 <Icon className="corner black" name="attach"/>
@@ -275,7 +275,7 @@ class AttachSubdeckModal extends React.Component{
 
 
         return (
-           <Modal trigger={attachSlideBtn}
+            <Modal trigger={attachSlideBtn}
                 open={this.state.modalOpen}
                 onClose={this.handleClose}
                 role="dialog"
@@ -285,37 +285,37 @@ class AttachSubdeckModal extends React.Component{
                 aria-hidden = {!this.state.modalOpen}
                 tabIndex="0">
                 <FocusTrap
-                        id="focus-trap-attachSubdeckModal"
-                        focusTrapOptions={{
-                            onDeactivate: this.unmountTrap,
-                            clickOutsideDeactivates: true,
-                            initialFocus: '#tabMyDecksId'
-                        }}
-                        active={this.state.activeTrap}
-                        className = "header">
+                    id="focus-trap-attachSubdeckModal"
+                    focusTrapOptions={{
+                        onDeactivate: this.unmountTrap,
+                        clickOutsideDeactivates: true,
+                        initialFocus: '#tabMyDecksId'
+                    }}
+                    active={this.state.activeTrap}
+                    className = "header">
 
-                <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
+                    <Modal.Header className="ui center aligned" as="h1" id="attachModalHeader">
                      Attach Slides
-                </Modal.Header>
-                <Modal.Content>
-                    <Container text>
-                         <Segment color="blue" textAlign="center" padded>
-                            {attachMenu}
-                            <Segment attached="bottom" textAlign="left" role="tabpanel">
-                               {modalDescription}
-                               {searchForm}
-                               {segmentPanelContent}
-                            </Segment>
-                            <Modal.Actions>
-                              {actionButton}
-                              {actionButton2}
-                              <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
+                    </Modal.Header>
+                    <Modal.Content>
+                        <Container text>
+                            <Segment color="blue" textAlign="center" padded>
+                                {attachMenu}
+                                <Segment attached="bottom" textAlign="left" role="tabpanel">
+                                    {modalDescription}
+                                    {searchForm}
+                                    {segmentPanelContent}
+                                </Segment>
+                                <Modal.Actions>
+                                    {actionButton}
+                                    {actionButton2}
+                                    <Button id="cancelAttachModal" color="red" tabIndex="0" type="button" aria-label="Cancel" data-tooltip="Cancel" onClick={this.handleClose} >
                                 Cancel
-                              </Button>
-                            </Modal.Actions>
-                         </Segment>
-                   </Container>
-                </Modal.Content>
+                                    </Button>
+                                </Modal.Actions>
+                            </Segment>
+                        </Container>
+                    </Modal.Content>
 
                 </FocusTrap>
             </Modal>

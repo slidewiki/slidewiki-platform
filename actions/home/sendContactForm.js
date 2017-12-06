@@ -17,9 +17,9 @@ export default function sendContactForm(context,payload,done){
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-            .then(() => {
+                .then(() => {
                 //nothing
-            });
+                });
         } else {
             swal({
                 title: payload.swal_messages.title,
@@ -31,14 +31,14 @@ export default function sendContactForm(context,payload,done){
                 allowOutsideClick: false,
                 buttonsStyling: false
             })
-            .then(() => {
+                .then(() => {
                 //go to homepage
-                context.executeAction(navigateAction, {
-                  //go to home page after
-                    url: '/'
-                });
+                    context.executeAction(navigateAction, {
+                        //go to home page after
+                        url: '/'
+                    });
 
-            });
+                });
         }
         done();
     });

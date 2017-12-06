@@ -35,7 +35,7 @@ class ContentQuestionsList extends React.Component {
                 <div className="ui styled fluid accordion">
                     {list}
                 </div>
-             </div>
+            </div>
         );
     }
 }

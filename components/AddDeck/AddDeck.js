@@ -167,10 +167,10 @@ class AddDeck extends React.Component {
         let noOfSlides = String(this.props.ImportStore.noOfSlides);
         let totalNoOfSlides = String(this.props.ImportStore.totalNoOfSlides);
         let progressLabel = (totalNoOfSlides === '0' && this.props.ImportStore.uploadProgress < 65) ? 'Uploading file' :
-        (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
-        (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
-        (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
-        'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
+            (this.props.ImportStore.uploadProgress === 65) ? 'Converting file' :
+                (this.props.ImportStore.uploadProgress !== 100) ? 'Importing slide ' + noOfSlides + ' of ' + totalNoOfSlides :
+                    (noOfSlides === totalNoOfSlides) ? 'Slides uploaded!' :
+                        'Imported ' + noOfSlides  + ' of ' + totalNoOfSlides + ' slides';//this should not happen, but user should know in case it does
         $('#progresslabel_addDeck_upload').text(parseInt(this.props.ImportStore.uploadProgress) + '% - ' + progressLabel);
 
         if (this.props.ImportStore.uploadProgress === 100) {
@@ -336,21 +336,21 @@ class AddDeck extends React.Component {
         </select>;
         */
         let themeOptions = <select className="ui search dropdown" id="themes" aria-labelledby="theme"  ref="select_themes">
-                <option value="default">White - Default</option>
-                <option value="beige">Cream</option>
-                <option value="black">Black</option>
-                <option value="league">Dark Grey</option>
-                <option value="sky">Pale Blue</option>
-                <option value="solarized">Beige</option>
-                <option value="moon">Dark Slate Blue</option>
-                <option value="night">High Contrast 1</option>
-                <option value="blood">High Contrast 2</option>
-                <option value="serif">Serif</option>
-                <option value="simple">Simple</option>
-                <option value="openuniversity">Open University</option>
-                <option value="odimadrid">ODI Madrid</option>
-                <option value="oeg">OEG</option>
-            </select>;
+            <option value="default">White - Default</option>
+            <option value="beige">Cream</option>
+            <option value="black">Black</option>
+            <option value="league">Dark Grey</option>
+            <option value="sky">Pale Blue</option>
+            <option value="solarized">Beige</option>
+            <option value="moon">Dark Slate Blue</option>
+            <option value="night">High Contrast 1</option>
+            <option value="blood">High Contrast 2</option>
+            <option value="serif">Serif</option>
+            <option value="simple">Simple</option>
+            <option value="openuniversity">Open University</option>
+            <option value="odimadrid">ODI Madrid</option>
+            <option value="oeg">OEG</option>
+        </select>;
         // let licenseOptions = <select className="ui search dropdown" aria-labelledby="license" id="license" ref="select_licenses">
         //   <option value="CC BY-SA" >Creative Commons Attribution-ShareAlike</option>
         //   <option value="CC BY" >Creative Commons Attribution</option>

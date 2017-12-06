@@ -187,18 +187,18 @@ export default {
                 }),
                 resolveWithFullResponse: true
             })
-              .then((res) => {
-                  // console.log('And we got', res.body);
-                  callback(null, {
-                      username: JSON.parse(res.body).username,
-                      userid: JSON.parse(res.body).userid,
-                      jwt: res.headers['----jwt----']
-                  });
-              })
-              .catch((err) => {
-                  // console.log('Error', err);
-                  callback(err, null);
-              });
+                .then((res) => {
+                    // console.log('And we got', res.body);
+                    callback(null, {
+                        username: JSON.parse(res.body).username,
+                        userid: JSON.parse(res.body).userid,
+                        jwt: res.headers['----jwt----']
+                    });
+                })
+                .catch((err) => {
+                    // console.log('Error', err);
+                    callback(err, null);
+                });
         }
     },
 
@@ -223,5 +223,5 @@ export default {
             });
         }
     }
-        // delete: (req, resource, params, config, callback) => {}
+    // delete: (req, resource, params, config, callback) => {}
 };

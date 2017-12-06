@@ -38,13 +38,13 @@ class DeckList extends React.Component {
                                     <div className="meta">Date: {deckDate}</div>
                                 </div>
                                 <div className="column right aligned">
-                                        <div className="ui large label" tabIndex="0">
+                                    <div className="ui large label" tabIndex="0">
                                         <i className="ui comments outline icon" aria-label="Deck language"></i>
-                                            {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
-                                        {/*<div className="ui large label" tabIndex="0" >
+                                        {/*<i className={countryFlag + ' flag'} aria-label="Language"></i>*/}{deckLanguage}</div>
+                                    {/*<div className="ui large label" tabIndex="0" >
                                             <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}</div>*/}
-                                       <div className="ui large label" tabIndex="0" >
-                                            <i className="fork icon" aria-label="Number of forks"></i>{deck.forkCount}</div>
+                                    <div className="ui large label" tabIndex="0" >
+                                        <i className="fork icon" aria-label="Number of forks"></i>{deck.forkCount}</div>
                                 </div>
                             </div>
                         </div>

@@ -164,13 +164,13 @@ class TreePanel extends React.Component {
 
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui icon fluid buttons">
-                        <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
-                            <i className="large blue fork icon"></i>
+                            <div className={classes_forksbtn} aria-label="Fork this deck to create your own copy" tabIndex="0" role="button" data-tooltip="Fork deck" onClick={this.handleFork.bind(this)}>
+                                <i className="large blue fork icon"></i>
+                            </div>
+                            <div className={classes_translatebtn} role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck" tabIndex="-1">
+                                <i className="translate blue large icon"></i>
+                            </div>
                         </div>
-                        <div className={classes_translatebtn} role="button" aria-label="Translate this deck. Not currently available" data-tooltip="Translate deck" tabIndex="-1">
-                            <i className="translate blue large icon"></i>
-                        </div>
-                    </div>
                     }
                     <div className="ui attached segment" style={treeDIVStyles}>
                         {decktreeError ? <div className="ui error message" style={{

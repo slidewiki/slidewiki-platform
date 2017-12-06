@@ -25,9 +25,9 @@ export default {
         form.append('tags', JSON.stringify(params.tags));
 
         form.append('contentType', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-            //knownLength: params.file.size ? params.file.size : params.base64.length
+        //knownLength: params.file.size ? params.file.size : params.base64.length
 
-            // form.submit(Microservices.import.url + '/importPPTX'
+        // form.submit(Microservices.import.url + '/importPPTX'
         let request = form.submit({
             port: Microservices.import.port ? Microservices.import.port : 3000,
             host: Microservices.import.host,

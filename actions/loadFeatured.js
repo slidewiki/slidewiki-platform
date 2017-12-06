@@ -4,7 +4,7 @@ const log = require('./log/clog');
 export default function loadFeatured(context, payload, done) {
     log.info(context);
     context.service.read('deck.featured', payload, {timeout: 20 * 1000}, (err, res) => {
-      //  console.log('Executing loadPresentation action');
+        //  console.log('Executing loadPresentation action');
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);

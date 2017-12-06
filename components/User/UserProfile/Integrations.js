@@ -168,7 +168,7 @@ class Integrations extends React.Component {
         if ( (data.token.length < 1)
           || (data.provider.length < 3)
           || (data.token_creation.length < 22) )
-            //Failure
+        //Failure
         {
             this.context.executeAction(updateProviderAction, '');
             return false;
@@ -281,76 +281,76 @@ class Integrations extends React.Component {
         let text_providerDisabled = 'This provider is currently disabled. To enable it, click on the button next to it.';
 
         return (
-          <div>
-              <div className="ui segments">
+            <div>
+                <div className="ui segments">
 
-                  <div className="ui secondary segment">
-                      <h3>Hint</h3>
-                  </div>
-                  <div className="ui segment">
-                    <p>
+                    <div className="ui secondary segment">
+                        <h3>Hint</h3>
+                    </div>
+                    <div className="ui segment">
+                        <p>
                       SlideWiki provides the possibility to sign in with multiple providers (new features will be added soon).
                       In order to use a specific provider you have to enable the provider separately.
                       Enabling a provider will open a new window for you to sign in.
                       Please sign in and don&apos;t close the opened window, as it will close automatically.
-                    </p>
-                  </div>
+                        </p>
+                    </div>
 
-              </div>
-              <div className="ui segments">
+                </div>
+                <div className="ui segments">
 
-                  <div className="ui secondary segment">
-                      <h3>Login Provider</h3>
-                  </div>
-                  <div className="ui segment">
-                      <div className="ui three column vertically divided grid">
-                        <div className="row">
-                          <div className="one wide column">
-                            <i className={google_icon_classes} ></i>
-                          </div>
-                          <div className="ten wide column">
-                            <div className="ui large label">
-                              {(google) ? text_providerEnabled : text_providerDisabled}
+                    <div className="ui secondary segment">
+                        <h3>Login Provider</h3>
+                    </div>
+                    <div className="ui segment">
+                        <div className="ui three column vertically divided grid">
+                            <div className="row">
+                                <div className="one wide column">
+                                    <i className={google_icon_classes} ></i>
+                                </div>
+                                <div className="ten wide column">
+                                    <div className="ui large label">
+                                        {(google) ? text_providerEnabled : text_providerDisabled}
+                                    </div>
+                                </div>
+                                <div className="two wide column">
+                                    {
+                                        (google) ? (
+                                            <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} >Disable</button>
+                                        ) : (
+                                            <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} >Enable</button>
+                                        )
+                                    }
+                                </div>
                             </div>
-                          </div>
-                          <div className="two wide column">
-                            {
-                              (google) ? (
-                                <button className={google_disable_classes} name="google" onClick={this.handleDisable.bind(this)} >Disable</button>
-                              ) : (
-                                <button className={google_enable_classes} name="google" onClick={this.handleEnable.bind(this)} >Enable</button>
-                              )
-                            }
-                          </div>
                         </div>
-                      </div>
 
-                      <div className="ui three column vertically divided grid">
-                        <div className="row">
-                          <div className="one wide column">
-                            <i className={github_icon_classes} ></i>
-                          </div>
-                          <div className="ten wide column">
-                            <div className="ui large label">
-                              {(github) ? text_providerEnabled : text_providerDisabled}
+                        <div className="ui three column vertically divided grid">
+                            <div className="row">
+                                <div className="one wide column">
+                                    <i className={github_icon_classes} ></i>
+                                </div>
+                                <div className="ten wide column">
+                                    <div className="ui large label">
+                                        {(github) ? text_providerEnabled : text_providerDisabled}
+                                    </div>
+                                </div>
+                                <div className="two wide column">
+                                    {
+                                        (github) ? (
+                                            <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} >Disable</button>
+                                        ) : (
+                                            <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} >Enable</button>
+                                        )
+                                    }
+                                </div>
                             </div>
-                          </div>
-                          <div className="two wide column">
-                            {
-                              (github) ? (
-                                <button className={github_disable_classes} name="github" onClick={this.handleDisable.bind(this)} >Disable</button>
-                              ) : (
-                                <button className={github_enable_classes} name="github" onClick={this.handleEnable.bind(this)} >Enable</button>
-                              )
-                            }
-                          </div>
                         </div>
-                      </div>
-                      {(this.props.providerAction) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
-                  </div>
+                        {(this.props.providerAction) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                    </div>
 
-              </div>
-          </div>
+                </div>
+            </div>
         );
     }
 }

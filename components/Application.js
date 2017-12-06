@@ -20,22 +20,22 @@ class Application extends React.Component {
         if (this.props.ErrorStore.error) {
             return (
 
-                    <div className="slidewiki-page">
-                        <Header currentRoute={this.props.currentRoute} links={pages} />
-                        <Error error={this.props.ErrorStore.error} />
-                        <Footer />
-                    </div>
+                <div className="slidewiki-page">
+                    <Header currentRoute={this.props.currentRoute} links={pages} />
+                    <Error error={this.props.ErrorStore.error} />
+                    <Footer />
+                </div>
 
             );
         }
         else {
             return (
 
-                    <div className="slidewiki-page">
-                        <Header currentRoute={this.props.currentRoute} links={pages} />
-                        <Handler />
-                        <Footer />
-                    </div>
+                <div className="slidewiki-page">
+                    <Header currentRoute={this.props.currentRoute} links={pages} />
+                    <Handler />
+                    <Footer />
+                </div>
 
             );
         }

@@ -37,20 +37,20 @@ class AddReply extends React.Component {
         const replyTitle = ((comment.title.startsWith('re: ')) ? '' :  're: ') + comment.title;
 
         return (
-          <form className="ui form reply">
-              <div className="ui seven wide required field">
-                  <label htmlFor="replytitle">Reply title</label>
-                  <input type="text" ref="replytitle" id="replytitle" name="replytitle" defaultValue={replyTitle} aria-required="true" required/>
-              </div>
-              <div className="ui field">
-                  <label htmlFor="replytext">Reply text</label>
-                  <textarea ref="replytext" id="replytext" name="replytext" style={{minHeight: '6em', height: '6em'}} placeholder="Text" autoFocus></textarea>
-              </div>
-              <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
-                  <i className="icon edit"></i> Add Reply
-              </button>
-              <div className="ui error message"/>
-          </form>
+            <form className="ui form reply">
+                <div className="ui seven wide required field">
+                    <label htmlFor="replytitle">Reply title</label>
+                    <input type="text" ref="replytitle" id="replytitle" name="replytitle" defaultValue={replyTitle} aria-required="true" required/>
+                </div>
+                <div className="ui field">
+                    <label htmlFor="replytext">Reply text</label>
+                    <textarea ref="replytext" id="replytext" name="replytext" style={{minHeight: '6em', height: '6em'}} placeholder="Text" autoFocus></textarea>
+                </div>
+                <button tabIndex="0" type="submit" className="ui blue labeled submit icon button" >
+                    <i className="icon edit"></i> Add Reply
+                </button>
+                <div className="ui error message"/>
+            </form>
         );
     }
 }

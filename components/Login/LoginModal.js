@@ -134,31 +134,31 @@ class LoginModal extends React.Component {
                 cancelButtonClass: 'ui orange button',
                 buttonsStyling: false
             })
-            .then((dismiss) => {
+                .then((dismiss) => {
                 // console.log('action after dismiss', dismiss);
-                $('.ui.login.modal').modal('hide');
-                return this.handleRegisterFirst(dismiss);
-            })
-            .catch((action) => {
+                    $('.ui.login.modal').modal('hide');
+                    return this.handleRegisterFirst(dismiss);
+                })
+                .catch((action) => {
                 // console.log('action after click', action);
-                localStorage.setItem(MODI, 'login_failed');
+                    localStorage.setItem(MODI, 'login_failed');
 
-                //delete old data
-                let that = this;
-                async.series([
-                    function(callback) {
-                        that.context.executeAction(newSocialData, {});
-                        callback(null, 'one');
-                    }
-                ],
-                // optional callback
-                (err, results) => {
-                    if (action !== 'close')
-                        that.handleLoginButton();
+                    //delete old data
+                    let that = this;
+                    async.series([
+                        function(callback) {
+                            that.context.executeAction(newSocialData, {});
+                            callback(null, 'one');
+                        }
+                    ],
+                        // optional callback
+                    (err, results) => {
+                        if (action !== 'close')
+                            that.handleLoginButton();
+                    });
+
+                    return true;
                 });
-
-                return true;
-            });
         }
         else if (this.props.userid && $('.ui.login.modal').modal('is active')) {
             if (localStorage.getItem(MODI) === 'login')
@@ -324,89 +324,89 @@ class LoginModal extends React.Component {
         });
 
         return(
-          <div>
-            <div className="ui login modal" id='signinModal' style={modalStyle}>
-              <div className="header">
-                  <h1 style={headerStyle}>
-                    <FormattedMessage
-                      id='LoginModal.header.signIn'
-                      defaultMessage='Sign In'
-                    />
-                  </h1>
-              </div>
-              <div className="content">
-                <div className="ui container">
-
-                    <div className="ui blue padded center aligned segment">
-                      <form className="ui form signin">
-                        <div className={inputField_classes}>
-                          <div><label htmlFor="email1" hidden>
+            <div>
+                <div className="ui login modal" id='signinModal' style={modalStyle}>
+                    <div className="header">
+                        <h1 style={headerStyle}>
                             <FormattedMessage
-                              id='LoginModal.label.email'
-                              defaultMessage='E-Mail'
-                            />
-                          </label></div>
-                          <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
-                        </div>
-                        <br/>
-                        <div className={inputField_classes}>
-                          <div><label htmlFor="password1" hidden>
-                            <FormattedMessage
-                              id='LoginModal.label.password'
-                              defaultMessage='Password'
-                            />
-                          </label></div>
-                          <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
-                        </div>
-                        <br/>
-                        <div className="ui center aligned">
-                            <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
-                              <FormattedMessage
-                                id='LoginModal.button.signIn'
+                                id='LoginModal.header.signIn'
                                 defaultMessage='Sign In'
-                              />
-                            </button>
-                        </div>
-                        <br/>
+                            />
+                        </h1>
+                    </div>
+                    <div className="content">
+                        <div className="ui container">
 
-                        <div className="ui error message"/>
-                      </form>
-                      <br/>
-                      <div className="container">
-                        {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
-                        <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
-                        <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
-                      </div>
-                      <br/>
-                      <div className="ui floated right">
-                          <a href="#" onClick={this.handleNoAccessClick}>
+                            <div className="ui blue padded center aligned segment">
+                                <form className="ui form signin">
+                                    <div className={inputField_classes}>
+                                        <div><label htmlFor="email1" hidden>
+                                            <FormattedMessage
+                                                id='LoginModal.label.email'
+                                                defaultMessage='E-Mail'
+                                            />
+                                        </label></div>
+                                        <input type="text" id="email1" name="email1" ref="email1" placeholder={this.context.intl.formatMessage(messages.placeholder_email)} autoFocus tabIndex="0" aria-required="true" required/><i className="mail icon"/>
+                                    </div>
+                                    <br/>
+                                    <div className={inputField_classes}>
+                                        <div><label htmlFor="password1" hidden>
+                                            <FormattedMessage
+                                                id='LoginModal.label.password'
+                                                defaultMessage='Password'
+                                            />
+                                        </label></div>
+                                        <input type="password" id="password1" name="password1" ref="password1" placeholder={this.context.intl.formatMessage(messages.placeholder_password)} tabIndex="0" aria-required="true" required/><i className="lock icon"/>
+                                    </div>
+                                    <br/>
+                                    <div className="ui center aligned">
+                                        <button type="submit" className="ui blue labeled submit icon button" onClick={this.signin}><i className="icon sign in"/>
+                                            <FormattedMessage
+                                                id='LoginModal.button.signIn'
+                                                defaultMessage='Sign In'
+                                            />
+                                        </button>
+                                    </div>
+                                    <br/>
+
+                                    <div className="ui error message"/>
+                                </form>
+                                <br/>
+                                <div className="container">
+                                    {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
+                                    <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
+                                    <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
+                                </div>
+                                <br/>
+                                <div className="ui floated right">
+                                    <a href="#" onClick={this.handleNoAccessClick}>
+                                        <FormattedMessage
+                                            id='LoginModal.text.iCannotAccessMyAccount'
+                                            defaultMessage='I can not access my account'
+                                        />
+                                    </a>
+                                    <br/><br/>
+                                    <a href="#" onClick={this.handleSignupClick}>
+                                        <FormattedMessage
+                                            id='LoginModal.text.dontHaveAnAccount'
+                                            defaultMessage='Don&apos;t have an account? Sign up here.'
+                                        />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="actions">
+                        <button type="cancel" className="ui cancel button">
+                            <i className="remove icon"/>
                             <FormattedMessage
-                              id='LoginModal.text.iCannotAccessMyAccount'
-                              defaultMessage='I can not access my account'
+                                id='LoginModal.button.close'
+                                defaultMessage='Close'
                             />
-                          </a>
-                          <br/><br/>
-                          <a href="#" onClick={this.handleSignupClick}>
-                            <FormattedMessage
-                              id='LoginModal.text.dontHaveAnAccount'
-                              defaultMessage='Don&apos;t have an account? Sign up here.'
-                            />
-                          </a>
-                      </div>
+                        </button>
                     </div>
                 </div>
-              </div>
-              <div className="actions">
-                <button type="cancel" className="ui cancel button">
-                  <i className="remove icon"/>
-                  <FormattedMessage
-                    id='LoginModal.button.close'
-                    defaultMessage='Close'
-                  />
-                </button>
-              </div>
             </div>
-          </div>
         );
     }
 }
