@@ -153,25 +153,7 @@ class Deck extends React.Component {
                     </div>*/}
                 </div>
 
-                <div className={leftColClass}>
-                    <div className="row">
-                        <div className={treePanelClass}>
-                            <TreePanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
-                        </div>
-
-                        {/*<div className="ui hidden divider"></div>
-                        <div className={ActivityFeedPanelClass}>
-                            <div className="row">
-                                <ActivityFeedPanel />
-                            </div>
-                        </div>*/}
-                        <div className="ui hidden divider"></div>
-                    </div>
-                </div>
-                {/*leftPanel*/}
-=======
                 {leftPanel}
->>>>>>> parent of 787ce63... Revert "SWIK 1861   integrate and implement new Slide editor design "
 
                 {dividerDIV}
 
