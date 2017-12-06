@@ -90,7 +90,10 @@ export default {
             if (args.username === '' || !regExp.test(args.username)) {//Do not call microservice with invalid username
                 callback(null, {username: '', res: {taken: undefined, alsoTaken:[]}});
             } else {
-                rp.get({uri: Microservices.user.uri + '/information/username/' + args.username}).then((res) => {
+                let url = args.url;
+                if (url === undefined  || url === '')
+                    url = Microservices.user.uri + '/information/username/';
+                rp.get({uri: url + args.username}).then((res) => {
                     callback(null, {username: args.username, res: JSON.parse(res)});
                 }).catch((err) => {
                     console.log(err.StatusCodeError, err.message, err.options);

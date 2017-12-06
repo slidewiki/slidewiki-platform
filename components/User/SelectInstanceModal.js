@@ -1,11 +1,12 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import {Form, Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup} from 'semantic-ui-react';
+import {Form, Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup, Message} from 'semantic-ui-react';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import SSOStore from '../../stores/SSOStore';
 import closeSSOModal from '../../actions/user/closeSSOModal.js';
 import instances from '../../configs/instances.js';
 import {isEmpty} from '../../common';
+import checkUsername from '../../actions/user/registration/checkUsername';
 
 class SelectInstanceModal extends React.Component {
 
@@ -40,14 +41,18 @@ class SelectInstanceModal extends React.Component {
     handleChange(e, { name, value }) {
         console.log(name, value);
         this.setState({ [name]: value });
+
+        if (name == 'username' && value !== '' && value !== undefined) {
+              this.context.executeAction(checkUsername, {username: value, dispatch: 'SSO_MODAL_CHECKED_USERNAME'});
+          }
     }
 
-    handleClose(){
+    handleClose() {
         this.context.executeAction(closeSSOModal);
         $('#app').attr('aria-hidden','false');
     }
 
-    unmountTrap(){
+    unmountTrap() {
         if(this.state.activeTrap){
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
@@ -58,24 +63,42 @@ class SelectInstanceModal extends React.Component {
         e.preventDefault();
 
 
+
         return false;
+    }
+
+    checkUsername() {
+        const username = this.state.username;
+        if (username !== '') {
+            this.context.executeAction(checkUsername, {username: username, dispatch: 'SSO_MODAL_CHECKED_USERNAME', url: instances[this.state.instance].usercheck});
+        }
     }
 
     render() {
         const instanceOptions = Object.keys(instances).reduce((arr, curr) => {
           if (!instances[curr]['this'])
-              arr.push({ key: curr, text: instances[curr]['url'], value: instances[curr]['url'] });
+              arr.push({ key: curr, text: instances[curr]['url'], value: curr});
           return arr;
         }, []);
-        let content = <Form>
+        let message = '';
+        // console.log('SelectInstanceModal render', this.props.SSOStore.usernameExisting, this.state.instance);
+        if (!this.props.SSOStore.usernameExisting && this.state.instance !== '') {
+          message = <Form.Field><Message
+            error
+            header='Unknown username'
+            content="The username you entered is not known at the selected instance"
+          /></Form.Field>;
+        }
+        let content = <Form error={!this.props.SSOStore.usernameExisting && this.state.instance !== '' ? true : false}>
             <Form.Field required>
               <label>Instance</label>
               <Form.Select options={instanceOptions} onChange={this.handleChange.bind(this)} name="instance" placeholder='Instance' />
             </Form.Field>
             <Form.Field  id="usernamefield" required>
               <label>Username</label>
-              <Input aria-required="true" onChange={this.handleChange.bind(this)} name="username" placeholder='Username' />
+              <Input aria-required="true" ref='username' onChange={this.handleChange.bind(this)} name="username" placeholder='Username' onBlur={this.checkUsername.bind(this)} />
             </Form.Field>
+            {message}
           </Form>
           ;
 
@@ -107,7 +130,7 @@ class SelectInstanceModal extends React.Component {
                     <Divider />
                     <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                       <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                      <Button id="SelectInstanceModalSaveButton" ref="SelectInstanceModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={this.saveHandler} icon='user' labelPosition='left' content='Sign in' disabled={isEmpty(this.state.username) || isEmpty(this.state.instance)}/>
+                      <Button id="SelectInstanceModalSaveButton" ref="SelectInstanceModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={this.saveHandler} icon='user' labelPosition='left' content='Sign in' disabled={isEmpty(this.state.username) || isEmpty(this.state.instance) || !this.props.SSOStore.usernameExisting}/>
                     </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>
