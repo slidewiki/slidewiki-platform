@@ -87,7 +87,7 @@ class welcome extends React.Component {
                                 </div>
                                 <div className="ui list">
                                     <div className="item">
-                                        <div className="content">Use the <strong>Presentation mode</strong> to view a deck as a slideshow. Includes a timer and speaker notes' view.
+                                        <div className="content">Use the <strong>Slideshow mode</strong> to view a deck as a slideshow. Includes a timer and speaker notes' view.
                                         </div>
                                     </div>
                                     <div className="item">

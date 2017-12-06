@@ -176,6 +176,7 @@ class SlideContentEditor extends React.Component {
                     '<div class="h-mid">'+
                     '<p><img alt="" height="322" src="http://fileservice.stable.slidewiki.org/2355/a5527130-f9b1-11e6-8593-f7fb03f4bfc1.jpg" width="408" /></p>'+
                     '<p>&nbsp;</p></div></div></div>', 'Add input box';
+
                 break;
             // case 'title':
             //     this.refs.inlineContent.innerHTML =
@@ -632,9 +633,9 @@ class SlideContentEditor extends React.Component {
         }); //leave all buttons
         //this.currentcontent = this.props.content;
 
-        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
-            return false;
-        });
+        //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+        //    return false;
+        //});
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
             //document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -726,14 +727,14 @@ class SlideContentEditor extends React.Component {
                 //console.log('image width' + $(this).find('img:first').width());
                 //console.log('image width attr' + $(this).find('img:first').attr('width'));
                 //console.log('box width' + $(this).width());
-                if($(this).width() < $(this).find('img:first').width()+8)
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than image width/height
-                    $(this).width($(this).find('img:first').width() + 8);
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust image width');
                 }
-                if($(this).height() < $(this).find('img:first').height()+8)
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than image width/height
-                    $(this).height($(this).find('img:first').height() + 8);
+                    $(this).height($(this).find('img:first').height());
                 //    console.log('adjust image height');
                 }
             }
@@ -821,8 +822,8 @@ class SlideContentEditor extends React.Component {
                             ui.size.height = newHeight;
                             if($(this).find('img:first').length)
                             {
-                                $(this).find('img:first').width(newWidth - 8);
-                                $(this).find('img:first').height(newHeight - 8);
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight);
                             }
                         },
                         stop: function(event, ui) {
@@ -1718,6 +1719,7 @@ class SlideContentEditor extends React.Component {
                  <i className="save icon large"></i>
                  Save
                 </button>
+                {/*<UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>*/}
                 <button tabIndex="0" ref="helpbutton" className="ui orange button " onClick={this.keymapInfoButton.bind(this)} onChange={this.keymapInfoButton.bind(this)}>
                     <i className="help circle icon black large"></i>
                     <a style={buttonColorBlack}>keys</a>
@@ -1740,7 +1742,6 @@ class SlideContentEditor extends React.Component {
                  <a style={buttonColorBlack}>{this.CKeditorMode}</a>
                 </button>
                 */}
-                <UploadMediaModal ref="uploadMediaModal" userFullName={this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (username: ' + this.props.UserProfileStore.username + ')'}/>
                 <div className="ui" style={compStyle} ref='slideEditPanel'>
                     <div className={[style.reveal, 'reveal'].join(' ')}>
                         <div className={[style.slides, 'slides'].join(' ')}>
