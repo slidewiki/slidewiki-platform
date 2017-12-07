@@ -256,7 +256,7 @@ class UserNotificationsItem extends React.Component {
             'ui raised segment': notification.new
         });
         return (
-            <List.Item className={itemClass} >
+            <List.Item className={itemClass} style={{border:0}}>
                 <Icon name={iconNotification} size='big' />
                 <List.Content style={{width:'100%'}} tabIndex='0'>
                     <List.Header>
