@@ -852,8 +852,8 @@ class SlideContentEditor extends React.Component {
         });
         $('.pptx2html [style*="absolute"]').not('.drawing').keyup((event) => {
             if( event.which === 9 ) { //if tabkey
-                console.log( event.target.id );
-                console.log('tabFocus');
+                //console.log( event.target.id );
+                //console.log('tabFocus');
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
                 if (!id || id === 'inlineContent'){id = this.menuFocus; console.log('used menuFocus');}
@@ -1681,7 +1681,6 @@ class SlideContentEditor extends React.Component {
         const buttonColorBlack = {
             color: 'black'
         };
-
 
         //<textarea style={compStyle} name='nonInline' ref='nonInline' id='nonInline' value={this.props.content} rows="10" cols="80" onChange={this.handleEditorChange}></textarea>
         //                <div style={headerStyle} contentEditable='true' name='inlineHeader' ref='inlineHeader' id='inlineHeader' dangerouslySetInnerHTML={{__html:'<h1>SLIDE ' + this.props.selector.sid + ' TITLE</h1>'}}></div>

@@ -45,7 +45,7 @@ CKEDITOR.editorConfig = function( config ) {
             { name: 'styles', items: [ 'Styles' ] },
             { name: 'styles', items: [ 'Format'] },
         '/',
-            { name: 'insert', items: [ 'Image', 'Table', 'Symbol', 'Youtube'] },
+            { name: 'insert', items: [ 'Table', 'Symbol', 'Youtube'] },
             { name: 'source', items: [ 'Mathjax'] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
         '/',

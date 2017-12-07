@@ -110,7 +110,7 @@ class SlideEditPanel extends React.Component {
         let templateDropDown;
         if(this.showTemplate){
             templateDropDown = (
-                <div className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
+                <div tabIndex="0" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
                     <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
                     <i className="dropdown icon large"/>
                     <div className="default text">Use template</div>
@@ -132,33 +132,32 @@ class SlideEditPanel extends React.Component {
                   <div className="ui center aligned grid">
                       <div className="ui vertical labeled icon grey inverted massive  menu">
 
-                          <a className="item" role="button" tabIndex="1" onClick={this.handleAddInputBox.bind(this)}>
+                          <a  className="item" role="button" tabIndex="1" onClick={this.handleAddInputBox.bind(this)}>
                               <i className="font icon"></i>Text
                           </a>
-                          <a className="item" role="button" tabIndex="1" onClick={this.handleUploadMediaClick.bind(this)}>
+                          <a  className="item" role="button" tabIndex="1" onClick={this.handleUploadMediaClick.bind(this)}>
                               <i className="photo icon"></i>Image
                           </a>
-                          <a className="item" role="button" tabIndex="1" onClick={this.handleUploadVideoClick.bind(this)}>
+                          <a  className="item" role="button" tabIndex="1" onClick={this.handleUploadVideoClick.bind(this)}>
                               <i className="film icon"></i>Video
                           </a>
-                          <a className="item">
+                          <a  className="item" tabIndex="1">
                               <i className="ellipsis horizontal icon"></i>Other
                           </a>
-                          <a className="item">
+                          <a  className="item" tabIndex="1">
                               <i className="plus square outline icon"></i>Embed
                           </a>
-                          <a className="item" role="button" tabIndex="1" onClick={this.handleTemplateClick.bind(this)}>
+                          <a  className="item" role="button" tabIndex="1" onClick={this.handleTemplateClick.bind(this)}>
                               <i className="grid layout icon"></i>Template
                           </a>
                           {templateDropDown}
-                          <div className="ui divider"></div>
-                          <a className="item">
+                          <a className="item" tabIndex="1">
                               <i className="code icon"></i>HTML editor
                           </a>
-                          <div className="ui divider"></div>
-                          <a className="item">
+                          { /*<div className="ui divider"></div>
+                            <a className="item">
                               <i className="linkify icon"></i>Sources
-                          </a>
+                          </a>*/}
                       </div>
                   </div>
               </div>
