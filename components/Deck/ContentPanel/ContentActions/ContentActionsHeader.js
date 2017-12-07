@@ -83,7 +83,7 @@ class ContentActionsHeader extends React.Component {
                 </NavLink>
                 
                 {this.props.UserProfileStore.username === '' ? '' :
-                    <button className={editClass  (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)
+                    <button className={editClass  (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)}
                         type="button" 
                         tabIndex="0">
                         <i className="ui large blue edit icon "></i> Edit
