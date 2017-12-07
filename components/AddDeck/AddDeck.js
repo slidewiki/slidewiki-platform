@@ -439,6 +439,10 @@ class AddDeck extends React.Component {
             selected_message:{
                 id: 'AddDeck.form.selected_message',
                 defaultMessage: '(Selected for upload: {filename})',
+            },
+            aria_label_create:{
+                id: 'AddDeck.form.aria_label_create',
+                defaultMessage: 'Create deck',
             }
         });
         let hint_title = this.props.AddDeckStore.wrongFields.title ? this.context.intl.formatMessage(form_messages.hint_title) : undefined;
@@ -561,7 +565,7 @@ class AddDeck extends React.Component {
                         </div>
 
                         <div className="ui buttons">
-                            <div className={btnClasses_submit} aria-label="Create deck" role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.aria_label_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
                               <FormattedMessage
                                   id='AddDeck.form.button_create'
                                   defaultMessage='Create deck' />
