@@ -141,7 +141,7 @@ class ContentActionsHeader extends React.Component {
                           */}
                       </div>
                   }
-              </div>
+             
         );
     }
   }
