@@ -1,12 +1,16 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
-import {Form, Button, Icon, Image, Input, Modal, Divider, TextArea, Dropdown, Popup, Message} from 'semantic-ui-react';
+import {Form, Button, Input, Modal, Divider, Message, Icon} from 'semantic-ui-react';
 import { connectToStores, provideContext } from 'fluxible-addons-react';
 import SSOStore from '../../stores/SSOStore';
 import closeSSOModal from '../../actions/user/closeSSOModal.js';
 import instances from '../../configs/instances.js';
-import {isEmpty} from '../../common';
-import checkUsername from '../../actions/user/registration/checkUsername';
+import common from '../../common';
+import checkEmail from '../../actions/user/registration/checkEmail';
+import newSocialData from '../../actions/user/registration/newSocialData';
+
+const MODI = 'sso_modi';
+const NAME = 'sso_data';
 
 class SelectInstanceModal extends React.Component {
 
@@ -17,7 +21,7 @@ class SelectInstanceModal extends React.Component {
             openModal: this.props.SSOStore.openModal,
             activeTrap: this.props.SSOStore.activeTrap,
             instance: '',
-            username: ''
+            email: ''
         };
 
         this.handleClose = this.handleClose.bind(this);
@@ -42,8 +46,8 @@ class SelectInstanceModal extends React.Component {
         console.log(name, value);
         this.setState({ [name]: value });
 
-        if (name == 'username' && value !== '' && value !== undefined) {
-              this.context.executeAction(checkUsername, {username: value, dispatch: 'SSO_MODAL_CHECKED_USERNAME'});
+        if (name == 'email' && value !== '' && value !== undefined && this.state.instance !== '') {
+              this.context.executeAction(checkEmail, {email: value, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
           }
     }
 
@@ -62,15 +66,88 @@ class SelectInstanceModal extends React.Component {
     saveHandler(e) {
         e.preventDefault();
 
+        if (!common.isLocalStorageOn()) {
+            swal({
+                title: 'Error',
+                text: 'Your browser does not support HTML5 which does not allow you to use this feature.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+            return;
+        }
 
+        //delete old data
+        this.context.executeAction(newSocialData, {});
+
+        //prepare localStorage
+        localStorage.setItem(MODI, 'register');
+        localStorage.setItem(NAME, '');
+
+        //observe storage
+        $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
+
+        //create new tab
+        let url = instances[this.state.instance].entry+'/'+this.state.instance+'/'+encodeURIComponent(this.state.email);
+
+        let width = screen.width*0.75, height = screen.height*0.75;
+        if (width < 600)
+            width = screen.width;
+        if (height < 500)
+            height = screen.height;
+        let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
+
+        this.handleClose();
+
+        let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
+        win.focus();
 
         return false;
     }
 
-    checkUsername() {
-        const username = this.state.username;
-        if (username !== '') {
-            this.context.executeAction(checkUsername, {username: username, dispatch: 'SSO_MODAL_CHECKED_USERNAME', url: instances[this.state.instance].usercheck});
+    handleStorageEvent(e) {
+        console.log('storage event', e.key, localStorage.getItem(e.key));
+        //this is available
+
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'register')
+            return false;
+
+        let data = {};
+        try {
+            data = JSON.parse(localStorage.getItem(e.key));
+        } catch (err) {
+            console.log('Error while parsing data', err);
+            return false;
+        }
+        finally {
+            //delete data
+            localStorage.setItem(NAME, '');
+        }
+
+        //add language before send to service
+        let language = common.getIntlLanguage();
+        data.language = language;
+
+        //check data - valid and not empty
+        if ( (data.username.length < 1)
+            || (data.email.length < 1)
+            || (data.jwt.length < 1)
+            || (data.hashedPasword.length < 1) )
+            //Failure
+            return false;
+
+        this.context.executeAction(newSocialData, data);
+
+        //TODO
+
+        return true;
+    }
+
+    checkEmail() {
+        const email = this.state.email;
+        if (email !== '' && this.state.instance !== '') {
+            this.context.executeAction(checkEmail, {email: email, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
         }
     }
 
@@ -81,22 +158,25 @@ class SelectInstanceModal extends React.Component {
           return arr;
         }, []);
         let message = '';
-        // console.log('SelectInstanceModal render', this.props.SSOStore.usernameExisting, this.state.instance);
-        if (!this.props.SSOStore.usernameExisting && this.state.instance !== '') {
+        // console.log('SelectInstanceModal render', this.props.SSOStore.emailExisting, this.state.instance);
+        if (!this.props.SSOStore.emailExisting && this.state.instance !== '') {
           message = <Form.Field><Message
             error
-            header='Unknown username'
-            content="The username you entered is not known at the selected instance"
+            header='Unknown email'
+            content="The email you entered is not known at the selected instance"
           /></Form.Field>;
         }
-        let content = <Form error={!this.props.SSOStore.usernameExisting && this.state.instance !== '' ? true : false}>
+        let content = <Form error={!this.props.SSOStore.emailExisting && this.state.instance !== '' ? true : false}>
             <Form.Field required>
               <label>Instance</label>
               <Form.Select options={instanceOptions} onChange={this.handleChange.bind(this)} name="instance" placeholder='Instance' />
             </Form.Field>
-            <Form.Field  id="usernamefield" required>
-              <label>Username</label>
-              <Input aria-required="true" ref='username' onChange={this.handleChange.bind(this)} name="username" placeholder='Username' onBlur={this.checkUsername.bind(this)} />
+            <Form.Field  id="emailfield" required>
+              <label>Email</label>
+              <Input iconPosition='left' aria-required="true" ref='email' onChange={this.handleChange.bind(this)} name="email" placeholder='Email' onBlur={this.checkEmail.bind(this)}>
+                <Icon name='at' />
+                <input />
+              </Input>
             </Form.Field>
             {message}
           </Form>
@@ -118,7 +198,7 @@ class SelectInstanceModal extends React.Component {
                   focusTrapOptions={{
                       onDeactivate: this.unmountTrap,
                       clickOutsideDeactivates: false,
-                      initialFocus: '#usernamefield',
+                      initialFocus: '#emailfield',
                   }}>
                   <Modal.Header className="ui left aligned" as="h1" id="SelectInstanceModalHeader">
                       Select your SlideWiki instance and user
@@ -130,7 +210,7 @@ class SelectInstanceModal extends React.Component {
                     <Divider />
                     <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                       <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                      <Button id="SelectInstanceModalSaveButton" ref="SelectInstanceModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={this.saveHandler} icon='user' labelPosition='left' content='Sign in' disabled={isEmpty(this.state.username) || isEmpty(this.state.instance) || !this.props.SSOStore.usernameExisting}/>
+                      <Button id="SelectInstanceModalSaveButton" ref="SelectInstanceModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={this.saveHandler} icon='user' labelPosition='left' content='Sign in' disabled={common.isEmpty(this.state.email) || common.isEmpty(this.state.instance) || !this.props.SSOStore.emailExisting}/>
                     </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>

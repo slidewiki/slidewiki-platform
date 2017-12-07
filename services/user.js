@@ -48,6 +48,21 @@ export default {
                         error: err
                     });
                 });
+        } else if (resource === 'user.ssosignin') {
+            rp.post({
+                uri: args.url,
+                body: JSON.stringify({
+                    email: args.email,
+                    password: args.password
+                }),
+                resolveWithFullResponse: true
+            })
+                .then((res) => {
+                    callback(null, res.headers['----jwt----']);
+                })
+                .catch((err) => {
+                    callback(err);
+                });
         } else if (resource === 'user.socialsignin') {
             rp.post({
                 uri: Microservices.user.uri + '/social/login',
@@ -78,7 +93,10 @@ export default {
             if (args.email === '' || !regExp.test(args.email)) {//Do not call microservice with invalid email
                 callback(null, {taken: undefined});
             } else {
-                rp.get({uri: Microservices.user.uri + '/information/email/' + args.email}).then((res) => {
+                let url = args.url;
+                if (url === undefined  || url === '')
+                    url = Microservices.user.uri + '/information/email/';
+                rp.get({uri: url + args.email}).then((res) => {
                     callback(null, JSON.parse(res));
                 }).catch((err) => {
                     console.log(err.StatusCodeError, err.message, err.options);
