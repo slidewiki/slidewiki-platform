@@ -89,11 +89,11 @@ class ContentActionsHeader extends React.Component {
                         <i className="ui large blue edit icon "></i> Edit
                     </button>
                 }
-                </div>
+                
             
-               
-                <div className="ui right floated buttons">
-                    {this.props.UserProfileStore.username === '' ? '' :   
+                {this.props.UserProfileStore.username === '' ? '' :   
+                
+                    <div className="ui right floated buttons">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
                           type="button"
                           aria-label="Add Slide"
@@ -132,10 +132,16 @@ class ContentActionsHeader extends React.Component {
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="red large trash icon"></i>
                           </button>
-                      }
-                     </div>
-                  
-             
+                          {/*
+                          <button className="item ui small basic right attached disabled button">
+                              <a className="" title="Settings">
+                                  <i className="black large setting icon"></i>
+                              </a>
+                          </button>
+                          */}
+                      </div>
+                  }
+              </div>
         );
     }
   }
