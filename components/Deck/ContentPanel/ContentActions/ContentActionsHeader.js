@@ -51,6 +51,10 @@ class ContentActionsHeader extends React.Component {
             'item ui small basic left attached button': true,
             'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
+        const editClass = classNames({
+            'item ui basic button': true,
+            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+        });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
@@ -77,10 +81,13 @@ class ContentActionsHeader extends React.Component {
                 <NavLink activeClass=" " className={'basic ui button' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'button'} tabIndex={'0'}>
                     <i></i>View
                 </NavLink>
+                
                 {this.props.UserProfileStore.username === '' ? '' :
-                    <div className={'basic ui button' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'button'} tabIndex={'0'}>
+                    <button className={editClass} onClick={this.handleEditNode.bind(this, selector)} 
+                        type="button" 
+                        tabIndex="0">
                         <i className="ui large blue edit icon "></i> Edit
-                    </div>
+                    </button>
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
