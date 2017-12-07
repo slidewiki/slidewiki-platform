@@ -6,6 +6,8 @@ import UserProfileStore from '../../stores/UserProfileStore';
 export default function loadUserCollections(context, payload, done) {
     log.info(context);
     
+    context.dispatch('SET_COLLECTIONS_LOADING'); // show loading indicator
+    
     // request deck collections for the loggedin user
     if(context.getStore(UserProfileStore).userid === context.getStore(UserProfileStore).user.id){
         

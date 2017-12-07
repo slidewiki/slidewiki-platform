@@ -19,7 +19,7 @@ import TagsStore from '../../../../../stores/TagsStore';
 import PermissionsStore from '../../../../../stores/PermissionsStore';
 import updateTheme from '../../../../../actions/updateTheme';
 import LanguageDropdown from '../../../../common/LanguageDropdown';
-import NewCollectionModal from './NewCollectionModal';
+import NewCollectionModal from '../../../../DeckCollection/NewCollectionModal';
 import addSelectedCollection from '../../../../../actions/collections/addSelectedCollection';
 import removeSelectedCollection from '../../../../../actions/collections/removeSelectedCollection';
 import updateCollectionDecks from '../../../../../actions/collections/updateCollectionDecks';

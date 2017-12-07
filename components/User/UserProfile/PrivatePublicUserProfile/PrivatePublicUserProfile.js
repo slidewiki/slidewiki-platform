@@ -1,7 +1,7 @@
 import React from 'react';
 import PublicUserData from '../PublicUserData';
 import UserDecks from './UserDecks';
-import UserDeckCollections from './UserDeckCollections';
+import UserCollections from '../../../DeckCollection/UserCollections';
 import UserMenu from './UserMenu';
 
 class PrivatePublicUserProfile extends React.Component {
@@ -14,7 +14,7 @@ class PrivatePublicUserProfile extends React.Component {
     }
 
     showUserCollections(){
-        return <UserDeckCollections user={this.props.user} loggedinuser={this.props.loggedinuser} collections={this.props.deckCollections} error={this.props.loadDeckCollectionsError} />;
+        return <UserCollections user={this.props.user} loggedinuser={this.props.loggedinuser} loggedinUserId={this.props.loggedinUserId} />;
     }
 
     chooseView(){

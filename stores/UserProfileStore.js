@@ -45,6 +45,7 @@ class UserProfileStore extends BaseStore {
         this.usergroupsViewStatus = '';
         this.userCollections = undefined;
         this.updateDeckCollectionsError = false;
+        this.deleteDeckCollectionError = false;
 
         let user = dispatcher.getContext().getUser();
         //console.log('UserProfileStore constructor:', user);
@@ -95,6 +96,7 @@ class UserProfileStore extends BaseStore {
         this.usergroupsViewStatus = '';
         this.userDeckCollections = undefined;
         this.updateDeckCollectionsError = false;
+        this.deleteDeckCollectionError = false;
 
         //LoginModal
         this.showLoginModal = false;
@@ -127,7 +129,8 @@ class UserProfileStore extends BaseStore {
             deleteUsergroupError: this.deleteUsergroupError,
             usergroupsViewStatus: this.usergroupsViewStatus, 
             userDeckCollections: this.userDeckCollections,
-            updateDeckCollectionsError: this.updateDeckCollectionsError
+            updateDeckCollectionsError: this.updateDeckCollectionsError, 
+            deleteDeckCollectionError: this.deleteDeckCollectionError
         };
     }
 
@@ -162,6 +165,7 @@ class UserProfileStore extends BaseStore {
         this.usergroupsViewStatus = state.usergroupsViewStatus;
         this.userDeckCollections = state.userDeckCollections;
         this.updateDeckCollectionsError = state.updateDeckCollectionsError;
+        this.deleteDeckCollectionError = state.deleteDeckCollectionError;
     }
 
     changeTo(payload) {
@@ -383,6 +387,21 @@ class UserProfileStore extends BaseStore {
         this.updateDeckCollectionsError = true;
         this.emitChange();
     }
+
+    deleteDeckCollection(payload){
+        let deletedCollectionId = payload.id;
+
+        // remove deleted id from the collections
+        let updatedCollections = this.userDeckCollections.documents.filter( (col) => {
+            return (col._id !== deletedCollectionId);
+        });
+        this.userDeckCollections.documents = updatedCollections;
+        this.emitChange(); 
+    }
+
+    deleteDeckCollectionFailed(){
+        return;
+    }
 }
 
 UserProfileStore.storeName = 'UserProfileStore';
@@ -423,8 +442,11 @@ UserProfileStore.handlers = {
     'SAVE_USERPROFILE_START': 'saveProfileStart',
 
     // load deck collections
-    'LOAD_USER_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
-    'LOAD_USER_COLLECTIONS_FAILURE': 'updateDeckCollectionsFailed'
+    // 'LOAD_USER_COLLECTIONS_SUCCESS': 'updateDeckCollections', 
+    // 'LOAD_USER_COLLECTIONS_FAILURE': 'updateDeckCollectionsFailed', 
+    
+    // 'DELETE_DECK_COLLECTION_SUCCESS': 'deleteDeckCollection', 
+    // 'DELETE_DECK_COLLECTION_FAILURE': 'deleteDeckCollectionFailed',
 };
 
 export default UserProfileStore;

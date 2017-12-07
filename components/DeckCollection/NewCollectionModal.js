@@ -2,7 +2,7 @@ import React from 'react';
 import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form, Dropdown} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
-import addNewCollection from '../../../../../actions/collections/addNewCollection';
+import addNewCollection from '../../actions/collections/addNewCollection';
 
 class NewCollectionModal extends React.Component {
 

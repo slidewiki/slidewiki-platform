@@ -136,5 +136,24 @@ export default {
                 callback(err);
             });
         }
+    }, 
+
+    delete: (req, resource, params, config, callback) => {
+        req.reqId = req.reqId ? req.reqId : -1;
+        log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'delete', Method: req.method});
+        let args = params.params? params.params : params;
+
+        if (resource === 'deckgroups.item'){
+            rp({
+                method: 'DELETE',
+                uri: `${Microservices.deck.uri}/group/${args.id}`,
+                headers: {'----jwt----': args.jwt}
+            }).then((res) => {
+                callback(null, res);
+            }).catch((err) => {
+                console.log(err);
+                callback(err);
+            });
+        }
     }
 };
