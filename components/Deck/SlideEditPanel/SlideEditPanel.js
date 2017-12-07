@@ -15,6 +15,18 @@ class SlideEditPanel extends React.Component {
         this.state = {
         };
     }
+    handleAddInputBox(){
+        this.context.executeAction(addInputBox, {});
+    }
+    handleUploadMediaClick(){
+        this.context.executeAction(uploadMediaClick, {});
+    }
+    handleUploadVideoClick(){
+        this.context.executeAction(uploadVideoClick, {});
+    }
+    handleOtherClick(){}
+    handleEmbedClick(){}
+
     handleTemplateClick(){
         console.log('clicked');
         this.showTemplate = true;
@@ -25,17 +37,17 @@ class SlideEditPanel extends React.Component {
             template: this.refs.template.value
         });
     }
-    handleAddInputBox(){
-        this.context.executeAction(addInputBox, {});
-    }
-    handleUploadMediaClick(){
-        this.context.executeAction(uploadMediaClick, {});
-    }
-    handleUploadVideoClick(){
-        this.context.executeAction(uploadVideoClick, {});
-    }
+    handleHTMLEditorClick(){}
+
     componentDidMount() {
         $(this.refs.TemplateDropdown).dropdown();
+        $('#handleAddInputBox').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleAddInputBox();}});
+        $('#handleUploadMediaClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleUploadMediaClick();}});
+        $('#handleUploadVideoClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleUploadVideoClick();}});
+        $('#handleOtherClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleOtherClick();}});
+        $('#handleEmbedClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleEmbedClick();}});
+        $('#handleTemplatechange').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleTemplatechange();}});
+        $('#handleHTMLEditorClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleHTMLEditorClick();}});
     }
     componentDidUpdate() {
         $(this.refs.TemplateDropdown).dropdown();
@@ -48,15 +60,15 @@ class SlideEditPanel extends React.Component {
             //borderColor: '#e7e7e7',
         };
         //TODO: put in separate component
-        let templateOptions = <div className="menu">
-            <div className="item" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
+        let templateOptions = <div className="menu" tabIndex="0" >
+            <div className="item" tabIndex="0"  data-value="1" onClick={this.handleTemplatechange.bind(this)}>
                 Title and bullets <br/>
                 <br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                <img tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
-            <div className="item" data-value="2" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" tabIndex="0"  data-value="2" onClick={this.handleTemplatechange.bind(this)}>
                 Empty document <br/><br/>
-                <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
+                <img tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
             </div>
             <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 1 column <br/><br/>
@@ -130,29 +142,29 @@ class SlideEditPanel extends React.Component {
                 */}
                 <div className="ui grey inverted segment bottom attached active tab">
                   <div className="ui center aligned grid">
-                      <div className="ui vertical labeled icon grey inverted massive  menu">
+                      <div className="ui vertical labeled icon grey inverted large menu">
 
-                          <a  className="item" role="button" tabIndex="1" onClick={this.handleAddInputBox.bind(this)}>
-                              <i className="font icon"></i>Text
+                          <a className="item" id="handleAddInputBox" tabIndex="0" onClick={this.handleAddInputBox.bind(this)}>
+                              <i tabIndex="0" className="font icon"></i>Text
                           </a>
-                          <a  className="item" role="button" tabIndex="1" onClick={this.handleUploadMediaClick.bind(this)}>
-                              <i className="photo icon"></i>Image
+                          <a  className="item" id="handleUploadMediaClick" tabIndex="0" onClick={this.handleUploadMediaClick.bind(this)}>
+                              <i tabIndex="0" className="photo icon"></i>Image
                           </a>
-                          <a  className="item" role="button" tabIndex="1" onClick={this.handleUploadVideoClick.bind(this)}>
-                              <i className="film icon"></i>Video
+                          <a  className="item" id="handleUploadVideoClick" tabIndex="0" onClick={this.handleUploadVideoClick.bind(this)}>
+                              <i tabIndex="0"  className="film icon"></i>Video
                           </a>
-                          <a  className="item" tabIndex="1">
-                              <i className="ellipsis horizontal icon"></i>Other
+                          <a  className="item" id="handleOtherClick" tabIndex="0" onClick={this.handleOtherClick.bind(this)}>
+                              <i tabIndex="0"  className="ellipsis horizontal icon"></i>Other
                           </a>
-                          <a  className="item" tabIndex="1">
-                              <i className="plus square outline icon"></i>Embed
+                          <a  className="item" id="handleEmbedClick" tabIndex="0" onClick={this.handleEmbedClick.bind(this)}>
+                              <i tabIndex="0"  className="plus square outline icon"></i>Embed
                           </a>
-                          <a  className="item" role="button" tabIndex="1" onClick={this.handleTemplateClick.bind(this)}>
-                              <i className="grid layout icon"></i>Template
+                          <a  className="item" id="handleTemplateClick" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)}>
+                              <i tabIndex="0"  className="grid layout icon"></i>Template
                           </a>
                           {templateDropDown}
-                          <a className="item" tabIndex="1">
-                              <i className="code icon"></i>HTML editor
+                          <a className="item" id="handleHTMLEditorClick" role="button" tabIndex="0" onClick={this.handleHTMLEditorClick.bind(this)}>
+                              <i tabIndex="0"  className="code icon"></i>HTML editor
                           </a>
                           { /*<div className="ui divider"></div>
                             <a className="item">
