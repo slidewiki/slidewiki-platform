@@ -56,7 +56,11 @@ class license extends React.Component {
                 </p>
                 <h2 className="ui header"><FormattedMessage id="licence.2.header" defaultMessage="Creative Commons Attribution 4.0 CC BY"/></h2>
                 <div className="ui right floated medium image">
-                  <img alt="Creative Commons CC BY License logo"  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" />
+                  <FormattedMessage id="licence.ccByLicenceLogo" defaultMessage="Creative Commons CC BY License logo">
+                    {
+                      (alt) => <img alt={alt} src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png"/>
+                    }
+                  </FormattedMessage>
                 </div>
                 <p><FormattedMessage id="licence.2.p1" defaultMessage="This license allows materials to be copied and redistributed in any medium or format as long as they are attributed to the original creator and copyright notices. Images published under a Creative Commons Attribution licence can be uploaded and incorporated into SlideWiki slides. However, it is your responsibility to ensure that you provide credit or attribution to the creator within the image upload dialog."/></p>
                 <p>
@@ -71,7 +75,11 @@ class license extends React.Component {
                 </p>
                 <h2 className="ui header"><FormattedMessage id="licence.3.header" defaultMessage="Work in the Public Domain, free of copyright or CC0"/></h2>
                 <div className="ui right floated medium image">
-                  <img alt="Creative Commons CC 0 public domain License logo"  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png" />
+                  <FormattedMessage id="licence.ccPdlLogo" defaultMessage="Creative Commons CC 0 public domain License logo">
+                    {
+                      <img alt={alt}  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png" />
+                    }
+                  </FormattedMessage>
                 </div>
                 <p><FormattedMessage id="licence.3.p1" defaultMessage="Work in the Public domain is free of copyright restrictions. This is usually for works that are free from copyright restrictions. This includes works where the copyright has expired or the creator has assigned their work to the public domain. While it is not always necessary to attribute the source of public domain work. However, it is good practice to attribute works to the creator or source to add provienance to your decks and slides. CCO is the Creative Commons license that enables authors and creators to waive their rights to their work and place it in the public domain."/></p>
                 <h2 className="ui header"><FormattedMessage id="licence.4.header" defaultMessage="Notices"/></h2>
