@@ -10,7 +10,11 @@ class license extends React.Component {
                 <p><FormattedMessage id="licence.p1" defaultMessage="SlideWiki is an open platform allowing you to publish educational content under a Creative Commons license. By publishing content under a Creative Commons license, SlideWiki intends to empower educational communities to author, share and reuse educational content in order to improve the availability of educational materials. This page will explain how SlideWiki uses Creative Common licenses."/></p>
                 <h2 className="ui header"><FormattedMessage id="licence.1.header" defaultMessage="Creative Commons Attribution ShareAlike 4.0 CC BY-SA"/></h2>
                 <div className="ui right floated medium image">
-                  <img alt="Creative Commons BY-SA License logo"  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-sa.png" />
+                  <FormattedMessage id="licence.ccBySaLicenceLogo" defaultMessage="Creative Commons BY-SA License logo">
+                    {
+                      (alt) => <img alt={alt}  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-sa.png" />
+                    }
+                  </FormattedMessage>
                 </div>
                 <p><FormattedMessage id="licence.1.p1" defaultMessage="Decks and slides in SlideWiki are published under the Creative Common Attribution ShareAlike licence. This license lets others reuse, alter and build on slides and decks as long as the user credit the orginial author and license their new creations under identical terms. Any external works that is is based on SlideWiki content must carry the same license. This means that any derivatives will also allow for commercial use, but still need to attribute the orginal author and publish under the same license."/></p>
                 <p>
