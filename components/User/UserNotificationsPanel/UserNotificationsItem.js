@@ -245,11 +245,11 @@ class UserNotificationsItem extends React.Component {
                 );
         }
 
-        let markAsReadButton = (notification.new) ? (<Button aria-label='Mark as read' icon='checkmark' onClick={this.handleMarkAsRead.bind(this, notification)}/>) : '';
+        let markAsReadButton = (notification.new) ? (<Button aria-label='Mark as read' icon='checkmark' onClick={this.handleMarkAsRead.bind(this, notification)} title='Mark as read'/>) : '';
         let buttons = (
-            <Button.Group basic size='tiny' floated='right'>
+            <Button.Group basic size='tiny' floated='right' >
                 {markAsReadButton}
-                <Button aria-label='Delete' icon='remove' onClick={this.handleDelete.bind(this, notification)} tabIndex='0'/>
+                <Button aria-label='Delete' icon='remove' onClick={this.handleDelete.bind(this, notification)} tabIndex='0' title='Delete'/>
             </Button.Group>);
         let itemClass = classNames({
             'event': true,
