@@ -28,7 +28,7 @@ class SlideEditPanel extends React.Component {
     handleEmbedClick(){}
 
     handleTemplateClick(){
-        console.log('clicked');
+        //console.log('clicked');
         this.showTemplate = true;
         this.forceUpdate();
     }
@@ -46,8 +46,9 @@ class SlideEditPanel extends React.Component {
         $('#handleUploadVideoClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleUploadVideoClick();}});
         $('#handleOtherClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleOtherClick();}});
         $('#handleEmbedClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleEmbedClick();}});
-        $('#handleTemplatechange').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleTemplatechange();}});
+        $('#handleTemplateClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleTemplateClick();}});
         $('#handleHTMLEditorClick').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleHTMLEditorClick();}});
+        $('#handleTemplatechange').on('keyup', (e) => {if (e.keyCode === 13 || e.keyCode === 32) {console.log('test');this.handleTemplatechange();}});
     }
     componentDidUpdate() {
         $(this.refs.TemplateDropdown).dropdown();
@@ -60,61 +61,61 @@ class SlideEditPanel extends React.Component {
             //borderColor: '#e7e7e7',
         };
         //TODO: put in separate component
-        let templateOptions = <div className="menu" tabIndex="0" >
-            <div className="item" tabIndex="0"  data-value="1" onClick={this.handleTemplatechange.bind(this)}>
+        let templateOptions = <div className="menu"  id="handleTemplatechange" tabIndex="0" >
+            <div className="item" id="handleTemplatechange" tabIndex="0" data-value="1" onClick={this.handleTemplatechange.bind(this)}>
                 Title and bullets <br/>
                 <br/>
                 <img tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
             </div>
-            <div className="item" tabIndex="0"  data-value="2" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" tabIndex="0"  data-value="2" onClick={this.handleTemplatechange.bind(this)}>
                 Empty document <br/><br/>
                 <img tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
             </div>
-            <div className="item" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="11" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 1 column <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
             </div>
-            <div className="item" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="12" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 2 columns <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
             </div>
-            <div className="item" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="22" onClick={this.handleTemplatechange.bind(this)}>
                 2 rows 2 columns <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
             </div>
-            <div className="item" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="21" onClick={this.handleTemplatechange.bind(this)}>
                 2 rows 1 column <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
             </div>
-            <div className="item" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="11img" onClick={this.handleTemplatechange.bind(this)}>
                 1 row 1 column image <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
             </div>
-            <div className="item" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="3" onClick={this.handleTemplatechange.bind(this)}>
                 Document with title <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
             </div>
-            <div className="item" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="outitleslide" onClick={this.handleTemplatechange.bind(this)}>
                 Open University Theme Title Page <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
             </div>
-            <div className="item" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="oegtitleslide" onClick={this.handleTemplatechange.bind(this)}>
                 OEG Theme Title Page <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
             </div>
-            <div className="item" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="slidewikislide" onClick={this.handleTemplatechange.bind(this)}>
                 SlideWiki template <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
             </div>
-            <div className="item" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="EKDDA" onClick={this.handleTemplatechange.bind(this)}>
                 EKDDA template <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
             </div>
-            <div className="item" data-value="EKDDAeng" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="EKDDAeng" onClick={this.handleTemplatechange.bind(this)}>
                 EKDDA template - English <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
             </div>
-            <div className="item" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
+            <div className="item" id="handleTemplatechange" data-value="EKDDAengNofooter" onClick={this.handleTemplatechange.bind(this)}>
                 EKDDA template - English no footer <br/><br/>
                 <img style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
             </div>
@@ -122,10 +123,10 @@ class SlideEditPanel extends React.Component {
         let templateDropDown;
         if(this.showTemplate){
             templateDropDown = (
-                <div tabIndex="0" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
+                <div tabIndex="0" id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="TemplateDropdown" >
                     <input type="hidden" name="template" id="template" ref="template" defaultValue={this.props.template} />
-                    <i className="dropdown icon large"/>
-                    <div className="default text">Use template</div>
+                    <i id="handleTemplatechange" className="dropdown icon large"/>
+                    <div id="handleTemplatechange" className="default text">Use template</div>
                     {templateOptions}
                 </div>);
         }else {
@@ -160,7 +161,7 @@ class SlideEditPanel extends React.Component {
                               <i tabIndex="0"  className="plus square outline icon"></i>Embed
                           </a>
                           <a  className="item" id="handleTemplateClick" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)}>
-                              <i tabIndex="0"  className="grid layout icon"></i>Template
+                              <i tabIndex="0"  id="handleTemplatechange" className="grid layout icon"></i>Template
                           </a>
                           {templateDropDown}
                           <a className="item" id="handleHTMLEditorClick" role="button" tabIndex="0" onClick={this.handleHTMLEditorClick.bind(this)}>
