@@ -3,14 +3,13 @@ const log = require('../../log/clog');
 
 export default function readUserNotification(context, payload, done) {
     log.info(context);
-    context.service.delete('notifications.item', payload, {timeout: 20 * 1000}, (err, res) => {
+    context.service.update('notifications.read', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {
             log.error(context, {filepath: __filename});
             context.executeAction(serviceUnavailable, payload, done);
             return;
-            // context.dispatch('DELETE_USER_NOTIFICATION_FAILURE', err);
         } else {
-            context.dispatch('DELETE_USER_NOTIFICATION_SUCCESS', res);
+            context.dispatch('READ_USER_NOTIFICATION_SUCCESS', res);
         }
 
         done();
