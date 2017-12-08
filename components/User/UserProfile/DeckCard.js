@@ -6,7 +6,7 @@ import { Microservices } from '../../../configs/microservices';
 
 class DeckCard extends React.Component {
 
-    
+
     componentDidMount() {}
 
     componentDidUpdate() {}
@@ -24,12 +24,12 @@ class DeckCard extends React.Component {
         return (
             <div className='card'>
                 {this.props.newTab === true ? (
-                    <a className="ui medium centered spaced image" aria-hidden={'true'} href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
+                    <a className="ui medium centered spaced image" aria-hidden={'true'} tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
                         <Thumbnail url={thumbnailURL}
                             slideId={this.props.cardContent.deckID} />
                     </a>
                 ) : (
-                    <NavLink className="ui medium centered spaced image" aria-hidden={'true'} href={'/deck/' + this.props.cardContent.deckID}>
+                    <NavLink className="ui medium centered spaced image" aria-hidden={'true'}  tabIndex={'-1'} href={'/deck/' + this.props.cardContent.deckID}>
                         <Thumbnail url={thumbnailURL}
                             slideId={this.props.cardContent.deckID} />
                     </NavLink>
@@ -55,19 +55,15 @@ class DeckCard extends React.Component {
                     <div className="meta">
                         <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
                     </div>
-                    <div class="ui fluid large icon buttons">
-                        <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}target="_blank">
-                                <button className="ui button" type="button" aria-label="Open deck" data-tooltip="Open deck">
-                                    <i className="yellow open folder large icon"></i>
-                                </button>
-                            </NavLink>
+                </div>
+                <div class="ui fluid large icon buttons">
+                    <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip="open deck" className="ui basic lightGrey icon button" type="button" aria-label="Open deck">
+                        <i className="yellow open folder large icon"></i>
+                    </NavLink>
 
-                        <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank">
-                                <button className="ui lightGrey button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
-                                    <i className="circle play large icon"></i>
-                                </button>
-                            </NavLink>     
-                    </div>
+                    <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank" className="ui basic lightGrey icon button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                        <i className="circle play large icon"></i>
+                    </NavLink>     
                 </div>
             </div>
         );
