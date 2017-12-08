@@ -1,6 +1,6 @@
 import React from 'react';
 import UserNotificationsItem from './UserNotificationsItem';
-
+import {List} from 'semantic-ui-react';
 class UserNotificationsList extends React.Component {
     render() {
         const selector = this.props.selector;
@@ -8,16 +8,16 @@ class UserNotificationsList extends React.Component {
         const list = this.props.items.map((notification, index) => {
             if (notification.visible) {
                 return (
-                    <UserNotificationsItem username={this.props.username} notification={notification} key={index} selector={selector} iconSize='big' />
+                    <UserNotificationsItem username={this.props.username} notification={notification} key={index} selector={selector} />
                 );
             }
         });
 
         return (
-            <div ref="userNotificationsList">
-                <div className="ui relaxed divided list" role="list" tabIndex="0">
+            <div ref="userNotificationsList" className="ui">
+                <List relaxed celled>
                     {list}
-                </div>
+                </List>
             </div>
         );
     }
