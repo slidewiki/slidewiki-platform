@@ -90,7 +90,7 @@ class ContentActionsHeader extends React.Component {
                     </button>
                 }
                 {this.props.UserProfileStore.username === '' ? '' :
-                    <div className="right menu">
+                    <div className="ui right floated buttons">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
                           type="button"
                           aria-label="Add Slide"
@@ -128,14 +128,7 @@ class ContentActionsHeader extends React.Component {
                             data-tooltip="Delete"
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="red large trash icon"></i>
-                          </button>
-                          {/*
-                          <button className="item ui small basic right attached disabled button">
-                              <a className="" title="Settings">
-                                  <i className="black large setting icon"></i>
-                              </a>
-                          </button>
-                          */}
+                          </button>                        
                       </div>
                   }
               </div>
