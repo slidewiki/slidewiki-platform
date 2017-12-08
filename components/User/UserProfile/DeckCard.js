@@ -5,6 +5,34 @@ import { timeSince } from '../../../common';
 import { Microservices } from '../../../configs/microservices';
 
 class DeckCard extends React.Component {
+    getPresentationHref(){
+        let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
+        if(!this.props.ContentStore.selector.subdeck){
+
+            presLocation += this.props.ContentStore.selector.id + '/';
+        }
+        else{
+            presLocation += this.props.ContentStore.selector.subdeck + '/';
+        }
+        if(this.props.ContentStore.selector.stype === 'slide'){
+            // presLocation += this.props.ContentStore.selector.sid + '/';
+            presLocation += this.props.ContentStore.selector.sid;// + '/';
+        }
+        return presLocation;
+    }
+    
+    handlePresentationClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getPresentationHref());
+        }
+    }
+    handleDeckClick(e){
+        if(process.env.BROWSER){
+            e.preventDefault();
+            window.open(this.getPresentationHref());
+        }
+    }
     componentDidMount() {}
 
     componentDidUpdate() {}
@@ -21,41 +49,51 @@ class DeckCard extends React.Component {
         let description = (this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
         return (
             <div className='card'>
-              {this.props.newTab === true ? (
-                <a className="ui medium centered spaced image" href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
-                  <Thumbnail url={thumbnailURL}
-                      slideId={this.props.cardContent.deckID} />
-                </a>
-              ) : (
-                <NavLink className="ui medium centered spaced image" href={'/deck/' + this.props.cardContent.deckID}>
-                  <Thumbnail url={thumbnailURL}
-                      slideId={this.props.cardContent.deckID} />
-                </NavLink>
-              )}
+                {this.props.newTab === true ? (
+                    <a className="ui medium centered spaced image" aria-hidden={'true'} href={'/deck/' + this.props.cardContent.deckID} target='_blank'>
+                        <Thumbnail url={thumbnailURL}
+                            slideId={this.props.cardContent.deckID} />
+                    </a>
+                ) : (
+                    <NavLink className="ui medium centered spaced image" aria-hidden={'true'} href={'/deck/' + this.props.cardContent.deckID}>
+                        <Thumbnail url={thumbnailURL}
+                            slideId={this.props.cardContent.deckID} />
+                    </NavLink>
+                )}
 
                 <div className="content">
-                  <div className="header">
-                    {this.props.newTab === true ? (
-                      this.props.cardContent.title.length > 50 ? (
-                        <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,49) + '...'}</a>
-                      ) : (
-                        <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
-                      )
-                    ) : (
-                      this.props.cardContent.title.length > 50 ? (
-                        <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,49) + '...'}</NavLink>
-                      ) : (
-                        <NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</NavLink>
-                      )
-                    )}
-                  </div>
+                    <div className="header">
+                        {this.props.newTab === true ? (
+                            this.props.cardContent.title.length > 50 ? (
+                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,49) + '...'}</a>
+                            ) : (
+                                <a href={'/deck/' + this.props.cardContent.deckID} target='_blank'>{this.props.cardContent.title}</a>
+                            )
+                        ) : (
+                            this.props.cardContent.title.length > 50 ? (
+                                <NavLink href={'/deck/' + this.props.cardContent.deckID} data-tooltip={this.props.cardContent.title}>{this.props.cardContent.title.slice(0,49) + '...'}</NavLink>
+                            ) : (
+                                <NavLink href={'/deck/' + this.props.cardContent.deckID}>{this.props.cardContent.title}</NavLink>
+                            )
+                        )}
+                    </div>
 
-                  <div className="meta">
-                      <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
-                  </div>
-                  <div className="description">
-                      {description}
-                  </div>
+                    <div className="meta">
+                        <span className="date">Last updated {timeSince((new Date(this.props.cardContent.updated)))} ago</span>
+                    </div>
+                    <div class="ui fluid large icon buttons">
+                        <NavLink href={'/deck/' + this.props.cardContent.deckID} target='_blank' data-tooltip={this.props.cardContent.title}target="_blank">
+                                <button className="ui button" type="button" aria-label="Open deck" data-tooltip="Open deck">
+                                    <i className="yellow open folder large icon"></i>
+                                </button>
+                            </NavLink>
+
+                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
+                                <button className="ui lightGrey button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
+                                    <i className="circle play large icon"></i>
+                                </button>
+                            </NavLink>     
+                    </div>
                 </div>
             </div>
         );
