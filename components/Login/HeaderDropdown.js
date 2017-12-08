@@ -35,30 +35,30 @@ class HeaderDropdown extends React.Component {
 
     render() {
         const header_messages = defineMessages({
-          usermanagement:{
-              id: 'header.usermanagement',
-              defaultMessage: 'User management'
-          },
-          mydecks:{
-              id: 'header.mydecks',
-              defaultMessage: 'My Decks'
-          },
-          mygroups:{
-              id: 'header.mygroups',
-              defaultMessage: 'My Groups'
-          },
-          mysettings:{
-              id: 'header.mysettings',
-              defaultMessage: 'My Settings'
-          },
-          mynotifications:{
-              id: 'header.mynotifications',
-              defaultMessage: 'My Notifications'
-          },
-          signout:{
-              id: 'header.signout',
-              defaultMessage: 'Sign Out'
-          }
+            usermanagement:{
+                id: 'header.usermanagement',
+                defaultMessage: 'User management'
+            },
+            mydecks:{
+                id: 'header.mydecks',
+                defaultMessage: 'My Decks'
+            },
+            mygroups:{
+                id: 'header.mygroups',
+                defaultMessage: 'My Groups'
+            },
+            mysettings:{
+                id: 'header.mysettings',
+                defaultMessage: 'My Settings'
+            },
+            mynotifications:{
+                id: 'header.mynotifications',
+                defaultMessage: 'My Notifications'
+            },
+            signout:{
+                id: 'header.signout',
+                defaultMessage: 'Sign Out'
+            }
         });
         let pic = (this.props.UserProfileStore.userpicture === undefined) ? '' : this.props.UserProfileStore.userpicture;
         const alarmClassName = (this.props.UserNotificationsStore.newNotificationsCount > 0) ? 'alarm red icon' : 'alarm outline icon';
