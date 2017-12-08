@@ -64,7 +64,7 @@ class presentationBroadcast extends React.Component {
         $('.menu:first').remove();
         $('.footer:first').remove();
 
-        that.socket = io(Microservices.webrtc.uri);
+        that.socket = io(Microservices.webrtc.uri);//eslint-disable-line no-undef
 
         let deckID = that.iframesrc.toLowerCase().split('presentation')[1].split('/')[1];//TODO implement a better version to get the deckID
         that.socket.emit('create or join', that.room, deckID);
@@ -523,7 +523,7 @@ class presentationBroadcast extends React.Component {
         }
 
         function onCreateSessionDescriptionError(error) {//TODO add better error handling for this - maybe close the window if this is fatal
-            trace('Failed to create session description: ' + error.toString());
+            console.log('Failed to create session description: ' + error.toString());
         }
 
         function handleRemoteStreamRemoved(event) {

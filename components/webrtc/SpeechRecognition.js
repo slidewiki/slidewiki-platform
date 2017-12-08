@@ -52,7 +52,8 @@ class SpeechRecognition extends React.Component {
         }
 
         if (window.hasOwnProperty('webkitSpeechRecognition')) {
-            that.recognition = new webkitSpeechRecognition();
+
+            that.recognition = new webkitSpeechRecognition();//eslint-disable-line no-undef
         } else if (window.hasOwnProperty('SpeechRecognition')) {
             that.recognition = new SpeechRecognition();
         }
@@ -70,7 +71,6 @@ class SpeechRecognition extends React.Component {
                 if (typeof (event.results) == 'undefined') {
                     that.recognition.onend = null;
                     that.recognition.stop();
-                    console.warn('error:', e);
 
                     swal({
                         titleText: 'Speech recognition disabled',
