@@ -117,7 +117,7 @@ class UserNotificationsItem extends React.Component {
                 );
                 break;
             case 'reply':
-                iconNotification = 'comments massive outline';
+                iconNotification = 'comments outline';
                 summaryNotification = (
                     <div className="summary">
                         <a className="user" href={notification.user_id ? '/user/' + notification.user_id : ''}>
