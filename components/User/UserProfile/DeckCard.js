@@ -5,34 +5,8 @@ import { timeSince } from '../../../common';
 import { Microservices } from '../../../configs/microservices';
 
 class DeckCard extends React.Component {
-    getPresentationHref(){
-        let presLocation = '/Presentation/' + this.props.ContentStore.selector.id + '/';
-        if(!this.props.ContentStore.selector.subdeck){
 
-            presLocation += this.props.ContentStore.selector.id + '/';
-        }
-        else{
-            presLocation += this.props.ContentStore.selector.subdeck + '/';
-        }
-        if(this.props.ContentStore.selector.stype === 'slide'){
-            // presLocation += this.props.ContentStore.selector.sid + '/';
-            presLocation += this.props.ContentStore.selector.sid;// + '/';
-        }
-        return presLocation;
-    }
     
-    handlePresentationClick(e){
-        if(process.env.BROWSER){
-            e.preventDefault();
-            window.open(this.getPresentationHref());
-        }
-    }
-    handleDeckClick(e){
-        if(process.env.BROWSER){
-            e.preventDefault();
-            window.open(this.getPresentationHref());
-        }
-    }
     componentDidMount() {}
 
     componentDidUpdate() {}
@@ -88,7 +62,7 @@ class DeckCard extends React.Component {
                                 </button>
                             </NavLink>
 
-                        <NavLink onClick={this.handlePresentationClick.bind(this)} href={this.getPresentationHref()} target="_blank">
+                        <NavLink href={'/presentation/' + this.props.cardContent.deckID + '/' + this.props.cardContent.deckID} target="_blank">
                                 <button className="ui lightGrey button" type="button" aria-label="Open slideshow in new tab" data-tooltip="Open slideshow in new tab">
                                     <i className="circle play large icon"></i>
                                 </button>
