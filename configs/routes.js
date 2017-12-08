@@ -31,6 +31,7 @@ import loadLegacy from '../actions/loadLegacy';
 import loadDeckFamily from '../actions/deckfamily/loadDeckFamily';
 import loadDiffview from '../actions/loadDiffview';
 import checkReviewableUser from '../actions/userReview/checkReviewableUser';
+import loadCollection from '../actions/collections/loadCollection';
 
 import {navigateAction} from 'fluxible-router';
 import loadSupportedLanguages from '../actions/loadSupportedLanguages';
@@ -576,6 +577,16 @@ export default {
         page: 'presentationBroadcast',
         handler: require('../components/webrtc/presentationBroadcast')
     },
+    collection: {
+        path: '/collection/:id',
+        method: 'get',
+        page: 'collection',
+        title: 'SlideWiki -- Deck Collection',
+        handler: require('../components/DeckCollection/CollectionPanel'),
+        action: (context, payload, done) => {
+            context.executeAction(loadCollection, payload, done);
+        }
+    }, 
     /* This should be the last route in routes.js */
     notfound: {
         path: '*',

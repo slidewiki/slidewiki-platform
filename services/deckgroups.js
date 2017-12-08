@@ -32,6 +32,8 @@ export default {
                 json: true 
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
+
+        // get deck collections assigned to a specified deck
         } else if (resource === 'deckgroups.forDeck'){
 
             let uri = `${Microservices.deck.uri}/deck/${args.sid}/groups?user=${args.userId}`;
@@ -45,8 +47,47 @@ export default {
                 json: true 
             }).then( (deckGroups) => callback(null, deckGroups))
             .catch( (err) => callback(err));
+
+        // get the details for a specific deck collection
+        } else if (resource === 'deckgroups.get'){
+            rp({
+                method: 'GET', 
+                uri: `${Microservices.deck.uri}/group/${args.id}`,
+                json: true 
+            }).then( (group) => {
+                let deckPromises = [];
+
+                // get details for the decks in the collection 
+                for(let deckId of group.decks){
+                    deckPromises.push(
+                        rp.get({
+                            uri: `${Microservices.deck.uri}/deck/${deckId}`, 
+                            json: true
+                        })
+                    );
+                }
+                let deckPromise = Promise.all(deckPromises);
+
+                // get username of the deck collection owner
+                let userPromise = rp.get({
+                    uri: `${Microservices.user.uri}/user/${group.user}`, 
+                    json: true
+                }).then( (user) => {
+                    return user.username;
+                });
+
+                Promise.all([deckPromise, userPromise]).then( (data) => {
+                    group.decks = data[0];
+                    group.user = {
+                        id: group.user, 
+                        username: data[1]
+                    };
+
+                    callback(null, group);
+                }).catch( (err) => callback(err));
+
+            }).catch( (err) => callback(err));
         }
-        
     }, 
 
     create: (req, resource, params, body, config, callback) => {

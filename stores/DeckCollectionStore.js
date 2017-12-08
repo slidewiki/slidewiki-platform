@@ -7,7 +7,8 @@ class DeckCollectionStore extends BaseStore {
         this.collections = undefined;
         this.updateCollectionsError = false;
         this.deleteDeckCollectionError = false;
-
+        this.collectionDetails = undefined;
+        this.collectionDetailsError = false;
         this.loading = false;
     }
 
@@ -15,6 +16,8 @@ class DeckCollectionStore extends BaseStore {
         this.collections = undefined;
         this.updateCollectionsError = false;
         this.deleteDeckCollectionError = false;
+        this.collectionDetails = undefined;
+        this.collectionDetailsError = false;
         this.loading = false;
     }
 
@@ -23,6 +26,8 @@ class DeckCollectionStore extends BaseStore {
             collections: this.collections,
             updateCollectionsError: this.updateCollectionsError, 
             deleteDeckCollectionError: this.deleteDeckCollectionError,
+            collectionDetails: this.collectionDetails,
+            collectionDetailsError: this.collectionDetailsError,
             loading: this.loading
         };
     }
@@ -35,6 +40,8 @@ class DeckCollectionStore extends BaseStore {
         this.collections = state.collections;
         this.updateCollectionsError = state.updateCollectionsError;
         this.deleteDeckCollectionError = state.deleteDeckCollectionError;
+        this.collectionDetails = state.collectionDetails;
+        this.collectionDetailsError = state.collectionDetailsError;
         this.loading = state.loading;
     }
 
@@ -77,6 +84,34 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    updateCollectionDetails(payload){
+
+        // format the results of the service
+        payload.decks = payload.decks.map( (deck) => {
+
+            // get the active revision of the deck 
+            let activeRevision = deck.revisions[deck.revisions.length-1];
+            return {
+                deckID: deck._id, 
+                title: activeRevision.title, 
+                firstSlide: activeRevision.firstSlide, 
+                updated: deck.lastUpdate, 
+                description: deck.description, 
+                creationDate: deck.timestamp
+            };
+        });
+
+        this.collectionDetails = payload;
+        this.collectionDetailsError = false;
+        this.emitChange();
+    }
+
+    updateCollectionDetailsFailed(){
+        this.collectionDetailsError = true;
+        this.emitChange();
+    }
+
+
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -87,6 +122,9 @@ DeckCollectionStore.handlers = {
     
     'DELETE_COLLECTION_SUCCESS': 'deleteCollection', 
     'DELETE_COLLECTION_FAILURE': 'deleteCollectionFailed',
+
+    'LOAD_COLLECTION_DETAILS_SUCCESS': 'updateCollectionDetails', 
+    'LOAD_COLLECTION_DETAILS_FAILURE': 'updateCollectionDetailsFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
 };

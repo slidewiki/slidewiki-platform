@@ -115,6 +115,10 @@ class DeckPropertiesEditor extends React.Component {
     componentDidMount() {
         this.handleDropboxes();
         this.initCollectionsDropdown();
+
+        // if we don't clear the dropdown,
+        // value of the previous deck edit appears
+        this.clearCollectionsDropdown();
     }
 
     handleDropboxes() {
@@ -572,7 +576,7 @@ class DeckPropertiesEditor extends React.Component {
                             ) : ''}
                             
                             <div className="field">
-                                <label htmlFor="deck_groups">Deck Collections</label>
+                                <label htmlFor="deck_collections">Deck Collections</label>
                                 <div className="two fields">
                                     <div className="field">
                                         <div id="collectionsDropdown" className="ui fluid multiple search selection dropdown">

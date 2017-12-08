@@ -118,7 +118,7 @@ class UserCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui header"><h3><NavLink href={`/collection/${col._id}`}>{col.title}</NavLink></h3></div>
+                                    <div className="ui header"><h3><a href={`/collection/${col._id}`} target='_blank'>{col.title}</a></h3></div>
                                     <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''} {col.decks.length} deck{((col.decks.length) !== 1) ? 's': ''} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title="Shared Collection"></i> : ''}</div>
                                 </div>
 
@@ -145,9 +145,6 @@ class UserCollections extends React.Component {
                 {loadingDiv}
                 <div className="ui secondary clearing segment">
                     <h2 className="ui left floated header">{(this.props.loggedinuser === this.props.user.uname) ? 'My Deck Collections' : 'Owned Deck Collections' }</h2>
-                    <button className="ui right floated button" role="button" tabIndex="0" onClick={this.handleCLickNewGroup.bind(this)}>
-                      <p>Create new collection</p>
-                    </button>
                 </div>
                 <div className="ui vertical segment">
                     {content}
