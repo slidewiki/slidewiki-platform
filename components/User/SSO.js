@@ -7,6 +7,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../configs/general';
 import instances from '../../configs/instances.js';
 import SSOSingIn from '../../actions/user/SSOSingIn';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 const MODI = 'sso_modi';
 const NAME = 'sso_data';
@@ -88,7 +89,7 @@ class SSO extends React.Component {
     componentWillReceiveProps(nextProps) {
         // console.log('changed jwt from to', this.props.SSOStore.jwt, nextProps.SSOStore.jwt);
         if (nextProps.SSOStore.jwt !== '' && nextProps.SSOStore.jwt !== this.props.SSOStore.jwt) {
-            location.replace(instances[nextProps.SSOStore.instance].validate + '/?instance=' + nextProps.SSOStore.instance + '&jwt=' + encodeURIComponent(nextProps.SSOStore.jwt));
+            location.replace(instances[nextProps.SSOStore.instance].validate + '/?instance=' + instances._self + '&jwt=' + encodeURIComponent(nextProps.SSOStore.jwt) + '&userid=' + nextProps.SSOStore.userid);
         }
     }
 

@@ -20,6 +20,7 @@ export default function SSOSignIn(context, payload, done) {
             }
             done();
         } else {
+            console.log('SSOSignIn', res);
             context.dispatch('SSO_SIGNIN_SUCCESS', res);
             done();
         }

@@ -316,6 +316,19 @@ export default {
             context.executeAction(prepareSSO, payload, done);
         }
     },
+    migrateUser: {
+        path: '/migrateUser',
+        method: 'get',
+        page: 'migrateUser',
+        title: 'SlideWiki -- Single Sign On',
+        handler: require('../components/Login/MigrateUser'),
+        action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+                pageTitle: shortTitle + ' | Single Sign On'
+            });
+            done();
+        }
+    },
 
     //-----------------------------------DeckPage routes------------------------------
     // selector {id: 'id of parent deck; may contain [0-9-]',

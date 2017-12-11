@@ -58,11 +58,27 @@ export default {
                 resolveWithFullResponse: true
             })
                 .then((res) => {
-                    callback(null, res.headers['----jwt----']);
+                    console.log('user.ssosignin', res.body);
+                    callback(null, { data: res.body, jwt: res.headers['----jwt----']});
                 })
                 .catch((err) => {
                     callback(err);
                 });
+      } else if (resource === 'user.ssofinalize') {
+          rp.post({
+              uri: args.url,
+              body: JSON.stringify({
+                  email: args.email,
+                  username: args.username
+              }),
+              resolveWithFullResponse: true
+          })
+              .then((res) => {
+                  callback(null, res.headers['----jwt----']);
+              })
+              .catch((err) => {
+                  callback(err);
+              });
         } else if (resource === 'user.socialsignin') {
             rp.post({
                 uri: Microservices.user.uri + '/social/login',

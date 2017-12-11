@@ -8,6 +8,7 @@ import instances from '../../configs/instances.js';
 import common from '../../common';
 import checkEmail from '../../actions/user/registration/checkEmail';
 import newSocialData from '../../actions/user/registration/newSocialData';
+import {navigateAction} from 'fluxible-router';
 
 const MODI = 'sso_modi';
 const NAME = 'sso_data';
@@ -21,12 +22,13 @@ class SelectInstanceModal extends React.Component {
             openModal: this.props.SSOStore.openModal,
             activeTrap: this.props.SSOStore.activeTrap,
             instance: '',
-            email: ''
+            email: '',
+            isLoading: false
         };
 
         this.handleClose = this.handleClose.bind(this);
         this.unmountTrap = this.unmountTrap.bind(this);
-        this.saveHandler = this.saveHandler.bind(this);
+        this.singInHandler = this.singInHandler.bind(this);
     }
 
     componentWillReceiveProps(nextProps){
@@ -63,7 +65,7 @@ class SelectInstanceModal extends React.Component {
         }
     }
 
-    saveHandler(e) {
+    singInHandler(e) {
         e.preventDefault();
 
         if (!common.isLocalStorageOn()) {
@@ -82,7 +84,7 @@ class SelectInstanceModal extends React.Component {
         this.context.executeAction(newSocialData, {});
 
         //prepare localStorage
-        localStorage.setItem(MODI, 'register');
+        localStorage.setItem(MODI, 'signin');
         localStorage.setItem(NAME, '');
 
         //observe storage
@@ -98,7 +100,7 @@ class SelectInstanceModal extends React.Component {
             height = screen.height;
         let left = screen.width/2-width/2, topSpace = screen.height/2-height/2;
 
-        this.handleClose();
+        this.setState({ isLoading: true });
 
         let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
         win.focus();
@@ -110,7 +112,7 @@ class SelectInstanceModal extends React.Component {
         console.log('storage event', e.key, localStorage.getItem(e.key));
         //this is available
 
-        if (e.key !== NAME || localStorage.getItem(MODI) !== 'register')
+        if (e.key !== NAME || localStorage.getItem(MODI) !== 'signin')
             return false;
 
         let data = {};
@@ -131,15 +133,20 @@ class SelectInstanceModal extends React.Component {
 
         //check data - valid and not empty
         if ( (data.username.length < 1)
-            || (data.email.length < 1)
-            || (data.jwt.length < 1)
-            || (data.hashedPasword.length < 1) )
+            || (data.userid.length < 1)
+            || (data.jwt.length < 1) )
             //Failure
             return false;
 
-        this.context.executeAction(newSocialData, data);
+        this.setState({ isLoading: false });
 
-        //TODO
+        context.setUser(data); //save user as cookie via userStoragePlugin
+        try {
+            this.context.executeAction(navigateAction, {url: '/user/'+data.username});
+            location.reload();
+        } catch (e) {
+            //nothing - server side
+        }
 
         return true;
     }
@@ -210,7 +217,7 @@ class SelectInstanceModal extends React.Component {
                     <Divider />
                     <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
                       <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                      <Button id="SelectInstanceModalSaveButton" ref="SelectInstanceModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={this.saveHandler} icon='user' labelPosition='left' content='Sign in' disabled={common.isEmpty(this.state.email) || common.isEmpty(this.state.instance) || !this.props.SSOStore.emailExisting}/>
+                      <Button id="SelectInstanceModalSaveButton" ref="SelectInstanceModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Upload" onClick={this.singInHandler} icon='user' labelPosition='left' content='Sign in' disabled={common.isEmpty(this.state.email) || common.isEmpty(this.state.instance) || !this.props.SSOStore.emailExisting}/>
                     </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>
@@ -221,10 +228,11 @@ class SelectInstanceModal extends React.Component {
 
 SelectInstanceModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func
+    getUser: React.PropTypes.func,
+    setUser: React.PropTypes.func
 };
 
-SelectInstanceModal = connectToStores(SelectInstanceModal ,[SSOStore],(context,props) => {
+SelectInstanceModal = connectToStores(SelectInstanceModal, [SSOStore], (context,props) => {
     return {
         SSOStore: context.getStore(SSOStore).getState()
     };
