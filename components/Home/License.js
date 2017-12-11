@@ -77,7 +77,7 @@ class license extends React.Component {
                 <div className="ui right floated medium image">
                   <FormattedMessage id="licence.ccPdlLogo" defaultMessage="Creative Commons CC 0 public domain License logo">
                     {
-                      <img alt={alt}  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png" />
+                      (alt) => <img alt={alt}  src="http://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png" />
                     }
                   </FormattedMessage>
                 </div>
