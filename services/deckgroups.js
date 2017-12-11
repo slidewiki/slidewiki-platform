@@ -121,12 +121,12 @@ export default {
         log.info({Id: req.reqId, Service: __filename.split('/').pop(), Resource: resource, Operation: 'update', Method: req.method});
         let args = params.params? params.params : params;
 
-        let usergroups = params.usergroups.map( (usergroup) => {
-            return usergroup._id;
-        }).join('&usergroup=');
-
         // update deck assignments to deck groups
         if(resource === 'deckgroups.decks'){
+
+            let usergroups = params.usergroups.map( (usergroup) => {
+                return usergroup._id;
+            }).join('&usergroup=');
 
             let uri = `${Microservices.deck.uri}/deck/${args.deckId}/groups?user=${params.userId}`;
 
@@ -176,6 +176,21 @@ export default {
             }).catch( (err) => {
                 callback(err);
             });
+
+        // update deck collection metadata
+        } else if (resource === 'deckgroups.metadata'){
+            rp({
+                method: 'PUT', 
+                uri: `${Microservices.deck.uri}/group/${args.id}`,
+                json: true,
+                headers: {'----jwt----': args.jwt},
+                body: {
+                    title: args.title, 
+                    description: args.description, 
+                    userGroup: (args.userGroup !== '') ? args.userGroup : undefined
+                }
+            }).then( (updated) => callback(null, updated))
+            .catch((err) => callback(err));
         }
     }, 
 

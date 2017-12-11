@@ -51,7 +51,7 @@ class CollectionPanel extends React.Component {
                     <div className="ui segments">
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
-                            <h2 className="ui left floated header">Decks</h2>
+                            <h2 className="ui left floated header">Decks in collection</h2>
                             <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                                 <i className="icon exchange"/>
                                 <div className="text">First Added</div>

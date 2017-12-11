@@ -53,8 +53,8 @@ class NewCollectionModal extends React.Component {
         }
 
         swal({
-            title: 'New Deck Group',
-            text: 'We are creating a new Deck Group...',
+            title: 'New Deck Collection',
+            text: 'We are creating a new Deck Collection...',
             type: 'success',
             timer: 2000,
             showCloseButton: false,
@@ -75,7 +75,7 @@ class NewCollectionModal extends React.Component {
     render() {
 
         // the user can assign a user group to a collection only if he is the creator of the user group
-        let userGroupOptions = this.props.userGroups.filter( (userGroup) => {
+        let userGroupOptions = (this.props.userGroups || []).filter( (userGroup) => {
             return (userGroup.creator.userid === this.props.loggedInUser);
         }).map( (userGroup) => ({
             text: `${userGroup.name} (${userGroup.members.length+1} member${((userGroup.members.length+1) !== 1) ? 's': ''})`,
@@ -83,10 +83,10 @@ class NewCollectionModal extends React.Component {
         }));
 
         return (
-            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='forkModalHeader'
-                   aria-describedby='forkModalDesc' open={this.props.isOpen}
+            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='addNewCollectionHeader'
+                   aria-describedby='addNewCollectionHeaderDescr' open={this.props.isOpen}
                    onClose={this.props.handleClose}>
-                <Header content='Create a new Deck Collection' id='forkModalHeader'/>
+                <Header content='Create a new Deck Collection' id='addNewCollectionHeader'/>
                 <Modal.Content>
                 <Form>
                     <Form.Field required error={this.state.validationError}>

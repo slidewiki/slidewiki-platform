@@ -1,74 +1,43 @@
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
 import DeckCollectionStore from '../../stores/DeckCollectionStore';
+import UserProfileStore from '../../stores/UserProfileStore';
 import deleteCollection from '../../actions/collections/deleteCollection';
 import { connectToStores } from 'fluxible-addons-react';
-
+import NewCollectionModal from './NewCollectionModal';
+import UpdateCollectionModal from './UpdateCollectionModal';
 
 class UserCollections extends React.Component {
     constructor(props){
         super(props);
 
         this.styles = {'backgroundColor': '#2185D0', 'color': 'white'};
+
+        this.state = {
+            showNewCollectionModal: false, 
+            showUpdateCollectionModal: false,
+            updateCollectionDetails: {}
+        };
     }
 
-    componentWillReceiveProps(nextProps) {
-        // if (nextProps.error.action !== undefined && this.props.error === '') {
-        //     let message = 'Error while deleting the group: ';
-        //     if (nextProps.error.action === 'leave')
-        //         message = 'Error while leaving the group: ';
-        //     swal({
-        //         title: 'Error',
-        //         text: message + nextProps.error.message,
-        //         type: 'error',
-        //         confirmButtonText: 'Close',
-        //         confirmButtonClass: 'negative ui button',
-        //         allowEscapeKey: false,
-        //         allowOutsideClick: false,
-        //         buttonsStyling: false
-        //     })
-        //     .then(() => {
-        //         this.context.executeAction(updateUsergroup, {group: {}, offline: true});
-
-        //         return true;
-        //     })
-        //     .catch();
-        //     return;
-        // }
+    showNewCollectionModal(event){
+        event.preventDefault();
+        this.setState({
+            showNewCollectionModal: true
+        });
     }
 
-    handleClickOnEditGroup(e) {
-        // e.preventDefault();
-        // console.log('handleClickOnEditGroup:', e.target.attributes.name.nodeValue);
-
-        // const action = e.target.attributes.name.nodeValue;  //eg. changeGroup_2
-        // const groupid = action.split('_')[1];
-
-        // let group = this.props.groups.find((group) => {
-        //     return group._id.toString() === groupid;
-        // });
-
-        // console.log('handleClickOnEditGroup: use group', group);
-
-        // this.context.executeAction(updateUsergroup, {group: group, offline: false});
-
-        // this.context.executeAction(navigateAction, {
-        //     url: '/user/' + this.props.username + '/groups/edit'
-        // });
+    handleClickOnEditCollection(collection) {
+        this.setState({
+            showUpdateCollectionModal: true,
+            updateCollectionDetails: collection
+        });
     }
 
     handleDeleteCollection(colId) {
         this.context.executeAction(deleteCollection, {
             id: colId
         });
-    }
-
-    handleCLickNewGroup(e) {
-        // e.preventDefault();
-        // this.context.executeAction(updateUsergroup, {group: {}, offline: true});
-        // this.context.executeAction(navigateAction, {
-        //     url: '/user/' + this.props.username + '/groups/edit'
-        // });
     }
 
     showErrorPopup(text){
@@ -128,7 +97,7 @@ class UserCollections extends React.Component {
                                           <button className="ui large basic icon button" data-tooltip="Delete Collection" aria-label="Delete Collection" onClick={this.handleDeleteCollection.bind(this, col._id)} >
                                               <i className="remove icon" name={'deleteCollection_' + col._id} ></i>
                                           </button>
-                                          <button className="ui large basic icon button" data-tooltip="Collection Settings" aria-label="Collection Settings" name={col._id} onClick={this.handleClickOnEditGroup.bind(this)} >
+                                          <button className="ui large basic icon button" data-tooltip="Collection Settings" aria-label="Collection Settings" name={col._id} onClick={this.handleClickOnEditCollection.bind(this, col)} >
                                               <i className="setting icon" name={'editCollection' + col._id} ></i>
                                           </button>
                                       </div>
@@ -140,15 +109,21 @@ class UserCollections extends React.Component {
                 });
             }
         }
+
         return (
             <div className="ui segments">
                 {loadingDiv}
                 <div className="ui secondary clearing segment">
                     <h2 className="ui left floated header">{(this.props.loggedinuser === this.props.user.uname) ? 'My Deck Collections' : 'Owned Deck Collections' }</h2>
+                    <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
+                      <p>Create new collection</p>
+                  </button>
                 </div>
                 <div className="ui vertical segment">
                     {content}
                 </div>
+                <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.UserProfileStore.user.groups} loggedInUser={this.props.UserProfileStore.userid} />
+                <UpdateCollectionModal collection={this.state.updateCollectionDetails} isOpen={this.state.showUpdateCollectionModal} handleClose={() => this.setState({showUpdateCollectionModal: false})} userGroups={this.props.UserProfileStore.user.groups} loggedInUser={this.props.UserProfileStore.userid} />
             </div>
         );
     }
@@ -158,9 +133,10 @@ UserCollections.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
 
-UserCollections = connectToStores(UserCollections, [DeckCollectionStore], (context, props) => {
+UserCollections = connectToStores(UserCollections, [DeckCollectionStore, UserProfileStore], (context, props) => {
     return {
         DeckCollectionStore: context.getStore(DeckCollectionStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
     };
 });
 

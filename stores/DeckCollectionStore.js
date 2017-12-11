@@ -111,6 +111,28 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    addCollection(newCollection){
+        this.collections.documents.push(newCollection);
+        this.emitChange();
+    }
+
+    addCollectionFailure(){
+
+    }
+
+    updateCollectionMetadata(updatedCollection){
+
+        // replace the collection that has just been updated
+        this.collections.documents = this.collections.documents.map( (col) => {          
+            return (col._id === updatedCollection._id) ? updatedCollection : col;
+        });
+        
+        this.emitChange();
+    }   
+
+    updateCollectionMetadataFailed(){
+
+    }
 
 }
 
@@ -125,6 +147,12 @@ DeckCollectionStore.handlers = {
 
     'LOAD_COLLECTION_DETAILS_SUCCESS': 'updateCollectionDetails', 
     'LOAD_COLLECTION_DETAILS_FAILURE': 'updateCollectionDetailsFailed',
+
+    'ADD_COLLECTION_SUCCESS': 'addCollection', 
+    'ADD_COLLECTION_FAILURE': 'addCollectionFailure', 
+
+    'UPDATE_COLLECTION_METADATA': 'updateCollectionMetadata', 
+    'UPDATE_COLLECTION_METADATA_ERROR': 'updateCollectionMetadataFailed',
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
 };
