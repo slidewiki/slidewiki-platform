@@ -1,8 +1,9 @@
 import React from 'react';
 import FocusTrap from 'focus-trap-react';
 import {Cropper} from 'react-image-cropper';
-import uploadPicture from '../../../actions/user/userprofile/uploadPicture';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { Button, Modal, Divider, TextArea} from 'semantic-ui-react';
+import uploadPicture from '../../../actions/user/userprofile/uploadPicture';
 
 class ChangePictureModal extends React.Component {
 
@@ -44,6 +45,16 @@ class ChangePictureModal extends React.Component {
     }
 
     uploadCroppedPicture(e) {
+        const messages = defineMessages({
+            modalTitle: {
+                id: 'ChangePictureModal.modalTitle',
+                defaultMessage: 'A wild error has been spotted!',
+            },
+            modalText: {
+                id: 'ChangePictureModal.modalText',
+                defaultMessage: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
+            },
+        });
         let payload = {};
         Object.assign(payload, this.props.user);
         payload.picture = this.refs.cropper.crop({ maxWidth: 170 });//NOTE maxWidth is not used by the cropper
@@ -57,8 +68,8 @@ class ChangePictureModal extends React.Component {
         } else {
             this.handleClose();
             swal({
-                title: 'A wild error has been spotted!',
-                text: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
+                title: this.context.intl.formatMessage(messages.modalTitle),
+                text: this.context.intl.formatMessage(messages.modalText),
                 type: 'error',
                 confirmButtonClass: 'ui primary button',
                 buttonsStyling: false
@@ -67,6 +78,20 @@ class ChangePictureModal extends React.Component {
     }
 
     render() {
+        const messages = defineMessages({
+            description: {
+                id: 'ChangePictureModal.description',
+                defaultMessage: 'This modal is used to crop and save a picture meant to be used as a user-profile picture.',
+            },
+            cancel: {
+                id: 'ChangePictureModal.cancel',
+                defaultMessage: 'Cancel',
+            },
+            save: {
+                id: 'ChangePictureModal.save',
+                defaultMessage: 'Save',
+            },
+        });
         return (
           <Modal trigger={
                   <Button tabIndex='-1' id="ChangePictureModalOpenButton" aria-hidden={this.state.modalOpen} basic onClick={this.handleOpen} style={{'display': 'none'}}/>
@@ -89,16 +114,19 @@ class ChangePictureModal extends React.Component {
                       initialFocus: '#ChangePictureModalSaveButton',
                   }}>
                   <Modal.Header className="ui left aligned" as="h1" id="ChangePictureModalHeader">
-                      Crop your image
+                    <FormattedMessage
+                      id='ChangePictureModal.modalHeader'
+                      defaultMessage='Crop your image'
+                    />
                   </Modal.Header>
                   <Modal.Content>
                       <Divider />
-                      <TextArea className="sr-only" id="ChangePictureModalDescription" value="This modal is used to crop and save a picture meant to be used as a user-profile picture." />
+                      <TextArea className="sr-only" id="ChangePictureModalDescription" value={this.context.intl.formatMessage(messages.description)}/>
                       <Cropper src={this.props.filePath} ref="cropper" fixedRatio={true} rate={1} styles={{source_img: {WebkitFilter: 'blur(3.5px)', filter: 'blur(3.5px)'}}}/>
                       <Divider />
                       <Modal.Actions className="ui center aligned" as="div" style={{'textAlign': 'right'}}>
-                        <Button color='red' tabIndex="0" type="button" aria-label="Cancel" onClick={this.handleClose} icon="minus circle" labelPosition='left' content="Cancel"/>
-                        <Button id="ChangePictureModalSaveButton" color="green" tabIndex="0" type="button" aria-label="Save" onClick={this.uploadCroppedPicture} icon="save" labelPosition='left' content="Save"/>
+                        <Button color='red' tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.cancel)} onClick={this.handleClose} icon="minus circle" labelPosition='left' content={this.context.intl.formatMessage(messages.cancel)}/>
+                        <Button id="ChangePictureModalSaveButton" color="green" tabIndex="0" type="button" aria-label={this.context.intl.formatMessage(messages.save)} onClick={this.uploadCroppedPicture} icon="save" labelPosition='left' content={this.context.intl.formatMessage(messages.save)}/>
                       </Modal.Actions>
                   </Modal.Content>
               </FocusTrap>
@@ -108,7 +136,8 @@ class ChangePictureModal extends React.Component {
 }
 
 ChangePictureModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 export default ChangePictureModal;
