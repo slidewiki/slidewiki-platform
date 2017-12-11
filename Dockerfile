@@ -1,6 +1,9 @@
 FROM slidewiki/runtime:nodejs-8-slim
 MAINTAINER Ali Khalili "hyperir@gmail.com"
 
+ARG BUILD_ENV=local
+ENV BUILD_ENV ${BUILD_ENV}
+
 WORKDIR /nodeApp
 
 # ---------------- #
@@ -10,7 +13,7 @@ WORKDIR /nodeApp
 ADD . /nodeApp
 RUN ./make_version.sh
 
-RUN npm install
+RUN if [ "$BUILD_ENV" = "travis" ] ; then npm prune --production ; else rm -R node_modules ; npm install --production ; fi
 RUN npm run install
 
 # -------- #
