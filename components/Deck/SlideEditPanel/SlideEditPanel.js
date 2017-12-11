@@ -158,8 +158,8 @@ class SlideEditPanel extends React.Component {
 
         let normalContent = (
           <div>
-            <a className="item" id="handleAddInputBox" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
-                <div tabIndex="0"><i  className="font icon"></i>Text</div>
+            <a className="item" id="handleAddInputBox" tabIndex="0" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
+                <i tabIndex="0" className="font icon"></i>Text
             </a>
             <a  className="item" id="handleUploadMediaClick" tabIndex="0" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
                 <i tabIndex="0" className="photo icon"></i>Image

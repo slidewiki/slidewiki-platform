@@ -717,25 +717,20 @@ class SlideContentEditor extends React.Component {
             }
         });
 
-        this.correctImageBoxes();
+        this.correctDimensionsBoxes('img');
     }
-    correctImageBoxes(){
+    correctDimensionsBoxes(type){
         $('.pptx2html [style*="absolute"]').each(function () {
-            if($(this).find('img:first').length)
-            { //find boxes with images inside
-                //console.log('adjust image');
-                //console.log('image width' + $(this).find('img:first').width());
-                //console.log('image width attr' + $(this).find('img:first').attr('width'));
-                //console.log('box width' + $(this).width());
-                if($(this).width() < $(this).find('img:first').width())
-                { //check if box width is smaller than image width/height
-                    $(this).width($(this).find('img:first').width());
-                //    console.log('adjust image width');
+            if($(this).find(type + ':first').length)
+            {
+                if($(this).width() < $(this).find(type+':first').width())
+                { //check if box width is smaller than iframe/image width/height
+                    $(this).width($(this).find(type+':first').width());
+                //    console.log('adjust iframe width');
                 }
-                if($(this).height() < $(this).find('img:first').height())
-                { //check if box height is smaller than image width/height
-                    $(this).height($(this).find('img:first').height());
-                //    console.log('adjust image height');
+                if($(this).height() < $(this).find(type+':first').height())
+                { //check if box height is smaller than iframe/image width/height
+                    $(this).height($(this).find(type+':first').height());
                 }
             }
         });
@@ -1289,27 +1284,31 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.uploadVideoClick === 'true' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
         {
-            $('.pptx2html').append('<div id="10000" style="width: 300px; height: 200px; position: absolute; top: 100px; left: 100px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+            //register event to correct Iframeboxes dimensions as soon as user clicks on "OK" button in video dialog
+            $('.cke_dialog_ui_button_ok').mouseup((evt) => {
+                console.log('====ckeditor save button ok==== - refresh drag and menus');
+                //this.addBorders();
+                setTimeout(() => {
+                    this.correctDimensionsBoxes('iframe');
+                    this.resizeDrag();
+                    this.emitChange();
+                    //this.forceUpdate();
+                }, 500);
+            });
+
+            $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
             //this.refreshCKeditor();
             //this.resize();
             //this.forceUpdate();
             //https://www.youtube.com/watch?v=08C-u8U6rXM
 
             //$('#10000').focus();
-            //this.placeCaretAtStart(10000);
+            this.placeCaretAtStart('10000');
             //this.resizeDrag();
             //this.uniqueIDAllElements();
             CKEDITOR.instances.inlineContent.execCommand('youtube');
 
-            /*$('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in video dialog button
-                console.log('====ckeditor save button ok==== - refresh drag and menus');
-                //this.addBorders();
-                setTimeout(() => {
-                    this.resizeDrag();
-                    this.emitChange();
-                    //this.forceUpdate();
-                }, 500);
-            });*/
+
 
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
