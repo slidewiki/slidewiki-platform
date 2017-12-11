@@ -13,6 +13,9 @@ class SlideEditStore extends BaseStore {
         this.addInputBox = 'false';
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
+        this.otherClick = 'false';
+        this.embedClick = 'false';
+        this.HTMLEditorClick = 'false';
     }
     updateContent(payload) {
         //console.log('test' + payload + payload.slide.content + ' title: ' +  payload.slide.title + ' id: ' + payload.slide.id);
@@ -66,6 +69,25 @@ class SlideEditStore extends BaseStore {
         this.uploadVideoClick = 'false';
         this.emitChange();
     }
+    handleOtherClick(){
+        this.otherClick = 'true';
+        this.emitChange();
+        this.otherClick = 'false';
+        this.emitChange();
+    }
+    handleEmbedClick(){
+        this.embedClick = 'true';
+        this.emitChange();
+        this.embedClick = 'false';
+        this.emitChange();
+    }
+    handleHTMLEditorClick(){
+        this.HTMLEditorClick = 'true';
+        this.emitChange();
+        this.HTMLEditorClick = 'false';
+        this.emitChange();
+    }
+
     getState() {
         return {
             id: this.id,
@@ -76,7 +98,10 @@ class SlideEditStore extends BaseStore {
             template: this.template,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
-            uploadVideoClick: this.uploadVideoClick
+            uploadVideoClick: this.uploadVideoClick,
+            otherClick: this.otherClick,
+            embedClick: this.embedClick,
+            HTMLEditorClick: this.HTMLEditorClick
         };
     }
     dehydrate() {
@@ -92,6 +117,9 @@ class SlideEditStore extends BaseStore {
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;
+        this.otherClick = state.otherClick;
+        this.embedClick = state.embedClick;
+        this.HTMLEditorClick = state.HTMLEditorClick;
     }
 }
 
@@ -104,6 +132,9 @@ SlideEditStore.handlers = {
     'ADD_INPUT_BOX': 'handleAddInputBox',
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
     'UPLOAD_VIDEO_CLICK': 'handleuploadVideoClick',
+    'OTHER_CLICK': 'handleOtherClick',
+    'EMBED_CLICK': 'handleEmbedClick',
+    'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
 };
 
 export default SlideEditStore;

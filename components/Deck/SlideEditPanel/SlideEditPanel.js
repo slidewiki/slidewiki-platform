@@ -2,10 +2,14 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import classNames from 'classnames';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
-import changeTemplate from '../../../actions/slide/changeTemplate';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
+import otherClick from '../../../actions/slide/otherClick';
+import embedClick from '../../../actions/slide/embedClick';
+import changeTemplate from '../../../actions/slide/changeTemplate';
+import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
+
 
 class SlideEditPanel extends React.Component {
 
@@ -24,9 +28,12 @@ class SlideEditPanel extends React.Component {
     handleUploadVideoClick(){
         this.context.executeAction(uploadVideoClick, {});
     }
-    handleOtherClick(){}
-    handleEmbedClick(){}
-
+    handleOtherClick(){
+        this.context.executeAction(otherClick, {});
+    }
+    handleEmbedClick(){
+        this.context.executeAction(embedClick, {});
+    }
     handleTemplateClick(){
         //console.log('clicked');
         this.showTemplate = true;
@@ -42,7 +49,9 @@ class SlideEditPanel extends React.Component {
             this.forceUpdate();
         }
     }
-    handleHTMLEditorClick(){}
+    handleHTMLEditorClick(){
+        this.context.executeAction(HTMLEditorClick, {});
+    }
     handleBack(){
         this.showTemplate = false;
         this.forceUpdate();

@@ -592,11 +592,11 @@ class SlideContentEditor extends React.Component {
 
         //destroy previous ckeditor-plugins
         if (CKEDITOR.instances.inlineContent != null) {
-            console.log('destroy previous CKEDITOR instance');
+            //console.log('destroy previous CKEDITOR instance');
             CKEDITOR.instances.inlineContent.destroy();
         }
         if (CKEDITOR.instances.inlineSpeakerNotes != null)  {
-            console.log('destroy previous CKEDITOR instance');
+            //console.log('destroy previous CKEDITOR instance');
             CKEDITOR.instances.inlineSpeakerNotes.destroy();
         }
 
@@ -1367,6 +1367,19 @@ class SlideContentEditor extends React.Component {
                     return true;
                 });
             }
+        }
+        if (nextProps.SlideEditStore.otherClick === 'true' && nextProps.SlideEditStore.otherClick !== this.props.SlideEditStore.otherClick)
+        {
+            console.log('otherclick');
+        }
+        if (nextProps.SlideEditStore.embedClick === 'true' && nextProps.SlideEditStore.embedClick !== this.props.SlideEditStore.embedClick)
+        {
+            console.log('embedClick');
+        }
+        if (nextProps.SlideEditStore.HTMLEditorClick === 'true' && nextProps.SlideEditStore.HTMLEditorClick !== this.props.SlideEditStore.HTMLEditorClick)
+        {
+            this.disableResizeDrag();
+            CKEDITOR.instances.inlineContent.execCommand('sourcedialog');
         }
 
     }
