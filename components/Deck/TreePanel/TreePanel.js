@@ -17,6 +17,8 @@ import loadTranslations from '../../../actions/loadTranslations';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
 import TranslationModal from '../Translation/TranslationModal';
+import CronjobModal from '../Translation/CronjobModal';
+import SlidePreviewModal from '../Translation/SlidePreviewModal';
 import NavigationPanel from './../NavigationPanel/NavigationPanel';
 
 
@@ -26,7 +28,7 @@ class TreePanel extends React.Component {
         super(props);
         this.state = {
             isForkModalOpen: false,
-            isTranslationModalOpen: false
+            isTranslationModalOpen: false,
         };
     }
 
@@ -114,6 +116,8 @@ class TreePanel extends React.Component {
             });
     }
 
+
+
     render() {
         const rootNodeStyles = {
             fontSize: '1.06em'
@@ -153,6 +157,7 @@ class TreePanel extends React.Component {
         return (
             <div className="ui container" ref="treePanel" role="navigation" onFocus={this.handleFocus} onBlur={this.handleBlur}>
                 <NavigationPanel />
+
                 <div className="ui segment bottom attached active tab" style={SegmentStyles}>
 
                     {/*  <h2 className="ui medium header">Deck: <NavLink style={rootNodeStyles} href={'/deck/' + rootNode.id}>{rootNodeTitle}</NavLink></h2> */}
@@ -191,6 +196,7 @@ class TreePanel extends React.Component {
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
                 <TranslationModal selector={selector.toJS()} mode='deck' isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
+                
             </div>
         );
     }

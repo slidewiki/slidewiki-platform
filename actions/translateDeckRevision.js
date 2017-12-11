@@ -17,7 +17,7 @@ export default function translateDeckRevision(context, payload, done) {
 
     payload.user = user.toString();
     payload.deckId = context.getStore(ContentStore).selector.sid;
-    
+
     payload.jwt = context.getStore(UserProfileStore).jwt;
         //enrich with root deck id if deck to be revised is not uppermost deck
     //    let parent = TreeUtil.getParentId(payload.selector);
@@ -42,11 +42,17 @@ export default function translateDeckRevision(context, payload, done) {
 
             context.dispatch('END_TRANSLATION', 'success');
 
-            context.executeAction(navigateAction, {
-                url: '/deck/' + res.root_deck //ADD HERE NEW DECK ID
-            });
+            if (res.cronjob) {
+                context.dispatch('TOGGLE_CRONJOB_MODAL');
+            }else{
+                context.executeAction(navigateAction, {
+                    url: '/deck/' + res.root_deck //ADD HERE NEW DECK ID
+                });
 
-            done();
+                done();
+            }
+
+
 
         }
     });

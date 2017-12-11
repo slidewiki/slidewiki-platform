@@ -80,13 +80,13 @@ class TranslationPanel extends React.Component {
         }
     }
 
-    renderTranslateTo(supported) {
-
-        return (
-            {value:supported.code , text: supported.name}
-        );
-
-    }
+    // renderTranslateTo(supported) {
+    //
+    //     return (
+    //         {value:supported.code , text: supported.name}
+    //     );
+    //
+    // }
 
     render() {
         let deckLanguage = '';
@@ -107,7 +107,7 @@ class TranslationPanel extends React.Component {
         const user = this.props.UserProfileStore.userid;
         let divider = (user && translations.length) ? <Dropdown.Divider /> : '';
 
-        let languageOptions = supported.map(this.renderTranslateTo, this);
+        //let languageOptions = supported.map(this.renderTranslateTo, this);
 
         let currentLang = deckLanguage ?
             <span>{ISO6391.getName(deckLanguage.toLowerCase().substr(0,2))}</span>

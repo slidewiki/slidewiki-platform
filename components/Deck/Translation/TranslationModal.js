@@ -64,7 +64,7 @@ class TranslationModal extends React.Component {
                         selector: selector
                     });
                     this.props.handleClose();
-                    break;                
+                    break;
             }
 
         }else{

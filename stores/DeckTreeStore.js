@@ -554,6 +554,7 @@ class DeckTreeStore extends BaseStore {
         arr.push(lastNode.split(':')[0] + ':' + newPosition);
         return arr.join(';');
     }
+
     getSelector(){
         return {
             id: this.selector.get('id'),
@@ -576,7 +577,7 @@ class DeckTreeStore extends BaseStore {
             latestRevisionId: this.latestRevisionId,
             theme: this.theme,
             translations: this.translations,
-            currentLang: this.currentLang
+            currentLang: this.currentLang,
         };
     }
     dehydrate() {
@@ -669,6 +670,7 @@ DeckTreeStore.handlers = {
     'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError',
     'FOCUS_TREE_NODE': 'focusTreeNode',
     'LOAD_TRANSLATIONS_ROOT_SUCCESS': 'updateTranslations',
+
 };
 
 export default DeckTreeStore;
