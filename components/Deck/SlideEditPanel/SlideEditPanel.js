@@ -5,7 +5,9 @@ import NavigationPanel from './../NavigationPanel/NavigationPanel';
 import addInputBox from '../../../actions/slide/addInputBox';
 import uploadMediaClick from '../../../actions/slide/uploadMediaClick';
 import uploadVideoClick from '../../../actions/slide/uploadVideoClick';
-import otherClick from '../../../actions/slide/otherClick';
+import tableClick from '../../../actions/slide/tableClick';
+import mathsClick from '../../../actions/slide/mathsClick';
+import codeClick from '../../../actions/slide/codeClick';
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
@@ -16,6 +18,7 @@ class SlideEditPanel extends React.Component {
     constructor(props) {
         super(props);
         this.showTemplate = false;
+        this.showOther = false;
         this.state = {
         };
     }
@@ -29,7 +32,18 @@ class SlideEditPanel extends React.Component {
         this.context.executeAction(uploadVideoClick, {});
     }
     handleOtherClick(){
-        this.context.executeAction(otherClick, {});
+        this.showOther = true;
+        this.forceUpdate();
+        //this.context.executeAction(otherClick, {});
+    }
+    handleTableClick(){
+        this.context.executeAction(tableClick, {});
+    }
+    handleMathsClick(){
+        this.context.executeAction(mathsClick, {});
+    }
+    handleCodeClick(){
+        this.context.executeAction(codeClick, {});
     }
     handleEmbedClick(){
         this.context.executeAction(embedClick, {});
@@ -54,6 +68,7 @@ class SlideEditPanel extends React.Component {
     }
     handleBack(){
         this.showTemplate = false;
+        this.showOther = false;
         this.forceUpdate();
     }
     handleKeyPress = (event, param, template) => {
@@ -74,6 +89,15 @@ class SlideEditPanel extends React.Component {
                     break;
                 case 'handleOtherClick':
                     this.handleOtherClick();
+                    break;
+                case 'handleTableClick':
+                    this.handleTableClick();
+                    break;
+                case 'handleMathsClick':
+                    this.handleMathsClick();
+                    break;
+                case 'handleCodeClick':
+                    this.handleCodeClick();
                     break;
                 case 'handleEmbedClick':
                     this.handleEmbedClick();
@@ -99,6 +123,21 @@ class SlideEditPanel extends React.Component {
             //borderStyle: 'dashed dashed none dashed',
             //borderColor: '#e7e7e7',
         };
+        let otherList = (
+                <div>
+                  <a className="item" id="handleBack" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i tabIndex="0" className="reply icon"></i>back
+                  </a>
+                  <a className="item" id="handleTableClick" tabIndex="0" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
+                      <i tabIndex="0" className="table icon"></i>Table
+                  </a>
+                  <a className="item" id="handleMathsClick" tabIndex="0" onClick={this.handleMathsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleMathsClick')}>
+                      <i tabIndex="0" className="superscript icon"></i>Maths
+                  </a>
+                  <a className="item" id="handleCodeClick" tabIndex="0" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
+                      <i tabIndex="0" className="code icon"></i>Code
+                  </a>
+                </div>);
 
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
@@ -194,7 +233,9 @@ class SlideEditPanel extends React.Component {
         let panelcontent;
         if(this.showTemplate){
             panelcontent = templateList;
-        }else {
+        }else if (this.showOther) {
+            panelcontent = otherList;
+        } else {
             panelcontent = normalContent;
         }
         return (

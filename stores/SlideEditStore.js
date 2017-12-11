@@ -13,7 +13,9 @@ class SlideEditStore extends BaseStore {
         this.addInputBox = 'false';
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
-        this.otherClick = 'false';
+        this.tableClick = 'false';
+        this.mathsClick = 'false';
+        this.codeClick = 'false';
         this.embedClick = 'false';
         this.HTMLEditorClick = 'false';
     }
@@ -69,10 +71,22 @@ class SlideEditStore extends BaseStore {
         this.uploadVideoClick = 'false';
         this.emitChange();
     }
-    handleOtherClick(){
-        this.otherClick = 'true';
+    handleTableClick(){
+        this.tableClick = 'true';
         this.emitChange();
-        this.otherClick = 'false';
+        this.tableClick = 'false';
+        this.emitChange();
+    }
+    handleMathsClick(){
+        this.mathsClick = 'true';
+        this.emitChange();
+        this.mathsClick = 'false';
+        this.emitChange();
+    }
+    handleCodeClick(){
+        this.codeClick = 'true';
+        this.emitChange();
+        this.codeClick = 'false';
         this.emitChange();
     }
     handleEmbedClick(){
@@ -99,7 +113,9 @@ class SlideEditStore extends BaseStore {
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
             uploadVideoClick: this.uploadVideoClick,
-            otherClick: this.otherClick,
+            tableClick: this.tableClick,
+            mathsClick: this.mathsClick,
+            codeClick: this.codeClick,
             embedClick: this.embedClick,
             HTMLEditorClick: this.HTMLEditorClick
         };
@@ -117,7 +133,9 @@ class SlideEditStore extends BaseStore {
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
         this.uploadVideoClick = state.uploadVideoClick;
-        this.otherClick = state.otherClick;
+        this.tableClick = state.tableClick;
+        this.mathsClick = state.mathsClick;
+        this.codeClick = state.codeClick;
         this.embedClick = state.embedClick;
         this.HTMLEditorClick = state.HTMLEditorClick;
     }
@@ -132,7 +150,9 @@ SlideEditStore.handlers = {
     'ADD_INPUT_BOX': 'handleAddInputBox',
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',
     'UPLOAD_VIDEO_CLICK': 'handleuploadVideoClick',
-    'OTHER_CLICK': 'handleOtherClick',
+    'TABLE_CLICK': 'handleTableClick',
+    'MATHS_CLICK': 'handleMathsClick',
+    'CODE_CLICK': 'handleCodeClick',
     'EMBED_CLICK': 'handleEmbedClick',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
 };

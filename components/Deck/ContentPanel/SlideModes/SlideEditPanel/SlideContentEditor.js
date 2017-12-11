@@ -1282,39 +1282,6 @@ class SlideContentEditor extends React.Component {
         {
             this.refs.uploadMediaModal.handleOpen();
         }
-        if (nextProps.SlideEditStore.uploadVideoClick === 'true' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
-        {
-            //register event to correct Iframeboxes dimensions as soon as user clicks on "OK" button in video dialog
-            $('.cke_dialog_ui_button_ok').mouseup((evt) => {
-                console.log('====ckeditor save button ok==== - refresh drag and menus');
-                //this.addBorders();
-                setTimeout(() => {
-                    this.correctDimensionsBoxes('iframe');
-                    this.resizeDrag();
-                    this.emitChange();
-                    //this.forceUpdate();
-                }, 500);
-            });
-
-            $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-            //this.refreshCKeditor();
-            //this.resize();
-            //this.forceUpdate();
-            //https://www.youtube.com/watch?v=08C-u8U6rXM
-
-            //$('#10000').focus();
-            this.placeCaretAtStart('10000');
-            //this.resizeDrag();
-            //this.uniqueIDAllElements();
-            CKEDITOR.instances.inlineContent.execCommand('youtube');
-
-
-
-        }
-        if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
-        {
-            this.handleTemplatechange(nextProps.SlideEditStore.template);
-        }
         if (this.props.MediaStore.status === 'uploading') {
             if (nextProps.MediaStore.status === 'success') {
                 this.refs.uploadMediaModal.handleClose();
@@ -1368,13 +1335,60 @@ class SlideContentEditor extends React.Component {
                 });
             }
         }
-        if (nextProps.SlideEditStore.otherClick === 'true' && nextProps.SlideEditStore.otherClick !== this.props.SlideEditStore.otherClick)
+        if (nextProps.SlideEditStore.uploadVideoClick === 'true' && nextProps.SlideEditStore.uploadVideoClick !== this.props.SlideEditStore.uploadVideoClick)
         {
-            console.log('otherclick');
+            //register event to correct Iframeboxes dimensions as soon as user clicks on "OK" button in video dialog
+            $('.cke_dialog_ui_button_ok').mouseup((evt) => {
+                console.log('====ckeditor save button ok==== - refresh drag and menus');
+                //this.addBorders();
+                setTimeout(() => {
+                    this.correctDimensionsBoxes('iframe');
+                    this.resizeDrag();
+                    this.emitChange();
+                    //this.forceUpdate();
+                }, 500);
+            });
+
+            $('.pptx2html').append('<div id="10000" style="position: absolute; top: 100px; left: 100px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+            //this.refreshCKeditor();
+            //this.resize();
+            //this.forceUpdate();
+            //https://www.youtube.com/watch?v=08C-u8U6rXM
+
+            //$('#10000').focus();
+            this.placeCaretAtStart('10000');
+            //this.resizeDrag();
+            //this.uniqueIDAllElements();
+            CKEDITOR.instances.inlineContent.execCommand('youtube');
+        }
+        if (nextProps.SlideEditStore.tableClick === 'true' && nextProps.SlideEditStore.tableClick !== this.props.SlideEditStore.tableClick)
+        {
+            $('.pptx2html').append('<div id="10001" style="position: absolute; width: 400px; height:300px; top: 150px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+            this.resizeDrag();
+            this.placeCaretAtStart('10001');
+            CKEDITOR.instances.inlineContent.execCommand('table');
+        }
+        if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
+        {
+            $('.pptx2html').append('<div id="10002" style="position: absolute; width: 300px; height:200px; top: 200px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+            this.resizeDrag();
+            this.placeCaretAtStart('10002');
+            CKEDITOR.instances.inlineContent.execCommand('mathjax');
+        }
+        if (nextProps.SlideEditStore.codeClick === 'true' && nextProps.SlideEditStore.codeClick !== this.props.SlideEditStore.codeClick)
+        {
+            $('.pptx2html').append('<div id="10003" style="position: absolute; width: 400px; height:400px; top: 250px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+            this.resizeDrag();
+            this.placeCaretAtStart('10003');
+            CKEDITOR.instances.inlineContent.execCommand('codeSnippet');
         }
         if (nextProps.SlideEditStore.embedClick === 'true' && nextProps.SlideEditStore.embedClick !== this.props.SlideEditStore.embedClick)
         {
             console.log('embedClick');
+        }
+        if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
+        {
+            this.handleTemplatechange(nextProps.SlideEditStore.template);
         }
         if (nextProps.SlideEditStore.HTMLEditorClick === 'true' && nextProps.SlideEditStore.HTMLEditorClick !== this.props.SlideEditStore.HTMLEditorClick)
         {
