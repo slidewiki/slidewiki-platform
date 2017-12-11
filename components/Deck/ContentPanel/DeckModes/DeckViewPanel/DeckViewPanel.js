@@ -102,7 +102,7 @@ class DeckViewPanel extends React.Component {
             case 'oeg':
                 deckTheme = 'OEG';
                 break;
-            default:                
+            default:
         }
         const deckLicense = deckData.license;
         const deckTitle = currentRevision.title;
@@ -138,7 +138,7 @@ class DeckViewPanel extends React.Component {
         </div> : '';
 
         return (
-        <div ref="deckViewPanel" id='deckViewPanel' className="ui container bottom attached" style={heightStyle}>
+        <div ref="deckViewPanel" id='deckViewPanel' className="ui bottom attached" style={heightStyle}>
 
                 <main role="main">
             <div className="ui segment" style={heightStyle}>
@@ -170,7 +170,7 @@ class DeckViewPanel extends React.Component {
                                 <div className="ui label" tabIndex="0">
                                     <i className="comments icon" aria-label="Language"></i>{deckLanguage}
                                 </div>
-                                
+
                                {/* <TranslationPanel/>*/}
                                 <div className="ui large label" tabIndex="0">
                                     <i className="block layout icon" aria-label="Number of slides"></i>{totalSlides}
