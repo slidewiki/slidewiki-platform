@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
-//import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
 import LoginModal from '../Login/LoginModal.js';
 import HeaderDropdown from '../Login/HeaderDropdown.js';
 import {connectToStores} from 'fluxible-addons-react';
@@ -74,7 +73,7 @@ class Header extends React.Component {
               <FormattedMessage id='header.logout' defaultMessage='Logout'/>
               </a>
             </div>);
-            notification_locale = ''; ///*<UserNotificationsBadge className="ui item"/>*/
+            notification_locale = '';
 
         } else{
             notification_locale = <div className="item"><LocaleSwitcher className = 'ui item'/></div>;
@@ -136,7 +135,6 @@ class Header extends React.Component {
                     <NavLink className="item" routeName="addDeck">
                         <i className="add icon"/><FormattedMessage id='header.menu.addDeck' defaultMessage='Add Deck'/>
                     </NavLink>
-                    {/*<UserNotificationsBadge className="ui item"/>*/}
                     {mobileLoginButton}
                     <LoginModal errorMessage={this.props.UserProfileStore.errorMessage} socialLoginError={this.props.UserProfileStore.socialLoginError} userid={this.props.UserProfileStore.userid} username={this.props.UserProfileStore.username}/>
                     <div className="item search">
