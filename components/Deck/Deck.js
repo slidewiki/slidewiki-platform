@@ -189,7 +189,7 @@ class Deck extends React.Component {
 
 
                 </div>
-                {error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''}
+                {/*error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''*/}
             </div>
 
         );

@@ -1,7 +1,12 @@
 import rp from 'request-promise';
 import { isEmpty } from '../common.js';
 import { Microservices } from '../configs/microservices';
+import cookieParser from 'cookie';
+
 const log = require('../configs/log').log;
+
+const user_cookieName = 'user_json_storage';
+const secondsCookieShouldBeValid = 60*60*24*14 ;  //2 weeks
 
 export default {
     name: 'userProfile',
@@ -149,10 +154,11 @@ export default {
                     method: 'GET',
                     uri: Microservices.user.uri + '/user/' + params.params.id + '/profile',
                     headers: { '----jwt----': params.params.jwt },
-                    json: true
+                    resolveWithFullResponse: true,
                 })
-                .then((body) => {
+                .then((response) => {
                     //console.log(body);
+                    let body = JSON.parse(response.body);
                     let converted = {
                         id: body._id,
                         uname: body.username,
@@ -168,7 +174,19 @@ export default {
                         providers: body.providers || [],
                         groups: !isEmpty(body.groups) ? body.groups : []
                     };
-                    callback(null, converted);
+                    callback(null, converted, {
+                        headers: {
+                            'Set-Cookie': cookieParser.serialize(user_cookieName, JSON.stringify({
+                                username: body.username,
+                                userid: body._id,
+                                jwt: response.headers['----jwt----'],
+                            }), {
+                                maxAge: secondsCookieShouldBeValid,
+                                sameSite: true,
+                                path: '/',
+                            }),
+                        }
+                    });
                 })
                 .catch((err) => callback(err));
             } else {

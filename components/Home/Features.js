@@ -86,8 +86,8 @@ class features extends React.Component {
                                 <div className="item">
                                     <i className="large circle blue play middle aligned icon"></i>
                                     <div className="content">
-                                        <div className="header">Presentation mode </div>
-                                        <div className="description">Use the Presentation mode to view a deck as a slideshow. Includes a timer and speaker notes' view.
+                                        <div className="header">Slideshow mode </div>
+                                        <div className="description">Use the Slideshow mode to view a deck as a slideshow. Includes a timer and speaker notes' view.
                                         </div>
                                     </div>
                                 </div>
