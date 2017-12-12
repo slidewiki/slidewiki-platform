@@ -9,6 +9,7 @@ import common from '../../common';
 import checkEmail from '../../actions/user/registration/checkEmail';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import {navigateAction} from 'fluxible-router';
+import setUser from '../../actions/user/setUser.js';
 
 const MODI = 'sso_modi';
 const NAME = 'sso_data';
@@ -140,9 +141,9 @@ class SelectInstanceModal extends React.Component {
 
         this.setState({ isLoading: false });
 
-        context.setUser(data); //save user as cookie via userStoragePlugin
+        this.context.executeAction(setUser, data);
         try {
-            this.context.executeAction(navigateAction, {url: '/user/'+data.username});
+            this.context.executeAction(navigateAction, {url: '/user/'+data.username+'/settings/profile'});
             location.reload();
         } catch (e) {
             //nothing - server side
@@ -228,8 +229,7 @@ class SelectInstanceModal extends React.Component {
 
 SelectInstanceModal.contextTypes = {
     executeAction: React.PropTypes.func.isRequired,
-    getUser: React.PropTypes.func,
-    setUser: React.PropTypes.func
+    getUser: React.PropTypes.func
 };
 
 SelectInstanceModal = connectToStores(SelectInstanceModal, [SSOStore], (context,props) => {
