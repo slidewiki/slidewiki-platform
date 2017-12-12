@@ -50,7 +50,7 @@ export default {
                 });
         } else if (resource === 'user.ssosignin') {
             rp.post({
-                uri: args.url,
+                uri: Microservices.user.uri + '/login',
                 body: JSON.stringify({
                     email: args.email,
                     password: args.password

@@ -103,7 +103,6 @@ class SSO extends React.Component {
             password: hashPassword(this.refs.password.value),
             grecaptcharesponse: this.state.grecaptcharesponse,
             email: this.props.SSOStore.email,
-            url: instances[this.props.SSOStore.instance].login,
             errorMessages: {
                 error403: this.context.intl.formatMessage(this.errorMessages.error403),
                 error404: this.context.intl.formatMessage(this.errorMessages.error404),

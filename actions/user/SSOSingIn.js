@@ -2,7 +2,7 @@ const log = require('../log/clog');
 
 export default function SSOSignIn(context, payload, done) {
     log.info(context);
-    context.service.read('user.ssosignin', {url: payload.url, email: payload.email, password: payload.password}, { timeout: 20 * 1000 }, (err, res) => {
+    context.service.read('user.ssosignin', {email: payload.email, password: payload.password}, { timeout: 20 * 1000 }, (err, res) => {
         if (err) {
             console.log(err, err.statusCode, err.message);
             switch (err.statusCode) {

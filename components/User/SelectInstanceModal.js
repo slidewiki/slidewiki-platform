@@ -91,7 +91,7 @@ class SelectInstanceModal extends React.Component {
         $(window).off('storage').on('storage', this.handleStorageEvent.bind(this));
 
         //create new tab
-        let url = instances[this.state.instance].entry+'/'+this.state.instance+'/'+encodeURIComponent(this.state.email);
+        let url = instances[this.state.instance].entry+'/'+instances._self+'/'+encodeURIComponent(this.state.email);
 
         let width = screen.width*0.75, height = screen.height*0.75;
         if (width < 600)
