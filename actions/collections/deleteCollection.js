@@ -1,7 +1,6 @@
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import UserProfileStore from '../../stores/UserProfileStore';
-// import loadUserCollections from './loadUserCollections';
 
 export default function deleteCollection(context, payload, done) {
     log.info(context);

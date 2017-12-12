@@ -64,9 +64,13 @@ class UserCollections extends React.Component {
             content = (
                 <h3>An error occurred while fetching deck collections. Please try again later.</h3>
             );
-        
+        // show pop-ups when error occurs
         } else if(this.props.DeckCollectionStore.deleteDeckCollectionError){
             this.showErrorPopup('An error occurred while deleting collection...');
+        } else if(this.props.DeckCollectionStore.addCollectionError){
+            this.showErrorPopup('An error occurred while creating collection....');
+        } else if(this.props.DeckCollectionStore.updateCollectionMetadataError){
+            this.showErrorPopup('An error occured while updating collection...');
         }
         
         // just show loading indicator
@@ -87,7 +91,7 @@ class UserCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui header"><h3><a href={`/collection/${col._id}`} target='_blank'>{col.title}</a></h3></div>
+                                    <div className="ui header"><h3><a href={`/collection/${col._id}`}>{col.title}</a></h3></div>
                                     <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''} {col.decks.length} deck{((col.decks.length) !== 1) ? 's': ''} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title="Shared Collection"></i> : ''}</div>
                                 </div>
 
@@ -115,9 +119,11 @@ class UserCollections extends React.Component {
                 {loadingDiv}
                 <div className="ui secondary clearing segment">
                     <h2 className="ui left floated header">{(this.props.loggedinuser === this.props.user.uname) ? 'My Deck Collections' : 'Owned Deck Collections' }</h2>
-                    <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
-                      <p>Create new collection</p>
-                  </button>
+                    {(this.props.loggedinuser === this.props.user.uname) &&
+                        <button className="ui right floated button" role="button" tabIndex="0" onClick={this.showNewCollectionModal.bind(this)}>
+                          <p>Create new collection</p>
+                        </button>
+                    }
                 </div>
                 <div className="ui vertical segment">
                     {content}

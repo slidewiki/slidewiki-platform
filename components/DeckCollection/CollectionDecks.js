@@ -34,7 +34,7 @@ class ColletionDecks extends React.Component {
                 {[...Array(size).keys()].map( (i) => <DeckCard userid={this.props.UserProfileStore.user.id} key={i} cardContent={content[i]} newTab={this.props.newTab}/>)}
                     </div>);
         } else {
-            return <h3>No decks available</h3>;
+            return <center><h3>No decks available</h3></center>;
         }
     }
 }

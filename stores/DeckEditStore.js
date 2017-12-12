@@ -131,9 +131,11 @@ class DeckEditStore extends BaseStore {
         this.loadCollectionsError = false;
     }
 
-    addCollection(newCollection){
+    addCollection(newCollection){        
         this.collectionOptions.push(newCollection);
+        this.collectionOptions = [...new Set(this.collectionOptions)];
         this.selectedCollections.push(newCollection._id);
+
         this.emitChange();
     }
 

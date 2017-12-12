@@ -9,6 +9,8 @@ class DeckCollectionStore extends BaseStore {
         this.deleteDeckCollectionError = false;
         this.collectionDetails = undefined;
         this.collectionDetailsError = false;
+        this.addCollectionError = false;
+        this.updateCollectionMetadataError = false;
         this.loading = false;
     }
 
@@ -18,6 +20,8 @@ class DeckCollectionStore extends BaseStore {
         this.deleteDeckCollectionError = false;
         this.collectionDetails = undefined;
         this.collectionDetailsError = false;
+        this.addCollectionError = false;
+        this.updateCollectionMetadataError = false;
         this.loading = false;
     }
 
@@ -28,6 +32,8 @@ class DeckCollectionStore extends BaseStore {
             deleteDeckCollectionError: this.deleteDeckCollectionError,
             collectionDetails: this.collectionDetails,
             collectionDetailsError: this.collectionDetailsError,
+            addCollectionError: this.addCollectionError,
+            updateCollectionMetadataError: this.updateCollectionMetadataError,
             loading: this.loading
         };
     }
@@ -42,6 +48,8 @@ class DeckCollectionStore extends BaseStore {
         this.deleteDeckCollectionError = state.deleteDeckCollectionError;
         this.collectionDetails = state.collectionDetails;
         this.collectionDetailsError = state.collectionDetailsError;
+        this.addCollectionError = state.addCollectionError;
+        this.updateCollectionMetadataError = state.updateCollectionMetadataError;
         this.loading = state.loading;
     }
 
@@ -117,7 +125,10 @@ class DeckCollectionStore extends BaseStore {
     }
 
     addCollectionFailure(){
-
+        this.addCollectionError = true;
+        this.emitChange();
+        this.addCollectionError = false;
+        this.emitChange();
     }
 
     updateCollectionMetadata(updatedCollection){
@@ -131,7 +142,10 @@ class DeckCollectionStore extends BaseStore {
     }   
 
     updateCollectionMetadataFailed(){
-
+        this.updateCollectionMetadataError = true;
+        this.emitChange();
+        this.updateCollectionMetadataError = false;
+        this.emitChange();
     }
 
 }

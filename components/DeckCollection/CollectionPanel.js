@@ -38,6 +38,7 @@ class CollectionPanel extends React.Component {
             <div className = "ui vertically padded stackable grid container" >
                 <div className = "four wide column" >
                     <div>
+                        <h3>Collection</h3>
                         <h2>{data.title}</h2>
                         <h4>{data.description}</h4>
                         <div className = "ui divider" />
