@@ -35,9 +35,7 @@ STEP 3: Verify that in STEP 2, you have correct operation mentioned. If you see 
 export default {
     Microservices: {
         'deck': {
-            // NOTE remove before merging
-            uri: 'http://slidewiki.imis.athena-innovation.gr/deckservice'
-            // uri: 'https://deckservice.experimental.slidewiki.org'
+            uri: 'https://deckservice.experimental.slidewiki.org'
         },
         'discussion': {
             uri: 'https://discussionservice.experimental.slidewiki.org'
@@ -59,14 +57,10 @@ export default {
             port: 443
         },
         'search': {
-            // NOTE remove
-            uri: 'http://slidewiki.imis.athena-innovation.gr/searchservice'
-            // uri: 'https://searchservice.experimental.slidewiki.org'
+            uri: 'https://searchservice.experimental.slidewiki.org'
         },
         'file': {
-            // NOTE remove before merging
-            uri: 'http://slidewiki.imis.athena-innovation.gr/fileservice'
-            // uri: 'https://fileservice.experimental.slidewiki.org'
+            uri: 'https://fileservice.experimental.slidewiki.org'
         },
         'pdf': {
             uri : 'https://pdfservice.experimental.slidewiki.org'
