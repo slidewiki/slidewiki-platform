@@ -2,8 +2,9 @@ import React from 'react';
 import { NavLink } from 'fluxible-router';
 import SearchBox  from '../Search/AutocompleteComponents/HeaderSearchBox';
 //import UserNotificationsBadge from '../User/UserNotificationsPanel/UserNotificationsBadge';
-import LoginModal from '../Login/LoginModal.js';
-import HeaderDropdown from '../Login/HeaderDropdown.js';
+import LoginModal from '../Login/LoginModal';
+import HeaderDropdown from '../Login/HeaderDropdown';
+import UserMenuDropdown from '../Login/UserMenuDropdown';
 import {connectToStores} from 'fluxible-addons-react';
 import UserProfileStore from '../../stores/UserProfileStore';
 import userSignOut from '../../actions/user/userSignOut';
@@ -56,7 +57,7 @@ class Header extends React.Component {
         let cookieBanner = '';
 
         if (this.props.UserProfileStore.username !== '') {
-            loginButton = <HeaderDropdown/>;
+            loginButton = <UserMenuDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
               <FormattedMessage id='header.mydecks' defaultMessage='My Decks'/>
