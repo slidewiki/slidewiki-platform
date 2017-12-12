@@ -130,7 +130,7 @@ class AttachDeckList extends React.Component {
                 // default English
                 deckLanguage = (deckLanguage === '' ? 'English' : deckLanguage);
                 //let countryFlag = deckLanguageCode === 'en' ? 'gb' : deckLanguageCode;
-                let deckTheme = deck.theme === undefined ? 'Simple' : deck.theme;
+                let deckTheme = deck.theme || 'default';
                 let selectedDeck = {
                     selectedDeckTitle:deck.title,
                     selectedDeckId: deck.deckID+'-'+deck.countRevisions
@@ -145,7 +145,7 @@ class AttachDeckList extends React.Component {
                               role="listitem"
                               aria-selected ={this.state.selectedDeckId === selectedDeck.selectedDeckId}
                               tabIndex="0">
-                            <Item.Image src={Microservices.file.uri + '/slideThumbnail/' +deck.firstSlide+'.jpeg'} alt={deck.title} size="small"/>
+                            <Item.Image src={Microservices.file.uri + '/thumbnail/slide/' +deck.firstSlide+'/'+deckTheme} alt={deck.title} size="small"/>
                             <Item.Content verticalAlign="middle" >
                               <Item.Header style ={this.state.selectedDeckId === selectedDeck.selectedDeckId ?activeItemStyle:{}}>
                                   {deck.title}
