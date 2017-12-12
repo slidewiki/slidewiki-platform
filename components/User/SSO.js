@@ -89,7 +89,7 @@ class SSO extends React.Component {
     componentWillReceiveProps(nextProps) {
         // console.log('changed jwt from to', this.props.SSOStore.jwt, nextProps.SSOStore.jwt);
         if (nextProps.SSOStore.jwt !== '' && nextProps.SSOStore.jwt !== this.props.SSOStore.jwt) {
-            location.replace(instances[nextProps.SSOStore.instance].validate + '/?instance=' + instances._self + '&jwt=' + encodeURIComponent(nextProps.SSOStore.jwt) + '&userid=' + nextProps.SSOStore.userid);
+            location.replace(instances[nextProps.SSOStore.instance].validate + '?instance=' + instances._self + '&jwt=' + encodeURIComponent(nextProps.SSOStore.jwt) + '&userid=' + nextProps.SSOStore.userid);
         }
     }
 
@@ -137,7 +137,7 @@ class SSO extends React.Component {
                             <h2 className="ui dividing header">Single Sign On</h2>
                             <h3 className="ui header">At this page you could sign up or sign in with an account from this instance on another one.</h3>
                             <h3 className="ui header">Beneath you have to enter your password and your account with the email {this.props.SSOStore.email} will be used on {url}.</h3>
-
+//TODO add more information - like in OpenID
                             <br />
                             <br />
 

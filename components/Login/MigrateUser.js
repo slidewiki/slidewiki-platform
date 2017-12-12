@@ -26,6 +26,7 @@ class MigrateUser extends React.Component {
         //handle data
         if (data !== null && data !== undefined && data !== '') {
             let json = JSON.parse(decodeURIComponent(data));
+            console.log('Got data:', json);
             //do a login
             if (json.jwt) {
                 localStorage.setItem(NAME, decodeURIComponent(data));
@@ -35,9 +36,9 @@ class MigrateUser extends React.Component {
             }
             //revise user data
             else {
-                this.hash = data.hash;
-                this.email = data.email;
-                this.username = data.email;
+                this.hash = json.hash;
+                this.email = json.email;
+                this.username = json.email;
                 //open modal
                 $(ReactDOM.findDOMNode(this.refs.modal.refs.wrappedElement.refs.ReviseUser_Modal)).modal({
                     closable  : false,

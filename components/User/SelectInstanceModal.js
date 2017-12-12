@@ -151,7 +151,7 @@ class SelectInstanceModal extends React.Component {
         return true;
     }
 
-    checkEmail() {
+    checkEmail() {//TODO only check email if value is an email
         const email = this.state.email;
         if (email !== '' && this.state.instance !== '') {
             this.context.executeAction(checkEmail, {email: email, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
