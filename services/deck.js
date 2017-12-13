@@ -69,7 +69,7 @@ export default {
             });
 
             let shareCountPromise = rp.get({
-                uri: Microservices.activities.uri + '/activities/allrevisions/count/share/deck/' + deckId,
+                uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=share&all_revisions=true',
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -79,7 +79,7 @@ export default {
             });
 
             let downloadCountPromise = rp.get({
-                uri: Microservices.activities.uri + '/activities/allrevisions/count/download/deck/' + deckId,
+                uri: Microservices.activities.uri + '/activities/deck/' + deckId + '?metaonly=true&activity_type=download&all_revisions=true',
                 simple: false //By default, http response codes other than 2xx will cause the promise to be rejected. This is overwritten here
             }).catch((err) => {
                 callback({
@@ -235,6 +235,22 @@ export default {
                 headers: {'----jwt----': params.jwt},
                 body: toSend
             }).then((deck) => callback(false, deck))
+            .catch((err) => callback(err));
+        } else if (resource === 'deck.translate'){
+
+            let toSend = {
+                language: params.language
+            };
+            rp({
+                method: 'PUT',
+                uri: Microservices.deck.uri + '/deck/' + params.deckId + '/translate',
+                json: true,
+                headers: {'----jwt----': params.jwt},
+                body: toSend
+            }).then((data) => {
+                //console.log('DECK:' + JSON.stringify(data.root_deck));
+                callback(false, data);
+            })
             .catch((err) => callback(err));
         }
     },

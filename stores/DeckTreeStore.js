@@ -6,6 +6,8 @@ class DeckTreeStore extends BaseStore {
         super(dispatcher);
         //keeps the status of currently selected node
         this.selector = Immutable.fromJS({});
+        //keeps the status of currently focused node
+        this.focusedSelector = Immutable.fromJS({});
         this.prevSelector = Immutable.fromJS({});
         this.nextSelector = Immutable.fromJS({});
         this.deckTree = Immutable.fromJS({});
@@ -42,6 +44,14 @@ class DeckTreeStore extends BaseStore {
             this.isSelectorValid = false;
         }
 
+        this.focusedSelector = this.selector;
+        //if the root deck was selected, focus it's first node
+        if (!this.focusedSelector.get('spath')) {
+            this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
+        }
+        //update the focused node in the tree
+        this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
+
         //prepare next and prev node selector
         this.updatePrevNextSelectors();
         //reset error state
@@ -52,14 +62,23 @@ class DeckTreeStore extends BaseStore {
         this.emitChange();
     }
     updatePrevNextSelectors() {
-        this.prevSelector = this.makeSelectorFromNode(this.findPrevNode(this.flatTree, this.selector));
-        this.nextSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.selector));
+        this.prevSelector = this.makeSelectorFromNode(this.findPrevNode(this.flatTree, this.focusedSelector));
+        this.nextSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
     }
     //deckTree: original deckTree from service without path
     //path: array of binary id:position
     makePathForTree(deckTree, path) {
         let nodePath = this.makeSelectorPathString(path);
-        let newTree = {id: deckTree.id, title: deckTree.title, type: deckTree.type, path: nodePath, selected: false, editable: false, onAction: 0};
+        let newTree = {
+            id: deckTree.id,
+            title: deckTree.title,
+            type: deckTree.type,
+            path: nodePath,
+            theme: deckTree.theme,
+            selected: false,
+            editable: false,
+            onAction: 0
+        };
         if (deckTree.type === 'deck') {
             newTree.children = [];
             newTree.expanded = true;
@@ -85,12 +104,25 @@ class DeckTreeStore extends BaseStore {
     }
     //flat tree is used to avoid complex recursive functions on tree
     //it is a trade off: updating the tree needs this to be synchronized
-    flattenTree(deckTree) {
+    //this also propagates themes from decks to slide children
+    flattenTree(deckTree, theme) {
+        if (!theme) theme = deckTree.get('theme');
+
         let list = [];
-        list.push({id: deckTree.get('id'), title: deckTree.get('title'), type: deckTree.get('type'), path: deckTree.get('path')});
+        list.push({
+            id: deckTree.get('id'),
+            title: deckTree.get('title'),
+            type: deckTree.get('type'),
+            path: deckTree.get('path'),
+            theme: theme,
+        });
+
         if (deckTree.get('type') === 'deck') {
             deckTree.get('children').forEach((item, index) => {
-                list = list.concat(this.flattenTree(item));
+                let theme = item.get('theme');
+                if (item.get('type') === 'slide') theme = deckTree.get('theme');
+
+                list = list.concat(this.flattenTree(item, theme));
             });
         }
         return list;
@@ -240,12 +272,23 @@ class DeckTreeStore extends BaseStore {
             return arr[arr.length - 1].split(':')[1];
         }
     }
+
     selectTreeNode(args) {
         let oldSelector = this.selector;
         this.selector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
         this.switchSelector(oldSelector, this.selector);
         this.emitChange();
     }
+
+    focusTreeNode(args) {
+        this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => false));
+        this.focusedSelector = Immutable.fromJS({'id': args.id, 'spath': args.spath, 'sid': args.sid, 'stype': args.stype});
+        this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
+        //update next and prev nodes states
+        this.updatePrevNextSelectors();
+        this.emitChange();
+    }
+
     toggleTreeNode(selector) {
         let selectorIm = Immutable.fromJS(selector);
         let selectedNodeIndex = this.makeImmSelectorFromPath(selectorIm.get('spath'));
@@ -273,6 +316,7 @@ class DeckTreeStore extends BaseStore {
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('title', (val) => payload.nodeSpec.title));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('id', (val) => payload.nodeSpec.id));
         this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('path', (val) => payload.nodeSpec.path));
+        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('theme', (val) => payload.nodeSpec.theme));
         //update flat tree for slide control
         this.flatTree = Immutable.fromJS(this.flattenTree(this.deckTree));
         this.emitChange();
@@ -335,10 +379,24 @@ class DeckTreeStore extends BaseStore {
         } catch (e) {
             //there might be the case when the node for old selector does not exist anymore
         }
-        selectedNodeIndex = this.makeImmSelectorFromPath(newSelector.get('spath'));
-        this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
-        this.selector = newSelector;
-        this.updatePrevNextSelectors();
+        try {
+            selectedNodeIndex = this.makeImmSelectorFromPath(newSelector.get('spath'));
+            this.deckTree = this.deckTree.updateIn(selectedNodeIndex,(node) => node.update('selected', (val) => true));
+            this.selector = newSelector;
+
+            //unfocus old focused node
+            this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => false));
+            this.focusedSelector = newSelector;
+            //if the root deck was selected, focus it's first node
+            if (!this.focusedSelector.get('spath')) {
+                this.focusedSelector = this.makeSelectorFromNode(this.findNextNode(this.flatTree, this.focusedSelector));
+            }
+            //update the focused node in the tree
+            this.deckTree = this.deckTree.updateIn(this.makeImmSelectorFromPath(this.focusedSelector.get('spath')),(node) => node.update('focused', (val) => true));
+            this.updatePrevNextSelectors();
+        } catch (e) {
+            //todo: handle unexpected events here
+        }
     }
     deleteTreeNode(selector, silent) {
         let selectorIm = Immutable.fromJS(selector);
@@ -536,6 +594,7 @@ class DeckTreeStore extends BaseStore {
             flatTree: this.flatTree,
             prevSelector: this.prevSelector,
             nextSelector: this.nextSelector,
+            focusedSelector: this.focusedSelector,
             error: this.error,
             isSelectorValid: this.isSelectorValid,
             revisionId: this.revisionId,
@@ -552,6 +611,7 @@ class DeckTreeStore extends BaseStore {
         this.flatTree = Immutable.fromJS(state.flatTree);
         this.prevSelector = Immutable.fromJS(state.prevSelector);
         this.nextSelector = Immutable.fromJS(state.nextSelector);
+        this.focusedSelector = Immutable.fromJS(state.focusedSelector);
         this.error  = state.error;
         this.isSelectorValid = state.isSelectorValid;
         this.revisionId = state.revisionId;
@@ -621,8 +681,8 @@ DeckTreeStore.handlers = {
     'ADD_TREE_NODELIST_SUCCESS': 'addTreeNodeList',
     'SWITCH_ON_ACTION_TREE_NODE_SUCCESS': 'switchOnActionTreeNode',
     'MOVE_TREE_NODE_SUCCESS': 'moveTreeNode',
-    'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError'
-
+    'LOAD_DECK_TREE_FAILURE': 'handleDeckTreeError',
+    'FOCUS_TREE_NODE': 'focusTreeNode'
 
 };
 

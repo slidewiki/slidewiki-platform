@@ -366,7 +366,7 @@ class ContactUs extends React.Component {
                        'Description: '+this.descriptionContact.ref.value,
                 swal_messages : this.getSwalMessages()
             };
-            console.log(payload);
+          
             this.context.executeAction(sendContactForm,payload);
         }
     }

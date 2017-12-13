@@ -109,7 +109,7 @@ class AttachSubdeckModal extends React.Component{
     handleAttachButton() {
         //selector: Object {id: "56", stype: "deck", sid: 67, spath: "67:2"}
         //nodeSec: Object {type: "deck", id: 1245-2}
-        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}});
+        this.context.executeAction(addTreeNodeAndNavigate, {selector: this.props.selector, nodeSpec: {type:'deck',id:this.state.selectedDeckId}, attach: true});
 
         //find target deck id
         let targetDeckId = this.props.selector.sid;

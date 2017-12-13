@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Identicons from 'identicons-react';
 import classNames from 'classnames';
 
@@ -14,13 +14,10 @@ import classNames from 'classnames';
  *   avatar:
  */
 
+//change by Ted for testing framework
+//class UserPicture extends Component {
+
 class UserPicture extends React.Component {
-    componentDidMount() {
-    }
-
-    componentDidUpdate() {
-    }
-
     render() {
         let classes = classNames({
             'ui': true,
@@ -51,13 +48,9 @@ class UserPicture extends React.Component {
         } else
             picture = <img src={ this.props.picture } className={ classes } alt=' ' role='presentation'/>;
         return (
-        <div > { this.props.link ? <a href={ '/user/' + username }>picture</a> : picture}</div>
+        <div > { this.props.link ? <a href={ '/user/' + this.props.username }>picture</a> : picture}</div>
         );
     }
 }
-
-UserPicture.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
-};
 
 export default UserPicture;

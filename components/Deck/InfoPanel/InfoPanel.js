@@ -15,12 +15,7 @@ class InfoPanel extends React.Component {
 
 
         return (
-            <div className="ui container" ref="infoPanel" role="complementary" >
-                  <InfoPanelHeader  />
-                   <div className="ui bottom attached segment">
                        <InfoPanelInfoView />
-                </div>
-            </div>
         );
     }
 }

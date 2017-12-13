@@ -192,6 +192,7 @@ class SearchPanel extends React.Component {
                                     <label htmlFor="language">Language</label>
                                     <select name='language' onChange={this.onChange.bind(this)} value={this.state.language} multiple='' id='language' className='ui fluid search dropdown' ref='language'>
                                       <option value=' '>Select Language</option>
+                                      <option value='nl_NL'>Dutch</option>
                                       <option value='en_GB'>English</option>
                                       <option value='de_DE'>German</option>
                                       <option value='el_GR'>Greek</option>

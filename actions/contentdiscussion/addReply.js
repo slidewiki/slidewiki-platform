@@ -1,3 +1,4 @@
+import UserProfileStore from '../../stores/UserProfileStore';
 import serviceUnavailable from '../error/serviceUnavailable';
 import addActivity from '../activityfeed/addActivity';
 const log = require('../log/clog');
@@ -15,7 +16,7 @@ export default function addReply(context, payload, done) {
             const comment = res.comment;
             let activity = {
                 activity_type: 'reply',
-                user_id: comment.user_id,
+                user_id: String(context.getStore(UserProfileStore).userid),
                 content_id: comment.content_id,
                 content_kind: comment.content_kind,
                 comment_info: {

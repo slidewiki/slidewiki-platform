@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import classNames from 'classnames/bind';
 import {NavLink} from 'fluxible-router';
@@ -41,12 +42,20 @@ class TreeNode extends React.Component {
         return !(Immutable.is(nextProps.item, this.props.item) && nextProps === this.props.mode);
     }
 
+    // Explicitly focus the node link in view mode
+    focusNode() {
+        ReactDOM.findDOMNode(this.nodeLink).focus();
+    }
+
     componentDidMount() {
 
     }
 
-    componentDidUpdate() {
-
+    componentDidUpdate(prevProps, prevState) {
+        //check if node was focused
+        if (this.props.item.get('focused') && !prevProps.item.get('focused')) {
+            this.focusNode();
+        }
     }
 
     handleExpandIconClick(selector, e) {
@@ -139,12 +148,18 @@ class TreeNode extends React.Component {
                                           page={self.props.page} rootNode={self.props.rootNode}
                                           username={self.props.username} permissions={self.props.permissions}/>;
         }
-        actionSigClass = classNames({
-            'hide-element': !this.props.item.get('selected') && !this.state.mouseover
-        });
-        let actionSignifier = <span className={actionSigClass}
-                                    onClick={this.handleMenuClick.bind(this, nodeSelector)}><i
-            className="ui link ellipsis horizontal icon right floated"></i></span>;
+        /*
+        let actionSignifierStyle = {
+            display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none',
+            'background-color': '#FFFFFF',
+            height: '0.5em'
+        };
+        let actionSignifier = <Button as='button' icon ui size='tiny' floated='right'
+                                      onClick={this.handleMenuClick.bind(this, nodeSelector)}
+                                      style={actionSignifierStyle} aria-label='open deck edit controls'
+                                      tabIndex={this.props.item.get('focused')}>
+                <Icon name='ellipsis horizontal'/>
+        </Button>;
         actionBtnsClass = classNames({
             'hide-element': !this.props.item.get('onAction'),
             'ui right aligned': true
@@ -207,7 +222,7 @@ class TreeNode extends React.Component {
                     </Button>} content='Delete' on='hover'/>
                 </Button.Group>
             </div>
-        );
+        );*/
         //change the node title style if it is selected
         const nodeTitle = cheerio.load(this.props.item.get('title')).text();
         let nodeTitleDIV = nodeTitle;
@@ -218,9 +233,9 @@ class TreeNode extends React.Component {
         if (this.props.item.get('editable')) {
             nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
-            actionSignifier = '';
+            //actionSignifier = '';
         } else {
-            nodeDIV = <NavLink href={nodeURL} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
+            nodeDIV = <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
                 {nodeTitleDIV}</NavLink>;
         }
         //change the node icon based on the type of node and its expanded state
@@ -242,11 +257,11 @@ class TreeNode extends React.Component {
                 {nodeIndex === 0 ? <TreeNodeTarget parentNode={self.props.parentNode} nodeIndex={nodeIndex}
                                                onMoveNode={self.props.onMoveNode} isAfterNode={false}/> : null }
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
-                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass}>  </i>
+                    <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true">  </i>
                     {nodeDIV}
-                    {(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier}
+                    {/*(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier*/}
                 </div>
-                {actionBtns}
+                {/*actionBtns*/}
                 {childNodesDIV}
                 <TreeNodeTarget parentNode={self.props.parentNode} onMoveNode={self.props.onMoveNode}
                                 nodeIndex={nodeIndex + 1} isAfterNode={true}/>

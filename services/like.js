@@ -31,8 +31,8 @@ export default {
                 }
                 //console.log("LOAD Deck id: " + targetDeckID);
                   /*********connect to microservices*************/
-                rp.get({uri: Microservices.activities.uri + '/activities/allrevisions/react/deck/' + targetDeckID}).then((res) => {
-                    let activities = JSON.parse(res);
+                rp.get({uri: Microservices.activities.uri + '/activities/deck/' + targetDeckID + '?metaonly=false&activity_type=react&all_revisions=true'}).then((res) => {
+                    let activities = JSON.parse(res).items;
                     let listOfUserIDs = [];
 
                     activities.forEach((activity) => listOfUserIDs.push(activity.user_id));
@@ -70,6 +70,10 @@ export default {
                 //console.log("LIKE Deck id: " + targetDeckID + "  User id: " + params.userid);
                 /*********connect to microservices*************/
                 //update backend store
+
+                let headers = {};
+                if (args.jwt) headers['----jwt----'] = args.jwt;
+
                 rp.post({
                     uri: Microservices.activities.uri + '/activity/new',
                     body:JSON.stringify({
@@ -78,7 +82,8 @@ export default {
                         content_id: String(targetDeckID),
                         content_kind: 'deck',
                         react_type: 'like'
-                    })
+                    }),
+                    headers,
                 }).then((res) => {
                     callback(null, {userid:  String(params.userid), username: params.username, selector: args.selector});
                 }).catch((err) => {

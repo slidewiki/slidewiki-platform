@@ -11,6 +11,7 @@ import ErrorStore from '../stores/ErrorStore';
 import Error from './Error/Error';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import loadSupportedLanguages from '../actions/loadSupportedLanguages';
 
 
 class Application extends React.Component {
@@ -38,6 +39,10 @@ class Application extends React.Component {
 
             );
         }
+    }
+
+    componentDidMount() {
+        context.executeAction(loadSupportedLanguages, {}, () => {return;});
     }
 
     componentDidUpdate(prevProps, prevState) {

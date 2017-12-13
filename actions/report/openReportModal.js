@@ -1,8 +1,4 @@
-/**
- * Created by lfernandes on 24.03.17.
- */
-
-const log = require('../log/clog');
+import log from '../log/clog';
 
 export default function openReportModal(context, payload, done) {
     log.info(context);
