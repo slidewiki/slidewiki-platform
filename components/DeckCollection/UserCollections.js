@@ -5,7 +5,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import deleteCollection from '../../actions/collections/deleteCollection';
 import { connectToStores } from 'fluxible-addons-react';
 import NewCollectionModal from './NewCollectionModal';
-import UpdateCollectionModal from './UpdateCollectionModal';
+// import UpdateCollectionModal from './UpdateCollectionModal';
 
 class UserCollections extends React.Component {
     constructor(props){
@@ -129,7 +129,6 @@ class UserCollections extends React.Component {
                     {content}
                 </div>
                 <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.UserProfileStore.user.groups} loggedInUser={this.props.UserProfileStore.userid} />
-                <UpdateCollectionModal collection={this.state.updateCollectionDetails} isOpen={this.state.showUpdateCollectionModal} handleClose={() => this.setState({showUpdateCollectionModal: false})} userGroups={this.props.UserProfileStore.user.groups} loggedInUser={this.props.UserProfileStore.userid} />
             </div>
         );
     }
