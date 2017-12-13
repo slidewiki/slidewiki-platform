@@ -49,7 +49,7 @@ class SelectInstanceModal extends React.Component {
         console.log(name, value);
         this.setState({ [name]: value });
 
-        if (name == 'email' && value !== '' && value !== undefined && this.state.instance !== '') {
+        if (name == 'email' && value !== '' && value !== undefined && this.state.instance !== '' && common.isEmailAddress(value)) {
               this.context.executeAction(checkEmail, {email: value, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
           }
     }
@@ -153,9 +153,9 @@ class SelectInstanceModal extends React.Component {
         return true;
     }
 
-    checkEmail() {//TODO only check email if value is an email
+    checkEmail() {
         const email = this.state.email;
-        if (email !== '' && this.state.instance !== '') {
+        if (email !== '' && this.state.instance !== '' && common.isEmailAddress(email)) {
             this.context.executeAction(checkEmail, {email: email, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
         }
     }

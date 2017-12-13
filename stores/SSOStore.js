@@ -76,6 +76,7 @@ class SSOStore extends BaseStore {
     initiate(data) {
         this.instance = data.instance;
         this.email = data.email;
+        // console.log('SSOStore initiate', data);
         this.emitChange();
     }
 

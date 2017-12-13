@@ -8,6 +8,7 @@ import {hashPassword} from '../../configs/general';
 import instances from '../../configs/instances.js';
 import SSOSingIn from '../../actions/user/SSOSingIn';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import {Accordion, Icon} from 'semantic-ui-react';
 
 const MODI = 'sso_modi';
 const NAME = 'sso_data';
@@ -17,7 +18,8 @@ class SSO extends React.Component {
         super(props);
 
         this.state = {
-            grecaptcharesponse: null
+            grecaptcharesponse: null,
+            activeIndex: 0
         };
 
         this.errorMessages = defineMessages({
@@ -68,7 +70,7 @@ class SSO extends React.Component {
 
         $(ReactDOM.findDOMNode(this.refs.SSO_form)).form(validationRules);
 
-        if (!instances[this.props.SSOStore.instance]) {
+        if (this.props.SSOStore && !instances[this.props.SSOStore.instance]) {
             console.log('Wrong instance name:', this.props.SSOStore.instance);
             swal({
                 title: 'Problem with the URL',
@@ -120,42 +122,90 @@ class SSO extends React.Component {
         });
     }
 
+    handleAccordionClick(e, titleProps) {
+        e.preventDefault();
+
+        const { index } = titleProps;
+        const { activeIndex } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
+
+        this.setState({ activeIndex: newIndex });
+    }
+
     render() {
         const signUpLabelStyle = {width: '150px'};
         const recaptchaStyle = {display: 'inline-block'};
         const PUBLIC_KEY = '6LdNLyYTAAAAAINDsVZRKG_E3l3Dvpp5sKboR1ET'; // Public reCAPTCHA key
 
         let url = '';
-        if (instances[this.props.SSOStore.instance])
+        let redirect = '';
+        if (this.props.SSOStore && instances[this.props.SSOStore.instance]) {
             url = instances[this.props.SSOStore.instance].url;
+            redirect = instances[this.props.SSOStore.instance].validate;
+        }
+
+        const { activeIndex } = this.state;
 
         return (
             <div>
                 <div className="ui vertically padded centered grid container" >
                     <div className="ten wide column">
                         <div className="ui blue padded center aligned segment">
-                            <h2 className="ui dividing header">Single Sign On</h2>
-                            <h3 className="ui header">At this page you could sign up or sign in with an account from this instance on another one.</h3>
-                            <h3 className="ui header">Beneath you have to enter your password and your account with the email {this.props.SSOStore.email} will be used on {url}.</h3>
-//TODO add more information - like in OpenID
-                            <br />
-                            <br />
+                            <div className="ui basic segment">
+                              <img className="ui centered medium image" src="/assets/images/logo_full.png" />
+                              <h2 className="ui header">SlideWiki Single Sign On</h2>
+                            </div>
+                            <div className="ui segments">
+                              <div className="ui left aligned segment">
+                                <p>
+                                  SlideWiki wants to access your account on {instances[instances._self].url} in order to retrieve your account details to the SlideWiki on {url}.
+                                  <br/>
+                                  Beneath you have to enter your password and your account with the email {(this.props.SSOStore) ? this.props.SSOStore.email : ''} will be copied to {url}.
+                                </p>
+                              </div>
+                              <div className="ui left aligned segment">
 
-                            <form className="ui form ssosignin" ref="SSO_form" >
-                                <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="password_label">Password</label>
-                                    <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
-                                </div>
-                                <div >
-                                    <input type="hidden" id="recaptcha" name="recaptcha"></input>
-                                    <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
-                                </div>
-                                <div className="ui error message" ></div>
-                                <br/>
-                                <button type="submit" className="ui blue labeled submit icon button" >
-                                    <i className="icon add user"/> Sign In
-                                </button>
-                            </form>
+                                <Accordion>
+                                  <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleAccordionClick.bind(this)}>
+                                    <Icon name='dropdown' />
+                                    Personal Account Data
+                                  </Accordion.Title>
+                                  <Accordion.Content active={activeIndex === 1}>
+                                    The following details will be read and transfered:
+                                    <br/>
+                                    <ul className="ui list">
+                                      <li>Username</li>
+                                      <li>Email Address</li>
+                                      <li>Full Name</li>
+                                      <li>Country</li>
+                                      <li>Picture</li>
+                                      <li>Biography</li>
+                                      <li>Organization</li>
+                                      <li>Language</li>
+                                    </ul>
+                                  </Accordion.Content>
+                                </Accordion>
+
+                              </div>
+                              <div className="ui segment">
+                                <form className="ui form ssosignin" ref="SSO_form" >
+                                    <div className="ui inline required field">
+                                        <label style={signUpLabelStyle} htmlFor="password_label">Password</label>
+                                        <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
+                                    </div>
+                                    <div >
+                                        <input type="hidden" id="recaptcha" name="recaptcha"></input>
+                                        <ReCAPTCHA style={recaptchaStyle} ref="recaptcha" sitekey={publicRecaptchaKey} onChange={this.onRecaptchaChange.bind(this)} aria-required="true"/>
+                                    </div>
+                                    <div className="ui error message" ></div>
+                                    <br/>
+                                    <button type="submit" className="ui blue labeled submit icon button" >
+                                        <i className="icon add user"/> Sign In
+                                    </button>
+                                    <p><small>This will redirect you to<br/><b>{redirect}</b></small></p>
+                                </form>
+                              </div>
+                            </div>
                         </div>
                     </div>
 
