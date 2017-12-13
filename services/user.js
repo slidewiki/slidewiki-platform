@@ -67,14 +67,17 @@ export default {
       } else if (resource === 'user.ssofinalize') {
           rp.post({
               uri: args.url,
-              body: JSON.stringify({
+              body: {
                   email: args.email,
                   username: args.username
-              }),
+              },
+              json: true,
               resolveWithFullResponse: true
           })
               .then((res) => {
-                  callback(null, res.headers['----jwt----']);
+                let json = res.body;
+                json.jwt = res.headers['----jwt----'];
+                  callback(null, json);
               })
               .catch((err) => {
                   callback(err);

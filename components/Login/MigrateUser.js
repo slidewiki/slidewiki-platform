@@ -4,19 +4,12 @@ import {navigateAction} from 'fluxible-router';
 import ReactDOM from 'react-dom';
 import ReviseUser from './ReviseUser';
 let classNames = require('classnames');
+import updateSSOData from '../../actions/user/updateSSOData';
 
 const MODI = 'sso_modi';
 const NAME = 'sso_data';
 
 class MigrateUser extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.hash = '';
-        this.email = '',
-        this.username = '';
-    }
-
     componentDidMount() {
         console.log('MigrateUser was called');
 
@@ -36,9 +29,6 @@ class MigrateUser extends React.Component {
             }
             //revise user data
             else {
-                this.hash = json.hash;
-                this.email = json.email;
-                this.username = json.email;
                 //open modal
                 $(ReactDOM.findDOMNode(this.refs.modal.refs.wrappedElement.refs.ReviseUser_Modal)).modal({
                     closable  : false,
@@ -50,6 +40,7 @@ class MigrateUser extends React.Component {
                         window.close();
                     }
                 }).modal('show');
+                this.context.executeAction(updateSSOData, json);
             }
         }
         else {
@@ -82,7 +73,7 @@ class MigrateUser extends React.Component {
         return (
             <div>
                 <b>We are merging your user account. This will take just a few seconds.<br/>You will be directed to next view.</b>
-                <ReviseUser ref='modal' hash={this.hash} email={this.email} username={this.username} />
+                <ReviseUser ref='modal' hash={this.hash} />
             </div>
         );
     }

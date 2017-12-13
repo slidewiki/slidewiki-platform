@@ -125,7 +125,7 @@ class SelectInstanceModal extends React.Component {
         }
         finally {
             //delete data
-            localStorage.setItem(NAME, '');
+            // localStorage.setItem(NAME, '');
         }
 
         //add language before send to service
@@ -143,7 +143,8 @@ class SelectInstanceModal extends React.Component {
 
         this.context.executeAction(setUser, data);
         try {
-            this.context.executeAction(navigateAction, {url: '/user/'+data.username+'/settings/profile'});
+            if (this.props.SSOStore.register)
+                this.context.executeAction(navigateAction, {url: '/user/'+data.username+'/settings/profile'});
             location.reload();
         } catch (e) {
             //nothing - server side

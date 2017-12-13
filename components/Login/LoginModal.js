@@ -227,7 +227,7 @@ class LoginModal extends React.Component {
 
         $('.ui.login.modal').modal('toggle');
 
-        this.context.executeAction(openSSOModal);
+        this.context.executeAction(openSSOModal, {register: false});
     }
 
     handleStorageEvent(e) {

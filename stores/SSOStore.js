@@ -12,6 +12,9 @@ class SSOStore extends BaseStore {
         this.jwt = '';
         this.errorMessage = '';
         this.userid = 0;
+        this.register = false;
+        this.username = '';
+        this.hash = '';
     }
 
     getState(){
@@ -24,7 +27,10 @@ class SSOStore extends BaseStore {
             email: this.email,
             jwt: this.jwt,
             errorMessage: this.errorMessage,
-            userid: this.userid
+            userid: this.userid,
+            register: this.register,
+            username: this.username,
+            hash: this.hash
         };
     }
     dehydrate() {
@@ -39,14 +45,18 @@ class SSOStore extends BaseStore {
         this.jwt = state.jwt;
         this.errorMessage = state.errorMessage;
         this.userid = state.userid;
+        this.register = state.register;
+        this.username = state.username;
+        this.hash = state.hash;
     }
-    openExampleModal(payload){
+    openModalMethod(payload){
         this.openModal = true;
         this.activeTrap = true;
+        this.register = payload.register;
         this.emitChange();
 
     }
-    closeExampleModal(payload){
+    closeModal(payload){
         this.openModal = false;
         this.activeTrap = false;
         this.emitChange();
@@ -80,16 +90,24 @@ class SSOStore extends BaseStore {
         this.emitChange();
     }
 
+    newData(data) {
+        this.username = data.username;
+        this.email = data.email;
+        this.hash = data.hash;
+        this.emitChange();
+    }
+
 }
 SSOStore.storeName = 'SSOStore';
 SSOStore.handlers = {
-  'SSO_MODAL_OPEN' : 'openExampleModal',
-  'SSO_MODAL_CLOSE': 'closeExampleModal',
+  'SSO_MODAL_OPEN' : 'openModalMethod',
+  'SSO_MODAL_CLOSE': 'closeModal',
   'SSO_MODAL_ERROR': 'error',
   'SSO_MODAL_CHECKED_EMAIL': 'checkedEmail',
   'SSO_INITIATE': 'initiate',
   'SSO_SIGNIN_SUCCESS': 'saveSignInData',
-  'SSO_SIGNIN_ERROR': 'signInError'
+  'SSO_SIGNIN_ERROR': 'signInError',
+  'SSO_NEW_DATA': 'newData'
 };
 
 export default SSOStore;

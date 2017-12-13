@@ -6,6 +6,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import checkEmail from '../../actions/user/registration/checkEmail';
 import checkUsername from '../../actions/user/registration/checkUsername';
 import UserRegistrationStore from '../../stores/UserRegistrationStore';
+import SSOStore from '../../stores/SSOStore';
 import common from '../../common';
 import finalizeMergedUser from '../../actions/user/finalizeMergedUser';
 import instances from '../../configs/instances.js';
@@ -18,13 +19,6 @@ const modalStyle = {
 };
 
 class ReviseUser extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.setUserdata = this.setUserdata.bind(this);
-        this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
-    }
-
     componentDidMount() {
         //Form validation
         const validationRules = {
@@ -77,32 +71,31 @@ class ReviseUser extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log('UserRegistrationSocial componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata);
-        if (nextProps.UserRegistrationStore.socialuserdata.email === undefined && nextProps.UserRegistrationStore.socialuserdata.username === undefined) {
-            this.setUserdata({}, false);
-            return;
-        }
-        if (nextProps.UserRegistrationStore.socialuserdata && localStorage.getItem(MODI) === 'register') {
-            if ((nextProps.UserRegistrationStore.socialuserdata.username && !(this.refs.username.value)) || (nextProps.UserRegistrationStore.socialuserdata.email && !(this.refs.email.value)))
-                this.setUserdata(nextProps.UserRegistrationStore.socialuserdata);
+        console.log('ReviseUser componentWillReceiveProps()', this.props.UserRegistrationStore.socialuserdata, nextProps.UserRegistrationStore.socialuserdata, this.props.SSOStore.username, nextProps.SSOStore.username);
+        if (nextProps.SSOStore.username !== this.props.SSOStore.username) {
+            this.refs.username.value = nextProps.SSOStore.username;
+            this.refs.email.value = nextProps.SSOStore.email;
+            this.checkUsername();
+            this.checkEmail();
         }
     }
 
     handleSignUp(e) {
         e.preventDefault();
 
-        $(ReactDOM.findDOMNode(this.refs.SocialRegistration_Modal)).modal('hide');
-        let user = this.props.UserRegistrationStore.socialuserdata;
+        let user = {};
         user.email = this.refs.email.value;
         user.username = this.refs.username.value;
-        user.hash = this.props.hash;
+        user.hash = this.props.SSOStore.hash;
 
         let language = common.getIntlLanguage();
         user.language = language;
 
-        user.url = instances[instances._self].finalize.replace('{hash}', this.props.hash);
+        user.url = instances[instances._self].finalize.replace('{hash}', user.hash);
 
         this.context.executeAction(finalizeMergedUser, user);
+
+        $(ReactDOM.findDOMNode(this.refs.ReviseUser_Modal)).modal('hide');
 
         return false;
     }
@@ -119,26 +112,6 @@ class ReviseUser extends React.Component {
         if (this.props.UserRegistrationStore.failures.usernameNotAllowed !== undefined || username !== '') {
             this.context.executeAction(checkUsername, {username: username});
         }
-    }
-
-    setUserdata(data, check = true) {
-        // console.log('ReviseUser setUserdata()', data);
-
-        this.refs.username.value = data.username || '';
-        this.refs.email.value = data.email || '';
-
-        if (check) {
-            this.checkUsername();
-            this.checkEmail();
-        }
-    }
-
-    handleNoAccessClick(e) {
-        e.preventDefault();
-        $(ReactDOM.findDOMNode(this.refs.SocialRegistration_Modal)).modal('hide');
-        this.context.executeAction(navigateAction, {
-            url: '/resetpassword'
-        });
     }
 
     render() {
@@ -186,11 +159,11 @@ class ReviseUser extends React.Component {
                   <form className="ui ssoregistrationmodalform form" ref="ReviseUser_form" >
                       <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
                           <label style={signUpLabelStyle}>Username * </label>
-                          <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" name="username" ref="username" placeholder="Username" aria-required="true" value={this.props.username} /></div>
+                          <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" name="username" ref="username" placeholder="Username" aria-required="true" /></div>
                       </div>
                       <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
                           <label style={signUpLabelStyle}>Email * </label>
-                          <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true" value={this.props.email} /></div>
+                          <div className="ui icon input"><i className={emailIconClasses}/><input type="email" name="email" ref="email" placeholder="Email" aria-required="true" /></div>
                       </div>
                       <div className="ui error message"></div>
                       <button type="submit" className="ui blue labeled submit icon button" >
@@ -210,9 +183,10 @@ class ReviseUser extends React.Component {
 ReviseUser.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-ReviseUser = connectToStores(ReviseUser, [UserRegistrationStore], (context, props) => {
+ReviseUser = connectToStores(ReviseUser, [UserRegistrationStore, SSOStore], (context, props) => {
     return {
-        UserRegistrationStore: context.getStore(UserRegistrationStore).getState()
+        UserRegistrationStore: context.getStore(UserRegistrationStore).getState(),
+        SSOStore: context.getStore(SSOStore).getState()
     };
 });
 export default ReviseUser;
