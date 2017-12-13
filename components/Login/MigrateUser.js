@@ -15,10 +15,17 @@ class MigrateUser extends React.Component {
 
         //get data
         let data = this.findGetParameter('data');
+        let json = {};
+
+        try {
+            json = JSON.parse(decodeURIComponent(data));
+        } catch (e) {
+            data = undefined;
+        }
 
         //handle data
         if (data !== null && data !== undefined && data !== '') {
-            let json = JSON.parse(decodeURIComponent(data));
+
             console.log('Got data:', json);
             //do a login
             if (json.jwt) {
@@ -34,7 +41,14 @@ class MigrateUser extends React.Component {
                     closable  : false,
                     onDeny    : function(){
                         console.log('Modal closed');
-                        //TODO show hint
+                        swal({
+                            title: 'Modal closed',
+                            text: 'The modal was closed. It is needed for completion, thus this page will be reloaded in order to show the modal again.',
+                            type: 'warning',
+                            confirmButtonText: 'Confirm',
+                            confirmButtonClass: 'negative ui button',
+                            buttonsStyling: false
+                        }).then(() => {location.reload();}).catch();
 
 
                         window.close();
@@ -44,7 +58,20 @@ class MigrateUser extends React.Component {
             }
         }
         else {
-            //TODO show hint
+            swal({
+                title: 'Data Error',
+                text: 'There was an error with the URL data. Either you used the wrong URL or there was an implementation error. The window will be closed now.',
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then(() => {
+                try {
+                    window.close();
+                } catch (e) {
+                    console.log('Window could not be closed.');
+                }
+            }).catch();
         }
     }
 

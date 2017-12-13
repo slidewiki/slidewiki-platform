@@ -43,6 +43,17 @@ class SelectInstanceModal extends React.Component {
                openModal: nextProps.SSOStore.openModal
            });
         }
+
+        if (nextProps.SSOStore.errorMessageFinalize !== this.props.SSOStore.errorMessageFinalize) {
+            swal({
+                title: 'Error',
+                text: nextProps.SSOStore.errorMessageFinalize,
+                type: 'error',
+                confirmButtonText: 'Confirm',
+                confirmButtonClass: 'negative ui button',
+                buttonsStyling: false
+            }).then().catch();
+        }
     }
 
     handleChange(e, { name, value }) {

@@ -10,6 +10,7 @@ import SSOStore from '../../stores/SSOStore';
 import common from '../../common';
 import finalizeMergedUser from '../../actions/user/finalizeMergedUser';
 import instances from '../../configs/instances.js';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 const headerStyle = {
     'textAlign': 'center'
@@ -19,6 +20,25 @@ const modalStyle = {
 };
 
 class ReviseUser extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.errorMessages = defineMessages({
+            error409: {
+                id: 'SSOSignIn.errormessage.isForbidden',
+                defaultMessage: 'Migration is not possible with this user. Please start all over again.'
+            },
+            error404: {
+                id: 'SSOSignIn.errormessage.notFound',
+                defaultMessage: 'This account was not prepared for migration. Please start all over again.'
+            },
+            error500: {
+                id: 'SSOSignIn.errormessage.badImplementation',
+                defaultMessage: 'An unknown error occurred.'
+            }
+        });
+    }
+
     componentDidMount() {
         //Form validation
         const validationRules = {
@@ -92,6 +112,12 @@ class ReviseUser extends React.Component {
         user.language = language;
 
         user.url = instances[instances._self].finalize.replace('{hash}', user.hash);
+
+        user.errorMessages = {
+            error409: this.context.intl.formatMessage(this.errorMessages.error409),
+            error404: this.context.intl.formatMessage(this.errorMessages.error404),
+            error500: this.context.intl.formatMessage(this.errorMessages.error500)
+        };
 
         this.context.executeAction(finalizeMergedUser, user);
 

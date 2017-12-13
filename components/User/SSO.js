@@ -24,15 +24,15 @@ class SSO extends React.Component {
 
         this.errorMessages = defineMessages({
             error403: {
-                id: 'userSignIn.errormessage.isSPAM',
+                id: 'SSOSignIn.errormessage.isSPAM',
                 defaultMessage: 'Your account was marked as SPAM thus you are not able to sign in. Contact us directly for reactivation.'
             },
             error404: {
-                id: 'userSignIn.errormessage.notFound',
+                id: 'SSOSignIn.errormessage.notFound',
                 defaultMessage: 'The credentials are unknown. Please retry with another input.'
             },
             error423: {
-                id: 'userSignIn.errormessage.deactivatedOrUnactivated',
+                id: 'SSOSignIn.errormessage.deactivatedOrUnactivated',
                 defaultMessage: 'Your user account either have to be activated via the activation link in your email or is deactivated in general.'
             }
         });

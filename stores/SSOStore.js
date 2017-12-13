@@ -11,6 +11,7 @@ class SSOStore extends BaseStore {
         this.email = '';
         this.jwt = '';
         this.errorMessage = '';
+        this.errorMessageFinalize = '';
         this.userid = 0;
         this.register = false;
         this.username = '';
@@ -27,6 +28,7 @@ class SSOStore extends BaseStore {
             email: this.email,
             jwt: this.jwt,
             errorMessage: this.errorMessage,
+            errorMessageFinalize: this.errorMessageFinalize,
             userid: this.userid,
             register: this.register,
             username: this.username,
@@ -44,6 +46,7 @@ class SSOStore extends BaseStore {
         this.email = state.email;
         this.jwt = state.jwt;
         this.errorMessage = state.errorMessage;
+        this.errorMessageFinalize = state.errorMessageFinalize;
         this.userid = state.userid;
         this.register = state.register;
         this.username = state.username;
@@ -98,6 +101,11 @@ class SSOStore extends BaseStore {
         this.emitChange();
     }
 
+    handleFinalizeError(err) {
+        this.errorMessage = err.message;
+        this.emitChange();
+    }
+
 }
 SSOStore.storeName = 'SSOStore';
 SSOStore.handlers = {
@@ -108,7 +116,8 @@ SSOStore.handlers = {
   'SSO_INITIATE': 'initiate',
   'SSO_SIGNIN_SUCCESS': 'saveSignInData',
   'SSO_SIGNIN_ERROR': 'signInError',
-  'SSO_NEW_DATA': 'newData'
+  'SSO_NEW_DATA': 'newData',
+  'SSO_FINALIZE_FAILURE': 'handleFinalizeError'
 };
 
 export default SSOStore;
