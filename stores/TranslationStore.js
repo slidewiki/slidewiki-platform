@@ -8,7 +8,7 @@ class TranslationStore extends BaseStore {
         this.supportedLangs = [];
         this.inProgress = false;
         this.slideToPreview = null;
-        this.isCronjobModalOpen = true;
+        this.isCronjobModalOpen = false;
     }
     startTranslation(payload){
         this.inProgress = true;
