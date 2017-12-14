@@ -1,30 +1,10 @@
 import React from 'react';
-import DeckCard from '../User/UserProfile/DeckCard';
+import DeckCard from '../../User/UserProfile/DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
-import UserProfileStore from '../../stores/UserProfileStore';
-import { isEmpty } from './../../common';
+import UserProfileStore from '../../../stores/UserProfileStore';
+import { isEmpty } from '../../../common';
 
 class ColletionDecksReorder extends React.Component {
-    // constructor(props){
-    //     super(props);
-    //     this.state = {
-    //         decks: this.props.decks
-    //     };
-    // }
-    // handleMoveUp(index){
-    //     let newState = Object.assign({}, this.state);
-    //     let tmp = newState.decks[index];
-    //     newState.decks[index] = newState.decks[index - 1];
-    //     newState.decks[index - 1] = tmp;
-    //     this.setState(newState);
-    // }
-    // handleMoveDown(index){
-    //     let newState = Object.assign({}, this.state);
-    //     let tmp = newState.decks[index];
-    //     newState.decks[index] = newState.decks[index + 1];
-    //     newState.decks[index + 1] = tmp;
-    //     this.setState(newState);
-    // }
     handleMoveUp(index){
         this.props.moveUp(index);
     }

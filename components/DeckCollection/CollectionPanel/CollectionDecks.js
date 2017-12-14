@@ -1,8 +1,8 @@
 import React from 'react';
-import DeckCard from '../User/UserProfile/DeckCard';
+import DeckCard from '../../User/UserProfile/DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
-import UserProfileStore from '../../stores/UserProfileStore';
-import { isEmpty } from './../../common';
+import UserProfileStore from '../../../stores/UserProfileStore';
+import { isEmpty } from '../../../common';
 
 class ColletionDecks extends React.Component {
 

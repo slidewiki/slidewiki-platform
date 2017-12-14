@@ -1,25 +1,35 @@
+import async from 'async';
 const log = require('../log/clog');
 import serviceUnavailable from '../error/serviceUnavailable';
 import notFoundError from '../error/notFoundError';
+import loadCollectionDetails from './loadCollectionDetails';
+import fetchUser from '../../actions/user/userprofile/fetchUser';
+import UserProfileStore from '../../stores/UserProfileStore';
 
-// loads a deck collection
+// loads deck collection details and user info
 export default function loadCollection(context, payload, done) {
     log.info(context);
 
-    context.dispatch('SET_COLLECTIONS_LOADING'); // show loading indicator
-
-    context.service.read('deckgroups.get', payload, {timeout: 20 * 1000}, (err, res) => {
+    // load required actions in parallel
+    async.parallel([
+        (callback) => {
+            context.executeAction(fetchUser, {
+                params: {
+                    username: context.getStore(UserProfileStore).getState().username
+                }
+            }, callback);
+        },
+        (callback) => {
+            context.executeAction(loadCollectionDetails, payload, callback);
+        }
+    ], (err, results) => {
         if (err) {
-            if(err.statusCode === 404){
-                context.executeAction(notFoundError, {}, done);
-                return;
-            }
             log.error(context, {filepath: __filename});
-            context.dispatch('LOAD_COLLECTION_DETAILS_FAILURE', err);
-        } else {
-            context.dispatch('LOAD_COLLECTION_DETAILS_SUCCESS', res);
+            context.executeAction(serviceUnavailable, payload, done);
+            return;
         }
 
         done();
     });
+    
 }

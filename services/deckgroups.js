@@ -191,6 +191,17 @@ export default {
                 }
             }).then( (updated) => callback(null, updated))
             .catch((err) => callback(err));
+        
+        // update the deck order of the collection's decks
+        } else if (resource === 'deckgroups.deckOrder'){
+            rp({
+                method: 'PUT', 
+                uri: `${Microservices.deck.uri}/group/${args.id}/decks`,
+                json: true,
+                headers: {'----jwt----': args.jwt},
+                body: args.newOrder
+            }).then( (updated) => callback(null, updated))
+            .catch((err) => callback(err));
         }
     }, 
 

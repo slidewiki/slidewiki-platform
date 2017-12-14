@@ -1,11 +1,13 @@
 import React from 'react';
 import {NavLink, navigateAction} from 'fluxible-router';
-import DeckCollectionStore from '../../stores/DeckCollectionStore';
+import DeckCollectionStore from '../../../stores/DeckCollectionStore';
+import UserProfileStore from '../../../stores/UserProfileStore';
 import { connectToStores } from 'fluxible-addons-react';
-import CustomDate from '../Deck/util/CustomDate';
+import CustomDate from '../../Deck/util/CustomDate';
 import CollectionDecks from './CollectionDecks';
 import CollectionDecksReorder from './CollectionDecksReorder';
 import {Button, Icon} from 'semantic-ui-react';
+import updateCollectionDeckOrder from '../../../actions/collections/updateCollectionDeckOrder';
 
 class CollectionPanel extends React.Component {
     constructor(props){
@@ -13,7 +15,7 @@ class CollectionPanel extends React.Component {
         this.sortBy = '3';
         this.state = {
             editMode: false, 
-            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks || []
+            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || []
         };
     }
     componentDidMount() {
@@ -33,9 +35,20 @@ class CollectionPanel extends React.Component {
             editMode: value
         });
     }
+    handleCancelEditOrder(){
+        this.setState({
+            editMode: false, 
+            decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() // revert to inital stored order
+        });
+    }
     handleSaveDeckOrder(){
-        console.log('save order');
-        console.log(this.state.decksOrder);
+        this.context.executeAction(updateCollectionDeckOrder, {
+            id: this.props.DeckCollectionStore.collectionDetails._id,
+            newOrder: this.state.decksOrder.map( (deck) => deck.deckID )
+        });
+        this.setState({
+            editMode: false
+        });
     }
     handleMoveUp(index){
         let newState = Object.assign({}, this.state);
@@ -51,12 +64,33 @@ class CollectionPanel extends React.Component {
         newState.decksOrder[index + 1] = tmp;
         this.setState(newState);
     }
+    showErrorPopup(text){
+        swal({
+            title: 'Error',
+            text: text,
+            type: 'error',
+            timer: 2000,
+            showCloseButton: false,
+            showCancelButton: false,
+            allowEscapeKey: false,
+            showConfirmButton: false
+        })
+        .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
+    }
     render() {
+
+        if(this.props.DeckCollectionStore.updateCollectionDeckOrderError){
+            this.showErrorPopup('An error occurred while updating deck order in collection...');
+        }
 
         let data = this.props.DeckCollectionStore.collectionDetails;
         let content = (!this.state.editMode) 
         ? <CollectionDecks size={0} decks={data.decks} sort={this.sortBy}/>
         : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} />;
+
+        // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
+        let hasEditRights = (this.props.UserProfileStore.userid === data.user.id
+                    || this.props.UserProfileStore.user.groups.map((group) => group._id).includes(data.userGroup));
 
         return (
             <div className = "ui vertically padded stackable grid container" >
@@ -77,7 +111,7 @@ class CollectionPanel extends React.Component {
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
                             <h2 className="ui left floated header">{ (!this.state.editMode) ? 'Decks in collection' : 'Reorder Decks'}</h2>
-                            { (!this.state.editMode && data.decks.length > 0) && 
+                            { (!this.state.editMode && data.decks.length > 0 && hasEditRights) && 
                                 <div className="ui small button" onClick={this.setEditMode.bind(this, true)}>
                                     Reorder Decks
                                 </div>
@@ -85,7 +119,7 @@ class CollectionPanel extends React.Component {
                             { (this.state.editMode) && 
                                 <div className="ui right floated">
                                     <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/>Save</Button>
-                                    <Button as='button' size='small' onClick={this.setEditMode.bind(this, false)}><Icon name='close'/>Close</Button>
+                                    <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/>Close</Button>
                                 </div>
                             }
                             { (!this.state.editMode) && 
@@ -118,6 +152,7 @@ CollectionPanel.contextTypes = {
 CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore], (context, props) => {
     return {
         DeckCollectionStore: context.getStore(DeckCollectionStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
     };
 });
 

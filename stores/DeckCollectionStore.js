@@ -11,6 +11,7 @@ class DeckCollectionStore extends BaseStore {
         this.collectionDetailsError = false;
         this.addCollectionError = false;
         this.updateCollectionMetadataError = false;
+        this.updateCollectionDeckOrderError = false;
         this.loading = false;
     }
 
@@ -22,6 +23,7 @@ class DeckCollectionStore extends BaseStore {
         this.collectionDetailsError = false;
         this.addCollectionError = false;
         this.updateCollectionMetadataError = false;
+        this.updateCollectionDeckOrderError = false;
         this.loading = false;
     }
 
@@ -34,6 +36,7 @@ class DeckCollectionStore extends BaseStore {
             collectionDetailsError: this.collectionDetailsError,
             addCollectionError: this.addCollectionError,
             updateCollectionMetadataError: this.updateCollectionMetadataError,
+            updateCollectionDeckOrderError: this.updateCollectionDeckOrderError,
             loading: this.loading
         };
     }
@@ -50,10 +53,11 @@ class DeckCollectionStore extends BaseStore {
         this.collectionDetailsError = state.collectionDetailsError;
         this.addCollectionError = state.addCollectionError;
         this.updateCollectionMetadataError = state.updateCollectionMetadataError;
+        this.updateCollectionDeckOrderError = state.updateCollectionDeckOrderError;
         this.loading = state.loading;
     }
 
-    updateCollections(payload){       
+    updateCollections(payload){ 
         this.collections = payload;
         this.updateCollectionsError = false;
         this.loading = false;
@@ -121,6 +125,7 @@ class DeckCollectionStore extends BaseStore {
 
     addCollection(newCollection){
         this.collections.documents.push(newCollection);
+        this.collections.documents = [...new Set(this.collections.documents)];
         this.emitChange();
     }
 
@@ -148,6 +153,25 @@ class DeckCollectionStore extends BaseStore {
         this.emitChange();
     }
 
+    updateCollectionDeckOrder(payload){
+        // new deck order in the collection
+        let order = payload.decks;
+
+        // update the order of the collectionDetails.decks array
+        this.collectionDetails.decks = this.collectionDetails.decks.sort( (a,b) => {
+            return order.indexOf(a.deckID) > order.indexOf(b.deckID);
+        });
+        this.updateCollectionDeckOrderError = false;
+        this.emitChange();
+    }
+
+    updateCollectionDeckOrderFailed(){
+        this.updateCollectionDeckOrderError = true; 
+        this.emitChange();
+        this.updateCollectionDeckOrderError = false;
+        this.emitChange();
+    }
+
 }
 
 DeckCollectionStore.storeName = 'DeckCollectionStore';
@@ -167,6 +191,9 @@ DeckCollectionStore.handlers = {
 
     'UPDATE_COLLECTION_METADATA': 'updateCollectionMetadata', 
     'UPDATE_COLLECTION_METADATA_ERROR': 'updateCollectionMetadataFailed',
+
+    'UPDATE_COLLECTION_DECK_ORDER_SUCCESS': 'updateCollectionDeckOrder', 
+    'UPDATE_COLLECTION_DECK_ORDER_FAILURE': 'updateCollectionDeckOrderFailed', 
 
     'SET_COLLECTIONS_LOADING': 'startLoading',
 };

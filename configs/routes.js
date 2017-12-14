@@ -582,7 +582,7 @@ export default {
         method: 'get',
         page: 'collection',
         title: 'SlideWiki -- Deck Collection',
-        handler: require('../components/DeckCollection/CollectionPanel'),
+        handler: require('../components/DeckCollection/CollectionPanel/CollectionPanel'),
         action: (context, payload, done) => {
             context.executeAction(loadCollection, payload, done);
         }
