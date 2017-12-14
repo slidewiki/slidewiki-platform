@@ -124,10 +124,5 @@ export default {
 
     // other methods
     // create: (req, resource, params, body, config, callback) => {},
-<<<<<<< HEAD
-    // update: (req, resource, params, body, config, callback) => {}
-=======
-    //
 
->>>>>>> master
 };
