@@ -65,6 +65,7 @@ class Deck extends React.Component {
             'sixteen':  status.ContentPanel.columnSize===16 || status.ContentModulesPanel.columnSize===16,
             'wide column': status.ContentPanel.visible || status.ContentModulesPanel.visible
         });
+
         let contentPanelClass = classNames({
             'ten':  status.ContentPanel.columnSize===10,
             'twelve':  status.ContentPanel.columnSize===12,
@@ -78,6 +79,22 @@ class Deck extends React.Component {
             'sixteen':  status.ContentModulesPanel.columnSize===16,
             'wide column': status.ContentModulesPanel.visible,
             'hide-element': !status.ContentModulesPanel.visible
+        });
+        let contentAndRightPanelClass = classNames({
+            'ten':  status.contentAndRightPanel.columnSize===10,
+            'twelve':  status.contentAndRightPanel.columnSize===12,
+            'thirteen':  status.contentAndRightPanel.columnSize===13,
+            'sixteen':  status.contentAndRightPanel.columnSize===16,
+            'wide column': status.contentAndRightPanel.visible,
+            'hide-element': !status.contentAndRightPanel.visible
+        });
+        let contentAndRightModulesPanelClass = classNames({
+            'ten':  status.contentAndRightModulesPanel.columnSize===10,
+            'twelve':  status.contentAndRightModulesPanel.columnSize===12,
+            'thirteen':  status.contentAndRightModulesPanel.columnSize===13,
+            'sixteen':  status.contentAndRightModulesPanel.columnSize===16,
+            'wide column': status.contentAndRightModulesPanel.visible,
+            'hide-element': !status.contentAndRightModulesPanel.visible
         });
         let rightColClass = classNames({
             'three':  status.TreePanel.columnSize===3 || status.ActivityFeedPanel.columnSize===3,
@@ -101,17 +118,35 @@ class Deck extends React.Component {
             dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
         let leftPanel;
+        let centerPanel;
+        let rightPanel;
         if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '')
         {
+            //TODO -> add check on wether you have edit rights!!!
             //if we view a slide in edit mode - show slide edit panel
-            leftPanel =      <div className={leftColClassSlideEdit}>
-                                <div className="row">
-                                    <div className={SlideEditPanelClass}>
-                                        <SlideEditPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
-                                    </div>
-                                    <div className="ui hidden divider"></div>
+            leftPanel = <div className={leftColClassSlideEdit}>
+                            <div className="row">
+                                <div className={SlideEditPanelClass}>
+                                    <SlideEditPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
                                 </div>
-                            </div>;
+                                <div className="ui hidden divider"></div>
+                            </div>
+                        </div>;
+            centerPanel = (
+                    <div className={contentAndRightPanelClass}>
+                        <div className="row">
+                            <div className={contentAndRightPanelClass}>
+                                <ContentPanel />
+                            </div>
+                            <div className={contentAndRightModulesPanelClass}>
+                                <div className="ui hidden divider"></div>
+                                <div className="row">
+                                    {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            );
         }
         else {
             //if we view something else - show decktree
@@ -130,6 +165,31 @@ class Deck extends React.Component {
                                     <div className="ui hidden divider"></div>
                                 </div>
                             </div>;
+
+            centerPanel = (
+                    <div className={centerColClass}>
+                        <div className="row">
+                            <div className={contentPanelClass}>
+                                <ContentPanel />
+                            </div>
+                            <div className={contentModulesPanelClass}>
+                                <div className="ui hidden divider"></div>
+                                <div className="row">
+                                    {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
+                                </div>
+                            </div>
+                        </div>
+                    </div>);
+            rightPanel = (
+                <div className={rightColClass}>
+                    <div className={treePanelClass}>
+                        <InfoPanel />
+                    </div>
+
+                    <div className="ui hidden divider"></div>
+                </div>
+            );
+
         }
         return (
             <div className="ui fluid container" ref="deck">
@@ -144,29 +204,9 @@ class Deck extends React.Component {
 
                 {dividerDIV}
 
-                <div className={centerColClass}>
-                    <div className="row">
-                        <div className={contentPanelClass}>
-                            <ContentPanel />
-                        </div>
-                        <div className={contentModulesPanelClass}>
-                            <div className="ui hidden divider"></div>
-                            <div className="row">
-                                {this.props.DeckPageStore.mode !== 'view'? '' : <ContentModulesPanel mode='deck' />}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {centerPanel}
 
-                <div className={rightColClass}>
-                    <div className={treePanelClass}>
-                        <InfoPanel />
-                    </div>
-
-                    <div className="ui hidden divider"></div>
-                </div>
-
-
+                {rightPanel}
 
                 </div>
                 {/*error.hasOwnProperty('statusCode') ? <ServiceUnavailable error={this.props.ServiceErrorStore.error} /> : ''*/}

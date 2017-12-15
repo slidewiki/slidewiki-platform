@@ -12,7 +12,9 @@ class DeckPageStore extends BaseStore {
             'SlideEditPanel': {visible: 1, columnSize: 3},
             'ActivityFeedPanel': {visible: 1, columnSize: 3},
             'ContentPanel': {visible: 1, columnSize: 10},
-            'ContentModulesPanel': {visible: 1, columnSize: 10}};
+            'ContentModulesPanel': {visible: 1, columnSize: 10},
+            'contentAndRightPanel': {visible: 1, columnSize: 13},
+            'contentAndRightModulesPanel': {visible: 1, columnSize: 13}};
     }
     updateContent(payload) {
         this.selector= {'id': payload.params.id, 'spath': payload.params.spath, 'sid': payload.params.sid, 'stype': payload.params.stype};
