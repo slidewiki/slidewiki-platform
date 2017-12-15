@@ -3,6 +3,7 @@ import {navigateAction} from 'fluxible-router';
 import {Button, Icon, Modal, Header, Form, Dropdown} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import updateCollectionMetadata from '../../../actions/collections/updateCollectionMetadata';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class UpdateCollectionModal extends React.Component {
 
@@ -15,6 +16,8 @@ class UpdateCollectionModal extends React.Component {
             userGroup: this.props.collection.userGroup || '', 
             validationError: false
         };
+
+        this.messages = this.getIntlMessages();
     }
     componentWillReceiveProps(props){
         let collection = props.collection;
@@ -63,9 +66,12 @@ class UpdateCollectionModal extends React.Component {
             return;
         }
 
+        let title = this.context.intl.formatMessage(this.messages.newCollectionSuccessTitle);
+        let text = this.context.intl.formatMessage(this.messages.newCollectionSuccessTitle);
+
         swal({
-            title: 'Update Deck Collection',
-            text: 'We are updating the Deck Collection...',
+            title: title,
+            text: text,
             type: 'success',
             timer: 2000,
             showCloseButton: false,
@@ -83,6 +89,54 @@ class UpdateCollectionModal extends React.Component {
         });
 
         this.handleClose();
+    }
+    getIntlMessages(){
+        return defineMessages({
+            modalTitle: {
+                id: 'UpdateCollectionModal.title',
+                defaultMessage: 'Update a Deck Collection'
+            }, 
+            titleField: {
+                id: 'UpdateCollectionModal.field.title',
+                defaultMessage: 'Title'
+            }, 
+            titleFieldPlaceholder: {
+                id: 'UpdateCollectionModal.field.title.placeholder',
+                defaultMessage: 'Deck Collection Title'
+            }, 
+            descriptionField: {
+                id: 'UpdateCollectionModal.field.description',
+                defaultMessage: 'Description'
+            }, 
+            descriptionFieldPlaceholder: {
+                id: 'UpdateCollectionModal.field.description.placeholder',
+                defaultMessage: 'Deck Collection Description'
+            }, 
+            usergroupField: {
+                id: 'UpdateCollectionModal.field.usergroup',
+                defaultMessage: 'User Group'
+            }, 
+            usergroupFieldPlaceholder: {
+                id: 'UpdateCollectionModal.field.usergroup.placeholder',
+                defaultMessage: 'Select User Group'
+            }, 
+            buttonCreate: {
+                id: 'UpdateCollectionModal.button.create',
+                defaultMessage: 'Create'
+            }, 
+            buttonClose: {
+                id: 'UpdateCollectionModal.button.close',
+                defaultMessage: 'Close'
+            }, 
+            updateCollectionSuccessTitle: {
+                id: 'UpdateCollectionModal.success.title',
+                defaultMessage: 'Update Deck Collection'
+            }, 
+            updateCollectionSuccessText: {
+                id: 'UpdateCollectionModal.success.text',
+                defaultMessage: 'We are updating the Deck Collection...'
+            }
+        });
     }
     render() {
 
@@ -103,28 +157,28 @@ class UpdateCollectionModal extends React.Component {
             <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='updateCollectionModalHeader'
                    aria-describedby='updateCollectionDescr' open={this.props.isOpen}
                    onClose={this.props.handleClose}>
-                <Header content='Update a Deck Collection' id='updateCollectionModalHeader'/>
+                <Header content={this.context.intl.formatMessage(this.messages.modalTitle)} id='updateCollectionModalHeader'/>
                 <Modal.Content>
                 <Form>
                     <Form.Field required error={this.state.validationError}>
-                        <label>Title</label>
-                        <input placeholder='Deck Collection Title' value={this.state.title} onChange={this.handleChange.bind(this, 'title')} />
+                        <label><FormattedMessage {...this.messages.titleField} /></label>
+                        <input placeholder={this.context.intl.formatMessage(this.messages.titleFieldPlaceholder)} value={this.state.title} onChange={this.handleChange.bind(this, 'title')} />
                     </Form.Field>
                     <Form.Field>
-                        <label>Description</label>
-                        <input placeholder='Deck Collection Description' value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                        <label><FormattedMessage {...this.messages.descriptionField} /></label>
+                        <input placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
                     </Form.Field>
                     <Form.Field>
-                        <label htmlFor="user_group_of_new_deck_group">User Group</label>
-                        <Dropdown placeholder="Select User Group" fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} value={this.state.userGroup} />
+                        <label htmlFor="user_group_of_new_deck_group"><FormattedMessage {...this.messages.usergroupField} /></label>
+                        <Dropdown placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} value={this.state.userGroup} />
                     </Form.Field>
                 </Form>
                 </Modal.Content>
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
                         <div>
-                            <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/>Save</Button>
-                            <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/>Close</Button>
+                            <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.buttonCreate} /></Button>
+                            <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
                         </div>
                     </FocusTrap>
                 </Modal.Actions>
@@ -134,7 +188,8 @@ class UpdateCollectionModal extends React.Component {
 }
 
 UpdateCollectionModal.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired, 
+    intl: React.PropTypes.object.isRequired
 };
 
 export default UpdateCollectionModal;

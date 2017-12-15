@@ -8,6 +8,7 @@ import CollectionDecks from './CollectionDecks';
 import CollectionDecksReorder from './CollectionDecksReorder';
 import {Button, Icon} from 'semantic-ui-react';
 import updateCollectionDeckOrder from '../../../actions/collections/updateCollectionDeckOrder';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class CollectionPanel extends React.Component {
     constructor(props){
@@ -17,6 +18,8 @@ class CollectionPanel extends React.Component {
             editMode: false, 
             decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || []
         };
+
+        this.messages = this.getIntlMessages();
     }
     componentDidMount() {
         $(this.refs.sortDropdown).dropdown({onChange: this.dropdownSelect.bind(this)});
@@ -77,10 +80,62 @@ class CollectionPanel extends React.Component {
         })
         .then(() => {/* Confirmed */}, (reason) => {/* Canceled */});
     }
+    getIntlMessages(){
+        return defineMessages({
+            reorderError: {
+                id: 'CollectionPanel.error.reorder',
+                defaultMessage: 'An error occurred while updating deck order in collection...'
+            }, 
+            collectionTitle: {
+                id: 'CollectionPanel.title',
+                defaultMessage: 'Collection'
+            }, 
+            collectionCreator: {
+                id: 'CollectionPanel.creator',
+                defaultMessage: 'Creator'
+            }, 
+            collectionDate: {
+                id: 'CollectionPanel.date',
+                defaultMessage: 'Date'
+            }, 
+            decksInCollectionText: {
+                id: 'CollectionPanel.decks.title', 
+                defaultMessage: 'Decks in collection'
+            }, 
+            reorderDecks: {
+                id: 'CollectionPanel.decks.reorder', 
+                defaultMessage: 'Reorder Decks'
+            }, 
+            saveReorder: {
+                id: 'CollectionPanel.save.reorder', 
+                defaultMessage: 'Save'
+            }, 
+            cancelReorder: {
+                id: 'CollectionPanel.cancel.reorder', 
+                defaultMessage: 'Close'
+            },
+            sortDefault: {
+                id: 'CollectionPanel.sort.default', 
+                defaultMessage: 'First Added'
+            }, 
+            sortLastUpdated: {
+                id: 'CollectionPanel.sort.lastUpdated', 
+                defaultMessage: 'Last updated'
+            }, 
+            sortCreationDate: {
+                id: 'CollectionPanel.sort.date', 
+                defaultMessage: 'Creation date'
+            },
+            sortTitle: {
+                id: 'CollectionPanel.sort.title', 
+                defaultMessage: 'Title'
+            }
+        });
+    }
     render() {
 
         if(this.props.DeckCollectionStore.updateCollectionDeckOrderError){
-            this.showErrorPopup('An error occurred while updating deck order in collection...');
+            this.showErrorPopup(this.context.intl.formatMessage(this.messages.reorderError));
         }
 
         let data = this.props.DeckCollectionStore.collectionDetails;
@@ -96,12 +151,12 @@ class CollectionPanel extends React.Component {
             <div className = "ui vertically padded stackable grid container" >
                 <div className = "four wide column" >
                     <div>
-                        <h3>Collection</h3>
+                        <h3><FormattedMessage {...this.messages.collectionTitle} /></h3>
                         <h2>{data.title}</h2>
                         <h4>{data.description}</h4>
                         <div className = "ui divider" />
-                            <b>Creator:</b> <NavLink href={`/user/${data.user.username}`}>{data.user.username}</NavLink><br/>
-                            <b>Date:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
+                            <b><FormattedMessage {...this.messages.collectionCreator} />:</b> <NavLink href={`/user/${data.user.username}`}>{data.user.username}</NavLink><br/>
+                            <b><FormattedMessage {...this.messages.collectionDate} />:</b> {CustomDate.format(data.timestamp, 'Do MMMM YYYY')}<br/>
 
                         <div className = "ui divider" />
                     </div>
@@ -110,27 +165,27 @@ class CollectionPanel extends React.Component {
                     <div className="ui segments">
                         {(data === undefined) ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
                         <div className="ui secondary clearing segment">
-                            <h2 className="ui left floated header">{ (!this.state.editMode) ? 'Decks in collection' : 'Reorder Decks'}</h2>
+                            <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.reorderDecks)}</h2>
                             { (!this.state.editMode && data.decks.length > 0 && hasEditRights) && 
                                 <div className="ui small button" onClick={this.setEditMode.bind(this, true)}>
-                                    Reorder Decks
+                                    <FormattedMessage {...this.messages.reorderDecks} />
                                 </div>
                             }
                             { (this.state.editMode) && 
                                 <div className="ui right floated">
-                                    <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/>Save</Button>
-                                    <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/>Close</Button>
+                                    <Button primary size='small' as='button' onClick={this.handleSaveDeckOrder.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.saveReorder} /></Button>
+                                    <Button as='button' size='small' onClick={this.handleCancelEditOrder.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.cancelReorder} /></Button>
                                 </div>
                             }
                             { (!this.state.editMode) && 
                                 <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                                     <i className="icon exchange"/>
-                                    <div className="text">First Added</div>
+                                    <div className="text"><FormattedMessage {...this.messages.sortDefault} /></div>
                                     <div className="menu">
-                                        <div className="item active selected" data-value={3}>First Added</div>
-                                        <div className="item" data-value={2}>Last updated</div>
-                                        <div className="item" data-value={1}>Creation date</div>
-                                        <div className="item" data-value={0}>Title</div>
+                                        <div className="item active selected" data-value={3}><FormattedMessage {...this.messages.sortDefault} /></div>
+                                        <div className="item" data-value={2}><FormattedMessage {...this.messages.sortLastUpdated} /></div>
+                                        <div className="item" data-value={1}><FormattedMessage {...this.messages.sortCreationDate} /></div>
+                                        <div className="item" data-value={0}><FormattedMessage {...this.messages.sortTitle} /></div>
                                     </div>
                                 </div>
                             }
@@ -146,7 +201,8 @@ class CollectionPanel extends React.Component {
 }
 
 CollectionPanel.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 CollectionPanel = connectToStores(CollectionPanel, [DeckCollectionStore], (context, props) => {

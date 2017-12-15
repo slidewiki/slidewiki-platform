@@ -3,13 +3,30 @@ import DeckCard from '../../User/UserProfile/DeckCard';
 import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import { isEmpty } from '../../../common';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 class ColletionDecksReorder extends React.Component {
+    constructor(props){
+        super(props);
+        this.messages = this.getIntlMessages();
+    }
     handleMoveUp(index){
         this.props.moveUp(index);
     }
     handleMoveDown(index){
         this.props.moveDown(index);
+    }
+    getIntlMessages(){
+        return defineMessages({
+            moveUp: {
+                id: 'ColletionDecksReorder.moveup',
+                defaultMessage: 'Move Up'
+            }, 
+            moveDown: {
+                id: 'ColletionDecksReorder.movedown',
+                defaultMessage: 'Move Down'
+            }
+        });
     }
     render() {
         let size = 0;
@@ -31,12 +48,12 @@ class ColletionDecksReorder extends React.Component {
                         <div className="right aligned column">
                               <div>
                                 { (index > 0) && 
-                                    <button className="ui large basic icon button" data-tooltip="Move Up" aria-label="Move Up" onClick={this.handleMoveUp.bind(this, index)} >
+                                    <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.moveUp)} aria-label={this.context.intl.formatMessage(this.messages.moveUp)} onClick={this.handleMoveUp.bind(this, index)} >
                                       <i className="arrow up icon" name={'orderUp' + deck.deckID} ></i>
                                     </button>
                                 }
                                 { (index !== this.props.decks.length-1) &&
-                                    <button className="ui large basic icon button" data-tooltip="Move Down" aria-label="Move Down" onClick={this.handleMoveDown.bind(this, index)} >
+                                    <button className="ui large basic icon button" data-tooltip={this.context.intl.formatMessage(this.messages.moveDown)} aria-label={this.context.intl.formatMessage(this.messages.moveDown)} onClick={this.handleMoveDown.bind(this, index)} >
                                       <i className="arrow down icon" name={'orderDown' + deck.deckID} ></i>
                                     </button>
                                 } 
@@ -56,8 +73,10 @@ class ColletionDecksReorder extends React.Component {
 }
 
 ColletionDecksReorder.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired, 
+    intl: React.PropTypes.object.isRequired
 };
+
 ColletionDecksReorder = connectToStores(ColletionDecksReorder, [UserProfileStore], (context, props) => {
     return {
         UserProfileStore: context.getStore(UserProfileStore).getState()
