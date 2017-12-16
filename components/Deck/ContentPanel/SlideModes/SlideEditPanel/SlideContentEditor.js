@@ -1274,6 +1274,10 @@ class SlideContentEditor extends React.Component {
         //console.log(nextProps.SlideEditStore.addInputBox);
         //console.log(nextProps.SlideEditStore.uploadMediaClick);
         //console.log(nextProps.SlideEditStore.template);
+        if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
+        {
+            this.handleSaveButton();
+        }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
             this.addAbsoluteDiv();
@@ -1692,7 +1696,7 @@ class SlideContentEditor extends React.Component {
             overflowY: 'hidden',
             overflowX: 'auto',
             //padding: 10,
-            paddingTop: 40,
+            //paddingTop: 40,
             height: '100%'
         };
         const contentStyle = {
@@ -1752,6 +1756,7 @@ class SlideContentEditor extends React.Component {
         return (
             <ResizeAware ref='container' id='container' style={{position: 'relative'}}>
             {(this.loading === 'loading') ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+            {/*
                 <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButton.bind(this)} onChange={this.handleSaveButton.bind(this)}>
                  <i className="save icon large"></i>
                  Save
@@ -1762,7 +1767,6 @@ class SlideContentEditor extends React.Component {
                     <a style={buttonColorBlack}>keys</a>
                 </button>
 
-                {/*
                     'ui': true,
                     'field': true,
                     'search': true,

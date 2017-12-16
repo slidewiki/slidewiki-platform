@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import {connectToStores} from 'fluxible-addons-react';
 import DeckPageStore from '../../stores/DeckPageStore';
 import ServiceErrorStore from '../../stores/ServiceErrorStore';
+import UserProfileStore from '../../stores/UserProfileStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import TreePanel from './TreePanel/TreePanel';
@@ -120,7 +121,7 @@ class Deck extends React.Component {
         let leftPanel;
         let centerPanel;
         let rightPanel;
-        if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '')
+        if(this.props.DeckPageStore.mode === 'edit' && this.props.DeckPageStore.selector.stype === 'slide' && this.props.DeckPageStore.selector.spath !== '' && this.props.UserProfileStore.username !== '')
         {
             //TODO -> add check on wether you have edit rights!!!
             //if we view a slide in edit mode - show slide edit panel
@@ -219,10 +220,11 @@ class Deck extends React.Component {
 Deck.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore], (context, props) => {
+Deck = connectToStores(Deck, [DeckPageStore, ServiceErrorStore, UserProfileStore], (context, props) => {
     return {
         DeckPageStore: context.getStore(DeckPageStore).getState(),
         ServiceErrorStore: context.getStore(ServiceErrorStore).getState(),
+        UserProfileStore: context.getStore(UserProfileStore).getState(),
     };
 });
 export default Deck;

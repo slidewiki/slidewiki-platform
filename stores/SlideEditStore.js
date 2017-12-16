@@ -10,6 +10,7 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = '';
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
+        this.saveSlideClick = 'false';
         this.addInputBox = 'false';
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
@@ -51,6 +52,12 @@ class SlideEditStore extends BaseStore {
         this.template = payload.template;
         this.emitChange();
         this.template = '';
+        this.emitChange();
+    }
+    handleSaveSlideClick(){
+        this.saveSlideClick = 'true';
+        this.emitChange();
+        this.saveSlideClick = 'false';
         this.emitChange();
     }
     handleAddInputBox(){
@@ -109,6 +116,7 @@ class SlideEditStore extends BaseStore {
             content: this.content,
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
+            saveSlideClick: this.saveSlideClick,
             template: this.template,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
@@ -129,6 +137,7 @@ class SlideEditStore extends BaseStore {
         this.content = state.content;
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
+        this.saveSlideClick = state.saveSlideClick;
         this.template = state.template;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
@@ -146,6 +155,7 @@ SlideEditStore.handlers = {
     'LOAD_SLIDE_EDIT_SUCCESS': 'updateContent',
     'SAVE_SLIDE_EDIT_SUCCESS': 'saveSlide',
     'ADD_SLIDE_EDIT_SUCCESS': 'addSlide',
+    'SAVE_SLIDE_CLICK': 'handleSaveSlideClick',
     'CHANGE_TEMPLATE': 'changeTemplate',
     'ADD_INPUT_BOX': 'handleAddInputBox',
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',

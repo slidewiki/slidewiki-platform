@@ -12,7 +12,7 @@ import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
-
+import saveClick from '../../../../actions/slide/saveClick';
 
 
 class ContentActionsHeader extends React.Component {
@@ -28,6 +28,16 @@ class ContentActionsHeader extends React.Component {
 
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+    }
+
+    handleSaveButtonClick(){
+        this.context.executeAction(saveClick, {});
+    }
+    handleUndoButtonClick (){
+        console.log('undo');
+    }
+    handleRedoButtonClick(){
+        console.log('redo');
     }
 
     handleEditNode(selector) {
@@ -59,6 +69,10 @@ class ContentActionsHeader extends React.Component {
             'item ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
+        const buttonTextBlack = {
+            color: 'black'
+        };
+
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
 
@@ -71,17 +85,56 @@ class ContentActionsHeader extends React.Component {
             attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
+        let viewButton, editButton, undoButton, redoButton;
+        if (contentDetails.mode === 'view')
+        {
+            if (this.props.UserProfileStore.username !== ''){
+                viewButton =
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                    <i></i>View
+                </NavLink>;
+                editButton =
+                <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
+                    <i className="ui large blue edit icon "></i> Edit
+                </div>;
+            } else {
+                viewButton =
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                    <i></i>View
+                </NavLink> ;
+            }
+        } else {
+            //edit mode
+            if (this.props.UserProfileStore.username !== ''){
+                viewButton =
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                <i className="cancel icon"></i>
+                <a style={buttonTextBlack}>Cancel</a>
+                </NavLink> ;
+                editButton =
+                    <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
+                         <i className="save icon large"></i>
+                         Save
+                    </button>;
+                undoButton =
+                <button tabIndex="0" ref="submitbutton" className="ui button grey primary " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
+                     <i className="reply icon large"></i>
+                </button>;
+                redoButton =
+                <button tabIndex="0" ref="submitbutton" className="ui button grey primary " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
+                     <i className="mail forward icon large"></i>
+                </button>;
+            } else {
+                viewButton =
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                    <i></i>View
+                </NavLink>;
+            }
+        }
 
         return (
             <div className="ui top attached tabular menu" role="tablist">
-                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
-                    <i></i>View
-                </NavLink>
-                {this.props.UserProfileStore.username === '' ? '' :
-                    <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
-                        <i className="ui large blue edit icon "></i> Edit
-                    </div>
-                }
+                {viewButton} {editButton} {undoButton} {redoButton}
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
