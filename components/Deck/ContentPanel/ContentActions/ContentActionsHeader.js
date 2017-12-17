@@ -14,7 +14,6 @@ import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 import saveClick from '../../../../actions/slide/saveClick';
 
-
 class ContentActionsHeader extends React.Component {
 
     componentDidUpdate(){
@@ -34,10 +33,18 @@ class ContentActionsHeader extends React.Component {
         this.context.executeAction(saveClick, {});
     }
     handleUndoButtonClick (){
+        //this.context.executeAction(undoClick, {});
         console.log('undo');
     }
     handleRedoButtonClick(){
+        //this.context.executeAction(redoClick, {});
         console.log('redo');
+    }
+    cancelButtonClick(selector){
+        const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
+        this.context.executeAction(navigateAction, {
+            url: nodeURL
+        });
     }
 
     handleEditNode(selector) {
@@ -69,8 +76,8 @@ class ContentActionsHeader extends React.Component {
             'item ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
-        const buttonTextBlack = {
-            color: 'black'
+        const red = {
+            backgroundColor: 'red'
         };
 
         let selectorImm = this.props.DeckTreeStore.selector;
@@ -106,29 +113,40 @@ class ContentActionsHeader extends React.Component {
         } else {
             //edit mode
             if (this.props.UserProfileStore.username !== ''){
-                viewButton =
+                /*viewButton =
+                <NavLink style={red} activeClass=" " className="active item link" href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                    <i className="ui large black cancel icon "></i>
+                    Cancel
+                </NavLink>;
+
                 <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                 <i className="cancel icon"></i>
                 <a style={buttonTextBlack}>Cancel</a>
-                </NavLink> ;
+                </NavLink> ;*/
+
+                viewButton =
+                    <button tabIndex="0" ref="submitbutton" className="ui button " onClick={this.cancelButtonClick.bind(this, selector)} onChange={this.cancelButtonClick.bind(this, selector)}>
+                         <i className="cancel icon large"></i>
+                         cancel
+                    </button>;
                 editButton =
                     <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
                          <i className="save icon large"></i>
                          Save
                     </button>;
                 undoButton =
-                <button tabIndex="0" ref="submitbutton" className="ui button grey primary " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
-                     <i className="reply icon large"></i>
-                </button>;
+                    <button tabIndex="0" ref="undoButton" className="ui button " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
+                         <i className="reply icon large"></i>
+                    </button>;
                 redoButton =
-                <button tabIndex="0" ref="submitbutton" className="ui button grey primary " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
-                     <i className="mail forward icon large"></i>
-                </button>;
+                    <button tabIndex="0" ref="redoButton" className="ui button " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
+                         <i className="mail forward icon large"></i>
+                    </button>;
             } else {
                 viewButton =
-                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
-                    <i></i>View
-                </NavLink>;
+                    <NavLink activeClass=" " className='item link' onClick={this.cancelButtonClick.bind(this, selector)} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                        <i></i>View
+                    </NavLink>;
             }
         }
 
