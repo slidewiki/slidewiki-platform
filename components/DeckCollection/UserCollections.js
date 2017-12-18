@@ -38,8 +38,23 @@ class UserCollections extends React.Component {
     }
 
     handleDeleteCollection(colId) {
-        this.context.executeAction(deleteCollection, {
-            id: colId
+        let title = this.context.intl.formatMessage(this.messages.deleteCollectionConfirmationTitle);
+        let text = this.context.intl.formatMessage(this.messages.deleteCollectionConfirmationText);
+
+        swal({
+            title: title,
+            text: text,
+            type: 'warning',
+            showCloseButton: false,
+            showCancelButton: true,
+            allowEscapeKey: true,
+            showConfirmButton: true
+        })
+        .then(() => {
+            this.context.executeAction(deleteCollection, {
+                id: colId
+            });
+        }, (reason) => { // canceled
         });
     }
 
@@ -115,6 +130,14 @@ class UserCollections extends React.Component {
             shareCollectionText: {
                 id: 'UserCollections.collections.shared', 
                 defaultMessage: 'Shared Collection'
+            }, 
+            deleteCollectionConfirmationTitle:{
+                id: 'UserCollections.collections.delete.title', 
+                defaultMessage: 'Delete Collection'
+            }, 
+            deleteCollectionConfirmationText:{
+                id: 'UserCollections.collections.delete.text', 
+                defaultMessage: 'Are you sure you want to delete this collection?'
             }
         });
     }
@@ -158,7 +181,7 @@ class UserCollections extends React.Component {
                         <div key={col._id} className="ui vertical segment">
                             <div className="ui two column stackable grid container">
                                 <div className="column">
-                                    <div className="ui header"><h3><a href={`/collection/${col._id}`}>{col.title}</a></h3></div>
+                                    <div className="ui header"><h3><a href={`/collection/${col._id}`} target='_blank'>{col.title}</a></h3></div>
                                     <div className="meta">{col.description} {(col.description) ? '\u00b7' : ''}  {col.decks.length} {this.context.intl.formatMessage((col.decks.length === 1) ? this.messages.deckText : this.messages.decksText)} {(col.userGroup) ? '\u00b7' : ''} {(col.userGroup) ? <i className="users icon" title={this.context.intl.formatMessage(this.messages.shareCollectionText)}></i> : ''}</div>
                                 </div>
 

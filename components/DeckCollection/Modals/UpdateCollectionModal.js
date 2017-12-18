@@ -66,8 +66,8 @@ class UpdateCollectionModal extends React.Component {
             return;
         }
 
-        let title = this.context.intl.formatMessage(this.messages.newCollectionSuccessTitle);
-        let text = this.context.intl.formatMessage(this.messages.newCollectionSuccessTitle);
+        let title = this.context.intl.formatMessage(this.messages.updateCollectionSuccessTitle);
+        let text = this.context.intl.formatMessage(this.messages.updateCollectionSuccessText);
 
         swal({
             title: title,
@@ -120,9 +120,9 @@ class UpdateCollectionModal extends React.Component {
                 id: 'UpdateCollectionModal.field.usergroup.placeholder',
                 defaultMessage: 'Select User Group'
             }, 
-            buttonCreate: {
-                id: 'UpdateCollectionModal.button.create',
-                defaultMessage: 'Create'
+            buttonSave: {
+                id: 'UpdateCollectionModal.button.save',
+                defaultMessage: 'Save'
             }, 
             buttonClose: {
                 id: 'UpdateCollectionModal.button.close',
@@ -177,7 +177,7 @@ class UpdateCollectionModal extends React.Component {
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
                         <div>
-                            <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.buttonCreate} /></Button>
+                            <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.buttonSave} /></Button>
                             <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
                         </div>
                     </FocusTrap>
