@@ -431,7 +431,8 @@ class Integrations extends React.Component {
 }
 
 Integrations.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 export default Integrations;
