@@ -117,6 +117,11 @@ class SelectInstanceModal extends React.Component {
         let win = window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+topSpace+',toolbar=No,location=No,scrollbars=no,status=No,resizable=no,fullscreen=No');
         win.focus();
 
+        let that = this;
+        win.onunload = () => {
+            that.setState({ isLoading: false });
+        };
+
         return false;
     }
 

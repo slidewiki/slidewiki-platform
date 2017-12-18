@@ -8,7 +8,7 @@ import userSocialSignIn from '../../actions/user/userSocialSignIn';
 import newSocialData from '../../actions/user/registration/newSocialData';
 import HeaderDropdown from './HeaderDropdown.js';
 import ReactDOM from 'react-dom';
-import {hashPassword} from '../../configs/general';
+import {hashPassword, ssoEnabled} from '../../configs/general';
 import common from '../../common';
 import {Microservices} from '../../configs/microservices';
 let classNames = require('classnames');
@@ -384,7 +384,7 @@ class LoginModal extends React.Component {
                       <br/>
                       <div className="container">
                         {/*<i className="big circular facebook square link icon" onClick={this.socialLogin.bind(this, 'facebook')} ></i>*/}
-                        <i className="big circular user link icon" onClick={this.doSSO.bind(this)} title='Sign in with an account of another SlideWiki instance' ></i>
+                        {ssoEnabled ? <i className="big circular user link icon" onClick={this.doSSO.bind(this)} title='Sign in with an account of another SlideWiki instance' ></i> : ''}
                         <i className="big circular google plus link icon" onClick={this.socialLogin.bind(this, 'google')} ></i>
                         <i className="big circular github link icon" onClick={this.socialLogin.bind(this, 'github')} ></i>
                       </div>

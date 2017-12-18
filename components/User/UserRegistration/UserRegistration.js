@@ -13,7 +13,7 @@ import newSocialData from '../../../actions/user/registration/newSocialData';
 import UserRegistrationStore from '../../../stores/UserRegistrationStore';
 import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
-import {hashPassword} from '../../../configs/general';
+import {hashPassword, ssoEnabled} from '../../../configs/general';
 import common from '../../../common';
 import openSSOModal from '../../../actions/user/openSSOModal';
 
@@ -472,7 +472,7 @@ class UserRegistration extends React.Component {
                             <h3 className="ui dividing header">Sign Up with a Social Provider</h3>
 
                             {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
-                            <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title='Sign up with an account of another SlideWiki instance' aria-label="Sign up with another SlideWiki instance"><i className="big user icon"></i></button>
+                            {ssoEnabled ? <button className="ui basic icon large circular button" onClick={this.doSSO.bind(this)} title='Sign up with an account of another SlideWiki instance' aria-label="Sign up with another SlideWiki instance"><i className="big user icon"></i></button> : ''}
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label="Sign up with Google"><i className="big google plus lnk icon"></i></button>
                             <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label="Sign up with Github"><i className="big github icon"></i></button>
 

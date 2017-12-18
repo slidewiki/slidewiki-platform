@@ -207,7 +207,8 @@ class ReviseUser extends React.Component {
 }
 
 ReviseUser.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 ReviseUser = connectToStores(ReviseUser, [UserRegistrationStore, SSOStore], (context, props) => {
     return {
