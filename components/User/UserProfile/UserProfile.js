@@ -236,7 +236,8 @@ class UserProfile extends React.Component {
 }
 
 UserProfile.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {
