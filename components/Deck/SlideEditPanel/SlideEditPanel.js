@@ -27,6 +27,14 @@ class SlideEditPanel extends React.Component {
             embedHeight: ''
         };
     }
+    componentDidUpdate(prevProps){
+        if (prevProps.showTemplate !== this.showTemplate || prevProps.showOther !== this.showOther || prevProps.showEmbed !== this.showEmbed)
+        {
+            //console.log('test');
+            $('#handleBackLink').focus();
+            //$('#handleAddInputBox').focus(); //if back at root menu
+        }
+    }
     handleAddInputBox(){
         this.context.executeAction(addInputBox, {});
     }
@@ -191,27 +199,27 @@ class SlideEditPanel extends React.Component {
         };
         let otherList = (
                 <div>
-                  <a className="item" id="handleBack" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i tabIndex="0" className="reply icon"></i>back
+                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
-                  <a  className="item" id="handleEmbedClick" tabIndex="0" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
+                  <a  className="item" id="handleEmbedClick" role="button" onClick={this.handleEmbedClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedClick')}>
                       <i tabIndex="0"  className="plus square outline icon"></i>Embed
                   </a>
-                  <a className="item" id="handleTableClick" tabIndex="0" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
+                  <a className="item" id="handleTableClick" role="button" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
                       <i tabIndex="0" className="table icon"></i>Table
                   </a>
-                  <a className="item" id="handleMathsClick" tabIndex="0" onClick={this.handleMathsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleMathsClick')}>
+                  <a className="item" id="handleMathsClick" role="button" onClick={this.handleMathsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleMathsClick')}>
                       <i tabIndex="0" className="superscript icon"></i>Maths
                   </a>
-                  <a className="item" id="handleCodeClick" tabIndex="0" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
+                  <a className="item" id="handleCodeClick" role="button" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i>Code
                   </a>
                 </div>);
 
         let embedOptions = (
                 <form className="ui form">
-                  <a className="item" id="handleBack" tabIndex="0" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
-                      <i tabIndex="0" className="reply icon"></i>back
+                  <a className="item" id="handleBack" role="button" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
+                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
                   <div className="required field">
                     <label htmlFor="embedURL">URL/Link to embedded content:</label>
@@ -223,7 +231,7 @@ class SlideEditPanel extends React.Component {
                     <label htmlFor="embedHeight">Height of embedded content:</label>
                     <Input onChange={this.handleChange.bind(this)} defaultValue="300"  id="embedHeight" ref="embedHeight" name="embedHeight" aria-label="Height of embedded content" aria-required="true" required />
                   </div>
-                  <a className="item" id="handleEmbedAddClick" tabIndex="0" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
+                  <a className="item" id="handleEmbedAddClick" role="button" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
                       <i tabIndex="0" className="add square icon"></i>Add to Slide
                   </a>
                 </form>);
@@ -231,8 +239,8 @@ class SlideEditPanel extends React.Component {
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
         let templateList = (
                 <div >
-                  <a className="item" id="handleBack" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
-                      <i tabIndex="0" className="reply icon"></i>back
+                  <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
                   <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
                       Title and bullets <br/>
@@ -247,7 +255,7 @@ class SlideEditPanel extends React.Component {
                       1 row 1 column <br/><br/>
                       <img tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
                   </a>
-                  <a className="item" tabIndex="0" tabIndex="0"  onClick={this.handleTemplatechange.bind(this, '12')}>
+                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '12')}>
                       1 row 2 columns <br/><br/>
                       <img tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
                   </a>
@@ -295,28 +303,28 @@ class SlideEditPanel extends React.Component {
 
         let normalContent = (
           <div>
-            <a className="item" id="handleAddInputBox" tabIndex="0" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
+            <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
                 <i tabIndex="0" className="font icon"></i>Text
             </a>
-            <a  className="item" id="handleUploadMediaClick" tabIndex="0" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
+            <a  className="item" id="handleUploadMediaClick" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
                 <i tabIndex="0" className="photo icon"></i>Image
             </a>
-            <a  className="item" id="handleUploadVideoClick" tabIndex="0" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
+            <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
                 <i tabIndex="0"  className="film icon"></i>Video
             </a>
-            <a  className="item" id="handleOtherClick" tabIndex="0" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
+            <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
                 <i tabIndex="0"  className="ellipsis horizontal icon"></i>Other
             </a>
-            <a  className="item" id="handleTemplateClick" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
+            <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i>Template
             </a>
-            <a className="item" id="handleSettingsClick" role="button" tabIndex="0" onClick={this.handleSettingsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSettingsClick')}>
+            <a className="item" id="handleSettingsClick" role="button" onClick={this.handleSettingsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSettingsClick')}>
                 <i tabIndex="0"  className="settings icon"></i>Properties
             </a>
-            <a className="item" id="handleHTMLEditorClick" role="button" tabIndex="0" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
+            <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
                 <i tabIndex="0"  className="code icon"></i>HTML editor
             </a>
-            <a className="item" id="handleHelpClick" role="button" tabIndex="0" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
+            <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
                 <i tabIndex="0"  className="help icon"></i>Help
             </a>
             </div>
