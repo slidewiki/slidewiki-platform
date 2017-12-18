@@ -20,8 +20,9 @@ class SlideEditPanel extends React.Component {
         super(props);
         this.state = {
             embedURL: '',
-            embedWidth: '',
-            embedHeight: '',
+            embedWidth: '400',
+            embedHeight: '300',
+            URLMissingError: '',
             showOther: false,
             showTemplate: false,
             showEmbed: false
@@ -64,12 +65,21 @@ class SlideEditPanel extends React.Component {
         //this.context.executeAction(embedClick, {});
     }
     handleEmbedAddClick(){
-        console.log('handleEmbedAddClick');
-        console.log('embedURL = ' + this.state.embedURL);
-        console.log('embedWidth = ' + this.state.embedWidth);
-        console.log('embedHeight = ' + this.state.embedHeight);
         console.log(this.state.embedURL);
         console.log(this.state.embedWidth);
+        if(this.state.embedURL === ''){
+            this.setState({ URLMissingError: 'missing URL/link to content' });
+            //console.log('errormissing');
+            this.forceUpdate();
+        }
+        else {
+            let iframe = '<iframe src="'+this.state.embedURL+'" width="'+this.state.embedWidth+'" height="'+this.state.embedHeight+'" frameborder="0"></iframe>';
+            this.context.executeAction(embedClick, {
+                embedWidth: this.state.embedWidth,
+                embedHeight: this.state.embedHeight,
+                iframe: iframe
+            });
+        }
     }
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
@@ -221,6 +231,7 @@ class SlideEditPanel extends React.Component {
                   </a>
                   <div className="required field">
                     <label htmlFor="embedURL">URL/Link to embedded content:</label>
+                    <i className="error">{this.state.URLMissingError}</i>
                     <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" aria-required="true" required autoFocus/>
                   </div>
                   <div className="required field">
