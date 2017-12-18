@@ -11,18 +11,18 @@ class ColletionDecks extends React.Component {
         let content = this.props.decks;
         if(!isEmpty(content)){
             switch(this.props.sort){
-                case '1':
+                case 'date':
                     content = content.sort((a,b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
                     break;
-                case '0':
+                case 'title':
                     content = content.sort((a,b) => (b.title.toUpperCase() < a.title.toUpperCase()) ? 1 : -1 );
                     break;
-                case '2':
+                case 'lastUpdated':
                     content = content.sort((a,b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
                     break;
 
                 // use the natural order of the array
-                case '3':
+                case 'order':
                 default:
                     break;
             }

@@ -17,6 +17,7 @@ export default function loadCollectionDetails(context, payload, done) {
             log.error(context, {filepath: __filename});
             context.dispatch('LOAD_COLLECTION_DETAILS_FAILURE', err);
         } else {
+            res.sortBy = (payload.query.sort) ? payload.query.sort : 'order';
             context.dispatch('LOAD_COLLECTION_DETAILS_SUCCESS', res);
         }
 

@@ -13,7 +13,6 @@ import {FormattedMessage, defineMessages} from 'react-intl';
 class CollectionPanel extends React.Component {
     constructor(props){
         super(props);
-        this.sortBy = '3';
         this.state = {
             editMode: false, 
             decksOrder: this.props.DeckCollectionStore.collectionDetails.decks.slice() || []
@@ -30,8 +29,10 @@ class CollectionPanel extends React.Component {
     }
 
     dropdownSelect(value) {
-        this.sortBy = value;
-        this.forceUpdate();
+        // redirect with sort param
+        this.context.executeAction(navigateAction, {
+            url: `/collection/${this.props.DeckCollectionStore.collectionDetails._id}?sort=${value}`, 
+        });
     }
     setEditMode(value){
         this.setState({
@@ -52,6 +53,8 @@ class CollectionPanel extends React.Component {
         this.setState({
             editMode: false
         });
+        // set sorting by order
+        this.dropdownSelect('order');
     }
     handleMoveUp(index){
         let newState = Object.assign({}, this.state);
@@ -116,7 +119,7 @@ class CollectionPanel extends React.Component {
             },
             sortDefault: {
                 id: 'CollectionPanel.sort.default', 
-                defaultMessage: 'First Added'
+                defaultMessage: 'Default Order'
             }, 
             sortLastUpdated: {
                 id: 'CollectionPanel.sort.lastUpdated', 
@@ -132,6 +135,19 @@ class CollectionPanel extends React.Component {
             }
         });
     }
+    getSelectedSort(sortBy){
+        switch(sortBy){
+            case 'lastUpdated':
+                return <FormattedMessage {...this.messages.sortLastUpdated} />;
+            case 'date': 
+                return <FormattedMessage {...this.messages.sortCreationDate} />;
+            case 'title':
+                return <FormattedMessage {...this.messages.sortTitle} />;
+            case 'order': 
+            default: 
+                return <FormattedMessage {...this.messages.sortDefault} />;        }
+
+    }
     render() {
 
         if(this.props.DeckCollectionStore.updateCollectionDeckOrderError){
@@ -140,12 +156,15 @@ class CollectionPanel extends React.Component {
 
         let data = this.props.DeckCollectionStore.collectionDetails;
         let content = (!this.state.editMode) 
-        ? <CollectionDecks size={0} decks={data.decks} sort={this.sortBy}/>
+        ? <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
         : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} />;
 
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
         let hasEditRights = (this.props.UserProfileStore.userid === data.user.id
                     || this.props.UserProfileStore.user.groups.map((group) => group._id).includes(data.userGroup));
+
+        // get sort text of the selected sortBy option
+        let sortText = this.getSelectedSort(data.sortBy);
 
         return (
             <div className = "ui vertically padded stackable grid container" >
@@ -180,12 +199,12 @@ class CollectionPanel extends React.Component {
                             { (!this.state.editMode) && 
                                 <div className="ui right floated pointing labeled icon dropdown button" ref="sortDropdown">
                                     <i className="icon exchange"/>
-                                    <div className="text"><FormattedMessage {...this.messages.sortDefault} /></div>
+                                    <div className="text">{sortText}</div>
                                     <div className="menu">
-                                        <div className="item active selected" data-value={3}><FormattedMessage {...this.messages.sortDefault} /></div>
-                                        <div className="item" data-value={2}><FormattedMessage {...this.messages.sortLastUpdated} /></div>
-                                        <div className="item" data-value={1}><FormattedMessage {...this.messages.sortCreationDate} /></div>
-                                        <div className="item" data-value={0}><FormattedMessage {...this.messages.sortTitle} /></div>
+                                        <div className={(data.sortBy === 'order') ? 'item active selected' : 'item'} data-value='order'><FormattedMessage {...this.messages.sortDefault} /></div>
+                                        <div className={(data.sortBy === 'lastUpdated') ? 'item active selected' : 'item'} data-value='lastUpdated'><FormattedMessage {...this.messages.sortLastUpdated} /></div>
+                                        <div className={(data.sortBy === 'date') ? 'item active selected' : 'item'} data-value='date'><FormattedMessage {...this.messages.sortCreationDate} /></div>
+                                        <div className={(data.sortBy === 'title') ? 'item active selected' : 'item'} data-value='title'><FormattedMessage {...this.messages.sortTitle} /></div>
                                     </div>
                                 </div>
                             }
