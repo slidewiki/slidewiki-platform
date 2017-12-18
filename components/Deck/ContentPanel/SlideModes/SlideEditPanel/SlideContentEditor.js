@@ -57,7 +57,9 @@ class SlideContentEditor extends React.Component {
                 confirmButtonClass: 'ui olive button',
                 cancelButtonText: 'No',
                 cancelButtonClass: 'ui red button',
-                buttonsStyling: false
+                buttonsStyling: false,
+                focusConfirm: true,
+                allowEnterKey: true,
             }).then((accepted) => {
                 this.applyTemplate(template);
             }, (reason) => {

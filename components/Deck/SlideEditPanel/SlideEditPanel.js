@@ -18,19 +18,18 @@ class SlideEditPanel extends React.Component {
 
     constructor(props) {
         super(props);
-        this.showTemplate = false;
-        this.showOther = false;
-        this.showEmbed = false;
         this.state = {
             embedURL: '',
             embedWidth: '',
-            embedHeight: ''
+            embedHeight: '',
+            showOther: false,
+            showTemplate: false,
+            showEmbed: false
         };
     }
-    componentDidUpdate(prevProps){
-        if (prevProps.showTemplate !== this.showTemplate || prevProps.showOther !== this.showOther || prevProps.showEmbed !== this.showEmbed)
+    componentDidUpdate(prevProps, prevState){
+        if (prevState.showTemplate !== this.state.showTemplate || prevState.showOther !== this.state.showOther || prevState.showEmbed !== this.state.showEmbed)
         {
-            //console.log('test');
             $('#handleBackLink').focus();
             //$('#handleAddInputBox').focus(); //if back at root menu
         }
@@ -45,7 +44,7 @@ class SlideEditPanel extends React.Component {
         this.context.executeAction(uploadVideoClick, {});
     }
     handleOtherClick(){
-        this.showOther = true;
+        this.setState({showOther: true});
         this.forceUpdate();
         //this.context.executeAction(otherClick, {});
     }
@@ -59,8 +58,8 @@ class SlideEditPanel extends React.Component {
         this.context.executeAction(codeClick, {});
     }
     handleEmbedClick(){
-        this.showEmbed = true;
-        this.showOther = false;
+        this.setState({showEmbed: true});
+        this.setState({showOther: false});
         this.forceUpdate();
         //this.context.executeAction(embedClick, {});
     }
@@ -77,17 +76,17 @@ class SlideEditPanel extends React.Component {
     }
     handleTemplateClick(){
         //console.log('clicked');
-        this.showTemplate = true;
+        this.setState({showTemplate: true});
         this.forceUpdate();
     }
     handleTemplatechange(templateID){
         if(templateID !== ''){
-            this.showTemplate = false;
+            //this.setState({showTemplate: false});
             this.context.executeAction(changeTemplate, {
                 //template: this.refs.template.value
                 template: templateID
             });
-            this.forceUpdate();
+            //this.forceUpdate();
         }
     }
     handleSettingsClick(){
@@ -122,15 +121,14 @@ class SlideEditPanel extends React.Component {
         });
     }
     handleBackEmbed(){
-        this.showTemplate = false;
-        this.showOther = true;
-        this.showEmbed = false;
-        this.forceUpdate();
+        this.setState({showTemplate: false});
+        this.setState({showOther: true});
+        this.setState({showEmbed: false});
     }
     handleBack(){
-        this.showTemplate = false;
-        this.showOther = false;
-        this.showEmbed = false;
+        this.setState({showTemplate: false});
+        this.setState({showOther: false});
+        this.setState({showEmbed: false});
         this.forceUpdate();
     }
     handleKeyPress = (event, param, template) => {
@@ -242,62 +240,61 @@ class SlideEditPanel extends React.Component {
                   <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
-                      Title and bullets <br/>
-                      <br/>
-                      <img aria-hidden="true" tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
+                      <i tabIndex="0" aria-label="Title and bullets">Title and bullets </i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
-                      Empty document <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
+                      <i tabIndex="0" aria-label="Empty document">Empty document</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '11')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11')}>
-                      1 row 1 column <br/><br/>
-                      <img aria-hidden="true" tabIndex="0"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11')}>
+                      <i tabIndex="0" aria-label="1 row 1 column">1 row 1 column</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '12')}>
-                      1 row 2 columns <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '12')}>
+                      <i tabIndex="0" aria-label="1 row 2 column">1 row 2 columns</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '22')}>
-                      2 rows 2 columns <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '22')}>
+                      <i tabIndex="0" aria-label="2 rows 2 columns">2 rows 2 columns</i> <br/><br/>
+                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '21')}>
-                      2 rows 1 column <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '21')}>
+                      <i tabIndex="0" aria-label="2 rows 1 column">2 rows 1 column</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '11img')}>
-                      1 row 1 column image <br/><br/>
-                      <img tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11img')}>
+                      <i tabIndex="0" aria-label="1 row 1 column image">1 row 1 column image</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, '3')}>
-                      Document with title <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')}>
+                      <i tabIndex="0" aria-label="Document with title">Document with title</i> <br/><br/>
+                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, 'outitleslide')}>
-                      Open University Theme Title Page <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'outitleslide')}>
+                      <i tabIndex="0" aria-label="Open University Theme Title Page">Open University Theme Title Page</i> <br/><br/>
+                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, 'oegtitleslide')}>
-                      OEG Theme Title Page <br/><br/>
-                      <img aria-hidden="true" aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'oegtitleslide')}>
+                      <i tabIndex="0" aria-label="OEG Theme Title Page">OEG Theme Title Page</i> <br/><br/>
+                      <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, 'slidewikislide')}>
-                      SlideWiki template <br/><br/>
-                      <img aria-hidden="true" aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'slidewikislide')}>
+                      <i tabIndex="0" aria-label="SlideWiki template">SlideWiki template</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, 'EKDDA')}>
-                      EKDDA template <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDA')}>
+                      <i tabIndex="0" aria-label="EKDDA template">EKDDA template</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, 'EKDDAeng')}>
-                      EKDDA template - English <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAeng')}>
+                      <i tabIndex="0" aria-label="EKDDA template - English">EKDDA template - English</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
                   </a>
-                  <a className="item" tabIndex="0" onClick={this.handleTemplatechange.bind(this, 'EKDDAengNofooter')}>
-                      EKDDA template - English no footer <br/><br/>
-                      <img aria-hidden="true" tabIndex="0" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAengNofooter')}>
+                      <i tabIndex="0" aria-label="EKDDA template - English no footer">EKDDA template - English no footer</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
                   </a>
                 </div>);
 
@@ -331,11 +328,11 @@ class SlideEditPanel extends React.Component {
           );
 
         let panelcontent;
-        if(this.showTemplate){
+        if(this.state.showTemplate){
             panelcontent = templateList;
-        }else if (this.showOther) {
+        }else if (this.state.showOther) {
             panelcontent = otherList;
-        } else if (this.showEmbed) {
+        } else if (this.state.showEmbed) {
             panelcontent = embedOptions;
         } else {
             panelcontent = normalContent;
