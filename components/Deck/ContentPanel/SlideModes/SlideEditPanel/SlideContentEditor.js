@@ -34,34 +34,6 @@ class SlideContentEditor extends React.Component {
         //this.oldContent = '';
         //this.redoContent = '';
     }
-
-    keymapInfoButton(){
-        let message = '&#8226; Enter text in input box: control + enter <br/>'+
-                '&#8226; Move input box around: press control + alt and then the up, down, left, right keys <br/>' +
-                '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
-                '&#8226; Duplicate an input box: control + d <br/>'+
-                '&#8226; Delete an input box: control + delete <br/>'+
-                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>' +
-                '&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>';
-        swal({
-            title: 'Keyboard shortcuts',
-            html: message,
-            type: 'question',
-            showCloseButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'ok',
-            confirmButtonClass: 'ui olive button',
-            cancelButtonText: 'No',
-            cancelButtonClass: 'ui red button',
-            buttonsStyling: false
-        }).then((accepted) => {
-            //this.applyTemplate(template);
-        }, (reason) => {
-            //done(reason);
-        });
-
-    }
-
     handleTemplatechange(template){
         /*
         if (this.showTemplates === false){

@@ -19,6 +19,7 @@ class SlideEditPanel extends React.Component {
         super(props);
         this.showTemplate = false;
         this.showOther = false;
+        this.showEmbed = false;
         this.state = {
         };
     }
@@ -46,7 +47,9 @@ class SlideEditPanel extends React.Component {
         this.context.executeAction(codeClick, {});
     }
     handleEmbedClick(){
-        this.context.executeAction(embedClick, {});
+        this.showEmbed = true;
+        this.forceUpdate();
+        //this.context.executeAction(embedClick, {});
     }
     handleTemplateClick(){
         //console.log('clicked');
@@ -63,12 +66,41 @@ class SlideEditPanel extends React.Component {
             this.forceUpdate();
         }
     }
+    handleSettingsClick(){
+        console.log('properties click');
+    }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
+    }
+    handleHelpClick(){
+        let message = '&#8226; Enter text in input box: control + enter <br/>'+
+                '&#8226; Move input box around: press control + alt and then the up, down, left, right keys <br/>' +
+                '&#8226; Bring input box to front or back: press control+shift and then the plus or minus key <br/>' +
+                '&#8226; Duplicate an input box: control + d <br/>'+
+                '&#8226; Delete an input box: control + delete <br/>'+
+                '&#8226; See <a href="https://sdk.ckeditor.com/samples/accessibility.html" target="_blank">https://sdk.ckeditor.com/samples/accessibility.html</a> for more (CKeditor) keyboard shortcuts <br/>' +
+                '&#8226; When using Firefox, the selection of text via mouse cursor does not work well. Use keyboard selection or another browser instead. We are working to solve this problem. <br/>';
+        swal({
+            title: 'Keyboard shortcuts',
+            html: message,
+            type: 'question',
+            showCloseButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'ok',
+            confirmButtonClass: 'ui olive button',
+            cancelButtonText: 'No',
+            cancelButtonClass: 'ui red button',
+            buttonsStyling: false
+        }).then((accepted) => {
+            //this.applyTemplate(template);
+        }, (reason) => {
+            //done(reason);
+        });
     }
     handleBack(){
         this.showTemplate = false;
         this.showOther = false;
+        this.showEmbed = false;
         this.forceUpdate();
     }
     handleKeyPress = (event, param, template) => {
@@ -108,8 +140,14 @@ class SlideEditPanel extends React.Component {
                 case 'handleTemplatechange':
                     this.handleTemplatechange(template);
                     break;
+                case 'handleSettingsClick':
+                    this.handleSettingsClick();
+                    break;
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
+                    break;
+                case 'handleHelpClick':
+                    this.handleHelpClick();
                     break;
                 default:
             }
@@ -136,6 +174,16 @@ class SlideEditPanel extends React.Component {
                   </a>
                   <a className="item" id="handleCodeClick" tabIndex="0" onClick={this.handleCodeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleCodeClick')}>
                       <i tabIndex="0" className="code icon"></i>Code
+                  </a>
+                </div>);
+
+        let embedOptions = (
+                <div>
+                  <a className="item" id="handleBack" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i tabIndex="0" className="reply icon"></i>back
+                  </a>
+                  <a className="item" id="handleTableClick" tabIndex="0" onClick={this.handleTableClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTableClick')}>
+                      <i tabIndex="0" className="table icon"></i>Table
                   </a>
                 </div>);
 
@@ -224,8 +272,14 @@ class SlideEditPanel extends React.Component {
             <a  className="item" id="handleTemplateClick" role="button" tabIndex="0" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i>Template
             </a>
+            <a className="item" id="handleSettingsClick" role="button" tabIndex="0" onClick={this.handleSettingsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSettingsClick')}>
+                <i tabIndex="0"  className="settings icon"></i>Properties
+            </a>
             <a className="item" id="handleHTMLEditorClick" role="button" tabIndex="0" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
                 <i tabIndex="0"  className="code icon"></i>HTML editor
+            </a>
+            <a className="item" id="handleHelpClick" role="button" tabIndex="0" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
+                <i tabIndex="0"  className="help icon"></i>Help
             </a>
             </div>
           );
@@ -235,6 +289,8 @@ class SlideEditPanel extends React.Component {
             panelcontent = templateList;
         }else if (this.showOther) {
             panelcontent = otherList;
+        } else if (this.showEmbed) {
+            panelcontent = embedOptions;
         } else {
             panelcontent = normalContent;
         }
