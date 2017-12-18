@@ -13,6 +13,8 @@ import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 import saveClick from '../../../../actions/slide/saveClick';
+import undoClick from '../../../../actions/slide/undoClick';
+import redoClick from '../../../../actions/slide/redoClick';
 
 class ContentActionsHeader extends React.Component {
 
@@ -34,11 +36,11 @@ class ContentActionsHeader extends React.Component {
     }
     handleUndoButtonClick (){
         //this.context.executeAction(undoClick, {});
-        console.log('undo');
+        //console.log('undo');
     }
     handleRedoButtonClick(){
         //this.context.executeAction(redoClick, {});
-        console.log('redo');
+        //console.log('redo');
     }
     cancelButtonClick(selector){
         const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
@@ -135,11 +137,11 @@ class ContentActionsHeader extends React.Component {
                          Save
                     </button>;
                 undoButton =
-                    <button tabIndex="0" ref="undoButton" className="ui button " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
+                    <button tabIndex="0" ref="undoButton" className="ui orange button " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
                          <i className="reply icon large"></i>
                     </button>;
                 redoButton =
-                    <button tabIndex="0" ref="redoButton" className="ui button " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
+                    <button tabIndex="0" ref="redoButton" className="ui orange button " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
                          <i className="mail forward icon large"></i>
                     </button>;
             } else {

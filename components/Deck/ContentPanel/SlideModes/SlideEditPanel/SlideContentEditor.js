@@ -31,6 +31,8 @@ class SlideContentEditor extends React.Component {
         this.previousCaretRange;
         this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
+        //this.oldContent = '';
+        //this.redoContent = '';
     }
 
     keymapInfoButton(){
@@ -1274,9 +1276,30 @@ class SlideContentEditor extends React.Component {
         //console.log(nextProps.SlideEditStore.addInputBox);
         //console.log(nextProps.SlideEditStore.uploadMediaClick);
         //console.log(nextProps.SlideEditStore.template);
+        //if (nextProps.SlideEditStore.content !== this.props.SlideEditStore.content)
+        //{
+            //this.oldContent = this.props.SlideEditStore.content;
+        //}
         if (nextProps.SlideEditStore.saveSlideClick === 'true' && nextProps.SlideEditStore.saveSlideClick !== this.props.SlideEditStore.saveSlideClick)
         {
             this.handleSaveButton();
+        }
+        if (nextProps.SlideEditStore.undoClick === 'true' && nextProps.SlideEditStore.undoClick !== this.props.SlideEditStore.undoClick)
+        {
+            console.log('undo');
+            //this.redoContent = this.props.SlideEditStore.content; //existing content is redocontent now
+            //this.props.SlideEditStore.content = this.oldContent; //oldcontent is restored
+            CKEDITOR.instances.inlineContent.execCommand('undo');
+            this.resizeDrag();
+            //this.forceUpdate();
+        }
+        if (nextProps.SlideEditStore.redoClick === 'true' && nextProps.SlideEditStore.redoClick !== this.props.SlideEditStore.redoClick)
+        {
+            console.log('redo');
+            //this.props.SlideEditStore.content = this.redoContent; //restore oringal content before undo
+            CKEDITOR.instances.inlineContent.execCommand('redo');
+            this.resizeDrag();
+            //this.forceUpdate();
         }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {

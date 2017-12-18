@@ -11,6 +11,8 @@ class SlideEditStore extends BaseStore {
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
         this.saveSlideClick = 'false';
+        this.undoClick = 'false';
+        this.redoClick = 'false';
         this.addInputBox = 'false';
         this.uploadMediaClick = 'false';
         this.uploadVideoClick = 'false';
@@ -58,6 +60,18 @@ class SlideEditStore extends BaseStore {
         this.saveSlideClick = 'true';
         this.emitChange();
         this.saveSlideClick = 'false';
+        this.emitChange();
+    }
+    handleUndoClick(){
+        this.undoClick = 'true';
+        this.emitChange();
+        this.undoClick = 'false';
+        this.emitChange();
+    }
+    handleRedoClick(){
+        this.redoClick = 'true';
+        this.emitChange();
+        this.redoClick = 'false';
         this.emitChange();
     }
     handleAddInputBox(){
@@ -117,6 +131,8 @@ class SlideEditStore extends BaseStore {
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
             saveSlideClick: this.saveSlideClick,
+            undoClick: this.undoClick,
+            redoClick: this.redoClick,
             template: this.template,
             addInputBox: this.addInputBox,
             uploadMediaClick: this.uploadMediaClick,
@@ -138,6 +154,8 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
         this.saveSlideClick = state.saveSlideClick;
+        this.undoClick = state.undoClick;
+        this.redoClick = state.redoClick;
         this.template = state.template;
         this.addInputBox = state.addInputBox;
         this.uploadMediaClick = state.uploadMediaClick;
@@ -165,6 +183,8 @@ SlideEditStore.handlers = {
     'CODE_CLICK': 'handleCodeClick',
     'EMBED_CLICK': 'handleEmbedClick',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
+    'UNDO_CLICK': 'handleUndoClick',
+    'REDO_CLICK': 'handleRedoClick',
 };
 
 export default SlideEditStore;
