@@ -9,7 +9,7 @@ class DeckPageStore extends BaseStore {
         this.componentsStatus = {
             'NavigationPanel': {visible: 1, columnSize: 16},
             'TreePanel': {visible: 1, columnSize: 3},
-            'SlideEditPanel': {visible: 1, columnSize: 3},
+            'SlideEditLeftPanel': {visible: 1, columnSize: 3},
             'ActivityFeedPanel': {visible: 1, columnSize: 3},
             'ContentPanel': {visible: 1, columnSize: 10},
             'ContentModulesPanel': {visible: 1, columnSize: 10},
@@ -23,7 +23,7 @@ class DeckPageStore extends BaseStore {
         this.emitChange();
     }
     restoreAll() {
-        this.componentsStatus = {'NavigationPanel': {visible: 1, columnSize: 16}, 'TreePanel': {visible: 1, columnSize: 3}, 'SlideEditPanel': {visible: 1, columnSize: 3}, 'ActivityFeedPanel': {visible: 1, columnSize: 3}, 'ContentPanel': {visible: 1, columnSize: 10}, 'ContentModulesPanel': {visible: 1, columnSize: 10}};
+        this.componentsStatus = {'NavigationPanel': {visible: 1, columnSize: 16}, 'TreePanel': {visible: 1, columnSize: 3}, 'SlideEditLeftPanel': {visible: 1, columnSize: 3}, 'ActivityFeedPanel': {visible: 1, columnSize: 3}, 'ContentPanel': {visible: 1, columnSize: 10}, 'ContentModulesPanel': {visible: 1, columnSize: 10}};
         this.emitChange();
     }
     expandContentPanel() {
@@ -38,14 +38,14 @@ class DeckPageStore extends BaseStore {
         }
         this.emitChange();
     }
-    showSlideEditPanel() {
+    showSlideEditLeftPanel() {
         //hide all others than Navigation and Content
         for(let c in this.componentsStatus){
             if(c=== 'NavigationPanel') {
                 //this.componentsStatus[c].visible=0;
                 this.componentsStatus[c].visible=1;
                 this.componentsStatus[c].columnSize=16;
-            }else if(c=== 'SlideEditPanel'){
+            }else if(c=== 'SlideEditLeftPanel'){
                 this.componentsStatus[c].visible=1;
                 this.componentsStatus[c].columnSize=3;
             }else if(c=== 'ContentPanel'){
@@ -99,7 +99,7 @@ DeckPageStore.handlers = {
     'EXPAND_CONTENET_PANEL': 'expandContentPanel',
     'HIDE_LEFT_COLUMN': 'hideLeftColumn',
     'RESTORE_DECK_PAGE_LAYOUT': 'restoreAll',
-    'SHOW_SLIDE_EDIT_PANEL': 'showSlideEditPanel'
+    'SHOW_SLIDE_EDIT_PANEL': 'showSlideEditLeftPanel'
 };
 
 export default DeckPageStore;

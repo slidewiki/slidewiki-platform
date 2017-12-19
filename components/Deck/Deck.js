@@ -7,7 +7,7 @@ import UserProfileStore from '../../stores/UserProfileStore';
 import hideLeftColumn from '../../actions/deckpagelayout/hideLeftColumn';
 import restoreDeckPageLayout from '../../actions/deckpagelayout/restoreDeckPageLayout';
 import TreePanel from './TreePanel/TreePanel';
-import SlideEditPanel from './SlideEditPanel/SlideEditPanel';
+import SlideEditLeftPanel from './SlideEditLeftPanel/SlideEditLeftPanel';
 import ContentPanel from './ContentPanel/ContentPanel';
 import ContentModulesPanel from './ContentModulesPanel/ContentModulesPanel';
 //import ActivityFeedPanel from './ActivityFeedPanel/ActivityFeedPanel';
@@ -44,15 +44,15 @@ class Deck extends React.Component {
             'hide-element': !status.TreePanel.visible
         });
         let leftColClassSlideEdit = classNames({
-            'three':  status.SlideEditPanel.columnSize===3 || status.ActivityFeedPanel.columnSize===3,
-            'four':  status.SlideEditPanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
-            'twelve':  status.SlideEditPanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
-            'sixteen':  status.SlideEditPanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
-            'wide column': status.SlideEditPanel.visible || status.ActivityFeedPanel.visible,
-            'hide-element': !status.SlideEditPanel.visible && !status.ActivityFeedPanel.visible
+            'three':  status.SlideEditLeftPanel.columnSize===3 || status.ActivityFeedPanel.columnSize===3,
+            'four':  status.SlideEditLeftPanel.columnSize===4 || status.ActivityFeedPanel.columnSize===4,
+            'twelve':  status.SlideEditLeftPanel.columnSize===12 || status.ActivityFeedPanel.columnSize===12,
+            'sixteen':  status.SlideEditLeftPanel.columnSize===16 || status.ActivityFeedPanel.columnSize===16,
+            'wide column': status.SlideEditLeftPanel.visible || status.ActivityFeedPanel.visible,
+            'hide-element': !status.SlideEditLeftPanel.visible && !status.ActivityFeedPanel.visible
         });
-        let SlideEditPanelClass = classNames({
-            'hide-element': !status.SlideEditPanel.visible
+        let SlideEditLeftPanelClass = classNames({
+            'hide-element': !status.SlideEditLeftPanel.visible
         });
         /*
         let ActivityFeedPanelClass = classNames({
@@ -127,8 +127,8 @@ class Deck extends React.Component {
             //if we view a slide in edit mode - show slide edit panel
             leftPanel = <div className={leftColClassSlideEdit}>
                             <div className="row">
-                                <div className={SlideEditPanelClass}>
-                                    <SlideEditPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
+                                <div className={SlideEditLeftPanelClass}>
+                                    <SlideEditLeftPanel mode={this.props.DeckPageStore.mode} page={this.props.DeckPageStore.page}/>
                                 </div>
                                 <div className="ui hidden divider"></div>
                             </div>

@@ -12,9 +12,9 @@ import codeClick from '../../../actions/slide/codeClick';
 import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
+import SlideEditStore from '../../../stores/SlideEditStore';
 
-
-class SlideEditPanel extends React.Component {
+class SlideEditLeftPanel extends React.Component {
 
     constructor(props) {
         super(props);
@@ -27,7 +27,10 @@ class SlideEditPanel extends React.Component {
             embedCodeMissingError: '',
             showOther: false,
             showTemplate: false,
-            showEmbed: false
+            showEmbed: false,
+            showProperties: false,
+            title: this.props.SlideEditStore.title,
+            titleMissingError: ''
         };
     }
     componentDidUpdate(prevProps, prevState){
@@ -118,8 +121,20 @@ class SlideEditPanel extends React.Component {
             //this.forceUpdate();
         }
     }
-    handleSettingsClick(){
-        console.log('properties click');
+    handlePropertiesClick(){
+        this.setState({showProperties: true});
+    }
+    handleTitleChangeClick(){
+        console.log('change title');
+        if (this.state.title === ''){
+            this.setState({titleMissingError: 'title cannot be empty'});
+        } else {
+            console.log(this.state.title);
+            //update this.props.SlideEditStore.title via action
+            //in content editor -> catch new value for title SlideEditStore.title -> manuall trigger save -> new revision??
+            //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
+        }
+
     }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
@@ -150,7 +165,6 @@ class SlideEditPanel extends React.Component {
         });
     }
     handleBackEmbed(){
-        this.setState({showTemplate: false});
         this.setState({showOther: true});
         this.setState({showEmbed: false});
     }
@@ -158,6 +172,7 @@ class SlideEditPanel extends React.Component {
         this.setState({showTemplate: false});
         this.setState({showOther: false});
         this.setState({showEmbed: false});
+        this.setState({showProperties: false});
         this.forceUpdate();
     }
     handleKeyPress = (event, param, template) => {
@@ -203,8 +218,11 @@ class SlideEditPanel extends React.Component {
                 case 'handleTemplatechange':
                     this.handleTemplatechange(template);
                     break;
-                case 'handleSettingsClick':
-                    this.handleSettingsClick();
+                case 'handlePropertiesClick':
+                    this.handlePropertiesClick();
+                    break;
+                case 'handleTitleChangeClick':
+                    this.handleTitleChangeClick();
                     break;
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
@@ -338,6 +356,21 @@ class SlideEditPanel extends React.Component {
                   </a>
                 </div>);
 
+        let propertiesContent  = (
+                <form className="ui form">
+                  <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
+                  </a>
+                  <div className="required field">
+                    <label htmlFor="title">Slide title:</label>
+                    <i className="error">{this.state.titleMissingError}</i>
+                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="title" ref="title" name="title" aria-label="Slide title" aria-required="true" required autoFocus/>
+                  </div>
+                  <a className="item" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
+                      <i tabIndex="0" className="edit icon"></i>Change slide title
+                  </a>
+                </form>);
+
         let normalContent = (
           <div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
@@ -355,7 +388,7 @@ class SlideEditPanel extends React.Component {
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
                 <i tabIndex="0"  className="grid layout icon"></i>Template
             </a>
-            <a className="item" id="handleSettingsClick" role="button" onClick={this.handleSettingsClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSettingsClick')}>
+            <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
                 <i tabIndex="0"  className="settings icon"></i>Properties
             </a>
             <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
@@ -374,7 +407,9 @@ class SlideEditPanel extends React.Component {
             panelcontent = otherList;
         } else if (this.state.showEmbed) {
             panelcontent = embedOptions;
-        } else {
+        } else if (this.state.showProperties){
+            panelcontent = propertiesContent;
+        } else{
             panelcontent = normalContent;
         }
         return (
@@ -392,7 +427,12 @@ class SlideEditPanel extends React.Component {
     }
 }
 
-SlideEditPanel.contextTypes = {
+SlideEditLeftPanel.contextTypes = {
     executeAction: React.PropTypes.func.isRequired
 };
-export default SlideEditPanel;
+SlideEditLeftPanel = connectToStores(SlideEditLeftPanel, [SlideEditStore], (context, props) => {
+    return {
+        SlideEditStore: context.getStore(SlideEditStore).getState()
+    };
+});
+export default SlideEditLeftPanel;
