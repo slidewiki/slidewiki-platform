@@ -26,9 +26,9 @@ export default function finalizeMergedUser(context, payload, done) {
             localStorage.setItem(NAME, decodeURIComponent(JSON.stringify(res)));
 
             try {
-              window.close();
+                window.close();
             } catch (e) {
-              console.log('Window could not be closed.');
+                console.log('Window could not be closed.');
             }
 
             done();

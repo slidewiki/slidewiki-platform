@@ -34,14 +34,14 @@ class SelectInstanceModal extends React.Component {
 
     componentWillReceiveProps(nextProps){
         if (nextProps.SSOStore.activeTrap !== this.props.SSOStore.activeTrap){
-           this.setState({
-               activeTrap: nextProps.SSOStore.activeTrap
-           });
+            this.setState({
+                activeTrap: nextProps.SSOStore.activeTrap
+            });
         }
         if (nextProps.SSOStore.openModal !== this.props.SSOStore.openModal){
-           this.setState({
-               openModal: nextProps.SSOStore.openModal
-           });
+            this.setState({
+                openModal: nextProps.SSOStore.openModal
+            });
         }
 
         if (nextProps.SSOStore.errorMessageFinalize !== this.props.SSOStore.errorMessageFinalize) {
@@ -60,9 +60,9 @@ class SelectInstanceModal extends React.Component {
         console.log(name, value);
         this.setState({ [name]: value });
 
-        if (name == 'email' && value !== '' && value !== undefined && this.state.instance !== '' && common.isEmailAddress(value)) {
-              this.context.executeAction(checkEmail, {email: value, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
-          }
+        if (name === 'email' && value !== '' && value !== undefined && this.state.instance !== '' && common.isEmailAddress(value)) {
+            this.context.executeAction(checkEmail, {email: value, dispatch: 'SSO_MODAL_CHECKED_EMAIL', url: instances[this.state.instance].emailcheck});
+        }
     }
 
     handleClose() {
@@ -178,18 +178,18 @@ class SelectInstanceModal extends React.Component {
 
     render() {
         const instanceOptions = Object.keys(instances).reduce((arr, curr) => {
-          if (!instances[curr]['this'])
-              arr.push({ key: curr, text: instances[curr]['url'], value: curr});
-          return arr;
+            if (!instances[curr].this)
+                arr.push({ key: curr, text: instances[curr].url, value: curr});
+            return arr;
         }, []);
         let message = '';
         // console.log('SelectInstanceModal render', this.props.SSOStore.emailExisting, this.state.instance);
         if (!this.props.SSOStore.emailExisting && this.state.instance !== '') {
-          message = <Form.Field><Message
-            error
-            header='Unknown email'
-            content="The email you entered is not known at the selected instance"
-          /></Form.Field>;
+            message = <Form.Field><Message
+              error
+              header='Unknown email'
+              content="The email you entered is not known at the selected instance"
+            /></Form.Field>;
         }
         let content = <Form error={!this.props.SSOStore.emailExisting && this.state.instance !== '' ? true : false}>
             <Form.Field required>

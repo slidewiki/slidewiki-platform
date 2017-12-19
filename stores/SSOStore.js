@@ -109,15 +109,15 @@ class SSOStore extends BaseStore {
 }
 SSOStore.storeName = 'SSOStore';
 SSOStore.handlers = {
-  'SSO_MODAL_OPEN' : 'openModalMethod',
-  'SSO_MODAL_CLOSE': 'closeModal',
-  'SSO_MODAL_ERROR': 'error',
-  'SSO_MODAL_CHECKED_EMAIL': 'checkedEmail',
-  'SSO_INITIATE': 'initiate',
-  'SSO_SIGNIN_SUCCESS': 'saveSignInData',
-  'SSO_SIGNIN_ERROR': 'signInError',
-  'SSO_NEW_DATA': 'newData',
-  'SSO_FINALIZE_FAILURE': 'handleFinalizeError'
+    'SSO_MODAL_OPEN' : 'openModalMethod',
+    'SSO_MODAL_CLOSE': 'closeModal',
+    'SSO_MODAL_ERROR': 'error',
+    'SSO_MODAL_CHECKED_EMAIL': 'checkedEmail',
+    'SSO_INITIATE': 'initiate',
+    'SSO_SIGNIN_SUCCESS': 'saveSignInData',
+    'SSO_SIGNIN_ERROR': 'signInError',
+    'SSO_NEW_DATA': 'newData',
+    'SSO_FINALIZE_FAILURE': 'handleFinalizeError'
 };
 
 export default SSOStore;

@@ -326,9 +326,9 @@ class UserRegistration extends React.Component {
     }
 
     doSSO(e) {
-      e.preventDefault();
+        e.preventDefault();
 
-      this.context.executeAction(openSSOModal, {register: true});
+        this.context.executeAction(openSSOModal, {register: true});
     }
 
     handleStorageEvent(e) {

@@ -64,19 +64,19 @@ export default {
                 .catch((err) => {
                     callback(err);
                 });
-      } else if (resource === 'user.ssofinalize') {
-          rp.post({
-              uri: args.url,
-              body: {
-                  email: args.email,
-                  username: args.username
-              },
-              json: true,
-              resolveWithFullResponse: true
-          })
+        } else if (resource === 'user.ssofinalize') {
+            rp.post({
+                uri: args.url,
+                body: {
+                    email: args.email,
+                    username: args.username
+                },
+                json: true,
+                resolveWithFullResponse: true
+            })
               .then((res) => {
-                let json = res.body;
-                json.jwt = res.headers['----jwt----'];
+                  let json = res.body;
+                  json.jwt = res.headers['----jwt----'];
                   callback(null, json);
               })
               .catch((err) => {
