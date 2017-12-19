@@ -89,7 +89,7 @@ class Integrations extends React.Component {
     }
 
     handleEnable(e) {
-        console.log('handleEnable', e.target.attributes[1].nodeValue);
+        console.log('handleEnable', e.currentTarget.attributes[1].nodeValue);
         e.preventDefault();
 
         if (this.props.providerAction) {
@@ -97,7 +97,7 @@ class Integrations extends React.Component {
             return;
         }
 
-        this.provider = e.target.attributes[1].nodeValue;
+        this.provider = e.currentTarget.attributes[1].nodeValue;
 
         this.context.executeAction(updateProviderAction, 'enable_' + this.provider);
 
@@ -147,7 +147,7 @@ class Integrations extends React.Component {
                 defaultMessage: 'Confirmed',
             }
         });
-        console.log('handleDisable', e.target.attributes[1].nodeValue);
+        console.log('handleDisable', e.currentTarget.attributes[1].nodeValue);
         e.preventDefault();
 
         if (this.props.providerAction) {
@@ -155,7 +155,7 @@ class Integrations extends React.Component {
             return;
         }
 
-        this.provider = e.target.attributes[1].nodeValue;
+        this.provider = e.currentTarget.attributes[1].nodeValue;
 
         this.context.executeAction(updateProviderAction, 'disable_' + this.provider);
 
