@@ -20,9 +20,11 @@ class SlideEditPanel extends React.Component {
         super(props);
         this.state = {
             embedURL: '',
+            embedCode: '',
             embedWidth: '400',
             embedHeight: '300',
             URLMissingError: '',
+            embedCodeMissingError: '',
             showOther: false,
             showTemplate: false,
             showEmbed: false
@@ -66,19 +68,36 @@ class SlideEditPanel extends React.Component {
     }
     handleEmbedAddClick(){
         console.log(this.state.embedURL);
+        console.log(this.state.embedCode);
         console.log(this.state.embedWidth);
-        if(this.state.embedURL === ''){
+        if(this.state.embedURL === '' && this.state.embedCode === ''){
             this.setState({ URLMissingError: 'missing URL/link to content' });
+            this.setState({ embedCodeMissingError: 'missing embed code' });
             //console.log('errormissing');
             this.forceUpdate();
         }
         else {
-            let iframe = '<iframe src="'+this.state.embedURL+'" width="'+this.state.embedWidth+'" height="'+this.state.embedHeight+'" frameborder="0"></iframe>';
-            this.context.executeAction(embedClick, {
-                embedWidth: this.state.embedWidth,
-                embedHeight: this.state.embedHeight,
-                iframe: iframe
-            });
+            if (this.state.embedCode !== ''){
+                this.context.executeAction(embedClick, {
+                    embedWidth: '',
+                    embedHeight: '',
+                    iframe: '',
+                    embedCode: this.state.embedCode
+                });
+
+            }
+            else{
+                let iframe = '<iframe src="'+this.state.embedURL+'" width="'+this.state.embedWidth+'" height="'+this.state.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
+                this.context.executeAction(embedClick, {
+                    embedWidth: this.state.embedWidth,
+                    embedHeight: this.state.embedHeight,
+                    iframe: iframe,
+                    embedCode: ''
+                });
+            }
+            this.setState({showTemplate: false});
+            this.setState({showOther: true});
+            this.setState({showEmbed: false});
         }
     }
     handleChange(e) {
@@ -224,11 +243,20 @@ class SlideEditPanel extends React.Component {
                   </a>
                 </div>);
 
+
         let embedOptions = (
                 <form className="ui form">
                   <a className="item" id="handleBack" role="button" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
+                  <div className="required field">
+                    <label htmlFor="embedCode">Code to embed content:</label>
+                    <i className="error">{this.state.embedCodeMissingError}</i>
+                    <Input onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-label="URL (Link) to embedded content" aria-required="true" required autoFocus/>
+                  </div>
+                  <div>
+                    <i>or</i>
+                  </div>
                   <div className="required field">
                     <label htmlFor="embedURL">URL/Link to embedded content:</label>
                     <i className="error">{this.state.URLMissingError}</i>
@@ -243,6 +271,7 @@ class SlideEditPanel extends React.Component {
                   <a className="item" id="handleEmbedAddClick" role="button" onClick={this.handleEmbedAddClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleEmbedAddClick')}>
                       <i tabIndex="0" className="add square icon"></i>Add to Slide
                   </a>
+                  <label htmlFor="handleEmbedAddClick">Not all website owners allow their content to be embedded. Using an embed code often works best.</label>
                 </form>);
 
         //id="handleTemplatechange" className="ui field search selection dropdown" data-position="top center" data-inverted="" ref="templateList"
