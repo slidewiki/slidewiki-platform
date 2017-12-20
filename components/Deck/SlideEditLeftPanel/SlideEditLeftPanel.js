@@ -339,13 +339,13 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
+                      <i tabIndex="0" aria-label="Empty document">Empty document (Document / non-canvas mode!)</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
+                  </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
                       <i tabIndex="0" aria-label="Title and bullets">Title and bullets </i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
-                  </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
-                      <i tabIndex="0" aria-label="Empty document">Empty document</i> <br/><br/>
-                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11')}>
                       <i tabIndex="0" aria-label="1 row 1 column">1 row 1 column</i> <br/><br/>
