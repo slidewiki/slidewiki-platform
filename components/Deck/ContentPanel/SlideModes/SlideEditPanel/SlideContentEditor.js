@@ -1327,7 +1327,10 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
-            this.addAbsoluteDiv();
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                this.addAbsoluteDiv();
+            }
         }
         if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
         {
@@ -1338,7 +1341,7 @@ class SlideContentEditor extends React.Component {
                 this.refs.uploadMediaModal.handleClose();
                 //TODO code which inserts the file into the slide
                 // MediaStore.file contains everything about the file - also the byte64 string and url
-                if($('.pptx2html').length)
+                if($('.pptx2html').length)  //if slide is in canvas mode
                 {
                     let uniqueID = this.getuniqueID();
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px;  z-index: '+(this.getHighestZIndex() + 10)+';"><img src="' + nextProps.MediaStore.file.url + '" alt="'+nextProps.MediaStore.file.text+'"></div>');
@@ -1352,7 +1355,7 @@ class SlideContentEditor extends React.Component {
                     nextProps.MediaStore.filename = '';
                     nextProps.MediaStore.file = {};
                 }
-                else
+                else  //if slide is in non-canvas mode
                 {
                     let uniqueID = this.getuniqueID();
                     $('#inlineContent').append('<img id="'+uniqueID+'" src="' + nextProps.MediaStore.file.url + '" width="100%" height="100%" alt="'+nextProps.MediaStore.file.text+'">');
@@ -1391,75 +1394,100 @@ class SlideContentEditor extends React.Component {
         {
             //this.uniqueIDAllElements();
             let uniqueID = this.getuniqueID();
-            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px;  width: 400px; height: 300px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-            this.resizeDrag();
-            this.placeCaretAtStart(uniqueID);
-            $('#'+uniqueID).focus();
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px;  width: 400px; height: 300px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                this.resizeDrag();
+                this.placeCaretAtStart(uniqueID);
+                $('#'+uniqueID).focus();
+            }
             //make async/callback/promise -> async/await
             CKEDITOR.instances.inlineContent.execCommand('youtube');
 
-            $('.cke_dialog_ui_button_ok').mouseup((evt) => {
-                //register event to correct Iframeboxes dimensions as soon as user clicks on "OK" button in video dialog
-                console.log('====ckeditor save button ok====');
-                //this.addBorders();
-                setTimeout(() => {
-                    //this.correctDimensionsBoxes('iframe');
-                    this.correctDimensionsBoxesIframe();
-                    ////this.forceUpdate();
-                }, 1000);
-            });
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                $('.cke_dialog_ui_button_ok').mouseup((evt) => {
+                    //register event to correct Iframeboxes dimensions as soon as user clicks on "OK" button in video dialog
+                    console.log('====ckeditor save button ok====');
+                    //this.addBorders();
+                    setTimeout(() => {
+                        //this.correctDimensionsBoxes('iframe');
+                        this.correctDimensionsBoxesIframe();
+                        ////this.forceUpdate();
+                    }, 1000);
+                });
+            }
         }
         if (nextProps.SlideEditStore.tableClick === 'true' && nextProps.SlideEditStore.tableClick !== this.props.SlideEditStore.tableClick)
         {
-            let uniqueID = this.getuniqueID();
-            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:300px; top: 150px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-            this.resizeDrag();
-            this.placeCaretAtStart(uniqueID);
-            $('#'+uniqueID).focus();
-            //this.uniqueIDAllElements();
-            //make async/callback/promise -> async/await
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                let uniqueID = this.getuniqueID();
+                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:300px; top: 150px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                this.resizeDrag();
+                this.placeCaretAtStart(uniqueID);
+                $('#'+uniqueID).focus();
+                //this.uniqueIDAllElements();
+                //make async/callback/promise -> async/await
+            }
             CKEDITOR.instances.inlineContent.execCommand('table');
         }
         if (nextProps.SlideEditStore.mathsClick === 'true' && nextProps.SlideEditStore.mathsClick !== this.props.SlideEditStore.mathsClick)
         {
-            let uniqueID = this.getuniqueID();
-            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 300px; height:200px; top: 200px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-            this.resizeDrag();
-            this.placeCaretAtStart(uniqueID);
-            $('#'+uniqueID).focus();
-            //this.uniqueIDAllElements();
-            //make async/callback/promise -> async/await
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                let uniqueID = this.getuniqueID();
+                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 300px; height:200px; top: 200px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                this.resizeDrag();
+                this.placeCaretAtStart(uniqueID);
+                $('#'+uniqueID).focus();
+                //this.uniqueIDAllElements();
+                //make async/callback/promise -> async/await
+            }
             CKEDITOR.instances.inlineContent.execCommand('mathjax');
         }
         if (nextProps.SlideEditStore.codeClick === 'true' && nextProps.SlideEditStore.codeClick !== this.props.SlideEditStore.codeClick)
         {
-            let uniqueID = this.getuniqueID();
-            $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:400px; top: 250px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
-            this.resizeDrag();
-            this.placeCaretAtStart(uniqueID);
-            $('#'+uniqueID).focus();
-            //this.uniqueIDAllElements();
-            //make async/callback/promise -> async/await
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                let uniqueID = this.getuniqueID();
+                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:400px; top: 250px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                this.resizeDrag();
+                this.placeCaretAtStart(uniqueID);
+                $('#'+uniqueID).focus();
+                //this.uniqueIDAllElements();
+                //make async/callback/promise -> async/await
+            }
             CKEDITOR.instances.inlineContent.execCommand('codeSnippet');
         }
         if (nextProps.SlideEditStore.embedClick === 'true' && nextProps.SlideEditStore.embedClick !== this.props.SlideEditStore.embedClick)
         {
-            //console.log('embedClick');
-            //console.log(nextProps.SlideEditStore.iframe);
-            //console.log(nextProps.SlideEditStore.embedWidth);
-            //console.log(nextProps.SlideEditStore.embedHeight);
             let uniqueID = this.getuniqueID();
             if(nextProps.SlideEditStore.embedCode !== '') {
-                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
-                this.correctDimensionsBoxesIframe();
+                if($('.pptx2html').length) //if slide is in canvas mode
+                {
+                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
+                    this.correctDimensionsBoxesIframe();
+                } else { //if slide is in non-canvas mode
+                    this.refs.inlineContent.innerHTML += nextProps.SlideEditStore.embedCode;
+                }
             }
             else {
                 let iframe = '<iframe src="'+nextProps.SlideEditStore.embedURL+'" width="'+nextProps.SlideEditStore.embedWidth+'" height="'+nextProps.SlideEditStore.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
-                $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
-                //this.correctDimensionsBoxes('iframe');
+                if($('.pptx2html').length) //if slide is in canvas mode
+                {
+                    $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+                    //this.correctDimensionsBoxes('iframe');
+                } else { //if slide is in non-canvas mode
+                    this.refs.inlineContent.innerHTML += iframe;
+                }
+
             }
-            //this.uniqueIDAllElements();
-            this.resizeDrag();
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                //this.uniqueIDAllElements();
+                this.resizeDrag();
+            }
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {
@@ -1467,7 +1495,10 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.HTMLEditorClick === 'true' && nextProps.SlideEditStore.HTMLEditorClick !== this.props.SlideEditStore.HTMLEditorClick)
         {
-            this.disableResizeDrag();
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                this.disableResizeDrag();
+            }
             CKEDITOR.instances.inlineContent.execCommand('sourcedialog');
         }
 
@@ -1642,7 +1673,7 @@ class SlideContentEditor extends React.Component {
     }
     */
     resize() {
-        if($('.pptx2html').length)
+        if($('.pptx2html').length)  //if slide is in canvas mode
         {
             let containerwidth = document.getElementById('container').offsetWidth;
             let containerheight = document.getElementById('container').offsetHeight;
