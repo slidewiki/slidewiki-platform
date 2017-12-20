@@ -29,7 +29,7 @@ class SlideEditLeftPanel extends React.Component {
             showTemplate: false,
             showEmbed: false,
             showProperties: false,
-            title: this.props.SlideEditStore.title,
+            slideTitle: this.props.SlideEditStore.title,
             titleMissingError: ''
         };
     }
@@ -126,15 +126,18 @@ class SlideEditLeftPanel extends React.Component {
     }
     handleTitleChangeClick(){
         console.log('change title');
-        if (this.state.title === ''){
+        if (this.state.slideTitle === ''){
             this.setState({titleMissingError: 'title cannot be empty'});
         } else {
-            console.log(this.state.title);
+            console.log(this.state.slideTitle);
             //update this.props.SlideEditStore.title via action
             //in content editor -> catch new value for title SlideEditStore.title -> manuall trigger save -> new revision??
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
         }
 
+    }
+    changeSlideSizeClick(){
+        console.log('change slide size button clicked');
     }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
@@ -223,6 +226,9 @@ class SlideEditLeftPanel extends React.Component {
                     break;
                 case 'handleTitleChangeClick':
                     this.handleTitleChangeClick();
+                    break;
+                case 'changeSlideSizeClick':
+                    this.changeSlideSizeClick();
                     break;
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
@@ -362,14 +368,20 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
                   <div className="required field">
-                    <label htmlFor="title">Slide title:</label>
+                    <label htmlFor="slideTitle">Change slide title:</label>
                     <i className="error">{this.state.titleMissingError}</i>
-                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="title" ref="title" name="title" aria-label="Slide title" aria-required="true" required autoFocus/>
+                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide title" aria-required="true" required autoFocus/>
                   </div>
                   <a className="item" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
                       <i tabIndex="0" className="edit icon"></i>Change slide title
                   </a>
+                  <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
+                      <i tabIndex="0" className="external icon"></i>Change slide size (dimension and resolution)
+                  </a>
                 </form>);
+                //better (not working) icons for change slide size
+                //window restore
+                //window restore icon
 
         let normalContent = (
           <div>
