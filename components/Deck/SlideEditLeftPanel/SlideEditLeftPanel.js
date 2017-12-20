@@ -29,12 +29,21 @@ class SlideEditLeftPanel extends React.Component {
             showTemplate: false,
             showEmbed: false,
             showProperties: false,
+            showTitleChange: false,
+            showSize: false,
+            showBackground: false,
             slideTitle: this.props.SlideEditStore.title,
             titleMissingError: ''
         };
     }
     componentDidUpdate(prevProps, prevState){
-        if (prevState.showTemplate !== this.state.showTemplate || prevState.showOther !== this.state.showOther || prevState.showEmbed !== this.state.showEmbed)
+        if (prevState.showTemplate !== this.state.showTemplate ||
+            prevState.showOther !== this.state.showOther ||
+            prevState.showEmbed !== this.state.showEmbed ||
+            prevState.showEmbed !== this.state.showProperties ||
+            prevState.showTitleChange !== this.state.showTitleChange ||
+            prevState.showSize !== this.state.showSize ||
+            prevState.showBackground !== this.state.showBackground)
         {
             $('#handleBackLink').focus();
             //$('#handleAddInputBox').focus(); //if back at root menu
@@ -70,9 +79,6 @@ class SlideEditLeftPanel extends React.Component {
         //this.context.executeAction(embedClick, {});
     }
     handleEmbedAddClick(){
-        console.log(this.state.embedURL);
-        console.log(this.state.embedCode);
-        console.log(this.state.embedWidth);
         if(this.state.embedURL === '' && this.state.embedCode === ''){
             this.setState({ URLMissingError: 'missing URL/link to content' });
             this.setState({ embedCodeMissingError: 'missing embed code' });
@@ -90,11 +96,10 @@ class SlideEditLeftPanel extends React.Component {
 
             }
             else{
-                let iframe = '<iframe src="'+this.state.embedURL+'" width="'+this.state.embedWidth+'" height="'+this.state.embedHeight+'" frameborder="0" allow="encrypted-media"></iframe>';
                 this.context.executeAction(embedClick, {
                     embedWidth: this.state.embedWidth,
                     embedHeight: this.state.embedHeight,
-                    iframe: iframe,
+                    embedURL: this.state.embedURL,
                     embedCode: ''
                 });
             }
@@ -123,6 +128,12 @@ class SlideEditLeftPanel extends React.Component {
     }
     handlePropertiesClick(){
         this.setState({showProperties: true});
+        this.forceUpdate();
+    }
+    handleTitleClick(){
+        this.setState({showProperties: false});
+        this.setState({showTitleChange: true});
+        this.forceUpdate();
     }
     handleTitleChangeClick(){
         console.log('change title');
@@ -138,6 +149,15 @@ class SlideEditLeftPanel extends React.Component {
     }
     changeSlideSizeClick(){
         console.log('change slide size button clicked');
+        this.setState({showSize: true});
+        this.setState({showProperties: false});
+        this.forceUpdate();
+    }
+    changeSlideBackgroundClick(){
+        console.log('change slide background clicked');
+        this.setState({showBackground: true});
+        this.setState({showProperties: false});
+        this.forceUpdate();
     }
     handleHTMLEditorClick(){
         this.context.executeAction(HTMLEditorClick, {});
@@ -170,6 +190,12 @@ class SlideEditLeftPanel extends React.Component {
     handleBackEmbed(){
         this.setState({showOther: true});
         this.setState({showEmbed: false});
+        this.forceUpdate();
+    }
+    handleTitleBack(){
+        this.setState({showProperties: true});
+        this.setState({showTitleChange: false});
+        this.forceUpdate();
     }
     handleBack(){
         this.setState({showTemplate: false});
@@ -184,9 +210,6 @@ class SlideEditLeftPanel extends React.Component {
             switch (param) {
                 case 'handleBack':
                     this.handleBack();
-                    break;
-                case 'handleBackEmbed':
-                    this.handleBackEmbed();
                     break;
                 case 'handleAddInputBox':
                     this.handleAddInputBox();
@@ -209,6 +232,9 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handleCodeClick':
                     this.handleCodeClick();
                     break;
+                case 'handleBackEmbed':
+                    this.handleBackEmbed();
+                    break;
                 case 'handleEmbedClick':
                     this.handleEmbedClick();
                     break;
@@ -224,11 +250,20 @@ class SlideEditLeftPanel extends React.Component {
                 case 'handlePropertiesClick':
                     this.handlePropertiesClick();
                     break;
+                case 'handleTitleBack':
+                    this.handleTitleBack();
+                    break;
+                case 'handleTitleClick':
+                    this.handleTitleClick();
+                    break;
                 case 'handleTitleChangeClick':
                     this.handleTitleChangeClick();
                     break;
                 case 'changeSlideSizeClick':
                     this.changeSlideSizeClick();
+                    break;
+                case 'changeSlideBackgroundClick':
+                    this.changeSlideBackgroundClick();
                     break;
                 case 'handleHTMLEditorClick':
                     this.handleHTMLEditorClick();
@@ -367,21 +402,38 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleBack" role="button" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
-                  <div className="required field">
-                    <label htmlFor="slideTitle">Change slide title:</label>
-                    <i className="error">{this.state.titleMissingError}</i>
-                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide title" aria-required="true" required autoFocus/>
-                  </div>
-                  <a className="item" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
-                      <i tabIndex="0" className="edit icon"></i>Change slide title
+                  <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
+                      <i tabIndex="0" className="edit icon"></i>Slide title
                   </a>
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
-                      <i tabIndex="0" className="external icon"></i>Change slide size (dimension and resolution)
+                      <i tabIndex="0" className="crop icon"></i>Slide size (dimension and resolution)
+                  </a>
+                  <a className="item" id="changeSlideBackgroundClick" role="button" onClick={this.changeSlideBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideBackgroundClick')}>
+                      <i tabIndex="0" className="file image outline icon"></i>Background image
                   </a>
                 </form>);
                 //better (not working) icons for change slide size
                 //window restore
                 //window restore icon
+                //crop
+                //map outline
+                //working: //external
+
+        let titleChangeContent  = (
+                <div className="ui form">
+                  <a className="item" id="handleTitleBack" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
+                      <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
+                  </a>
+                  <div className="required field">
+                    <label htmlFor="slideTitle">Slide title:</label>
+                    <i className="error">{this.state.titleMissingError}</i>
+                    <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide title" aria-required="true" required autoFocus/>
+                  </div>
+                  <a className="item" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
+                      <i tabIndex="0" className="edit icon"></i>Change slide title
+                      <label htmlFor="handleTitleChangeClick">(This will save all changes that you made and reload the page - a new slide revision is created).</label>
+                  </a>
+                </div>);
 
         let normalContent = (
           <div>
@@ -421,6 +473,8 @@ class SlideEditLeftPanel extends React.Component {
             panelcontent = embedOptions;
         } else if (this.state.showProperties){
             panelcontent = propertiesContent;
+        } else if (this.state.showTitleChange){
+            panelcontent = titleChangeContent;
         } else{
             panelcontent = normalContent;
         }

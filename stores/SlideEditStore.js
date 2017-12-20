@@ -22,7 +22,7 @@ class SlideEditStore extends BaseStore {
         this.embedClick = 'false';
         this.embedWidth = '';
         this.embedHeight = '';
-        this.iframe = '';
+        this.embedURL = '';
         this.embedCode = '';
         this.HTMLEditorClick = 'false';
     }
@@ -118,13 +118,13 @@ class SlideEditStore extends BaseStore {
         this.embedClick = 'true';
         this.embedWidth = payload.embedWidth;
         this.embedHeight = payload.embedHeight;
-        this.iframe = payload.iframe;
+        this.embedURL = payload.embedURL;
         this.embedCode = payload.embedCode;
         this.emitChange();
         this.embedClick = 'false';
         this.embedWidth = '';
         this.embedHeight = '';
-        this.iframe = '';
+        this.embedURL = '';
         this.embedCode = '';
         this.emitChange();
     }
@@ -153,7 +153,7 @@ class SlideEditStore extends BaseStore {
             mathsClick: this.mathsClick,
             codeClick: this.codeClick,
             embedClick: this.embedClick,
-            iframe: this.iframe,
+            embedURL: this.embedURL,
             embedCode: this.embedCode,
             embedWidth: this.embedWidth,
             embedHeight: this.embedHeight,
@@ -180,7 +180,7 @@ class SlideEditStore extends BaseStore {
         this.mathsClick = state.mathsClick;
         this.codeClick = state.codeClick;
         this.embedClick = state.embedClick;
-        this.iframe = state.iframe;
+        this.embedURL = state.embedURL;
         this.embedCode = state.embedCode;
         this.embedWidth = state.embedWidth;
         this.embedHeight = state.embedHeight;
