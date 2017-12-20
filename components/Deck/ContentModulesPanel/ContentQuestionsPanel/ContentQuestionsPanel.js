@@ -7,6 +7,7 @@ import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentModulesStore from '../../../../stores/ContentModulesStore';
 import loadContentQuestions from '../../../../actions/loadContentQuestions';
+import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
 import ContentQuestionsList from './ContentQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
 // import ContentQuestionForm from './ContentQuestionForm';
@@ -17,8 +18,7 @@ class ContentQuestionsPanel extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            pageNo: props.ContentModulesStore.selector.pageNum,
-            isAddButtonClicked: false,
+            pageNo: props.ContentModulesStore.selector.pageNum
         };
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handlePreviousClick = this.handlePreviousClick.bind(this);
@@ -57,9 +57,7 @@ class ContentQuestionsPanel extends React.Component {
     }
 
     handleAddButtonClick() {
-        this.setState({
-            isAddButtonClicked: true
-        });
+        this.context.executeAction(invertAddQuestionBoxFlag, {});
     }
 
     render() {
@@ -98,7 +96,7 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         let editPermission = (this.props.PermissionsStore.permissions.admin || this.props.PermissionsStore.permissions.edit);
-        console.log(editPermission);
+        // console.log(editPermission);
         let addQuestionButton = (editPermission) ?
             <div className="column right aligned" data-reactid={655}>
                 <button className="ui right floated compact button primary" onClick={this.handleAddButtonClick.bind(this)}>
@@ -107,7 +105,7 @@ class ContentQuestionsPanel extends React.Component {
                 </button>
             </div>
             : '';
-        console.log(addQuestionButton);
+        // console.log(addQuestionButton);
 
         /*
         let addQuestionButton = (
@@ -216,7 +214,7 @@ class ContentQuestionsPanel extends React.Component {
 
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
-                { this.state.isAddButtonClicked ? <ContentQuestionAdd question={this.props.items} selector={this.props.selector} userId={userId} /> : content }
+                { this.props.ContentQuestionsStore.showAddBox ? <ContentQuestionAdd question={this.props.items} selector={this.props.selector} userId={userId} /> : content }
             </div>
         );
     }

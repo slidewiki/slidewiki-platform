@@ -7,6 +7,7 @@ class ContentQuestionsStore extends BaseStore {
         this.question = null;
         this.selector = {};
         this.totalLength = 0;
+        this.showAddBox = false;
     }
     loadQuestions(payload) {
         this.questions = payload.questions;
@@ -34,12 +35,17 @@ class ContentQuestionsStore extends BaseStore {
         }
         this.emitChange();
     }
+    invertAddBoxFlag() {
+        this.showAddBox = !this.showAddBox;
+        this.emitChange();
+    }
     getState() {
         return {
             questions: this.questions,
             question: this.question,
             selector: this.selector,
-            totalLength: this.totalLength
+            totalLength: this.totalLength,
+            showAddBox: this.showAddBox
         };
     }
     dehydrate() {
@@ -50,6 +56,7 @@ class ContentQuestionsStore extends BaseStore {
         this.question = state.question;
         this.selector = state.selector;
         this.totalLength = state.totalLength;
+        this.showAddBox = state.showAddBox;
     }
 }
 
@@ -61,6 +68,7 @@ ContentQuestionsStore.handlers = {
     'TOGGLE_ANSWERS': 'toggleAnswers',
     'SAVE_QUESTION': 'loadQuestions',
     'ADD_QUESTION': 'loadQuestions',
+    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag',
 };
 
 export default ContentQuestionsStore;

@@ -1,5 +1,6 @@
 import React from 'react';
 import addQuestion from '../../../../actions/questions/addQuestion';
+import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
 
 class ContentQuestionAdd extends React.Component {
 
@@ -42,6 +43,10 @@ class ContentQuestionAdd extends React.Component {
     saveButtonClick(e) {
         e.preventDefault();
         this.context.executeAction(addQuestion, {question: this.state});
+    }
+
+    cancelButtonClick() {
+        this.context.executeAction(invertAddQuestionBoxFlag, {});
     }
 
     /* Update answer choice text */
@@ -154,7 +159,7 @@ class ContentQuestionAdd extends React.Component {
                                         <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" onChange={this.updateCorrect3}/>
                                         <label htmlFor="answer3"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" onChange={this.updateAnswer3}/>
+                                    <input type="text" style={answerChoiceWidth} name="response3" id="response3" onChange={this.updateAnswer3}/>
                                     <label htmlFor="response3"></label>
                                 </div>
                                 <div className="inline field">
@@ -174,8 +179,12 @@ class ContentQuestionAdd extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div className="ui right floated buttons">
-                                    <button className="ui primary button" onClick={this.saveButtonClick}>Save</button>
-                                    <button className="ui secondary button">Cancel</button>
+                                    <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick.bind(this)}>
+                                        <i className="icon check" />Save
+                                    </button>
+                                    <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
+                                        <i className="icon close" />Cancel
+                                    </button>
                                 </div>
                             </div>
                         </div>
