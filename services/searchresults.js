@@ -199,6 +199,9 @@ export default {
                         if(returnItem.kind === 'Deck'){
 
                             returnItem.revisionsCount = (decks[returnItem.db_id]) ? decks[returnItem.db_id].revisions.length : 1;
+                            returnItem.theme = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
+                                                        deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].theme : '';
+
                             returnItem.firstSlide = (deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`]) ?
                                                         deckRevisions[`${returnItem.db_id}-${returnItem.db_revision_id}`].firstSlide : '';
 

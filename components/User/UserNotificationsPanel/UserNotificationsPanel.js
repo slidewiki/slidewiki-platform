@@ -6,7 +6,10 @@ import UserProfileStore from '../../../stores/UserProfileStore';
 import UserNotificationsList from './UserNotificationsList';
 import updateUserNotificationsVisibility from '../../../actions/user/notifications/updateUserNotificationsVisibility';
 import markAsReadUserNotifications from '../../../actions/user/notifications/markAsReadUserNotifications';
+import deleteAllUserNotifications from '../../../actions/user/notifications/deleteAllUserNotifications';
 import loadUserNotifications from '../../../actions/user/notifications/loadUserNotifications';
+import selectAllActivityTypes from '../../../actions/user/notifications/selectAllActivityTypes';
+import {Button} from 'semantic-ui-react';
 
 class UserNotificationsPanel extends React.Component {
 
@@ -25,12 +28,39 @@ class UserNotificationsPanel extends React.Component {
             changedType: type,
             changedId: id
         });
+        //set value of selectAll
+        let value = true;
+        this.props.UserNotificationsStore.activityTypes.forEach((at) => {if (! $('#' + at.type).prop('checked')) value = false;});
+        $('#all').prop('checked', value);
+    }
+
+    handleChangeAll() {
+        let value = $('#all').prop('checked');
+        this.props.UserNotificationsStore.activityTypes.forEach((at) => {$('#' + at.type).prop('checked', value);});
+        this.context.executeAction(selectAllActivityTypes, {
+            value: value
+        });
     }
 
     handleMarkAsRead() {
         this.context.executeAction(markAsReadUserNotifications, {
             uid: this.props.UserProfileStore.userid
         });
+    }
+
+    handleDelete() {
+        swal({
+            title: 'Delete all notifications. Are you sure?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete!'
+        }).then((accepted) => {
+            this.context.executeAction(deleteAllUserNotifications, {
+                uid: this.props.UserProfileStore.userid
+            });
+        }, (reason) => {/*do nothing*/}).catch(swal.noop);
     }
 
     render() {
@@ -44,30 +74,28 @@ class UserNotificationsPanel extends React.Component {
             const label = labelName.charAt(0).toUpperCase() + labelName.slice(1);
             return (
                 <div className="ui item toggle checkbox" key={index} role="listitem" tabIndex="0">
-                    <input name="toggleCheckbox" type="checkbox" defaultChecked={at.selected} onChange={this.handleChangeToggle.bind(this, at.type, 0)} />
+                    <input name={at.type} id={at.type} type="checkbox" defaultChecked={at.selected} onChange={this.handleChangeToggle.bind(this, at.type, 0)} />
                     <label>{label}</label>
                 </div>
             );
         });
 
         const notifications = this.props.UserNotificationsStore.notifications;
-        const newNotifications = this.props.UserNotificationsStore.newNotifications;
+        const notificationsCount = this.props.UserNotificationsStore.notifications ? this.props.UserNotificationsStore.notifications.length : 0;
+        const newNotificationsCount = this.props.UserNotificationsStore.newNotificationsCount;
         const selector = this.props.UserNotificationsStore.selector;
 
-        const iconMarkAsReadTitle = (newNotifications.length > 0) ? 'Mark all ' + newNotifications.length + ' new notifications as read' : 'Mark all as read';
-        let iconMarkAsRead = (//disabled icon
-            <a className="item" title={iconMarkAsReadTitle}>
-                <i tabIndex="0" className="ui large disabled checkmark box icon"></i>
-            </a>
-        );
-        if(newNotifications.length > 0) {//if there are new notifications -> enable it
-            iconMarkAsRead = (
-              <a className="item" onClick={this.handleMarkAsRead.bind(this)} title={iconMarkAsReadTitle} >
-                  <i tabIndex="0" className="ui large checkmark box icon"></i>
-              </a>
-            );
-        };
-        // const hrefPath = '/notifications/' + this.props.UserNotificationsStore.selector.uid;
+        const buttonMarkAsReadDisabled = newNotificationsCount === 0;
+        const buttonDeleteAllDisabled = notificationsCount === 0;
+        const buttonMarkAsReadTitle = (newNotificationsCount > 1) ? 'Mark all ' + newNotificationsCount + ' new notifications as read' : 'Mark all new notifications as read';
+        const buttonDeleteAllTitle = (notificationsCount > 1) ? 'Delete all ' + notificationsCount + ' notifications' : 'Delete all notifications';
+
+        let buttons = (
+            <Button.Group basic size='tiny' >
+                <Button disabled={buttonMarkAsReadDisabled} aria-label='Mark all as read' icon='checkmark' onClick={this.handleMarkAsRead.bind(this)} tabIndex='0' title={buttonMarkAsReadTitle}/>
+                <Button disabled={buttonDeleteAllDisabled} aria-label='Delete all' icon='remove' onClick={this.handleDelete.bind(this)} tabIndex='0' title={buttonDeleteAllTitle}/>
+            </Button.Group>);
+
         const filters = (
             <div className="five wide column">
                 <div className="ui basic segment">
@@ -76,6 +104,11 @@ class UserNotificationsPanel extends React.Component {
                     <div className="activityTypes">
                         <div ref="activityTypeList">
                             <div className="ui relaxed list" role="list" >
+                                <div className="ui toggle checkbox">
+                                    <input name="all" id="all" type="checkbox" defaultChecked={true} onChange={this.handleChangeAll.bind(this)}/>
+                                    <label>Select all</label>
+                                </div>
+                                <div className="ui hidden divider" />
                                 {activityTypeList}
                             </div>
                          </div>
@@ -101,12 +134,13 @@ class UserNotificationsPanel extends React.Component {
         }
         return (
             <div ref="userNotificationsPanel">
-                <div className="ui hidden divider"></div>
+                <div className="ui hidden divider" />
                 <div className="ui container stackable two columm grid">
                     <div className="six wide column">
                       <div className="ui huge header">
-                          Notifications <div className="ui mini label" >{iconMarkAsRead} {newNotifications.length}</div>
+                          Notifications <div className="ui mini label" > {newNotificationsCount} </div>
                       </div>
+                      {buttons}
                       <div className="ui basic segment">
                           {filters}
                       </div>

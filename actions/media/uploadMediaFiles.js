@@ -34,7 +34,7 @@ export default function uploadMediaFiles(context, payload, done) {
             }
         }
         else {
-            payload.url = Microservices.file.uri + '/picture/' + res.filename;
+            payload.url = Microservices.file.uri + '/picture/' + res.fileName;
             payload.thumbnailUrl = Microservices.file.uri + '/picture/' + res.thumbnailName;
             context.dispatch('SUCCESS_UPLOADING_MEDIA_FILE', payload);
 

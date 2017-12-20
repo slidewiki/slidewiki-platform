@@ -119,7 +119,7 @@ class presentationBroadcast extends React.Component {
             that.forceUpdate();
             swal.queue([{
                 title: 'You\'re about to join a live presentation',
-                html: 'Nice to see you here! You will hear the presenters voice in a few moments and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.',
+                html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Nice to see you here! You will hear the presenters voice in a few moments and your presentation will reflect his progress. Just lean back and keep watching. In case you have any questions to the presenter, please use the "Send Question" functionality.</p>',
                 type: 'info',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Okay',
@@ -130,7 +130,7 @@ class presentationBroadcast extends React.Component {
                 },
                 preConfirm: () => {
                     return new Promise((resolve) => {
-                        $('body>a#atlwdg-trigger').remove();
+                        /*$('body>a#atlwdg-trigger').remove();*/
                         resolve();
                     });
                 }
@@ -300,13 +300,13 @@ class presentationBroadcast extends React.Component {
                 $('#media').remove();
                 swal({//NOTE implemented here because this dialog interrupted with error dialogs of requestStreams()
                     title: '<p>Room <i>' + that.room + '</i> successfully created!</p>',
-                    text: 'Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.',
+                    html: '<p><strong>Please keep in mind that this is an experimental feature and might not work for you. If you encounter any issues, please report them.</strong></p><p>Other people are free to join the room. Rooms are currently limited to '+that.maxPeers+' people. See the counter at the bottom of the page for information about currently listening people.</p>',
                     type: 'info',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Check',
                     allowOutsideClick: false,
                     allowEscapeKey: false
-                }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); $('body>a#atlwdg-trigger').remove();});
+                }).then(() => { that.refs.speechRecognition.activateSpeechRecognition(); /*$('body>a#atlwdg-trigger').remove();*/});
             }
             that.localStream = stream;
 
@@ -1006,7 +1006,7 @@ class presentationBroadcast extends React.Component {
                   pcs={this.pcs}/>
               </Grid.Column>
               {(this.isInitiator) ? (
-                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '40%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
+                  <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '20%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
               ) : ('')};
             </Grid.Row>
 
@@ -1028,7 +1028,7 @@ class presentationBroadcast extends React.Component {
               <Grid.Column width={3}>
                 <Button.Group vertical fluid>
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
-                  <a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Edit current slide' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
+                  <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
                   {(this.isInitiator) ? (
                     <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>

@@ -27,17 +27,13 @@ class PresentationRoomsHTMLLayout extends React.Component {
             </head>
             <body>
                 <div id="app" aria-hidden="false" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
-                {/* Following are added only to support IE browser */}
-                <script src="/es5-shim/es5-shim.min.js"></script>
-                <script src="/es5-shim/es5-sham.min.js"></script>
-                <script src="/json3/lib/json3.min.js"></script>
-                <script src="/es6-shim/es6-shim.min.js"></script>
-                <script src="/es6-shim/es6-sham.min.js"></script>
-                {/* Above are added only to support IE browser */}
-                {/*TODO Following custom libs have been included due to the header bar (that is included but will be removed internally) --> Don't load the headerbar at all and remove the following two libs*/}
+                {/*TODO The following libs were included due to the header bar (that is included but is removed internally) --> don't load the headerbar at all and remove these two libs*/}
                 <script src="/custom_modules/custom-semantic-ui/dist/components/search.min.js" defer></script>
                 <script src="/custom_modules/custom-semantic-ui/dist/components/sidebar.min.js" defer></script>
+                {/*Following libs need to be included*/}
                 <script src="/custom_modules/custom-semantic-ui/dist/components/dropdown.min.js" defer></script>
+                <script src="/custom_modules/custom-semantic-ui/dist/components/accordion.min.js" defer></script>
+                <script src="/custom_modules/custom-semantic-ui/dist/components/transition.min.js" defer></script>
                 <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
                 <script src="/jquery/dist/jquery.min.js"></script>
                 {/* All external vendors bundle*/
@@ -48,6 +44,7 @@ class PresentationRoomsHTMLLayout extends React.Component {
                 {/* Main app bundle */}
                 <script src={'/public/js/' + this.props.clientFile} defer></script>
                 <script src="/sweetalert2/dist/sweetalert2.min.js" defer></script>
+                <script type="text/javascript" src="https://slidewiki.atlassian.net/s/5e2fc7b2a8ba40bc00a09a4f81a301c8-T/rfg5q6/100012/c/1000.0.9/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=241c9e18" defer></script>
                 <script dangerouslySetInnerHTML={ {__html: ga} } />
             </body>
             </html>
