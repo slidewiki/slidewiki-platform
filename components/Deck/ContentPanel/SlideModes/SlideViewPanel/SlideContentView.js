@@ -83,8 +83,8 @@ class SlideContentView extends React.Component {
 
         if ($('.pptx2html').length)
         {
-            $('.pptx2html').css({'transform': '', 'transform-origin': ''});
-            $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
+            //$('.pptx2html').css({'transform': '', 'transform-origin': ''});
+            //$('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
 
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
             //width = pptxwidth + 40
