@@ -33,14 +33,14 @@ export default {
                 callback(err, {});
             });
         } else if(resource === 'questions.count') {
-          rp.get({
-              uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true',
-          }).then((res) => {
-              callback(null, {count: JSON.parse(res).count});
-          }).catch((err) => {
-              console.log(err);
-              callback(err, {});
-          });
+            rp.get({
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true',
+            }).then((res) => {
+                callback(null, {count: JSON.parse(res).count});
+            }).catch((err) => {
+                console.log(err);
+                callback(err, {});
+            });
         }
 
         /* Hard coded sample work follows */
