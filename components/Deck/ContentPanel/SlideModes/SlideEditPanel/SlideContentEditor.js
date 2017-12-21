@@ -67,6 +67,7 @@ class SlideContentEditor extends React.Component {
             }, (reason) => {
                 //done(reason);
             });
+            $('.swal2-confirm').focus();
         }
         //}
     }

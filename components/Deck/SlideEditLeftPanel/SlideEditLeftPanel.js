@@ -312,18 +312,18 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleBack" role="button" onClick={this.handleBackEmbed.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBackEmbed')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
-                  <div className="required field">
+                  <div className="field">
                     <label htmlFor="embedCode">Code to embed content:</label>
                     <i className="error">{this.state.embedCodeMissingError}</i>
-                    <Input onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-label="URL (Link) to embedded content" aria-required="true" required autoFocus/>
+                    <Input onChange={this.handleChange.bind(this)} id="embedCode" ref="embedCode" name="embedCode" aria-label="Code to embed content" autoFocus/>
                   </div>
                   <div>
                     <i>or</i>
                   </div>
-                  <div className="required field">
+                  <div className="field">
                     <label htmlFor="embedURL">URL/Link to embedded content:</label>
                     <i className="error">{this.state.URLMissingError}</i>
-                    <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" aria-required="true" required autoFocus/>
+                    <Input onChange={this.handleChange.bind(this)} id="embedURL" ref="embedURL" name="embedURL" aria-label="URL (Link) to embedded content" autoFocus/>
                   </div>
                   <div className="required field">
                     <label htmlFor="embedWidth">Width of embedded content:</label>
