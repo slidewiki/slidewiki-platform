@@ -15,16 +15,238 @@ import UserRegistrationSocial from './UserRegistrationSocial';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {hashPassword} from '../../../configs/general';
 import common from '../../../common';
+import {defineMessages} from 'react-intl';
 
 const MODI = 'sociallogin_modi';
 const NAME = 'sociallogin_data';
 
 class UserRegistration extends React.Component {
     constructor(props) {
+        /* Uses: this.props.UserRegistrationStore.errorMessage
+           this message should be translated in the origin
+        */
         super(props);
         this.provider = '';
 
         this.handleNoAccessClick = this.handleNoAccessClick.bind(this);
+
+        this.messages = defineMessages({
+            firstName_prompt:{
+                id: 'UserRegistration.firstName_prompt',
+                defaultMessage:'Please enter your first name'
+            },
+            lastName_prompt:{
+                id: 'UserRegistration.lastName_prompt',
+                defaultMessage:'Please enter your last name'
+            },
+            userName_prompt:{
+                id: 'UserRegistration.userName_prompt',
+                defaultMessage:'Please select your username'
+            },
+            uniqueUsername_error:{
+                id: 'UserRegistration.uniqueUsername_error',
+                defaultMessage:'The username is already in use'
+            },
+            maxLengthUsername_error:{
+                id: 'UserRegistration.maxLengthUsername_error',
+                defaultMessage:'Your username can not be longer than 64 characters'
+            },
+            wrongExpressionUsername_error:{
+                id: 'UserRegistration.wrongExpressionUsername_error',
+                defaultMessage:'The username must contain only alphanumeric characters plus the following: _ . - ~'
+            },
+            email_prompt:{
+                id:'UserRegistration.email_prompt',
+                defaultMessage:'Please enter your email address'
+            },
+            wrongExpressionEmail_error:{
+                id:'UserRegistration.wrongExpressionEmail_error',
+                defaultMessage:'Please enter a valid email address'
+
+            },
+            uniqueEmail_error:{
+                id:'UserRegistration.uniqueEmail_error',
+                defaultMessage:'The email address is already in use'
+
+            },
+            reenteremail_prompt:{
+                id:'UserRegistration.reenteremail_prompt',
+                defaultMessage:'Please re-enter your email address'
+            },
+            noMatchReenteremail_error:{
+                id:'noMatchReenteremail_error',
+                defaultMessage:'Your email address does not match'
+
+            },
+            password_prompt:{
+                id:'UserRegistration.password_prompt',
+                defaultMessage:'Please enter a password'
+
+            },
+            minLengthPassword_error:{
+                id:'UserRegistration.minLengthPassword_error',
+                defaultMessage:'Your password should contain 8 characters or more'
+
+            },
+            reenterPassword_prompt:{
+                id:'UserRegistration.reenterPassword_prompt',
+                defaultMessage:'Please enter your password again'
+
+            },
+            noMatchReenterPassword_error:{
+                id:'UserRegistration.noMatchReenterPassword_error',
+                defaultMessage:'Your password does not match'
+
+            },
+            recaptcha_prompt:{
+                id:'UserRegistration.recaptcha_prompt',
+                defaultMessage:'Please verify that you are a human'
+            },
+            swal_title:{
+                id:'UserRegistration.swal_title',
+                defaultMessage:'Information'
+
+            },
+            swal_text:{
+                id:'UserRegistration.swal_text',
+                defaultMessage:'Signing up with this provider failed because you are already registered at SlideWiki with this provider. Either sign in or sign up with another provider if you wish to create a new account.'
+            },
+            swal_confirmButton:{
+                id:'UserRegistration.swal_confirmButton',
+                defaultMessage:'Login'
+            },
+            swal_cancelButton:{
+                id:'UserRegistration.swal_cancelButton',
+                defaultMessage:'Register'
+            },
+            swal2_confirmButton:{
+                id:'UserRegistration.swal2_confirmButton',
+                defaultMessage:'Ok'
+            },
+            swal2_text:{
+                id:'UserRegistration.swal2_text',
+                defaultMessage:'These provider credentials are already used by a deactivated user. To reactivate a specific user please contact us directly.',
+            },
+            swal3_title:{
+                id:'UserRegistration.swal3_title',
+                defaultMessage:'Thanks for signing up!'
+
+            },
+            swal3_text:{
+                id:'UserRegistration.swal3_text',
+                defaultMessage:'Thank you. You have successfully registered. Please sign in with your new credentials.'
+            },
+            swal3_confirmButton:{
+                id:'UserRegistration.swal3_confirmButton',
+                defaultMessage:'Close'
+
+            },
+            swal4_title:{
+                id:'UserRegistration.swal4_title',
+                defaultMessage:'Error!',
+            },
+            /*
+            swal4_text:{ //not accepted by intl
+                id:'UserRegistration.swal4_text',
+                defaultMessage:this.props.UserRegistrationStore.errorMessage,
+            },
+            */
+            swal5_title:{
+                id:'UserRegistration.swal5_title',
+                defaultMessage:'Error'
+            },
+            swal5_text:{
+                id:'UserRegistration.swal5_text',
+                defaultMessage:'The data from ',
+
+            },
+            swal5_text2:{
+                id:'UserRegistration.swal5_text2',
+                defaultMessage:' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again.',
+
+            },
+            swal5_confirmButton:{
+                id:'UserRegistration.swal5_confirmButton',
+                defaultMessage:'Confirm'
+
+            },
+            modal_title:{
+                id:'UserRegistration.modal_title',
+                defaultMessage:'Sign Up',
+            },
+            modal_subtitle:{
+                id:'UserRegistration.modal_subtitle',
+                defaultMessage:'Sign Up with a Social Provider',
+            },
+            modal_googleButton:{
+                id:'UserRegistration.modal_googleButton',
+                defaultMessage:'Sign up with Google'
+            },
+            modal_githubButton:{
+                id:'UserRegistration.modal_githubButton',
+                defaultMessage:'Sign up with Github'
+            },
+            modal_termText1:{
+                id:'UserRegistration.modal_termText1',
+                defaultMessage:'By clicking on a Social Provider, you agree to our '
+            },
+            modal_termText2:{
+                id:'UserRegistration.modal_termText2',
+                defaultMessage:'Terms'
+            },
+            modal_termLinkTitle:{
+                id:'UserRegistration.modal_termLinkTitle',
+                defaultMessage:'Sign-up terms and conditions'
+            },
+            modal_subtitle2:{
+                id:'UserRegistration.modal_subtitle2',
+                defaultMessage:'Or complete the registration form'
+            },
+            form_firstName:{
+                id:'UserRegistration.form_firstName',
+                defaultMessage:'First name'
+            },
+            form_lastName:{
+                id:'UserRegistration.form_lastName',
+                defaultMessage:'Last name'
+            },
+            form_userName:{
+                id:'UserRegistration.form_userName',
+                defaultMessage:'User name'
+            },
+            form_email:{
+                id:'UserRegistration.form_email',
+                defaultMessage:'Email'
+            },
+            form_reenterEmail:{
+                id:'UserRegistration.form_reenterEmail',
+                defaultMessage:'Re-enter email'
+            },
+            form_password:{
+                id:'UserRegistration.form_password',
+                defaultMessage:'Password'
+            },
+            form_reenterPassword:{
+                id:'UserRegistration.form_reenterPassword',
+                defaultMessage:'Re-enter password'
+            },
+            form_submitButton:{
+                id:'UserRegistration.form_submitButton',
+                defaultMessage:'Sign Up'
+            },
+            form_terms:{
+                id:'UserRegistration.form_terms',
+                defaultMessage:'By clicking Sign Up, you agree to our'
+            },
+            form_terms2:{
+                id:'UserRegistration.form_terms2',
+                defaultMessage:'Terms'
+            },
+            form_noAccess:{
+                id:'UserRegistration.noAccess',
+                defaultMessage:'I can not access my account'
+            }
+        });
     }
 
     componentDidMount() {
@@ -35,80 +257,80 @@ class UserRegistration extends React.Component {
                     identifier: 'firstname',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your first name'
+                        prompt: this.context.intl.formatMessage(this.messages.firstName_prompt),
                     }]
                 },
                 lastname: {
                     identifier: 'lastname',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your last name'
+                        prompt: this.context.intl.formatMessage(this.messages.lastName_prompt)
                     }]
                 },
                 username: {
                     identifier: 'username',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please select your username'
+                        prompt: this.context.intl.formatMessage(this.messages.userName_prompt)
                     }, {
                         type: 'uniqueUsername',
-                        prompt: 'The username is already in use'
+                        prompt: this.context.intl.formatMessage(this.messages.uniqueUsername_error)
                     }, {
                         type   : 'maxLength[64]',
-                        prompt : 'Your username can not be longer than 64 characters'
+                        prompt : this.context.intl.formatMessage(this.messages.maxLengthUsername_error)
                     }, {
                         type   : 'regExp[/^[a-zA-Z0-9-.~_]+$/i]',
-                        prompt : 'The username must contain only alphanumeric characters plus the following: _ . - ~'
+                        prompt : this.context.intl.formatMessage(this.messages.wrongExpressionUsername_error)
                     }]
                 },
                 email: {
                     identifier: 'email',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your email address'
+                        prompt: this.context.intl.formatMessage(this.messages.email_prompt)
                     }, {
                         type   : 'regExp[/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+[.][a-zA-Z0-9-.]+$/]',
-                        prompt : 'Please enter a valid email address'
+                        prompt : this.context.intl.formatMessage(this.messages.wrongExpressionEmail_error)
                     }, {
                         type: 'uniqueEmail',
-                        prompt: 'The email address is already in use'
+                        prompt: this.context.intl.formatMessage(this.messages.uniqueEmail_error)
                     }]
                 },
                 reenteremail: {
                     identifier: 'reenteremail',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please re-enter your email address'
+                        prompt: this.context.intl.formatMessage(this.messages.reenteremail_prompt)
                     }, {
                         type: 'match[email]',
-                        prompt: 'Your email address does not match'
+                        prompt: this.context.intl.formatMessage(this.messages.noMatchReenteremail_error)
                     }]
                 },
                 password: {
                     identifier: 'password',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter a password'
+                        prompt: this.context.intl.formatMessage(this.messages.password_prompt)
                     }, {
                         type: 'minLength[8]',
-                        prompt: 'Your password should contain 8 characters or more'
+                        prompt: this.context.intl.formatMessage(this.messages.minLengthPassword_error)
                     }]
                 },
                 reenterpassword: {
                     identifier: 'reenterpassword',
                     rules: [{
                         type: 'empty',
-                        prompt: 'Please enter your password again'
+                        prompt: this.context.intl.formatMessage(this.messages.reenterPassword_prompt)
                     }, {
                         type: 'match[password]',
-                        prompt: 'Your password does not match'
+                        prompt: this.context.intl.formatMessage(this.messages.noMatchReenterPassword_error)
                     }]
                 },
                 recaptcha: {
                     identifier: 'recaptcha',
                     rules: [{
                         type: 'recaptcha',
-                        prompt: 'Please verify that you are a human'
+                        prompt: this.context.intl.formatMessage(this.messages.recaptcha_prompt)
                     }]
                 }
             },
@@ -143,14 +365,14 @@ class UserRegistration extends React.Component {
             window.scrollTo(0,0);
 
             swal({
-                title: 'Information',
-                text: 'Signing up with this provider failed because you are already registered at SlideWiki with this provider. Either sign in or sign up with another provider if you wish to create a new account.',
+                title: this.context.intl.formatMessage(this.messages.swal_title),
+                text: this.context.intl.formatMessage(this.messages.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Login',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal_confirmButton),
                 confirmButtonClass: 'positive ui button',
-                cancelButtonText: 'Register',
+                cancelButtonText: this.context.intl.formatMessage(this.messages.swal_cancelButton),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             })
@@ -175,12 +397,12 @@ class UserRegistration extends React.Component {
             window.scrollTo(0,0);
 
             swal({
-                title: 'Information',
-                text: 'These provider credentials are already used by a deactivated user. To reactivate a specific user please contact us directly.',
+                title: this.context.intl.formatMessage(this.messages.swal_title),
+                text: this.context.intl.formatMessage(this.messages.swal2_text),
                 type: 'error',
                 showCloseButton: true,
                 showCancelButton: false,
-                confirmButtonText: 'OK',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal2_confirmButton),
                 confirmButtonClass: 'ui button',
                 buttonsStyling: false
             })
@@ -200,10 +422,10 @@ class UserRegistration extends React.Component {
     componentDidUpdate() {
         if (this.props.UserRegistrationStore.registrationStatus === 'pending') {
             swal({
-                title: 'Thanks for signing up!',
-                text: 'Thank you. You have successfully registered. Please sign in with your new credentials.',
+                title: this.context.intl.formatMessage(this.messages.swal3_title),
+                text: this.context.intl.formatMessage(this.messages.swal3_text),
                 type: 'success',
-                confirmButtonText: 'Close',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal3_confirmButton),
                 confirmButtonClass: 'positive ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -214,10 +436,10 @@ class UserRegistration extends React.Component {
                 });
         } else if (this.props.UserRegistrationStore.registrationStatus === 'error') {
             swal({
-                title: 'Error!',
-                text: this.props.UserRegistrationStore.errorMessage,
+                title: this.context.intl.formatMessage(this.messages.swal4_title),
+                text: this.props.UserRegistrationStore.errorMessage, //it should be translated in the place it is generated
                 type: 'error',
-                confirmButtonText: 'Close',
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal3_confirmButton),
                 confirmButtonClass: 'negative ui button',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -335,7 +557,6 @@ class UserRegistration extends React.Component {
         try {
             data = JSON.parse(localStorage.getItem(e.key));
         } catch (err) {
-            console.log('Error while parsing data', err);
             return false;
         }
         finally {
@@ -358,10 +579,9 @@ class UserRegistration extends React.Component {
             //show hint
             const provider = this.getProviderName();
             swal({
-                title: 'Error',
-                text: 'The data from ' + provider + ' was incomplete. In case you want to use this provider, please add an e-mail address at the provider itself and try again.',
-                type: 'error',
-                confirmButtonText: 'Confirm',
+                title: this.context.intl.formatMessage(this.messages.swal5_title),
+                text: this.context.intl.formatMessage(this.messages.swal5_text)+provider+this.context.intl.formatMessage(this.messages.swal5_text2),
+                confirmButtonText: this.context.intl.formatMessage(this.messages.swal5_confirmButton),
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             }).then().catch();
@@ -461,45 +681,45 @@ class UserRegistration extends React.Component {
                 <div className="ui vertically padded centered grid container" >
                     <div className="ten wide column">
                         <div className="ui blue padded center aligned segment">
-                            <h2 className="ui dividing header">Sign Up</h2>
-                            <h3 className="ui dividing header">Sign Up with a Social Provider</h3>
+                            <h2 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_title)}</h2>
+                            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle)}</h3>
 
                             {/*<button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'facebook')} aria-label="Sign up with Facebook"><i className="big facebook square icon"> </i></button>*/}
-                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label="Sign up with Google"><i className="big google plus lnk icon"></i></button>
-                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label="Sign up with Github"><i className="big github icon"></i></button>
+                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'google')} aria-label={this.context.intl.formatMessage(this.messages.modal_googleButton)}><i className="big google plus lnk icon"></i></button>
+                            <button className="ui basic icon large circular button" onClick={this.socialRegister.bind(this, 'github')} aria-label={this.context.intl.formatMessage(this.messages.modal_githubButton)}><i className="big github icon"></i></button>
 
-                            <p>By clicking on a Social Provider, you agree to our <a href="/imprint" title="Sign-up terms and conditions">Terms</a>.</p>
+                            <p>{this.context.intl.formatMessage(this.messages.modal_termText1)} <a href="/imprint" title={this.context.intl.formatMessage(this.messages.modal_termLinkTitle)}>{this.context.intl.formatMessage(this.messages.modal_termText2)}</a>.</p>
                             <div className="ui dividing header" ></div>
 
-                            <h3 className="ui dividing header">Or complete the registration form</h3>
+                            <h3 className="ui dividing header">{this.context.intl.formatMessage(this.messages.modal_subtitle2)}</h3>
                             <form className="ui form" ref="UserRegistration_form" >
                                 <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="FirstName_label">First name </label>
-                                    <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" placeholder="First name" autoFocus aria-required="true"/></div>
+                                    <label style={signUpLabelStyle} htmlFor="FirstName_label">{this.context.intl.formatMessage(this.messages.form_firstName)}</label>
+                                    <div className="ui icon input"><input type="text" id="FirstName_label" name="firstname" ref="firstname" placeholder={this.context.intl.formatMessage(this.messages.form_firstName)} autoFocus aria-required="true"/></div>
                                 </div>
                                 <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="LastName_label">Last name</label>
-                                    <div className="ui icon input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" placeholder="Last name" /></div>
+                                    <label style={signUpLabelStyle} htmlFor="LastName_label">{this.context.intl.formatMessage(this.messages.form_lastName)}</label>
+                                    <div className="ui icon input"><input type="text" id="LastName_label" name="lastname" ref="lastname" aria-required="true" placeholder={this.context.intl.formatMessage(this.messages.form_lastName)} /></div>
                                 </div>
                                 <div className={usernameClasses} data-tooltip={usernameToolTipp} data-position="top center" data-inverted="" onBlur={this.checkUsername.bind(this)}>
-                                    <label style={signUpLabelStyle} htmlFor="username_label">User name </label>
-                                    <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username_label" name="username" ref="username" placeholder="Username" aria-required="true"/></div>
+                                    <label style={signUpLabelStyle} htmlFor="username_label">{this.context.intl.formatMessage(this.messages.form_userName)}</label>
+                                    <div className="ui icon input"><i className={usernameIconClasses}/><input type="text" id="username_label" name="username" ref="username" placeholder={this.context.intl.formatMessage(this.messages.form_userName)} aria-required="true"/></div>
                                 </div>
                                 <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="" onBlur={this.checkEmail.bind(this)}>
-                                    <label style={signUpLabelStyle} htmlFor="email_label">Email</label>
-                                    <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email_label" name="email" ref="email" placeholder="Email" aria-required="true"/></div>
+                                    <label style={signUpLabelStyle} htmlFor="email_label">{this.context.intl.formatMessage(this.messages.form_email)}</label>
+                                    <div className="ui icon input"><i className={emailIconClasses}/><input type="text" id="email_label" name="email" ref="email" placeholder={this.context.intl.formatMessage(this.messages.form_email)} aria-required="true"/></div>
                                 </div>
                                 <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="reenteremail">Re-enter email</label>
-                                    <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder="Re-enter email" aria-required="true"/></div>
+                                    <label style={signUpLabelStyle} htmlFor="reenteremail">{this.context.intl.formatMessage(this.messages.form_reenterEmail)}</label>
+                                    <div className="ui icon input"><input type="text" id="reenteremail" name="reenteremail" ref="reenteremail" placeholder={this.context.intl.formatMessage(this.messages.form_reenterEmail)} aria-required="true"/></div>
                                 </div>
                                 <div className="ui inline required field">
-                                    <label style={signUpLabelStyle} htmlFor="password_label">Password</label>
-                                    <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder="Password" aria-required="true"/></div>
+                                    <label style={signUpLabelStyle} htmlFor="password_label">{this.context.intl.formatMessage(this.messages.form_password)}</label>
+                                    <div className="ui icon input"><input type="password" id="password_label" name="password" ref="password" placeholder={this.context.intl.formatMessage(this.messages.form_password)} aria-required="true"/></div>
                                 </div>
                                 <div className="ui inline field">
-                                    <label style={signUpLabelStyle} htmlFor="reenterpassword_label">Re-enter password</label>
-                                    <div className="ui icon input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder="Re-enter password" aria-required="true"/></div>
+                                    <label style={signUpLabelStyle} htmlFor="reenterpassword_label">{this.context.intl.formatMessage(this.messages.form_reenterPassword)}</label>
+                                    <div className="ui icon input"><input type="password" id="reenterpassword_label" name="reenterpassword" ref="reenterpassword" placeholder={this.context.intl.formatMessage(this.messages.form_reenterPassword)} aria-required="true"/></div>
                                 </div>
                                 <div >
                                     <input type="hidden" id="recaptcha" name="recaptcha"></input>
@@ -508,13 +728,13 @@ class UserRegistration extends React.Component {
                                 <div className="ui error message" ></div>
                                 <br/>
                                 <button type="submit" className="ui blue labeled submit icon button" >
-                                    <i className="icon add user"/> Sign Up
+                                    <i className="icon add user"/> {this.context.intl.formatMessage(this.messages.form_submitButton)}
                                 </button>
                             </form>
                             <div className="ui dividing header" ></div>
-                            By clicking Sign Up, you agree to our <a href="/imprint">Terms</a>.
+                          {this.context.intl.formatMessage(this.messages.form_terms)}<a href="/imprint">{this.context.intl.formatMessage(this.messages.form_terms2)}</a>.
                             <br/><br/>
-                            <a href="#" onClick={this.handleNoAccessClick}>I can not access my account</a>
+                            <a href="#" onClick={this.handleNoAccessClick}>{this.context.intl.formatMessage(this.messages.form_noAccess)}</a>
                         </div>
                     </div>
 
@@ -528,7 +748,8 @@ class UserRegistration extends React.Component {
 }
 
 UserRegistration.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 UserRegistration = connectToStores(UserRegistration, [UserRegistrationStore], (context, props) => {
     return {
