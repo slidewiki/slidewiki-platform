@@ -12,6 +12,8 @@ class SlideEditStore extends BaseStore {
         this.scaleratio = 1; //default no scale ratio
         this.template = '';
         this.saveSlideClick = 'false';
+        this.cancelClick = 'false';
+        this.selector = '';
         this.undoClick = 'false';
         this.redoClick = 'false';
         this.addInputBox = 'false';
@@ -67,6 +69,13 @@ class SlideEditStore extends BaseStore {
         this.saveSlideClick = 'true';
         this.emitChange();
         this.saveSlideClick = 'false';
+        this.emitChange();
+    }
+    handleCancelClick(payload){
+        this.selector = payload.selector;
+        this.cancelClick = 'true';
+        this.emitChange();
+        this.cancelClick = 'false';
         this.emitChange();
     }
     handleUndoClick(){
@@ -153,6 +162,8 @@ class SlideEditStore extends BaseStore {
             speakernotes: this.speakernotes,
             scaleratio: this.scaleratio,
             saveSlideClick: this.saveSlideClick,
+            cancelClick: this.cancelClick,
+            selector: this.selector,
             undoClick: this.undoClick,
             redoClick: this.redoClick,
             template: this.template,
@@ -181,6 +192,8 @@ class SlideEditStore extends BaseStore {
         this.speakernotes = state.speakernotes;
         this.scaleratio = state.scaleratio;
         this.saveSlideClick = state.saveSlideClick;
+        this.cancelClick = state.cancelClick;
+        this.selector = state.selector;
         this.undoClick = state.undoClick;
         this.redoClick = state.redoClick;
         this.template = state.template;
@@ -205,6 +218,7 @@ SlideEditStore.handlers = {
     'SAVE_SLIDE_EDIT_SUCCESS': 'saveSlide',
     'ADD_SLIDE_EDIT_SUCCESS': 'addSlide',
     'SAVE_SLIDE_CLICK': 'handleSaveSlideClick',
+    'CANCEL_CLICK': 'handleCancelClick',
     'CHANGE_TEMPLATE': 'changeTemplate',
     'ADD_INPUT_BOX': 'handleAddInputBox',
     'UPLOAD_MEDIA_CLICK': 'handleUploadMedia',

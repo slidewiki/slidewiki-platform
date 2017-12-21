@@ -13,6 +13,7 @@ import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
 import saveClick from '../../../../actions/slide/saveClick';
+import cancelClick from '../../../../actions/slide/cancelClick';
 import undoClick from '../../../../actions/slide/undoClick';
 import redoClick from '../../../../actions/slide/redoClick';
 
@@ -43,9 +44,8 @@ class ContentActionsHeader extends React.Component {
         //console.log('redo');
     }
     cancelButtonClick(selector){
-        const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
-        this.context.executeAction(navigateAction, {
-            url: nodeURL
+        this.context.executeAction(cancelClick, {
+            selector: selector
         });
     }
 

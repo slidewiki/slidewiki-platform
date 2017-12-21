@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavLink} from 'fluxible-router';
+import {NavLink, navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import SlideEditStore from '../../../../../stores/SlideEditStore';
 import DataSourceStore from '../../../../../stores/DataSourceStore';
@@ -16,6 +16,7 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 //import TemplateDropdown from '../../../../common/TemplateDropdown';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
+import ContentUtil from '../../util/ContentUtil';
 
 let ReactDOM = require('react-dom');
 
@@ -31,6 +32,7 @@ class SlideContentEditor extends React.Component {
         this.previousCaretRange;
         this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
+        this.hasChanges = false;
         //this.oldContent = '';
         //this.redoContent = '';
     }
@@ -1308,6 +1310,41 @@ class SlideContentEditor extends React.Component {
         {
             this.handleSaveButton();
         }
+        if (nextProps.SlideEditStore.cancelClick === 'true' && nextProps.SlideEditStore.cancelClick !== this.props.SlideEditStore.cancelClick)
+        {
+            //if there are no changes!!! -> otherwise show SWAL menu
+            //console.log('cancel clicked');
+            if (this.hasChanges === true)
+            {
+                //console.log('there are changes!');
+                swal({
+                    title: 'Changes were made. If you do not save the slide, it will not be updated.',
+                    text: 'Are you sure you want to exit this page?',
+                    type: 'question',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    confirmButtonClass: 'ui olive button',
+                    cancelButtonText: 'No',
+                    cancelButtonClass: 'ui red button',
+                    buttonsStyling: false
+                }).then((accepted) => {
+                    const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+                    this.context.executeAction(navigateAction, {
+                        url: nodeURL
+                    });
+                }, (reason) => {
+                    //done(reason);
+                });
+
+            }
+            else{
+                const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
+                this.context.executeAction(navigateAction, {
+                    url: nodeURL
+                });
+            }
+        }
         if (nextProps.SlideEditStore.undoClick === 'true' && nextProps.SlideEditStore.undoClick !== this.props.SlideEditStore.undoClick)
         {
             console.log('undo');
@@ -1923,8 +1960,9 @@ class SlideContentEditor extends React.Component {
     }*/
 
     emitChange() {
+        this.hasChanges = true;
         window.onbeforeunload = () => {
-            return 'If you don\'t save the slide, it won\'t be updated. ' +
+            return 'If you do not save the slide, it will not be updated. ' +
             'Are you sure you want to exit this page?';
         };
     }
