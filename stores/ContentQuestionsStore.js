@@ -6,7 +6,7 @@ class ContentQuestionsStore extends BaseStore {
         this.questions = [];
         this.question = null;
         this.selector = {};
-        this.totalLength = 0;
+        this.questionsCount = 0;
         this.showAddBox = false;
     }
     addQuestion(payload) {
@@ -29,7 +29,7 @@ class ContentQuestionsStore extends BaseStore {
         this.questions = payload.questions;
         this.question = null;
         this.selector = payload.selector;
-        this.totalLength = this.questions.length;
+        this.questionsCount = this.questions.length;
         this.emitChange();
     }
     loadQuestion(payload) {
@@ -60,7 +60,7 @@ class ContentQuestionsStore extends BaseStore {
             questions: this.questions,
             question: this.question,
             selector: this.selector,
-            totalLength: this.totalLength,
+            questionsCount: this.questionsCount,
             showAddBox: this.showAddBox
         };
     }
@@ -71,7 +71,7 @@ class ContentQuestionsStore extends BaseStore {
         this.questions = state.questions;
         this.question = state.question;
         this.selector = state.selector;
-        this.totalLength = state.totalLength;
+        this.questionsCount = state.questionsCount;
         this.showAddBox = state.showAddBox;
     }
 }
@@ -84,7 +84,7 @@ ContentQuestionsStore.handlers = {
     'TOGGLE_ANSWERS': 'toggleAnswers',
     'SAVE_QUESTION': 'updateQuestion',
     'ADD_QUESTION': 'addQuestion',
-    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag',
+    'INVERT_ADD_QUESTION_BOX_FLAG': 'invertAddBoxFlag'
 };
 
 export default ContentQuestionsStore;

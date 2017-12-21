@@ -10,24 +10,13 @@ export default {
         let args = params.params? params.params : params;
         let selector= {'sid': args.sid, 'stype': args.stype};
 
-        if (resource === 'questions.count') {
-            let randomNumber = Math.round(Math.random() * 20);
-            callback(null, {'count' : randomNumber, 'selector': selector, 'mode': args.mode});
-        }
-
         if(resource === 'questions.list') {
             rp.get({
-                uri: 'https://questionservice.experimental.slidewiki.org/questions',
-                //uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions',
+                // uri: 'https://questionservice.experimental.slidewiki.org/questions',
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions'
             }).then((res) => {
-            /* This is what we get from microservice */
-            /*
-            let q = [{'related_object':'slide','related_object_id':'10678','question':'string','user_id':'17','difficulty':1,'choices':[{'choice':'string','is_correct':true}],'explanation':'string explanation','id':10},
-                {'related_object':'slide','related_object_id':'1141','question':'question 2','user_id':'17','difficulty':2,'choices':[{'choice':'string1','is_correct':true},{'choice':'string2','is_correct':true},{'choice':'string3','is_correct':false}],'explanation':'string1 string2 explanation','id':11}];
-            */
-                let questions = JSON.parse(res)
-            // let questions = q
-                .map((item, index) => {
+
+                let questions = JSON.parse(res).map((item, index) => {
                     return {
                         id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
                         answers: item.choices
@@ -40,10 +29,18 @@ export default {
                 });
                 callback(null, {questions: questions, selector: selector});
             }).catch((err) => {
-                console.log('Questions get errored. Check via swagger for following object and id:', args.stype, args.sid);
                 console.log(err);
                 callback(err, {});
             });
+        } else if(resource === 'questions.count') {
+          rp.get({
+              uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?metaonly=true',
+          }).then((res) => {
+              callback(null, {count: JSON.parse(res).count});
+          }).catch((err) => {
+              console.log(err);
+              callback(err, {});
+          });
         }
 
         /* Hard coded sample work follows */

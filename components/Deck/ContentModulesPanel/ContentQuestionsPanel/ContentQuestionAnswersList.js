@@ -12,7 +12,7 @@ class ContentQuestionAnswersList extends React.Component {
         super(props);
         this.state = {
             isEditButtonClicked: false,
-	        showCorrect: false,
+            showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
@@ -47,13 +47,13 @@ class ContentQuestionAnswersList extends React.Component {
             return null;
         };
 
-        let list = this.props.items.answers.map((node, index) => {
+        let list = this.props.items.map((node, index) => {
             return (
                 <ContentQuestionAnswersItem answer={node} name={'answer' + index} key={index}/>
             );
         });
 
-        let correctAnswers = this.props.items.answers.filter((item) => item.correct).map((node, index) => {
+        let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
             return (
               <div key={index}>
                   <a className="header">
@@ -88,6 +88,7 @@ class ContentQuestionAnswersList extends React.Component {
                   <div className="ui item">
                     <div className="content">
                       {this.state.showCorrect ? correctAnswers : null}
+                      {this.state.showCorrect ? explanation : null}
                     </div>
                   </div>
               </div>

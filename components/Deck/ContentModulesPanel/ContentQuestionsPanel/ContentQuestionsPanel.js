@@ -66,7 +66,7 @@ class ContentQuestionsPanel extends React.Component {
         const selector = this.props.ContentQuestionsStore.selector;
         const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
-        const totalLength = this.props.ContentQuestionsStore.totalLength;
+        const questionsCount = this.props.ContentQuestionsStore.questionsCount;
         const itemsPerPage = this.props.ContentModulesStore.selector.maxQ;
 
         // Button bar differs for Slide and Folder
@@ -170,7 +170,7 @@ class ContentQuestionsPanel extends React.Component {
         }
 
         let getItems = () => {
-            let noOfQuestions = totalLength;
+            let noOfQuestions = questionsCount;
             let items = [];
             let pageNo = 1;
             for(let i = 0; i < noOfQuestions; i+=itemsPerPage) {
@@ -181,7 +181,7 @@ class ContentQuestionsPanel extends React.Component {
             return items;
         };
 
-        let lastPageNo = parseInt(totalLength / itemsPerPage) + 1;
+        let lastPageNo = parseInt(questionsCount / itemsPerPage) + 1;
         let pagination = (
             <div className="ui centered pagination menu">
                 <a className="icon item" onClick={this.handlePreviousClick}>
