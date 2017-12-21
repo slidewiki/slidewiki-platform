@@ -394,6 +394,8 @@ class SlideContentEditor extends React.Component {
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
+                /*this.refs.uploadMediaModal.handleOpen();
+                evt.preventDefault();*/
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
@@ -700,9 +702,8 @@ class SlideContentEditor extends React.Component {
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
-                this.refs.uploadMediaModal.handleOpen();
-                evt.preventDefault();
-                /*
+                /*this.refs.uploadMediaModal.handleOpen();
+                evt.preventDefault();*/
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
@@ -716,7 +717,6 @@ class SlideContentEditor extends React.Component {
                         }, 500);
                     });
                 }, 500);
-                */
             });
         });
         //fix bug with speakernotes overlapping soure dialog/other elements - SWIK-832
@@ -1758,9 +1758,17 @@ class SlideContentEditor extends React.Component {
         let styleName = 'default';
         if(this.props.selector.theme && typeof this.props.selector.theme !== 'undefined'){
             styleName = this.props.selector.theme;
-        }
-        else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined'){
-            styleName = this.props.DeckTreeStore.theme;
+        } else {
+            // we need to figure out the theme based on the parent deck
+            // we need to locate the slide in the DeckTreeStore.flatTree and find the theme from there
+            let treeNode = this.props.DeckTreeStore.flatTree
+                .find((node) => node.get('id') === this.props.SlideEditStore.slideId && node.get('type') === 'slide');
+
+            if (treeNode) {
+                styleName = treeNode.get('theme');
+            } else if(this.props.DeckTreeStore.theme && typeof this.props.DeckTreeStore.theme !== 'undefined') {
+                styleName = this.props.DeckTreeStore.theme;
+            }
         }
         if (styleName === '' || typeof styleName === 'undefined' || styleName === 'undefined')
         {
