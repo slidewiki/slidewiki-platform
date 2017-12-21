@@ -58,19 +58,19 @@ class Header extends React.Component {
             loginButton = <HeaderDropdown/>;
             mobileLoginButton = (<div>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username}><i className="user icon"/>
-              <FormattedMessage id='header.mydecks' defaultMessage='My Decks'/>
+              <FormattedMessage id='header.mydecks.mobile' defaultMessage='My Decks'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/groups/overview'}><i className="icon users"/>
-              <FormattedMessage id='header.mygroups' defaultMessage='My Groups'/>
+              <FormattedMessage id='header.mygroups.mobile' defaultMessage='My Groups'/>
               </NavLink>
               <NavLink className="item" href={'/user/' + this.props.UserProfileStore.username + '/settings/profile'}><i className="setting icon"/>
-              <FormattedMessage id='header.mysettings' defaultMessage='My Settings'/>
+              <FormattedMessage id='header.mysettings.mobile' defaultMessage='My Settings'/>
               </NavLink>
               <NavLink className="item" href={'/notifications'}><i className="alarm red icon"/>
-              <FormattedMessage id='header.mynotifications' defaultMessage='My Notifications'/>
+              <FormattedMessage id='header.mynotifications.mobile' defaultMessage='My Notifications'/>
               </NavLink>
               <a className="item" onClick={this.logout.bind(this)}><i className="sign out icon"/>
-              <FormattedMessage id='header.logout' defaultMessage='Logout'/>
+              <FormattedMessage id='header.logout.mobile' defaultMessage='Logout'/>
               </a>
             </div>);
             notification_locale = '';

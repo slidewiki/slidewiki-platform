@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { connectToStores } from 'fluxible-addons-react';
 import CountryDropdown from '../../common/CountryDropdown.js';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import changeUserData from '../../../actions/user/userprofile/changeUserData';
 import Iso from 'iso-639-1';
 import { writeCookie } from '../../../common';
@@ -58,12 +59,22 @@ class ChangePersonalData extends React.Component {
     }
 
     render() {
+        const messages = defineMessages({
+            emailNotAllowed: {
+                id: 'ChangePersonalData.emailNotAllowed',
+                defaultMessage: 'This E-Mail has already been used by someone else. Please choose another one.',
+            },
+            tooltipp: {
+                id: 'ChangePersonalData.tooltipp',
+                defaultMessage: 'A few words about yourself - max 120 characters'
+            }
+        });
         let emailClasses = classNames({
             'ui': true,
             'field': true,
             'error': this.props.failures.emailNotAllowed
         });
-        let emailToolTipp = this.props.failures.emailNotAllowed ? 'This E-Mail has already been used by someone else. Please choose another one.' : undefined;
+        let emailToolTipp = this.props.failures.emailNotAllowed ? this.context.intl.formatMessage(messages.emailNotAllowed) : undefined;
         let languageOptions = this.getLocaleOptions();
         let currentLocale = (this.state.currentLocale.length <= 2) ? this.state.currentLocale : 'en';
         return (
@@ -71,23 +82,43 @@ class ChangePersonalData extends React.Component {
                 <form className="ui form userdata" onSubmit={ this.handleChangeUserdata.bind(this) }>
                     <div className="two fields">
                         <div className="ui field">
-                            <label htmlFor="fname">Firstname</label>
+                            <label htmlFor="fname">
+                              <FormattedMessage
+                                id='ChangePersonalData.fistname'
+                                defaultMessage='Firstname'
+                              />
+                            </label>
                             <input type="text" placeholder="John" name="fname" id="fname" defaultValue={this.props.user.fname} ref="fname" required/>
                         </div>
                         <div className="ui field">
-                            <label htmlFor="lname">Lastname</label>
+                            <label htmlFor="lname">
+                              <FormattedMessage
+                                id='ChangePersonalData.lastname'
+                                defaultMessage='Lastname'
+                              />
+                            </label>
                             <input type="text" placeholder="Doe" name="lname" id="lname" defaultValue={this.props.user.lname} ref="lname" required/>
                         </div>
                     </div>
 
                     <div className="two fields">
                         <div className={emailClasses} data-tooltip={emailToolTipp} data-position="top center" data-inverted="">
-                            <label htmlFor="email">E-Mail</label>
+                            <label htmlFor="email">
+                              <FormattedMessage
+                                id='ChangePersonalData.email'
+                                defaultMessage='E-Mail'
+                              />
+                            </label>
                             <input type="email" placeholder="j.doe@ex.org" name="email" id="email" defaultValue={this.props.user.email} ref="email" required/>
                         </div>
                         <div className="ui field">
                             <div className="ui field">
-                                <label htmlFor="language">User Interface Language</label>
+                                <label htmlFor="language">
+                                  <FormattedMessage
+                                    id='ChangePersonalData.uilanguage'
+                                    defaultMessage='User Interface Language'
+                                  />
+                                </label>
                                 <Dropdown fluid selection options={languageOptions} defaultValue={currentLocale} ref="language" id="langauge" required={true}/>
                             </div>
                         </div>
@@ -96,25 +127,44 @@ class ChangePersonalData extends React.Component {
                     <div className="two fields">
                         <div className="ui field">
                             <div className="ui field">
-                                <label htmlFor="country">Country</label>
+                                <label htmlFor="country">
+                                  <FormattedMessage
+                                    id='ChangePersonalData.country'
+                                    defaultMessage='Country'
+                                  />
+                                </label>
                                 <CountryDropdown ref="country" id="country" required={false} country={this.props.user.country}/>
                             </div>
                         </div>
                         <div className="ui field">
-                            <label htmlFor="organization">Organization</label>
+                            <label htmlFor="organization">
+                              <FormattedMessage
+                                id='ChangePersonalData.organization'
+                                defaultMessage='Organization'
+                              />
+                            </label>
                             <input type="text" placeholder="Google" name="organization" id="organization" defaultValue={this.props.user.organization} ref="organization"/>
                         </div>
                     </div>
 
                     <div className="ui field">
-                        <label htmlFor="bio">Biography</label>
-                        <textarea rows="2" maxLength="120" placeholder="A few words about yourself - max 120 characters" id="bio" name="description" defaultValue={this.props.user.description} ref="description"/>
+                        <label htmlFor="bio">
+                          <FormattedMessage
+                            id='ChangePersonalData.bio'
+                            defaultMessage='Biography'
+                          />
+                        </label>
+                        <textarea rows="2" maxLength="120" placeholder={this.context.intl.formatMessage(messages.tooltipp)} id="bio" name="description" defaultValue={this.props.user.description} ref="description"/>
                     </div>
 
-                    {this.props.saveProfileIsLoading ? <div className="ui active dimmer"><div className="ui text loader">Loading</div></div> : ''}
+                    {this.props.saveProfileIsLoading ? <div className="ui active dimmer"><div className="ui text loader"><FormattedMessage id='ChangePersonalData.loading' defaultMessage='Loading' /></div></div> : ''}
 
                     <button type="submit" className="ui blue labeled submit icon button">
-                        <i className="icon checkmark"/>Submit Changes
+                        <i className="icon checkmark"/>
+                        <FormattedMessage
+                          id='ChangePersonalData.submit'
+                          defaultMessage='Submit Changes'
+                        />
                     </button>
                 </form>
             </div>
@@ -123,7 +173,8 @@ class ChangePersonalData extends React.Component {
 }
 
 ChangePersonalData.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 ChangePersonalData = connectToStores(ChangePersonalData, [IntlStore], (context, props) => {
