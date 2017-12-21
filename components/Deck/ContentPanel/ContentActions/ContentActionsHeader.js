@@ -94,20 +94,20 @@ class ContentActionsHeader extends React.Component {
             attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
-        let viewButton, editButton, undoButton, redoButton;
+        let firstButton, secondButton, undoButton, redoButton;
         if (contentDetails.mode === 'view')
         {
             if (this.props.UserProfileStore.username !== ''){
-                viewButton =
+                firstButton =
                 <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     <i></i>View
                 </NavLink>;
-                editButton =
+                secondButton =
                 <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
                     <i className="ui large blue edit icon "></i> Edit
                 </div>;
             } else {
-                viewButton =
+                firstButton =
                 <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     <i></i>View
                 </NavLink> ;
@@ -115,7 +115,7 @@ class ContentActionsHeader extends React.Component {
         } else {
             //edit mode
             if (this.props.UserProfileStore.username !== ''){
-                /*viewButton =
+                /*firstButton =
                 <NavLink style={red} activeClass=" " className="active item link" href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     <i className="ui large black cancel icon "></i>
                     Cancel
@@ -126,15 +126,15 @@ class ContentActionsHeader extends React.Component {
                 <a style={buttonTextBlack}>Cancel</a>
                 </NavLink> ;*/
 
-                viewButton =
-                    <button tabIndex="0" ref="submitbutton" className="ui button " onClick={this.cancelButtonClick.bind(this, selector)} onChange={this.cancelButtonClick.bind(this, selector)}>
-                         <i className="cancel icon large"></i>
-                         cancel
-                    </button>;
-                editButton =
+                firstButton =
                     <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
                          <i className="save icon large"></i>
                          Save
+                    </button>;
+                secondButton =
+                    <button tabIndex="0" ref="submitbutton" className="ui button " onClick={this.cancelButtonClick.bind(this, selector)} onChange={this.cancelButtonClick.bind(this, selector)}>
+                         <i className="cancel icon large"></i>
+                         cancel
                     </button>;
                 undoButton =
                     <button tabIndex="0" ref="undoButton" className="ui orange button " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
@@ -145,16 +145,16 @@ class ContentActionsHeader extends React.Component {
                          <i className="mail forward icon large"></i>
                     </button>;
             } else {
-                viewButton =
+                firstButton =
                     <NavLink activeClass=" " className='item link' onClick={this.cancelButtonClick.bind(this, selector)} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                         <i></i>View
                     </NavLink>;
             }
         }
-
+        //{undoButton} {redoButton}
         return (
             <div className="ui top attached tabular menu" role="tablist">
-                {viewButton} {editButton} {undoButton} {redoButton}
+                {firstButton} {secondButton}
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="right menu">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }

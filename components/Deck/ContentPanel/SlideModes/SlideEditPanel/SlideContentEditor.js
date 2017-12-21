@@ -1318,7 +1318,7 @@ class SlideContentEditor extends React.Component {
             {
                 //console.log('there are changes!');
                 swal({
-                    title: 'Changes were made. If you do not save the slide, it will not be updated.',
+                    title: 'You have unsaved changes. If you do not save the slide, it will not be updated.',
                     text: 'Are you sure you want to exit this page?',
                     type: 'question',
                     showCloseButton: true,
@@ -1962,7 +1962,7 @@ class SlideContentEditor extends React.Component {
     emitChange() {
         this.hasChanges = true;
         window.onbeforeunload = () => {
-            return 'If you do not save the slide, it will not be updated. ' +
+            return 'You have unsaved changes. If you do not save the slide, it will not be updated. ' +
             'Are you sure you want to exit this page?';
         };
     }
