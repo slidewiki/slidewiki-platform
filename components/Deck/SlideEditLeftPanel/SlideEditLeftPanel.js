@@ -355,47 +355,47 @@ class SlideEditLeftPanel extends React.Component {
                       <i tabIndex="0" aria-label="1 row 1 column">1 row 1 column</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '12')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '12')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '12')}>
                       <i tabIndex="0" aria-label="1 row 2 column">1 row 2 columns</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '22')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '22')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '12')}>
                       <i tabIndex="0" aria-label="2 rows 2 columns">2 rows 2 columns</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '21')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '21')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '21')}>
                       <i tabIndex="0" aria-label="2 rows 1 column">2 rows 1 column</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11img')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11img')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11img')}>
                       <i tabIndex="0" aria-label="1 row 1 column image">1 row 1 column image</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '3')}>
                       <i tabIndex="0" aria-label="Document with title">Document with title</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'outitleslide')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'outitleslide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'outitleslide')}>
                       <i tabIndex="0" aria-label="Open University Theme Title Page">Open University Theme Title Page</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'oegtitleslide')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'oegtitleslide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'oegtitleslide')}>
                       <i tabIndex="0" aria-label="OEG Theme Title Page">OEG Theme Title Page</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'slidewikislide')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'slidewikislide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'slidewikislide')}>
                       <i tabIndex="0" aria-label="SlideWiki template">SlideWiki template</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDA')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDA')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'EKDDA')}>
                       <i tabIndex="0" aria-label="EKDDA template">EKDDA template</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAeng')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAeng')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'EKDDAeng')}>
                       <i tabIndex="0" aria-label="EKDDA template - English">EKDDA template - English</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
                   </a>
-                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAengNofooter')}>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAengNofooter')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'EKDDAengNofooter')}>
                       <i tabIndex="0" aria-label="EKDDA template - English no footer">EKDDA template - English no footer</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
                   </a>
