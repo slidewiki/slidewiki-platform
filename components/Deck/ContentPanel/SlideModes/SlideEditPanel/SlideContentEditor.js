@@ -67,7 +67,9 @@ class SlideContentEditor extends React.Component {
             }, (reason) => {
                 //done(reason);
             });
-            $('.swal2-confirm').focus();
+            setTimeout(() => {
+                $('.swal2-confirm').focus();
+            }, 500);
         }
         //}
     }
@@ -1328,7 +1330,8 @@ class SlideContentEditor extends React.Component {
                     confirmButtonClass: 'ui olive button',
                     cancelButtonText: 'No',
                     cancelButtonClass: 'ui red button',
-                    buttonsStyling: false
+                    buttonsStyling: false,
+                    allowEnterKey: true
                 }).then((accepted) => {
                     const nodeURL = ContentUtil.makeNodeURL(nextProps.SlideEditStore.selector, 'view');
                     this.context.executeAction(navigateAction, {
@@ -1337,6 +1340,9 @@ class SlideContentEditor extends React.Component {
                 }, (reason) => {
                     //done(reason);
                 });
+                setTimeout(() => {
+                    $('.swal2-confirm').focus();
+                }, 500);
 
             }
             else{
