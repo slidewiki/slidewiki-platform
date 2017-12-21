@@ -128,6 +128,12 @@ class SlideEditStore extends BaseStore {
         this.embedCode = '';
         this.emitChange();
     }
+    changeTitle(payload){
+        this.title = payload.title;
+        this.emitChange();
+        //this.title = '';
+        //this.emitChange();
+    }
     handleHTMLEditorClick(){
         this.HTMLEditorClick = 'true';
         this.emitChange();
@@ -202,6 +208,7 @@ SlideEditStore.handlers = {
     'MATHS_CLICK': 'handleMathsClick',
     'CODE_CLICK': 'handleCodeClick',
     'EMBED_CLICK': 'handleEmbedClick',
+    'CHANGE_TITLE': 'changeTitle',
     'HTML_EDITOR_CLICK': 'handleHTMLEditorClick',
     'UNDO_CLICK': 'handleUndoClick',
     'REDO_CLICK': 'handleRedoClick',

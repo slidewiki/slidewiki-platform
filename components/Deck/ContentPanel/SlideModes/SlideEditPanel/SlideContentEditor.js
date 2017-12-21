@@ -1348,6 +1348,7 @@ class SlideContentEditor extends React.Component {
                     this.refreshCKeditor();
                     //this.resize();
                     this.resizeDrag();
+                    this.emitChange();
                     //this.forceUpdate();
 
                     nextProps.MediaStore.status = '';
@@ -1400,6 +1401,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
+                this.emitChange();
             }
             //make async/callback/promise -> async/await
             CKEDITOR.instances.inlineContent.execCommand('youtube');
@@ -1427,6 +1429,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
+                this.emitChange();
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
             }
@@ -1441,6 +1444,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
+                this.emitChange();
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
             }
@@ -1455,6 +1459,7 @@ class SlideContentEditor extends React.Component {
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
+                this.emitChange();
                 //this.uniqueIDAllElements();
                 //make async/callback/promise -> async/await
             }
@@ -1468,8 +1473,10 @@ class SlideContentEditor extends React.Component {
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: 640px; height: 480px; z-index: '+(this.getHighestZIndex() + 10)+';">'+nextProps.SlideEditStore.embedCode+'</div>');
                     this.correctDimensionsBoxesIframe();
+                    this.emitChange();
                 } else { //if slide is in non-canvas mode
                     this.refs.inlineContent.innerHTML += nextProps.SlideEditStore.embedCode;
+                    this.emitChange();
                 }
             }
             else {
@@ -1477,6 +1484,7 @@ class SlideContentEditor extends React.Component {
                 if($('.pptx2html').length) //if slide is in canvas mode
                 {
                     $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; top: 100px; left: 100px; width: '+nextProps.SlideEditStore.embedWidth+'px; height: '+nextProps.SlideEditStore.embedHeight+'px; z-index: '+(this.getHighestZIndex() + 10)+';">'+iframe+'</div>');
+                    this.emitChange();
                     //this.correctDimensionsBoxes('iframe');
                 } else { //if slide is in non-canvas mode
                     this.refs.inlineContent.innerHTML += iframe;
@@ -1488,6 +1496,12 @@ class SlideContentEditor extends React.Component {
                 //this.uniqueIDAllElements();
                 this.resizeDrag();
             }
+        }
+        if (nextProps.SlideEditStore.title !== '' && nextProps.SlideEditStore.title !== this.props.SlideEditStore.title)
+        {
+            this.emitChange();
+            //no need for this -> title is updated on slide save.
+            //this.handleSaveButton();
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {

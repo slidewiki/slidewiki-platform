@@ -13,6 +13,7 @@ import embedClick from '../../../actions/slide/embedClick';
 import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
+import changeTitle from '../../../actions/slide/changeTitle';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -136,11 +137,14 @@ class SlideEditLeftPanel extends React.Component {
         this.forceUpdate();
     }
     handleTitleChangeClick(){
-        console.log('change title');
+        //console.log('change title');
         if (this.state.slideTitle === ''){
             this.setState({titleMissingError: 'title cannot be empty'});
         } else {
             console.log(this.state.slideTitle);
+            this.context.executeAction(changeTitle, {
+                title: this.state.slideTitle
+            });
             //update this.props.SlideEditStore.title via action
             //in content editor -> catch new value for title SlideEditStore.title -> manuall trigger save -> new revision??
             //context.dispatch('UNDO_RENAME_TREE_NODE_SUCCESS', payload.params);
@@ -340,7 +344,7 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '2')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '2')}>
-                      <i tabIndex="0" aria-label="Empty document">Empty document (Document / non-canvas mode!)</i> <br/><br/>
+                      <i tabIndex="0" aria-label="Empty document">Empty document - Document-mode (non-canvas)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
@@ -431,8 +435,9 @@ class SlideEditLeftPanel extends React.Component {
                   </div>
                   <a className="item" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
                       <i tabIndex="0" className="edit icon"></i>Change slide title
-                      <label htmlFor="handleTitleChangeClick">(This will save all changes that you made and reload the page - a new slide revision is created).</label>
                   </a>
+                  <label htmlFor="handleTitleChangeClick">Title is updated when saving the slide <br /></label>
+                  <label htmlFor="handleTitleChangeClick">(after clicking the separate save button).</label>
                 </div>);
 
         let normalContent = (
