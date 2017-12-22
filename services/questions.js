@@ -160,17 +160,22 @@ export default {
         let args = params.params? params.params : params;
 
         let choices = [];
+        let answers = [];//There is a problem with different names used on the platform and service
         if (args.question.answer1 !== '') {
             choices.push({'choice': args.question.answer1, 'is_correct': args.question.correct1});
+            answers.push({'answer': args.question.answer1, 'correct': args.question.correct1});
         }
         if (args.question.answer2 !== '') {
             choices.push({'choice': args.question.answer2, 'is_correct': args.question.correct2});
+            answers.push({'answer': args.question.answer2, 'correct': args.question.correct2});
         }
         if (args.question.answer3 !== '') {
             choices.push({'choice': args.question.answer3, 'is_correct': args.question.correct3});
+            answers.push({'answer': args.question.answer3, 'correct': args.question.correct3});
         }
         if (args.question.answer4 !== '') {
             choices.push({'choice': args.question.answer4, 'is_correct': args.question.correct4});
+            answers.push({'answer': args.question.answer4, 'correct': args.question.correct4});
         }
 
         if (resource === 'questions.update') {
@@ -188,7 +193,7 @@ export default {
             }).then((res) => {
                 const question = {
                     id: args.question.qid, title: args.question.title, difficulty: parseInt(args.question.difficulty), relatedObject: args.question.relatedObject, relatedObjectId: args.question.relatedObjectId.split('-')[0],
-                    answers: choices,
+                    answers: answers,
                     explanation: args.question.explanation,
                     userId: args.question.userId.toString()
                 };

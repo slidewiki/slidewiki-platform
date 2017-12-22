@@ -1,5 +1,6 @@
 import React from 'react';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
+import cancelQuestion from '../../../../actions/questions/cancelQuestion';
 
 class ContentQuestionEdit extends React.Component {
 
@@ -18,7 +19,7 @@ class ContentQuestionEdit extends React.Component {
             correct2: numAnswers > 2 ? this.props.question.answers[1].correct: '',
             correct3: numAnswers > 3 ? this.props.question.answers[2].correct: '',
             correct4: numAnswers > 3 ? this.props.question.answers[3].correct: '',
-            explanation: 'Test explanation', //this.props.question.explanation,
+            explanation: this.props.question.explanation,
             userId: this.props.userId,
             relatedObjectId: this.props.selector.sid,
             relatedObject: this.props.selector.stype,
@@ -38,11 +39,16 @@ class ContentQuestionEdit extends React.Component {
 
         this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
+        this.cancelButtonClick = this.cancelButtonClick.bind(this);
     };
 
     saveButtonClick(e) {
         e.preventDefault();
         this.context.executeAction(updateQuestion, {question: this.state});
+    }
+
+    cancelButtonClick() {
+        this.context.executeAction(cancelQuestion, {});
     }
 
     /* Update answer choice text */
@@ -164,7 +170,7 @@ class ContentQuestionEdit extends React.Component {
                                         <input type="checkbox" name="example3" id="answer3" tabIndex="0" className="hidden" defaultChecked={numAnswers > 2 && this.state.correct3} onChange={this.updateCorrect3}/>
                                         <label htmlFor="answer3"></label>
                                     </div>
-                                    <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 2 ? this.state.answer3: ''} onChange={this.updateAnswer3}/>
+                                    <input type="text" style={answerChoiceWidth} name="response3" id="response3" defaultValue={numAnswers > 2 ? this.state.answer3: ''} onChange={this.updateAnswer3}/>
                                     <label htmlFor="response3"></label>
                                 </div>
                                 <div className="inline field">
@@ -184,8 +190,12 @@ class ContentQuestionEdit extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div className="ui right floated buttons">
-                                    <button className="ui primary button" onClick={this.saveButtonClick}>Save</button>
-                                    <button className="ui secondary button">Cancel</button>
+                                    <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick}>
+                                        <i className="icon check" />Save
+                                    </button>
+                                    <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
+                                        <i className="icon close" />Cancel
+                                    </button>
                                 </div>
                             </div>
                         </div>

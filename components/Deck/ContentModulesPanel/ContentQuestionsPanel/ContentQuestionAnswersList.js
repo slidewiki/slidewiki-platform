@@ -5,13 +5,14 @@ import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
 import ContentQuestionEdit from './ContentQuestionEdit';
+import loadQuestion from '../../../../actions/questions/loadQuestion';
 
 class ContentQuestionAnswersList extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            isEditButtonClicked: false,
+            // isEditButtonClicked: false,
             showCorrect: false,
         };
         this.handleButtonClick = this.handleButtonClick.bind(this);
@@ -25,16 +26,18 @@ class ContentQuestionAnswersList extends React.Component {
     }
 
     handleEditButtonClick() {
-        this.setState({
-            isEditButtonClicked: true
-        });
+        // this.setState({
+        //     isEditButtonClicked: true
+        // });
+
+        this.context.executeAction(loadQuestion, {qstid: this.props.qstid});
     }
 
     render() {
         const creatorId = this.props.DeckViewStore.creatorData._id;
         const userId = this.props.UserProfileStore.userid;
         const editButton = (
-            <button className="ui compact button primary" onClick={this.handleEditButtonClick.bind(this)}>
+            <button className="ui compact button primary" onClick={this.handleEditButtonClick}>
                 <i className="edit icon" />
                 Edit question
             </button>
@@ -70,6 +73,7 @@ class ContentQuestionAnswersList extends React.Component {
                 </p>
             </div>
         );
+        let showButtonLabel = this.state.showCorrect ? 'Hide answer' : 'Show answer';
         let answers = (
             <div className="ui two column stackable grid">
                 <div className="column">
@@ -82,7 +86,7 @@ class ContentQuestionAnswersList extends React.Component {
                 <div className="column">
                   <button className="ui compact button primary" onClick={this.handleButtonClick}>
                     <i className=" help circle icon" />
-                    Show answer
+                    {showButtonLabel}
                   </button>
                   {showEditButton()}
                   <div className="ui item">
@@ -104,6 +108,10 @@ class ContentQuestionAnswersList extends React.Component {
         );
     }
 }
+
+ContentQuestionAnswersList.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 ContentQuestionAnswersList = connectToStores(ContentQuestionAnswersList, [ContentQuestionsStore, DeckViewStore, UserProfileStore], (context, props) => {
     return {

@@ -1,14 +1,8 @@
 import React from 'react';
 import ContentQuestionAnswersList from './ContentQuestionAnswersList';
-import loadQuestion from '../../../../actions/questions/loadQuestion';
 import toggleAnswers from '../../../../actions/questions/toggleAnswers';
 
 class ContentQuestionsItem extends React.Component {
-    handleEditClick() {
-        this.context.executeAction(loadQuestion, {
-            qstid: this.props.question.id
-        });
-    }
 
     handleToggleAnwers() {
         this.context.executeAction(toggleAnswers, {question: this.props.question});
@@ -16,7 +10,7 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
+            <ContentQuestionAnswersList qstid={question.id} items={question.answers} explanation={question.explanation} />
         );
 
         //HEAD of 1602:

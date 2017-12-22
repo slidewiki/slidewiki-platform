@@ -38,6 +38,7 @@ class ContentQuestionAdd extends React.Component {
 
         this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
+        this.cancelButtonClick = this.cancelButtonClick.bind(this);
     };
 
     saveButtonClick(e) {
@@ -179,10 +180,10 @@ class ContentQuestionAdd extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div className="ui right floated buttons">
-                                    <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick.bind(this)}>
+                                    <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick}>
                                         <i className="icon check" />Save
                                     </button>
-                                    <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick.bind(this)}>
+                                    <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
                                         <i className="icon close" />Cancel
                                     </button>
                                 </div>

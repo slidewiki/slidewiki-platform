@@ -10,6 +10,7 @@ import loadContentQuestions from '../../../../actions/loadContentQuestions';
 import invertAddQuestionBoxFlag from '../../../../actions/questions/invertAddQuestionBoxFlag';
 import ContentQuestionsList from './ContentQuestionsList';
 import ContentQuestionAdd from './ContentQuestionAdd';
+import ContentQuestionEdit from './ContentQuestionEdit';
 // import ContentQuestionForm from './ContentQuestionForm';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 
@@ -214,7 +215,7 @@ class ContentQuestionsPanel extends React.Component {
 
         return (
             <div ref="contentQuestionsPanel" className="ui bottom attached">
-                { this.props.ContentQuestionsStore.showAddBox ? <ContentQuestionAdd question={this.props.items} selector={this.props.selector} userId={userId} /> : content }
+                { this.props.ContentQuestionsStore.showAddBox ? <ContentQuestionAdd selector={this.props.selector} userId={userId} /> : this.props.ContentQuestionsStore.question ? <ContentQuestionEdit question={this.props.ContentQuestionsStore.question} selector={this.props.selector} userId={userId}/> : content }
             </div>
         );
     }
