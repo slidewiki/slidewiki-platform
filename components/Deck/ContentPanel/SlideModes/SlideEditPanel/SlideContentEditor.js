@@ -336,6 +336,7 @@ class SlideContentEditor extends React.Component {
                 $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
+                    this.contextMenuAndDragDivAllRemove();
                     console.log('====ckeditor on change====');
                     //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                     setTimeout(() => {
@@ -659,6 +660,7 @@ class SlideContentEditor extends React.Component {
                 $('.cke_button__sourcedialog_label').mousedown((evt) => { //detect click on source dialog button
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
+                    this.contextMenuAndDragDivAllRemove();
                     console.log('====ckeditor on change====');
                     //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                     setTimeout(() => {
@@ -1556,10 +1558,30 @@ class SlideContentEditor extends React.Component {
             if($('.pptx2html').length) //if slide is in canvas mode
             {
                 this.disableResizeDrag();
+                this.contextMenuAndDragDivAllRemove();
+                setTimeout(() => {
+                    CKEDITOR.instances.inlineContent.execCommand('sourcedialog');
+                }, 500);
+            } else{
+                CKEDITOR.instances.inlineContent.execCommand('sourcedialog');
             }
-            CKEDITOR.instances.inlineContent.execCommand('sourcedialog');
-        }
 
+            if($('.pptx2html').length) //if slide is in canvas mode
+            {
+                //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
+                setTimeout(() => {
+                    $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
+                        console.log('====ckeditor save button ok==== - refresh drag and menus');
+                        //this.addBorders();
+                        setTimeout(() => {
+                            this.resizeDrag();
+                            this.emitChange();
+                            ////this.forceUpdate();
+                        }, 500);
+                    });
+                }, 1000);
+            }
+        }
     }
     addBorders() { //not used at the moment
         //do not put borders around empty divs containing SVG elements
