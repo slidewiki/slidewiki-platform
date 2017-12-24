@@ -36,6 +36,69 @@ class SlideContentEditor extends React.Component {
         //this.oldContent = '';
         //this.redoContent = '';
     }
+    handleSlideSizechange(slideSize){
+        if (slideSize !== ''){
+            if($('.pptx2html').length)  //if slide is in canvas mode
+            {
+                swal({
+                    title: 'Apply template',
+                    text: 'This action will change the size of the slide. Your current slide size is ' + $('.pptx2html').css('height') + ' by ' + $('.pptx2html').css('width') + ' (pixels), and you can reset the slide size to its original. Do you want to continue?',
+                    type: 'question',
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, apply template',
+                    confirmButtonClass: 'ui olive button',
+                    cancelButtonText: 'No',
+                    cancelButtonClass: 'ui red button',
+                    buttonsStyling: false,
+                    focusConfirm: true,
+                    allowEnterKey: true,
+                }).then((accepted) => {
+                    //this.applyTemplate(template);
+                    switch (slideSize) {
+                        case '960':
+                            $('.pptx2html').css('width', '960');
+                            $('.pptx2html').css('height', '720');
+                            break;
+                        case '1280':
+                            $('.pptx2html').css('width', '1280');
+                            $('.pptx2html').css('height', '960');
+                            break;
+                        case '1600':
+                            $('.pptx2html').css('width', '1600');
+                            $('.pptx2html').css('height', '1200');
+                            break;
+                        case '720p':
+                            $('.pptx2html').css('width', '1280');
+                            $('.pptx2html').css('height', '720');
+                            break;
+                        case '1080p':
+                            $('.pptx2html').css('width', '1920');
+                            $('.pptx2html').css('height', '1080');
+                            break;
+                        default:
+                    }
+                    this.resize();
+                }, (reason) => {
+                    //done(reason);
+                });
+                setTimeout(() => {
+                    $('.swal2-confirm').focus();
+                }, 500);
+            } else{
+                //no PPTX2html element available to change size
+                swal({
+                    title: 'Slide has no canvas size to change.',
+                    text: 'Your current slide is not in canvas mode, but in document (non-canvas) mode and it will automatically adjust its size based on the content you enter. If you want to set a slide size you must first set the slide to canvas-mode via the menu template option.',
+                    type: 'error',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: true
+                });
+            }
+        }
+    }
     handleTemplatechange(template){
         /*
         if (this.showTemplates === false){
@@ -1548,6 +1611,10 @@ class SlideContentEditor extends React.Component {
             this.emitChange();
             //no need for this -> title is updated on slide save.
             //this.handleSaveButton();
+        }
+        if (nextProps.SlideEditStore.slideSize !== '' && nextProps.SlideEditStore.slideSize !== this.props.SlideEditStore.slideSize)
+        {
+            this.handleSlideSizechange(nextProps.SlideEditStore.slideSize);
         }
         if (nextProps.SlideEditStore.template !== '' && nextProps.SlideEditStore.template !== this.props.SlideEditStore.template)
         {
