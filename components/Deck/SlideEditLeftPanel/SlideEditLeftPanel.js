@@ -14,6 +14,7 @@ import changeTemplate from '../../../actions/slide/changeTemplate';
 import HTMLEditorClick from '../../../actions/slide/HTMLEditorClick';
 import SlideEditStore from '../../../stores/SlideEditStore';
 import changeTitle from '../../../actions/slide/changeTitle';
+import changeSlideSize from '../../../actions/slide/changeSlideSize';
 
 class SlideEditLeftPanel extends React.Component {
 
@@ -162,10 +163,20 @@ class SlideEditLeftPanel extends React.Component {
 
     }
     changeSlideSizeClick(){
-        console.log('change slide size button clicked');
+        //console.log('change slide size button clicked');
         this.setState({showSize: true});
         this.setState({showProperties: false});
         this.forceUpdate();
+    }
+    handleSlideSizechange(slideSize){
+        if(slideSize !== ''){
+            //this.setState({showTemplate: false});
+            this.context.executeAction(changeSlideSize, {
+                //slideSize: this.refs.template.slideSize
+                slideSize: slideSize
+            });
+            //this.forceUpdate();
+        }
     }
     changeSlideBackgroundClick(){
         console.log('change slide background clicked');
@@ -216,6 +227,7 @@ class SlideEditLeftPanel extends React.Component {
         this.setState({showOther: false});
         this.setState({showEmbed: false});
         this.setState({showProperties: false});
+        this.setState({showSize: false});
         this.forceUpdate();
     }
     handleKeyPress = (event, param, template) => {
@@ -277,6 +289,9 @@ class SlideEditLeftPanel extends React.Component {
                     break;
                 case 'changeSlideSizeClick':
                     this.changeSlideSizeClick();
+                    break;
+                case 'handleSlideSizechange':
+                    this.handleSlideSizechange(slideSize);
                     break;
                 case 'changeSlideBackgroundClick':
                     this.changeSlideBackgroundClick();
@@ -364,55 +379,55 @@ class SlideEditLeftPanel extends React.Component {
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/2.png" alt="template - Empty document" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '1')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '1')}>
-                      <i tabIndex="0" aria-label="Title and bullets">Title and bullets </i> <br/><br/>
+                      <i tabIndex="0" aria-label="Title and bullets">Title and bullets <br/> 960 * 720 pixels (4:3) </i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11')}>
-                      <i tabIndex="0" aria-label="1 row 1 column">1 row 1 column</i> <br/><br/>
+                      <i tabIndex="0" aria-label="1 row 1 column">1 row 1 column <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11.png" alt="template - 1 row 1 column" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '12')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '12')}>
-                      <i tabIndex="0" aria-label="1 row 2 column">1 row 2 columns</i> <br/><br/>
+                      <i tabIndex="0" aria-label="1 row 2 column">1 row 2 columns <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/12.png" alt="template - 1 row 2 columns" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '22')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '12')}>
-                      <i tabIndex="0" aria-label="2 rows 2 columns">2 rows 2 columns</i> <br/><br/>
+                      <i tabIndex="0" aria-label="2 rows 2 columns">2 rows 2 columns <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/22.png" alt="template - 2 rows 2 columns" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '21')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '21')}>
-                      <i tabIndex="0" aria-label="2 rows 1 column">2 rows 1 column</i> <br/><br/>
+                      <i tabIndex="0" aria-label="2 rows 1 column">2 rows 1 column <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/21.png" alt="template - 2 rows 1 column" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '11img')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '11img')}>
-                      <i tabIndex="0" aria-label="1 row 1 column image">1 row 1 column image</i> <br/><br/>
+                      <i tabIndex="0" aria-label="1 row 1 column image">1 row 1 column image <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/11img.png" alt="template - 1 row 1 column image" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, '3')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', '3')}>
-                      <i tabIndex="0" aria-label="Document with title">Document with title</i> <br/><br/>
+                      <i tabIndex="0" aria-label="Document with title">Document with title <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/3.png" alt="template - Document with title" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'outitleslide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'outitleslide')}>
-                      <i tabIndex="0" aria-label="Open University Theme Title Page">Open University Theme Title Page</i> <br/><br/>
+                      <i tabIndex="0" aria-label="Open University Theme Title Page">Open University Theme Title Page <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/outitleslide.png" alt="template - Open University Theme Title Page" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'oegtitleslide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'oegtitleslide')}>
-                      <i tabIndex="0" aria-label="OEG Theme Title Page">OEG Theme Title Page</i> <br/><br/>
+                      <i tabIndex="0" aria-label="OEG Theme Title Page">OEG Theme Title Page <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true"  style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/oegtitleslide.png" alt="template - OEG Theme Title Page" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'slidewikislide')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'slidewikislide')}>
-                      <i tabIndex="0" aria-label="SlideWiki template">SlideWiki template</i> <br/><br/>
+                      <i tabIndex="0" aria-label="SlideWiki template">SlideWiki template <br/> 960 * 720 pixels (4:3)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/slidewikislide.png" alt="template - SlideWiki template" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDA')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'EKDDA')}>
-                      <i tabIndex="0" aria-label="EKDDA template">EKDDA template</i> <br/><br/>
+                      <i tabIndex="0" aria-label="EKDDA template">EKDDA template <br/> 1280 * 720 pixels (720p 16:9)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDA.png" alt="template - EKDDA template" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAeng')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'EKDDAeng')}>
-                      <i tabIndex="0" aria-label="EKDDA template - English">EKDDA template - English</i> <br/><br/>
+                      <i tabIndex="0" aria-label="EKDDA template - English">EKDDA template - English <br/> 1280 * 720 pixels (720p 16:9)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAeng.png" alt="template - EKDDA template - English" />
                   </a>
                   <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'EKDDAengNofooter')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'EKDDAengNofooter')}>
-                      <i tabIndex="0" aria-label="EKDDA template - English no footer">EKDDA template - English no footer</i> <br/><br/>
+                      <i tabIndex="0" aria-label="EKDDA template - English no footer">EKDDA template - English no footer <br/> 1280 * 720 pixels (720p 16:9)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
                   </a>
                 </div>);
@@ -425,10 +440,11 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
                       <i tabIndex="0" className="edit icon"></i>Slide title
                   </a>
+                  <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
+                      <i tabIndex="0" className="crop icon"></i>Slide size (dimension and resolution)
+                  </a>
                 </form>);
-                /*                  <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
-                                      <i tabIndex="0" className="crop icon"></i>Slide size (dimension and resolution)
-                                  </a>
+                /*
                                   <a className="item" id="changeSlideBackgroundClick" role="button" onClick={this.changeSlideBackgroundClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideBackgroundClick')}>
                                       <i tabIndex="0" className="file image outline icon"></i>Background image
                                   </a>
@@ -456,7 +472,32 @@ class SlideEditLeftPanel extends React.Component {
                   <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" >Title is updated when saving the slide <br /> (after clicking the separate save button).</label>
                 </div>);
 
-        let sizeContent = (<div></div>);
+        let sizeContent = (
+            <div >
+              <a className="item" id="handleBack" role="button" tabIndex="0" onClick={this.handleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleBack')}>
+                  <i id="handleBackLink" tabIndex="0" className="reply icon"></i>back
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '960')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '960')}>
+                  <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) low <br/> 960 * 720 pixels <br/>  (legacy Powerpoint default) </i> <br/><br/>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/960.png" alt="template - Title and bullets" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1280')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1280')}>
+                  <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) medium <br/> 1280 * 960 pixels <br/> Super XGA </i> <br/><br/>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1280.png" alt="template - Title and bullets" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1600')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1600')}>
+                  <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) high <br/> 1600 * 1200 pixels <br/> Ultra XGA </i> <br/><br/>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1600.png" alt="template - Title and bullets" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '720p')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '720p')}>
+                  <i tabIndex="0" aria-label="Title and bullets">Widescreen (16:9) <br/> 1280 * 720 pixels <br/> 720p HDTV Wide XGA </i> <br/><br/>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/720p.png" alt="template - Title and bullets" />
+              </a>
+              <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1080p')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1080p')}>
+                  <i tabIndex="0" aria-label="Title and bullets">Widescreen (16:9) <br/> 1920 * 1080 pixels <br/> 1080p/1080i HDTV Blu-ray </i> <br/><br/>
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1080p.png" alt="template - Title and bullets" />
+              </a>
+            </div>);
 
         let normalContent = (
           <div>
@@ -499,7 +540,7 @@ class SlideEditLeftPanel extends React.Component {
         } else if (this.state.showTitleChange){
             panelcontent = titleChangeContent;
         } else if (this.state.showSize){
-            panelcontent = showSizeelse;
+            panelcontent = sizeContent;
         } else {
             panelcontent = normalContent;
         }
