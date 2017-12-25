@@ -42,7 +42,7 @@ class SlideContentEditor extends React.Component {
             {
                 swal({
                     title: 'Apply template',
-                    text: 'This action will change the size of the slide. Your current slide size is ' + $('.pptx2html').css('height') + ' by ' + $('.pptx2html').css('width') + ' (pixels), and you can reset the slide size to its original. Do you want to continue?',
+                    text: 'This action will change the size of the slide. Your current slide size is ' + $('.pptx2html').css('width') + ' by ' + $('.pptx2html').css('height') + ' (pixels), and you can reset the slide size to its original. Do you want to continue?',
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
