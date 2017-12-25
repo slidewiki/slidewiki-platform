@@ -479,23 +479,23 @@ class SlideEditLeftPanel extends React.Component {
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '960')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '960')}>
                   <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) low <br/> 960 * 720 pixels <br/>  (legacy Powerpoint default) </i> <br/><br/>
-                  <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/960.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1280')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1280')}>
                   <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) medium <br/> 1280 * 960 pixels <br/> Super XGA </i> <br/><br/>
-                  <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1280.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1600')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1600')}>
                   <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) high <br/> 1600 * 1200 pixels <br/> Ultra XGA </i> <br/><br/>
-                  <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1600.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '720p')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '720p')}>
                   <i tabIndex="0" aria-label="Title and bullets">Widescreen (16:9) <br/> 1280 * 720 pixels <br/> 720p HDTV Wide XGA </i> <br/><br/>
-                  <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/720p.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1080p')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1080p')}>
                   <i tabIndex="0" aria-label="Title and bullets">Widescreen (16:9) <br/> 1920 * 1080 pixels <br/> 1080p/1080i HDTV Blu-ray </i> <br/><br/>
-                  <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/1.png" alt="template - Title and bullets" />
+                  <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1080p.png" alt="template - Title and bullets" />
               </a>
             </div>);
 
