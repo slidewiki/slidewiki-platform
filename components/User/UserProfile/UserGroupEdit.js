@@ -15,7 +15,7 @@ class UserGroupEdit extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError);
+        console.log('UserGroupEdit componentDidUpdate:', this.props.saveUsergroupError, this.props.currentUsergroup);
         if (this.props.saveUsergroupError) {
             swal({
                 title: 'Error',
@@ -33,6 +33,8 @@ class UserGroupEdit extends React.Component {
             .catch();
             return;
         }
+        this.refs.GroupName.value = this.props.currentUsergroup.name;
+        this.refs.GroupDescription.value = this.props.currentUsergroup.description;
     }
 
     componentDidMount() {
@@ -141,10 +143,6 @@ class UserGroupEdit extends React.Component {
         const signUpLabelStyle = {width: '150px'};
 
         let userlist = [];
-        let prefs = {
-            name: this.props.currentUsergroup.name,
-            desc: this.props.currentUsergroup.description
-        };
         //change header and data depending on group should be created or edited
         let header = 'Create Group';
         if (this.props.currentUsergroup._id !== undefined) {
@@ -222,12 +220,12 @@ class UserGroupEdit extends React.Component {
                                 <label htmlFor="usergroupedit_input_GroupName">
                                     Group Name
                                 </label>
-                                <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={prefs.name}  />
+                                <input type="text" placeholder="Name" id="usergroupedit_input_GroupName" name="GroupName" ref="GroupName" aria-labelledby="GroupName" aria-required="true" defaultValue={this.props.currentUsergroup.name}  />
                             </div>
 
                             <div className="field">
                                 <label htmlFor="usergroupedit_input_GroupDescription">Description</label>
-                                <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={prefs.desc} ></textarea>
+                                <textarea rows="4" aria-labelledby="GroupDescription" id="usergroupedit_input_GroupDescription" name="GroupDescription" ref="GroupDescription" defaultValue={this.props.currentUsergroup.description} ></textarea>
                             </div>
                             <div className="field">
                                 <label htmlFor="usergroupedit_input_AddUserGr">Add user</label>

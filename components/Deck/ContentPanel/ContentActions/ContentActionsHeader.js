@@ -12,8 +12,10 @@ import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
-
-
+import saveClick from '../../../../actions/slide/saveClick';
+import cancelClick from '../../../../actions/slide/cancelClick';
+import undoClick from '../../../../actions/slide/undoClick';
+import redoClick from '../../../../actions/slide/redoClick';
 
 class ContentActionsHeader extends React.Component {
 
@@ -28,6 +30,23 @@ class ContentActionsHeader extends React.Component {
 
     handleDeleteNode(selector) {
         this.context.executeAction(deleteTreeNodeAndNavigate, selector);
+    }
+
+    handleSaveButtonClick(){
+        this.context.executeAction(saveClick, {});
+    }
+    handleUndoButtonClick (){
+        //this.context.executeAction(undoClick, {});
+        //console.log('undo');
+    }
+    handleRedoButtonClick(){
+        //this.context.executeAction(redoClick, {});
+        //console.log('redo');
+    }
+    cancelButtonClick(selector){
+        this.context.executeAction(cancelClick, {
+            selector: selector
+        });
     }
 
     handleEditNode(selector) {
@@ -63,6 +82,10 @@ class ContentActionsHeader extends React.Component {
             'item ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
+        const red = {
+            backgroundColor: 'red'
+        };
+
         let selectorImm = this.props.DeckTreeStore.selector;
         let selector = {id: selectorImm.get('id'), stype: selectorImm.get('stype'), sid: selectorImm.get('sid'), spath: selectorImm.get('spath')};
 
@@ -75,20 +98,67 @@ class ContentActionsHeader extends React.Component {
             attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
-
-        return (
-            <div className="ui buttons" >
-                <NavLink activeClass=" " className={editClass} href={ContentUtil.makeNodeURL(selector, 'view')} role={'button'} tabIndex={'0'}>
+        let firstButton, secondButton, undoButton, redoButton;
+        if (contentDetails.mode === 'view')
+        {
+            if (this.props.UserProfileStore.username !== ''){
+                firstButton =
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
                     <i></i>View
-                </NavLink>
-                
-                {this.props.UserProfileStore.username === '' ? '' :
-                    <button className={editClass} onClick={this.handleEditNode.bind(this, selector)}
-                        type="button" 
-                        tabIndex="0">
-                        <i className="ui large blue edit icon "></i> Edit
-                    </button>
-                }
+                </NavLink>;
+                secondButton =
+                <div className={'item link' + (contentDetails.mode === 'edit' ? ' active' : '')} onClick={this.handleEditNode.bind(this, selector)} role={'tab'} tabIndex={'0'}>
+                    <i className="ui large blue edit icon "></i> Edit
+                </div>;
+            } else {
+                firstButton =
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                    <i></i>View
+                </NavLink> ;
+            }
+        } else {
+            //edit mode
+            if (this.props.UserProfileStore.username !== ''){
+                /*firstButton =
+                <NavLink style={red} activeClass=" " className="active item link" href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                    <i className="ui large black cancel icon "></i>
+                    Cancel
+                </NavLink>;
+
+                <NavLink activeClass=" " className={'item link' + (contentDetails.mode === 'view' ? ' active' : '')} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                <i className="cancel icon"></i>
+                <a style={buttonTextBlack}>Cancel</a>
+                </NavLink> ;*/
+
+                firstButton =
+                    <button tabIndex="0" ref="submitbutton" className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
+                         <i className="save icon large"></i>
+                         Save
+                    </button>;
+                secondButton =
+                    <button tabIndex="0" ref="submitbutton" className="ui button " onClick={this.cancelButtonClick.bind(this, selector)} onChange={this.cancelButtonClick.bind(this, selector)}>
+                         <i className="cancel icon large"></i>
+                         cancel
+                    </button>;
+                undoButton =
+                    <button tabIndex="0" ref="undoButton" className="ui orange button " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
+                         <i className="reply icon large"></i>
+                    </button>;
+                redoButton =
+                    <button tabIndex="0" ref="redoButton" className="ui orange button " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
+                         <i className="mail forward icon large"></i>
+                    </button>;
+            } else {
+                firstButton =
+                    <NavLink activeClass=" " className='item link' onClick={this.cancelButtonClick.bind(this, selector)} href={ContentUtil.makeNodeURL(selector, 'view')} role={'tab'}>
+                        <i></i>View
+                    </NavLink>;
+            }
+        }
+        //{undoButton} {redoButton}
+        return (
+            <div className="ui top attached tabular menu" role="tablist">
+                {firstButton} {secondButton}
                 {this.props.UserProfileStore.username === '' ? '' :
                     <div className="ui right floated buttons">
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
@@ -128,7 +198,7 @@ class ContentActionsHeader extends React.Component {
                             data-tooltip="Delete"
                             tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
                               <i className="red large trash icon"></i>
-                          </button>                        
+                          </button>
                       </div>
                   }
               </div>

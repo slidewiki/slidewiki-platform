@@ -98,11 +98,11 @@ class Import extends React.Component {
 
         let uploadBtn_classes = classNames({
             'ui': true,
-            'animated': true,
-            'approve': true,
+            'labeled': true,
+            'icon': true,
             'disabled': !this.props.ImportStore.fileReadyForUpload,
-            'button': true,
-            'green': true
+            'positive': true,
+            'button': true
         });
         let acceptedFormats = '.key, .odp, .pps, .ppsx, .ppt, .pptm, .pptx,  ';
         outputDIV =   <div className="ui small modal" ref="import">
@@ -118,10 +118,10 @@ class Import extends React.Component {
                           </div>
                           <div className="actions">
                               <button tabIndex="0" ref="submitbutton" className={uploadBtn_classes} >
-                                  <div className="visible content"><i className="thumbs up icon"></i>Select <i className="thumbs up icon"></i></div>
-                                  <div className="hidden content" ><i className="upload icon"></i>Done <i className="upload icon"></i></div>
+                                  <i className="right upload icon"></i>
+                                  Upload
                               </button>
-                              <div className="ui cancel button red" tabIndex="0">Cancel</div>
+                              <button className="ui negative cancel button" tabIndex="0">Cancel</button>
                           </div>
                       </div>;
 
