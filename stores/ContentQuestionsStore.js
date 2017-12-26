@@ -21,15 +21,15 @@ class ContentQuestionsStore extends BaseStore {
         this.question.answers = payload.question.answers;
         this.question.explanation = payload.question.explanation;
         this.question = null;
-        
+
         this.emitChange();
     }
     deleteQuestion(payload) {
-
-
-
-
-
+        let index = this.questions.findIndex((qst) => {return (qst.id === payload.questionId);});
+        if (index !== -1) {
+            this.questions.splice(index, 1);
+        }
+        this.question = null;
         this.emitChange();
     }
     loadQuestions(payload) {

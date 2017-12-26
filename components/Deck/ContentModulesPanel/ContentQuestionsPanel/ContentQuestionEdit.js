@@ -1,6 +1,7 @@
 import React from 'react';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
 import cancelQuestion from '../../../../actions/questions/cancelQuestion';
+import deleteQuestion from '../../../../actions/questions/deleteQuestion';
 
 class ContentQuestionEdit extends React.Component {
 
@@ -40,6 +41,7 @@ class ContentQuestionEdit extends React.Component {
         this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
         this.cancelButtonClick = this.cancelButtonClick.bind(this);
+        this.deleteButtonClick = this.deleteButtonClick.bind(this);
     };
 
     saveButtonClick(e) {
@@ -49,6 +51,10 @@ class ContentQuestionEdit extends React.Component {
 
     cancelButtonClick() {
         this.context.executeAction(cancelQuestion, {});
+    }
+
+    deleteButtonClick() {
+        this.context.executeAction(deleteQuestion, {questionId: this.state.qid});
     }
 
     /* Update answer choice text */
@@ -195,6 +201,9 @@ class ContentQuestionEdit extends React.Component {
                                     </button>
                                     <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
                                         <i className="icon close" />Cancel
+                                    </button>
+                                    <button type="button" className="ui red labeled icon button" onClick={this.deleteButtonClick}>
+                                        <i className="icon minus circle" />Delete
                                     </button>
                                 </div>
                             </div>

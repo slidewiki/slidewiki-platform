@@ -215,7 +215,7 @@ export default {
                 uri: Microservices.questions.uri + '/question/' + args.questionId
             }).then((res) => {
                 console.log('Question delete should be successful. Check via swagger for questionId:', args.questionId);
-                callback(null, {});
+                callback(null, {questionId: args.questionId});
             }).catch((err) => {
                 console.log(err);
                 callback(err, {});
