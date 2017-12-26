@@ -124,6 +124,11 @@ class ContentActionsHeader extends React.Component {
                          <i className="cancel icon large"></i>
                          cancel
                     </button>;
+            /*It were not displayed in master...but the code is prepared for it*/
+            undoButton ='';
+            redoButton ='';
+
+            /* discomment when we want to see them
             undoButton =
                     <button tabIndex="0"  className="ui orange button " onClick={this.handleUndoButtonClick.bind(this)} onChange={this.handleUndoButtonClick.bind(this)}>
                          <i className="reply icon large"></i>
@@ -132,6 +137,7 @@ class ContentActionsHeader extends React.Component {
                     <button tabIndex="0"  className="ui orange button " onClick={this.handleRedoButtonClick.bind(this)} onChange={this.handleRedoButtonClick.bind(this)}>
                          <i className="mail forward icon large"></i>
                     </button>;
+            */
 
         } else{ //No buttons
             saveButton ='';
@@ -141,7 +147,7 @@ class ContentActionsHeader extends React.Component {
 
 
         }
-        //{undoButton} {redoButton}
+      
         return (
             <div className="ui top attached menu" role="menu">
                 <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
