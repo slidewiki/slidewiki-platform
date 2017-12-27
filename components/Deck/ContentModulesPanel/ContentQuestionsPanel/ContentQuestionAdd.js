@@ -116,7 +116,7 @@ class ContentQuestionAdd extends React.Component {
                                     <div className="inline fields">
                                         <div className="field">
                                             <div className="ui radio checkbox">
-                                                <input type="radio" id="easy" name="difficulty" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
+                                                <input type="radio" checked="checked" id="easy" name="difficulty" defaultValue={1} tabIndex="0" onChange={this.updateQuestionDifficulty} />
                                                 <label htmlFor="easy">Easy</label>
                                             </div>
                                         </div>
@@ -179,7 +179,7 @@ class ContentQuestionAdd extends React.Component {
                         </div>
                         <div className="field">
                             <div className="ui container">
-                                <div className="ui right floated buttons">
+                                <div >
                                     <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick}>
                                         <i className="icon check" />Save
                                     </button>

@@ -54,7 +54,16 @@ class ContentQuestionEdit extends React.Component {
     }
 
     deleteButtonClick() {
-        this.context.executeAction(deleteQuestion, {questionId: this.state.qid});
+        swal({
+            title: 'Delete this question. Are you sure?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete!'
+        }).then((accepted) => {
+            this.context.executeAction(deleteQuestion, {questionId: this.state.qid});
+        }, (reason) => {/*do nothing*/}).catch(swal.noop);
     }
 
     /* Update answer choice text */
@@ -195,7 +204,7 @@ class ContentQuestionEdit extends React.Component {
                         </div>
                         <div className="field">
                             <div className="ui container">
-                                <div className="ui right floated buttons">
+                                <div >
                                     <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick}>
                                         <i className="icon check" />Save
                                     </button>
