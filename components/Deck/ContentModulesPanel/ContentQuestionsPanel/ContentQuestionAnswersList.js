@@ -66,13 +66,13 @@ class ContentQuestionAnswersList extends React.Component {
             );
         });
 
-        let explanation = (
+        let explanation = (this.props.explanation && this.props.explanation.trim() !== '') ?
             <div className="description">
                 <p>
                     <label><strong>Explanation:</strong></label> {this.props.explanation}
                 </p>
             </div>
-        );
+        : '';
         let showButtonLabel = this.state.showCorrect ? 'Hide answer' : 'Show answer';
         let answers = (
             <div className="ui two column stackable grid">
