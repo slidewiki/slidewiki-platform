@@ -147,21 +147,28 @@ class ContentActionsHeader extends React.Component {
             attached : 'left',
             noTabIndex : this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         } ;
-        let saveButton, cancelButton, undoButton, redoButton;
+        let editButton, saveButton, cancelButton, undoButton, redoButton;
 
         if (contentDetails.mode === 'edit' && this.props.UserProfileStore.username !== ''){
             //edit mode & logged UserProfileStore
+            editButton = '';
             //ref="" --> we can't use string refs as they are legacy. ref={(refName)=>{this.refName=refName}}
-            saveButton =
-                    <button tabIndex="0"  className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
-                         <i className="save icon large"></i>
-                         Save
-                    </button>;
-            cancelButton =
-                    <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
-                         <i className="cancel icon large"></i>
-                         cancel
-                    </button>;
+            if(contentDetails.selector.stype === 'slide'){
+                saveButton =
+                        <button tabIndex="0"  className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
+                             <i className="save icon large"></i>
+                             Save
+                        </button>;
+                cancelButton =
+                        <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
+                             <i className="cancel icon large"></i>
+                             cancel
+                        </button>;
+            } else {
+                saveButton ='';
+                cancelButton ='';
+            }
+
             /*It were not displayed in master...but the code is prepared for it*/
             undoButton ='';
             redoButton ='';
@@ -178,6 +185,18 @@ class ContentActionsHeader extends React.Component {
             */
 
         } else{ //No buttons
+            if(this.props.UserProfileStore.username !== '') /* Edit button only visible if logged user*/
+            {
+                editButton =
+                                <button className={editClass} onClick={this.handleEditButton.bind(this,selector)}
+                                  type="button"
+                                  aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
+                                  data-tooltip={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
+                                  tabIndex = {contentDetails.mode ==='edit'?-1:0}
+                                >
+                                  <i className="ui large blue edit icon "></i>{this.context.intl.formatMessage(this.messages.editButtonText)}
+                                </button>;
+            }
             saveButton ='';
             cancelButton ='';
             undoButton ='';
@@ -185,27 +204,20 @@ class ContentActionsHeader extends React.Component {
 
 
         }
+        /*
+        <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
+          type="button"
+          aria-label={this.context.intl.formatMessage(this.messages.viewButtonAriaText)}
+          data-tooltip={this.context.intl.formatMessage(this.messages.viewButtonAriaText)}
+          tabIndex = {contentDetails.mode ==='edit'?0:-1}
+        >
+          <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
+        </button>
+        */
 
         return (
             <div className="ui top attached menu" role="menu">
-                <button className={viewClass} onClick={this.handleViewButton.bind(this,selector)}
-                  type="button"
-                  aria-label={this.context.intl.formatMessage(this.messages.viewButtonAriaText)}
-                  data-tooltip={this.context.intl.formatMessage(this.messages.viewButtonAriaText)}
-                  tabIndex = {contentDetails.mode ==='edit'?0:-1}
-                >
-                  <i className="blue large unhide icon"></i>{this.context.intl.formatMessage(this.messages.viewButtonText)}
-                </button>
-                {this.props.UserProfileStore.username === '' ? '' : /* Edit button only visible if logged user*/
-                <button className={editClass} onClick={this.handleEditButton.bind(this,selector)}
-                  type="button"
-                  aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
-                  data-tooltip={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
-                  tabIndex = {contentDetails.mode ==='edit'?-1:0}
-                >
-                  <i className="ui large blue edit icon "></i>{this.context.intl.formatMessage(this.messages.editButtonText)}
-                </button>
-                }
+                {editButton}
                 {saveButton}
                 {cancelButton}
                 {undoButton}
