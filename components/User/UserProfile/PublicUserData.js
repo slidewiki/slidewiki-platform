@@ -14,17 +14,17 @@ class PublicUserData extends React.Component {
                     { this.props.user.uname }
                     <strong>     </strong>
                     {(this.props.user.uname === this.props.loggedinuser) ? (
-                      <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' }>
-                        <i className="setting icon"/>
+                      <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' } role="button" aria-label="open my settings">
+                        <i className="setting icon" aria-hidden="true"/>
                       </NavLink>
                       ) : ''}
                 </h3>
                 { !isEmpty(this.props.user.description) ? <p>{ this.props.user.description }</p> : '' }
                 <div className = "ui divider" />
-                { !isEmpty(this.props.user.organization) ? <div><i className="ui users icon"/> { this.props.user.organization }<br/><br/></div> : '' }
-                { !isEmpty(this.props.user.country) ? <div><i className="ui marker icon"/> { this.props.user.country }<br/><br/></div> : '' }
-                { !isEmpty(this.props.user.website) ? <div><i className="ui globe icon"/> { this.props.user.website }<br/><br/></div> : '' }
-                { !isEmpty(this.props.user.joined) ? <div><i className="ui clock icon"/> { this.props.user.joined }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.organization) ? <div><i className="ui user circle outline icon" aria-hidden="true"/> { this.props.user.organization }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.country) ? <div><i className="ui marker icon" aria-hidden="true"/> { this.props.user.country }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.website) ? <div><i className="ui globe icon" aria-hidden="true"/> { this.props.user.website }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.joined) ? <div><i className="ui clock icon" aria-hidden="true"/> { this.props.user.joined }<br/><br/></div> : '' }
                 <div className = "ui divider" />
             </div>
         );
