@@ -14,42 +14,43 @@ class PublicUserData extends React.Component {
                     <div className="item">
                         <div className="content">
                             <div className="header">
-                                <i className="icon user" aira-label="user name"></i>
+                                <i className="icon user" aria-label="user name"></i>
                                 { this.props.user.uname }
                                 {(this.props.user.uname === this.props.loggedinuser) ? (     
-                                    <NavLink href={ '/user/' + this.props.user.uname + '/settings/profile' } role="button" aria-label="open my settings" className="ui right floated basic setting icon button">
+                                    <NavLink href={ '/user/' + this.props.user.uname + '/settings/profile' } role="button" aria-label="open my settings" className="ui right floated basic icon button">
+                                        <i className="setting icon"/>
                                     </NavLink>
                                 ) : ''}
                             </div>
-                        </div>
-                        <div className="description">
-                            { !isEmpty(this.props.user.description) ? <p>{ this.props.user.description }</p> : '' }
+                            <div className="description">
+                                { !isEmpty(this.props.user.description) ? <p>{ this.props.user.description }</p> : '' }
+                            </div>
                         </div>
                     </div>
                 </div>
-            <div className = "ui divider" />
-            <div className="ui list">
-                { !isEmpty(this.props.user.organization) ? 
-                    <div className="item">
-                        <i className="user circle outline icon" aria-label="organisation"/> { this.props.user.organization }
+                <div className = "ui divider" />
+                <div className="ui list">
+                    { !isEmpty(this.props.user.organization) ? 
+                        <div className="item">
+                            <i className="user circle outline icon" aria-label="organisation"/> { this.props.user.organization }
+                        </div> 
+                        : '' }
+                    { !isEmpty(this.props.user.country) ? 
+                        <div classname="item">
+                            <i className="marker icon" aria-label="country"/> { this.props.user.country }
+                        </div> 
+                        : '' }
+                    { !isEmpty(this.props.user.website) ? 
+                        <div className="item">
+                            <i className="globe icon" aria-label="website"/> { this.props.user.website }
+                        </div> 
+                        : '' }
+                    { !isEmpty(this.props.user.joined) ? <div className="item">
+                        <i className="clock icon" aria-label="user since"/> { this.props.user.joined }
                     </div> 
                     : '' }
-                { !isEmpty(this.props.user.country) ? 
-                    <div classname="item">
-                        <i className="marker icon" aria-label="country"/> { this.props.user.country }
-                    </div> 
-                    : '' }
-                { !isEmpty(this.props.user.website) ? 
-                    <div className="item">
-                        <i className="globe icon" aria-label="website"/> { this.props.user.website }
-                    </div> 
-                    : '' }
-                { !isEmpty(this.props.user.joined) ? <div className="item">
-                    <i className="clock icon" aria-label="user since"/> { this.props.user.joined }
-                </div> 
-                : '' }
-            </div>
-            <div className = "ui divider" />
+                </div>
+                <div className = "ui divider" />
             </div>
         );
     }
