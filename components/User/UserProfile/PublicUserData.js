@@ -10,21 +10,22 @@ class PublicUserData extends React.Component {
             <div>
                 <UserPicture picture={ this.props.user.picture } username={ this.props.user.uname } link={ false } private={ false } width={ 150 } centered={ false } size={ 'small' }/>
                 <h2>{ this.props.user.fname } { this.props.user.lname }</h2>
-                <h3>
+                <div className="ui medium header">
+                    <i className="icon user" aira-label="user name"></i>
                     { this.props.user.uname }
                     <strong>     </strong>
                     {(this.props.user.uname === this.props.loggedinuser) ? (
-                      <NavLink className="circular basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' } role="button" aria-label="open my settings">
+                      <NavLink className="basic ui icon button" href={ '/user/' + this.props.user.uname + '/settings/profile' } role="button" aria-label="open my settings">
                         <i className="setting icon" aria-hidden="true"/>
                       </NavLink>
                       ) : ''}
-                </h3>
+                </div>
                 { !isEmpty(this.props.user.description) ? <p>{ this.props.user.description }</p> : '' }
                 <div className = "ui divider" />
-                { !isEmpty(this.props.user.organization) ? <div><i className="ui user circle outline icon" aria-hidden="true"/> { this.props.user.organization }<br/><br/></div> : '' }
-                { !isEmpty(this.props.user.country) ? <div><i className="ui marker icon" aria-hidden="true"/> { this.props.user.country }<br/><br/></div> : '' }
-                { !isEmpty(this.props.user.website) ? <div><i className="ui globe icon" aria-hidden="true"/> { this.props.user.website }<br/><br/></div> : '' }
-                { !isEmpty(this.props.user.joined) ? <div><i className="ui clock icon" aria-hidden="true"/> { this.props.user.joined }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.organization) ? <div><i className="user circle outline icon" aria-label="organisation"/> { this.props.user.organization }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.country) ? <div><i className="marker icon" aria-label="country"/> { this.props.user.country }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.website) ? <div><i className="globe icon" aria-label="website"/> { this.props.user.website }<br/><br/></div> : '' }
+                { !isEmpty(this.props.user.joined) ? <div><i className="clock icon" aria-label="user since"/> { this.props.user.joined }<br/><br/></div> : '' }
                 <div className = "ui divider" />
             </div>
         );
