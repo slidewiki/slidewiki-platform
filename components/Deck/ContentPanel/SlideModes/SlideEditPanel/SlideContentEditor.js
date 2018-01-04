@@ -1708,7 +1708,7 @@ class SlideContentEditor extends React.Component {
             position: 'relative'
         };
         const sectionElementStyle = {
-            overflowY: 'hidden',
+            overflowY: 'auto',
             overflowX: 'auto',
             //padding: 10,
             paddingTop: 40,
@@ -1723,8 +1723,6 @@ class SlideContentEditor extends React.Component {
             paddingTop: 10,
             xpaddingBottom: 10,*/
             minHeight: 610,
-            overflowY: 'auto',
-            overflowX: 'auto',
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };

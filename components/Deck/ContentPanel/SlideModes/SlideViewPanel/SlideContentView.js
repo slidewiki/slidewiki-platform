@@ -125,7 +125,7 @@ class SlideContentView extends React.Component {
             position: 'relative'
         };
         const sectionElementStyle = {
-            overflowY: 'hidden',
+            overflowY: 'auto',
             overflowX: 'auto',
             //paddingTop: 40,
             height: '100%'
@@ -134,8 +134,6 @@ class SlideContentView extends React.Component {
             minWidth: '100%',
             // maxHeight: 450,
             minHeight: 610,
-            overflowY: 'auto',
-            overflowX: 'auto',
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
