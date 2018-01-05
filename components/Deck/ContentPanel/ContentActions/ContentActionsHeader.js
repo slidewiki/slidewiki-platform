@@ -216,8 +216,8 @@ class ContentActionsHeader extends React.Component {
         */
 
         return (
-            <div className="two column grid">
-                <div className="column">
+            <div className="ui two column grid">
+                <div className="left floated column">
                     <div className="ui top attached buttons" >
                         {editButton}
                         {saveButton}
@@ -226,7 +226,7 @@ class ContentActionsHeader extends React.Component {
                         {redoButton}
                     </div>
                 </div>
-                <div className="column">
+                <div className="right floated column">
                     {this.props.UserProfileStore.username === '' ? '' :
                         <div className="ui top attached buttons" >
                         <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
