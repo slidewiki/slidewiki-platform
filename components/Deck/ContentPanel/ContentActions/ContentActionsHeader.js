@@ -108,7 +108,7 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const editClass = classNames({
-            'item ui small basic button': true,
+            'item ui button': true,
             'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const viewClass = classNames({
@@ -191,7 +191,7 @@ class ContentActionsHeader extends React.Component {
                                 <button className={editClass} onClick={this.handleEditButton.bind(this,selector)}
                                   type="button"
                                   aria-label={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
-                                  data-tooltip={this.context.intl.formatMessage(this.messages.editButtonAriaText)}
+                                  /*data-tooltip={this.context.intl.formatMessage(this.messages.editButtonAriaText)}*/
                                   tabIndex = {contentDetails.mode ==='edit'?-1:0}
                                 >
                                   <i className="ui large blue edit icon "></i>{this.context.intl.formatMessage(this.messages.editButtonText)}
@@ -216,7 +216,7 @@ class ContentActionsHeader extends React.Component {
         */
 
         return (
-            <div className="ui top attached menu" role="menu">
+            <div className="ui top attached menu" role="menu" style="border-width:0px;">
                 {editButton}
                 {saveButton}
                 {cancelButton}
