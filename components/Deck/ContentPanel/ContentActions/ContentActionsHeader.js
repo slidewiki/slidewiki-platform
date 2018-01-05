@@ -216,58 +216,59 @@ class ContentActionsHeader extends React.Component {
         */
 
         return (
-            <div className="ui two column grid">
-                <div className="left floated column">
-                    <div className="ui top attached buttons" >
-                        {editButton}
-                        {saveButton}
-                        {cancelButton}
-                        {undoButton}
-                        {redoButton}
+            <div className="ui top attached compact segment">
+                <div className="ui two column grid">
+                    <div className="column">
+                        <div className="ui left floated buttons" >
+                            {editButton}
+                            {saveButton}
+                            {cancelButton}
+                            {undoButton}
+                            {redoButton}
+                        </div>
                     </div>
-                </div>
-                <div className="right floated column">
-                    {this.props.UserProfileStore.username === '' ? '' :
-                        <div className="ui top attached buttons" >
-                        <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
-                            type="button"
-                            aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                            <i className="icons">
-                                <i className="grey file large text icon"></i>
-                                <i className="inverted corner plus icon"></i>
-                            </i>
+                    <div className="column">
+                        {this.props.UserProfileStore.username === '' ? '' :
+                            <div className="ui right floated buttons" >
+                            <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
+                                type="button"
+                                aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
+                                tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                                <i className="icons">
+                                    <i className="grey file large text icon"></i>
+                                    <i className="inverted corner plus icon"></i>
+                                </i>
 
-                        </button>
-                        <AttachSlides buttonStyle={buttonStyle} selector={selector} />
-                        <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
-                            type="button"
-                            aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                            <i className="medium icons">
-                                <i className="yellow large folder icon"></i>
-                                <i className="inverted corner plus icon"></i>
-                            </i>
-                        </button>
-                        <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
-                        <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
-                            type="button"
-                            aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
-                            tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                            <i className="grey large copy icon"></i>
+                            </button>
+                            <AttachSlides buttonStyle={buttonStyle} selector={selector} />
+                            <button className={addDeckClass} onClick={this.handleAddNode.bind(this, selector, {type: 'deck', id: '0'})}
+                                type="button"
+                                aria-label={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.addDeckButtonAriaText)}
+                                tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                                <i className="medium icons">
+                                    <i className="yellow large folder icon"></i>
+                                    <i className="inverted corner plus icon"></i>
+                                </i>
+                            </button>
+                            <AttachSubdeck buttonStyle={buttonStyle} selector={selector} />
+                            <button className={duplicateItemClass} onClick={this.handleAddNode.bind(this, selector, {type: selector.stype, id: selector.sid})}
+                                type="button"
+                                aria-label={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.duplicateAriaText)}
+                                tabIndex={contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                                <i className="grey large copy icon"></i>
 
-                        </button>
-                        <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
-                            type="button"
-                            aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
-                            tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
-                            <i className="red large trash icon"></i>
-                        </button>
-                        {/*
+                            </button>
+                            <button className={deleteItemClass} onClick={this.handleDeleteNode.bind(this, selector)}
+                                type="button"
+                                aria-label={this.context.intl.formatMessage(this.messages.deleteAriaText)}
+                                data-tooltip={this.context.intl.formatMessage(this.messages.deleteAriaText)}
+                                tabIndex={this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'?-1:0}>
+                                <i className="red large trash icon"></i>
+                            </button>
+                            {/*
                           <button className="item ui small basic right attached disabled button">
                               <a className="" title="Settings">
                                   <i className="black large setting icon"></i>
@@ -275,7 +276,8 @@ class ContentActionsHeader extends React.Component {
                           </button>
                           */}
                         </div>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
         );
