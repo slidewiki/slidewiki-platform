@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
+import { hashPassword } from '../../../configs/general';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import changePassword from '../../../actions/user/userprofile/changePassword';
-import {hashPassword} from '../../../configs/general';
 
 class ChangePassword extends React.Component {
     constructor(props) {
@@ -10,6 +11,12 @@ class ChangePassword extends React.Component {
     }
 
     componentDidMount() {
+        const messages = defineMessages({
+            passwordMismatch: {
+                id: 'ChangePassword.passwordMismatch',
+                defaultMessage: 'Your passwords do not match',
+            }
+        });
         const changePasswordValidation = {
             fields: {
                 newPassword: {
@@ -19,7 +26,7 @@ class ChangePassword extends React.Component {
                     identifier: 'reenterPassword',
                     rules: [{
                         type: 'match[newPassword]',
-                        prompt: 'Your passwords do not match'
+                        prompt: this.context.intl.formatMessage(messages.passwordMismatch)
                     }]
                 }
             },
@@ -55,6 +62,16 @@ class ChangePassword extends React.Component {
 
     render() {
         // console.log('render changepasswd: wrongPassword, success, failure', this.props.failures.wrongPassword, this.props.dimmer.success, this.props.dimmer.failure);
+        const messages = defineMessages({
+            passwordToolTipp: {
+                id: 'ChangePassword.passwordToolTipp',
+                defaultMessage: 'This is not the password you entered before - Please try again',
+            },
+            newPasswordTitle: {
+                id: 'ChangePassword.newPasswordTitle',
+                defaultMessage: 'Your password should contain 8 characters or more',
+            }
+        });
         let passwordClasses = classNames({
             'ui': true,
             'field': true,
@@ -70,28 +87,47 @@ class ChangePassword extends React.Component {
             'form': true,
             'changePassword': true
         });
-        let passwordToolTipp = this.props.failures.wrongPassword ? 'This is not the password you entered before - Please try again' : undefined;
+        let passwordToolTipp = this.props.failures.wrongPassword ? this.context.intl.formatMessage(messages.passwordToolTipp) : undefined;
         return (
             <div>
                 <form className={formClasses}>
                     <div className="two fields">
                         <div className={ passwordClasses } data-tooltip={ passwordToolTipp } data-position="top center" data-inverted="">
-                            <label htmlFor="oldpasswd">Old Password</label>
+                            <label htmlFor="oldpasswd">
+                              <FormattedMessage
+                                id='ChangePassword.oldPassword'
+                                defaultMessage='Old Password'
+                              />
+                            </label>
                             <input type="password" placeholder="******" ref="oldPassword" name="oldpasswd" required/>
                         </div>
                     </div>
                     <div className="two fields">
                         <div className={passwordClasses2}>
-                            <label htmlFor="newpasswd1">New Password</label>
-                            <input type="password" name="newpasswd1" placeholder="******" pattern=".{8,}" title="Your password should contain 8 characters or more" id="newPassword" name="newPassword" ref="newPassword" required/>
+                            <label htmlFor="newpasswd1">
+                              <FormattedMessage
+                                id='ChangePassword.newPassword'
+                                defaultMessage='New Password'
+                              />
+                            </label>
+                            <input type="password" name="newpasswd1" placeholder="******" pattern=".{8,}" title={this.context.intl.formatMessage(messages.newPasswordTitle)} id="newPassword" name="newPassword" ref="newPassword" required/>
                         </div>
                         <div className={passwordClasses2}>
-                            <label htmlFor="newpasswd2">Retype Password</label>
-                            <input type="password" name="newpasswd2" placeholder="******" pattern=".{8,}" title="Your password should contain 8 characters or more" id="reenterPassword" name="reenterPassword" ref="reenterPassword" required/>
+                            <label htmlFor="newpasswd2">
+                              <FormattedMessage
+                                id='ChangePassword.retypePassword'
+                                defaultMessage='Retype Password'
+                              />
+                            </label>
+                            <input type="password" name="newpasswd2" placeholder="******" pattern=".{8,}" title={this.context.intl.formatMessage(messages.newPasswordTitle)} id="reenterPassword" name="reenterPassword" ref="reenterPassword" required/>
                         </div>
                     </div>
                     <button type="submit" className="ui blue labeled submit icon button">
-                        <i className="icon checkmark"/>Submit Password
+                        <i className="icon checkmark"/>
+                        <FormattedMessage
+                          id='ChangePassword.submitPassword'
+                          defaultMessage='Submit Password'
+                        />
                     </button>
                     <div className="ui error message"/>
                 </form>
@@ -101,7 +137,8 @@ class ChangePassword extends React.Component {
 }
 
 ChangePassword.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 export default ChangePassword;

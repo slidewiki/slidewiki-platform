@@ -112,6 +112,18 @@ class ActivityItem extends React.Component {
                     </div>
                 );
                 break;
+            case 'move':
+                IconNode = (<i className="ui large move icon"></i>);
+                SummaryNode = (
+                    <div className="summary">
+                        <a className="user" href={node.user_id ? '/user/' + node.user_id : ''} target="_blank">
+                            {node.author ? node.author.username : 'unknown'}
+                        </a> {'moved '} {nodeRef}
+                        <br/>
+                        {DateDiv}
+                    </div>
+                );
+                break;
             case 'comment':
                 IconNode = (<i className="ui large comment outline icon"></i>);
                 SummaryNode = (

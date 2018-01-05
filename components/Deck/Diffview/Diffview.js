@@ -99,7 +99,7 @@ class DiffView extends Component {
 
         //REDUCE complex Object into flat Array
         const elements = Object.keys(diff_results).reduce((arr, key) => arr.concat(diff_results[key]), []);
-        console.log(elements);
+        // console.log(elements);
 
         //LOG
         // console.group();
@@ -123,16 +123,16 @@ class DiffView extends Component {
         return (
             <div className="fluid container top-diff">
                 <div className='helpers'>
-                  <div className='diff-header'>
-                    Settings
-                  </div>
-                  <div className='inlineContent'>
-                    <Radio label='Change color palette' toggle onChange={this.toggleColor}/>
-                    <Checkbox label='Show Addition' defaultChecked onChange={() => this.toggleVisibleChanges('add')} />
-                    <Checkbox label='Show Mofidication' defaultChecked onChange={() => this.toggleVisibleChanges('mod')} />
-                    <Checkbox label='Show Deletion' defaultChecked onChange={() => this.toggleVisibleChanges('del')} />
-                    <Checkbox label='Show Text' defaultChecked onChange={() => this.toggleVisibleChanges('text')} />
-                  </div>
+                    <div className='diff-header'>
+                        Settings
+                    </div>
+                    <div className='inlineContent'>
+                        <Radio label='Change color' toggle onChange={this.toggleColor}/>
+                        <Checkbox label='Additions' defaultChecked onChange={() => this.toggleVisibleChanges('add')} />
+                        <Checkbox label='Modifications' defaultChecked onChange={() => this.toggleVisibleChanges('mod')} />
+                        <Checkbox label='Deletions' defaultChecked onChange={() => this.toggleVisibleChanges('del')} />
+                        <Checkbox label='Text' defaultChecked onChange={() => this.toggleVisibleChanges('text')} />
+                    </div>
                 </div>
 
                 <div className='reveal'>
@@ -145,14 +145,14 @@ class DiffView extends Component {
                             ${!show.text && 'hide-text'}
                             `}>
                             <div className='initVers' id='container'>
-                              <div className='diff-header'>
-                                Revision [ {base.id} ]
-                              </div>
-                              <div className='inlineContent' dangerouslySetInnerHTML={{__html: currContent}}></div>
+                                <div className='diff-header'>
+                                    Revision [ {base.id} ]
+                                </div>
+                                <div className='inlineContent' dangerouslySetInnerHTML={{__html: currContent}}></div>
                             </div>
                             <div className='mergedVers'>
-                              <div className='diff-header'>
-                                Diff view changes between [ {base.id} ] and [ {diff.id} ]
+                                <div className='diff-header'>
+                                    Diff View Changes Between Revisions [ {base.id} ] and [ {diff.id} ]
                               </div>
                               <div className='inlineContent' dangerouslySetInnerHTML={{__html: diffcontent}}></div>
                             </div>

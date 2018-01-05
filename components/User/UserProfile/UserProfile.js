@@ -12,17 +12,40 @@ import { connectToStores } from 'fluxible-addons-react';
 import UserProfileStore from '../../../stores/UserProfileStore';
 import PrivatePublicUserProfile from './PrivatePublicUserProfile';
 import Integrations from './Integrations';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { categories } from '../../../actions/user/userprofile/chooseAction';
 
 class UserProfile extends React.Component {
     componentDidMount() {}
 
     componentDidUpdate() {
+        const messages = defineMessages({
+            swalTitle1: {
+                id: 'UserProfile.swalTitle1',
+                defaultMessage: 'Changes have been applied',
+            },
+            swalTitle2: {
+                id: 'UserProfile.swalTitle2',
+                defaultMessage: 'Your Account has been deleted',
+            },
+            swalTitle3: {
+                id: 'UserProfile.swalTitle3',
+                defaultMessage: 'Error',
+            },
+            swalText3: {
+                id: 'UserProfile.swalText3',
+                defaultMessage: 'Something went wrong',
+            },
+            swalButton3: {
+                id: 'UserProfile.swalButton3',
+                defaultMessage: 'Ok',
+            }
+        });
         if (this.props.UserProfileStore.dimmer.success === true)
             swal({
                 type: 'success',
                 text: '',
-                title: 'Changes have been applied',
+                title: this.context.intl.formatMessage(messages.swalTitle1),
                 timer: 2600,
                 showCloseButton: false,
                 showCancelButton: false,
@@ -31,14 +54,15 @@ class UserProfile extends React.Component {
             })
             .then(() => {
             },() => {//dismiss function
-                if(this.props.IntlStore.currentLocale !== getIntlLanguage()) //user to reload page beacuse of cookie change
+                if(this.props.IntlStore.currentLocale !== getIntlLanguage() ||
+                (this.props.UserProfileStore.category === categories.categories[0] && this.props.UserProfileStore.categoryItem === categories.settings[0]) ) //user to reload page beacuse of cookie change or picture change
                     window.location.reload();
             }).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.userdeleted === true)
             swal({
                 type: 'success',
                 text: '',
-                title: 'Your Account has been deleted',
+                title: this.context.intl.formatMessage(messages.swalTitle2),
                 timer: 4000,
                 showCloseButton: false,
                 showCancelButton: false,
@@ -48,12 +72,12 @@ class UserProfile extends React.Component {
             .then(() => {}).catch(swal.noop);
         if (this.props.UserProfileStore.dimmer.failure === true)
             swal({
-                title: 'Error',
-                text: 'Something went wrong',
+                title: this.context.intl.formatMessage(messages.swalTitle3),
+                text: this.context.intl.formatMessage(messages.swalText3),
                 type: 'error',
                 allowEscapeKey: false,
                 allowOutsideClick: false,
-                confirmButtonText: 'OK',
+                confirmButtonText: this.context.intl.formatMessage(messages.swalButton3),
                 confirmButtonClass: 'negative ui button',
                 buttonsStyling: false
             })
@@ -112,7 +136,12 @@ class UserProfile extends React.Component {
               <div className="ui segments">
 
                   <div className="ui secondary segment">
-                      <h3>Exchange picture</h3>
+                      <h3>
+                        <FormattedMessage
+                          id='UserProfile.exchangePicture'
+                          defaultMessage='Exchange picture'
+                        />
+                      </h3>
                   </div>
                   <div className="ui segment">
                       <ChangePicture user={ this.props.UserProfileStore.user }/>
@@ -122,7 +151,12 @@ class UserProfile extends React.Component {
               <div className="ui segments">
 
                   <div className="ui secondary segment">
-                      <h3>Alter my personal data</h3>
+                      <h3>
+                        <FormattedMessage
+                          id='UserProfile.alterData'
+                          defaultMessage='Alter my personal data'
+                        />
+                      </h3>
                   </div>
                   <div className="ui segment">
                       <ChangePersonalData localeFlags={false} user={ this.props.UserProfileStore.user } failures={ this.props.UserProfileStore.failures } saveProfileIsLoading={this.props.UserProfileStore.saveProfileIsLoading} />
@@ -136,7 +170,12 @@ class UserProfile extends React.Component {
         let changePassword = (this.props.UserProfileStore.user.hasPassword) ? (
                 <div className="ui segments">
                   <div className="ui secondary segment">
-                    <h3>Change password</h3>
+                    <h3>
+                      <FormattedMessage
+                        id='UserProfile.changePassword'
+                        defaultMessage='Change password'
+                      />
+                    </h3>
                   </div>
 
                   <div className="ui segment">
@@ -149,7 +188,12 @@ class UserProfile extends React.Component {
             {changePassword}
             <div className="ui segments">
               <div className="ui red inverted segment">
-                <h3>Deactivate Account</h3>
+                <h3>
+                  <FormattedMessage
+                    id='UserProfile.deactivateAccount'
+                    defaultMessage='Deactivate Account'
+                  />
+                </h3>
               </div>
 
               <div className="ui segment">
@@ -178,7 +222,12 @@ class UserProfile extends React.Component {
     }
 
     notImplemented() {
-        return (<h3>This feature is curently not implemented. Please wait for future releases of SlideWiki</h3>);
+        return (<h3>
+          <FormattedMessage
+            id='UserProfile.notImplemented'
+            defaultMessage='This feature is curently not implemented. Please wait for future releases of SlideWiki'
+          />
+        </h3>);
     }
 
     render() {
@@ -187,7 +236,8 @@ class UserProfile extends React.Component {
 }
 
 UserProfile.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 UserProfile = connectToStores(UserProfile, [UserProfileStore,IntlStore], (context, props) => {

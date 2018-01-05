@@ -10,6 +10,10 @@ export default function loadSlideView(context, payload, done) {
         context.executeAction(slideIdTypeError, payload, done);
         return;
     }
+    console.log('send to load');
+    context.dispatch('LOAD_SLIDE_CONTENT_LOAD', {loadingIndicator: 'true'});
+    //context.dispatch('LOAD_SLIDE_CONTENT_LOAD');
+    //console.log('get content');
 
     context.service.read('slide.content', payload, {timeout: 20 * 1000}, (err, res) => {
         if (err) {

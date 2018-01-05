@@ -148,6 +148,7 @@ class TreeNode extends React.Component {
                                           page={self.props.page} rootNode={self.props.rootNode}
                                           username={self.props.username} permissions={self.props.permissions}/>;
         }
+        /*
         let actionSignifierStyle = {
             display: this.props.item.get('focused') || this.state.mouseover ? 'block' : 'none',
             'background-color': '#FFFFFF',
@@ -221,7 +222,7 @@ class TreeNode extends React.Component {
                     </Button>} content='Delete' on='hover'/>
                 </Button.Group>
             </div>
-        );
+        );*/
         //change the node title style if it is selected
         const nodeTitle = cheerio.load(this.props.item.get('title')).text();
         let nodeTitleDIV = nodeTitle;
@@ -232,7 +233,7 @@ class TreeNode extends React.Component {
         if (this.props.item.get('editable')) {
             nodeDIV = <input autoFocus onFocus={this.handleEditFocus} type="text" defaultValue={nodeTitle}
                              onChange={this.handleNameChange} onKeyDown={this.handleKeyDown.bind(this, nodeSelector)}/>;
-            actionSignifier = '';
+            //actionSignifier = '';
         } else {
             nodeDIV = <NavLink href={nodeURL} tabIndex={this.props.item.get('focused') ? 0 : -1} ref={(el) => { this.nodeLink = el; }} onDoubleClick={this.handleRenameClick.bind(this, nodeSelector)} >
                 {nodeTitleDIV}</NavLink>;
@@ -258,9 +259,9 @@ class TreeNode extends React.Component {
                 <div onMouseOver={this.handleMouseOver.bind(this)} onMouseOut={this.handleMouseOut.bind(this)}>
                     <i onClick={this.handleExpandIconClick.bind(this, nodeSelector)} className={iconClass} aria-hidden="true">  </i>
                     {nodeDIV}
-                    {(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier}
+                    {/*(this.props.username === '' || !this.props.permissions.edit || this.props.permissions.readOnly) ? '' : actionSignifier*/}
                 </div>
-                {actionBtns}
+                {/*actionBtns*/}
                 {childNodesDIV}
                 <TreeNodeTarget parentNode={self.props.parentNode} onMoveNode={self.props.onMoveNode}
                                 nodeIndex={nodeIndex + 1} isAfterNode={true}/>

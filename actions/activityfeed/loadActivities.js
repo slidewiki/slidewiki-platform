@@ -30,6 +30,16 @@ export default function loadActivities(context, payload, done) {
         // context.dispatch('UPDATE_PAGE_TITLE', {
         //     pageTitle: pageTitle
         // });
-        done();
+        if (payload.params.stype !== 'deck')
+            return done();
+        context.service.read('presentation.live', {id: payload.params.sid}, {timeout: 20 * 1000}, (err, res) => {
+            if (err) {
+                log.error(context, {filepath: __filename});
+                context.executeAction(serviceUnavailable, payload, done);
+            } else {
+                context.dispatch('LOAD_PRESENTATIONS_SUCCESS', res);
+            }
+            done();
+        });
     });
 }
