@@ -216,7 +216,7 @@ class ContentActionsHeader extends React.Component {
         */
 
         return (
-            <div className="ui top attached menu" role="menu" style="border-width: 0px;">
+            <div className="ui top attached menu" role="menu">
                 {editButton}
                 {saveButton}
                 {cancelButton}
