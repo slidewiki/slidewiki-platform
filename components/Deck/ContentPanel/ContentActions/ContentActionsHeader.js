@@ -216,10 +216,9 @@ class ContentActionsHeader extends React.Component {
         */
 
         return (
-            <div className="ui top attached compact segment">
                 <div className="ui two column grid">
                     <div className="column">
-                        <div className="ui left floated buttons" >
+                        <div className="ui left floated basic top attached buttons" >
                             {editButton}
                             {saveButton}
                             {cancelButton}
@@ -229,7 +228,7 @@ class ContentActionsHeader extends React.Component {
                     </div>
                     <div className="column">
                         {this.props.UserProfileStore.username === '' ? '' :
-                            <div className="ui right floated buttons" >
+                            <div className="ui right floated basic top attached buttons" >
                             <button className={addSlideClass} onClick={this.handleAddNode.bind(this, selector, {type: 'slide', id: '0'}) }
                                 type="button"
                                 aria-label={this.context.intl.formatMessage(this.messages.addSlideButtonAriaText)}
@@ -279,7 +278,6 @@ class ContentActionsHeader extends React.Component {
                         }
                     </div>
                 </div>
-            </div>
         );
     }
 }
