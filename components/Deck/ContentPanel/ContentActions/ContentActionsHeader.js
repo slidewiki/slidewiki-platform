@@ -218,7 +218,7 @@ class ContentActionsHeader extends React.Component {
         return (
                 <div className="ui two column grid">
                     <div className="column">
-                        <div className="ui left floated basic top attached buttons" >
+                        <div className="ui left floated top attached buttons" >
                             {editButton}
                             {saveButton}
                             {cancelButton}
