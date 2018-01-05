@@ -108,27 +108,27 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const editClass = classNames({
-            'item ui button': true,
+            'ui button basic primary': true,
             'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const viewClass = classNames({
-            'item ui small basic button': true,
+            ' ui small basic button': true,
             'disabled': contentDetails.mode ==='view'
         });
         const addSlideClass = classNames({
-            'item ui small basic left attached button': true,
+            'ui small basic left attached button': true,
             'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const addDeckClass = classNames({
-            'item ui small basic left attached button': true,
+            'ui small basic left attached button': true,
             'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const duplicateItemClass = classNames({
-            'item ui small basic left attached button': true,
+            'ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck' || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const deleteItemClass = classNames({
-            'item ui small basic left attached button': true,
+            'ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const red = {
@@ -140,7 +140,7 @@ class ContentActionsHeader extends React.Component {
 
         let buttonStyle = {
             classNames : classNames({
-                'item small attached left':true,
+                'ui small basic left attached button':true,
                 'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
             }),
             iconSize : 'large',
@@ -162,7 +162,7 @@ class ContentActionsHeader extends React.Component {
                 cancelButton =
                         <button tabIndex="0"  className="ui button " onClick={this.handleCancelButtonClick.bind(this, selector)} onChange={this.handleCancelButtonClick.bind(this, selector)}>
                              <i className="cancel icon large"></i>
-                             cancel
+                             Cancel
                         </button>;
             } else {
                 saveButton ='';
