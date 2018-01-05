@@ -140,7 +140,7 @@ class ContentActionsHeader extends React.Component {
 
         let buttonStyle = {
             classNames : classNames({
-                'ui small basic left attached button':true,
+                'small left attached':true,
                 'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
             }),
             iconSize : 'large',
@@ -155,7 +155,7 @@ class ContentActionsHeader extends React.Component {
             //ref="" --> we can't use string refs as they are legacy. ref={(refName)=>{this.refName=refName}}
             if(contentDetails.selector.stype === 'slide'){
                 saveButton =
-                        <button tabIndex="0"  className="ui button blue primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
+                        <button tabIndex="0"  className="ui button primary " onClick={this.handleSaveButtonClick.bind(this)} onChange={this.handleSaveButtonClick.bind(this)}>
                              <i className="save icon large"></i>
                              Save
                         </button>;
@@ -216,7 +216,7 @@ class ContentActionsHeader extends React.Component {
         */
 
         return (
-            <div className="ui top attached menu" role="menu">
+            <div className="ui top attached menu" role="menu" style="border-width: 0px;">
                 {editButton}
                 {saveButton}
                 {cancelButton}
