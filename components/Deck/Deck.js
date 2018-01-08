@@ -167,6 +167,7 @@ class Deck extends React.Component {
                                 </div>
                             </div>;
 
+
             centerPanel = (
                     <div className={centerColClass}>
                         <div className="row">
