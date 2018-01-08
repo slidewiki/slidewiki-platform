@@ -430,6 +430,10 @@ class SlideEditLeftPanel extends React.Component {
                       <i tabIndex="0" aria-label="EKDDA template - English no footer">EKDDA template - English no footer <br/> 1280 * 720 pixels (720p 16:9)</i> <br/><br/>
                       <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/EKDDAengNofooter.png" alt="template - EKDDA template - English no footer" />
                   </a>
+                  <a className="item" role="button" onClick={this.handleTemplatechange.bind(this, 'TIBtitle')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplatechange', 'TIBtitle')}>
+                      <i tabIndex="0" aria-label="TIB template - title page">TIB template - Title page<br/> 960 * 720 pixels (4:3)</i> <br/><br/>
+                      <img aria-hidden="true" style={dropDownItemStyle} className="ui image small bordered fluid" src="/assets/images/templates/TIBtitle.png" alt="template - TIB template title page - English" />
+                  </a>
                 </div>);
 
         let propertiesContent  = (
