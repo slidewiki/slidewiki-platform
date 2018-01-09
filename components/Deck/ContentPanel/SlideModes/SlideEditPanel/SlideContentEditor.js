@@ -823,7 +823,8 @@ class SlideContentEditor extends React.Component {
             }
         });
 
-        this.correctDimensionsBoxes('img');
+        this.correctDimensionsBoxesImg();
+        //('img');
     }
     correctDimensionsBoxesIframe()
     {
@@ -847,24 +848,25 @@ class SlideContentEditor extends React.Component {
             }
         });
     }
-    correctDimensionsBoxes(type){
+    correctDimensionsBoxesImg(){
+    //correctDimensionsBoxes(type){
         $('.pptx2html [style*="absolute"]').each(function () {
             if($(this).find(type + ':first').length)
             {
-                if($(this).width() < $(this).find(type+':first').width())
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than iframe/image width/height
-                    $(this).width($(this).find(type+':first').width());
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust iframe width');
-                } else if ($(this).width() < $(this).find(type+':first').attr('width'))
+                } else if ($(this).width() < $(this).find('img:first').attr('width'))
                 {
-                    $(this).width($(this).find(type+':first').attr('width'));
+                    $(this).width($(this).find('img:first').attr('width'));
                 }
-                if($(this).height() < $(this).find(type+':first').height())
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than iframe/image width/height
-                    $(this).height($(this).find(type+':first').height());
-                } else if ($(this).height() < $(this).find(type+':first').attr('height'))
+                    $(this).height($(this).find('img:first').height());
+                } else if ($(this).height() < $(this).find('img:first').attr('height'))
                 {
-                    $(this).height($(this).find(type+':first').attr('height'));
+                    $(this).height($(this).find('img:first').attr('height'));
                 }
             }
         });
@@ -951,8 +953,8 @@ class SlideContentEditor extends React.Component {
                             ui.size.height = newHeight;
                             if($(this).find('img:first').length)
                             {
-                                $(this).find('img:first').width(newWidth);
-                                $(this).find('img:first').height(newHeight);
+                                $(this).find('img:first').width(newWidth - 8);
+                                $(this).find('img:first').height(newHeight - 8);
                             }
                             if($(this).find('iframe:first').length)
                             {
