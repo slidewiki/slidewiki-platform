@@ -58,11 +58,11 @@ class ChangePictureModal extends React.Component {
         const messages = defineMessages({
             modalTitle: {
                 id: 'ChangePictureModal.modalTitle',
-                defaultMessage: 'A wild error has been spotted!',
+                defaultMessage: 'Photo slection not processible!',
             },
             modalText: {
                 id: 'ChangePictureModal.modalText',
-                defaultMessage: 'There it is. You catched it! - Seems like we can not handle your picture. Please try another one.',
+                defaultMessage: 'Sorry, we could not process your chosen selection. Please try again with a different photo or selection.',
             },
         });
         let payload = {};
