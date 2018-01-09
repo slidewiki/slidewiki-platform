@@ -851,7 +851,7 @@ class SlideContentEditor extends React.Component {
     correctDimensionsBoxesImg(){
     //correctDimensionsBoxes(type){
         $('.pptx2html [style*="absolute"]').each(function () {
-            if($(this).find(type + ':first').length)
+            if($(this).find('img:first').length)
             {
                 if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than iframe/image width/height
