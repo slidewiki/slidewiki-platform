@@ -855,18 +855,18 @@ class SlideContentEditor extends React.Component {
             {
                 if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than iframe/image width/height
-                    $(this).width($(this).find('img:first').width() + 8);
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust iframe width');
                 } else if ($(this).width() < $(this).find('img:first').attr('width'))
                 {
-                    $(this).width($(this).find('img:first').attr('width') + 8);
+                    $(this).width($(this).find('img:first').attr('width'));
                 }
                 if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than iframe/image width/height
-                    $(this).height($(this).find('img:first').height() + 8);
+                    $(this).height($(this).find('img:first').height());
                 } else if ($(this).height() < $(this).find('img:first').attr('height'))
                 {
-                    $(this).height($(this).find('img:first').attr('height') + 8);
+                    $(this).height($(this).find('img:first').attr('height'));
                 }
             }
         });
@@ -953,8 +953,8 @@ class SlideContentEditor extends React.Component {
                             ui.size.height = newHeight;
                             if($(this).find('img:first').length)
                             {
-                                $(this).find('img:first').width(newWidth - 8);
-                                $(this).find('img:first').height(newHeight - 8);
+                                $(this).find('img:first').width(newWidth);
+                                $(this).find('img:first').height(newHeight);
                             }
                             if($(this).find('iframe:first').length)
                             {
