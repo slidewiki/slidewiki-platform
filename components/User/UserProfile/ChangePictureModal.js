@@ -58,7 +58,7 @@ class ChangePictureModal extends React.Component {
         const messages = defineMessages({
             modalTitle: {
                 id: 'ChangePictureModal.modalTitle',
-                defaultMessage: 'Photo slection not processible!',
+                defaultMessage: 'Photo selection not processible!',
             },
             modalText: {
                 id: 'ChangePictureModal.modalText',
