@@ -155,7 +155,8 @@
     "webpack": "^3.8.1",
     "webpack-stats-plugin": "^0.1.5",
     "webpack-visualizer-plugin": "^0.1.11",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "es6-promise": "^4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
@@ -164,7 +165,6 @@
     "enzyme": "3.1.0",
     "enzyme-adapter-react-15": "1.0.2",
     "css-loader": "^0.28.7",
-    "es6-promise": "^4.1.0",
     "eslint": "^3.17.0",
     "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-react": "^6.10.0",
