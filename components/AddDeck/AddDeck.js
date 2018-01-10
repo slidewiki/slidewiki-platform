@@ -545,7 +545,8 @@ class AddDeck extends React.Component {
                                     <NavLink className="item" routeName="terms">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
-                                            defaultMessage='terms and conditions' />
+                                            defaultMessage='terms and conditions'
+                                            target="_blank" />
                                     </NavLink>
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
