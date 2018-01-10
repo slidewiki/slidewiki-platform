@@ -542,11 +542,10 @@ class AddDeck extends React.Component {
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
                                         defaultMessage='I agree to the SlideWiki ' />
-                                    <NavLink className="item" routeName="terms">
+                                    <NavLink className="item" routeName="terms" target="_blank">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
-                                            defaultMessage='terms and conditions'
-                                            target="_blank" />
+                                            defaultMessage='terms and conditions' />
                                     </NavLink>
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
