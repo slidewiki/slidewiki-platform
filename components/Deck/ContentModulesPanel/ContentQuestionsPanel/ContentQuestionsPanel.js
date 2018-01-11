@@ -195,7 +195,7 @@ class ContentQuestionsPanel extends React.Component {
         let questionsList = (<ContentQuestionsList items={questions} selector={selector} />);
         let content = (
             <div>
-                {buttonBar}
+                {/* {buttonBar} */}
                 {questionsHeader}
                 {questions.length === 0 ? 'There are currently no questions for this ' + selector.stype + '.' : questionsList}
                 {/* {pagination} */}

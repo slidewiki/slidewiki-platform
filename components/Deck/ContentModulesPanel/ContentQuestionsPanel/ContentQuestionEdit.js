@@ -142,7 +142,7 @@ class ContentQuestionEdit extends React.Component {
 
     updateQuestionTitle(e) {
         this.setState({title: e.target.value});
-    };
+    }
 
     updateQuestionDifficulty(e) {
         this.setState({difficulty: e.target.value});
@@ -225,7 +225,7 @@ class ContentQuestionEdit extends React.Component {
                                 </div>
                                 <div className="inline field">
                                     <div className="ui checkbox">
-                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked={(numAnswers > 3 && this.state.correct4)} onChange={this.updateCorrect4}/>
+                                        <input type="checkbox" name="example4" id="answer4" tabIndex="0" className="hidden" defaultChecked={numAnswers > 3 && this.state.correct4} onChange={this.updateCorrect4}/>
                                         <label htmlFor="answer4"></label>
                                     </div>
                                     <input type="text" style={answerChoiceWidth} name="response4" id="response4" defaultValue={numAnswers > 3 ? this.state.answer4: ''} onChange={this.updateAnswer4}/>

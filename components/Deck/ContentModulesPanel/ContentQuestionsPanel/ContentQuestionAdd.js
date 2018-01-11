@@ -40,7 +40,7 @@ class ContentQuestionAdd extends React.Component {
         this.updateExplanation = this.updateExplanation.bind(this);
         this.saveButtonClick = this.saveButtonClick.bind(this);
         this.cancelButtonClick = this.cancelButtonClick.bind(this);
-    };
+    }
 
     componentDidMount() {
         const questionValidation = {
@@ -126,7 +126,7 @@ class ContentQuestionAdd extends React.Component {
 
     updateQuestionTitle(e) {
         this.setState({title: e.target.value});
-    };
+    }
 
     updateQuestionDifficulty(e) {
         this.setState({difficulty: e.target.value});
