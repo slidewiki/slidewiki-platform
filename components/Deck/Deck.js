@@ -111,6 +111,7 @@ class Deck extends React.Component {
             oneColumnMode = 1;
         }
         let dividerDIV = '';
+        /* temporary fix for SWIK-1996 - When expand screen (hide decktree) on slide edit, then no content is displayed
         if(oneColumnMode){
             if(status.ContentModulesPanel.visible){
                 dividerDIV = <div className="ui" onClick={this.handleCollapseClick.bind(this)} title="show deck tree"><i className="icon link angle double right"></i> </div>;
@@ -118,6 +119,7 @@ class Deck extends React.Component {
         }else{
             dividerDIV = <div className="ui vertical hidden divider fitted" onClick={this.handleExpandClick.bind(this)} title="hide deck tree"><i className="icon link angle double left"></i> </div>;
         }
+        */
         let leftPanel;
         let centerPanel;
         let rightPanel;
