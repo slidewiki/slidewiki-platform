@@ -52,7 +52,7 @@ class PresentationsPanel extends React.Component {
                         </div>
                         <div className="content" style={{marginLeft: '1em'}}>
                             <div className="summary">
-                                <a target="_blank" href={url}>{this.props.ActivityFeedStore.presentations[index]}</a>
+                                <a target="_blank" href={url} rel="nofollow">{this.props.ActivityFeedStore.presentations[index]}</a>
                             </div>
                         </div>
                     </div>
