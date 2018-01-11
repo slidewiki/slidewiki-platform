@@ -155,11 +155,13 @@ class DeckViewPanel extends React.Component {
                             </div>
                             {originInfo}
                             <div className="meta"><strong>Date:&nbsp;</strong>{deckDate}</div>
+                            {deckDescription &&
                             <div className="meta"><strong>Description:</strong>
                                 <div className="description" tabIndex="0" aria-label="deck description">{deckDescription}</div>
+                            </div>
+                            }
                         </div>
-                    </div>
-                    </div>
+                        </div>
                     </div>
                     <div className="right aligned column">
 
