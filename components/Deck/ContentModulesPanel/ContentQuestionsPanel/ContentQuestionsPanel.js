@@ -81,19 +81,17 @@ class ContentQuestionsPanel extends React.Component {
                             Export to PDF
                         </button>
                     </div>
-            );
+                );
                 break;
         }
 
         let addQuestionButton = (
-          <div className="column right aligned">
-            <button className="ui right floated compact button primary">
-              <i
-                className="small plus icon"
-                data-reactid={640} />
-              {/* react-text: 641 */}Add question{/* /react-text */}
-            </button>
-          </div>
+            <div className="column right aligned">
+                <button className="ui right floated compact button primary">
+                    <i className="small plus icon" data-reactid={640} />
+                    {/* react-text: 641 */}Add question{/* /react-text */}
+                </button>
+            </div>
         );
 
         const getUserButton = () => {
@@ -104,31 +102,26 @@ class ContentQuestionsPanel extends React.Component {
         };
 
         let questionsHeader = (
-      <div
-        className="ui segment attached"
-        data-reactid={636}>
-        <div
-          className="ui bottom attached"
-          data-reactid={637}>
-          <div data-reactid={638}>
-            <div className="ui vertical segment">
-              <div className="ui two column stackable grid">
-                <div className="column">
-                  <h3 className="ui  header">Questions
-            <div className="ui label red">Prototype interface - not functional</div></h3>
+            <div className="ui segment attached" data-reactid={636}>
+                <div className="ui bottom attached" data-reactid={637}>
+                    <div data-reactid={638}>
+                        <div className="ui vertical segment">
+                            <div className="ui two column stackable grid">
+                                <div className="column">
+                                    <h3 className="ui  header">Questions
+                                        <div className="ui label red">Prototype interface - not functional</div>
+                                    </h3>
+                                </div>
+                                {getUserButton()}
+                            </div>
+                        </div>
+                        {content}
+                    </div>
                 </div>
-                {getUserButton()}
-              </div>
             </div>
-            {content}
-          </div>
-        </div>
-      </div>
+        );
 
-    );
-
-        class PaginationItem extends React.Component
-        {
+        class PaginationItem extends React.Component {
             constructor(props){
                 super(props);
                 this._onClick = this._onClick.bind(this);
@@ -143,11 +136,8 @@ class ContentQuestionsPanel extends React.Component {
                     className += ' active';
                 }
                 return (
-                  <a
-                    className={className}
-                    onClick={this._onClick}
-                  >
-                  {this.props.pageNo}
+                  <a className={className} onClick={this._onClick} >
+                    {this.props.pageNo}
                   </a>
                 );
             }
@@ -172,42 +162,39 @@ class ContentQuestionsPanel extends React.Component {
 
         let lastPageNo = parseInt(totalLength / itemsPerPage) + 1;
         let pagination = (
-          <div className="ui centered pagination menu">
-            <a className="icon item" onClick={this.handlePreviousClick}>
-              <i className="left chevron icon" />
-            </a>
-            {getItems()}
-            <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
-              <i className="right chevron icon" />
-            </a>
-          </div>
-
-    );
+            <div className="ui centered pagination menu">
+                <a className="icon item" onClick={this.handlePreviousClick}>
+                    <i className="left chevron icon" />
+                </a>
+                {getItems()}
+                <a className="icon item" onClick={() => this.handleNextClick(lastPageNo)}>
+                    <i className="right chevron icon" />
+                </a>
+            </div>
+        );
 
         let content = (
-      <div>
-        {buttonBar}
-        {questionsHeader}
-        <ContentQuestionsList items={questions} />
-        {/* {pagination} */}
-      </div>
-    );
+            <div>
+                {buttonBar}
+                {questionsHeader}
+                <ContentQuestionsList items={questions} selector={selector} />
+                {/* {pagination} */}
+            </div>
+        );
 
-    //   if (question !== undefined && question !== null) {
-    // //Question is selected -> show its data
-    //       content = (
-    //   <div>
-    //     <ContentQuestionForm question={question} />
-    //   </div>
-    // );
-    //   }
+        //   if (question !== undefined && question !== null) {
+        // //Question is selected -> show its data
+        //       content = (
+        //   <div>
+        //     <ContentQuestionForm question={question} />
+        //   </div>
+        // );
+        //   }
 
         return (
-      <div
-        ref="contentQuestionsPanel"
-        className="ui bottom attached">
-        {content}
-      </div>
+            <div ref="contentQuestionsPanel" className="ui bottom attached">
+                {content}
+            </div>
         );
     }
 }

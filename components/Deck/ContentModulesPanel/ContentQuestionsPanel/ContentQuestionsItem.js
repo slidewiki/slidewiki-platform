@@ -16,9 +16,13 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
-        );
 
+            <ContentQuestionAnswersList items={question} selector={this.props.selector} />
+        );
+        {/*
+            //Merge conflict with branch 1451 above. which is newer version?          
+             <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
+        */}
         // const editIcon = (
         //     <a className="like" onClick={this.handleEditClick.bind(this)}>
         //         <i className="edit icon" />
