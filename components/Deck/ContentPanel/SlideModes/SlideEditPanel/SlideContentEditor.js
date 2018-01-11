@@ -1544,6 +1544,7 @@ class SlideContentEditor extends React.Component {
             let pptxheight = $('.pptx2html').height();
             //TODO - change to get right!
             this.scaleratio = containerwidth / (pptxwidth+50);
+            this.vScaleratio = containerheight / (pptxheight+50);
             //this.scaleratio = containerwidth / (pptxwidth+120);
             $('.pptx2html').css({'transform': '', 'transform-origin': ''});
             $('.pptx2html').css({'transform': 'scale('+this.scaleratio+','+this.scaleratio+')', 'transform-origin': 'top left'});
@@ -1553,8 +1554,8 @@ class SlideContentEditor extends React.Component {
             console.log('scale with ratio: ' + this.scaleratio);
 
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            this.refs.slideContentView.style.height = ((pptxheight + 10 + 20) * this.vScaleratio) + 'px';
+            this.refs.inlineContent.style.height = ((pptxheight + 0 + 0) * this.vScaleratio) + 'px';
         }
     }
     componentWillUnmount() {
@@ -1698,7 +1699,7 @@ class SlideContentEditor extends React.Component {
             //minWidth: '100%',
             // maxHeight: 450,
             //padding: 20,
-            minHeight: 600,
+            minHeight: 824,
             //minHeight: '100%',
             overflowY: 'auto',
             //overflowX: 'hidden',
@@ -1722,7 +1723,7 @@ class SlideContentEditor extends React.Component {
             paddingRight: 50,
             paddingTop: 10,
             xpaddingBottom: 10,*/
-            minHeight: 610,
+//            minHeight: 610,
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };

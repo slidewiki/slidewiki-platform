@@ -78,6 +78,7 @@ class SlideContentView extends React.Component {
 
         //only calculate scaleration for width for now
         this.scaleratio = containerwidth / (pptxwidth+50);
+        this.vScaleratio = containerheight / (pptxheight+100);
         //console.log(containerwidth);
         //console.log(pptxwidth);
 
@@ -95,8 +96,8 @@ class SlideContentView extends React.Component {
             //style.padding left = 20 px, top 20 px
             //this.refs.slideContentView.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
             //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideContentView.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            this.refs.slideContentView.style.height = ((pptxheight + 10 + 20) * this.vScaleratio) + 'px';
+            this.refs.inlineContent.style.height = ((pptxheight + 0 + 0) * this.vScaleratio) + 'px';
 
             //show that content is outside of pptx2html box (alternative to ridge: groove)
             //$('.pptx2html').css({'borderStyle': 'ridge ridge ridge ridge', 'borderColor': '#7AB0D7', 'box-shadow': '0px 0px 1000px #E28447'});
@@ -116,7 +117,7 @@ class SlideContentView extends React.Component {
         const compStyle = {
             //minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 600,
+            minHeight: 740,
             //minHeight: '100%',
             overflowY: 'auto',
             overflowX: 'auto',
@@ -133,7 +134,6 @@ class SlideContentView extends React.Component {
         const contentStyle = {
             minWidth: '100%',
             // maxHeight: 450,
-            minHeight: 610,
             //borderStyle: 'dashed',
             //borderColor: '#e7e7e7',
         };
