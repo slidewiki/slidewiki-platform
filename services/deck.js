@@ -207,6 +207,25 @@ export default {
                     content: err
                 }, {slides: []});
             });
+        } else if (resource ==='deck.requesteditrights'){
+
+            let args = params.params ? params.params : params;
+            rp({
+                method: 'GET',
+                uri: Microservices.deck.uri + '/deck/' + args.deckId + '/requestEditRights/' + args.userid,
+                headers: { '----jwt----': params.params.jwt },
+                json: true
+            })
+            .then((response) => {
+                //Either the request was already send or deck owner id + deckname is returned for sending an email
+                if (!response.ownerid || response.deckname) {
+                    return callback(null, {});
+                }
+                else {
+                    return callback(null, {deckname: response.deckname, ownerid: response.ownerid});
+                }
+            })
+            .catch((err) => callback(err));
         }
     },
     // other methods
