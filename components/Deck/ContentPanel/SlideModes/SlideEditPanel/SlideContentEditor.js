@@ -368,8 +368,51 @@ class SlideContentEditor extends React.Component {
                 '</div>'+
                 '</div>';
                 break;
-
-
+            case 'TIBtitle':
+                this.refs.inlineContent.innerHTML =
+                '<div class="pptx2html" id="96004" style="position: relative; width: 960px; height: 720px; border-style: double; border-color: rgb(218, 102, 25); transform: scale(1.03187, 1.03187); transform-origin: left top 0px;">'+
+                '<div id="51108"></div>'+
+                '<div _id="2" _idx="undefined" _name="Title 1" _type="ctrTitle" class="block content v-down context-menu-disabled" id="7861" style="position: absolute; top: 117.833px; left: 120px; width: 720px; height: 250.667px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5302; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="75057">'+
+                '<h3 id="73463"><span class="text-block" id="27668" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></h3>'+
+                '</div>'+
+                '</div>'+
+                '<div _id="3" _idx="1" _name="Subtitle 2" _type="subTitle" class="block content v-up context-menu-disabled" id="32501" style="position: absolute; top: 378.167px; left: 120px; width: 720px; height: 173.833px; border-width: 1pt; border-image: none 100% / 1 / 0 stretch; -moz-border-top-colors: none; -moz-border-left-colors: none; -moz-border-bottom-colors: none; -moz-border-right-colors: none; z-index: 5323; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="72872">'+
+                '<h4 id="68355"><span class="text-block" id="47397" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></h4>'+
+                '</div>'+
+                '</div>'+
+                '<div _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="drawing-container context-menu-disabled" id="56075" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;" tabindex="0">'+
+                '<svg _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="drawing context-menu-disabled" id="81480" style="position: absolute; top: 0px; left: 0px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;"><rect fill="none" height="78.64062992125984" id="76952" stroke="none" stroke-dasharray="0" stroke-width="1" width="514.0092388451444" x="0" y="0"></rect></svg></div>'+
+                '<div _id="28" _idx="undefined" _name="Rectangle 3" _type="undefined" class="block content v-up context-menu-disabled" id="78548" style="position: absolute; top: 541.438px; left: 102.005px; width: 514.009px; height: 78.6406px; z-index: 5719; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="80193"><span class="text-block" id="60204" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">Formatvorlage&nbsp;des Untertitelmasters durch Klicken bearbeiten</span></div>'+
+                '</div>'+
+                '<div _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="drawing-container context-menu-disabled" id="89302" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;" tabindex="0">'+
+                '<svg _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="drawing context-menu-disabled" id="11168" style="position: absolute; top: 0px; left: 0px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;"><rect fill="none" height="162.89553805774278" id="65850" stroke="none" stroke-dasharray="0" stroke-width="1" width="514.0092388451444" x="0" y="0"></rect></svg></div>'+
+                '<div _id="29" _idx="undefined" _name="Rectangle 2" _type="undefined" class="block content v-down ui-draggable ui-resizable context-menu-disabled" id="37934" style="position: absolute; top: 352.44px; left: 102.005px; width: 514.009px; height: 162.896px; z-index: 5762; cursor: auto;" tabindex="0">'+
+                '<div class="h-left" id="53020"><span style="font-size:36px;" id="73276"><span class="text-block" id="12823" style="color: rgb(255, 0, 0); font-family: inherit; font-weight: bold; font-style: inherit; text-decoration: initial;">Titelmasterformat&nbsp;durch Klicken bearbeiten</span></span></div>'+
+                '</div>'+
+                '<div class="block content ui-draggable ui-resizable context-menu-disabled" id="38934" style="position: absolute; top: 0px; left: 0px; width: 1007.14px; height: 713.371px; z-index: -11; cursor: auto;" tabindex="0">'+
+                '<img alt="" id="39529" src="https://fileservice.experimental.slidewiki.org/picture/81be1e5f68acd42b07b9cd2be11896be1b638cab38059152e7d0a29e4d0ed5e5.jpg" style="width: 1007.14px; height: 713.371px;">'+
+                '</div>'+
+                '<div class="block content context-menu-disabled" id="23908" style="position: absolute; top: 116.333px; left: 427px; width: 189px; height: 125.167px; z-index: 5489; cursor: auto;" tabindex="0">'+
+                '<img alt="" id="28695" src="https://fileservice.experimental.slidewiki.org/picture/5bbbb8a925773d2dadbd143c1827987ddcb7974b421eed4311a7e3f7ed1e0ad9.png" style="width: 100%; height: 100%;"></div>'+
+                '<div class="block content context-menu-disabled" id="30251" style="position: absolute; top: 159.667px; left: 102px; width: 227.667px; height: 50.6667px; z-index: 5532; cursor: auto;" tabindex="0">'+
+                '<img alt="" id="37806" src="https://fileservice.experimental.slidewiki.org/picture/68c7b9ab7feda6bc9f08202be815e4e4388e4ae6e0a15e45751a2d374f2f422b.png" style="width: 100%; height: 100%;"></div>'+
+                '<div class="block content context-menu-disabled" id="62817" style="position: absolute; top: 590.5px; left: 821.726px; width: 123.453px; height: 98.9206px; z-index: 2147483647; cursor: auto;" tabindex="0">'+
+                '<img id="50826" src="https://fileservice.experimental.slidewiki.org/picture/007c01bd034065e1fd66f518dfac4c3d08cc0efd9b186fb914e43c442e05479e.png" style="width: 123.45px; height: 98.9206px;"></div>'+
+                '<div class="block group ui-draggable ui-resizable context-menu-disabled" id="97475" style="position: absolute; z-index: 5446; top: 27.1862px; left: 60.5469px; cursor: auto;" tabindex="0">'+
+                '<div _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing-container context-menu-disabled" id="62863" style="position: absolute; top: 54.0956px; left: 11.2865px; z-index: 5412; cursor: auto;" tabindex="0"><svg _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="drawing context-menu-disabled" id="38242" style="position: absolute; top: 0px; left: 0px; width: 725.75px; height: 619.922px; z-index: 5412; cursor: auto;"><rect fill="rgb(255,255,255)" height="619.9218897637795" id="83399" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
+                '<div _id="24" _idx="undefined" _name="Rechteck 5" _type="undefined" class="block content v-mid context-menu-disabled" id="43475" style="position: absolute; top: 54.0956px; left: 11.2865px; width: 575.75px; height: 619.922px; z-index: 5412; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="88591"><span class="text-block" id="58474" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
+                '</div>'+
+                '<div _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing-container context-menu-disabled" id="9173" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;" tabindex="0"><svg _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="drawing context-menu-disabled" id="44611" style="position: absolute; top: 0px; left: 0px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;"><rect fill="rgb(68,84,106)" height="12.09784776902887" id="16902" stroke="#203965" stroke-dasharray="0" stroke-width="1" width="575.7499212598425" x="0" y="0"></rect></svg></div>'+
+                '<div _id="25" _idx="undefined" _name="Rechteck 6" _type="undefined" class="block content v-mid context-menu-disabled" id="61992" style="position: absolute; top: 45.4804px; left: 11.2865px; width: 575.75px; height: 12.0978px; z-index: 5445; cursor: auto;" tabindex="0">'+
+                '<div class="h-mid" id="52795"><span class="text-block" id="12515" style="color: inherit; font-size: inherit; font-family: inherit; font-weight: inherit; font-style: inherit; text-decoration: initial; vertical-align: ;">&nbsp;</span></div>'+
+                '</div>'+
+                '</div>'+
+                '</div>';
+                break;
         }
         this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
@@ -780,7 +823,8 @@ class SlideContentEditor extends React.Component {
             }
         });
 
-        this.correctDimensionsBoxes('img');
+        this.correctDimensionsBoxesImg();
+        //('img');
     }
     correctDimensionsBoxesIframe()
     {
@@ -804,24 +848,25 @@ class SlideContentEditor extends React.Component {
             }
         });
     }
-    correctDimensionsBoxes(type){
+    correctDimensionsBoxesImg(){
+    //correctDimensionsBoxes(type){
         $('.pptx2html [style*="absolute"]').each(function () {
-            if($(this).find(type + ':first').length)
+            if($(this).find('img:first').length)
             {
-                if($(this).width() < $(this).find(type+':first').width())
+                if($(this).width() < $(this).find('img:first').width())
                 { //check if box width is smaller than iframe/image width/height
-                    $(this).width($(this).find(type+':first').width());
+                    $(this).width($(this).find('img:first').width());
                 //    console.log('adjust iframe width');
-                } else if ($(this).width() < $(this).find(type+':first').attr('width'))
+                } else if ($(this).width() < $(this).find('img:first').attr('width'))
                 {
-                    $(this).width($(this).find(type+':first').attr('width'));
+                    $(this).width($(this).find('img:first').attr('width'));
                 }
-                if($(this).height() < $(this).find(type+':first').height())
+                if($(this).height() < $(this).find('img:first').height())
                 { //check if box height is smaller than iframe/image width/height
-                    $(this).height($(this).find(type+':first').height());
-                } else if ($(this).height() < $(this).find(type+':first').attr('height'))
+                    $(this).height($(this).find('img:first').height());
+                } else if ($(this).height() < $(this).find('img:first').attr('height'))
                 {
-                    $(this).height($(this).find(type+':first').attr('height'));
+                    $(this).height($(this).find('img:first').attr('height'));
                 }
             }
         });
