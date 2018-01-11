@@ -1,6 +1,6 @@
 import React from 'react';
 import {navigateAction} from 'fluxible-router';
-import {Button, Icon, Modal, Header, Form, Dropdown} from 'semantic-ui-react';
+import {Button, Icon, Modal, Header, Form, Dropdown, Segment, TextArea} from 'semantic-ui-react';
 import FocusTrap from 'focus-trap-react';
 import addNewCollection from '../../../actions/collections/addNewCollection';
 import {FormattedMessage, defineMessages} from 'react-intl';
@@ -136,35 +136,53 @@ class NewCollectionModal extends React.Component {
             value: userGroup._id
         }));
 
+        userGroupOptions.unshift({
+            text: 'Select User Group', 
+            value: ''
+        });
+
         return (
-            <Modal dimmer='blurring' size='small' role='dialog' aria-labelledby='addNewCollectionHeader'
-                   aria-describedby='addNewCollectionHeaderDescr' open={this.props.isOpen}
-                   onClose={this.props.handleClose}>
-                <Header content={this.context.intl.formatMessage(this.messages.modalTitle)} id='addNewCollectionHeader'/>
-                <Modal.Content>
-                <Form>
-                    <Form.Field required error={this.state.validationError}>
-                        <label><FormattedMessage {...this.messages.titleField} /></label>
-                        <input placeholder={this.context.intl.formatMessage(this.messages.titleFieldPlaceholder)} value={this.state.title} onChange={this.handleChange.bind(this, 'title')} />
-                    </Form.Field>
-                    <Form.Field>
-                        <label><FormattedMessage {...this.messages.descriptionField} /></label>
-                        <input placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
-                    </Form.Field>
-                    <Form.Field>
-                        <label htmlFor="user_group_of_new_deck_group"><FormattedMessage {...this.messages.usergroupField} /></label>
-                        <Dropdown placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} />
-                    </Form.Field>
-                </Form>
-                </Modal.Content>
-                <Modal.Actions>
-                    <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen}>
-                        <div>
-                            <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.buttonCreate} /></Button>
-                            <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
-                        </div>
-                    </FocusTrap>
-                </Modal.Actions>
+            <Modal 
+                id="newCollectioModal"
+                dimmer='blurring' 
+                size='small' 
+                role='dialog' 
+                aria-labelledby='addNewCollectionHeader'
+                aria-describedby='addNewCollectionDescription'
+                aria-hidden = {!this.props.isOpen}
+                tabIndex="0"
+                open={this.props.isOpen}
+                onClose={this.props.handleClose}>
+
+                <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.isOpen} className="header">
+                    <Modal.Header  as="h1" content={this.context.intl.formatMessage(this.messages.modalTitle)} id='addNewCollectionHeader'/>
+                    <Modal.Content>
+                       <TextArea className="sr-only" id="addNewCollectionDescription" value="Create a new deck collection" tabIndex ='-1'/>
+                        <Form>
+                            <Form.Field required error={this.state.validationError}>
+                                <label htmlFor="col_title"><FormattedMessage {...this.messages.titleField} /></label>
+                                <input id="col_title" placeholder={this.context.intl.formatMessage(this.messages.titleFieldPlaceholder)} value={this.state.title} onChange={this.handleChange.bind(this, 'title')} aria-required="true" />
+                            </Form.Field>
+                            <Form.Field>
+                                <label htmlFor="col_description"><FormattedMessage {...this.messages.descriptionField} /></label>
+                                <input id="col_description" placeholder={this.context.intl.formatMessage(this.messages.descriptionFieldPlaceholder)} value={this.state.description} onChange={this.handleChange.bind(this, 'description')} />
+                            </Form.Field>
+                            <Form.Field>
+                                <label htmlFor="col_user_group"><FormattedMessage {...this.messages.usergroupField} /></label>
+                                <Dropdown id="col_user_group" placeholder={this.context.intl.formatMessage(this.messages.usergroupFieldPlaceholder)} fluid selection options={userGroupOptions} onChange={this.handleUserGroupChange.bind(this)} />
+                            </Form.Field>
+                        </Form>
+                    </Modal.Content>
+
+                    <Modal.Actions>
+                        <Segment basic textAlign="center">
+                            <div>
+                                <Button primary as='button' onClick={this.handleSave.bind(this)}><Icon name='save'/><FormattedMessage {...this.messages.buttonCreate} /></Button>
+                                <Button as='button' onClick={this.handleClose.bind(this)}><Icon name='close'/><FormattedMessage {...this.messages.buttonClose} /></Button>
+                            </div>
+                        </Segment>
+                    </Modal.Actions>
+                </FocusTrap>
             </Modal>
         );
     }

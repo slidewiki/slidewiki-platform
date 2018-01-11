@@ -186,9 +186,9 @@ class CollectionPanel extends React.Component {
                         <div className="ui secondary clearing segment">
                             <h2 className="ui left floated header">{this.context.intl.formatMessage((!this.state.editMode) ? this.messages.decksInCollectionText : this.messages.reorderDecks)}</h2>
                             { (!this.state.editMode && data.decks.length > 0 && hasEditRights) && 
-                                <div className="ui small button" onClick={this.setEditMode.bind(this, true)}>
+                                <Button size='small' as='button' onClick={this.setEditMode.bind(this, true)}>
                                     <FormattedMessage {...this.messages.reorderDecks} />
-                                </div>
+                                </Button>
                             }
                             { (this.state.editMode) && 
                                 <div className="ui right floated">
