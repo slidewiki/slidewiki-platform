@@ -44,14 +44,40 @@ export default function moveTreeNode(context, payload, done) {
             } else {
                 context.dispatch('MOVE_TREE_NODE_SUCCESS', payload);
 
-                let activity = {
-                    activity_type: 'move',
-                    user_id: String(userid),
-                    content_name: res.title,
-                    content_id: String(res.id),
-                    content_kind: res.type
-                };
-                context.executeAction(addActivity, {activity: activity});
+                let sourceId = undefined;
+                const sourcePathArray = sourceNode.get('path').split(';');
+                if (sourcePathArray.length > 1 && sourcePathArray[sourcePathArray.length - 2] !== '') {
+                    const parentDeck = sourcePathArray[sourcePathArray.length - 2];
+                    sourceId = parentDeck.split(':')[0];
+                }
+                let targetId = undefined;
+                const targetPathArray = targetNode.get('path').split(';');
+                if (targetPathArray.length > 0 && targetPathArray[targetPathArray.length - 1] !== '') {
+                    const parentDeck = targetPathArray[targetPathArray.length - 1];
+                    targetId = parentDeck.split(':')[0];
+                }
+
+                if (sourceId === undefined) {
+                    sourceId = selector.id;// root deck
+                }
+                if (targetId === undefined) {
+                    targetId = selector.id;// root deck
+                }
+
+                if (sourceId !== undefined) {
+                    let activity = {
+                        activity_type: 'move',
+                        user_id: String(userid),
+                        content_name: res.title,
+                        content_id: String(res.id),
+                        content_kind: res.type,
+                        move_info: {
+                            source_id: sourceNode.get('id'),
+                            target_id: targetNode.get('id')
+                        }
+                    };
+                    context.executeAction(addActivity, {activity: activity});
+                }
             }
             done(null, res);
         });
