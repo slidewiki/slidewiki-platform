@@ -63,7 +63,7 @@ export default function moveTreeNode(context, payload, done) {
                 if (targetId === undefined) {
                     targetId = selector.id;// root deck
                 }
-
+                
                 if (sourceId !== undefined) {
                     let activity = {
                         activity_type: 'move',
@@ -72,8 +72,8 @@ export default function moveTreeNode(context, payload, done) {
                         content_id: String(res.id),
                         content_kind: res.type,
                         move_info: {
-                            source_id: sourceNode.get('id'),
-                            target_id: targetNode.get('id')
+                            source_id: sourceId,
+                            target_id: targetId
                         }
                     };
                     context.executeAction(addActivity, {activity: activity});
