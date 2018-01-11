@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import updateQuestion from '../../../../actions/questions/updateQuestion';
 import cancelQuestion from '../../../../actions/questions/cancelQuestion';
 import deleteQuestion from '../../../../actions/questions/deleteQuestion';
@@ -42,11 +43,45 @@ class ContentQuestionEdit extends React.Component {
         this.saveButtonClick = this.saveButtonClick.bind(this);
         this.cancelButtonClick = this.cancelButtonClick.bind(this);
         this.deleteButtonClick = this.deleteButtonClick.bind(this);
-    };
+    }
+
+    componentDidMount() {
+        const questionValidation = {
+            fields: {
+                question: {
+                    identifier: 'question',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'Please, enter question',
+                    }]
+                },
+                response1: {
+                    identifier: 'response1',
+                    rules: [{
+                        type: 'atleastoneanswer',
+                        prompt: 'Please, add answers',
+                    }]
+                }
+            },
+            onSuccess: this.saveButtonClick
+        };
+
+        // Custom form validation rule
+        $.fn.form.settings.rules.atleastoneanswer = (() => {
+            return (this.state.answer1 !== '' && this.state.correct1) ||
+                (this.state.answer2 !== '' && this.state.correct2) ||
+                (this.state.answer3 !== '' && this.state.correct3) ||
+                (this.state.answer4 !== '' && this.state.correct4);
+        });
+        $(ReactDOM.findDOMNode(this.refs.questionedit_form)).form(questionValidation);
+        // $('.ui.form')
+        //     .form(questionValidation);
+    }
 
     saveButtonClick(e) {
         e.preventDefault();
         this.context.executeAction(updateQuestion, {question: this.state});
+        return false;
     }
 
     cancelButtonClick() {
@@ -121,7 +156,7 @@ class ContentQuestionEdit extends React.Component {
         return (
             <div className="ui bottom attached" data-reactid="637">
                 <div className="ui padded segment">
-                    <form className="ui form">
+                    <form className="ui form" ref="questionedit_form">
                         <div className="two fields inline">
                             <div className="required field"><label htmlFor="question">Question</label>
                                 <textarea rows="3"  name="question" id="question" aria-required="true" defaultValue={this.state.title} onChange={this.updateQuestionTitle} />
@@ -205,7 +240,7 @@ class ContentQuestionEdit extends React.Component {
                         <div className="field">
                             <div className="ui container">
                                 <div >
-                                    <button type="submit" className="ui blue labeled submit icon button" onClick={this.saveButtonClick}>
+                                    <button type="submit" className="ui blue labeled submit icon button" >
                                         <i className="icon check" />Save
                                     </button>
                                     <button type="button" className="ui secondary labeled close icon button" onClick={this.cancelButtonClick}>
