@@ -22,7 +22,7 @@ class DeckCard extends React.Component {
             thumbnailURL = this.props.cardContent.picture;
         }
 
-        let description = (this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
+        let description = (this.props.cardContent.description && this.props.cardContent.description.length > 100) ? this.props.cardContent.description.slice(0,99) + '...' : this.props.cardContent.description;
         return (
             <div className='card'>
               {this.props.newTab === true ? (

@@ -542,11 +542,11 @@ class AddDeck extends React.Component {
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms1'
                                         defaultMessage='I agree to the SlideWiki ' />
-                                    <NavLink className="item" routeName="imprint">
+                                    <a className="item" href="/terms" target="_blank">
                                         <FormattedMessage
                                             id='AddDeck.form.label_terms2'
                                             defaultMessage='terms and conditions' />
-                                    </NavLink>
+                                    </a>
                                     <FormattedMessage
                                         id='AddDeck.form.label_terms3'
                                         defaultMessage=' and that content I upload, create and edit can be published under a Creative Commons ShareAlike license.' />
@@ -559,7 +559,7 @@ class AddDeck extends React.Component {
                                 <label htmlFor="termsimages">
                                     <FormattedMessage
                                         id='AddDeck.form.label_termsimages'
-                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons ShareAlike license.' />
+                                        defaultMessage='I agree that images within my imported slides are in the public domain or made available under a Creative Commons Attribution (CC-BY or CC-BY-SA) license.' />
                                 </label>
                             </div>
                         </div>

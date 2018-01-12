@@ -63,7 +63,7 @@ class AttachSubdeckModalStore extends BaseStore{
                 return({
                     title: !isEmpty(deck.title) ? deck.title : 'No Title',
                     picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                    description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                    description: deck.description,
                     //updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                     updated:deck.lastUpdate,
                     //creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
@@ -97,7 +97,7 @@ class AttachSubdeckModalStore extends BaseStore{
                 return({
                     title: !isEmpty(deck.title) ? deck.title : 'No Title',
                     picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                    description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                    description: deck.description,
                     updated:deck.lastUpdate,
                     creationDate: deck.timestamp,
                     deckID: deck.db_id,

@@ -1,14 +1,8 @@
 import React from 'react';
 import ContentQuestionAnswersList from './ContentQuestionAnswersList';
-import loadQuestion from '../../../../actions/questions/loadQuestion';
 import toggleAnswers from '../../../../actions/questions/toggleAnswers';
 
 class ContentQuestionsItem extends React.Component {
-    handleEditClick() {
-        this.context.executeAction(loadQuestion, {
-            qstid: this.props.question.id
-        });
-    }
 
     handleToggleAnwers() {
         this.context.executeAction(toggleAnswers, {question: this.props.question});
@@ -16,8 +10,11 @@ class ContentQuestionsItem extends React.Component {
     render() {
         const question = this.props.question;
         const answers = (
-            <ContentQuestionAnswersList items={question.answers} explanation={question.explanation} />
+            <ContentQuestionAnswersList qstid={question.id} items={question.answers} explanation={question.explanation} />
         );
+
+        //HEAD of 1602:
+        //<ContentQuestionAnswersList items={question} selector={this.props.selector} />
 
         // const editIcon = (
         //     <a className="like" onClick={this.handleEditClick.bind(this)}>
@@ -78,17 +75,17 @@ class ContentQuestionsItem extends React.Component {
             // </div>
             // </div>
             <div>
-            <div className={activeIfFirst + ' title'}>
-              <i className="dropdown icon" />
-              {question.title}
-              <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
-                  {difficultyStars(question.difficulty)}
-              </div>
-            <div
-              className={activeIfFirst + ' content'}
-              data-reactid={653}>
-              {answers}
-            </div>
+                <div className={activeIfFirst + ' title'}>
+                  <i className="dropdown icon" />
+                  {question.title}
+                  <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
+                      {difficultyStars(question.difficulty)}
+                  </div>
+                <div
+                  className={activeIfFirst + ' content'}
+                  data-reactid={653}>
+                  {answers}
+                </div>
             </div>
         );
     }
