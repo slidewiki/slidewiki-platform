@@ -114,16 +114,13 @@ export default function loadDeck(context, payload, done) {
         (callback) => {
             permissionsPromise.then(() => {
                 let permissions = context.getStore(PermissionsStore).getState().permissions;
-                console.log('loadDeck permission', permissions);
-                console.log('loadDeck data', payloadCustom);
-                console.log(payloadCustom.params.stype, payload.query.interestedUser, payload);
                 //special handling for special case: Link from email for deck owner to add new editor
                 context.dispatch('DECKEDIT_START_QUERY_PARAMS', payload.query);
                 if (payloadCustom.params.mode === 'edit' && (!permissions.edit || permissions.readOnly)){
                     if (!(payloadCustom.params.stype === 'deck' && payload.query.interestedUser))
                         payloadCustom.params.mode = 'view';
                 }
-                console.log('now mode is', payloadCustom.params.mode);
+                // console.log('now mode is', payloadCustom.params.mode);
                 context.executeAction(loadContent, payloadCustom, callback);
             });
         },
