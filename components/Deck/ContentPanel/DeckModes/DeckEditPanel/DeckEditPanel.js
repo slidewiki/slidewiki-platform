@@ -28,7 +28,7 @@ class DeckEditPanel extends React.Component {
     getParameterByName(name) {
         try {
             let param = this.props.DeckEditStore.queryParams[name];
-            return decodeURIComponent(param.replace(/\+/g, " "));
+            return decodeURIComponent(param.replace(/\+/g, ' '));
         } catch (e) {
             console.log('Not able to get query parameter!', e);
             return undefined;
