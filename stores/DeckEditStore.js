@@ -22,6 +22,7 @@ class DeckEditStore extends BaseStore {
             groups: []
         };
         this.showGroupModal = false;
+        this.queryParams = {};
     }
 
     updateProperties(payload) {
@@ -55,7 +56,8 @@ class DeckEditStore extends BaseStore {
             viewstate: this.viewstate,
             detailedGroup: this.detailedGroup,
             originalEditors: this.originalEditors,
-            showGroupModal: this.showGroupModal
+            showGroupModal: this.showGroupModal,
+            queryParams: this.queryParams
         };
     }
 
@@ -72,6 +74,7 @@ class DeckEditStore extends BaseStore {
         this.detailedGroup = state.detailedGroup;
         this.originalEditors = state.originalEditors;
         this.showGroupModal = state.showGroupModal;
+        this.queryParams = state.queryParams;
     }
 
     updateAuthorizedUsers(users) {
@@ -95,6 +98,11 @@ class DeckEditStore extends BaseStore {
         this.emitChange();
         this.showGroupModal = false;
     }
+
+    setQueryParams(params) {
+        this.queryParams = params;
+        this.emitChange();
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -104,7 +112,8 @@ DeckEditStore.handlers = {
     'UPDATE_AUTHORIZED_GROUPS': 'updateAuthorizedGroups',
     'UPDATE_DECKEDIT_VIEW_STATE': 'updateViewState',
     'DECKEDIT_LOAD_USERGROUP': 'loadUsergroup',
-    'LOAD_DECK_PROPS_FAILURE': 'resetProperties'
+    'LOAD_DECK_PROPS_FAILURE': 'resetProperties',
+    'DECKEDIT_START_QUERY_PARAMS': 'setQueryParams'
 };
 
 export default DeckEditStore;

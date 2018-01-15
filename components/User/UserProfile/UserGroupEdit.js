@@ -158,7 +158,7 @@ class UserGroupEdit extends React.Component {
               </div>
               <div className="fourteen wide column">
                 <div className="content">
-                    <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                    <TextArea className="sr-only" id={'usernameIsALinkHint' + this.props.userid} value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
                     <a className="header" href={'/user/' + this.props.username} target="_blank">{this.props.username}</a>
                     <div className="description">Group owner</div>
                 </div>
@@ -189,7 +189,7 @@ class UserGroupEdit extends React.Component {
                         </div>
                         <div className="fourteen wide column">
                           <div className="content">
-                              <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
+                              <TextArea className="sr-only" id={'usernameIsALinkHint' + member.userid} value="The username is a link which will open a new browser tab. Close it when you want to go back to the form and list." tabIndex ='-1'/>
                               <a className="header" href={'/user/' + member.username} target="_blank">{member.username}</a>
                               <div className="description">{optionalElement}{optionalText}</div>
                           </div>

@@ -296,7 +296,7 @@ class DeckPropertiesEditor extends React.Component {
                                 </div>
                                 <div className="ten wide column">
                                     <div className="content">
-                                        <TextArea className="sr-only" id="usernameIsALinkHint" value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
+                                        <TextArea className="sr-only" id={'usernameIsALinkHint' + key} value="The username is a link which will open a new browser tab. Close it when you want to go back to this page." tabIndex ='-1'/>
                                         <a className="header" href={'/user/' + user.username} target="_blank">{user.username}</a>
                                         <div className="description">
                                             {optionalElement}{optionalText}
