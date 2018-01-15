@@ -463,7 +463,7 @@ class SlideEditLeftPanel extends React.Component {
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
                   <a className="item" id="handleTitleClick" role="button" onClick={this.handleTitleClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleClick')}>
-                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitle' defaultMessage='Slide title' />
+                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleButton' defaultMessage='Slide title' />
                   </a>
                   <a className="item" id="changeSlideSizeClick" role="button" onClick={this.changeSlideSizeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'changeSlideSizeClick')}>
                       <i tabIndex="0" className="crop icon"></i><FormattedMessage id='editpanel.slideSize' defaultMessage='Slide size (dimension and resolution)' />
@@ -486,7 +486,9 @@ class SlideEditLeftPanel extends React.Component {
                   <a className="item" id="handleTitleBack" role="button" onClick={this.handleTitleBack.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleBack')}>
                       <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
                   </a>
-                  <label htmlFor="slideTitle">Slide title:</label>
+                  <label htmlFor="slideTitle">
+                    <FormattedMessage id='editpanel.slideTitle' defaultMessage='Slide title:' />
+                  </label>
                   <div className="inverted required field">
                     <i className="error">
                         {this.state.titleMissingError === false ? '' : <FormattedMessage id='editpanel.titleMissingError' defaultMessage='title cannot be empty' />}
@@ -494,9 +496,9 @@ class SlideEditLeftPanel extends React.Component {
                     <Input onChange={this.handleChange.bind(this)} defaultValue={this.props.SlideEditStore.title} id="slideTitle" ref="slideTitle" name="slideTitle" aria-label="Slide title" aria-required="true" required autoFocus/>
                   </div>
                   <a className="item" aria-describedby="handleTitleChangeClickDescription" id="handleTitleChangeClick" role="button" onClick={this.handleTitleChangeClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTitleChangeClick')}>
-                      <i tabIndex="0" className="edit icon"></i>Change slide title
+                      <i tabIndex="0" className="edit icon"></i><FormattedMessage id='editpanel.slideTitleChange' defaultMessage='Change slide title' />
                   </a>
-                  <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" >Title is updated when saving the slide <br /> (after clicking the separate save button).</label>
+                  <label htmlFor="handleTitleChangeClick" id="handleTitleChangeClickDescription" ><FormattedMessage id='editpanel.slideTitleChangeUpdateNote1' defaultMessage='Title is updated when saving the slide' /> <br /> <FormattedMessage id='editpanel.slideTitleChangeUpdateNote2' defaultMessage='(after clicking the separate save button).' /></label>
                 </div>);
 
         let sizeContent = (
@@ -505,23 +507,23 @@ class SlideEditLeftPanel extends React.Component {
                   <i id="handleBackLink" tabIndex="0" className="reply icon"></i><FormattedMessage id='editpanel.back' defaultMessage='back' />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '960')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '960')}>
-                  <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) low <br/> 960 * 720 pixels <br/>  (legacy Powerpoint default) </i> <br/><br/>
+                  <i tabIndex="0" aria-label="Standard (4:3) low - 960 * 720 pixels -  (legacy Powerpoint default) "><FormattedMessage id='editpanel.slideSizeStandard' defaultMessage='Standard (4:3) low' /> <br/> 960 * 720 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' />  <br/> <FormattedMessage id='editpanel.slideSizeNameLegacy' defaultMessage='(legacy/old) Powerpoint default' />  </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/960.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1280')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1280')}>
-                  <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) medium <br/> 1280 * 960 pixels <br/> Super XGA </i> <br/><br/>
+                  <i tabIndex="0" aria-label="Standard (4:3) medium - 1280 * 960 pixels - Super XGA "><FormattedMessage id='editpanel.slideSizeStandardmedium' defaultMessage='Standard (4:3) medium' />  <br/> 1280 * 960 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' /> <br/> <FormattedMessage id='editpanel.slideSizeNameSuperXGA' defaultMessage='Super XGA' /> </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1280.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1600')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1600')}>
-                  <i tabIndex="0" aria-label="Title and bullets">Standard (4:3) high <br/> 1600 * 1200 pixels <br/> Ultra XGA </i> <br/><br/>
+                  <i tabIndex="0" aria-label="Standard (4:3) high - 1600 * 1200 pixels - Ultra XGA "><FormattedMessage id='editpanel.slideSizeStandardhigh' defaultMessage='Standard (4:3) high' /> <br/> 1600 * 1200 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' /> <br/> <FormattedMessage id='editpanel.slideSizeNameUltraXGA' defaultMessage='Ultra XGA' /> </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1600.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '720p')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '720p')}>
-                  <i tabIndex="0" aria-label="Title and bullets">Widescreen (16:9) <br/> 1280 * 720 pixels <br/> 720p HDTV Wide XGA </i> <br/><br/>
+                  <i tabIndex="0" aria-label="Widescreen (16:9) - 1280 * 720 pixels - 720p HDTV Wide XGA "><FormattedMessage id='editpanel.slideSizeWidescreen720' defaultMessage='Widescreen (16:9)' /> <br/> 1280 * 720 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' /> <br/> <FormattedMessage id='editpanel.slideSizeName720' defaultMessage='720p HDTV Wide XGA' /> </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/720p.png" alt="template - Title and bullets" />
               </a>
               <a className="item" role="button" onClick={this.handleSlideSizechange.bind(this, '1080p')} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleSlideSizechange', '1080p')}>
-                  <i tabIndex="0" aria-label="Title and bullets">Widescreen (16:9) <br/> 1920 * 1080 pixels <br/> 1080p/1080i HDTV Blu-ray </i> <br/><br/>
+                  <i tabIndex="0" aria-label="Widescreen (16:9) High - 1920 * 1080 pixels - 1080p/1080i HDTV Blu-ray "><FormattedMessage id='editpanel.slideSizeWidescreen1080' defaultMessage='Widescreen (16:9) high' /> <br/> 1920 * 1080 <FormattedMessage id='editpanel.slideSizeStandardPixels' defaultMessage='pixels' /> <br/> <FormattedMessage id='editpanel.slideSizeName1080' defaultMessage='1080p/1080i HDTV Blu-ray' /> </i> <br/><br/>
                   <img aria-hidden="true" className="ui image small bordered fluid" src="/assets/images/slidesizes/1080p.png" alt="template - Title and bullets" />
               </a>
             </div>);
@@ -529,28 +531,28 @@ class SlideEditLeftPanel extends React.Component {
         let normalContent = (
           <div>
             <a className="item" id="handleAddInputBox" role="button" onClick={this.handleAddInputBox.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleAddInputBox')}>
-                <i tabIndex="0" className="font icon"></i>Add text box
+                <i tabIndex="0" className="font icon"></i><FormattedMessage id='editpanel.addTextBox' defaultMessage='Add text box' />
             </a>
             <a  className="item" id="handleUploadMediaClick" role="button" onClick={this.handleUploadMediaClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadMediaClick')}>
-                <i tabIndex="0" className="photo icon"></i>Image
+                <i tabIndex="0" className="photo icon"></i><FormattedMessage id='editpanel.Image' defaultMessage='Image' />
             </a>
             <a  className="item" id="handleUploadVideoClick" role="button" onClick={this.handleUploadVideoClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleUploadVideoClick')}>
-                <i tabIndex="0"  className="film icon"></i>Video
+                <i tabIndex="0"  className="film icon"></i><FormattedMessage id='editpanel.Video' defaultMessage='Video' />
             </a>
             <a  className="item" id="handleOtherClick" role="button" onClick={this.handleOtherClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleOtherClick')}>
-                <i tabIndex="0"  className="ellipsis horizontal icon"></i>Other
+                <i tabIndex="0"  className="ellipsis horizontal icon"></i><FormattedMessage id='editpanel.Other' defaultMessage='Other' />
             </a>
             <a  className="item" id="handleTemplateClick" role="button" onClick={this.handleTemplateClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleTemplateClick')}>
-                <i tabIndex="0"  className="grid layout icon"></i>Template
+                <i tabIndex="0"  className="grid layout icon"></i><FormattedMessage id='editpanel.Template' defaultMessage='Template' />
             </a>
             <a className="item" id="handlePropertiesClick" role="button" onClick={this.handlePropertiesClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handlePropertiesClick')}>
-                <i tabIndex="0"  className="settings icon"></i>Properties
+                <i tabIndex="0"  className="settings icon"></i><FormattedMessage id='editpanel.Properties' defaultMessage='Properties' />
             </a>
             <a className="item" id="handleHTMLEditorClick" role="button" onClick={this.handleHTMLEditorClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHTMLEditorClick')}>
-                <i tabIndex="0"  className="code icon"></i>HTML editor
+                <i tabIndex="0"  className="code icon"></i><FormattedMessage id='editpanel.HTMLeditor' defaultMessage='HTML editor' />
             </a>
             <a className="item" id="handleHelpClick" role="button" onClick={this.handleHelpClick.bind(this)} onKeyPress={(evt) => this.handleKeyPress(evt, 'handleHelpClick')}>
-                <i tabIndex="0"  className="help icon"></i>Help
+                <i tabIndex="0"  className="help icon"></i><FormattedMessage id='editpanel.Help' defaultMessage='Help' />
             </a>
             </div>
           );
