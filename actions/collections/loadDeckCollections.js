@@ -7,9 +7,14 @@ export default function loadDeckCollections(context, payload, done) {
     log.info(context);
 
     // enrich payload with user id
-    payload.params.userId = context.getStore(UserProfileStore).userid;
-    payload.jwt = context.getStore(UserProfileStore).jwt;
-
+    if(payload.params){
+        payload.params.userId = context.getStore(UserProfileStore).userid;
+        payload.params.jwt = context.getStore(UserProfileStore).jwt;
+    } else {
+        payload.userId = context.getStore(UserProfileStore).userid;
+        payload.jwt = context.getStore(UserProfileStore).jwt;
+    }
+    
     // first get user groups that the user is member of 
     context.service.read('usergroup.member', payload, {timeout: 20 * 1000}, (err, usergroups) => {
         if(err){

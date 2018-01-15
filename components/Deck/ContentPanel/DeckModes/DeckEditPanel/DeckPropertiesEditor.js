@@ -4,7 +4,7 @@ import { Microservices } from '../../../../../configs/microservices';
 import classNames from 'classnames';
 import {connectToStores} from 'fluxible-addons-react';
 import {navigateAction} from 'fluxible-router';
-import { TextArea } from 'semantic-ui-react';
+import { TextArea, Dropdown } from 'semantic-ui-react';
 import ContentUtil from '../../util/ContentUtil';
 import DeckEditStore from '../../../../../stores/DeckEditStore';
 import saveDeckEdit from '../../../../../actions/saveDeckEdit';
@@ -48,6 +48,7 @@ class DeckPropertiesEditor extends React.Component {
             license: 'CC BY-SA',
             users: editors.users,
             groups: editors.groups,
+            selectedCollection: '',
         };
     }
 
@@ -92,20 +93,18 @@ class DeckPropertiesEditor extends React.Component {
             }
         }
     }
-    initCollectionsDropdown(){
-        $('#collectionsDropdown').dropdown({
-            allowAdditions: false,
-            onAdd: (newValue) => {
-                this.context.executeAction(addSelectedCollection, parseInt(newValue));
-            }, 
-            onRemove: (removedValue) => {
-                this.context.executeAction(removeSelectedCollection, parseInt(removedValue));
-            }
+    addCollection(event, data){
+        this.context.executeAction(addSelectedCollection, parseInt(data.value));
+        this.setState({
+            selectedCollection: '' 
         });
+    }
+    removeCollection(removedValue, event){
+        event.preventDefault();
+        this.context.executeAction(removeSelectedCollection, parseInt(removedValue));
     }
     componentDidUpdate() {
         this.handleDropboxes();
-        this.initCollectionsDropdown();
         
         if (this.props.DeckEditStore.showGroupModal) {
             $(ReactDOM.findDOMNode(this.refs.groupdetailsmodal_.refs.groupdetailsmodal)).modal('show');
@@ -114,11 +113,6 @@ class DeckPropertiesEditor extends React.Component {
 
     componentDidMount() {
         this.handleDropboxes();
-        this.initCollectionsDropdown();
-
-        // if we don't clear the dropdown,
-        // value of the previous deck edit appears
-        this.clearCollectionsDropdown();
     }
 
     handleDropboxes() {
@@ -193,9 +187,6 @@ class DeckPropertiesEditor extends React.Component {
     handleCancel(event) {
         event.preventDefault();
 
-        // needed so as not preserve values when editing deck again
-        this.clearCollectionsDropdown();
-
         this.context.executeAction(navigateAction, {
             url: ContentUtil.makeNodeURL(this.props.selector, 'view')
         });
@@ -256,8 +247,6 @@ class DeckPropertiesEditor extends React.Component {
                 deckId : deckId, 
                 collections: this.props.DeckEditStore.selectedCollections
             });
-            // needed so as not preserve values when editing deck again
-            this.clearCollectionsDropdown(); 
         }
     }
 
@@ -398,16 +387,45 @@ class DeckPropertiesEditor extends React.Component {
 
         return list_authorized;
     }
+    getSelectedCollections(collectionDetails, selectedCollections){
+        let details = {};
 
+        // transform collection details from array to json
+        details = collectionDetails.reduce((details, value, key) => { 
+            details[value._id] = value; return details; 
+        }, {});
+
+        let items = selectedCollections.map( (colId) => { 
+            let col = details[colId]; 
+            let description = `${col.description} ${(col.description) ? '\u00b7' : ''} Created ${timeSince((new Date(col.timestamp)))} ago`;
+
+            return ( 
+                <div className="item" key={'group_' + col._id } > 
+                    <div className="ui grid"> 
+                        <div className="one wide column">                            
+                            <i className="large grid layout middle aligned icon"></i> 
+                        </div> 
+                        <div className="ten wide column">
+                            <div className="content"> 
+                                <a className="header" href={`/collection/${col._id}?sort=order`} target='_blank'>{col.title}</a> 
+                                <div className="description">{description}</div> 
+                            </div> 
+                        </div> 
+                        <div className="four wide column middle aligned"> 
+                            <button className="ui tiny compact borderless black basic button" onClick={this.removeCollection.bind(this, col._id)} >Remove</button> 
+                        </div> 
+                    </div> 
+                </div>             
+            );
+        });
+
+        return items;
+    }
     showNewCollectionModal(event){
         event.preventDefault();
         this.setState({
             showNewCollectionModal: true
         });
-    }
-
-    clearCollectionsDropdown(){
-        $('#collectionsDropdown').dropdown('clear');
     }
 
     render() {
@@ -502,10 +520,23 @@ class DeckPropertiesEditor extends React.Component {
             </div>
         );
 
+        let collectionOptions = this.props.DeckEditStore.collectionOptions;
+        let selectedCollections = this.props.DeckEditStore.selectedCollections;
+
         // form collections dropdown options
-        let collectionOptions = this.props.DeckEditStore.collectionOptions.map( (collection) => {
-            return <div className="item" key={collection._id} data-value={collection._id}>{collection.title}</div>;
+        let collectionDropdownOptions = collectionOptions.filter( (collection) => {
+
+            // exclude collections that are already selected
+            return !selectedCollections.includes(collection._id);
+        }).map( (collection) => {
+            return {
+                key: collection._id, 
+                value: collection._id, 
+                text: collection.title
+            };
         });
+
+        let selectedCollectionsList = this.getSelectedCollections(collectionOptions, selectedCollections);
         
         //<div className={licenseFieldClass} data-tooltip={this.state.validationErrors.license}>
         //<div className={licenseFieldClass}>
@@ -579,19 +610,17 @@ class DeckPropertiesEditor extends React.Component {
                                 <label htmlFor="deck_collections">Deck Collections</label>
                                 <div className="two fields">
                                     <div className="field">
-                                        <div id="collectionsDropdown" className="ui fluid multiple search selection dropdown">
-                                            <input name="collections" type="hidden" value={this.props.DeckEditStore.selectedCollections}/>
-                                            <i className="dropdown icon"></i>
-                                            <div className="default text">Choose Deck Collection</div>
-                                            <div className="menu">
-                                                {collectionOptions}
-                                            </div>
-                                        </div>
+                                        <Dropdown value={this.state.selectedCollection} placeholder='Select Deck Collections' fluid search selection options={collectionDropdownOptions} onChange={this.addCollection.bind(this)} />
                                     </div>
                                     <div className="field">
-                                        <button className="ui primary button"
+                                        <button className="ui borderless black basic button"
                                                 onClick={this.showNewCollectionModal.bind(this)}>Create
                                         </button>
+                                    </div>
+                                </div>
+                                <div className="field">
+                                    <div className="ui very relaxed  list">
+                                        {selectedCollectionsList}
                                     </div>
                                 </div>
                                 <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />

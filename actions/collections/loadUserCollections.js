@@ -10,11 +10,16 @@ export default function loadUserCollections(context, payload, done) {
     
     // request deck collections for the loggedin user
     if(context.getStore(UserProfileStore).userid === context.getStore(UserProfileStore).user.id){
-        
-        // enrich payload with user id and authToken
-        payload.userId = context.getStore(UserProfileStore).userid;
-        payload.jwt = context.getStore(UserProfileStore).jwt;
 
+        // enrich payload with user id and authToken
+        if(payload.params){
+            payload.params.userId = context.getStore(UserProfileStore).userid;
+            payload.params.jwt = context.getStore(UserProfileStore).jwt;
+        } else {
+            payload.userId = context.getStore(UserProfileStore).userid;
+            payload.jwt = context.getStore(UserProfileStore).jwt;
+        }
+        
         // first get user groups that the user is member of 
         context.service.read('usergroup.member', payload, {timeout: 20 * 1000}, (err, usergroups) => {
             if(err){
@@ -26,7 +31,6 @@ export default function loadUserCollections(context, payload, done) {
                 payload.usergroups = usergroups;
                 context.service.read('deckgroups.forUser', payload, {timeout: 20 * 1000}, (err, res) => {
                     if (err) {
-                        console.log(err);
                         log.error(context, {filepath: __filename});
                         context.dispatch('LOAD_USER_COLLECTIONS_FAILURE', err);
                     } else {
@@ -40,8 +44,11 @@ export default function loadUserCollections(context, payload, done) {
 
     // request deck collections for a user that is not the logged in one
     } else {
-
-        payload.userId = context.getStore(UserProfileStore).user.id;
+        if(payload.params){
+            payload.params.userId = context.getStore(UserProfileStore).user.id;
+        } else {
+            payload.userId = context.getStore(UserProfileStore).user.id;
+        }
         
         // just get the deck collections for this user
         context.service.read('deckgroups.forUser', payload, {timeout: 20 * 1000}, (err, res) => {
