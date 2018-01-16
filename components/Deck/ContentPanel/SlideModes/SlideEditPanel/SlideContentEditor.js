@@ -41,35 +41,37 @@ class SlideContentEditor extends React.Component {
         if (slideSize !== ''){
             if($('.pptx2html').length)  //if slide is in canvas mode
             {
-                /*
-                let messages = defineMessages({
+                const messagesSlideSizeModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.slideSizeModalTitle',
+                        defaultMessage: 'Apply template',
+                    },
                     swal_text:{
-                        id: 'slideEditor.slideSizeModalText',
-                        defaultMessage: 'This action will change the size of the slide, however, you can reset the slide size to its original. Do you want to continue?'
+                        id: 'SlideContentEditor.slideSizeModalText',
+                        defaultMessage: 'This action will change the size of the slide. Your current slide size is {width} by {height} (pixels), and you can reset the slide size to its original. Do you want to continue?'
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.slideSizeModalConfirmButton',
+                        defaultMessage: 'Yes, apply template',
+                    },
+                    swal_cancel:{
+                        id: 'SlideContentEditor.slideSizeModalCancelButton',
+                        defaultMessage: 'No',
                     },
                 });
-                */
                 swal({
-                    title: this.context.intl.formatMessage({
-                        id: 'slideEditor.slideSizeModalTitle',
-                        defaultMessage: 'Apply template',
-                    }),
-                    text: this.context.intl.formatMessage({
-                        id: 'slideEditor.slideSizeModalText',
-                        defaultMessage: 'This action will change the size of the slide, however, you can reset the slide size to its original. Do you want to continue?',
+                    title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
+                    title: 'Apply template',
+                    text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text, {
+                        width: $('.pptx2html').css('width'),
+                        height: $('.pptx2html').css('height')
                     }),
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
-                    confirmButtonText: this.context.intl.formatMessage({
-                        id: 'slideEditor.slideSizeModalConfirmButton',
-                        defaultMessage: 'Yes, apply template',
-                    }),
+                    confirmButtonText: this.context.intl.formatMessage(messagesSlideSizeModal.swal_confirm),
                     confirmButtonClass: 'ui olive button',
-                    cancelButtonText: this.context.intl.formatMessage({
-                        id: 'slideEditor.slideSizeModalCancelButton',
-                        defaultMessage: 'No',
-                    }),
+                    cancelButtonText: this.context.intl.formatMessage(messagesSlideSizeModal.swal_cancel),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
                     focusConfirm: true,
@@ -108,15 +110,19 @@ class SlideContentEditor extends React.Component {
                 }, 500);
             } else{
                 //no PPTX2html element available to change size
+                const messagesSlideSizeModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.slideSizeErrorModalTitle',
+                        defaultMessage: 'Slide has no canvas size to change.',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.slideSizeErrorModalText',
+                        defaultMessage: 'This action will change the size of the slide. Your current slide size is {width} by {height} (pixels), and you can reset the slide size to its original. Do you want to continue?'
+                    },
+                });
                 swal({
-                    title: this.context.intl.formatMessage({
-                        id: 'slideEditor.slideSizeErrorModalTitle',
-                        defaultMessage: 'Slide has no canvas size to change.'
-                    }),
-                    text: this.context.intl.formatMessage({
-                        id: 'slideEditor.slideSizeErrorModalText',
-                        defaultMessage: 'Your current slide is not in canvas mode, but in document (non-canvas) mode and it will automatically adjust its size based on the content you enter. If you want to set a slide size you must first set the slide to canvas-mode via the menu template option.'
-                    }),
+                    title: this.context.intl.formatMessage(messagesSlideSizeModal.swal_title),
+                    text: this.context.intl.formatMessage(messagesSlideSizeModal.swal_text),
                     type: 'error',
                     showCloseButton: false,
                     showCancelButton: false,
@@ -139,27 +145,33 @@ class SlideContentEditor extends React.Component {
         {
             //overwrite content with templates from
             //http://stable.slidewiki.org/deck/9319-3/
-            swal({
-                title: this.context.intl.formatMessage({
-                    id: 'slideEditor.templateModalTitle',
-                    defaultMessage: 'Apply template'
-                }),
-                text: this.context.intl.formatMessage({
-                    id: 'slideEditor.templateModalText',
+            const messagestemplateModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.templateModalTitle',
+                    defaultMessage: 'Apply template',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.templateModalText',
                     defaultMessage: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?'
-                }),
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.templateModalConfirmButton',
+                    defaultMessage: 'Yes, apply template',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.templateModalCancelButton',
+                    defaultMessage: 'No',
+                },
+            });
+            swal({
+                title: this.context.intl.formatMessage(messagestemplateModal.swal_title),
+                text: this.context.intl.formatMessage(messagestemplateModal.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: this.context.intl.formatMessage({
-                    id: 'slideEditor.templateModalConfirmButton',
-                    defaultMessage: 'Yes, apply template'
-                }),
+                confirmButtonText: this.context.intl.formatMessage(messagestemplateModal.swal_confirm),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: this.context.intl.formatMessage({
-                    id: 'slideEditor.templateModalCancelButton',
-                    defaultMessage: 'No'
-                }),
+                cancelButtonText: this.context.intl.formatMessage(messagestemplateModal.swal_cancel),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false,
                 focusConfirm: true,
@@ -680,27 +692,33 @@ class SlideContentEditor extends React.Component {
             this.resizeDrag();
             //this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
-            swal({
-                title: this.context.intl.formatMessage({
-                    id: 'slideEditor.switchToCanvasModalTitle',
-                    defaultMessage: 'Do you want to switch to canvas style layout?'
-                }),
-                text: this.context.intl.formatMessage({
-                    id: 'slideEditor.switchToCanvasModalText',
+            const messagesCanvasModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.switchToCanvasModalTitle',
+                    defaultMessage: 'Do you want to switch to canvas style layout?',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.switchToCanvasModalText',
                     defaultMessage: 'You can click "no" and type your text directly in the editor window, however, you can also add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?'
-                }),
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.switchToCanvasModalConfirm',
+                    defaultMessage: 'Yes, switch to canvas-style with input boxes',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.switchToCanvasModalCancel',
+                    defaultMessage: 'No',
+                },
+            });
+            swal({
+                title: this.context.intl.formatMessage(messagesCanvasModal.swal_title),
+                text: this.context.intl.formatMessage(messagesCanvasModal.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: this.context.intl.formatMessage({
-                    id: 'slideEditor.switchToCanvasModalConfirm',
-                    defaultMessage: 'Yes, switch to canvas-style with input boxes'
-                }),
+                confirmButtonText: this.context.intl.formatMessage(messagesCanvasModal.swal_confirm),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: this.context.intl.formatMessage({
-                    id: 'slideEditor.switchToCanvasModalCancel',
-                    defaultMessage: 'No'
-                }),
+                cancelButtonText: this.context.intl.formatMessage(messagesCanvasModal.swal_cancel),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             }).then((accepted) => {
@@ -734,10 +752,13 @@ class SlideContentEditor extends React.Component {
         window.onbeforeunload = () => {
             if (this.hasChanges === true)
             {
-                return this.context.intl.formatMessage({
-                    id: 'slideEditor.unsavedChangesAlert',
-                    defaultMessage: 'You have unsaved changes. If you do not save the slide, it will not be updated. Are you sure you want to exit this page?'
+                const messagesUnsavedChangesAlert = defineMessages({
+                    alert:{
+                        id: 'SlideContentEditor.unsavedChangesAlert',
+                        defaultMessage: 'You have unsaved changes. If you do not save the slide, it will not be updated. Are you sure you want to exit this page?'
+                    }
                 });
+                return this.context.intl.formatMessage(messagesUnsavedChangesAlert.alert);
                 //return 'You have unsaved changes. If you do not save the slide, it will not be updated. ' +
                 //'Are you sure you want to exit this page?';
             }
@@ -1257,6 +1278,28 @@ class SlideContentEditor extends React.Component {
             //let menuID = $(this).attr('id');
             //if(!$(this).draggable( 'instance' )){
             //console.log('menu for: ' + $(this).attr('id'));
+            const messagesContextMenu = defineMessages({
+                contextMenuBringToFront:{
+                    id: 'SlideContentEditor.contextMenuBringToFront',
+                    defaultMessage: 'Bring to front (Ctrl shift +)',
+                },
+                contextMenuSendToBack:{
+                    id: 'SlideContentEditor.contextMenuSendToBack',
+                    defaultMessage: 'Send to back (Ctrl shift -)'
+                },
+                contextDuplicate:{
+                    id: 'SlideContentEditor.contextDuplicate',
+                    defaultMessage: 'Duplicate (Ctrl d)',
+                },
+                contextDelete:{
+                    id: 'SlideContentEditor.contextDelete',
+                    defaultMessage: 'Delete (ctrl Del)',
+                },
+                contextMenuClose:{
+                    id: 'SlideContentEditor.contextMenuClose',
+                    defaultMessage: 'Close menu (Esc)',
+                },
+            });
             $.contextMenu({
             //$('.pptx2html').contextMenu({
                 // define which elements trigger this menu
@@ -1299,27 +1342,12 @@ class SlideContentEditor extends React.Component {
                         items: {
                             //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
                             //'move': {name: 'Move around', icon: 'fa-arrows',},
-                            'front': {name: slideEditorContext.context.intl.formatMessage({
-                                id: 'slideEditor.contextMenuBringToFront',
-                                defaultMessage: 'Bring to front (Ctrl shift +)',
-                            }), icon: 'fa-arrow-circle-up'},
-                            'back': {name: slideEditorContext.context.intl.formatMessage({
-                                id: 'slideEditor.contextMenuSendToBack',
-                                defaultMessage: 'Send to back (Ctrl shift -)',
-                            }), icon: 'fa-arrow-circle-o-down'},
-                            'duplicate': {name: slideEditorContext.context.intl.formatMessage({
-                                id: 'slideEditor.contextDuplicate',
-                                defaultMessage: 'Duplicate (Ctrl d)',
-                            }), icon: 'copy'},
-                            'delete': {name: slideEditorContext.context.intl.formatMessage({
-                                id: 'slideEditor.contextDelete',
-                                defaultMessage: 'Delete (ctrl Del)',
-                            }), icon: 'delete'},
+                            'front': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuBringToFront), icon: 'fa-arrow-circle-up'},
+                            'back': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuSendToBack), icon: 'fa-arrow-circle-o-down'},
+                            'duplicate': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDuplicate), icon: 'copy'},
+                            'delete': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextDelete), icon: 'delete'},
                             //'sep1': '---------',
-                            'quit': {name: slideEditorContext.context.intl.formatMessage({
-                                id: 'slideEditor.contextMenuClose',
-                                defaultMessage: 'Close menu (Esc)',
-                            }), icon: 'quit', accesskey: 'esc'}
+                            'quit': {name: slideEditorContext.context.intl.formatMessage(messagesContextMenu.contextMenuClose), icon: 'quit', accesskey: 'esc'}
                             //'quit': {name: 'Send to back', icon: 'quit'},
                         }
                     };
@@ -1342,27 +1370,33 @@ class SlideContentEditor extends React.Component {
             if (this.hasChanges === true)
             {
                 //console.log('there are changes!');
-                swal({
-                    title: this.context.intl.formatMessage({
-                        id: 'slideEditor.saveChangesModalTitle',
+                const messagesSaveChangesModal = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.saveChangesModalTitle',
                         defaultMessage: 'You have unsaved changes. If you do not save the slide, it will not be updated.',
-                    }),
-                    text: this.context.intl.formatMessage({
-                        id: 'slideEditor.saveChangesModalText',
-                        defaultMessage: 'Are you sure you want to exit this page?',
-                    }),
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.saveChangesModalText',
+                        defaultMessage: 'Are you sure you want to exit this page?'
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.saveChangesModalConfirm',
+                        defaultMessage: 'Yes',
+                    },
+                    swal_cancel:{
+                        id: 'SlideContentEditor.saveChangesModalCancel',
+                        defaultMessage: 'No',
+                    },
+                });
+                swal({
+                    title: this.context.intl.formatMessage(messagesSaveChangesModal.swal_title),
+                    text: this.context.intl.formatMessage(messagesSaveChangesModal.swal_text),
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
-                    confirmButtonText: this.context.intl.formatMessage({
-                        id: 'slideEditor.saveChangesModalConfirm',
-                        defaultMessage: 'Yes',
-                    }),
+                    confirmButtonText: this.context.intl.formatMessage(messagesSaveChangesModal.swal_confirm),
                     confirmButtonClass: 'ui olive button',
-                    cancelButtonText: this.context.intl.formatMessage({
-                        id: 'slideEditor.saveChangesModalCancel',
-                        defaultMessage: 'No',
-                    }),
+                    cancelButtonText: this.context.intl.formatMessage(messagesSaveChangesModal.swal_cancel),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
                     allowEnterKey: true
@@ -1455,20 +1489,25 @@ class SlideContentEditor extends React.Component {
             }
             else if (nextProps.MediaStore.status === 'error') {
                 this.refs.uploadMediaModal.handleClose();
-                swal({
-                    title: this.context.intl.formatMessage({
-                        id: 'slideEditor.imageUploadErrorTitle',
+                const messagesimageUploadError = defineMessages({
+                    swal_title:{
+                        id: 'SlideContentEditor.imageUploadErrorTitle',
                         defaultMessage: 'Error',
-                    }),
-                    text: this.context.intl.formatMessage({
-                        id: 'slideEditor.imageUploadErrorText',
+                    },
+                    swal_text:{
+                        id: 'SlideContentEditor.imageUploadErrorText',
                         defaultMessage: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
-                    }),
-                    type: 'error',
-                    confirmButtonText: this.context.intl.formatMessage({
-                        id: 'slideEditor.imageUploadErrorConfirm',
+                    },
+                    swal_confirm:{
+                        id: 'SlideContentEditor.imageUploadErrorConfirm',
                         defaultMessage: 'Close',
-                    }),
+                    },
+                });
+                swal({
+                    title: this.context.intl.formatMessage(messagesimageUploadError.swal_title),
+                    text: this.context.intl.formatMessage(messagesimageUploadError.swal_text),
+                    type: 'error',
+                    confirmButtonText: this.context.intl.formatMessage(messagesimageUploadError.swal_confirm),
                     confirmButtonClass: 'negative ui button',
                     allowEscapeKey: false,
                     allowOutsideClick: false,
@@ -1746,27 +1785,33 @@ class SlideContentEditor extends React.Component {
         if (!id){id = context.menuFocus;}
         if(!$('#'+id).hasClass('editMode') && !$('.editMode').length && !$('#'+id).hasClass('pptx2html') && id !== 'inlineContent'){
             if(event){event.preventDefault();}
-            swal({
-                title: this.context.intl.formatMessage({
-                    id: 'slideEditor.deleteModalTitle',
+            const messagesDeleteModal = defineMessages({
+                swal_title:{
+                    id: 'SlideContentEditor.deleteModalTitle',
                     defaultMessage: 'Remove element',
-                }),
-                text: this.context.intl.formatMessage({
-                    id: 'slideEditor.deleteModalText',
+                },
+                swal_text:{
+                    id: 'SlideContentEditor.deleteModalText',
                     defaultMessage: 'Are you sure you want to delete this element?',
-                }),
+                },
+                swal_confirm:{
+                    id: 'SlideContentEditor.deleteModalConfirm',
+                    defaultMessage: 'Yes',
+                },
+                swal_cancel:{
+                    id: 'SlideContentEditor.deleteModalCancel',
+                    defaultMessage: 'No',
+                },
+            });
+            swal({
+                title: this.context.intl.formatMessage(messagesDeleteModal.swal_title),
+                text: this.context.intl.formatMessage(messagesDeleteModal.swal_text),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: this.context.intl.formatMessage({
-                    id: 'slideEditor.deleteModalConfirm',
-                    defaultMessage: 'Yes',
-                }),
+                confirmButtonText: this.context.intl.formatMessage(messagesDeleteModal.swal_confirm),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: this.context.intl.formatMessage({
-                    id: 'slideEditor.deleteModalCancel',
-                    defaultMessage: 'No',
-                }),
+                cancelButtonText: this.context.intl.formatMessage(messagesDeleteModal.swal_cancel),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             }).then((accepted) => {
