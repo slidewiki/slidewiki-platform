@@ -13,12 +13,12 @@ export default {
         if(resource === 'questions.list') {
             rp.get({
                 // uri: 'https://questionservice.experimental.slidewiki.org/questions',
-                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions'
+                uri: Microservices.questions.uri + '/' + args.stype + '/' + args.sid.split('-')[0] + '/' + 'questions?include_subdecks_and_slides=true'
             }).then((res) => {
 
                 let questions = JSON.parse(res).map((item, index) => {
                     return {
-                        id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id,
+                        id: item.id, title: item.question, difficulty: item.difficulty, relatedObject: item.related_object, relatedObjectId: item.related_object_id, relatedObjectName: item.related_object_name,
                         answers: item.choices
                             .map((ans, ansIndex) => {
                                 return {answer: ans.choice, correct: ans.is_correct};

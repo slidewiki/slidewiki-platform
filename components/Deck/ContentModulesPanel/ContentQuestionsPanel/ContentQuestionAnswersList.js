@@ -4,7 +4,6 @@ import {connectToStores} from 'fluxible-addons-react';
 import DeckViewStore from '../../../../stores/DeckViewStore';
 import UserProfileStore from '../../../../stores/UserProfileStore';
 import ContentQuestionsStore from '../../../../stores/ContentQuestionsStore';
-import ContentQuestionEdit from './ContentQuestionEdit';
 import loadQuestion from '../../../../actions/questions/loadQuestion';
 
 class ContentQuestionAnswersList extends React.Component {
