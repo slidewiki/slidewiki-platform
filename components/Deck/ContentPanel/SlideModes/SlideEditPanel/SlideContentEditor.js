@@ -17,6 +17,7 @@ import DeckTreeStore from '../../../../../stores/DeckTreeStore';
 import {HotKeys} from 'react-hotkeys';
 import UploadMediaModal from '../../../../common/UploadMediaModal';
 import ContentUtil from '../../util/ContentUtil';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 let ReactDOM = require('react-dom');
 
@@ -30,7 +31,7 @@ class SlideContentEditor extends React.Component {
         //this.refs.template;
         this.menuFocus;
         this.previousCaretRange;
-        this.CKeditorMode = 'advanced toolbar';
+        //this.CKeditorMode = 'advanced toolbar';
         this.loading = '';
         this.hasChanges = false;
         //this.oldContent = '';
@@ -40,15 +41,34 @@ class SlideContentEditor extends React.Component {
         if (slideSize !== ''){
             if($('.pptx2html').length)  //if slide is in canvas mode
             {
+                let messages = defineMessages({
+                    swal_text:{
+                        id: 'slideEditor.slideSizeModalText',
+                        defaultMessage: 'This action will change the size of the slide. Your current slide size is {width} by {height} (pixels), and you can reset the slide size to its original. Do you want to continue?'
+                    },
+                });
                 swal({
+                    title: this.context.intl.formatMessage({
+                        id: 'slideEditor.slideSizeModalTitle',
+                        defaultMessage: 'Apply template',
+                    }),
                     title: 'Apply template',
-                    text: 'This action will change the size of the slide. Your current slide size is ' + $('.pptx2html').css('width') + ' by ' + $('.pptx2html').css('height') + ' (pixels), and you can reset the slide size to its original. Do you want to continue?',
+                    text: this.context.intl.formatMessage(messages.swal_text, {
+                        width: $('.pptx2html').css('width'),
+                        height: $('.pptx2html').css('height')
+                    }),
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, apply template',
+                    confirmButtonText: this.context.intl.formatMessage({
+                        id: 'slideEditor.slideSizeModalConfirmButton',
+                        defaultMessage: 'Yes, apply template',
+                    }),
                     confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'No',
+                    cancelButtonText: this.context.intl.formatMessage({
+                        id: 'slideEditor.slideSizeModalCancelButton',
+                        defaultMessage: 'No',
+                    }),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
                     focusConfirm: true,
@@ -88,8 +108,14 @@ class SlideContentEditor extends React.Component {
             } else{
                 //no PPTX2html element available to change size
                 swal({
-                    title: 'Slide has no canvas size to change.',
-                    text: 'Your current slide is not in canvas mode, but in document (non-canvas) mode and it will automatically adjust its size based on the content you enter. If you want to set a slide size you must first set the slide to canvas-mode via the menu template option.',
+                    title: this.context.intl.formatMessage({
+                        id: 'slideEditor.slideSizeErrorModalTitle',
+                        defaultMessage: 'Slide has no canvas size to change.'
+                    }),
+                    text: this.context.intl.formatMessage({
+                        id: 'slideEditor.slideSizeErrorModalText',
+                        defaultMessage: 'Your current slide is not in canvas mode, but in document (non-canvas) mode and it will automatically adjust its size based on the content you enter. If you want to set a slide size you must first set the slide to canvas-mode via the menu template option.'
+                    }),
                     type: 'error',
                     showCloseButton: false,
                     showCancelButton: false,
@@ -113,14 +139,26 @@ class SlideContentEditor extends React.Component {
             //overwrite content with templates from
             //http://stable.slidewiki.org/deck/9319-3/
             swal({
-                title: 'Apply template',
-                text: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?',
+                title: this.context.intl.formatMessage({
+                    id: 'slideEditor.templateModalTitle',
+                    defaultMessage: 'Apply template'
+                }),
+                text: this.context.intl.formatMessage({
+                    id: 'slideEditor.templateModalText',
+                    defaultMessage: 'This action will overwrite existing slide content with the template. Recent changes (after pressing the save button) are lost. You can always revert to an earlier version of the slide or decide to not save after applying the template. Do you want to continue?'
+                }),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Yes, apply template',
+                confirmButtonText: this.context.intl.formatMessage({
+                    id: 'slideEditor.templateModalConfirmButton',
+                    defaultMessage: 'Yes, apply template'
+                }),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: 'No',
+                cancelButtonText: this.context.intl.formatMessage({
+                    id: 'slideEditor.templateModalCancelButton',
+                    defaultMessage: 'No'
+                }),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false,
                 focusConfirm: true,
@@ -443,11 +481,11 @@ class SlideContentEditor extends React.Component {
                     //remove resize and drag interaction because it generates HTML in slide editor content
                     this.disableResizeDrag();
                     this.contextMenuAndDragDivAllRemove();
-                    console.log('====ckeditor on change====');
+                    //console.log('====ckeditor on change====');
                     //add time because dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                     setTimeout(() => {
                         $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in source dialog button
-                            console.log('====ckeditor save button ok==== - refresh drag and menus');
+                            //console.log('====ckeditor save button ok==== - refresh drag and menus');
                             //this.addBorders();
                             setTimeout(() => {
                                 this.resizeDrag();
@@ -460,13 +498,13 @@ class SlideContentEditor extends React.Component {
             }
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
-                console.log('====ckeditor image dialog onclick====');
+                //console.log('====ckeditor image dialog onclick====');
                 /*this.refs.uploadMediaModal.handleOpen();
                 evt.preventDefault();*/
                 //add time because image dialog needs to be generate/added to page before mousedown handler can be assigned to "OK" button with class cke_dialog_ui_button_ok
                 setTimeout(() => {
                     $('.cke_dialog_ui_button_ok').mouseup((evt) => { //detect click on "OK" in image dialog button
-                        console.log('====ckeditor image save button ok==== refresh CKeditor');
+                        //console.log('====ckeditor image save button ok==== refresh CKeditor');
                         //this.addBorders();
                         setTimeout(() => {
                             this.refreshCKeditor();
@@ -643,14 +681,26 @@ class SlideContentEditor extends React.Component {
             //this.forceUpdate();
         } else { //if slide does not have pptx2html/canvas/absolute positioning
             swal({
-                title: 'Do you want to switch to canvas style layout?',
-                text: 'You can click "no" and type your text directly in the editor window, however, you can also add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?',
+                title: this.context.intl.formatMessage({
+                    id: 'slideEditor.switchToCanvasModalTitle',
+                    defaultMessage: 'Do you want to switch to canvas style layout?'
+                }),
+                text: this.context.intl.formatMessage({
+                    id: 'slideEditor.switchToCanvasModalText',
+                    defaultMessage: 'You can click "no" and type your text directly in the editor window, however, you can also add input boxes to your slide which can be moved and resized. Your existing content will be placed in one input box. You will then be able to add new input boxes to separate existing content or add new boxes. Do you wish to continue?'
+                }),
                 type: 'question',
                 showCloseButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Yes, switch to canvas-style with input boxes',
+                confirmButtonText: this.context.intl.formatMessage({
+                    id: 'slideEditor.switchToCanvasModalConfirm',
+                    defaultMessage: 'Yes, switch to canvas-style with input boxes'
+                }),
                 confirmButtonClass: 'ui olive button',
-                cancelButtonText: 'No',
+                cancelButtonText: this.context.intl.formatMessage({
+                    id: 'slideEditor.switchToCanvasModalCancel',
+                    defaultMessage: 'No'
+                }),
                 cancelButtonClass: 'ui red button',
                 buttonsStyling: false
             }).then((accepted) => {
@@ -665,7 +715,7 @@ class SlideContentEditor extends React.Component {
                 //update content
                 //TODO replace with this.refs.inlineContent.innerHTML
                 //CKEDITOR.instances.inlineContent.setData(newContent);
-                this.emitChange(); //confirm non-save on-leave
+                this.emitChange(this); //confirm non-save on-leave
                 //this.forceUpdate();
                 this.resizeDrag();
                 this.resize();
@@ -1481,10 +1531,10 @@ class SlideContentEditor extends React.Component {
         }
         if (nextProps.SlideEditStore.addInputBox === 'true' && nextProps.SlideEditStore.addInputBox !== this.props.SlideEditStore.addInputBox)
         {
-            if($('.pptx2html').length) //if slide is in canvas mode
-            {
+            //if($('.pptx2html').length) //if slide is in canvas mode
+            //{
                 this.addAbsoluteDiv();
-            }
+            //}
         }
         if (nextProps.SlideEditStore.uploadMediaClick === 'true' && nextProps.SlideEditStore.uploadMediaClick !== this.props.SlideEditStore.uploadMediaClick)
         {
@@ -2100,8 +2150,13 @@ class SlideContentEditor extends React.Component {
         // return nextProps.html !== ReactDOM.findDOMNode(this).innerHTML;
     }*/
 
-    emitChange() {
-        this.hasChanges = true;
+    emitChange(context) {
+        if (this){
+            this.hasChanges = true;
+        } else {
+            context.hasChanges = true;
+        }
+
         window.onbeforeunload = () => {
             return 'You have unsaved changes. If you do not save the slide, it will not be updated. ' +
             'Are you sure you want to exit this page?';
@@ -2110,7 +2165,8 @@ class SlideContentEditor extends React.Component {
 }
 
 SlideContentEditor.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
+    executeAction: React.PropTypes.func.isRequired,
+    intl: React.PropTypes.object.isRequired
 };
 
 SlideContentEditor = connectToStores(SlideContentEditor, [SlideEditStore, UserProfileStore, DataSourceStore, SlideViewStore, DeckTreeStore, MediaStore], (context, props) => {
