@@ -1077,81 +1077,6 @@ class SlideContentEditor extends React.Component {
         });
         //TODO: http://chrispearce.co/exploring-hotkeys-and-focus-in-react/
 
-        /*
-        $('.pptx2html [style*="absolute"]').focusin(function(event) {
-            event.preventDefault();
-        }, function() {
-        });
-        */
-
-        //$('.pptx2html [style*="absolute"]').click(function() {
-        /*
-        $('.pptx2html [style*="absolute"]').not('.drawing').mousedown(function(event) {
-            switch (event.which) {
-                case 1:
-                    console.log('Left Mouse button pressed.');
-                    //$('.cke_menu').hide();
-                    if ($(this).attr('id') !== 'inlineContent')
-                    {
-                        slideEditorContext.menuFocus = $(this).attr('id');
-                        console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                        if (!$(this).hasClass('editMode'))
-                        { //the clicked element is not editMode
-                            console.log('hide ckeditor context menu');
-                            $('.cke_menu').hide();
-                            /*
-                            if($('.editMode').length)
-                            {   //there is one or more editMode element (earlier via doubleclick)
-                                //we disable edit mode from the(se) element(s).
-                                slideEditorContext.removeEditMode();
-                            }
-                            *//*
-                        }
-                    }
-                    break;
-                case 2:
-                    console.log('Middle Mouse button pressed.');
-                    break;
-                case 3:
-                    console.log('Right Mouse button pressed.');
-                    //event.preventDefault();
-                    if ($(this).attr('id') !== 'inlineContent')
-                    {
-                        slideEditorContext.menuFocus = $(this).attr('id');
-                        console.log('this.menuFocus: ' + slideEditorContext.menuFocus + 'should be ' + $(this).attr('id'));
-                        if (!$(this).hasClass('editMode'))
-                        {
-                            $('.pptx2html [style*="absolute"]').css({'box-shadow':''}); //remove existing box-shadows
-                            //$(this).css({'box-shadow':'0 0 15px 5px rgba(81, 203, 238, 1)'});
-                            $(this).css({'box-shadow':'0 0 15px 5px rgba(0, 150, 253, 1)'});
-                            console.log('hide ckeditor context menu');
-                            $('.cke_menu').hide();
-                            //set cursor to
-                            slideEditorContext.previousCaretRange = slideEditorContext.getMouseEventCaretRange(event);
-                            //slideEditorContext.selectRange(caretRange);
-                            //also need to get + store previous caretrange for context menu
-                            //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                            //let caretRange = this.getMouseEventCaretRange(evt);
-                            // Set a timer to allow the selection to happen and the dust settle first
-                            //window.setTimeout(function() {
-                            //CKEDITOR.instances.inlineContent.destroy();
-                            //slideEditorContext.refs.inlineContent.contentEditable = false;
-                            //CKEDITOR.instances.inlineContent.hide();
-                        }
-                        else {
-                            slideEditorContext.removeEditMode();
-                        }
-                        //$(this).focus();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-        });
-        */
-
-
         //give each input element a tab index
         //$('.pptx2html [style*="absolute"]').each(function (i) { $(this).attr('tabindex', i + 1); });
         //$('.pptx2html [style*="absolute"]').each(function () { if ($(this).attr('tabindex') !== ''){$(this).attr('tabindex', 0);} });
@@ -1176,21 +1101,7 @@ class SlideContentEditor extends React.Component {
         });
         */
     }
-    /*
-    removeEditMode(){
-        //$(this).focus();
-        // re-apply draggable to editMode element
-        if ($('.editMode').length){
-            if(!$('.editMode').draggable( 'instance' )){$('.editMode').draggable({cursor: 'move'});}
-            $('.editMode').css('cursor', 'pointer');
-            $('.editMode').css('box-shadow','');
-            //$('.cke_menu').show();
-            $('.cke_menu').hide();
-            $('.editMode').contextMenu(true);
-            $('.editMode').removeClass('editMode');
-        }
-    }
-    */
+
     enterEditKey(evt, slideEditorContext, clickMenuFocus, previousCaret){
         console.log('editmode with event: ' + evt);
         let id = $(':focus').attr('id');
@@ -1233,77 +1144,6 @@ class SlideContentEditor extends React.Component {
             console.log('editmode canceled due to selection of inlineContent');
         }
     }
-    /*
-    setEditMode(evt, slideEditorContext, clickMenuFocus, previousCaret){
-        console.log('editmode with event: ' + evt);
-        let id = $(':focus').attr('id');
-        //let id = this.currentfocus;
-        //let id = $('.currentFocus').attr('id');
-        if (clickMenuFocus){
-            //if right-click context menu has selected an input box object
-            id = clickMenuFocus;
-            console.log('right-click context menu or dblclick has selected an input box - clickMenuFocusId: ' + id);
-            if($('#'+id).css('position') === 'absolute'){
-                console.log('position of menufocus' + $('#'+clickMenuFocus).css('position'));
-            }
-        } else if (slideEditorContext.menuFocus) {
-            id = slideEditorContext.menuFocus;
-            console.log('menufocus via shortkey and/or tabindex - clickMenuFocusId: ' + id);
-        }
-        //id on which edit mode is applied
-        console.log('seteditmode with id: ' + id);
-        if(id !== 'inlineContent')
-        {
-            $('.context-menu-list').trigger('contextmenu:hide'); //hide any active context menu
-            slideEditorContext.removeEditMode(); //remove existing edit mode from existing elements
-
-            if(!$('#'+id).hasClass('.editMode') &&
-               !$('#'+id).hasClass('drawing-container') &&
-                id !== 'inlineContent')
-            { //if not already in edit mode or is not SVG in drawing-container
-                $('.cke_menu').show();
-                console.log('disable extra context menu with id: ' + id );
-                $('#'+id).contextMenu(false);
-
-                if (evt)
-                {//if not already in input mode
-                    if(evt.keyCode){ //if keyboard event
-                        evt.preventDefault(); //do not fire enter key for changing content via contenteditable/Ckeditor
-                        //set caret to start of text (span) in last selected div element
-                        slideEditorContext.placeCaretAtStart(id);
-                    }
-                    else {
-                        let caretRange = slideEditorContext.getMouseEventCaretRange(evt);
-                        //console.log('caretrange: ' + caretRange + evt.clientX + evt.clientY);
-                        //let caretRange = this.getMouseEventCaretRange(evt);
-                        // Set a timer to allow the selection to happen and the dust settle first
-                        //window.setTimeout(function() {
-                        slideEditorContext.selectRange(caretRange);
-                        //this.selectRange(caretRange);
-                        //}, 10);
-                    }
-                }
-                else {
-                    //event is false = right-click context menu was used
-                    if (previousCaret){
-                        slideEditorContext.selectRange(previousCaret);
-                    } else {
-                        //set caret to start of text (span) in last selected div element
-                        slideEditorContext.placeCaretAtStart(id);
-                    }
-                }
-                if($('#' + id).draggable( 'instance' )){$('#' + id).draggable('destroy');}
-                $('#' + id).css('cursor', 'auto');
-                $('#' + id).addClass('editMode');
-                // TODO:  restore draggable after pressing 'esc' key
-                $('#' + id).css({'box-shadow':'0 0 15px 5px rgba(218, 102, 25, 1)'});
-                console.log('set edit mode end, with currentfocus: ' + id);
-            }
-        }
-        else {
-            console.log('editmode canceled due to selection of inlineContent');
-        }
-    }*/
     placeCaretAtStart(id) {
         console.log('placeCaretAtStart');
         let el = $('#'+id).find('span:first').not('.cke_widget_wrapper')[0];
@@ -1458,12 +1298,27 @@ class SlideContentEditor extends React.Component {
                         items: {
                             //'edit': {name: 'Edit (key: Ctrl enter)', icon: 'edit'},
                             //'move': {name: 'Move around', icon: 'fa-arrows',},
-                            'front': {name: 'Bring to front (Ctrl shift +)', icon: 'fa-arrow-circle-up'},
-                            'back': {name: 'Send to back (Ctrl shift -)', icon: 'fa-arrow-circle-o-down'},
-                            'duplicate': {name: 'Duplicate (Ctrl d)', icon: 'copy'},
-                            'delete': {name: 'Delete (ctrl Del)', icon: 'delete'},
+                            'front': {name: slideEditorContext.context.intl.formatMessage({
+                                id: 'slideEditor.contextMenuBringToFront',
+                                defaultMessage: 'Bring to front (Ctrl shift +)',
+                            }), icon: 'fa-arrow-circle-up'},
+                            'back': {name: slideEditorContext.context.intl.formatMessage({
+                                id: 'slideEditor.contextMenuSendToBack',
+                                defaultMessage: 'Send to back (Ctrl shift -)',
+                            }), icon: 'fa-arrow-circle-o-down'},
+                            'duplicate': {name: slideEditorContext.context.intl.formatMessage({
+                                id: 'slideEditor.contextDuplicate',
+                                defaultMessage: 'Duplicate (Ctrl d)',
+                            }), icon: 'copy'},
+                            'delete': {name: slideEditorContext.context.intl.formatMessage({
+                                id: 'slideEditor.contextDelete',
+                                defaultMessage: 'Delete (ctrl Del)',
+                            }), icon: 'delete'},
                             //'sep1': '---------',
-                            'quit': {name: 'Close menu (Esc)', icon: 'quit', accesskey: 'esc'}
+                            'quit': {name: slideEditorContext.context.intl.formatMessage({
+                                id: 'slideEditor.contextMenuClose',
+                                defaultMessage: 'Close menu (Esc)',
+                            }), icon: 'quit', accesskey: 'esc'}
                             //'quit': {name: 'Send to back', icon: 'quit'},
                         }
                     };
@@ -1487,14 +1342,26 @@ class SlideContentEditor extends React.Component {
             {
                 //console.log('there are changes!');
                 swal({
-                    title: 'You have unsaved changes. If you do not save the slide, it will not be updated.',
-                    text: 'Are you sure you want to exit this page?',
+                    title: this.context.intl.formatMessage({
+                        id: 'slideEditor.saveChangesModalTitle',
+                        defaultMessage: 'You have unsaved changes. If you do not save the slide, it will not be updated.',
+                    }),
+                    text: this.context.intl.formatMessage({
+                        id: 'slideEditor.saveChangesModalText',
+                        defaultMessage: 'Are you sure you want to exit this page?',
+                    }),
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
-                    confirmButtonText: 'Yes',
+                    confirmButtonText: this.context.intl.formatMessage({
+                        id: 'slideEditor.saveChangesModalConfirm',
+                        defaultMessage: 'Yes',
+                    }),
                     confirmButtonClass: 'ui olive button',
-                    cancelButtonText: 'No',
+                    cancelButtonText: this.context.intl.formatMessage({
+                        id: 'slideEditor.saveChangesModalCancel',
+                        defaultMessage: 'No',
+                    }),
                     cancelButtonClass: 'ui red button',
                     buttonsStyling: false,
                     allowEnterKey: true
@@ -1588,10 +1455,19 @@ class SlideContentEditor extends React.Component {
             else if (nextProps.MediaStore.status === 'error') {
                 this.refs.uploadMediaModal.handleClose();
                 swal({
-                    title: 'Error',
-                    text: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
+                    title: this.context.intl.formatMessage({
+                        id: 'slideEditor.imageUploadErrorTitle',
+                        defaultMessage: 'Error',
+                    }),
+                    text: this.context.intl.formatMessage({
+                        id: 'slideEditor.imageUploadErrorText',
+                        defaultMessage: 'Uploading the image file failed. Please try it again and make sure that you select an image and that the file size is not too big. Also please make sure you did not upload an image twice.',
+                    }),
                     type: 'error',
-                    confirmButtonText: 'Close',
+                    confirmButtonText: this.context.intl.formatMessage({
+                        id: 'slideEditor.imageUploadErrorConfirm',
+                        defaultMessage: 'Close',
+                    }),
                     confirmButtonClass: 'negative ui button',
                     allowEscapeKey: false,
                     allowOutsideClick: false,
