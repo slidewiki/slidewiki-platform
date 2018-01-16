@@ -41,21 +41,22 @@ class SlideContentEditor extends React.Component {
         if (slideSize !== ''){
             if($('.pptx2html').length)  //if slide is in canvas mode
             {
+                /*
                 let messages = defineMessages({
                     swal_text:{
                         id: 'slideEditor.slideSizeModalText',
-                        defaultMessage: 'This action will change the size of the slide. Your current slide size is {width} by {height} (pixels), and you can reset the slide size to its original. Do you want to continue?'
+                        defaultMessage: 'This action will change the size of the slide, however, you can reset the slide size to its original. Do you want to continue?'
                     },
                 });
+                */
                 swal({
                     title: this.context.intl.formatMessage({
                         id: 'slideEditor.slideSizeModalTitle',
                         defaultMessage: 'Apply template',
                     }),
-                    title: 'Apply template',
-                    text: this.context.intl.formatMessage(messages.swal_text, {
-                        width: $('.pptx2html').css('width'),
-                        height: $('.pptx2html').css('height')
+                    text: this.context.intl.formatMessage({
+                        id: 'slideEditor.slideSizeModalText',
+                        defaultMessage: 'This action will change the size of the slide, however, you can reset the slide size to its original. Do you want to continue?',
                     }),
                     type: 'question',
                     showCloseButton: true,
