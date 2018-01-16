@@ -57,10 +57,8 @@ class ContentQuestionAnswersList extends React.Component {
 
         let correctAnswers = this.props.items.filter((item) => item.correct).map((node, index) => {
             return (
-              <div key={index}>
-                  <a className="header">
-                      {node.answer}
-                  </a>
+              <div key={index} className="header">
+                  {node.answer}
               </div>
             );
         });
