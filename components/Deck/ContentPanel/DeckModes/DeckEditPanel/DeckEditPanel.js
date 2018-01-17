@@ -92,7 +92,7 @@ class DeckEditPanel extends React.Component {
                     username = this.props.UserProfileStore.user.uname;
                 let organization = '';
                 if (this.props.UserProfileStore.user.organization) {
-                    organization = ', organization: ' + this.props.UserProfileStore.user.organization
+                    organization = ', organization: ' + this.props.UserProfileStore.user.organization;
                 }
 
                 swal({
