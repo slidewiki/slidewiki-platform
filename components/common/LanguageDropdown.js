@@ -73,6 +73,10 @@ class LanguageDropdown extends React.Component {
             tooltip: {
                 id: 'LanguageDropdown.tooltip',
                 defaultMessage: 'There will be more in the future'
+            }, 
+            placeholder: {
+                id: 'LanguageDropdown.placeholder',
+                defaultMessage: 'Select your language'
             }
         });
     }
@@ -129,7 +133,7 @@ class LanguageDropdown extends React.Component {
                     :
                     <input type="hidden" value={this.props.value} name="language" id="language" ref="language" defaultValue={this.props.language}/>}
                 <i className="dropdown icon"/>
-                <div className="default text">Select your language</div>
+                <div className="default text"><FormattedMessage {...this.messages.placeholder} /></div>
                 {this.props.type === 'spoken' ? languageOptions : languageOptionsUI}
             </div>
         );
