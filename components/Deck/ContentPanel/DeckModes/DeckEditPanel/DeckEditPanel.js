@@ -18,8 +18,7 @@ class DeckEditPanel extends React.Component {
 
     handleAuth(selector) {
         if (this.getParameterByName('interestedUser') && this.props.UserProfileStore.username === '') {
-            $('.ui.login.modal').modal('show');
-            return; //TODO Modal should refresh current page?
+            return;
         }
 
         const nodeURL = ContentUtil.makeNodeURL(selector, 'view');
@@ -44,6 +43,10 @@ class DeckEditPanel extends React.Component {
 
     componentDidMount() {
         let interestedUser = this.getParameterByName('interestedUser');
+        if (interestedUser && this.props.UserProfileStore.username === '') {
+            $('.ui.login.modal').modal('show');
+            return;
+        }
         // console.log('componentDidMount', interestedUser, this.props.DeckEditStore.deckProps.deckOwner, this.props.UserProfileStore.userid);
         if (interestedUser) {
             let users = this.props.DeckEditStore.authorizedUsers;
@@ -87,13 +90,14 @@ class DeckEditPanel extends React.Component {
                 let username = this.props.UserProfileStore.user.fname + ' ' + this.props.UserProfileStore.user.lname + ' (' + this.props.UserProfileStore.user.uname + ')';
                 if (!this.props.UserProfileStore.user.lname && !this.props.UserProfileStore.user.fname)
                     username = this.props.UserProfileStore.user.uname;
+                let organization = '';
+                if (this.props.UserProfileStore.user.organization) {
+                    organization = ', organization: ' + this.props.UserProfileStore.user.organization
+                }
 
-                let func = () => {
-                    window.open(link);return false;
-                };
                 swal({
                     title: 'Requested deck edit rights',
-                    text: 'The following user requested edit rights on deck "' + this.props.DeckEditStore.deckProps.title + '":   ' + username + ', organization: ' + this.props.UserProfileStore.user.organization + '. Grant it?',
+                    text: 'The following user requested edit rights on deck "' + this.props.DeckEditStore.deckProps.title + '":   ' + username + organization + '. Grant it?',
                     type: 'question',
                     showCloseButton: true,
                     showCancelButton: true,
@@ -114,7 +118,7 @@ class DeckEditPanel extends React.Component {
 
                     this.action = 1;
                     this.context.executeAction(updateAuthorizedUsers, users);
-                }).catch();
+                }, () => {}).catch();
             }
         }
     }
