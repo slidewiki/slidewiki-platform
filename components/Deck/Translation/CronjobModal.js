@@ -8,27 +8,56 @@ import {  Dropdown, Button, Modal, Icon, Header, Divider} from 'semantic-ui-reac
 
 
 import toggleCronjobModal from '../../../actions/decktree/toggleCronjobModal';
+import updateTranslationProgressBar from '../../../actions/updateTranslationProgressBar';
 
 
 class CronjobModal extends React.Component {
 
     constructor(props) {
         super(props);
-        //this.state = {language: null, error:false, previewModal:false, previewLanguage: null, cronjobModalOpen: true};
+        //this.state = {progress: this.props.TranslationStore.translationProgress.toString()};
     }
 
     handleCronjobModalClose(){
         this.context.executeAction(toggleCronjobModal);
     }
 
-    render() {
 
+    //$('#progressbar_cronjobModal_translate').progress('set percent', this.props.TranslationStore.translationProgress);
+
+    initializeProgressBar() {
+        $('#progressbar_cronjobModal_translate').progress('set active');
+        $('#progressbar_cronjobModal_translate').progress('reset');
+        $('#progressbar_cronjobModal_translate').progress({
+            text: {
+                active  : 'Translating: {percent}%',
+                success : 'Slides translated!',
+                error   : 'Translation failed!'
+            }
+        });
+    }
+
+    componentDidMount(){
+        this.initializeProgressBar();
+    }
+
+    componentDidUpdate(){
+        $('#progressbar_cronjobModal_translate').progress('set percent', this.props.TranslationStore.translationProgress);
+    }
+
+    render() {
+        let progress = this.props.TranslationStore.translationProgress;
         return (
             <Modal dimmer='blurring' role='dialog' aria-labelledby='cronjobModalHeader' open={this.props.TranslationStore.isCronjobModalOpen}>
                 <Header icon='translate' content={'Translation is in progress'} id='cronjobModalHeader'/>
                 <Modal.Content>
                     <p> The translation of a deck with more than 20 slides in it takes time.
-                    The deck has been added to the queue. You will be notified when the job is done. </p>
+                    The deck has been added to the queue. You can close this window and will be notified when the job is done.
+                    </p>
+                    <div className="ui indicating progress" ref="div_progress" id="progressbar_cronjobModal_translate" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100" tabIndex="0" >
+                        <div className="bar"></div>
+                        <div className="label" ref="div_progress_text" id="progresslabel_cronjobModal_translate" aria-live="polite"></div>
+                    </div>
                 </Modal.Content>
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.TranslationStore.isCronjobModalOpen}>

@@ -187,6 +187,16 @@ export default {
                 console.log('serviceErr', err);
                 callback(null, {noofslides: 0});
             });
+
+        } else if (resource === 'deck.translationProgress') {
+            //logger.info({reqId: req.reqId, file: __filename.split('/').pop(), Resource: resource});
+            let args = params.params ? params.params : params;
+            rp.get({uri: Microservices.translation.uri + '/jobByNewId/' + args.id}).then((res) => {
+                callback(null, {noofslides: JSON.parse(res).progress});
+            }).catch((err) => {
+                console.log('serviceErr', err);
+                callback(null, {noofslides: 0});
+            });
         } else if (resource === 'deck.forks') {
             rp({
                 method: 'GET',

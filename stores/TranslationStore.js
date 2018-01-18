@@ -9,6 +9,7 @@ class TranslationStore extends BaseStore {
         this.inProgress = false;
         this.slideToPreview = null;
         this.isCronjobModalOpen = false;
+        this.translationProgress = 0;
     }
     startTranslation(payload){
         this.inProgress = true;
@@ -29,6 +30,10 @@ class TranslationStore extends BaseStore {
     }
     loadSlidePreview(payload) {
         this.slideToPreview = payload.slide;
+        this.emitChange();
+    }
+    updateTranslationProgressBar(payload){
+        this.translationProgress = payload.noofslides/payload.totalSlides*100;
         this.emitChange();
     }
     //opens a modal with the info about translation cronjob
@@ -59,6 +64,7 @@ class TranslationStore extends BaseStore {
             inProgress: this.inProgress,
             slideToPreview: this.slideToPreview,
             isCronjobModalOpen: this.isCronjobModalOpen,
+            translationProgress: this.translationProgress,
         };
     }
 
@@ -70,6 +76,7 @@ class TranslationStore extends BaseStore {
             inProgress: this.inProgress,
             slideToPreview: this.slideToPreview,
             isCronjobModalOpen: this.isCronjobModalOpen,
+            translationProgress: this.translationProgress,
         };
     }
     rehydrate(state) {
@@ -79,6 +86,7 @@ class TranslationStore extends BaseStore {
         this.inProgress = state.inProgress;
         this.slideToPreview = state.slideToPreview;
         this.isCronjobModalOpen = state.isCronjobModalOpen;
+        this.translationProgress = state.translationProgress;
     }
 
 }
@@ -91,6 +99,7 @@ TranslationStore.handlers = {
     'END_TRANSLATION' : 'endTranslation',
     'LOAD_SLIDE_PREVIEW_SUCCESS': 'loadSlidePreview',
     'TOGGLE_CRONJOB_MODAL': 'toggleCronjobModal',
+    'UPDATE_TRANSLATION_PROGRESS_BAR': 'updateTranslationProgressBar',
 };
 
 export default TranslationStore;

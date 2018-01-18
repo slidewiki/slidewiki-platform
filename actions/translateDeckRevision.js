@@ -5,6 +5,7 @@ import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
 import serviceUnavailable from './error/serviceUnavailable';
 import addActivity from './activityfeed/addActivity';
+import updateTranslationProgressBar from './updateTranslationProgressBar';
 const log = require('./log/clog');
 const common = require('../common.js');
 
@@ -41,9 +42,12 @@ export default function translateDeckRevision(context, payload, done) {
             // context.executeAction(addActivity, {activity: activity});
 
             context.dispatch('END_TRANSLATION', 'success');
-
+            //res.totalSlides = 2;//TODO
+            //res.newId = '11356';
             if (res.cronjob) {
                 context.dispatch('TOGGLE_CRONJOB_MODAL');
+                context.executeAction(updateTranslationProgressBar, {'totalSlides': res.totalSlides, 'id' : res.newId});
+                done();
             }else{
                 context.executeAction(navigateAction, {
                     url: '/deck/' + res.root_deck //ADD HERE NEW DECK ID
