@@ -70,8 +70,7 @@ CKEDITOR.editorConfig = function( config ) {
     //{ name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
     //{ name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
     //{ name: 'about', items: [ 'About' ] }
-    //config.floatSpacePreferRight = true;
-    config.floatSpacePreferMiddle = true;
+    config.floatSpacePreferRight = true;
     //config.floatSpaceDockedOffsetX = 300;
     //config.floatSpaceDockedOffsetY = 100;
     //config.floatSpacePinnedOffsetX = 1000;
