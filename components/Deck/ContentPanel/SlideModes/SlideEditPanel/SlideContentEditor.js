@@ -1888,6 +1888,14 @@ class SlideContentEditor extends React.Component {
             this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
         }
+        //$('.cke_float').width( $('.pptx2html').width());
+        //$('.cke_top').css('maxwidth', $('.pptx2html').width());
+        //$('.cke_float').css('maxwidth', $('.pptx2html').width());
+        //$('.cke_toolbox').css('maxwidth', $('.pptx2html').width());
+        let twentypercent = $('#container').width() * 0.2;
+        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
+        $('.cke_float').css('width', $('#container').width() - twentypercent);
+        $('.cke_top').css('width', $('#container').width() - twentypercent);
     }
     componentWillUnmount() {
         // Remove the warning window.
