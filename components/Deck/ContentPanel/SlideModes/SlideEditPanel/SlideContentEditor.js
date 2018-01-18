@@ -735,9 +735,9 @@ class SlideContentEditor extends React.Component {
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         }); //leave all buttons
         //this.currentcontent = this.props.content;
-        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
-            return false;
-        });
+        //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+        //    return false;
+        //});
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
