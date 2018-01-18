@@ -10,6 +10,7 @@ class TranslationStore extends BaseStore {
         this.slideToPreview = null;
         this.isCronjobModalOpen = false;
         this.translationProgress = 0;
+        this.newId = null;
     }
     startTranslation(payload){
         this.inProgress = true;
@@ -41,6 +42,10 @@ class TranslationStore extends BaseStore {
         this.isCronjobModalOpen = !this.isCronjobModalOpen;
         this.emitChange();
     }
+    setNewId(payload){
+        this.newId = payload.newId;
+        this.emitChange();
+    }
 
 
     getSupportedLangs(){
@@ -54,6 +59,12 @@ class TranslationStore extends BaseStore {
         };
     }
 
+    resetStore(){
+        this.inProgress = false;
+        this.translationProgress = 0;
+        this.newId = null;
+    }
+
 
 
     getState() {
@@ -65,6 +76,7 @@ class TranslationStore extends BaseStore {
             slideToPreview: this.slideToPreview,
             isCronjobModalOpen: this.isCronjobModalOpen,
             translationProgress: this.translationProgress,
+            newId: this.newId,
         };
     }
 
@@ -77,6 +89,7 @@ class TranslationStore extends BaseStore {
             slideToPreview: this.slideToPreview,
             isCronjobModalOpen: this.isCronjobModalOpen,
             translationProgress: this.translationProgress,
+            newId: this.newId,
         };
     }
     rehydrate(state) {
@@ -87,6 +100,7 @@ class TranslationStore extends BaseStore {
         this.slideToPreview = state.slideToPreview;
         this.isCronjobModalOpen = state.isCronjobModalOpen;
         this.translationProgress = state.translationProgress;
+        this.newId = state.newId;
     }
 
 }
@@ -100,6 +114,8 @@ TranslationStore.handlers = {
     'LOAD_SLIDE_PREVIEW_SUCCESS': 'loadSlidePreview',
     'TOGGLE_CRONJOB_MODAL': 'toggleCronjobModal',
     'UPDATE_TRANSLATION_PROGRESS_BAR': 'updateTranslationProgressBar',
+    'SET_NEW_ID' : 'setNewId',
+    'RESET_TRANSLATION_STORE' : 'resetStore',
 };
 
 export default TranslationStore;

@@ -12,7 +12,7 @@ import AttachSlides from '../AttachSubdeck/AttachSlidesModal';
 import PermissionsStore from '../../../../stores/PermissionsStore';
 import ContentStore from '../../../../stores/ContentStore';
 import showNoPermissionsModal from '../../../../actions/permissions/showNoPermissionsModal';
-import translateSlideRevision from '../../../../actions/translateSlideRevision';
+import translateSlideRevision from '../../../../actions/translation/translateSlideRevision';
 
 import TranslationModal from '../../Translation/TranslationModal';
 

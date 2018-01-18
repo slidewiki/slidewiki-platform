@@ -1,9 +1,9 @@
-import { shortTitle } from '../configs/general';
-import deckContentTypeError from './error/deckContentTypeError';
-import slideIdTypeError from './error/slideIdTypeError';
-import { AllowedPattern } from './error/util/allowedPattern';
-import serviceUnavailable from './error/serviceUnavailable';
-const log = require('./log/clog');
+import { shortTitle } from '../../configs/general';
+import deckContentTypeError from '../error/deckContentTypeError';
+import slideIdTypeError from '../error/slideIdTypeError';
+import { AllowedPattern } from '../error/util/allowedPattern';
+import serviceUnavailable from '../error/serviceUnavailable';
+const log = require('../log/clog');
 
 export default function loadTranslations(context, payload, done) {
     log.info(context);

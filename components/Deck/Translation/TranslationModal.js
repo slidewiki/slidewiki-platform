@@ -4,8 +4,8 @@ import FocusTrap from 'focus-trap-react';
 import {connectToStores} from 'fluxible-addons-react';
 import ISO6391 from 'iso-639-1';
 import {navigateAction} from 'fluxible-router';
-import translateDeckRevision from '../../../actions/translateDeckRevision.js';
-import translateSlideRevision from '../../../actions/translateSlideRevision.js';
+import translateDeckRevision from '../../../actions/translation/translateDeckRevision.js';
+import translateSlideRevision from '../../../actions/translation/translateSlideRevision.js';
 
 import {  Dropdown, Button, Modal, Icon, Header, Divider} from 'semantic-ui-react';
 
@@ -21,14 +21,6 @@ class TranslationModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {language: null, error:false, previewModal:false, previewLanguage: null};
-    }
-
-    handleLanguageClick(id){
-
-        this.context.executeAction(navigateAction, {
-            url: '/deck/'+ id
-        });
-        this.handleClose();
     }
 
     handleClose(){

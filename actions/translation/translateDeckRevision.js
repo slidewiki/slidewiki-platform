@@ -1,13 +1,13 @@
-import UserProfileStore from '../stores/UserProfileStore';
-import ContentStore from '../stores/ContentStore';
+import UserProfileStore from '../../stores/UserProfileStore';
+import ContentStore from '../../stores/ContentStore';
 import striptags from 'striptags';
-import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
+import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
-import serviceUnavailable from './error/serviceUnavailable';
-import addActivity from './activityfeed/addActivity';
+import serviceUnavailable from '../error/serviceUnavailable';
+import addActivity from '../activityfeed/addActivity';
 import updateTranslationProgressBar from './updateTranslationProgressBar';
-const log = require('./log/clog');
-const common = require('../common.js');
+const log = require('../log/clog');
+const common = require('../../common.js');
 
 export default function translateDeckRevision(context, payload, done) {
     context.dispatch('START_TRANSLATION', 'success');
@@ -46,6 +46,7 @@ export default function translateDeckRevision(context, payload, done) {
             //res.newId = '11356';
             if (res.cronjob) {
                 context.dispatch('TOGGLE_CRONJOB_MODAL');
+                context.dispatch('SET_NEW_ID', {'newId': res.newId});
                 context.executeAction(updateTranslationProgressBar, {'totalSlides': res.totalSlides, 'id' : res.newId});
                 done();
             }else{

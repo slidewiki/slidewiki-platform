@@ -1,6 +1,6 @@
 
-const log = require('./log/clog');
-import serviceUnavailable from './error/serviceUnavailable';
+const log = require('../log/clog');
+import serviceUnavailable from '../error/serviceUnavailable';
 
 export default function updateTranslationProgressBar(context, payload, done) {
     log.info(context);

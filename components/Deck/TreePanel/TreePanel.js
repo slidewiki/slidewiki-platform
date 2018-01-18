@@ -13,7 +13,7 @@ import saveTreeNode from '../../../actions/decktree/saveTreeNode';
 import deleteTreeNodeAndNavigate from '../../../actions/decktree/deleteTreeNodeAndNavigate';
 import addTreeNodeAndNavigate from '../../../actions/decktree/addTreeNodeAndNavigate';
 import moveTreeNodeAndNavigate from '../../../actions/decktree/moveTreeNodeAndNavigate';
-import loadTranslations from '../../../actions/loadTranslations';
+import loadTranslations from '../../../actions/translation/loadTranslations';
 import PermissionsStore from '../../../stores/PermissionsStore';
 import ForkModal from './ForkModal';
 import TranslationModal from '../Translation/TranslationModal';
@@ -196,7 +196,7 @@ class TreePanel extends React.Component {
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
                 <TranslationModal selector={selector.toJS()} mode='deck' isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
-                
+
             </div>
         );
     }

@@ -2,13 +2,16 @@ import React from 'react';
 import FocusTrap from 'focus-trap-react';
 
 import {connectToStores} from 'fluxible-addons-react';
+import {navigateAction} from 'fluxible-router';
+
 import TranslationStore from '../../../stores/TranslationStore';
 
 import {  Dropdown, Button, Modal, Icon, Header, Divider} from 'semantic-ui-react';
 
 
 import toggleCronjobModal from '../../../actions/decktree/toggleCronjobModal';
-import updateTranslationProgressBar from '../../../actions/updateTranslationProgressBar';
+import updateTranslationProgressBar from '../../../actions/translation/updateTranslationProgressBar';
+import resetTranslationStore from '../../../actions/translation/resetTranslationStore';
 
 
 class CronjobModal extends React.Component {
@@ -20,6 +23,7 @@ class CronjobModal extends React.Component {
 
     handleCronjobModalClose(){
         this.context.executeAction(toggleCronjobModal);
+        this.context.executeAction(resetTranslationStore);    
     }
 
 
@@ -45,8 +49,17 @@ class CronjobModal extends React.Component {
         $('#progressbar_cronjobModal_translate').progress('set percent', this.props.TranslationStore.translationProgress);
     }
 
+    goToTranslation(){
+        this.context.executeAction(navigateAction, {
+            url: '/deck/'+ this.props.TranslationStore.newId
+        });
+        this.handleCronjobModalClose();
+
+    }
+
     render() {
         let progress = this.props.TranslationStore.translationProgress;
+
         return (
             <Modal dimmer='blurring' role='dialog' aria-labelledby='cronjobModalHeader' open={this.props.TranslationStore.isCronjobModalOpen}>
                 <Header icon='translate' content={'Translation is in progress'} id='cronjobModalHeader'/>
@@ -61,6 +74,7 @@ class CronjobModal extends React.Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <FocusTrap focusTrapOptions={{clickOutsideDeactivates: true}} active={this.props.TranslationStore.isCronjobModalOpen}>
+                        {progress === 100 ? <Button as='button' primary onClick={this.goToTranslation.bind(this)}>Go to translation</Button> : ''}
                         <Button as='button' primary onClick={this.handleCronjobModalClose.bind(this)}><Icon name='close'/> Close</Button>
                     </FocusTrap>
                 </Modal.Actions>

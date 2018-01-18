@@ -1,12 +1,12 @@
-import UserProfileStore from '../stores/UserProfileStore';
-import ContentStore from '../stores/ContentStore';
+import UserProfileStore from '../../stores/UserProfileStore';
+import ContentStore from '../../stores/ContentStore';
 import striptags from 'striptags';
-import TreeUtil from '../components/Deck/TreePanel/util/TreeUtil';
+import TreeUtil from '../../components/Deck/TreePanel/util/TreeUtil';
 import {navigateAction} from 'fluxible-router';
-import serviceUnavailable from './error/serviceUnavailable';
+import serviceUnavailable from '../error/serviceUnavailable';
 import loadTranslations from './loadTranslations';
-const log = require('./log/clog');
-const common = require('../common.js');
+const log = require('../log/clog');
+const common = require('../../common.js');
 
 export default function translateSlideRevision(context, payload, done) {
     context.dispatch('START_TRANSLATION', 'success');

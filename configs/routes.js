@@ -12,7 +12,7 @@ import loadDeckEdit from '../actions/loadDeckEdit';
 import loadDataSources from '../actions/datasource/loadDataSources';
 import loadActivities from '../actions/activityfeed/loadActivities';
 import loadDeckTree from '../actions/decktree/loadDeckTree';
-import loadTranslations from '../actions/loadTranslations';
+import loadTranslations from '../actions/translation/loadTranslations';
 import loadContentHistory from '../actions/history/loadContentHistory';
 import loadContentUsage from '../actions/loadContentUsage';
 import loadContentQuestions from '../actions/loadContentQuestions';

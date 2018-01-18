@@ -2,7 +2,7 @@ import React from 'react';
 import {connectToStores} from 'fluxible-addons-react';
 import ISO6391 from 'iso-639-1';
 import {NavLink, navigateAction} from 'fluxible-router';
-import translateDeckRevision from '../../../actions/translateDeckRevision.js';
+import translateDeckRevision from '../../../actions/translation/translateDeckRevision.js';
 
 import { Dropdown, Menu, Flag, Button, Modal, Popup , Header} from 'semantic-ui-react';
 
