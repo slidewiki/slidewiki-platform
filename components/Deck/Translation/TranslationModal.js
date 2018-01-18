@@ -37,7 +37,8 @@ class TranslationModal extends React.Component {
                 case 'deck':
                     this.context.executeAction(translateDeckRevision, {
                         // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
-                        language: code+'_'+code.toUpperCase()
+                        language: code+'_'+code.toUpperCase(),
+                        mode: 'deck'
                     });
                     this.props.handleClose();
                     break;
@@ -53,7 +54,8 @@ class TranslationModal extends React.Component {
                     this.context.executeAction(translateDeckRevision, {
                         // TODO this is wrong, the second part for a lanugage code is the COUNTRY not the language, so for greek the el_EL is invalid
                         language: code+'_'+code.toUpperCase(),
-                        selector: selector
+                        selector: selector,
+                        mode: 'subdeck'
                     });
                     this.props.handleClose();
                     break;

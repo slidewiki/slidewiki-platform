@@ -195,7 +195,7 @@ class TreePanel extends React.Component {
                     </div>
                 </div>
                 <ForkModal selector={selector.toJS()} isOpen={this.state.isForkModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isForkModalOpen: false})} />
-                <TranslationModal selector={selector.toJS()} mode='deck' isOpen={this.state.isTranslationModalOpen} forks={this.props.PermissionsStore.ownedForks} handleClose={() => this.setState({isTranslationModalOpen: false})} />
+                <TranslationModal selector={selector.toJS()} mode='deck' isOpen={this.state.isTranslationModalOpen} handleClose={() => this.setState({isTranslationModalOpen: false})} />
 
             </div>
         );
