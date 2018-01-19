@@ -15,6 +15,8 @@ export default function loadDeckCollections(context, payload, done) {
         payload.jwt = context.getStore(UserProfileStore).jwt;
     }
     
+    context.dispatch('UPDATE_COLLECTIONS_LOADING', true);
+
     // first get user groups that the user is member of 
     context.service.read('usergroup.member', payload, {timeout: 20 * 1000}, (err, usergroups) => {
         if(err){
@@ -31,6 +33,8 @@ export default function loadDeckCollections(context, payload, done) {
                 } else {
                     context.dispatch('LOAD_COLLECTIONS_SUCCESS', res);
                 }
+                
+                context.dispatch('UPDATE_COLLECTIONS_LOADING', false);
 
                 done();
             });

@@ -29,6 +29,7 @@ class DeckEditStore extends BaseStore {
         // variables for error handling 
         this.loadCollectionsError = false;
         this.addCollectionError = false;
+        this.collectionsLoading = false;
     }
 
     updateProperties(payload) {
@@ -69,6 +70,7 @@ class DeckEditStore extends BaseStore {
             selectedCollections: this.selectedCollections,
             loadCollectionsError: this.loadCollectionsError, 
             addCollectionError: this.addCollectionError,
+            collectionsLoading: this.collectionsLoading
         };
     }
 
@@ -89,6 +91,7 @@ class DeckEditStore extends BaseStore {
         this.selectedCollections = state.selectedCollections;
         this.loadCollectionsError = state.loadCollectionsError; 
         this.addCollectionError = state.addCollectionError;
+        this.collectionsLoading = state.collectionsLoading;
     }
 
     updateAuthorizedUsers(users) {
@@ -156,6 +159,11 @@ class DeckEditStore extends BaseStore {
         });
         this.emitChange();
     }
+
+    updateCollectionsLoading(payload){
+        this.collectionsLoading = payload;
+        this.emitChange();
+    }
 }
 
 DeckEditStore.storeName = 'DeckEditStore';
@@ -174,6 +182,7 @@ DeckEditStore.handlers = {
     // load deck groups assigned to a deck
     'LOAD_COLLECTIONS_SUCCESS': 'loadCollections', 
     'LOAD_COLLECTIONS_FAILURE': 'loadCollectionsFail',
+    'UPDATE_COLLECTIONS_LOADING': 'updateCollectionsLoading', 
 
     'ADD_COLLECTION_SUCCESS': 'addCollection', 
     'ADD_COLLECTION_FAILURE': 'addCollectionFailure', 

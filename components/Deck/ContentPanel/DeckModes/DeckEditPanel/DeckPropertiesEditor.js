@@ -619,9 +619,13 @@ class DeckPropertiesEditor extends React.Component {
                                     </div>
                                 </div>
                                 <div className="field">
-                                    <div className="ui very relaxed  list">
-                                        {selectedCollectionsList}
-                                    </div>
+                                    {(this.props.DeckEditStore.collectionsLoading) ? 
+                                        <div className="ui active centered inline text loader">Loading Deck Collections</div>
+                                        :
+                                        <div className="ui very relaxed  list">
+                                            {selectedCollectionsList}
+                                        </div>
+                                    }
                                 </div>
                                 <NewCollectionModal isOpen={this.state.showNewCollectionModal} handleClose={() => this.setState({showNewCollectionModal: false})} userGroups={this.props.groups} loggedInUser={this.props.userid} />
                             </div>
