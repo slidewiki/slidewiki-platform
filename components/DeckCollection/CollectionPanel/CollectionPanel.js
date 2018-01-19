@@ -156,7 +156,7 @@ class CollectionPanel extends React.Component {
 
         let data = this.props.DeckCollectionStore.collectionDetails;
         let content = (!this.state.editMode) 
-        ? <CollectionDecks size={0} decks={data.decks} sort={data.sortBy}/>
+        ? <CollectionDecks size={0} decks={this.state.decksOrder} sort={data.sortBy}/>
         : <CollectionDecksReorder size={0} decks={this.state.decksOrder} moveUp={this.handleMoveUp.bind(this)} moveDown={this.handleMoveDown.bind(this)} />;
 
         // the user has edit rights in collection if he is the owner of the collection, or one of his user groups are assigned to the collection
