@@ -103,7 +103,7 @@ fetchrPlugin.registerService(require('./services/media'));
 fetchrPlugin.registerService(require('./services/email'));
 fetchrPlugin.registerService(require('./services/media'));
 fetchrPlugin.registerService(require('./services/userreview'));
-
+fetchrPlugin.registerService(require('./services/nlp'));
 
 // ************************** UI Internationalisation routines ***************************************
 
