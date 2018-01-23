@@ -5,14 +5,15 @@ import cheerio from 'cheerio';
 import ContentQuestionAnswersList from './ContentQuestionAnswersList';
 import toggleAnswers from '../../../../actions/questions/toggleAnswers';
 import DeckTreeStore from '../../../../stores/DeckTreeStore';
+import TreeUtil from '../../TreePanel/util/TreeUtil';
 
 class ContentQuestionsItem extends React.Component {
     //return the position of the node in the deck
     getPath(question){
-        const flatTree = this.props.savedDeckTreeStore.flatTree;
+        const flatTree = this.props.DeckTreeStore.flatTree;
         let path = '';
         for (let i=0; i < flatTree.size; i++) {
-            if (flatTree.get(i).get('type') === question.relatedObject && flatTree.get(i).get('id') === question.relatedObjectId) {
+            if (flatTree.get(i).get('type') === question.relatedObject && flatTree.get(i).get('id').split('-')[0] === question.relatedObjectId) {
                 path = flatTree.get(i).get('path');
                 let nodeSelector = {id: this.props.selector.id, stype: question.relatedObject, sid: question.relatedObjectId, spath: path};
                 let nodeURL = TreeUtil.makeNodeURL(nodeSelector, 'deck', 'view');
@@ -25,7 +26,7 @@ class ContentQuestionsItem extends React.Component {
 
     handleRefClick(e) {
         e.preventDefault();
-
+        
         this.context.executeAction(navigateAction, {
             url: this.getPath(this.props.question)
         });
@@ -107,17 +108,18 @@ class ContentQuestionsItem extends React.Component {
             // </div>
             <div>
                 <div className={activeIfFirst + ' title'}>
-                  <i className="dropdown icon" />
-                  {question.title}
-                  <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
-                      {difficultyStars(question.difficulty)}
-                  </div>
-                  {nodeRef}
-                <div
-                  className={activeIfFirst + ' content'}
-                  data-reactid={653}>
-                  {answers}
+                    <i className="dropdown icon" />
+                    {question.title}
+                    <div className="ui star rating" data-rating={question.difficulty} aria-label={'difficulty level ' + question.difficulty} tabIndex={0} />
+                    {difficultyStars(question.difficulty)}
                 </div>
+
+                <div
+                    className={activeIfFirst + ' content'}
+                    data-reactid={653}>
+                    {answers}
+                </div>
+                {nodeRef}
             </div>
         );
     }
