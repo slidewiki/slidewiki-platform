@@ -8,6 +8,7 @@ import {Microservices} from '../../../../configs/microservices';
 import addActivity from '../../../../actions/activityfeed/addActivity';
 import incrementDeckViewCounter from '../../../../actions/activityfeed/incrementDeckViewCounter';
 import {FormattedMessage, defineMessages} from 'react-intl';
+import EmbedModal from './EmbedModal';
 
 
 class DownloadModal extends React.Component{
@@ -26,7 +27,6 @@ class DownloadModal extends React.Component{
         this.unmountTrap = this.unmountTrap.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.handleRadioChange = this.handleRadioChange.bind(this);
-
 
         this.messages = defineMessages({
             downloadModal_header:{
@@ -57,7 +57,6 @@ class DownloadModal extends React.Component{
 
     }
 
-
     handleClose(){
         $('#app').attr('aria-hidden', 'false');
         this.setState({
@@ -66,18 +65,21 @@ class DownloadModal extends React.Component{
         });
 
     }
+
     unmountTrap() {
         if(this.state.activeTrap){
             this.setState({ activeTrap: false });
             $('#app').attr('aria-hidden','false');
         }
     }
+
     handleRadioChange(event,data){
         this.setState({
             radioValue:data.value
         });
 
     }
+
     getExportHref(type){
         let splittedId;
         if (this.props.ContentStore.selector.id !== undefined && this.props.ContentStore.selector.id !== '' && this.props.ContentStore.selector.id !== 0){
@@ -108,6 +110,7 @@ class DownloadModal extends React.Component{
 
 
     }
+
     createDownloadActivity() {
         //create new activity
         let splittedId =  this.props.ContentStore.selector.id.split('-'); //separates deckId and revision
@@ -124,6 +127,7 @@ class DownloadModal extends React.Component{
         this.context.executeAction(addActivity, {activity: activity});
         context.executeAction(incrementDeckViewCounter, {type: 'download'});
     }
+
     handleDownload(event,data){
         if(process.env.BROWSER){
             event.preventDefault();
@@ -285,6 +289,7 @@ class DownloadModal extends React.Component{
                                           onClick={this.handleClose}
                                           content={this.context.intl.formatMessage(this.messages.downloadModal_cancelButton)}
                                       />
+
                                       </Grid.Column>
                                       </Grid.Row>
 

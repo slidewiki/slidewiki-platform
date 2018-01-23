@@ -993,7 +993,7 @@ class SlideContentEditor extends React.Component {
                 //let id = $(':focus').attr('id');
                 let id = event.target.id;
                 if (!id || id === 'inlineContent'){id = this.menuFocus; console.log('used menuFocus');}
-                if (id && id !== 'inlineContent')
+                else
                 {
                     /*
                     if(!$('#'+id).hasClass('editMode')){
