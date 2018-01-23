@@ -108,8 +108,8 @@ class ContentActionsHeader extends React.Component {
         const contentDetails = this.props.ContentStore;
         //config buttons based on the selected item
         const editClass = classNames({
-            'ui button attached basic': true,
-            'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
+            'ui button attached basic': true
+            //'disabled': this.props.PermissionsStore.permissions.readOnly || !this.props.PermissionsStore.permissions.edit || contentDetails.mode ==='edit'
         });
         const viewClass = classNames({
             ' ui small basic button': true,

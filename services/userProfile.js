@@ -226,7 +226,7 @@ export default {
                         return {
                             title: !isEmpty(deck.title) ? deck.title : 'No Title',
                             picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                            description: deck.description,
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
@@ -253,7 +253,7 @@ export default {
                         return {
                             title: !isEmpty(deck.title) ? deck.title : 'No Title',
                             picture: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Business_presentation_byVectorOpenStock.jpg',
-                            description: !isEmpty(deck.description) ? deck.description : 'No Description',
+                            description: deck.description,
                             updated: !isEmpty(deck.lastUpdate) ? deck.lastUpdate : (new Date()).setTime(1).toISOString(),
                             creationDate: !isEmpty(deck.timestamp) ? deck.timestamp : (new Date()).setTime(1).toISOString(),
                             deckID: deck._id,
