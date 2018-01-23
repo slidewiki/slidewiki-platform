@@ -1,6 +1,5 @@
 const log = require('../../log/clog');
 import { shortTitle } from '../../../configs/general';
-import UserProfileStore from '../../../stores/UserProfileStore';
 
 export default function updateUsergroup(context, payload, done) {
     log.info(context);
