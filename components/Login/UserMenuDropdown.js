@@ -85,7 +85,7 @@ class UserMenuDropdown extends React.Component {
                  <i className="caret down icon floated"></i> {alarmIcon}
 
                </AriaMenuButton.Button>
-               <AriaMenuButton.Menu className='ui menu'>
+               <AriaMenuButton.Menu className='ui menu vertical'>
                   <AriaMenuButton.MenuItem
                    className='item'
                    key= {0}
