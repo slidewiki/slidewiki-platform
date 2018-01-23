@@ -9,13 +9,14 @@ class TagInput extends React.Component {
     }
     componentWillReceiveProps(newProps){
 
-        // TODO: check here if props have changed
-        this.setState(this.getStateFromProps(newProps));
+        if(this.props !== newProps){
+            this.setState(this.getStateFromProps(newProps));
 
-        // initialize pre-selected tags
-        let values = this.state.initialTags.map( (tag) => `tagName:${tag.tagName}`);
+            // initialize pre-selected tags
+            let values = this.state.initialTags.map( (tag) => `tagName:${tag.tagName}`);
 
-        $('#tags_input_div').dropdown('set selected', values);
+            $('#tags_input_div').dropdown('set selected', values);
+        }
     }
     getStateFromProps(props){
         return {
@@ -98,11 +99,14 @@ class TagInput extends React.Component {
         });
     }
     addRecommendedTag(value){
-        // let newOption = <div className="item" key={`recommended:${value}`} data-value={`recommended:${value}`}>{value}</div>;
-        // console.log(newOption);
-        // change state here to rerender
-        $('#tags_menu').html('<div class="item" key="recommended:elixir" data-value="recommended:elixir">elixir</div>');
-        // select a recommended tag
+        // add the recommended tag as an option to the dropdown
+        let newOption = `<div class="item" key="recommended:${value}" data-value="recommended:${value}">${value}</div>`;
+        $('#tags_menu').append(newOption);
+
+        // after this addition the dropdown needs to be initialized again
+        this.initDropdown();
+
+        // select the recommended tag
         $('#tags_input_div').dropdown('set selected', `recommended:${value}`);
     }
     render(){
@@ -119,18 +123,13 @@ class TagInput extends React.Component {
         let initialOptions = this.props.initialTags.map( (t) => {
             return <div className="item" key={`tagName:${t.tagName}`} data-value={`tagName:${t.tagName}`}>{t.defaultName}</div>;
         });
-        let recommendedOptions = this.props.recommendedTags.map( (t) => {
-            return <div className="item" key={`recommended:${t.name}`} data-value={`recommended:${t.name}`}>{t.name}</div>;
-        });
-
-        let allOptions = initialOptions.concat(recommendedOptions);
 
         return (
             <div id="tags_input_div" className={classes}>
               <i className="dropdown icon"></i>
               <div className="default text">Insert new tags</div>
               <div id="tags_menu" className="menu">
-                {allOptions}
+                {initialOptions}
               </div>
             </div>
         );
