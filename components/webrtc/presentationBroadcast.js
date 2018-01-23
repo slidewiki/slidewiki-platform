@@ -6,6 +6,7 @@ import { isEmpty } from '../../common';
 import { Grid, Button, Popup } from 'semantic-ui-react';
 import {Microservices} from '../../configs/microservices';
 import SpeechRecognition from './SpeechRecognition.js';
+import SocialSharing from './SocialSharing.js';
 import Chat from './Chat.js';
 import { QRCode } from 'react-qr-svg';
 
@@ -1012,12 +1013,19 @@ class presentationBroadcast extends React.Component {
 
             <Grid.Row>
               <Grid.Column width={13}>
-                <h4>
-                  {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
-                      trigger={<span>{Object.keys(this.pcs).length}</span>}
-                      content={peernames}
-                    /></p>) : <p>{this.state.roleText}</p>}
-                </h4>
+                <Grid stackable columns={2} rows={1}>
+                  <Grid.Column width={15}>
+                    <h4>
+                      {this.isInitiator ? (<p>{this.state.roleText}{this.state.peerCountText}<Popup
+                          trigger={<span>{Object.keys(this.pcs).length}</span>}
+                          content={peernames}
+                        /></p>) : <p>{this.state.roleText}</p>}
+                    </h4>
+                  </Grid.Column>
+                  <Grid.Column width={1} style={{'padding-left': '0'}}>
+                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} currentSlideURL={this.currentSlide}/>
+                  </Grid.Column>
+                </Grid>
                 <div id="media" style={{'display': 'none'}}></div>
                 <SpeechRecognition ref="speechRecognition"
                     isInitiator={this.isInitiator}
