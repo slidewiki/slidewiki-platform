@@ -414,6 +414,10 @@ class SlideContentEditor extends React.Component {
                 '</div>';
                 break;
         }
+        //fix to prevent Firefox caret from resetting
+        $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+            CKEDITOR.instances.inlineContent.getSelection().unlock();
+        });
         this.emitChange(); //confirm non-save on-leave
         //this.addBorders();
         this.uniqueIDAllElements();
@@ -458,6 +462,10 @@ class SlideContentEditor extends React.Component {
                     }, 500);
                 });
             }
+            //fix to prevent Firefox caret from resetting
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             //ugly fix for SWIK-1348- Image dialog not appearing once image added to slide
             $('.cke_button__image_icon').mousedown((evt) => { //detect click on image dialog button
                 console.log('====ckeditor image dialog onclick====');
@@ -638,6 +646,10 @@ class SlideContentEditor extends React.Component {
             $('.pptx2html').append(this.getAbsoluteDiv(this.getHighestZIndex() + 10));
             //.css({'borderStyle': 'dashed dashed dashed dashed', 'borderColor': '#33cc33'});
             this.emitChange(); //confirm non-save on-leave
+            //fix to prevent Firefox caret from resetting
+            $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                CKEDITOR.instances.inlineContent.getSelection().unlock();
+            });
             //this.uniqueIDAllElements();
             this.resizeDrag();
             //this.forceUpdate();
@@ -735,9 +747,9 @@ class SlideContentEditor extends React.Component {
             uploadUrl: Microservices.import.uri + '/importImagePaste/' + userId
         }); //leave all buttons
         //this.currentcontent = this.props.content;
-        CKEDITOR.instances.inlineContent.on('blur',(evt) => {
-            return false;
-        });
+        //CKEDITOR.instances.inlineContent.on('blur',(evt) => {
+        //    return false;
+        //});
 
         CKEDITOR.instances.inlineContent.on('instanceReady', (evt) => {
 
@@ -1580,6 +1592,10 @@ class SlideContentEditor extends React.Component {
             {
                 let uniqueID = this.getuniqueID();
                 $('.pptx2html').append('<div id="'+uniqueID+'" style="position: absolute; width: 400px; height:300px; top: 150px; left: 200px; z-index: '+(this.getHighestZIndex() + 10)+';"><span>&nbsp;</span></div>');
+                //fix to prevent Firefox caret from resetting
+                $('.pptx2html [style*="absolute"]').on('mouseup', (evt) => {
+                    CKEDITOR.instances.inlineContent.getSelection().unlock();
+                });
                 this.resizeDrag();
                 this.placeCaretAtStart(uniqueID);
                 $('#'+uniqueID).focus();
@@ -1888,6 +1904,14 @@ class SlideContentEditor extends React.Component {
             this.refs.slideEditPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
             this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
         }
+        //$('.cke_float').width( $('.pptx2html').width());
+        //$('.cke_top').css('maxwidth', $('.pptx2html').width());
+        //$('.cke_float').css('maxwidth', $('.pptx2html').width());
+        //$('.cke_toolbox').css('maxwidth', $('.pptx2html').width());
+        let twentypercent = $('#container').width() * 0.2;
+        $('.cke_toolbox').css('width', $('#container').width() - twentypercent);
+        $('.cke_float').css('width', $('#container').width() - twentypercent);
+        $('.cke_top').css('width', $('#container').width() - twentypercent);
     }
     componentWillUnmount() {
         // Remove the warning window.
