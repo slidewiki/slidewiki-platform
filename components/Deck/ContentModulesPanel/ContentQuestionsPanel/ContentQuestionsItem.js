@@ -26,7 +26,7 @@ class ContentQuestionsItem extends React.Component {
 
     handleRefClick(e) {
         e.preventDefault();
-        
+
         this.context.executeAction(navigateAction, {
             url: this.getPath(this.props.question)
         });
@@ -87,7 +87,7 @@ class ContentQuestionsItem extends React.Component {
         let activeIfFirst = this.props.index === 0 ? 'active' : ''; // something wrong with accordion - doesn't expand
 
         const cheerioContentName = (question.relatedObjectName) ? cheerio.load(question.relatedObjectName).text() : '';
-        const nodeRef = (question.relatedObject !== this.props.selector.stype || question.relatedObjectId !== this.props.selector.sid.split('-')[0]) ? (<span>{' (from ' + question.relatedObject + ' '}<a href={this.getPath(question)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</span>) : '';
+        const nodeRef = (question.relatedObject !== this.props.selector.stype || question.relatedObjectId !== this.props.selector.sid.split('-')[0]) ? (<span><i>{' (originally from ' + question.relatedObject + ' '}<a href={this.getPath(question)} onClick={this.handleRefClick.bind(this)}>{cheerioContentName}</a>)</i></span>) : '';
 
         return (
             // <div className="item">
