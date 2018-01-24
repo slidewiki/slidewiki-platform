@@ -63,7 +63,7 @@ class SocialSharing extends React.Component {
             // EmailShareButton
         } = ShareButtons;
 
-        let shareMessage = 'Someone presentend me a very interesting slide in a presentation room on SlideWiki. See ' + this.props.currentSlideURL;
+        let shareMessage = 'Someone presented me a very interesting slide in a presentation room on SlideWiki!';
         //const emailShareMessage = 'Hi.\nSomeone presentend me a very <a href="'+this.props.currentSlideURL+'">interesting slide</a> in a <a href="'+this.props.roomURL+'">presentation room</a> on SlideWiki.\n';
         //const emailShareSubject = 'Interesting slide on SlideWiki';
         // <Dropdown.Item aria-label="E-mail"> //triggers the close event handler of a data channel

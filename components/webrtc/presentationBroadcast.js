@@ -735,6 +735,7 @@ class presentationBroadcast extends React.Component {
             if (that.isInitiator) {
                 iframe.on('slidechanged', () => {
                     that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    that.forceUpdate();
                     sendRTCMessage('gotoslide', that.currentSlide);
                 });
                 iframe.on('paused', () => {
@@ -745,9 +746,11 @@ class presentationBroadcast extends React.Component {
                 });
             } else {
                 iframe.on('slidechanged', () => {
-                    if (document.getElementById('slidewikiPresentation').contentWindow.location.href !== that.lastRemoteSlide) {
+                    that.currentSlide = document.getElementById('slidewikiPresentation').contentWindow.location.href;
+                    if (that.currentSlide !== that.lastRemoteSlide) {
                         that.setState({paused: true});
                     }
+                    that.forceUpdate();
                 });
                 let textArea = $('#messageToSend');
                 textArea.on('focus', () => {
@@ -979,7 +982,7 @@ class presentationBroadcast extends React.Component {
                     </h4>
                   </Grid.Column>
                   <Grid.Column width={1} style={{'padding-left': '0'}}>
-                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} currentSlideURL={this.currentSlide}/>
+                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
                   </Grid.Column>
                 </Grid>
                 <div id="media" style={{'display': 'none'}}></div>
