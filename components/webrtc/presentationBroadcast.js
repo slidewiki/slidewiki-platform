@@ -941,29 +941,6 @@ class presentationBroadcast extends React.Component {
         .then(() => {}, () => {});
     }
 
-    postTweet(e) {
-        e.preventDefault();
-        function FindLeftWindowBoundry(){
-          	if (window.screenLeft)
-          		return window.screenLeft;
-          	if (window.screenX)
-          		return window.screenX;
-          	return 0;
-        }
-
-        function FindTopWindowBoundry(){
-          	if (window.screenTop)
-          		return window.screenTop;
-          	if (window.screenY)
-          		return window.screenY;
-          	return 0;
-        }
-        let x = screen.width/2 - 700/2 + FindLeftWindowBoundry();
-        let y = screen.height/2 - 450/2 + FindTopWindowBoundry();
-        window.open('https://twitter.com/intent/tweet?button_hashtag=' + this.hashTag , 'test', 'width=500,height=260,left='+x+',top='+y);
-        return false;
-    }
-
     render() {
         let peernames = new Set(Object.keys(this.pcs).map((key) => {
             let tmp = this.pcs[key].username === '' || this.pcs[key].username.startsWith('Peer');
@@ -989,7 +966,6 @@ class presentationBroadcast extends React.Component {
                   myName={this.state.myName}
                   pcs={this.pcs}/>
               </Grid.Column>
-              <Button content={'#' + this.hashTag} labelPosition='left' icon='twitter' primary onClick={this.postTweet.bind(this)} style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '1%', transform: 'rotate(90deg)', transformOrigin: 'top left'}}/>
               {(this.isInitiator) ? (
                   <Button style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '28%', transform: 'rotate(90deg)', transformOrigin: 'top left'}} onClick={this.showQRCode.bind(this)}>QR-Code</Button>
               ) : ('')};
@@ -1007,7 +983,7 @@ class presentationBroadcast extends React.Component {
                     </h4>
                   </Grid.Column>
                   <Grid.Column width={1} style={{'padding-left': '0'}}>
-                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
+                    <SocialSharing roomURL={typeof window === 'undefined' ? '' : window.location.href} hashTag={this.hashTag} currentSlideURL={(typeof window === 'undefined' ? '' : window.location.origin) + this.currentSlide}/>
                   </Grid.Column>
                 </Grid>
                 <div id="media" style={{'display': 'none'}}></div>

@@ -53,6 +53,29 @@ class SocialSharing extends React.Component {
         document.body.removeChild(toCopy);
     }
 
+    postTweet(e) {
+        e.preventDefault();
+        function FindLeftWindowBoundry(){
+          	if (window.screenLeft)
+          		return window.screenLeft;
+          	if (window.screenX)
+          		return window.screenX;
+          	return 0;
+        }
+
+        function FindTopWindowBoundry(){
+          	if (window.screenTop)
+          		return window.screenTop;
+          	if (window.screenY)
+          		return window.screenY;
+          	return 0;
+        }
+        let x = screen.width/2 - 700/2 + FindLeftWindowBoundry();
+        let y = screen.height/2 - 450/2 + FindTopWindowBoundry();
+        window.open('https://twitter.com/intent/tweet?button_hashtag=' + this.props.hashTag , 'test', 'width=500,height=260,left='+x+',top='+y);
+        return false;
+    }
+
     render() {
 
         const {
@@ -79,6 +102,7 @@ class SocialSharing extends React.Component {
 
 
         return(
+            <div>
             <Dropdown ref="shareDropDown" icon='share alternate' pointing="bottom left" upward={true} button compact className='icon' style={{'float': 'right'}} aria-label="Share" aria-haspopup="true" data-tooltip="Share" data-position="right center">
                 <Dropdown.Menu role="menu">
                     <Dropdown.Item aria-label="URL" role="menuitem" aria-haspopup="true" data-tooltip="URL" data-position="right center" onClick={this.copyURLToClipboard.bind(this)}>
@@ -110,6 +134,8 @@ class SocialSharing extends React.Component {
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
+            <Button content={'#' + this.props.hashTag} labelPosition='left' icon='twitter' primary onClick={this.postTweet.bind(this)} style={{position: 'fixed', padding: '5px', display: 'block', whiteSpace: 'nowrap', textDecoration: 'none !important', borderRadius: '0 0 5px 5px', left: '100%', top: '1%', transform: 'rotate(90deg)', transformOrigin: 'top left'}}/>
+            </div>
         );
     }
 }
