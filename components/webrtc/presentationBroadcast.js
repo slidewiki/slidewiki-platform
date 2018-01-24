@@ -878,50 +878,6 @@ class presentationBroadcast extends React.Component {
         //NOTE SlideChange is triggerd by componentDidUpdate
     }
 
-    copyURLToClipboard() {
-        let toCopy = document.createElement('input');
-        toCopy.style.position = 'fixed';
-        toCopy.style.top = 0;
-        toCopy.style.left = 0;
-        toCopy.style.width = '2em';
-        toCopy.style.height = '2em';
-        toCopy.style.padding = 0;
-        toCopy.style.border = 'none';
-        toCopy.style.outline = 'none';
-        toCopy.style.boxShadow = 'none';
-        toCopy.style.background = 'transparent';
-        toCopy.value = window.location.href;
-        document.body.appendChild(toCopy);
-        toCopy.value = window.location.href;
-        toCopy.select();
-
-        try {
-            let successful = document.execCommand('copy');
-            if(!successful)
-                throw 'Unable to copy';
-            else{
-                swal({
-                    titleText: 'URL copied to clipboard',
-                    type: 'success',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    timer: 1500
-                }).then(() => {}, () => {});
-            }
-        } catch (err) {
-            console.log('Oops, unable to copy');
-            swal({
-                titleText: 'Can\'t copy URL to clipboard',
-                text: 'Please select the URL in your browser and share it manually.',
-                type: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Check',
-                allowOutsideClick: false
-            });
-        }
-        document.body.removeChild(toCopy);
-    }
-
     showQRCode() {
         swal({
             titleText: 'Share this Room',
@@ -1038,11 +994,9 @@ class presentationBroadcast extends React.Component {
                   {/*<a href={this.iframesrc.toLowerCase().replace('presentation','deck')} target="_blank"><Button content='Add comment to deck' labelPosition='right' icon='comment' primary/></a>{/*TODO open up the right functionality*/}*/}
                   <a href={this.iframesrc.toLowerCase().split('presentation')[0] + 'deck/' + this.iframesrc.toLowerCase().split('presentation')[1].split('/')[1]} target="_blank"><Button content='Edit current deck' labelPosition='right' icon='pencil' primary style={{textAlign: 'left'}}/></a>{/*TODO open up the right functionality*/}
                   {this.isInitiator ? (<Button content="Ask audience to complete a task" labelPosition='right' icon='travel' primary onClick={this.audienceCompleteTask.bind(this)}/>) : ''}
-                  {(this.isInitiator) ? (
-                    <Button content='Share this presentation' labelPosition='right' icon='share alternate' primary onClick={this.copyURLToClipboard.bind(this)}/>
-                  ) : (
+                  {(!this.isInitiator) ?  (
                     <Button content='Resume to presenter progress' style={(this.state.paused) ? {} : {display: 'none'}} labelPosition='right' icon='video play' color='red' onClick={this.resumePlayback.bind(this)}/>
-                  )}
+                  ) : ('')}
                   {(this.state.showReopenModalButton) ? (
                     <Button content='Open Modal again' labelPosition='right' icon='check' color='green' onClick={this.showCompleteTaskModal.bind(this)}/>
                   ) : ''}
