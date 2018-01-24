@@ -42,7 +42,7 @@ class PresentationsPanel extends React.Component {
     }
 
     renderItem(index, key) {
-        let url = '/presentationbroadcast?room='+this.props.ActivityFeedStore.presentations[index]+'&presentation=/Presentation/'+this.props.ActivityFeedStore.selector.sid;
+        let url = '/presentationbroadcast?room='+this.props.ActivityFeedStore.presentations[index].roomName+'&presentation=/Presentation/'+this.props.ActivityFeedStore.selector.sid;
         return (
             <div className="ui item" key={key} style={{ margin: '1em 0'}}>
                 <div className="ui feed">
@@ -52,7 +52,7 @@ class PresentationsPanel extends React.Component {
                         </div>
                         <div className="content" style={{marginLeft: '1em'}}>
                             <div className="summary">
-                                <a target="_blank" href={url}>{this.props.ActivityFeedStore.presentations[index]}</a>
+                                <a target="_blank" href={url}>{this.props.ActivityFeedStore.presentations[index].roomName} (opened at {new Date(this.props.ActivityFeedStore.presentations[index].openingTime).toLocaleTimeString()})</a>
                             </div>
                         </div>
                     </div>

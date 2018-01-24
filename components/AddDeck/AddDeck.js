@@ -49,14 +49,23 @@ class AddDeck extends React.Component {
         if (this.props.ImportStore.error !== null)
             this.showError();
     }
-
+    handleKeyPressUploadModal(event){
+        if(event.key === 'Enter'){
+            this.handleUploadModal(event);
+        }
+    }
     handleUploadModal(x) {
         //console.log('handleUploadModal: ', x);
 
         $('.ui.small.modal').modal('show');
     }
+    handleKeyPressAddDeck(event){
+        if(event.key === 'Enter'){
+            this.handleAddDeck(event);
+        }
+    }
     handleAddDeck(x) {
-        //console.log('handleAddDeck');
+        console.log('handleAddDeck');
 
         this.context.executeAction(addDeckDeleteError, null);
 
@@ -519,7 +528,7 @@ class AddDeck extends React.Component {
                         <div className="ui grid">
                             <div className="two column row">
                                 <div className="column">
-                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} >
+                                    <div className={btnClasses_upload} role="button" tabIndex="0" aria-describedby="uploadDesc" onClick={this.handleUploadModal.bind(this)} onKeyPress={this.handleKeyPressUploadModal.bind(this)}  >
                                         <FormattedMessage
                                             id='AddDeck.form.button_select'
                                             defaultMessage='Select file' />
@@ -565,7 +574,7 @@ class AddDeck extends React.Component {
                         </div>
 
                         <div className="ui buttons">
-                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} >
+                            <div className={btnClasses_submit} aria-label={this.context.intl.formatMessage(form_messages.button_create)} role="button" tabIndex="0" onClick={this.handleAddDeck.bind(this)} onKeyPress={this.handleKeyPressAddDeck.bind(this)} >
                                 {this.context.intl.formatMessage(form_messages.button_create)}
                             </div>
                         </div>
