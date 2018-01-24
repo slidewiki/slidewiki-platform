@@ -84,25 +84,25 @@ class SocialSharing extends React.Component {
         // <Dropdown.Divider />
 
         return(
-            <Dropdown ref="shareDropDown" icon='share alternate' pointing="bottom" upward={true} button compact className='icon' style={{'float': 'right'}}>
-                <Dropdown.Menu>
-                    <Dropdown.Item aria-label="URL" onClick={this.copyURLToClipboard.bind(this)}>
-                        <Icon circular inverted name="external" size="large"/>
+            <Dropdown ref="shareDropDown" icon='share alternate' pointing="bottom" upward={true} button compact className='icon' style={{'float': 'right'}} aria-label="Share" aria-haspopup="true" data-tooltip="Share" data-position="right center">
+                <Dropdown.Menu role="menu">
+                    <Dropdown.Item aria-label="URL" role="menuitem" aria-haspopup="true" data-tooltip="URL" data-position="right center" onClick={this.copyURLToClipboard.bind(this)}>
+                        <Icon circular inverted name="linkify" size="large"/>
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item aria-label="Twitter">
+                    <Dropdown.Item aria-label="Twitter" role="menuitem" aria-haspopup="true" data-tooltip="Twitter" data-position="right center">
                         <TwitterShareButton url={this.props.currentSlideURL} title={shareMessage}>
                             <Icon circular inverted name="twitter" size="large"/>
                         </TwitterShareButton>
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item aria-label="Telegram">
+                    <Dropdown.Item aria-label="Telegram" role="menuitem" aria-haspopup="true" data-tooltip="Telegram" data-position="right center">
                         <TelegramShareButton url={this.props.currentSlideURL} title={shareMessage}>
                           <Icon circular inverted name="send" size="large"/>
                         </TelegramShareButton>
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item aria-label="Google Plus">
+                    <Dropdown.Item aria-label="Google Plus" role="menuitem" aria-haspopup="true" data-tooltip="GooglePus" data-position="right center">
                         <GooglePlusShareButton url={this.props.currentSlideURL} quote={shareMessage} className="Demo__some-network__share-button">
                           <Icon circular inverted name="google plus" size="large"/>
                         </GooglePlusShareButton>
