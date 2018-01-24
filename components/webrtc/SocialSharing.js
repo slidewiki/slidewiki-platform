@@ -56,7 +56,7 @@ class SocialSharing extends React.Component {
     render() {
 
         const {
-            // FacebookShareButton,
+            FacebookShareButton,
             TwitterShareButton,
             GooglePlusShareButton,
             TelegramShareButton,
@@ -76,18 +76,19 @@ class SocialSharing extends React.Component {
         //     </EmailShareButton>
         // </Dropdown.Item>
 
-        // <Dropdown.Item aria-label="Facebook">
-        //     <FacebookShareButton url={this.props.currentSlideURL} quote={shareMessage}>
-        //         <Icon circular inverted name="facebook" size="large"/>
-        //     </FacebookShareButton>
-        // </Dropdown.Item>
-        // <Dropdown.Divider />
+
 
         return(
-            <Dropdown ref="shareDropDown" icon='share alternate' pointing="bottom" upward={true} button compact className='icon' style={{'float': 'right'}} aria-label="Share" aria-haspopup="true" data-tooltip="Share" data-position="right center">
+            <Dropdown ref="shareDropDown" icon='share alternate' pointing="bottom left" upward={true} button compact className='icon' style={{'float': 'right'}} aria-label="Share" aria-haspopup="true" data-tooltip="Share" data-position="right center">
                 <Dropdown.Menu role="menu">
                     <Dropdown.Item aria-label="URL" role="menuitem" aria-haspopup="true" data-tooltip="URL" data-position="right center" onClick={this.copyURLToClipboard.bind(this)}>
                         <Icon circular inverted name="linkify" size="large"/>
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item aria-label="Facebook" role="menuitem" aria-haspopup="true" data-tooltip="Facebook" data-position="right center">
+                        <FacebookShareButton url={this.props.currentSlideURL} quote={shareMessage}>
+                            <Icon circular inverted name="facebook" size="large"/>
+                        </FacebookShareButton>
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item aria-label="Twitter" role="menuitem" aria-haspopup="true" data-tooltip="Twitter" data-position="right center">
@@ -96,16 +97,16 @@ class SocialSharing extends React.Component {
                         </TwitterShareButton>
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item aria-label="Telegram" role="menuitem" aria-haspopup="true" data-tooltip="Telegram" data-position="right center">
-                        <TelegramShareButton url={this.props.currentSlideURL} title={shareMessage}>
-                          <Icon circular inverted name="send" size="large"/>
-                        </TelegramShareButton>
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
                     <Dropdown.Item aria-label="Google Plus" role="menuitem" aria-haspopup="true" data-tooltip="GooglePus" data-position="right center">
                         <GooglePlusShareButton url={this.props.currentSlideURL} quote={shareMessage} className="Demo__some-network__share-button">
                           <Icon circular inverted name="google plus" size="large"/>
                         </GooglePlusShareButton>
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item aria-label="Telegram" role="menuitem" aria-haspopup="true" data-tooltip="Telegram" data-position="right center">
+                        <TelegramShareButton url={this.props.currentSlideURL} title={shareMessage}>
+                          <Icon circular inverted name="send" size="large"/>
+                        </TelegramShareButton>
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
